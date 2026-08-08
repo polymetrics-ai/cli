@@ -65,208 +65,208 @@ Reads the documented OnePageCRM API v3 CRM surface and exposes declarative write
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: company_name(), created_at(), first_name(), id(), job_title(), last_name(), owner_id(), starred(), status_id(), updated_at()
+  - fields: company_name(string), created_at(string), first_name(string), id(string), job_title(string), last_name(string), owner_id(string), starred(boolean), status_id(string), updated_at(string)
 - deals:
   - primary key: id
   - cursor: updated_at
-  - fields: amount(), contact_id(), created_at(), currency(), expected_close_date(), id(), name(), owner_id(), stage(), status(), updated_at()
+  - fields: amount(number), contact_id(string), created_at(string), currency(string), expected_close_date(string), id(string), name(string), owner_id(string), stage(string), status(string), updated_at(string)
 - actions:
   - primary key: id
   - cursor: updated_at
-  - fields: assignee_id(), contact_id(), created_at(), date(), done(), id(), status(), text(), updated_at()
+  - fields: assignee_id(string), contact_id(string), created_at(string), date(string), done(boolean), id(string), status(string), text(string), updated_at(string)
 - companies:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), id(), name(), phone(), updated_at(), url()
+  - fields: created_at(string), description(string), id(string), name(string), phone(string), updated_at(string), url(string)
 - users:
   - primary key: id
-  - fields: email(), first_name(), id(), last_name(), role(), status()
+  - fields: email(string), first_name(string), id(string), last_name(string), role(string), status(string)
 - bootstrap:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - user:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - lead_sources:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - lead_source:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - statuses:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - status:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - deal_fields:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - deal_field:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - custom_fields:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - custom_field:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_fields:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_field:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - predefined_actions:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - predefined_action:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - predefined_action_groups:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - predefined_action_group:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - predefined_items:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - predefined_item:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - predefined_item_groups:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - predefined_item_group:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - notes:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - note:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - calls:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - call:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - call_results:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - meetings:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - meeting:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - deal:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - relationship_types:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - relationship_type:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - countries:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - action:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - filters:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - filter:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_actions:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_deals:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_notes:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_calls:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_meetings:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_linked_contacts:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_pinned_attachments:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contact:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - filtered_contacts:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contact_actions:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contact_deals:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contact_notes:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contact_calls:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contact_meetings:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contact_relationships:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contact_relationship:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contact_pinned_attachments:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contacts_cascade:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - contacts_cascade_after:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - action_stream:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - team_stream:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - notifications:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - notification:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - webhooks:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - webhook:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - pipelines:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - pipeline:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 
 ## Sync Modes
 

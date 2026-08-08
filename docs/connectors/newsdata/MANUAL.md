@@ -41,14 +41,14 @@ ETL STREAMS
   latest:
     primary key: article_id
     cursor: pubDate
-    fields: article_id(), category(), content(), country(), creator(), description(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_priority(), title()
+    fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_priority(integer), title(string)
   crypto:
     primary key: article_id
     cursor: pubDate
-    fields: article_id(), category(), content(), country(), creator(), description(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_priority(), title()
+    fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_priority(integer), title(string)
   sources:
     primary key: id
-    fields: category(), country(), description(), icon(), id(), language(), name(), url()
+    fields: category(array), country(array), description(string), icon(string), id(string), language(array), name(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

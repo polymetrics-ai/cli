@@ -39,16 +39,16 @@ Reads Guru collections, groups, members, and teams through the Guru REST API usi
 
 - collections:
   - primary key: id
-  - fields: collectionType(), color(), dateCreated(), description(), id(), name(), publicCardsEnabled(), slug()
+  - fields: collectionType(string), color(string), dateCreated(string), description(string), id(string), name(string), publicCardsEnabled(boolean), slug(string)
 - groups:
   - primary key: id
-  - fields: dateCreated(), groupType(), id(), memberCount(), modifiable(), name()
+  - fields: dateCreated(string), groupType(string), id(string), memberCount(integer), modifiable(boolean), name(string)
 - members:
   - primary key: id
-  - fields: dateCreated(), email(), firstName(), id(), lastName(), status()
+  - fields: dateCreated(string), email(string), firstName(string), id(string), lastName(string), status(string)
 - teams:
   - primary key: id
-  - fields: dateCreated(), id(), name(), status()
+  - fields: dateCreated(string), id(string), name(string), status(string)
 
 ## Sync Modes
 

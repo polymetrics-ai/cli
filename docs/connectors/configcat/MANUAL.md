@@ -48,85 +48,85 @@ CONFIGURATION
 ETL STREAMS
   organizations:
     primary key: organization_id
-    fields: name(), organization_id()
+    fields: name(string), organization_id(string)
   products:
     primary key: product_id
-    fields: approve_required(), description(), name(), order(), organization_id(), product_id(), reason_required()
+    fields: approve_required(boolean), description(string), name(string), order(integer), organization_id(string), product_id(string), reason_required(boolean)
   configs:
     primary key: config_id
-    fields: config_id(), description(), evaluation_version(), migrated_config_id(), name(), order(), product_id()
+    fields: config_id(string), description(string), evaluation_version(string), migrated_config_id(string), name(string), order(integer), product_id(string)
   environments:
     primary key: environment_id
-    fields: approve_required(), color(), description(), environment_id(), name(), order(), product_id(), reason_required()
+    fields: approve_required(boolean), color(string), description(string), environment_id(string), name(string), order(integer), product_id(string), reason_required(boolean)
   tags:
     primary key: tag_id
-    fields: color(), name(), product_id(), tag_id()
+    fields: color(string), name(string), product_id(string), tag_id(integer)
   config:
     primary key: configId
-    fields: configId(), description(), evaluationVersion(), migratedConfigId(), name(), order(), product()
+    fields: configId(string), description(string), evaluationVersion(string), migratedConfigId(string), name(string), order(integer), product(object)
   environment:
     primary key: environmentId
-    fields: approveRequired(), color(), description(), environmentId(), name(), order(), product(), reasonRequired()
+    fields: approveRequired(boolean), color(string), description(string), environmentId(string), name(string), order(integer), product(object), reasonRequired(boolean)
   settings:
     primary key: settingId
-    fields: configId(), configName(), createdAt(), hint(), isJson(), key(), name(), order(), predefinedVariations(), settingId(), settingType(), tags()
+    fields: configId(string), configName(string), createdAt(string), hint(string), isJson(boolean), key(string), name(string), order(integer), predefinedVariations(array), settingId(integer), settingType(string), tags(array)
   setting:
     primary key: settingId
-    fields: configId(), configName(), createdAt(), hint(), isJson(), key(), name(), order(), predefinedVariations(), settingId(), settingType(), tags()
+    fields: configId(string), configName(string), createdAt(string), hint(string), isJson(boolean), key(string), name(string), order(integer), predefinedVariations(array), settingId(integer), settingType(string), tags(array)
   deleted_settings:
     primary key: key
-    fields: hint(), key(), name(), settingType()
+    fields: hint(string), key(string), name(string), settingType(string)
   sdk_keys:
     primary key: primary
-    fields: primary(), secondary()
+    fields: primary(string), secondary(string)
   config_setting_values:
     primary key: readOnly
-    fields: config(), environment(), featureFlagLimitations(), readOnly(), settingValues()
+    fields: config(object), environment(object), featureFlagLimitations(object), readOnly(boolean), settingValues(array)
   segments:
     primary key: segmentId
-    fields: createdAt(), creatorEmail(), creatorFullName(), description(), lastUpdaterEmail(), lastUpdaterFullName(), name(), product(), segmentId(), updatedAt(), usage()
+    fields: createdAt(string), creatorEmail(string), creatorFullName(string), description(string), lastUpdaterEmail(string), lastUpdaterFullName(string), name(string), product(object), segmentId(string), updatedAt(string), usage(object)
   segment:
     primary key: segmentId
-    fields: comparator(), comparisonAttribute(), comparisonValue(), createdAt(), creatorEmail(), creatorFullName(), description(), lastUpdaterEmail(), lastUpdaterFullName(), name(), product(), segmentId(), updatedAt()
+    fields: comparator(string), comparisonAttribute(string), comparisonValue(string), createdAt(string), creatorEmail(string), creatorFullName(string), description(string), lastUpdaterEmail(string), lastUpdaterFullName(string), name(string), product(object), segmentId(string), updatedAt(string)
   webhooks:
     primary key: webhookId
-    fields: config(), content(), environment(), httpMethod(), url(), webHookHeaders(), webhookId()
+    fields: config(object), content(string), environment(object), httpMethod(string), url(string), webHookHeaders(array), webhookId(integer)
   webhook:
     primary key: webhookId
-    fields: config(), content(), environment(), httpMethod(), url(), webHookHeaders(), webhookId()
+    fields: config(object), content(string), environment(object), httpMethod(string), url(string), webHookHeaders(array), webhookId(integer)
   permission_groups:
     primary key: permissionGroupId
-    fields: accessType(), canCreateOrUpdateConfig(), canCreateOrUpdateEnvironment(), canCreateOrUpdateSetting(), canDeleteConfig(), canDeleteEnvironment(), canDeleteSetting(), canManageMembers(), name(), permissionGroupId(), product()
+    fields: accessType(string), canCreateOrUpdateConfig(boolean), canCreateOrUpdateEnvironment(boolean), canCreateOrUpdateSetting(boolean), canDeleteConfig(boolean), canDeleteEnvironment(boolean), canDeleteSetting(boolean), canManageMembers(boolean), name(string), permissionGroupId(integer), product(object)
   permission_group:
     primary key: permissionGroupId
-    fields: accessType(), canCreateOrUpdateConfig(), canCreateOrUpdateEnvironment(), canCreateOrUpdateSetting(), canDeleteConfig(), canDeleteEnvironment(), canDeleteSetting(), canManageMembers(), name(), permissionGroupId(), product()
+    fields: accessType(string), canCreateOrUpdateConfig(boolean), canCreateOrUpdateEnvironment(boolean), canCreateOrUpdateSetting(boolean), canDeleteConfig(boolean), canDeleteEnvironment(boolean), canDeleteSetting(boolean), canManageMembers(boolean), name(string), permissionGroupId(integer), product(object)
   integrations:
     primary key: integrationId
-    fields: configIds(), environmentIds(), integrationId(), integrationType(), name(), parameters(), product()
+    fields: configIds(array), environmentIds(array), integrationId(string), integrationType(string), name(string), parameters(object), product(object)
   integration:
     primary key: integrationId
-    fields: configIds(), environmentIds(), integrationId(), integrationType(), name(), parameters(), product()
+    fields: configIds(array), environmentIds(array), integrationId(string), integrationType(string), name(string), parameters(object), product(object)
   proxy_profiles:
     primary key: proxyProfileId
-    fields: connectionPreferences(), description(), lastAccessedAt(), name(), proxyProfileId(), sdkKeySelectionRules()
+    fields: connectionPreferences(object), description(string), lastAccessedAt(string), name(string), proxyProfileId(string), sdkKeySelectionRules(array)
   proxy_profile:
     primary key: proxyProfileId
-    fields: connectionPreferences(), description(), lastAccessedAt(), name(), proxyProfileId(), sdkKeySelectionRules()
+    fields: connectionPreferences(object), description(string), lastAccessedAt(string), name(string), proxyProfileId(string), sdkKeySelectionRules(array)
   members:
     primary key: userId
-    fields: email(), fullName(), twoFactorEnabled(), userId()
+    fields: email(string), fullName(string), twoFactorEnabled(boolean), userId(string)
   audit_logs:
     primary key: auditLogId
-    fields: actionTarget(), auditLogDateTime(), auditLogId(), auditLogType(), auditLogTypeEnum(), details(), modelVersion(), truncated(), userEmail(), userName(), where(), why()
+    fields: actionTarget(object), auditLogDateTime(string), auditLogId(string), auditLogType(string), auditLogTypeEnum(string), details(object), modelVersion(integer), truncated(boolean), userEmail(string), userName(string), where(object), why(object)
   stale_flags:
     primary key: productId
-    fields: configs(), environments(), name(), productId()
+    fields: configs(array), environments(array), name(string), productId(string)
   me:
     primary key: email
-    fields: email(), fullName()
+    fields: email(string), fullName(string)
   tag:
     primary key: tagId
-    fields: color(), name(), product(), tagId()
+    fields: color(string), name(string), product(object), tagId(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

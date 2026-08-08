@@ -49,25 +49,25 @@ Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analyti
 
 - jobs:
   - primary key: id
-  - fields: create_time(), expire_time(), id(), name(), report_type_id(), system_managed()
+  - fields: create_time(string), expire_time(string), id(string), name(string), report_type_id(string), system_managed(boolean)
 - job:
   - primary key: id
-  - fields: create_time(), expire_time(), id(), name(), report_type_id(), system_managed()
+  - fields: create_time(string), expire_time(string), id(string), name(string), report_type_id(string), system_managed(boolean)
 - report_types:
   - primary key: id
-  - fields: deprecate_time(), id(), name(), system_managed()
+  - fields: deprecate_time(string), id(string), name(string), system_managed(boolean)
 - reports:
   - primary key: id
-  - fields: create_time(), download_url(), end_time(), id(), job_expire_time(), job_id(), start_time()
+  - fields: create_time(string), download_url(string), end_time(string), id(string), job_expire_time(string), job_id(string), start_time(string)
 - report:
   - primary key: id
-  - fields: create_time(), download_url(), end_time(), id(), job_expire_time(), job_id(), start_time()
+  - fields: create_time(string), download_url(string), end_time(string), id(string), job_expire_time(string), job_id(string), start_time(string)
 - groups:
   - primary key: id
-  - fields: etag(), id(), item_count(), item_type(), kind(), published_at(), title()
+  - fields: etag(string), id(string), item_count(string), item_type(string), kind(string), published_at(string), title(string)
 - group_items:
   - primary key: id
-  - fields: etag(), group_id(), id(), kind(), resource_id(), resource_kind()
+  - fields: etag(string), group_id(string), id(string), kind(string), resource_id(string), resource_kind(string)
 
 ## Sync Modes
 
@@ -132,7 +132,7 @@ Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analyti
   - report-types list - Read YouTube Reporting report types through the declared ETL stream. [intent=etl availability=implemented stream=report_types]; flags: --include-system-managed
   - reports list - Read generated report metadata for the configured YouTube Reporting job. [intent=etl availability=implemented stream=reports]; notes: Pass --config job_id=<job id>; downloaded report bytes are intentionally not emitted by this JSON metadata stream.; flags: --created-after, --start-time-at-or-after, --start-time-before
   - reports get - Read one generated report metadata resource for the configured job_id/report_id. [intent=etl availability=implemented stream=report]; notes: Pass --config job_id=<job id> --config report_id=<report id>; use reports download with the documented resourceName to fetch report bytes.
-  - reports query - Documented YouTube Analytics reports.query provider query operation planned for issue #2985. [intent=direct_read availability=planned operation=reports_query]; notes: Planned solely until typed provider-query foundation issue #2985 supports bounded provider-owned query fields without raw query escape hatches.
+  - reports query - Documented YouTube Analytics reports.query provider query operation planned for issue #2985. [intent=direct_read availability=planned operation=reports_query]; notes: Planned solely until typed provider-query foundation issue #2985 supports bounded provider-owned query fields without raw query escape hatches.; flags: --page, --page-cursor
   - reports download - Download generated YouTube Reporting report bytes to an explicit local destination. [intent=binary_download availability=implemented operation=download_report]; notes: The required --resource-name maps to the provider resourceName. Runtime download flags require --dest-root; --file-name is optional. The executor refuses path traversal, overwrites, archive extraction, and payloads over 100 MiB, and emits only file metadata with a SHA-256 receipt.; flags: --resource-name (required), --dest-root (required), --file-name, --max-bytes
 - YouTube Analytics groups
   - groups list - Read YouTube Analytics groups through the declared ETL stream. [intent=etl availability=implemented stream=groups]; flags: --mine (required)

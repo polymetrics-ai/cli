@@ -37,19 +37,19 @@ ETL STREAMS
   partnerships:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), id(), status()
+    fields: created_at(string), email(string), id(string), status(string)
   customers:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), id(), name()
+    fields: created_at(string), email(string), id(string), name(string)
   transactions:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), customer_id(), id()
+    fields: amount(number), created_at(string), currency(string), customer_id(string), id(string)
   groups:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -37,9 +37,9 @@ CONFIGURATION
 
 ETL STREAMS
   installs_report:
-    fields: appsflyer_id(), campaign(), event_time(), media_source()
+    fields: appsflyer_id(string), campaign(string), event_time(string), media_source(string)
   in_app_events_report:
-    fields: appsflyer_id(), campaign(), event_time(), media_source()
+    fields: appsflyer_id(string), campaign(string), event_time(string), media_source(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite

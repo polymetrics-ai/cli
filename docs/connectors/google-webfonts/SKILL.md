@@ -41,23 +41,23 @@ Reads Google Web Fonts families (default, popular, trending, newest, and alphabe
 - webfonts:
   - primary key: family
   - cursor: lastModified
-  - fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+  - fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
 - popular_fonts:
   - primary key: family
   - cursor: lastModified
-  - fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+  - fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
 - trending_fonts:
   - primary key: family
   - cursor: lastModified
-  - fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+  - fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
 - newest_fonts:
   - primary key: family
   - cursor: lastModified
-  - fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+  - fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
 - alpha_fonts:
   - primary key: family
   - cursor: lastModified
-  - fields: axes(), category(), family(), files(), kind(), lastModified(), menu(), subset_count(), subsets(), variant_count(), variants(), version()
+  - fields: axes(array), category(string), family(string), files(object), kind(string), lastModified(string), menu(string), subset_count(integer), subsets(array), variant_count(integer), variants(array), version(string)
 
 ## Sync Modes
 

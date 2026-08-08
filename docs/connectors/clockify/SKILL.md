@@ -36,43 +36,43 @@ Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, 
 
 - workspaces:
   - primary key: id
-  - fields: featureSubscriptionType(), hourlyRate(), id(), imageUrl(), memberships(), name(), workspaceSettings()
+  - fields: featureSubscriptionType(string), hourlyRate(object), id(string), imageUrl(string), memberships(array), name(string), workspaceSettings(object)
 - clients:
   - primary key: id
-  - fields: address(), archived(), email(), id(), name(), note(), workspaceId()
+  - fields: address(string), archived(boolean), email(string), id(string), name(string), note(string), workspaceId(string)
 - projects:
   - primary key: id
-  - fields: archived(), billable(), clientId(), clientName(), color(), duration(), id(), name(), note(), public(), workspaceId()
+  - fields: archived(boolean), billable(boolean), clientId(string), clientName(string), color(string), duration(string), id(string), name(string), note(string), public(boolean), workspaceId(string)
 - tags:
   - primary key: id
-  - fields: archived(), id(), name(), workspaceId()
+  - fields: archived(boolean), id(string), name(string), workspaceId(string)
 - users:
   - primary key: id
-  - fields: activeWorkspace(), defaultWorkspace(), email(), id(), name(), profilePicture(), status()
+  - fields: activeWorkspace(string), defaultWorkspace(string), email(string), id(string), name(string), profilePicture(string), status(string)
 - current_user:
   - primary key: id
-  - fields: activeWorkspace(), customFields(), defaultWorkspace(), email(), id(), memberships(), name(), profilePicture(), settings(), status()
+  - fields: activeWorkspace(string), customFields(array), defaultWorkspace(string), email(string), id(string), memberships(array), name(string), profilePicture(string), settings(object), status(string)
 - custom_fields:
   - primary key: id
-  - fields: allowedValues(), description(), entityType(), id(), name(), onlyAdminCanEdit(), placeholder(), projectDefaultValues(), required(), status(), type(), workspaceDefaultValue(), workspaceId()
+  - fields: allowedValues(array), description(string), entityType(string), id(string), name(string), onlyAdminCanEdit(boolean), placeholder(string), projectDefaultValues(array), required(boolean), status(string), type(string), workspaceDefaultValue(string), workspaceId(string)
 - user_groups:
   - primary key: id
-  - fields: id(), name(), teamManagers(), userIds(), workspaceId()
+  - fields: id(string), name(string), teamManagers(array), userIds(array), workspaceId(string)
 - holidays:
   - primary key: id
-  - fields: automaticTimeEntryCreation(), datePeriod(), everyoneIncludingNew(), id(), name(), occursAnnually(), projectId(), taskId(), userGroupIds(), userIds(), workspaceId()
+  - fields: automaticTimeEntryCreation(boolean), datePeriod(object), everyoneIncludingNew(boolean), id(string), name(string), occursAnnually(boolean), projectId(string), taskId(string), userGroupIds(array), userIds(array), workspaceId(string)
 - expense_categories:
   - primary key: id
-  - fields: archived(), hasUnitPrice(), id(), name(), priceInCents(), unit(), workspaceId()
+  - fields: archived(boolean), hasUnitPrice(boolean), id(string), name(string), priceInCents(integer), unit(string), workspaceId(string)
 - time_off_policies:
   - primary key: id
-  - fields: allowHalfDay(), allowNegativeBalance(), approve(), archived(), automaticAccrual(), automaticTimeEntryCreation(), everyoneIncludingNew(), id(), name(), negativeBalance(), projectId(), timeUnit(), userGroupIds(), userIds(), workspaceId()
+  - fields: allowHalfDay(boolean), allowNegativeBalance(boolean), approve(boolean), archived(boolean), automaticAccrual(object), automaticTimeEntryCreation(boolean), everyoneIncludingNew(boolean), id(string), name(string), negativeBalance(object), projectId(string), timeUnit(string), userGroupIds(array), userIds(array), workspaceId(string)
 - tasks:
   - primary key: id
-  - fields: assigneeId(), assigneeIds(), billable(), budgetEstimate(), costRate(), duration(), estimate(), hourlyRate(), id(), name(), projectId(), status(), userGroupIds()
+  - fields: assigneeId(string), assigneeIds(array), billable(boolean), budgetEstimate(object), costRate(object), duration(string), estimate(string), hourlyRate(object), id(string), name(string), projectId(string), status(string), userGroupIds(array)
 - time_entries:
   - primary key: id
-  - fields: billable(), costRate(), customFieldValues(), description(), hourlyRate(), id(), isLocked(), kioskId(), projectId(), tagIds(), taskId(), timeInterval(), type(), userId(), workspaceId()
+  - fields: billable(boolean), costRate(object), customFieldValues(array), description(string), hourlyRate(object), id(string), isLocked(boolean), kioskId(string), projectId(string), tagIds(array), taskId(string), timeInterval(object), type(string), userId(string), workspaceId(string)
 
 ## Sync Modes
 

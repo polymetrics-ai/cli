@@ -38,219 +38,219 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 
 - candidates:
   - primary key: id
-  - fields: applicationIds(), company(), createdAt(), creditedToUser(), customFields(), emailAddresses(), fileHandles(), fraudStatus(), id(), location(), name(), phoneNumbers(), position(), primaryEmailAddress(), primaryPhoneNumber(), profileUrl(), resumeFileHandle(), school(), socialLinks(), source(), tags(), timezone(), updatedAt()
+  - fields: applicationIds(array), company(string), createdAt(string), creditedToUser(object), customFields(array), emailAddresses(array), fileHandles(array), fraudStatus(string), id(string), location(object), name(string), phoneNumbers(array), position(string), primaryEmailAddress(object), primaryPhoneNumber(object), profileUrl(string), resumeFileHandle(object), school(string), socialLinks(array), source(object), tags(array), timezone(string), updatedAt(string)
 - jobs:
   - primary key: id
-  - fields: author(), brandId(), closedAt(), compensation(), confidential(), createdAt(), customFields(), customRequisitionId(), defaultInterviewPlanId(), departmentId(), employmentType(), hiringTeam(), id(), interviewPlanIds(), jobPostingIds(), location(), locationId(), openedAt(), openings(), status(), title(), updatedAt()
+  - fields: author(object), brandId(string), closedAt(string), compensation(object), confidential(boolean), createdAt(string), customFields(array), customRequisitionId(string), defaultInterviewPlanId(string), departmentId(string), employmentType(string), hiringTeam(array), id(string), interviewPlanIds(array), jobPostingIds(array), location(object), locationId(string), openedAt(string), openings(array), status(string), title(string), updatedAt(string)
 - applications:
   - primary key: id
-  - fields: appliedViaJobPostingId(), archiveReason(), archivedAt(), candidate(), createdAt(), creditedToUser(), currentInterviewStage(), customFields(), hiringTeam(), id(), job(), openings(), source(), status(), submitterClientIp(), submitterUserAgent(), updatedAt()
+  - fields: appliedViaJobPostingId(string), archiveReason(object), archivedAt(string), candidate(object), createdAt(string), creditedToUser(object), currentInterviewStage(object), customFields(array), hiringTeam(array), id(string), job(object), openings(array), source(object), status(string), submitterClientIp(string), submitterUserAgent(string), updatedAt(string)
 - users:
   - primary key: id
-  - fields: customFields(), email(), firstName(), globalRole(), id(), isEnabled(), lastName(), managerId(), updatedAt()
+  - fields: customFields(array), email(string), firstName(string), globalRole(string), id(string), isEnabled(boolean), lastName(string), managerId(string), updatedAt(string)
 - api_key_info:
   - primary key: title
-  - fields: createdAt(), scopes(), title()
+  - fields: createdAt(string), scopes(array), title(string)
 - audit_log_list:
   - primary key: id
-  - fields: actor(), category(), changedFields(), description(), id(), parentAction(), request(), target(), timestamp()
+  - fields: actor(object), category(string), changedFields(object), description(string), id(string), parentAction(object), request(object), target(object), timestamp(string)
 - application_info:
   - primary key: id
-  - fields: applicationFormSubmissions(), applicationHistory(), appliedViaJobPostingId(), archiveReason(), archivedAt(), candidate(), createdAt(), creditedToUser(), currentInterviewStage(), customFields(), hiringTeam(), id(), job(), openings(), referrals(), resumeFileHandle(), source(), status(), submitterClientIp(), submitterUserAgent(), updatedAt()
+  - fields: applicationFormSubmissions(array), applicationHistory(array), appliedViaJobPostingId(string), archiveReason(object), archivedAt(string), candidate(object), createdAt(string), creditedToUser(object), currentInterviewStage(object), customFields(array), hiringTeam(array), id(string), job(object), openings(array), referrals(array), resumeFileHandle(object), source(object), status(string), submitterClientIp(string), submitterUserAgent(string), updatedAt(string)
 - application_hiring_team_role_list:
   - primary key: id
-  - fields: id(), title()
+  - fields: id(string), title(string)
 - application_list_history:
   - primary key: id
-  - fields: actorId(), allowedActions(), enteredStageAt(), id(), leftStageAt(), stageId(), stageNumber(), title()
+  - fields: actorId(string), allowedActions(array), enteredStageAt(string), id(string), leftStageAt(string), stageId(string), stageNumber(integer), title(string)
 - application_list_criteria_evaluations:
   - primary key: id
-  - fields: criterion(), evaluatedAt(), id(), outcome(), outcomeNumber(), reasoning(), skipReason(), status()
+  - fields: criterion(object), evaluatedAt(string), id(string), outcome(string), outcomeNumber(number), reasoning(string), skipReason(string), status(string)
 - application_feedback_list:
   - primary key: id
-  - fields: applicationHistoryId(), applicationId(), creditedToUser(), feedbackFormDefinitionId(), formDefinition(), id(), interviewEventId(), interviewId(), submittedAt(), submittedByUser(), submittedValues()
+  - fields: applicationHistoryId(string), applicationId(string), creditedToUser(object), feedbackFormDefinitionId(string), formDefinition(object), id(string), interviewEventId(string), interviewId(string), submittedAt(string), submittedByUser(object), submittedValues(object)
 - candidate_info:
   - primary key: id
-  - fields: applicationIds(), company(), createdAt(), creditedToUser(), customFields(), emailAddresses(), fileHandles(), fraudStatus(), id(), location(), name(), phoneNumbers(), position(), primaryEmailAddress(), primaryPhoneNumber(), profileUrl(), resumeFileHandle(), school(), socialLinks(), source(), tags(), timezone(), updatedAt()
+  - fields: applicationIds(array), company(string), createdAt(string), creditedToUser(object), customFields(array), emailAddresses(array), fileHandles(array), fraudStatus(string), id(string), location(object), name(string), phoneNumbers(array), position(string), primaryEmailAddress(object), primaryPhoneNumber(object), profileUrl(string), resumeFileHandle(object), school(string), socialLinks(array), source(object), tags(array), timezone(string), updatedAt(string)
 - candidate_list_client_info:
   - primary key: id
-  - fields: candidateId(), createdAt(), id(), ipAddress(), relatedEntityId(), relatedEntityType(), userAgent()
+  - fields: candidateId(string), createdAt(string), id(string), ipAddress(string), relatedEntityId(string), relatedEntityType(string), userAgent(string)
 - candidate_list_fraud_checks:
   - primary key: id
-  - fields: applicationId(), candidateId(), createdAt(), fraudSignals(), id()
+  - fields: applicationId(string), candidateId(string), createdAt(string), fraudSignals(array), id(string)
 - candidate_list_notes:
   - primary key: id
-  - fields: author(), content(), createdAt(), id(), isPrivate()
+  - fields: author(object), content(string), createdAt(string), id(string), isPrivate(boolean)
 - candidate_list_projects:
   - primary key: id
-  - fields: authorId(), confidential(), createdAt(), customFieldEntries(), description(), id(), isArchived(), title()
+  - fields: authorId(string), confidential(boolean), createdAt(string), customFieldEntries(array), description(string), id(string), isArchived(boolean), title(string)
 - candidate_tag_list:
   - primary key: id
-  - fields: id(), isArchived(), title()
+  - fields: id(string), isArchived(boolean), title(string)
 - communication_template_list:
   - primary key: id
-  - fields: createdAt(), id(), intendedTypes(), title(), updatedAt()
+  - fields: createdAt(string), id(string), intendedTypes(array), title(string), updatedAt(string)
 - feedback_form_definition_list:
   - primary key: id
-  - fields: formDefinition(), id(), interviewId(), isArchived(), isDefaultForm(), organizationId(), title()
+  - fields: formDefinition(object), id(string), interviewId(string), isArchived(boolean), isDefaultForm(boolean), organizationId(string), title(string)
 - feedback_form_definition_info:
   - primary key: id
-  - fields: formDefinition(), id(), interviewId(), isArchived(), isDefaultForm(), organizationId(), title()
+  - fields: formDefinition(object), id(string), interviewId(string), isArchived(boolean), isDefaultForm(boolean), organizationId(string), title(string)
 - job_posting_list:
   - primary key: id
-  - fields: applicationDeadline(), applyLink(), compensationTierSummary(), departmentName(), employmentType(), externalLink(), id(), isListed(), jobId(), locationIds(), locationName(), publishedDate(), shouldDisplayCompensationOnJobBoard(), status(), teamName(), title(), updatedAt(), workplaceType()
+  - fields: applicationDeadline(string), applyLink(string), compensationTierSummary(string), departmentName(string), employmentType(string), externalLink(string), id(string), isListed(boolean), jobId(string), locationIds(object), locationName(string), publishedDate(string), shouldDisplayCompensationOnJobBoard(boolean), status(string), teamName(string), title(string), updatedAt(string), workplaceType(string)
 - job_posting_info:
   - primary key: id
-  - fields: address(), applicationConfirmationEmailTemplateId(), applicationDeadline(), applicationFormDefinition(), applicationLimitCalloutHtml(), applyLink(), compensation(), departmentName(), descriptionHtml(), descriptionParts(), descriptionPlain(), descriptionSocial(), employmentType(), externalLink(), id(), isListed(), isRemote(), job(), jobId(), linkedData(), locationAddress(), locationIds(), locationName(), publishedDate(), status(), suppressDescriptionClosing(), suppressDescriptionOpening(), surveyFormDefinitions(), teamName(), teamNameHierarchy(), title(), updatedAt(), workplaceType()
+  - fields: address(object), applicationConfirmationEmailTemplateId(string), applicationDeadline(string), applicationFormDefinition(object), applicationLimitCalloutHtml(string), applyLink(string), compensation(object), departmentName(string), descriptionHtml(string), descriptionParts(object), descriptionPlain(string), descriptionSocial(string), employmentType(string), externalLink(string), id(string), isListed(boolean), isRemote(boolean), job(object), jobId(string), linkedData(object), locationAddress(string), locationIds(object), locationName(string), publishedDate(string), status(string), suppressDescriptionClosing(boolean), suppressDescriptionOpening(boolean), surveyFormDefinitions(array), teamName(string), teamNameHierarchy(array), title(string), updatedAt(string), workplaceType(string)
 - job_info:
   - primary key: id
-  - fields: author(), brandId(), closedAt(), compensation(), confidential(), createdAt(), customFields(), customRequisitionId(), defaultInterviewPlanId(), departmentId(), employmentType(), hiringTeam(), id(), interviewPlanIds(), jobPostingIds(), location(), locationId(), openedAt(), openings(), status(), title(), updatedAt()
+  - fields: author(object), brandId(string), closedAt(string), compensation(object), confidential(boolean), createdAt(string), customFields(array), customRequisitionId(string), defaultInterviewPlanId(string), departmentId(string), employmentType(string), hiringTeam(array), id(string), interviewPlanIds(array), jobPostingIds(array), location(object), locationId(string), openedAt(string), openings(array), status(string), title(string), updatedAt(string)
 - job_board_list:
   - primary key: id
-  - fields: id(), isInternal(), title()
+  - fields: id(string), isInternal(boolean), title(string)
 - job_interview_plan_info:
   - primary key: jobId
-  - fields: interviewPlanId(), jobId(), stages()
+  - fields: interviewPlanId(string), jobId(string), stages(array)
 - job_template_list:
   - primary key: id
-  - fields: createdAt(), defaultInterviewPlanId(), departmentId(), id(), interviewPlanIds(), location(), locationId(), status(), title(), updatedAt()
+  - fields: createdAt(string), defaultInterviewPlanId(string), departmentId(string), id(string), interviewPlanIds(array), location(object), locationId(string), status(string), title(string), updatedAt(string)
 - department_info:
   - primary key: id
-  - fields: createdAt(), externalName(), extraData(), id(), isArchived(), name(), parentId(), updatedAt()
+  - fields: createdAt(string), externalName(string), extraData(object), id(string), isArchived(boolean), name(string), parentId(string), updatedAt(string)
 - department_list:
   - primary key: id
-  - fields: createdAt(), externalName(), extraData(), id(), isArchived(), name(), parentId(), updatedAt()
+  - fields: createdAt(string), externalName(string), extraData(object), id(string), isArchived(boolean), name(string), parentId(string), updatedAt(string)
 - location_list:
   - primary key: id
-  - fields: address(), externalName(), extraData(), id(), isArchived(), isRemote(), name(), parentLocationId(), type(), workplaceType()
+  - fields: address(object), externalName(string), extraData(object), id(string), isArchived(boolean), isRemote(boolean), name(string), parentLocationId(string), type(string), workplaceType(string)
 - location_info:
   - primary key: id
-  - fields: address(), externalName(), extraData(), id(), isArchived(), isRemote(), name(), parentLocationId(), type(), workplaceType()
+  - fields: address(object), externalName(string), extraData(object), id(string), isArchived(boolean), isRemote(boolean), name(string), parentLocationId(string), type(string), workplaceType(string)
 - interview_plan_list:
   - primary key: id
-  - fields: createdAt(), id(), isArchived(), title(), updatedAt()
+  - fields: createdAt(string), id(string), isArchived(boolean), title(string), updatedAt(string)
 - interview_stage_list:
   - primary key: id
-  - fields: id(), interviewPlanId(), interviewStageGroupId(), orderInInterviewPlan(), title(), type()
+  - fields: id(string), interviewPlanId(string), interviewStageGroupId(string), orderInInterviewPlan(integer), title(string), type(string)
 - interview_stage_group_list:
   - primary key: id
-  - fields: id(), order(), stageType(), title()
+  - fields: id(string), order(integer), stageType(string), title(string)
 - offer_list:
   - primary key: id
-  - fields: acceptanceStatus(), applicationId(), decidedAt(), formDefinition(), id(), latestVersion(), offerStatus(), versions()
+  - fields: acceptanceStatus(string), applicationId(string), decidedAt(string), formDefinition(object), id(string), latestVersion(object), offerStatus(string), versions(array)
 - offer_info:
   - primary key: id
-  - fields: acceptanceStatus(), applicationId(), decidedAt(), formDefinition(), id(), latestVersion(), offerStatus(), versions()
+  - fields: acceptanceStatus(string), applicationId(string), decidedAt(string), formDefinition(object), id(string), latestVersion(object), offerStatus(string), versions(array)
 - opening_info:
   - primary key: id
-  - fields: archivedAt(), closeReasonId(), closedAt(), id(), isArchived(), latestVersion(), openedAt(), openingState()
+  - fields: archivedAt(string), closeReasonId(string), closedAt(string), id(string), isArchived(boolean), latestVersion(object), openedAt(string), openingState(string)
 - opening_list:
   - primary key: id
-  - fields: archivedAt(), closeReasonId(), closedAt(), id(), isArchived(), latestVersion(), openedAt(), openingState()
+  - fields: archivedAt(string), closeReasonId(string), closedAt(string), id(string), isArchived(boolean), latestVersion(object), openedAt(string), openingState(string)
 - project_info:
   - primary key: id
-  - fields: authorId(), confidential(), createdAt(), customFieldEntries(), description(), id(), isArchived(), title()
+  - fields: authorId(string), confidential(boolean), createdAt(string), customFieldEntries(array), description(string), id(string), isArchived(boolean), title(string)
 - project_list:
   - primary key: id
-  - fields: authorId(), confidential(), createdAt(), customFieldEntries(), description(), id(), isArchived(), title()
+  - fields: authorId(string), confidential(boolean), createdAt(string), customFieldEntries(array), description(string), id(string), isArchived(boolean), title(string)
 - source_list:
   - primary key: id
-  - fields: id(), isArchived(), sourceType(), title()
+  - fields: id(string), isArchived(boolean), sourceType(object), title(string)
 - source_tracking_link_list:
   - primary key: id
-  - fields: code(), enabled(), id(), link(), sourceId()
+  - fields: code(string), enabled(boolean), id(string), link(string), sourceId(string)
 - archive_reason_list:
   - primary key: id
-  - fields: id(), isArchived(), reasonType(), text()
+  - fields: id(string), isArchived(boolean), reasonType(string), text(string)
 - brand_list:
   - primary key: id
-  - fields: hostedJobsPageSlug(), id(), name()
+  - fields: hostedJobsPageSlug(string), id(string), name(string)
 - custom_field_list:
   - primary key: id
-  - fields: description(), fieldType(), id(), isArchived(), isPrivate(), isRequired(), objectType(), selectableValues(), title()
+  - fields: description(string), fieldType(string), id(string), isArchived(boolean), isPrivate(boolean), isRequired(boolean), objectType(string), selectableValues(array), title(string)
 - custom_field_info:
   - primary key: id
-  - fields: description(), fieldType(), id(), isArchived(), isPrivate(), isRequired(), objectType(), selectableValues(), title()
+  - fields: description(string), fieldType(string), id(string), isArchived(boolean), isPrivate(boolean), isRequired(boolean), objectType(string), selectableValues(array), title(string)
 - hiring_team_role_list:
   - primary key: value
-  - fields: value()
+  - fields: value(string)
 - user_info:
   - primary key: id
-  - fields: customFields(), email(), firstName(), globalRole(), id(), isEnabled(), lastName(), managerId(), updatedAt()
+  - fields: customFields(array), email(string), firstName(string), globalRole(string), id(string), isEnabled(boolean), lastName(string), managerId(string), updatedAt(string)
 - user_list_interviewer_pauses:
   - primary key: id
-  - fields: comment(), createdAt(), endsAt(), id(), startsAt(), userId()
+  - fields: comment(string), createdAt(string), endsAt(string), id(string), startsAt(string), userId(string)
 - email_sender_list:
   - primary key: email
-  - fields: displayName(), email(), type()
+  - fields: displayName(string), email(string), type(string)
 - sequence_info:
   - primary key: id
-  - fields: applicationId(), candidateId(), createdAt(), id(), sequenceTemplateId(), stages(), status()
+  - fields: applicationId(string), candidateId(string), createdAt(string), id(string), sequenceTemplateId(string), stages(array), status(string)
 - sequence_list:
   - primary key: id
-  - fields: applicationId(), candidateId(), createdAt(), id(), sequenceTemplateId(), stages(), status()
+  - fields: applicationId(string), candidateId(string), createdAt(string), id(string), sequenceTemplateId(string), stages(array), status(string)
 - sequence_template_info:
   - primary key: id
-  - fields: id(), isArchived(), stages(), title(), unsubscribeLinkActive(), updatedAt()
+  - fields: id(string), isArchived(boolean), stages(array), title(string), unsubscribeLinkActive(boolean), updatedAt(string)
 - sequence_template_list:
   - primary key: id
-  - fields: id(), isArchived(), stages(), title(), unsubscribeLinkActive(), updatedAt()
+  - fields: id(string), isArchived(boolean), stages(array), title(string), unsubscribeLinkActive(boolean), updatedAt(string)
 - interview_schedule_list:
   - primary key: id
-  - fields: applicationId(), createdAt(), id(), interviewEvents(), interviewStageId(), scheduledBy(), status(), updatedAt()
+  - fields: applicationId(string), createdAt(string), id(string), interviewEvents(array), interviewStageId(string), scheduledBy(object), status(string), updatedAt(string)
 - take_home_assignment_list:
   - primary key: id
-  - fields: applicationId(), candidateId(), createdAt(), feedbackFormDefinitionId(), id(), interview(), interviewId(), interviewStageId(), reviewers(), status(), submission(), updatedAt()
+  - fields: applicationId(string), candidateId(string), createdAt(string), feedbackFormDefinitionId(string), id(string), interview(object), interviewId(string), interviewStageId(string), reviewers(array), status(string), submission(object), updatedAt(string)
 - take_home_assignment_info:
   - primary key: id
-  - fields: applicationId(), candidateId(), createdAt(), feedbackFormDefinitionId(), id(), interview(), interviewId(), interviewStageId(), reviewers(), status(), submission(), updatedAt()
+  - fields: applicationId(string), candidateId(string), createdAt(string), feedbackFormDefinitionId(string), id(string), interview(object), interviewId(string), interviewStageId(string), reviewers(array), status(string), submission(object), updatedAt(string)
 - interview_event_list:
   - primary key: id
-  - fields: createdAt(), endTime(), extraData(), feedbackLink(), hasSubmittedFeedback(), id(), interview(), interviewId(), interviewScheduleId(), interviewerCalendarEventId(), interviewerUserIds(), interviewers(), location(), meetingLink(), notetakerTranscriptId(), startTime(), updatedAt()
+  - fields: createdAt(string), endTime(string), extraData(object), feedbackLink(string), hasSubmittedFeedback(boolean), id(string), interview(object), interviewId(string), interviewScheduleId(string), interviewerCalendarEventId(string), interviewerUserIds(array), interviewers(array), location(string), meetingLink(string), notetakerTranscriptId(string), startTime(string), updatedAt(string)
 - interview_briefing_info:
   - primary key: id
   - cursor: candidate
-  - fields: application(), applicationId(), candidate(), feedbackFormDefinition(), feedbackFormDefinitionId(), hasSubmittedFeedback(), id(), interview(), interviewId(), interviewStageId(), interviewers(), job()
+  - fields: application(object), applicationId(string), candidate(object), feedbackFormDefinition(object), feedbackFormDefinitionId(string), hasSubmittedFeedback(boolean), id(string), interview(object), interviewId(string), interviewStageId(string), interviewers(array), job(object)
 - interview_info:
   - primary key: id
-  - fields: externalTitle(), feedbackFormDefinitionId(), id(), instructionsHtml(), instructionsPlain(), isArchived(), isDebrief(), isFeedbackRequested(), isFeedbackRequired(), jobId(), title(), type()
+  - fields: externalTitle(string), feedbackFormDefinitionId(string), id(string), instructionsHtml(string), instructionsPlain(string), isArchived(boolean), isDebrief(boolean), isFeedbackRequested(boolean), isFeedbackRequired(boolean), jobId(string), title(string), type(string)
 - interview_list:
   - primary key: id
-  - fields: externalTitle(), feedbackFormDefinitionId(), id(), instructionsHtml(), instructionsPlain(), isArchived(), isDebrief(), isFeedbackRequested(), isFeedbackRequired(), jobId(), title(), type()
+  - fields: externalTitle(string), feedbackFormDefinitionId(string), id(string), instructionsHtml(string), instructionsPlain(string), isArchived(boolean), isDebrief(boolean), isFeedbackRequested(boolean), isFeedbackRequired(boolean), jobId(string), title(string), type(string)
 - interview_stage_info:
   - primary key: id
-  - fields: id(), interviewPlanId(), interviewStageGroupId(), orderInInterviewPlan(), title(), type()
+  - fields: id(string), interviewPlanId(string), interviewStageGroupId(string), orderInInterviewPlan(integer), title(string), type(string)
 - survey_form_definition_info:
   - primary key: id
-  - fields: formDefinition(), id(), isArchived(), surveyType(), title()
+  - fields: formDefinition(object), id(string), isArchived(boolean), surveyType(string), title(string)
 - survey_form_definition_list:
   - primary key: id
-  - fields: formDefinition(), id(), isArchived(), surveyType(), title()
+  - fields: formDefinition(object), id(string), isArchived(boolean), surveyType(string), title(string)
 - survey_request_list:
   - primary key: id
   - cursor: candidateId
-  - fields: applicationId(), candidateId(), id(), surveyFormDefinitionId(), surveyUrl()
+  - fields: applicationId(string), candidateId(string), id(string), surveyFormDefinitionId(string), surveyUrl(string)
 - survey_submission_list:
   - primary key: id
-  - fields: applicationId(), candidateId(), formDefinition(), id(), submittedAt(), submittedValues(), surveyFormDefinitionId(), surveyType()
+  - fields: applicationId(string), candidateId(string), formDefinition(object), id(string), submittedAt(string), submittedValues(object), surveyFormDefinitionId(string), surveyType(string)
 - webhook_info:
   - primary key: id
-  - fields: enabled(), id(), requestUrl(), webhookType()
+  - fields: enabled(boolean), id(string), requestUrl(string), webhookType(string)
 - interviewer_pool_list:
   - primary key: id
-  - fields: id(), isArchived(), title(), trainingPath()
+  - fields: id(string), isArchived(boolean), title(string), trainingPath(object)
 - interviewer_pool_info:
   - primary key: id
-  - fields: id(), isArchived(), qualifiedMembers(), title(), trainees(), trainingPath()
+  - fields: id(string), isArchived(boolean), qualifiedMembers(array), title(string), trainees(array), trainingPath(object)
 - close_reason_list:
   - primary key: id
-  - fields: id(), isArchived(), reasonText()
+  - fields: id(string), isArchived(boolean), reasonText(string)
 - report_synchronous:
   - primary key: requestId
-  - fields: failureReason(), reportData(), requestId(), status()
+  - fields: failureReason(string), reportData(object), requestId(string), status(string)
 - approval_list:
   - primary key: id
-  - fields: approvalDefinitionId(), completedAt(), createdAt(), entityId(), entityType(), id(), steps(), submittedAt()
+  - fields: approvalDefinitionId(string), completedAt(string), createdAt(string), entityId(string), entityType(string), id(string), steps(array), submittedAt(string)
 
 ## Sync Modes
 
@@ -691,7 +691,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - application-feedback submit - Application feedback forms support a variety of field types. [intent=reverse_etl availability=partial write=submit_application_feedback]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby applicationFeedback.submit through the documented POST /applicationFeedback.submit endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --feedback-form-field-submissions-0-path, --form-definition-id, --application-id, --user-id, --interview-event-id
   - application-feedback-request create - Request feedback on an application without scheduling an interview. [intent=reverse_etl availability=implemented write=create_application_feedback_request]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby applicationFeedbackRequest.create through the documented POST /applicationFeedbackRequest.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --interview-id, --interviewer-user-id
   - approval-definition update - Create or update an approval definition for a specific entity that requires approval. [intent=reverse_etl availability=implemented write=update_approval_definition]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby approvalDefinition.update through the documented POST /approvalDefinition.update endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --entity-type, --entity-id, --approval-step-definitions-0-approvals-required, --approval-step-definitions-0-approvers-0-user-id, --approval-step-definitions-0-approvers-0-type, --submit-approval-request
-  - candidate search - Searches for candidates by email and/or name. Requires the candidatesRead permission. [intent=direct_read availability=implemented operation=ashby.direct.candidate.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email, --name
+  - candidate search - Searches for candidates by email and/or name. Requires the candidatesRead permission. [intent=direct_read availability=implemented operation=ashby.direct.candidate.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email, --name, --page, --page-cursor
   - candidate info - Fetches details about a single candidate by id or external mapping id. Requires the candidatesRead permission. [intent=etl availability=implemented stream=candidate_info]; notes: Fixed Ashby stream for candidate.info; flags map only to documented request body fields. Requires at least one documented selector: id, externalMappingId. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --id, --external-mapping-id
   - candidate create - Creates a new candidate. Requires the candidatesWrite permission. [intent=reverse_etl availability=implemented write=create_candidate]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidate.create through the documented POST /candidate.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --name, --email, --phone-number, --linked-in-url, --github-url, --website, --alternate-email-addresses, --source-id, --credited-to-user-id, --created-at
   - candidate upload-resume - Uploads a resume for a candidate. Accepts either a multipart/form-data request with a resume file part, or a JSON body with a resumeHandle previously... [intent=reverse_etl availability=implemented write=upload_candidate_resume]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidate.uploadResume through the documented POST /candidate.uploadResume endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --resume-handle
@@ -725,7 +725,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - job create - Creates a new job. Requires the jobsWrite permission. [intent=reverse_etl availability=implemented write=create_job]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.create through the documented POST /job.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --title, --team-id, --location-id, --default-interview-plan-id, --job-template-id, --employment-type, --brand-id
   - job update - Updates an existing job. At least one field other than jobId must be supplied. Requires the jobsWrite permission. [intent=reverse_etl availability=implemented write=update_job]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.update through the documented POST /job.update endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-id, --title, --team-id, --location-id, --default-interview-plan-id, --employment-type, --custom-requisition-id
   - job update-compensation - Replaces the compensation tiers on a job. Pass an empty array to clear existing compensation. [intent=reverse_etl availability=implemented write=update_job_compensation]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.updateCompensation through the documented POST /job.updateCompensation endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-id, --compensation-tiers-0-components-0-compensation-type, --compensation-tiers-0-components-0-interval
-  - job search - Searches jobs by title or custom requisition id. At least one of title or requisitionId must be provided. [intent=direct_read availability=implemented operation=ashby.direct.job.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title, --requisition-id
+  - job search - Searches jobs by title or custom requisition id. At least one of title or requisitionId must be provided. [intent=direct_read availability=implemented operation=ashby.direct.job.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title, --requisition-id, --page, --page-cursor
   - job set-status - Sets the status of a job. Requires the jobsWrite permission. [intent=reverse_etl availability=implemented write=set_job_status]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-id, --status
   - job-board list - List all enabled job boards. Requires the jobsRead permission. [intent=etl availability=implemented stream=job_board_list]; notes: Fixed Ashby stream for jobBoard.list; flags map only to documented request body fields.
   - job-interview-plan info - Returns a job's interview plan, including activities and interviews that need to be scheduled at each stage. [intent=etl availability=implemented stream=job_interview_plan_info]; notes: Fixed Ashby stream for jobInterviewPlan.info; flags map only to documented request body fields.; flags: --job-id (required)
@@ -750,7 +750,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - interview-plan list - Full-refresh-only Ashby interview-plan list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=interview_plan_list]; notes: Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
   - interview-stage list - List all interview stages for an interview plan in order. Requires the interviewsRead permission. [intent=etl availability=implemented stream=interview_stage_list]; notes: Fixed Ashby stream for interviewStage.list; flags map only to documented request body fields.; flags: --interview-plan-id (required)
   - interview-stage-group list - List all interview stage groups in the organization in order. Requires the interviewsRead permission. [intent=etl availability=implemented stream=interview_stage_group_list]; notes: Fixed Ashby stream for interviewStageGroup.list; flags map only to documented request body fields.
-  - notetaker-transcript info - Fetches metadata and a pre-signed download URL for an AI Notetaker transcript recording. [intent=direct_read availability=implemented operation=ashby.direct.notetaker.transcript.info]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --notetaker-transcript-id (required)
+  - notetaker-transcript info - Fetches metadata and a pre-signed download URL for an AI Notetaker transcript recording. [intent=direct_read availability=implemented operation=ashby.direct.notetaker.transcript.info]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --notetaker-transcript-id (required), --page, --page-cursor
   - offer approve - Approves an offer or a specific approval step within an offer's approval process. [intent=reverse_etl availability=implemented write=approve_offer]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby offer.approve through the documented POST /offer.approve endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --offer-version-id, --approval-step-id, --user-id, --exclude-form-definition
   - offer create - Creates a new Offer Offer forms support a variety of field types. [intent=reverse_etl availability=partial write=create_offer]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby offer.create through the documented POST /offer.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --offer-process-id, --offer-form-id, --offer-form-field-submissions-0-path, --exclude-form-definition
   - offer list - Full-refresh-only Ashby offer list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=offer_list]; notes: Fixed Ashby stream for offer.list; flags map only to documented request body fields. Repeatable array request variants (--offer-status, --acceptance-status, --approval-status) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after, --application-id
@@ -771,10 +771,10 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - opening add-location - Adds a location to an opening. Requires the jobsWrite permission. [intent=reverse_etl availability=implemented write=add_opening_location]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.addLocation through the documented POST /opening.addLocation endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --opening-id, --location-id
   - opening remove-location - Removes a location from an opening. Requires the jobsWrite permission. [intent=reverse_etl availability=implemented write=remove_opening_location]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.removeLocation through the documented POST /opening.removeLocation endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --opening-id, --location-id
   - opening list - Full-refresh-only Ashby opening list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=opening_list]; notes: Fixed Ashby stream for opening.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after
-  - opening search - Searches for openings by identifier. Requires the jobsRead permission. [intent=direct_read availability=implemented operation=ashby.direct.opening.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --identifier (required)
+  - opening search - Searches for openings by identifier. Requires the jobsRead permission. [intent=direct_read availability=implemented operation=ashby.direct.opening.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --identifier (required), --page, --page-cursor
   - project info - Retrieves a project by its UUID. Requires the candidatesRead permission. [intent=etl availability=implemented stream=project_info]; notes: Fixed Ashby stream for project.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --project-id (required)
   - project list - Full-refresh-only Ashby project list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=project_list]; notes: Fixed Ashby stream for project.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after
-  - project search - Search for projects by title. Responses are limited to 100 results. [intent=direct_read availability=implemented operation=ashby.direct.project.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title (required)
+  - project search - Search for projects by title. Responses are limited to 100 results. [intent=direct_read availability=implemented operation=ashby.direct.project.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title (required), --page, --page-cursor
   - source list - List all sources Requires the hiringProcessMetadataRead permission. [intent=etl availability=implemented stream=source_list]; notes: Fixed Ashby stream for source.list; flags map only to documented request body fields.; flags: --include-archived
   - source-tracking-link list - Full-refresh-only Ashby source-tracking-link list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=source_tracking_link_list]; notes: Fixed Ashby stream for sourceTrackingLink.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-disabled, --source-id
   - archive-reason list - Lists archive reasons. Requires the hiringProcessMetadataRead permission. [intent=etl availability=implemented stream=archive_reason_list]; notes: Fixed Ashby stream for archiveReason.list; flags map only to documented request body fields.; flags: --include-archived
@@ -791,8 +791,8 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - hiring-team remove-member - Removes an Ashby user from the hiring team at the application, job, or opening level. [intent=reverse_etl availability=implemented write=remove_hiring_team_member]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby hiringTeam.removeMember through the documented POST /hiringTeam.removeMember endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Provide an applicationId, jobId, or openingId target. Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --job-id, --opening-id, --team-member-id, --role-id
   - hiring-team-role list - Lists the possible hiring team roles in an organization Requires the organizationRead permission. [intent=etl availability=implemented stream=hiring_team_role_list]; notes: Fixed Ashby stream for hiringTeamRole.list; defaults to namesOnly=true role-title results. namesOnly=false object results are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false.
   - user info - Retrieves detailed information about a specific user by their ID. Requires the organizationRead permission. [intent=etl availability=implemented stream=user_info]; notes: Fixed Ashby stream for user.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --user-id (required)
-  - user search - Searches for users by email address. Returns an array containing the user if found, or an empty array if no user with the given email exists. [intent=direct_read availability=implemented operation=ashby.direct.user.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email (required)
-  - user interviewer-settings - Get interviewer settings for a user. Requires the organizationRead permission. [intent=direct_read availability=implemented operation=ashby.direct.user.interviewer.settings]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential interviewer settings remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --user-id (required)
+  - user search - Searches for users by email address. Returns an array containing the user if found, or an empty array if no user with the given email exists. [intent=direct_read availability=implemented operation=ashby.direct.user.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email (required), --page, --page-cursor
+  - user interviewer-settings - Get interviewer settings for a user. Requires the organizationRead permission. [intent=direct_read availability=implemented operation=ashby.direct.user.interviewer.settings]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential interviewer settings remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --user-id (required), --page, --page-cursor
   - user update-interviewer-settings - Update interviewer settings for a user. Either limit can be provided, or both can be provided. If only one is provided, the other will remain unchanged. [intent=reverse_etl availability=implemented write=update_user_interviewer_settings]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby user.updateInterviewerSettings through the documented POST /user.updateInterviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --user-id, --daily-limit, --weekly-limit
   - user create-interviewer-pause - Creates an interviewer pause for a user. While paused, the user will not be scheduled for interviews. [intent=reverse_etl availability=implemented write=create_user_interviewer_pause]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby user.createInterviewerPause through the documented POST /user.createInterviewerPause endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --user-id, --starts-at, --ends-at, --comment
   - user list-interviewer-pauses - Lists all active or scheduled interviewer pauses for a user. [intent=etl availability=implemented stream=user_list_interviewer_pauses]; notes: Fixed Ashby stream for user.listInterviewerPauses; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --user-id (required)
@@ -821,7 +821,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - interview info - Fetch interview details by id. Requires the interviewsRead permission. [intent=etl availability=implemented stream=interview_info]; notes: Fixed Ashby stream for interview.info; flags map only to documented request body fields.; flags: --id (required)
   - interview list - Full-refresh-only Ashby interview list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=interview_list]; notes: Fixed Ashby stream for interview.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived, --include-non-shared-interviews, --exclude-archived-schedule-template-interviews
   - interview-stage info - Retrieves detailed information about a specific interview stage by its ID. [intent=etl availability=implemented stream=interview_stage_info]; notes: Fixed Ashby stream for interviewStage.info; flags map only to documented request body fields.; flags: --interview-stage-id (required)
-  - file info - Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files). [intent=direct_read availability=implemented operation=ashby.direct.file.info]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --file-handle (required)
+  - file info - Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files). [intent=direct_read availability=implemented operation=ashby.direct.file.info]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --file-handle (required), --page, --page-cursor
   - survey-form-definition info - Returns details about a single survey form definition by id. [intent=etl availability=implemented stream=survey_form_definition_info]; notes: Fixed Ashby stream for surveyFormDefinition.info; flags map only to documented request body fields.; flags: --survey-form-definition-id (required)
   - survey-form-definition list - Full-refresh-only Ashby survey-form-definition list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=survey_form_definition_list]; notes: Fixed Ashby stream for surveyFormDefinition.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.
   - survey-request create - This endpoint generates a survey request and returns a survey URL. You can send this URL to a candidate to allow them to complete a survey. [intent=reverse_etl availability=implemented write=create_survey_request]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby surveyRequest.create through the documented POST /surveyRequest.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --application-id, --survey-form-definition-id
@@ -841,7 +841,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - interviewer-pool add-user - Add a user to an interviewer pool. Requires the hiringProcessMetadataWrite permission. [intent=reverse_etl availability=implemented write=add_interviewer_pool_user]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby interviewerPool.addUser through the documented POST /interviewerPool.addUser endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --interviewer-pool-id, --user-id, --interviewer-pool-training-path-stage-id
   - interviewer-pool remove-user - Remove a user from an interviewer pool. Requires the hiringProcessMetadataWrite permission. [intent=reverse_etl availability=implemented write=remove_interviewer_pool_user]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby interviewerPool.removeUser through the documented POST /interviewerPool.removeUser endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --interviewer-pool-id, --user-id
   - close-reason list - Lists all close reasons for jobs or openings. Requires the hiringProcessMetadataRead permission. [intent=etl availability=implemented stream=close_reason_list]; notes: Fixed Ashby stream for closeReason.list; flags map only to documented request body fields.; flags: --include-archived
-  - report generate - Start an Ashby report generation or check an existing request. [intent=direct_read availability=implemented operation=ashby.direct.report.generate]; approval: none; risk: bounded JSON direct read that starts or polls a documented Ashby report generation and returns at most 1 MiB of redacted JSON; the connector does not fetch returned report URLs or poll automatically; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --report-id (required), --include-headers-in-data, --result-style, --request-id
+  - report generate - Start an Ashby report generation or check an existing request. [intent=direct_read availability=implemented operation=ashby.direct.report.generate]; approval: none; risk: bounded JSON direct read that starts or polls a documented Ashby report generation and returns at most 1 MiB of redacted JSON; the connector does not fetch returned report URLs or poll automatically; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --report-id (required), --include-headers-in-data, --result-style, --request-id, --page, --page-cursor
   - report synchronous - Beta This endpoint is currently in beta and may change without notice. Retrieves report data synchronously. Timeout: 30 seconds. [intent=etl availability=implemented stream=report_synchronous]; notes: Fixed Ashby stream for report.synchronous; flags map only to documented request body fields.; flags: --report-id (required), --include-headers-in-data, --result-style
   - approval list - Full-refresh-only Ashby approval list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=approval_list]; notes: Fixed Ashby stream for approval.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --entity-type, --entity-id
 - Help topics:

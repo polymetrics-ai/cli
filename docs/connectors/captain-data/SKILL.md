@@ -39,16 +39,16 @@ Reads Captain Data workspace, workflows, jobs, and job results, and writes a lau
 
 - workspace:
   - primary key: uid
-  - fields: created_at(), name(), plan(), uid()
+  - fields: created_at(string), name(string), plan(string), uid(string)
 - workflows:
   - primary key: uid
-  - fields: created_at(), name(), status(), uid(), updated_at()
+  - fields: created_at(string), name(string), status(string), uid(string), updated_at(string)
 - jobs:
   - primary key: uid
-  - fields: created_at(), ended_at(), status(), uid(), workflow_uid()
+  - fields: created_at(string), ended_at(string), status(string), uid(string), workflow_uid(string)
 - job_results:
   - primary key: uid
-  - fields: created_at(), data(), job_uid(), status(), uid()
+  - fields: created_at(string), data(object), job_uid(string), status(string), uid(string)
 
 ## Sync Modes
 

@@ -33,6 +33,7 @@ type fakeConnector struct {
 	directWriteMetadata       connectors.OperationDirectWriteMetadata
 	binaryDownloadReq         connectors.OperationBinaryDownloadRequest
 	directReadErr             error
+	ignoresPageNavigation     bool
 	operationDirectReadErr    error
 	binaryDownloadErr         error
 	validateReq               connectors.WriteRequest
@@ -102,8 +103,20 @@ func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadR
 			"name": "README.md",
 			"type": "file",
 		},
+		Page: f.directReadPage(),
 	}, nil
 }
+
+// directReadPage stands in for the page context a real direct-read executor
+// reports. ignoresPageNavigation models the executor that does not: it accepts
+// Page/PageCursor and hands back a zero page, which is what the runner refuses.
+func (f *fakeConnector) directReadPage() connectors.DirectReadPage {
+	if f.ignoresPageNavigation {
+		return connectors.DirectReadPage{}
+	}
+	return connectors.DirectReadPage{Strategy: "page_number", Complete: true}
+}
+
 func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	f.operationDirectReadReq = req
 	if f.operationDirectReadErr != nil {
@@ -115,6 +128,7 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Path:      "/v2/meetings/integration/status",
 		Status:    200,
 		Body:      map[string]any{"ok": true},
+		Page:      f.directReadPage(),
 	}, nil
 }
 func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
@@ -2833,4 +2847,120 @@ func TestRunBinaryDownloadReachesOperationDeclaredCap(t *testing.T) {
 			t.Fatalf("Run error = %q, want it to name the size limit", err.Error())
 		}
 	})
+}
+
+// TestRunRejectsPageFlagsForIntentsThatCannotHonourThem is the anti-silence
+// guard for the page flags themselves: only a direct_read pages, so every
+// other intent must keep refusing --page instead of accepting and ignoring it.
+func TestRunRejectsPageFlagsForIntentsThatCannotHonourThem(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "issue list",
+				Intent:       "etl",
+				Availability: "implemented",
+				Stream:       "issues",
+			},
+		},
+	}}
+
+	for _, flag := range []string{"page", "page-cursor"} {
+		t.Run(flag, func(t *testing.T) {
+			_, err := Run(context.Background(), connector, Request{
+				Path:  []string{"issue", "list"},
+				Flags: map[string][]string{flag: {"3"}},
+				Page:  3,
+			}, func(connectors.Record) error { return nil })
+			if err == nil {
+				t.Fatalf("--%s on an etl command returned no error, want an unknown-flag refusal", flag)
+			}
+			if !strings.Contains(err.Error(), "unknown flag --"+flag) {
+				t.Fatalf("error = %q, want an unknown flag --%s refusal", err.Error(), flag)
+			}
+		})
+	}
+}
+
+// TestRunAcceptsPageFlagsForDirectRead is the other half: the intent that can
+// honour them must not see them as command flags, and must receive them as the
+// typed navigation inputs instead.
+func TestRunAcceptsPageFlagsForDirectRead(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "repo read-file",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/repos/{owner}/{repo}/contents/{path}"},
+				},
+				OutputPolicy: "repository_contents_file_metadata",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "path", Type: "string", MapsTo: "path.path"},
+				},
+			},
+		},
+	}}
+
+	if _, err := Run(context.Background(), connector, Request{
+		Path:  []string{"repo", "read-file"},
+		Flags: map[string][]string{"path": {"README.md"}, "page": {"2"}},
+		Page:  2,
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"owner": "octo",
+			"repo":  "hello",
+		}},
+	}, func(connectors.Record) error { return nil }); err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if connector.directReadReq.Page != 2 {
+		t.Fatalf("direct read page = %d, want 2", connector.directReadReq.Page)
+	}
+}
+
+// TestRunRefusesPageNavigationAReaderCannotHonour is the general guard behind
+// the amazon-sqs finding. Page/PageCursor are handed to whatever direct-read
+// implementation a connector supplies, and nothing in the type system makes it
+// honour them; one that does not returns a zero page, so the caller got page
+// one at status 200 with the request silently discarded.
+func TestRunRefusesPageNavigationAReaderCannotHonour(t *testing.T) {
+	surface := &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "repo read-file",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/repos/{owner}/{repo}/contents/{path}"},
+				},
+				OutputPolicy: "repository_contents_file_metadata",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "path", Type: "string", MapsTo: "path.path"},
+				},
+			},
+		},
+	}
+	config := connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}}
+
+	for _, tc := range []struct {
+		name string
+		req  Request
+	}{
+		{name: "page", req: Request{Flags: map[string][]string{"path": {"README.md"}, "page": {"3"}}, Page: 3}},
+		{name: "page-cursor", req: Request{Flags: map[string][]string{"path": {"README.md"}, "page-cursor": {"abc"}}, PageCursor: "abc"}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: surface, ignoresPageNavigation: true}
+			req := tc.req
+			req.Path = []string{"repo", "read-file"}
+			req.Config = config
+			_, err := Run(context.Background(), connector, req, func(connectors.Record) error { return nil })
+			if err == nil {
+				t.Fatal("a reader that ignores page navigation returned no error, want a refusal rather than page one")
+			}
+			if !strings.Contains(err.Error(), "reported no page context") {
+				t.Fatalf("error = %q, want it to name the missing page context", err.Error())
+			}
+		})
+	}
 }

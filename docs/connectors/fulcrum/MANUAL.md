@@ -37,23 +37,23 @@ ETL STREAMS
   forms:
     primary key: id
     cursor: updated_at
-    fields: auto_assign(), created_at(), description(), id(), name(), record_count(), status(), updated_at()
+    fields: auto_assign(boolean), created_at(string), description(string), id(string), name(string), record_count(integer), status(string), updated_at(string)
   records:
     primary key: id
     cursor: updated_at
-    fields: created_at(), created_by(), form_id(), id(), latitude(), longitude(), project_id(), status(), updated_at(), updated_by()
+    fields: created_at(string), created_by(string), form_id(string), id(string), latitude(number), longitude(number), project_id(string), status(string), updated_at(string), updated_by(string)
   projects:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), name(), updated_at()
+    fields: created_at(string), description(string), id(string), name(string), updated_at(string)
   choice_lists:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), name(), updated_at()
+    fields: created_at(string), description(string), id(string), name(string), updated_at(string)
   classification_sets:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), name(), updated_at()
+    fields: created_at(string), description(string), id(string), name(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

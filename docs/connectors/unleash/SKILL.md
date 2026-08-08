@@ -37,16 +37,16 @@ Reads Unleash projects, feature toggles, environments, and segments through admi
 
 - projects:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - features:
   - primary key: name
-  - fields: enabled(), name(), project(), type()
+  - fields: enabled(boolean), name(string), project(string), type(string)
 - environments:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - segments:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 
 ## Sync Modes
 

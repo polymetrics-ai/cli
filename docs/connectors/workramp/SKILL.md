@@ -39,21 +39,21 @@ Reads and writes WorkRamp users and groups, and reads guides, resources, and SCO
 - users:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), email(), id(), isAdmin(), isDeleted(), isPermanentlyDeleted(), name(), updatedAt()
+  - fields: createdAt(number), email(string), id(integer), isAdmin(boolean), isDeleted(boolean), isPermanentlyDeleted(boolean), name(string), updatedAt(number)
 - groups:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), description(), enterpriseId(), id(), name(), updatedAt()
+  - fields: createdAt(number), description(string), enterpriseId(integer), id(integer), name(string), updatedAt(number)
 - courses:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), num_total_tasks(), num_total_test_questions(), tags(), title(), updated_at()
+  - fields: created_at(number), id(string), num_total_tasks(integer), num_total_test_questions(integer), tags(array), title(string), updated_at(number)
 - resources:
   - primary key: id
-  - fields: createdAt(), description(), id(), name(), updatedAt()
+  - fields: createdAt(number), description(string), id(string), name(string), updatedAt(number)
 - scorm_courses:
   - primary key: id
-  - fields: created_at(), id(), time_estimate(), title()
+  - fields: created_at(number), id(string), time_estimate(integer), title(string)
 
 ## Sync Modes
 

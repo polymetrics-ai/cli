@@ -38,13 +38,13 @@ Reads Qonto bank transactions, memberships, and accounts through the Qonto REST 
 - transactions:
   - primary key: id
   - cursor: settled_at
-  - fields: amount(), id(), settled_at(), side(), updated_at()
+  - fields: amount(string), id(string), settled_at(string), side(string), updated_at(string)
 - memberships:
   - primary key: id
-  - fields: amount(), id(), settled_at(), side(), updated_at()
+  - fields: amount(string), id(string), settled_at(string), side(string), updated_at(string)
 - accounts:
   - primary key: id
-  - fields: amount(), id(), settled_at(), side(), updated_at()
+  - fields: amount(string), id(string), settled_at(string), side(string), updated_at(string)
 
 ## Sync Modes
 

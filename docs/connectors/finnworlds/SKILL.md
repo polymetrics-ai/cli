@@ -38,19 +38,19 @@ Reads global financial data (dividends, stock splits, historical candlesticks, a
 - dividends:
   - primary key: ticker, date
   - cursor: date
-  - fields: date(), dividend_rate(), ticker()
+  - fields: date(string), dividend_rate(string), ticker(string)
 - stock_splits:
   - primary key: ticker, date
   - cursor: date
-  - fields: date(), stock_split(), ticker()
+  - fields: date(string), stock_split(string), ticker(string)
 - historical_candlestick:
   - primary key: ticker, date
   - cursor: date
-  - fields: adjusted_close(), close(), closetime(), date(), high(), low(), open(), opentime(), ticker(), trade_volume()
+  - fields: adjusted_close(string), close(string), closetime(integer), date(string), high(string), low(string), open(string), opentime(integer), ticker(string), trade_volume(string)
 - commodities:
   - primary key: commodity_name, datetime
   - cursor: datetime
-  - fields: commodity_name(), commodity_price(), commodity_unit(), datetime(), percentage_day(), percentage_month(), percentage_week(), percentage_year(), price_change_day()
+  - fields: commodity_name(string), commodity_price(string), commodity_unit(string), datetime(string), percentage_day(string), percentage_month(string), percentage_week(string), percentage_year(string), price_change_day(string)
 
 ## Sync Modes
 

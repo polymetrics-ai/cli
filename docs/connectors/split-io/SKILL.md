@@ -37,27 +37,27 @@ Reads Split.io workspaces, environments, feature flags, segments, groups, traffi
 
 - workspaces:
   - primary key: id
-  - fields: id(), name(), status()
+  - fields: id(string), name(string), status(string)
 - environments:
   - primary key: id
-  - fields: id(), name(), status()
+  - fields: id(string), name(string), status(string)
 - splits:
   - primary key: id
   - cursor: updatedAt
-  - fields: environment(), id(), name(), status(), trafficType(), updatedAt()
+  - fields: environment(string), id(string), name(string), status(string), trafficType(string), updatedAt(string)
 - segments:
   - primary key: id
   - cursor: updatedAt
-  - fields: id(), name(), status(), updatedAt()
+  - fields: id(string), name(string), status(string), updatedAt(string)
 - groups:
   - primary key: id
-  - fields: description(), id(), name(), type()
+  - fields: description(string), id(string), name(string), type(string)
 - traffic_types:
   - primary key: id
-  - fields: displayAttributeId(), id(), name()
+  - fields: displayAttributeId(string), id(string), name(string)
 - users:
   - primary key: id
-  - fields: email(), groups(), id(), name(), status()
+  - fields: email(string), groups(array), id(string), name(string), status(string)
 
 ## Sync Modes
 

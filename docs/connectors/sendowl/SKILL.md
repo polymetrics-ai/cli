@@ -38,22 +38,22 @@ Reads SendOwl orders, products, subscriptions, discounts, bundles, and licenses,
 - orders:
   - primary key: id
   - cursor: created_at
-  - fields: buyer_email(), buyer_name(), created_at(), currency(), id(), name(), price(), state()
+  - fields: buyer_email(string), buyer_name(string), created_at(string), currency(string), id(integer), name(string), price(string), state(string)
 - products:
   - primary key: id
-  - fields: created_at(), currency(), id(), name(), price(), product_type()
+  - fields: created_at(string), currency(string), id(integer), name(string), price(string), product_type(string)
 - subscriptions:
   - primary key: id
-  - fields: buyer_email(), created_at(), id(), name(), state()
+  - fields: buyer_email(string), created_at(string), id(integer), name(string), state(string)
 - discounts:
   - primary key: id
-  - fields: code(), created_at(), currency_code(), current_uses(), discount_flat_rate(), discount_percentage(), end_at(), id(), max_uses(), start_at()
+  - fields: code(string), created_at(string), currency_code(string), current_uses(integer), discount_flat_rate(string), discount_percentage(string), end_at(string), id(integer), max_uses(integer), start_at(string)
 - bundles:
   - primary key: id
-  - fields: created_at(), currency_code(), id(), name(), price(), self_hosted()
+  - fields: created_at(string), currency_code(string), id(integer), name(string), price(string), self_hosted(boolean)
 - licenses:
   - primary key: id
-  - fields: created_at(), id(), key(), product_id(), status()
+  - fields: created_at(string), id(integer), key(string), product_id(string), status(string)
 
 ## Sync Modes
 

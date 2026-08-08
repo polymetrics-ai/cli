@@ -45,69 +45,69 @@ Reads PayFit legacy /v1 resources and current company-scoped PayFit API resource
 - employees:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), first_name(), id(), last_name(), updated_at()
+  - fields: email(string), first_name(string), id(string), last_name(string), updated_at(string)
 - contracts:
   - primary key: id
   - cursor: updated_at
-  - fields: employee_id(), id(), start_date(), type(), updated_at()
+  - fields: employee_id(string), id(string), start_date(string), type(string), updated_at(string)
 - companies:
   - primary key: id
   - cursor: updated_at
-  - fields: country(), id(), name(), updated_at()
+  - fields: country(string), id(string), name(string), updated_at(string)
 - absences:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - collaborators:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - collaborator_meal_vouchers:
   - primary key: collaboratorId
-  - fields: collaboratorId()
+  - fields: collaboratorId(string)
 - collaborator_payslips:
   - primary key: payslipId
-  - fields: payslipId()
+  - fields: payslipId(string)
 - company_contracts:
   - primary key: contractId
-  - fields: contractId()
+  - fields: contractId(string)
 - company_contracts_fr:
   - primary key: contractId
-  - fields: contractId()
+  - fields: contractId(string)
 - worked_time_by_contract:
   - primary key: contractId
-  - fields: contractId()
+  - fields: contractId(string)
 - health_insurance_contracts:
   - primary key: idContrat
-  - fields: idContrat()
+  - fields: idContrat(string)
 - provident_fund_contracts:
   - primary key: idContrat
-  - fields: idContrat()
+  - fields: idContrat(string)
 - auto_enrolment_documents:
   - primary key: documentId
-  - fields: documentId()
+  - fields: documentId(string)
 - income_tax_documents:
   - primary key: documentId
-  - fields: documentId()
+  - fields: documentId(string)
 - accounting_v2_entries:
   - primary key: operationDate, accountId, contractId
-  - fields: accountId(), contractId(), operationDate()
+  - fields: accountId(string), contractId(string), operationDate(string)
 - company:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_fr:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - collaborator:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - company_contract:
   - primary key: contractId
-  - fields: contractId()
+  - fields: contractId(string)
 - company_contract_fr:
   - primary key: contractId
-  - fields: contractId()
+  - fields: contractId(string)
 - payroll_status:
   - primary key: company_id
-  - fields: company_id()
+  - fields: company_id(string)
 
 ## Sync Modes
 

@@ -143,13 +143,6 @@
           "allow_empty": false
         },
         {
-          "name": "next-token",
-          "type": "string",
-          "summary": "Pagination token from a prior response.",
-          "maps_to": "body.next_token",
-          "allow_empty": false
-        },
-        {
           "name": "max-results",
           "type": "integer",
           "summary": "Maximum queue URLs to return (bounded by SQS).",
@@ -201,13 +194,6 @@
       "availability": "implemented",
       "operation": "list_dead_letter_source_queues",
       "flags": [
-        {
-          "name": "next-token",
-          "type": "string",
-          "summary": "Pagination token from a prior response.",
-          "maps_to": "body.next_token",
-          "allow_empty": false
-        },
         {
           "name": "max-results",
           "type": "integer",
@@ -281,7 +267,7 @@
           "type": "string",
           "summary": "Permission statement label.",
           "maps_to": "record.label",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         },
         {
@@ -289,14 +275,14 @@
           "type": "string_array",
           "summary": "AWS account ids to grant.",
           "maps_to": "record.aws_account_ids",
-	      "required": true
+          "required": true
         },
         {
           "name": "actions",
           "type": "string_array",
           "summary": "SQS action names to allow.",
           "maps_to": "record.actions",
-	      "required": true
+          "required": true
         }
       ],
       "examples": [
@@ -325,7 +311,7 @@
           "type": "string",
           "summary": "Task handle returned by StartMessageMoveTask/ListMessageMoveTasks.",
           "maps_to": "record.task_handle",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         }
       ],
@@ -355,7 +341,7 @@
           "type": "string",
           "summary": "Receipt handle from ReceiveMessage.",
           "maps_to": "record.receipt_handle",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         },
         {
@@ -363,7 +349,7 @@
           "type": "integer",
           "summary": "New visibility timeout in seconds.",
           "maps_to": "record.visibility_timeout",
-	      "required": true
+          "required": true
         }
       ],
       "examples": [
@@ -399,7 +385,7 @@
           "type": "string",
           "summary": "Receipt handle from ReceiveMessage.",
           "maps_to": "record.receipt_handle",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         },
         {
@@ -407,7 +393,7 @@
           "type": "integer",
           "summary": "New visibility timeout in seconds.",
           "maps_to": "record.visibility_timeout",
-	      "required": true
+          "required": true
         }
       ],
       "examples": [
@@ -436,7 +422,7 @@
           "type": "string",
           "summary": "Queue name to create.",
           "maps_to": "record.queue_name",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         }
       ],
@@ -466,7 +452,7 @@
           "type": "string",
           "summary": "Receipt handle from ReceiveMessage.",
           "maps_to": "record.receipt_handle",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         }
       ],
@@ -503,7 +489,7 @@
           "type": "string",
           "summary": "Receipt handle from ReceiveMessage.",
           "maps_to": "record.receipt_handle",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         }
       ],
@@ -573,7 +559,7 @@
           "type": "string",
           "summary": "Permission statement label to remove.",
           "maps_to": "record.label",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         }
       ],
@@ -603,7 +589,7 @@
           "type": "string",
           "summary": "Message body string.",
           "maps_to": "record.message_body",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         },
         {
@@ -660,7 +646,7 @@
           "type": "string",
           "summary": "Message body string.",
           "maps_to": "record.message_body",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         },
         {
@@ -724,7 +710,7 @@
           "type": "string",
           "summary": "Queue attribute name to set, for example VisibilityTimeout or Policy.",
           "maps_to": "record.attribute_name",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         },
         {
@@ -732,7 +718,7 @@
           "type": "string",
           "summary": "Queue attribute value. Sensitive values are redacted in previews/errors.",
           "maps_to": "record.attribute_value",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         }
       ]
@@ -749,7 +735,7 @@
           "type": "string",
           "summary": "Source dead-letter queue ARN.",
           "maps_to": "record.source_arn",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         },
         {
@@ -805,7 +791,7 @@
           "type": "string",
           "summary": "Tag key to add or update.",
           "maps_to": "record.tag_key",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         },
         {
@@ -813,7 +799,7 @@
           "type": "string",
           "summary": "Tag value to add or update.",
           "maps_to": "record.tag_value",
-	      "required": true,
+          "required": true,
           "allow_empty": false
         }
       ]
@@ -830,7 +816,7 @@
           "type": "string_array",
           "summary": "Tag keys to remove.",
           "maps_to": "record.tag_keys",
-	      "required": true
+          "required": true
         }
       ],
       "examples": [

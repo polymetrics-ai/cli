@@ -37,14 +37,14 @@ ETL STREAMS
   tasks:
     primary key: id
     cursor: updatedDate
-    fields: id(), title(), updatedDate()
+    fields: id(string), title(string), updatedDate(string)
   folders:
     primary key: id
     cursor: updatedDate
-    fields: id(), title(), updatedDate()
+    fields: id(string), title(string), updatedDate(string)
   contacts:
     primary key: id
-    fields: firstName(), id(), lastName()
+    fields: firstName(string), id(string), lastName(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

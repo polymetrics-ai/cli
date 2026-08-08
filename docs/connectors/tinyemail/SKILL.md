@@ -35,13 +35,13 @@ Reads subscribers, lists, and campaigns, and writes subscriber create/upsert act
 
 - subscribers:
   - primary key: id
-  - fields: created_at(), email(), first_name(), id(), last_name(), status()
+  - fields: created_at(string), email(string), first_name(string), id(string), last_name(string), status(string)
 - lists:
   - primary key: id
-  - fields: created_at(), id(), name(), subscriber_count()
+  - fields: created_at(string), id(string), name(string), subscriber_count(string)
 - campaigns:
   - primary key: id
-  - fields: created_at(), id(), name(), status(), subject()
+  - fields: created_at(string), id(string), name(string), status(string), subject(string)
 
 ## Sync Modes
 

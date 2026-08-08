@@ -36,19 +36,19 @@ Reads Grafana dashboards, folders, data sources, organization users, and provisi
 
 - dashboards:
   - primary key: uid
-  - fields: folderId(), folderTitle(), folderUid(), id(), isStarred(), orgId(), tags(), title(), type(), uid(), url()
+  - fields: folderId(integer), folderTitle(string), folderUid(string), id(integer), isStarred(boolean), orgId(integer), tags(array), title(string), type(string), uid(string), url(string)
 - folders:
   - primary key: uid
-  - fields: id(), orgId(), tags(), title(), type(), uid(), url()
+  - fields: id(integer), orgId(integer), tags(array), title(string), type(string), uid(string), url(string)
 - datasources:
   - primary key: uid
-  - fields: access(), id(), isDefault(), name(), orgId(), readOnly(), type(), uid(), url()
+  - fields: access(string), id(integer), isDefault(boolean), name(string), orgId(integer), readOnly(boolean), type(string), uid(string), url(string)
 - org_users:
   - primary key: userId
-  - fields: email(), lastSeenAt(), login(), orgId(), role(), userId()
+  - fields: email(string), lastSeenAt(string), login(string), orgId(integer), role(string), userId(integer)
 - alert_rules:
   - primary key: uid
-  - fields: condition(), execErrState(), folderUID(), for(), id(), noDataState(), orgID(), ruleGroup(), title(), uid()
+  - fields: condition(string), execErrState(string), folderUID(string), for(string), id(integer), noDataState(string), orgID(integer), ruleGroup(string), title(string), uid(string)
 
 ## Sync Modes
 

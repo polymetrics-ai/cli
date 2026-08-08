@@ -3,6 +3,7 @@ package connsdk
 import (
 	"context"
 	"crypto/sha256"
+	"crypto/tls"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"net/http/httptrace"
 	"net/url"
 	"os"
 	"slices"
@@ -622,6 +624,74 @@ func TestRequesterDisableRetriesMakesMutationNonReplayable(t *testing.T) {
 	}
 }
 
+func TestNoReplayClientKeepsHTTPNegotiationAvailable(t *testing.T) {
+	client := noReplayClient(&http.Client{Transport: http.DefaultTransport})
+	transport, ok := client.Transport.(*http.Transport)
+	if !ok {
+		t.Fatalf("strict transport type = %T, want *http.Transport", client.Transport)
+	}
+	if !transport.DisableKeepAlives {
+		t.Fatal("strict transport must keep one-use connections enabled")
+	}
+	if transport.Protocols != nil {
+		t.Fatal("strict transport forced an HTTP protocol instead of preserving normal negotiation")
+	}
+}
+
+func TestNoReplayClientALPNMatchesConfiguredProtocol(t *testing.T) {
+	var handlerProtocol string
+	srv := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		handlerProtocol = req.Proto
+		w.WriteHeader(http.StatusOK)
+	}))
+	srv.EnableHTTP2 = true
+	srv.StartTLS()
+	defer srv.Close()
+
+	base := srv.Client()
+	transport, ok := base.Transport.(*http.Transport)
+	if !ok {
+		t.Fatalf("test transport type = %T, want *http.Transport", base.Transport)
+	}
+	transport = transport.Clone()
+	tlsConfig := transport.TLSClientConfig.Clone()
+	tlsConfig.NextProtos = []string{"h2", "http/1.1"}
+	transport.TLSClientConfig = tlsConfig
+	base.Transport = transport
+
+	strictClient := noReplayClient(base)
+	strictTransport, ok := strictClient.Transport.(*http.Transport)
+	if !ok {
+		t.Fatalf("strict transport type = %T, want *http.Transport", strictClient.Transport)
+	}
+	wantALPN := "http/1.1"
+	wantHandlerProtocol := "HTTP/1.1"
+	if strictTransport.Protocols == nil || strictTransport.Protocols.HTTP2() {
+		wantALPN = "h2"
+		wantHandlerProtocol = "HTTP/2.0"
+	}
+
+	requester := &Requester{BaseURL: srv.URL, Client: strictClient, DisableRetries: true}
+	var negotiatedProtocol string
+	ctx := httptrace.WithClientTrace(context.Background(), &httptrace.ClientTrace{
+		TLSHandshakeDone: func(state tls.ConnectionState, err error) {
+			if err == nil {
+				negotiatedProtocol = state.NegotiatedProtocol
+			}
+		},
+	})
+	_, err := requester.Do(ctx, http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"})
+	if got, want := negotiatedProtocol, wantALPN; got != want {
+		t.Fatalf("strict TLS negotiated protocol = %q, want %q", got, want)
+	}
+	if err != nil {
+		t.Fatalf("strict mutation: %v", err)
+	}
+	if got, want := handlerProtocol, wantHandlerProtocol; got != want {
+		t.Fatalf("handler protocol = %q, want %q", got, want)
+	}
+}
+
 func TestRequesterDisableRetriesPreventsBodylessMutationTransportReplay(t *testing.T) {
 	var mutationHits int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
@@ -659,6 +729,125 @@ func TestRequesterDisableRetriesPreventsBodylessMutationTransportReplay(t *testi
 	}
 	if got := atomic.LoadInt32(&mutationHits); got != 0 {
 		t.Fatalf("mutation hits = %d, want no transport replay", got)
+	}
+}
+
+// The requestBody field is typed as io.Reader, but the concrete *bytes.Reader
+// must survive the interface handoff to http.NewRequest so ordinary requests
+// remain replayable when Go detects a stale pooled connection before a write.
+func TestRequesterKeepsJSONBodyReplayableBeforeNoReplayPolicy(t *testing.T) {
+	var sawGetBody bool
+	r := &Requester{
+		BaseURL: "https://example.invalid",
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			sawGetBody = req.GetBody != nil
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Header:     make(http.Header),
+				Body:       io.NopCloser(strings.NewReader(`{"ok":true}`)),
+			}, nil
+		})},
+	}
+
+	if _, err := r.Do(context.Background(), http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"}); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if !sawGetBody {
+		t.Fatal("JSON request lost Request.GetBody before the no-replay policy ran")
+	}
+}
+
+func TestRequesterReplaysReplayableJSONPostAfterStaleIdleWriteFailure(t *testing.T) {
+	var mutationHits, injectedFailures, dials int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/mutate" {
+			atomic.AddInt32(&mutationHits, 1)
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	dialer := net.Dialer{}
+	transport := &http.Transport{
+		MaxIdleConnsPerHost: 1,
+		DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
+			conn, err := dialer.DialContext(ctx, network, address)
+			if err != nil {
+				return nil, err
+			}
+			dial := atomic.AddInt32(&dials, 1)
+			return requestWriteFailureConn{Conn: conn, fail: func(p []byte) bool {
+				return dial == 1 && strings.HasPrefix(string(p), "POST /mutate ") && atomic.CompareAndSwapInt32(&injectedFailures, 0, 1)
+			}}, nil
+		},
+	}
+	t.Cleanup(transport.CloseIdleConnections)
+	client := &http.Client{Transport: transport}
+	primeHTTPConnection(t, client, srv.URL)
+
+	r := &Requester{BaseURL: srv.URL, Client: client}
+	resp, err := r.Do(context.Background(), http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"})
+	if err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if resp.Status != http.StatusOK {
+		t.Fatalf("status = %d, want %d", resp.Status, http.StatusOK)
+	}
+	if got, want := atomic.LoadInt32(&injectedFailures), int32(1); got != want {
+		t.Fatalf("injected failures = %d, want %d", got, want)
+	}
+	if got := atomic.LoadInt32(&dials); got < 2 {
+		t.Fatalf("dials = %d, want a fresh connection after the stale idle failure", got)
+	}
+	if got, want := atomic.LoadInt32(&mutationHits), int32(1); got != want {
+		t.Fatalf("mutation hits = %d, want %d after safe replay", got, want)
+	}
+}
+
+func TestRequesterStrictMutationAvoidsStaleIdleConnectionReplay(t *testing.T) {
+	var mutationHits, injectedFailures, dials int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/mutate" {
+			atomic.AddInt32(&mutationHits, 1)
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	dialer := net.Dialer{}
+	transport := &http.Transport{
+		MaxIdleConnsPerHost: 1,
+		DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
+			conn, err := dialer.DialContext(ctx, network, address)
+			if err != nil {
+				return nil, err
+			}
+			dial := atomic.AddInt32(&dials, 1)
+			return requestWriteFailureConn{Conn: conn, fail: func(p []byte) bool {
+				return dial == 1 && strings.HasPrefix(string(p), "POST /mutate ") && atomic.CompareAndSwapInt32(&injectedFailures, 0, 1)
+			}}, nil
+		},
+	}
+	t.Cleanup(transport.CloseIdleConnections)
+	client := &http.Client{Transport: transport}
+	primeHTTPConnection(t, client, srv.URL)
+
+	r := &Requester{BaseURL: srv.URL, Client: client, DisableRetries: true}
+	resp, err := r.Do(context.Background(), http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"})
+	if err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if resp.Status != http.StatusOK {
+		t.Fatalf("status = %d, want %d", resp.Status, http.StatusOK)
+	}
+	if got := atomic.LoadInt32(&injectedFailures); got != 0 {
+		t.Fatalf("strict mutation reused the stale idle connection; injected failures = %d", got)
+	}
+	if got := atomic.LoadInt32(&dials); got < 2 {
+		t.Fatalf("dials = %d, want the strict mutation to use a fresh connection", got)
+	}
+	if got, want := atomic.LoadInt32(&mutationHits), int32(1); got != want {
+		t.Fatalf("mutation hits = %d, want %d (exactly one dispatch)", got, want)
 	}
 }
 

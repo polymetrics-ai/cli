@@ -37,52 +37,52 @@ Reads and writes Elastic Email contacts, campaigns, lists, segments, templates, 
 - contacts:
   - primary key: Email
   - cursor: DateUpdated
-  - fields: Activity(), Consent(), CustomFields(), DateAdded(), DateUpdated(), Email(), FirstName(), LastName(), Source(), Status(), StatusChangeDate()
+  - fields: Activity(object), Consent(object), CustomFields(object), DateAdded(string), DateUpdated(string), Email(string), FirstName(string), LastName(string), Source(string), Status(string), StatusChangeDate(string)
 - campaigns:
   - primary key: Name
-  - fields: Content(), Name(), Options(), Recipients(), Status()
+  - fields: Content(object), Name(string), Options(object), Recipients(object), Status(string)
 - lists:
   - primary key: ListName
-  - fields: AllowUnsubscribe(), DateAdded(), ListName(), PublicListID()
+  - fields: AllowUnsubscribe(boolean), DateAdded(string), ListName(string), PublicListID(string)
 - segments:
   - primary key: Name
-  - fields: Name(), Rule()
+  - fields: Name(string), Rule(string)
 - templates:
   - primary key: Name
-  - fields: Body(), DateAdded(), Name(), Subject(), TemplateScope()
+  - fields: Body(object), DateAdded(string), Name(string), Subject(string), TemplateScope(string)
 - domains:
   - primary key: Domain
-  - fields: CertificateStatus(), CustomBouncesDomain(), DMARC(), DefaultDomain(), Dkim(), Domain(), IsMarkedForDeletion(), MX(), Spf(), TrackingStatus(), VERP(), Verify()
+  - fields: CertificateStatus(string), CustomBouncesDomain(string), DMARC(boolean), DefaultDomain(boolean), Dkim(boolean), Domain(string), IsMarkedForDeletion(boolean), MX(boolean), Spf(boolean), TrackingStatus(string), VERP(boolean), Verify(boolean)
 - suppressions:
   - primary key: Email
-  - fields: DateUpdated(), Email(), ErrorCode(), FriendlyErrorMessage()
+  - fields: DateUpdated(string), Email(string), ErrorCode(integer), FriendlyErrorMessage(string)
 - suppressions_bounces:
   - primary key: Email
-  - fields: DateUpdated(), Email(), ErrorCode(), FriendlyErrorMessage()
+  - fields: DateUpdated(string), Email(string), ErrorCode(integer), FriendlyErrorMessage(string)
 - suppressions_complaints:
   - primary key: Email
-  - fields: DateUpdated(), Email(), ErrorCode(), FriendlyErrorMessage()
+  - fields: DateUpdated(string), Email(string), ErrorCode(integer), FriendlyErrorMessage(string)
 - suppressions_unsubscribes:
   - primary key: Email
-  - fields: DateUpdated(), Email(), ErrorCode(), FriendlyErrorMessage()
+  - fields: DateUpdated(string), Email(string), ErrorCode(integer), FriendlyErrorMessage(string)
 - webhooks:
   - primary key: WebhookID
-  - fields: DateCreated(), DateUpdated(), IsEnabled(), Name(), NotificationForAbuseReport(), NotificationForClicked(), NotificationForError(), NotificationForOpened(), NotificationForSent(), NotificationForUnsubscribed(), NotifyOncePerEmail(), URL(), WebhookID()
+  - fields: DateCreated(string), DateUpdated(string), IsEnabled(boolean), Name(string), NotificationForAbuseReport(boolean), NotificationForClicked(boolean), NotificationForError(boolean), NotificationForOpened(boolean), NotificationForSent(boolean), NotificationForUnsubscribed(boolean), NotifyOncePerEmail(boolean), URL(string), WebhookID(string)
 - files:
   - primary key: FileName
-  - fields: ContentType(), DateAdded(), ExpirationDate(), FileName(), Size()
+  - fields: ContentType(string), DateAdded(string), ExpirationDate(string), FileName(string), Size(integer)
 - inbound_routes:
   - primary key: PublicId
-  - fields: ActionParameter(), ActionType(), Filter(), FilterType(), Name(), PublicId(), SortOrder()
+  - fields: ActionParameter(string), ActionType(string), Filter(string), FilterType(string), Name(string), PublicId(string), SortOrder(integer)
 - sub_accounts:
   - primary key: PublicAccountID
-  - fields: ContactsCount(), Email(), EmailCredits(), LastActivity(), PublicAccountID(), Reputation(), Status(), TotalEmailsSent()
+  - fields: ContactsCount(integer), Email(string), EmailCredits(integer), LastActivity(string), PublicAccountID(string), Reputation(number), Status(string), TotalEmailsSent(integer)
 - statistics_campaigns:
   - primary key: ChannelName
-  - fields: Bounced(), ChannelName(), Clicked(), Complaints(), Delivered(), EmailTotal(), InProgress(), Inbound(), ManualCancel(), NotDelivered(), Opened(), Recipients(), SmsTotal(), Unsubscribed()
+  - fields: Bounced(integer), ChannelName(string), Clicked(integer), Complaints(integer), Delivered(integer), EmailTotal(integer), InProgress(integer), Inbound(integer), ManualCancel(integer), NotDelivered(integer), Opened(integer), Recipients(integer), SmsTotal(integer), Unsubscribed(integer)
 - statistics_channels:
   - primary key: ChannelName
-  - fields: Bounced(), ChannelName(), Clicked(), Complaints(), Delivered(), EmailTotal(), InProgress(), Inbound(), ManualCancel(), NotDelivered(), Opened(), Recipients(), SmsTotal(), Unsubscribed()
+  - fields: Bounced(integer), ChannelName(string), Clicked(integer), Complaints(integer), Delivered(integer), EmailTotal(integer), InProgress(integer), Inbound(integer), ManualCancel(integer), NotDelivered(integer), Opened(integer), Recipients(integer), SmsTotal(integer), Unsubscribed(integer)
 
 ## Sync Modes
 

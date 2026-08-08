@@ -38,16 +38,16 @@ Reads LinkedIn organization (company page) profile, follower statistics, share s
 
 - follower_statistics:
   - primary key: org_id
-  - fields: followerCountsByAssociationType(), followerCountsByCountry(), followerCountsByFunction(), followerCountsByIndustry(), followerCountsByRegion(), followerCountsBySeniority(), followerCountsByStaffCountRange(), followerGains(), org_id(), organizationalEntity()
+  - fields: followerCountsByAssociationType(array), followerCountsByCountry(array), followerCountsByFunction(array), followerCountsByIndustry(array), followerCountsByRegion(array), followerCountsBySeniority(array), followerCountsByStaffCountRange(array), followerGains(object), org_id(string), organizationalEntity(string)
 - share_statistics:
   - primary key: org_id
-  - fields: org_id(), organizationalEntity(), shareStatisticsByPost(), totalShareStatistics()
+  - fields: org_id(string), organizationalEntity(string), shareStatisticsByPost(array), totalShareStatistics(object)
 - organizations:
   - primary key: id
-  - fields: id(), industries(), localized_name(), localized_website(), locations(), name(), org_id(), organization_type(), primary_organization_type(), staff_count_range(), urn(), vanity_name(), version_tag()
+  - fields: id(integer), industries(array), localized_name(string), localized_website(string), locations(array), name(object), org_id(string), organization_type(string), primary_organization_type(string), staff_count_range(string), urn(string), vanity_name(string), version_tag(string)
 - total_follower_count:
   - primary key: org_id
-  - fields: first_degree_size(), org_id()
+  - fields: first_degree_size(integer), org_id(string)
 
 ## Sync Modes
 

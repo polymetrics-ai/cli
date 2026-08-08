@@ -36,22 +36,22 @@ CONFIGURATION
 ETL STREAMS
   sitemaps:
     primary key: id
-    fields: id(), name(), url()
+    fields: id(integer), name(string), url(string)
   jobs:
     primary key: id
-    fields: id(), sitemap_id(), status()
+    fields: id(integer), sitemap_id(integer), status(string)
   sitemaps_list:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   scraping_jobs_list:
     primary key: id
-    fields: custom_id(), driver(), id(), jobs_empty(), jobs_executed(), jobs_failed(), jobs_scheduled(), page_load_delay(), request_interval(), scheduled(), sitemap_id(), sitemap_name(), status(), stored_record_count(), test_run(), time_created()
+    fields: custom_id(string), driver(string), id(integer), jobs_empty(integer), jobs_executed(integer), jobs_failed(integer), jobs_scheduled(integer), page_load_delay(integer), request_interval(integer), scheduled(integer), sitemap_id(integer), sitemap_name(string), status(string), stored_record_count(integer), test_run(integer), time_created(string)
   account:
     primary key: email
-    fields: email(), firstname(), lastname(), page_credits()
+    fields: email(string), firstname(string), lastname(string), page_credits(integer)
   problematic_urls:
     primary key: scraping_job_id, url
-    fields: scraping_job_id(), type(), url()
+    fields: scraping_job_id(string), type(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

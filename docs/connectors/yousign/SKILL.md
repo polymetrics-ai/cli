@@ -38,29 +38,29 @@ Reads and writes Yousign signature requests, contacts, documents, webhooks, temp
 - signature_requests:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - documents:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - webhooks:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), enabled(), endpoint(), id(), name(), subscribed_events(), updated_at()
+  - fields: created_at(string), enabled(boolean), endpoint(string), id(string), name(string), subscribed_events(array), updated_at(string)
 - templates:
   - primary key: id
-  - fields: created_at(), description(), id(), name(), status(), workspace_id()
+  - fields: created_at(string), description(string), id(string), name(string), status(string), workspace_id(string)
 - users:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), email(), id(), is_active(), name(), role(), status()
+  - fields: created_at(string), email(string), id(string), is_active(boolean), name(string), role(string), status(string)
 - workflow_sessions:
   - primary key: id
-  - fields: created_at(), id(), status(), workflow_template_id()
+  - fields: created_at(string), id(string), status(string), workflow_template_id(string)
 
 ## Sync Modes
 

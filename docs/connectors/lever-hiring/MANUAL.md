@@ -36,22 +36,22 @@ ETL STREAMS
   opportunities:
     primary key: id
     cursor: createdAt
-    fields: archivedAt(), createdAt(), emails(), headline(), id(), lastInteractionAt(), name(), origin(), sources(), stage(), tags(), updatedAt()
+    fields: archivedAt(integer), createdAt(integer), emails(array), headline(string), id(string), lastInteractionAt(integer), name(string), origin(string), sources(array), stage(string), tags(array), updatedAt(integer)
   postings:
     primary key: id
     cursor: createdAt
-    fields: categories(), createdAt(), hiringManager(), id(), owner(), state(), text(), updatedAt(), user()
+    fields: categories(object), createdAt(integer), hiringManager(string), id(string), owner(string), state(string), text(string), updatedAt(integer), user(string)
   users:
     primary key: id
     cursor: createdAt
-    fields: accessRole(), createdAt(), deactivatedAt(), email(), id(), name(), username()
+    fields: accessRole(string), createdAt(integer), deactivatedAt(integer), email(string), id(string), name(string), username(string)
   requisitions:
     primary key: id
     cursor: createdAt
-    fields: createdAt(), headcountHired(), headcountTotal(), id(), name(), owner(), requisitionCode(), status(), updatedAt()
+    fields: createdAt(integer), headcountHired(integer), headcountTotal(integer), id(string), name(string), owner(string), requisitionCode(string), status(string), updatedAt(integer)
   stages:
     primary key: id
-    fields: id(), text()
+    fields: id(string), text(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

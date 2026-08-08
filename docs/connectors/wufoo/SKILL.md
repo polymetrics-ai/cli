@@ -41,32 +41,32 @@ Reads Wufoo forms, fields, entries, comments, reports, and widgets, and writes e
 - forms:
   - primary key: Hash
   - cursor: DateUpdated
-  - fields: DateUpdated(), Hash(), Name()
+  - fields: DateUpdated(string), Hash(string), Name(string)
 - form_fields:
   - primary key: ID
-  - fields: ClassNames(), ID(), Instructions(), IsRequired(), Title(), Type()
+  - fields: ClassNames(string), ID(string), Instructions(string), IsRequired(string), Title(string), Type(string)
 - entries:
   - primary key: Hash
   - cursor: DateUpdated
-  - fields: DateCreated(), DateUpdated(), EntryId(), Hash()
+  - fields: DateCreated(string), DateUpdated(string), EntryId(string), Hash(string)
 - form_comments:
   - primary key: CommentId
   - cursor: DateCreated
-  - fields: CommentId(), CommentedBy(), DateCreated(), EntryId(), Text()
+  - fields: CommentId(string), CommentedBy(string), DateCreated(string), EntryId(string), Text(string)
 - reports:
   - primary key: Hash
   - cursor: DateUpdated
-  - fields: DateUpdated(), Hash(), Name()
+  - fields: DateUpdated(string), Hash(string), Name(string)
 - report_fields:
   - primary key: ID
-  - fields: ClassNames(), ID(), Instructions(), Title(), Type()
+  - fields: ClassNames(string), ID(string), Instructions(string), Title(string), Type(string)
 - report_entries:
   - primary key: EntryId
   - cursor: DateUpdated
-  - fields: DateCreated(), DateUpdated(), EntryId()
+  - fields: DateCreated(string), DateUpdated(string), EntryId(string)
 - report_widgets:
   - primary key: Hash
-  - fields: Hash(), Name(), Size(), Type(), TypeDesc()
+  - fields: Hash(string), Name(string), Size(string), Type(string), TypeDesc(string)
 
 ## Sync Modes
 

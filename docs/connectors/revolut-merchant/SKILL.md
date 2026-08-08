@@ -40,19 +40,19 @@ Reads Revolut Merchant orders, customers, settlements, and payment links through
 - orders:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), id(), state(), stream()
+  - fields: amount(string), created_at(string), currency(string), id(string), state(string), stream(string)
 - customers:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), email(), full_name(), id(), stream()
+  - fields: created_at(string), email(string), full_name(string), id(string), stream(string)
 - settlements:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), id(), stream()
+  - fields: amount(string), created_at(string), currency(string), id(string), stream(string)
 - payment_links:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), id(), state(), stream()
+  - fields: amount(string), created_at(string), currency(string), id(string), state(string), stream(string)
 
 ## Sync Modes
 

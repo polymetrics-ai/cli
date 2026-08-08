@@ -38,16 +38,16 @@ Reads Pipeliner CRM accounts, contacts, opportunities, and leads through the RES
 
 - accounts:
   - primary key: id
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - contacts:
   - primary key: id
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - opportunities:
   - primary key: id
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - leads:
   - primary key: id
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 
 ## Sync Modes
 

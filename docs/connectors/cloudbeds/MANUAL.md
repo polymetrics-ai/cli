@@ -36,67 +36,67 @@ CONFIGURATION
 ETL STREAMS
   guests:
     primary key: guestID
-    fields: dateCreated(), dateModified(), guestEmail(), guestID(), guestName(), isAnonymized(), isMainGuest(), propertyID(), reservationID()
+    fields: dateCreated(string), dateModified(string), guestEmail(string), guestID(string), guestName(string), isAnonymized(boolean), isMainGuest(boolean), propertyID(string), reservationID(string)
   hotels:
     primary key: propertyID
-    fields: organizationID(), propertyCurrency(), propertyDescription(), propertyID(), propertyImage(), propertyName(), propertyTimezone()
+    fields: organizationID(string), propertyCurrency(string), propertyDescription(string), propertyID(string), propertyImage(string), propertyName(string), propertyTimezone(string)
   rooms:
     primary key: propertyID
-    fields: propertyID(), roomBlocks()
+    fields: propertyID(string), roomBlocks(array)
   reservations:
     primary key: reservationID
-    fields: adults(), balance(), children(), dateCreated(), dateModified(), endDate(), guestID(), guestName(), origin(), propertyID(), reservationID(), sourceName(), startDate(), status()
+    fields: adults(integer), balance(number), children(integer), dateCreated(string), dateModified(string), endDate(string), guestID(string), guestName(string), origin(string), propertyID(string), reservationID(string), sourceName(string), startDate(string), status(string)
   transactions:
     primary key: transactionID
-    fields: amount(), category(), currency(), description(), guestID(), guestName(), propertyID(), reservationID(), transactionCategory(), transactionCode(), transactionDateTime(), transactionDateTimeUTC(), transactionID(), transactionType()
+    fields: amount(number), category(string), currency(string), description(string), guestID(string), guestName(string), propertyID(string), reservationID(string), transactionCategory(string), transactionCode(string), transactionDateTime(string), transactionDateTimeUTC(string), transactionID(string), transactionType(string)
   rate_plans:
     primary key: ratePlanID
-    fields: addOns(), baseRate(), daysOfWeek(), derivedType(), derivedValue(), isDerived(), parentRateID(), parentRatePlanID(), parentRatePlanNamePrivate(), parentRatePlanNamePublic(), promoCode(), propertyID(), rateID(), ratePlanID(), ratePlanNamePrivate(), ratePlanNamePublic(), roomRate(), roomRateDetailed(), roomTypeID(), roomTypeName(), roomsAvailable(), totalRate()
+    fields: addOns(array), baseRate(number), daysOfWeek(object), derivedType(string), derivedValue(number), isDerived(boolean), parentRateID(string), parentRatePlanID(string), parentRatePlanNamePrivate(string), parentRatePlanNamePublic(string), promoCode(string), propertyID(string), rateID(string), ratePlanID(string), ratePlanNamePrivate(string), ratePlanNamePublic(string), roomRate(number), roomRateDetailed(array), roomTypeID(string), roomTypeName(string), roomsAvailable(integer), totalRate(number)
   room_types:
     primary key: roomTypeID
-    fields: adultsIncluded(), childrenIncluded(), isPrivate(), maxGuests(), propertyID(), roomTypeDescription(), roomTypeID(), roomTypeName(), roomTypeNameShort()
+    fields: adultsIncluded(integer), childrenIncluded(integer), isPrivate(boolean), maxGuests(integer), propertyID(string), roomTypeDescription(string), roomTypeID(string), roomTypeName(string), roomTypeNameShort(string)
   items:
     primary key: itemID
-    fields: categoryID(), categoryName(), description(), fees(), grandTotal(), itemCode(), itemID(), itemQuantity(), itemType(), name(), price(), priceWithoutFeesAndTaxes(), reorderNeeded(), reorderThreshold(), sku(), stockInventory(), stopSell(), stopSellMet(), taxes(), totalFees(), totalTaxes()
+    fields: categoryID(string), categoryName(string), description(string), fees(array), grandTotal(number), itemCode(string), itemID(string), itemQuantity(integer), itemType(string), name(string), price(number), priceWithoutFeesAndTaxes(number), reorderNeeded(boolean), reorderThreshold(integer), sku(string), stockInventory(boolean), stopSell(boolean), stopSellMet(boolean), taxes(array), totalFees(number), totalTaxes(number)
   item_categories:
     primary key: categoryID
-    fields: categoryCode(), categoryColor(), categoryID(), categoryName()
+    fields: categoryCode(string), categoryColor(string), categoryID(string), categoryName(string)
   taxes_and_fees:
     primary key: type, feeID, taxID
-    fields: amount(), amountAdult(), amountChild(), amountRateBased(), amountType(), availableFor(), childId(), code(), createdAt(), dateRanges(), expiredAt(), feeID(), feesCharged(), inclusiveOrExclusive(), isDeleted(), kind(), lengthOfStaySettings(), name(), roomTypes(), taxID(), taxesCharged(), type()
+    fields: amount(number), amountAdult(number), amountChild(number), amountRateBased(boolean), amountType(string), availableFor(array), childId(string), code(string), createdAt(string), dateRanges(array), expiredAt(string), feeID(string), feesCharged(array), inclusiveOrExclusive(string), isDeleted(boolean), kind(string), lengthOfStaySettings(object), name(string), roomTypes(array), taxID(string), taxesCharged(array), type(string)
   sources:
     primary key: propertyID, sourceID
-    fields: commission(), fees(), isThirdParty(), paymentCollect(), propertyID(), sourceID(), sourceName(), status(), taxes()
+    fields: commission(number), fees(array), isThirdParty(boolean), paymentCollect(string), propertyID(string), sourceID(string), sourceName(string), status(string), taxes(array)
   groups:
     primary key: groupCode
-    fields: address1(), address2(), city(), commissionType(), contacts(), countryCode(), created(), groupCode(), legalName(), name(), sourceID(), sourceName(), state(), status(), taxDocumentType(), taxIdNumber(), type(), zip()
+    fields: address1(string), address2(string), city(string), commissionType(string), contacts(array), countryCode(string), created(string), groupCode(string), legalName(string), name(string), sourceID(string), sourceName(string), state(string), status(string), taxDocumentType(string), taxIdNumber(string), type(string), zip(string)
   house_accounts:
     primary key: accountID
-    fields: accountID(), accountName(), accountStatus(), isPrivate(), propertyID(), userName()
+    fields: accountID(string), accountName(string), accountStatus(string), isPrivate(boolean), propertyID(string), userName(string)
   housekeepers:
     primary key: housekeeperID
-    fields: housekeeperID(), name(), propertyID()
+    fields: housekeeperID(string), name(string), propertyID(string)
   housekeeping_status:
     primary key: roomID
-    fields: date(), doNotDisturb(), frontdeskStatus(), housekeeper(), housekeeperID(), refusedService(), roomBlocked(), roomComments(), roomCondition(), roomID(), roomName(), roomOccupied(), roomTypeID(), roomTypeName(), vacantPickup()
+    fields: date(string), doNotDisturb(boolean), frontdeskStatus(string), housekeeper(string), housekeeperID(string), refusedService(boolean), roomBlocked(boolean), roomComments(string), roomCondition(string), roomID(string), roomName(string), roomOccupied(boolean), roomTypeID(string), roomTypeName(string), vacantPickup(boolean)
   custom_fields:
     primary key: propertyID, shortcode
-    fields: applyTo(), displayed(), isPersonal(), maxCharacters(), name(), propertyID(), required(), shortcode(), type()
+    fields: applyTo(string), displayed(boolean), isPersonal(boolean), maxCharacters(integer), name(string), propertyID(string), required(boolean), shortcode(string), type(string)
   payment_methods:
     primary key: code
-    fields: cardTypes(), code(), method(), name()
+    fields: cardTypes(array), code(string), method(string), name(string)
   webhooks:
     primary key: id
-    fields: event(), id(), key(), owner(), subscriptionData(), subscriptionType()
+    fields: event(object), id(string), key(object), owner(object), subscriptionData(object), subscriptionType(string)
   allotment_blocks:
     primary key: allotmentBlockId
-    fields: allotmentBlockCode(), allotmentBlockId(), allotmentBlockName(), allotmentBlockStatus(), allotmentIntervals(), allotmentType(), autoRelease(), bookingCodeUrl(), eventCode(), eventId(), groupCode(), groupId(), isAutoRelease(), propertyID(), ratePlan(), ratePlanId(), rateType(), releaseDate(), releaseScheduleStatus(), releaseScheduleType(), releaseStatus(), reservationsCount(), resources(), roomsHeld(), roomsPickedUp(), roomsRemaining()
+    fields: allotmentBlockCode(string), allotmentBlockId(string), allotmentBlockName(string), allotmentBlockStatus(string), allotmentIntervals(array), allotmentType(string), autoRelease(object), bookingCodeUrl(string), eventCode(string), eventId(string), groupCode(string), groupId(string), isAutoRelease(boolean), propertyID(string), ratePlan(string), ratePlanId(string), rateType(string), releaseDate(string), releaseScheduleStatus(string), releaseScheduleType(string), releaseStatus(string), reservationsCount(integer), resources(array), roomsHeld(integer), roomsPickedUp(integer), roomsRemaining(integer)
   guest_notes:
     primary key: guestNoteID
-    fields: dateCreated(), dateModified(), guestID(), guestNote(), guestNoteID(), userName()
+    fields: dateCreated(string), dateModified(string), guestID(string), guestNote(string), guestNoteID(string), userName(string)
   reservation_notes:
     primary key: reservationNoteID
-    fields: dateCreated(), dateModified(), reservationID(), reservationNote(), reservationNoteID(), userName()
+    fields: dateCreated(string), dateModified(string), reservationID(string), reservationNote(string), reservationNoteID(string), userName(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

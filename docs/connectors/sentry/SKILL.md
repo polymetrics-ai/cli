@@ -40,19 +40,19 @@ Reads Sentry projects, issues, error events, and releases through the Sentry RES
 - projects:
   - primary key: id
   - cursor: dateCreated
-  - fields: dateCreated(), id(), isBookmarked(), isPublic(), name(), platform(), slug(), status()
+  - fields: dateCreated(string), id(string), isBookmarked(boolean), isPublic(boolean), name(string), platform(string), slug(string), status(string)
 - issues:
   - primary key: id
   - cursor: lastSeen
-  - fields: count(), culprit(), firstSeen(), id(), lastSeen(), level(), shortId(), status(), title(), type(), userCount()
+  - fields: count(string), culprit(string), firstSeen(string), id(string), lastSeen(string), level(string), shortId(string), status(string), title(string), type(string), userCount(integer)
 - events:
   - primary key: id
   - cursor: dateCreated
-  - fields: dateCreated(), eventID(), groupID(), id(), message(), platform(), title(), type()
+  - fields: dateCreated(string), eventID(string), groupID(string), id(string), message(string), platform(string), title(string), type(string)
 - releases:
   - primary key: version
   - cursor: dateCreated
-  - fields: dateCreated(), dateReleased(), ref(), shortVersion(), status(), url(), version()
+  - fields: dateCreated(string), dateReleased(string), ref(string), shortVersion(string), status(string), url(string), version(string)
 
 ## Sync Modes
 

@@ -151,6 +151,112 @@ func TestGenericDestructivePlanMintsApprovalOnlyAfterPreview(t *testing.T) {
 	}
 }
 
+// A reverse plan may intentionally stage only a prefix of a larger source.
+// Preview and execution must re-read and hash that exact approved slice; an
+// extra row is not source drift for a plan that never included it.
+func TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice(t *testing.T) {
+	ctx := context.Background()
+	var calls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls.Add(1)
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, root := setupGitHubApp(t, ctx, server.URL)
+	seedWarehouseTableRows(t, root, "repo_deletes",
+		`{"id":"row-1"}`,
+		`{"id":"row-2"}`,
+	)
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "delete_one_repo",
+		SourceTable:           "repo_deletes",
+		DestinationConnector:  "github",
+		DestinationCredential: "github-local",
+		Action:                "repo",
+		Mappings:              map[string]string{"id": "id"},
+		Limit:                 1,
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL() error = %v", err)
+	}
+	if plan.RecordCount != 1 {
+		t.Fatalf("planned records = %d, want 1", plan.RecordCount)
+	}
+
+	plan, preview, err := a.PreviewReversePlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewReversePlan() error = %v", err)
+	}
+	if preview.RecordsStaged != 1 {
+		t.Fatalf("preview records staged = %d, want 1", preview.RecordsStaged)
+	}
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("RunReverseETL() error = %v", err)
+	}
+	if run.RecordsStaged != 1 || run.RecordsSucceeded != 1 {
+		t.Fatalf("run staged/succeeded = %d/%d, want 1/1", run.RecordsStaged, run.RecordsSucceeded)
+	}
+	if calls.Load() != 1 {
+		t.Fatalf("write calls = %d, want 1", calls.Load())
+	}
+}
+
+// The live GitHub validation must use the declaration's precise issue endpoint.
+// This request-target assertion prevents a plan/preview/run success from hiding
+// a malformed URL that only fails after approval is consumed.
+func TestGitHubCreateIssueReversePlanUsesDeclaredEndpoint(t *testing.T) {
+	ctx := context.Background()
+	var calls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls.Add(1)
+		if r.Method != http.MethodPost {
+			t.Errorf("method = %s, want POST", r.Method)
+		}
+		if r.URL.Path != "/repos/acme/widgets/issues" {
+			t.Errorf("path = %q, want /repos/acme/widgets/issues", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		_, _ = w.Write([]byte(`{"number":1,"title":"fixture issue"}`))
+	}))
+	defer server.Close()
+
+	a, root := setupGitHubApp(t, ctx, server.URL)
+	seedWarehouseTableRows(t, root, "issue_candidates",
+		`{"title":"fixture issue","body":"fixture body"}`,
+	)
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "create_fixture_issue",
+		SourceTable:           "issue_candidates",
+		DestinationConnector:  "github",
+		DestinationCredential: "github-local",
+		Action:                "create_issue",
+		Mappings:              map[string]string{"title": "title", "body": "body"},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL() error = %v", err)
+	}
+	if _, _, err := a.PreviewReversePlan(ctx, plan.ID); err != nil {
+		t.Fatalf("PreviewReversePlan() error = %v", err)
+	}
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL() error = %v", err)
+	}
+	if run.Status != "completed" || run.RecordsSucceeded != 1 {
+		t.Fatalf("run = %+v, want one completed issue creation", run)
+	}
+	if calls.Load() != 1 {
+		t.Fatalf("create issue calls = %d, want 1", calls.Load())
+	}
+}
+
 func TestRunReverseETLAcceptsDestructiveConnectorCommandWithMatchingConfirmation(t *testing.T) {
 	ctx := context.Background()
 	calls := 0

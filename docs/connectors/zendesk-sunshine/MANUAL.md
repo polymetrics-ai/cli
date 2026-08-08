@@ -36,16 +36,16 @@ CONFIGURATION
 ETL STREAMS
   object_types:
     primary key: id
-    fields: created_at(), id(), schema()
+    fields: created_at(string), id(string), schema(object)
   relationship_types:
     primary key: id
-    fields: created_at(), id(), source_type(), target_type(), updated_at()
+    fields: created_at(string), id(string), source_type(string), target_type(string), updated_at(string)
   objects:
     primary key: id
-    fields: attributes(), id(), type()
+    fields: attributes(object), id(string), type(string)
   relationships:
     primary key: id
-    fields: id(), source(), target(), type()
+    fields: id(string), source(object), target(object), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

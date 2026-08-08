@@ -37,16 +37,16 @@ Reads Cart.com orders, customers, products, and inventory through a read-only RE
 
 - orders:
   - primary key: id
-  - fields: id(), order_number(), updated_at()
+  - fields: id(string), order_number(string), updated_at(string)
 - customers:
   - primary key: id
-  - fields: id(), order_number(), updated_at()
+  - fields: id(string), order_number(string), updated_at(string)
 - products:
   - primary key: id
-  - fields: id(), order_number(), updated_at()
+  - fields: id(string), order_number(string), updated_at(string)
 - inventory:
   - primary key: id
-  - fields: id(), product_id(), quantity(), sku(), updated_at()
+  - fields: id(string), product_id(string), quantity(integer), sku(string), updated_at(string)
 
 ## Sync Modes
 

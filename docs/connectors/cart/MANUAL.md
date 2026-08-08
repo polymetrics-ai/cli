@@ -35,16 +35,16 @@ CONFIGURATION
 ETL STREAMS
   orders:
     primary key: id
-    fields: id(), order_number(), updated_at()
+    fields: id(string), order_number(string), updated_at(string)
   customers:
     primary key: id
-    fields: id(), order_number(), updated_at()
+    fields: id(string), order_number(string), updated_at(string)
   products:
     primary key: id
-    fields: id(), order_number(), updated_at()
+    fields: id(string), order_number(string), updated_at(string)
   inventory:
     primary key: id
-    fields: id(), product_id(), quantity(), sku(), updated_at()
+    fields: id(string), product_id(string), quantity(integer), sku(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

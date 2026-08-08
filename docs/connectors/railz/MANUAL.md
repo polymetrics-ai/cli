@@ -34,20 +34,20 @@ ETL STREAMS
   businesses:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name(), status()
+    fields: created_at(string), id(string), name(string), status(string)
   connections:
     primary key: id
     cursor: created_at
-    fields: business_id(), created_at(), id(), status()
+    fields: business_id(string), created_at(string), id(string), status(string)
   customers:
     primary key: id
-    fields: business_id(), email(), id(), name()
+    fields: business_id(string), email(string), id(string), name(string)
   invoices:
     primary key: id
-    fields: business_id(), customer_id(), id(), status(), total_amount(), vendor_id()
+    fields: business_id(string), customer_id(string), id(string), status(string), total_amount(number), vendor_id(string)
   bills:
     primary key: id
-    fields: business_id(), id(), status(), total_amount(), vendor_id()
+    fields: business_id(string), id(string), status(string), total_amount(number), vendor_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

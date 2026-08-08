@@ -37,16 +37,16 @@ CONFIGURATION
 ETL STREAMS
   workspace:
     primary key: uid
-    fields: created_at(), name(), plan(), uid()
+    fields: created_at(string), name(string), plan(string), uid(string)
   workflows:
     primary key: uid
-    fields: created_at(), name(), status(), uid(), updated_at()
+    fields: created_at(string), name(string), status(string), uid(string), updated_at(string)
   jobs:
     primary key: uid
-    fields: created_at(), ended_at(), status(), uid(), workflow_uid()
+    fields: created_at(string), ended_at(string), status(string), uid(string), workflow_uid(string)
   job_results:
     primary key: uid
-    fields: created_at(), data(), job_uid(), status(), uid()
+    fields: created_at(string), data(object), job_uid(string), status(string), uid(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

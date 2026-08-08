@@ -37,25 +37,25 @@ CONFIGURATION
 ETL STREAMS
   datasets:
     primary key: id
-    fields: id(), title(), version()
+    fields: id(string), title(string), version(string)
   dataset_records:
     primary key: dataset_id, recordId
     cursor: modifiedAt
-    fields: dataset_id(), modifiedAt(), recordId(), values()
+    fields: dataset_id(string), modifiedAt(string), recordId(string), values(object)
   submissions:
     primary key: id
     cursor: submissionDate
-    fields: form_id(), id(), submissionDate()
+    fields: form_id(string), id(string), submissionDate(string)
   groups:
     primary key: id
     cursor: createdOn
-    fields: createdOn(), id(), parentGroupId(), title()
+    fields: createdOn(string), id(integer), parentGroupId(integer), title(string)
   roles:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   users:
     primary key: username
-    fields: roleId(), username()
+    fields: roleId(string), username(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

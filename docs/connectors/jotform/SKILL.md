@@ -36,21 +36,21 @@ Reads Jotform forms, submissions, reports, folders, and the account profile thro
 - forms:
   - primary key: id
   - cursor: created_at
-  - fields: count(), created_at(), id(), last_submission(), new(), status(), title(), type(), updated_at(), url(), username()
+  - fields: count(string), created_at(string), id(string), last_submission(string), new(string), status(string), title(string), type(string), updated_at(string), url(string), username(string)
 - submissions:
   - primary key: id
   - cursor: created_at
-  - fields: answers(), created_at(), flag(), form_id(), id(), ip(), new(), notes(), status(), updated_at()
+  - fields: answers(object), created_at(string), flag(string), form_id(string), id(string), ip(string), new(string), notes(string), status(string), updated_at(string)
 - reports:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), fields(), form_id(), id(), status(), title(), type(), updated_at(), url()
+  - fields: created_at(string), fields(string), form_id(string), id(string), status(string), title(string), type(string), updated_at(string), url(string)
 - folders:
   - primary key: id
-  - fields: color(), forms(), id(), name(), owner(), parent(), subfolders()
+  - fields: color(string), forms(object), id(string), name(string), owner(string), parent(string), subfolders(object)
 - user:
   - primary key: username
-  - fields: account_type(), created_at(), email(), name(), status(), time_zone(), updated_at(), usage(), username()
+  - fields: account_type(string), created_at(string), email(string), name(string), status(string), time_zone(string), updated_at(string), usage(string), username(string)
 
 ## Sync Modes
 

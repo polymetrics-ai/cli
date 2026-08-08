@@ -35,16 +35,16 @@ Reads Northpass LMS people, courses, course enrollments, and groups through the 
 
 - people:
   - primary key: id
-  - fields: created_at(), email(), first_name(), id(), last_name(), status(), type(), updated_at()
+  - fields: created_at(string), email(string), first_name(string), id(string), last_name(string), status(string), type(string), updated_at(string)
 - courses:
   - primary key: id
-  - fields: created_at(), id(), name(), slug(), status(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), slug(string), status(string), type(string), updated_at(string)
 - course_enrollments:
   - primary key: id
-  - fields: completed_at(), course_id(), created_at(), id(), learner_id(), percentage(), status(), type(), updated_at()
+  - fields: completed_at(string), course_id(string), created_at(string), id(string), learner_id(string), percentage(integer), status(string), type(string), updated_at(string)
 - groups:
   - primary key: id
-  - fields: created_at(), id(), name(), slug(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), slug(string), type(string), updated_at(string)
 
 ## Sync Modes
 

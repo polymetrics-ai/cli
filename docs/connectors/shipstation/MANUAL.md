@@ -35,19 +35,19 @@ ETL STREAMS
   orders:
     primary key: id
     cursor: modified_at
-    fields: id(), modified_at(), order_number(), status()
+    fields: id(integer), modified_at(string), order_number(string), status(string)
   shipments:
     primary key: id
     cursor: modified_at
-    fields: id(), modified_at(), order_number(), status()
+    fields: id(integer), modified_at(string), order_number(string), status(string)
   products:
     primary key: id
     cursor: modified_at
-    fields: id(), modified_at(), name(), sku()
+    fields: id(integer), modified_at(string), name(string), sku(string)
   customers:
     primary key: id
     cursor: modified_at
-    fields: email(), id(), modified_at(), name()
+    fields: email(string), id(integer), modified_at(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

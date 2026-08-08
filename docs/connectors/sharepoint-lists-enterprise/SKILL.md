@@ -42,11 +42,11 @@ Reads and writes SharePoint lists and list items through Microsoft Graph.
 - lists:
   - primary key: id
   - cursor: lastModifiedDateTime
-  - fields: displayName(), id(), lastModifiedDateTime(), name()
+  - fields: displayName(string), id(string), lastModifiedDateTime(string), name(string)
 - list_items:
   - primary key: id
   - cursor: lastModifiedDateTime
-  - fields: fields(), id(), lastModifiedDateTime()
+  - fields: fields(object), id(string), lastModifiedDateTime(string)
 
 ## Sync Modes
 

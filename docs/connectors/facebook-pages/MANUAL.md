@@ -35,11 +35,11 @@ CONFIGURATION
 ETL STREAMS
   page:
     primary key: id
-    fields: category(), fan_count(), id(), link(), name()
+    fields: category(string), fan_count(integer), id(string), link(string), name(string)
   posts:
     primary key: id
     cursor: updated_time
-    fields: created_time(), id(), message(), permalink_url(), updated_time()
+    fields: created_time(string), id(string), message(string), permalink_url(string), updated_time(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

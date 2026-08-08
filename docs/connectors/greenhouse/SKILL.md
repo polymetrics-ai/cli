@@ -61,151 +61,151 @@ Reads and writes documented Greenhouse Harvest REST API resources through the de
 - candidates:
   - primary key: id
   - cursor: updated_at
-  - fields: company(), created_at(), first_name(), id(), is_private(), last_activity(), last_name(), title(), updated_at()
+  - fields: company(string), created_at(string), first_name(string), id(integer), is_private(boolean), last_activity(string), last_name(string), title(string), updated_at(string)
 - applications:
   - primary key: id
   - cursor: last_activity_at
-  - fields: applied_at(), candidate_id(), id(), last_activity_at(), rejected_at(), source_id(), status()
+  - fields: applied_at(string), candidate_id(integer), id(integer), last_activity_at(string), rejected_at(string), source_id(integer), status(string)
 - jobs:
   - primary key: id
   - cursor: updated_at
-  - fields: closed_at(), confidential(), created_at(), id(), name(), opened_at(), requisition_id(), status(), updated_at()
+  - fields: closed_at(string), confidential(boolean), created_at(string), id(integer), name(string), opened_at(string), requisition_id(string), status(string), updated_at(string)
 - offers:
   - primary key: id
   - cursor: updated_at
-  - fields: application_id(), candidate_id(), created_at(), id(), sent_at(), starts_at(), status(), updated_at(), version()
+  - fields: application_id(integer), candidate_id(integer), created_at(string), id(integer), sent_at(string), starts_at(string), status(string), updated_at(string), version(integer)
 - users:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), disabled(), employee_id(), first_name(), id(), last_name(), name(), primary_email_address(), site_admin(), updated_at()
+  - fields: created_at(string), disabled(boolean), employee_id(string), first_name(string), id(integer), last_name(string), name(string), primary_email_address(string), site_admin(boolean), updated_at(string)
 - activity_feed:
-  - fields: id()
+  - fields: id(integer)
 - application:
-  - fields: id()
+  - fields: id(integer)
 - approvals_for_job:
-  - fields: id()
+  - fields: id(integer)
 - approval_flow:
-  - fields: id()
+  - fields: id(integer)
 - pending_approvals_for_user:
-  - fields: id()
+  - fields: id(integer)
 - candidate:
-  - fields: id()
+  - fields: id(integer)
 - close_reasons:
-  - fields: id()
+  - fields: id(integer)
 - custom_fields:
-  - fields: id()
+  - fields: id(integer)
 - custom_field:
-  - fields: id()
+  - fields: id(integer)
 - custom_field_options:
-  - fields: id()
+  - fields: id(integer)
 - demographic_question_sets:
-  - fields: id()
+  - fields: id(integer)
 - demographic_question_set:
-  - fields: id()
+  - fields: id(integer)
 - demographic_questions:
-  - fields: id()
+  - fields: id(integer)
 - demographic_questions_for_demographic_question_set:
-  - fields: id()
+  - fields: id(integer)
 - demographic_question:
-  - fields: id()
+  - fields: id(integer)
 - demographic_answer_options:
-  - fields: id()
+  - fields: id(integer)
 - demographic_answer_options_for_demographic_question:
-  - fields: id()
+  - fields: id(integer)
 - demographic_answer_option:
-  - fields: id()
+  - fields: id(integer)
 - demographic_answers:
-  - fields: id()
+  - fields: id(integer)
 - demographic_answers_for_application:
-  - fields: id()
+  - fields: id(integer)
 - demographic_answer:
-  - fields: id()
+  - fields: id(integer)
 - departments:
-  - fields: id()
+  - fields: id(integer)
 - department:
-  - fields: id()
+  - fields: id(integer)
 - degrees:
-  - fields: id()
+  - fields: id(integer)
 - disciplines:
-  - fields: id()
+  - fields: id(integer)
 - schools:
-  - fields: id()
+  - fields: id(integer)
 - eeoc:
-  - fields: id()
+  - fields: id(integer)
 - eeoc_data_for_application:
-  - fields: id()
+  - fields: id(integer)
 - email_templates:
-  - fields: id()
+  - fields: id(integer)
 - email_template:
-  - fields: id()
+  - fields: id(integer)
 - job_openings:
-  - fields: id()
+  - fields: id(integer)
 - opening_for_job:
-  - fields: id()
+  - fields: id(integer)
 - job_posts:
-  - fields: id()
+  - fields: id(integer)
 - job_post:
-  - fields: id()
+  - fields: id(integer)
 - job_posts_for_job:
-  - fields: id()
+  - fields: id(integer)
 - job_post_for_job:
-  - fields: id()
+  - fields: id(integer)
 - custom_locations_for_job_post:
-  - fields: id()
+  - fields: id(integer)
 - job_stages:
-  - fields: id()
+  - fields: id(integer)
 - job_stages_for_job:
-  - fields: id()
+  - fields: id(integer)
 - job_stage:
-  - fields: id()
+  - fields: id(integer)
 - job:
-  - fields: id()
+  - fields: id(integer)
 - hiring_team:
-  - fields: id()
+  - fields: id(integer)
 - offers_for_application:
-  - fields: id()
+  - fields: id(integer)
 - current_offer_for_application:
-  - fields: id()
+  - fields: id(integer)
 - offer:
-  - fields: id()
+  - fields: id(integer)
 - offices:
-  - fields: id()
+  - fields: id(integer)
 - office:
-  - fields: id()
+  - fields: id(integer)
 - prospect_pools:
-  - fields: id()
+  - fields: id(integer)
 - prospect_pool:
-  - fields: id()
+  - fields: id(integer)
 - rejection_reasons:
-  - fields: id()
+  - fields: id(integer)
 - scheduled_interviews:
-  - fields: id()
+  - fields: id(integer)
 - scheduled_interviews_for_application:
-  - fields: id()
+  - fields: id(integer)
 - scheduled_interview:
-  - fields: id()
+  - fields: id(integer)
 - scorecards:
-  - fields: id()
+  - fields: id(integer)
 - scorecards_for_application:
-  - fields: id()
+  - fields: id(integer)
 - scorecard:
-  - fields: id()
+  - fields: id(integer)
 - sources:
-  - fields: id()
+  - fields: id(integer)
 - candidate_tags:
-  - fields: id()
+  - fields: id(integer)
 - tags_applied_to_candidate:
-  - fields: id()
+  - fields: id(integer)
 - tracking_link_data_for_token:
-  - fields: id()
+  - fields: id(integer)
 - user:
-  - fields: id()
+  - fields: id(integer)
 - job_permissions:
-  - fields: id()
+  - fields: id(integer)
 - future_job_permissions:
-  - fields: id()
+  - fields: id(integer)
 - user_roles:
-  - fields: id()
+  - fields: id(integer)
 
 ## Sync Modes
 

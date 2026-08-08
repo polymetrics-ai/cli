@@ -47,19 +47,19 @@ Reads Apple Search Ads campaigns, ad groups, targeting keywords, and ads via the
 - campaigns:
   - primary key: id
   - cursor: modification_time
-  - fields: ad_channel_type(), billing_event(), budget_amount(), countries_or_regions(), creation_time(), daily_budget_amount(), deleted(), display_status(), id(), modification_time(), name(), org_id(), serving_status(), status(), supply_sources()
+  - fields: ad_channel_type(string), billing_event(string), budget_amount(object), countries_or_regions(array), creation_time(string), daily_budget_amount(object), deleted(boolean), display_status(string), id(integer), modification_time(string), name(string), org_id(integer), serving_status(string), status(string), supply_sources(array)
 - adgroups:
   - primary key: id
   - cursor: modification_time
-  - fields: campaign_id(), cpa_goal(), creation_time(), default_bid_amount(), deleted(), display_status(), end_time(), id(), modification_time(), name(), pricing_model(), serving_status(), start_time(), status()
+  - fields: campaign_id(integer), cpa_goal(object), creation_time(string), default_bid_amount(object), deleted(boolean), display_status(string), end_time(string), id(integer), modification_time(string), name(string), pricing_model(string), serving_status(string), start_time(string), status(string)
 - keywords:
   - primary key: id
   - cursor: modification_time
-  - fields: ad_group_id(), bid_amount(), campaign_id(), deleted(), id(), match_type(), modification_time(), status(), text()
+  - fields: ad_group_id(integer), bid_amount(object), campaign_id(integer), deleted(boolean), id(integer), match_type(string), modification_time(string), status(string), text(string)
 - ads:
   - primary key: id
   - cursor: modification_time
-  - fields: ad_group_id(), campaign_id(), creation_time(), creative_id(), creative_type(), deleted(), id(), modification_time(), name(), serving_status(), status()
+  - fields: ad_group_id(integer), campaign_id(integer), creation_time(string), creative_id(integer), creative_type(string), deleted(boolean), id(integer), modification_time(string), name(string), serving_status(string), status(string)
 
 ## Sync Modes
 

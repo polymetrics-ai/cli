@@ -43,25 +43,25 @@ ETL STREAMS
   organizations:
     primary key: id
     cursor: created_at
-    fields: agents_url(), created_at(), graphql_id(), id(), name(), pipelines_url(), slug(), url(), web_url()
+    fields: agents_url(string), created_at(string), graphql_id(string), id(string), name(string), pipelines_url(string), slug(string), url(string), web_url(string)
   pipelines:
     primary key: id
     cursor: created_at
-    fields: archived_at(), builds_url(), created_at(), default_branch(), description(), graphql_id(), id(), name(), repository(), slug(), url(), visibility(), web_url()
+    fields: archived_at(string), builds_url(string), created_at(string), default_branch(string), description(string), graphql_id(string), id(string), name(string), repository(string), slug(string), url(string), visibility(string), web_url(string)
   builds:
     primary key: id
     cursor: created_at
-    fields: blocked(), branch(), commit(), created_at(), finished_at(), graphql_id(), id(), message(), number(), scheduled_at(), source(), started_at(), state(), url(), web_url()
+    fields: blocked(boolean), branch(string), commit(string), created_at(string), finished_at(string), graphql_id(string), id(string), message(string), number(integer), scheduled_at(string), source(string), started_at(string), state(string), url(string), web_url(string)
   agents:
     primary key: id
     cursor: created_at
-    fields: connection_state(), created_at(), graphql_id(), hostname(), id(), ip_address(), last_job_finished_at(), name(), priority(), url(), user_agent(), version(), web_url()
+    fields: connection_state(string), created_at(string), graphql_id(string), hostname(string), id(string), ip_address(string), last_job_finished_at(string), name(string), priority(integer), url(string), user_agent(string), version(string), web_url(string)
   teams:
     primary key: id
-    fields: created_at(), default(), description(), graphql_id(), id(), name(), privacy(), slug()
+    fields: created_at(string), default(boolean), description(string), graphql_id(string), id(string), name(string), privacy(string), slug(string)
   clusters:
     primary key: id
-    fields: color(), created_at(), default_queue_id(), description(), emoji(), graphql_id(), id(), name(), url(), web_url()
+    fields: color(string), created_at(string), default_queue_id(string), description(string), emoji(string), graphql_id(string), id(string), name(string), url(string), web_url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

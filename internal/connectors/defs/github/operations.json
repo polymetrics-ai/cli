@@ -312,7 +312,42 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/caches",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "direction",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "asc",
+              "desc"
+            ],
+            "summary": "The direction to sort the results by."
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "type": "string",
+            "summary": "An explicit key or prefix for identifying the cache"
+          },
+          {
+            "name": "ref",
+            "in": "query",
+            "type": "string",
+            "summary": "The full Git reference for narrowing down the cache. The `ref` for a branch should be formatted as `refs/heads/<branch name>`. To reference a pull request use `refs/pull/<number>/merge`."
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "created_at",
+              "last_accessed_at",
+              "size_in_bytes"
+            ],
+            "summary": "The property to sort the results by. `created_at` means when the cache was created. `last_accessed_at` means when the cache was last accessed. `size_in_bytes` is the size of the cache in bytes."
+          }
+        ]
       }
     },
     {
@@ -364,7 +399,28 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ahead_of_job",
+            "in": "query",
+            "type": "integer",
+            "summary": "Filter to items ahead of this job ID in the queue, plus the job itself."
+          },
+          {
+            "name": "ahead_of_run",
+            "in": "query",
+            "type": "integer",
+            "summary": "Filter to items ahead of this workflow run ID in the queue, plus the run itself."
+          },
+          {
+            "name": "concurrency_group_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the concurrency group."
+          }
+        ]
       }
     },
     {
@@ -378,7 +434,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the job."
+          }
+        ]
       }
     },
     {
@@ -684,7 +749,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runners",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string",
+            "summary": "The name of a self-hosted runner."
+          }
+        ]
       }
     },
     {
@@ -768,7 +841,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "runner_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "Unique identifier of the self-hosted runner."
+          }
+        ]
       }
     },
     {
@@ -796,7 +878,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "runner_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "Unique identifier of the self-hosted runner."
+          }
+        ]
       }
     },
     {
@@ -852,7 +943,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the workflow run."
+          }
+        ]
       }
     },
     {
@@ -880,7 +980,29 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "attempt_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The attempt number of the workflow run."
+          },
+          {
+            "name": "exclude_pull_requests",
+            "in": "query",
+            "type": "boolean",
+            "summary": "If `true` pull requests are omitted from the response (empty array)."
+          },
+          {
+            "name": "run_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the workflow run."
+          }
+        ]
       }
     },
     {
@@ -894,7 +1016,23 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "attempt_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The attempt number of the workflow run."
+          },
+          {
+            "name": "run_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the workflow run."
+          }
+        ]
       }
     },
     {
@@ -924,7 +1062,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the workflow run."
+          }
+        ]
       }
     },
     {
@@ -952,7 +1099,26 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "latest",
+              "all"
+            ],
+            "summary": "Filters jobs by their `completed_at` timestamp. `latest` returns jobs from the most recent execution of the workflow run. `all` returns all jobs for a workflow run, including from old executions of the workflow run."
+          },
+          {
+            "name": "run_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the workflow run."
+          }
+        ]
       }
     },
     {
@@ -997,7 +1163,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the workflow run."
+          }
+        ]
       }
     },
     {
@@ -1025,7 +1200,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the workflow run."
+          }
+        ]
       }
     },
     {
@@ -1081,7 +1265,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "secret_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the secret."
+          }
+        ]
       }
     },
     {
@@ -1151,7 +1344,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/variables/{name}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the variable."
+          }
+        ]
       }
     },
     {
@@ -1207,7 +1409,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "summary": "The ID of the workflow. You can also pass the workflow file name as a string."
+          }
+        ]
       }
     },
     {
@@ -1221,7 +1431,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/assignees/{assignee}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "assignee",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
       }
     },
     {
@@ -1249,7 +1467,22 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/attestations/{subject_digest}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "predicate_type",
+            "in": "query",
+            "type": "string",
+            "summary": "Optional filter for fetching attestations with a given predicate type."
+          },
+          {
+            "name": "subject_digest",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The parameter should be set to the attestation's subject's SHA256 digest, in the form `sha256:HEX_DIGEST`."
+          }
+        ]
       }
     },
     {
@@ -1367,7 +1600,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1409,7 +1651,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1451,7 +1702,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1493,7 +1753,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1535,7 +1804,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1577,7 +1855,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1633,7 +1920,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1661,7 +1957,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1717,7 +2022,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1773,7 +2087,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+          }
+        ]
       }
     },
     {
@@ -1854,7 +2177,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "check_run_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the check run."
+          }
+        ]
       }
     },
     {
@@ -1892,7 +2224,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/annotations",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "check_run_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the check run."
+          }
+        ]
       }
     },
     {
@@ -1978,7 +2319,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "check_suite_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the check suite."
+          }
+        ]
       }
     },
     {
@@ -1992,7 +2342,43 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "check_name",
+            "in": "query",
+            "type": "string",
+            "summary": "Returns check runs with the specified `name`."
+          },
+          {
+            "name": "check_suite_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the check suite."
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "latest",
+              "all"
+            ],
+            "summary": "Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs."
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "queued",
+              "in_progress",
+              "completed"
+            ],
+            "summary": "Returns check runs with the specified `status`."
+          }
+        ]
       }
     },
     {
@@ -2030,7 +2416,29 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-quality/findings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "direction",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "asc",
+              "desc"
+            ],
+            "summary": "The direction to sort the results by."
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "open",
+              "dismissed"
+            ],
+            "summary": "If specified, only code quality findings with this state will be returned."
+          }
+        ]
       }
     },
     {
@@ -2044,7 +2452,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "finding_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies a finding."
+          }
+        ]
       }
     },
     {
@@ -2086,7 +2503,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "alert_number",
+            "in": "path",
+            "required": true,
+            "summary": "The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation."
+          }
+        ]
       }
     },
     {
@@ -2128,7 +2553,26 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "alert_number",
+            "in": "path",
+            "required": true,
+            "summary": "The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation."
+          },
+          {
+            "name": "pr",
+            "in": "query",
+            "type": "integer",
+            "summary": "The number of the pull request for the results you want to list."
+          },
+          {
+            "name": "ref",
+            "in": "query",
+            "summary": "The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`."
+          }
+        ]
       }
     },
     {
@@ -2142,7 +2586,54 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-scanning/analyses",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "direction",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "asc",
+              "desc"
+            ],
+            "summary": "The direction to sort the results by."
+          },
+          {
+            "name": "pr",
+            "in": "query",
+            "type": "integer",
+            "summary": "The number of the pull request for the results you want to list."
+          },
+          {
+            "name": "ref",
+            "in": "query",
+            "summary": "The Git reference for the analyses you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`."
+          },
+          {
+            "name": "sarif_id",
+            "in": "query",
+            "summary": "Filter analyses belonging to the same SARIF upload."
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "created"
+            ],
+            "summary": "The property by which to sort the results."
+          },
+          {
+            "name": "tool_guid",
+            "in": "query",
+            "summary": "The GUID of a code scanning tool. Only results by this tool will be listed. Note that some code scanning tools may not include a GUID in their analysis data. You can specify the tool by using either `tool_guid` or `tool_name`, but not both."
+          },
+          {
+            "name": "tool_name",
+            "in": "query",
+            "summary": "The name of a code scanning tool. Only results by this tool will be listed. You can specify the tool by using either `tool_name` or `tool_guid`, but not both."
+          }
+        ]
       }
     },
     {
@@ -2170,7 +2661,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The ID of the analysis, as returned from the `GET /repos/{owner}/{repo}/code-scanning/analyses` operation."
+          }
+        ]
       }
     },
     {
@@ -2212,7 +2712,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "language",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The language of the CodeQL database."
+          }
+        ]
       }
     },
     {
@@ -2240,7 +2749,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "codeql_variant_analysis_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the variant analysis."
+          }
+        ]
       }
     },
     {
@@ -2254,7 +2772,30 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "codeql_variant_analysis_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The ID of the variant analysis."
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the variant analysis repository."
+          },
+          {
+            "name": "repo_owner",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The account owner of the variant analysis repository. The name is not case sensitive."
+          }
+        ]
       }
     },
     {
@@ -2310,7 +2851,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "sarif_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The SARIF ID obtained after uploading."
+          }
+        ]
       }
     },
     {
@@ -2338,7 +2888,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/codeowners/errors",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "query",
+            "type": "string",
+            "summary": "A branch, tag or commit name used to determine which version of the CODEOWNERS file to use. Default: the repository's default branch (e.g. `main`)"
+          }
+        ]
       }
     },
     {
@@ -2404,7 +2962,27 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/codespaces/machines",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "client_ip",
+            "in": "query",
+            "type": "string",
+            "summary": "IP for location auto-detection when proxying a request"
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "type": "string",
+            "summary": "The location to check for available machines. Assigned by IP if not provided."
+          },
+          {
+            "name": "ref",
+            "in": "query",
+            "type": "string",
+            "summary": "The branch or commit to check for prebuild availability and devcontainer restrictions."
+          }
+        ]
       }
     },
     {
@@ -2418,7 +2996,21 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/codespaces/new",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "client_ip",
+            "in": "query",
+            "type": "string",
+            "summary": "An alternative IP for default location auto-detection, such as when proxying a request."
+          },
+          {
+            "name": "ref",
+            "in": "query",
+            "type": "string",
+            "summary": "The branch or commit to check for a default devcontainer path. If not specified, the default branch will be checked."
+          }
+        ]
       }
     },
     {
@@ -2432,7 +3024,23 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/codespaces/permissions_check",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "devcontainer_path",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "summary": "Path to the devcontainer.json configuration to use for the permission check."
+          },
+          {
+            "name": "ref",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "summary": "The git reference that points to the location of the devcontainer configuration to use for the permission check. The value of `ref` will typically be a branch name (`heads/BRANCH_NAME`). For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+          }
+        ]
       }
     },
     {
@@ -2498,7 +3106,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "secret_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the secret."
+          }
+        ]
       }
     },
     {
@@ -2536,7 +3153,32 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "comment_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the comment."
+          },
+          {
+            "name": "content",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "+1",
+              "-1",
+              "laugh",
+              "confused",
+              "heart",
+              "hooray",
+              "rocket",
+              "eyes"
+            ],
+            "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to a commit comment."
+          }
+        ]
       }
     },
     {
@@ -2598,7 +3240,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "commit_sha",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The SHA of the commit."
+          }
+        ]
       }
     },
     {
@@ -2612,7 +3263,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/commits/{commit_sha}/pulls",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "commit_sha",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The SHA of the commit."
+          }
+        ]
       }
     },
     {
@@ -2626,7 +3286,48 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "check_name",
+            "in": "query",
+            "type": "string",
+            "summary": "Returns check runs with the specified `name`."
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "latest",
+              "all"
+            ],
+            "summary": "Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs."
+          },
+          {
+            "name": "ref",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The commit reference. Can be a commit SHA, branch name (`heads/BRANCH_NAME`), or tag name (`tags/TAG_NAME`). For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "queued",
+              "in_progress",
+              "completed"
+            ],
+            "summary": "Returns check runs with the specified `status`."
+          }
+        ]
       }
     },
     {
@@ -2640,7 +3341,28 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "query",
+            "type": "integer",
+            "summary": "Filters check suites by GitHub App `id`."
+          },
+          {
+            "name": "check_name",
+            "in": "query",
+            "type": "string",
+            "summary": "Returns check runs with the specified `name`."
+          },
+          {
+            "name": "ref",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The commit reference. Can be a commit SHA, branch name (`heads/BRANCH_NAME`), or tag name (`tags/TAG_NAME`). For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+          }
+        ]
       }
     },
     {
@@ -2654,7 +3376,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/commits/{ref}/status",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The commit reference. Can be a commit SHA, branch name (`heads/BRANCH_NAME`), or tag name (`tags/TAG_NAME`). For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+          }
+        ]
       }
     },
     {
@@ -2668,7 +3399,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/commits/{ref}/statuses",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The commit reference. Can be a commit SHA, branch name (`heads/BRANCH_NAME`), or tag name (`tags/TAG_NAME`). For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+          }
+        ]
       }
     },
     {
@@ -2696,7 +3436,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/compare/{basehead}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "basehead",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The base branch and head branch to compare. This parameter expects the format `BASE...HEAD`. Both must be branch names in `repo`. To compare with a branch that exists in a different repository in the same network as `repo`, the `basehead` parameter expects the format `USERNAME:BASE...USERNAME:HEAD`."
+          }
+        ]
       }
     },
     {
@@ -2766,7 +3515,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "secret_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the secret."
+          }
+        ]
       }
     },
     {
@@ -2794,7 +3552,22 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "basehead",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The base and head Git revisions to compare. The Git revisions will be resolved to commit SHAs. Named revisions will be resolved to their corresponding HEAD commits, and an appropriate merge base will be determined. This parameter expects the format `{base}...{head}`."
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string",
+            "summary": "The full path, relative to the repository root, of the dependency manifest file."
+          }
+        ]
       }
     },
     {
@@ -2895,7 +3668,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "deployment_id parameter"
+          }
+        ]
       }
     },
     {
@@ -2957,7 +3739,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          }
+        ]
       }
     },
     {
@@ -2999,7 +3790,23 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "branch_policy_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the branch policy."
+          },
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          }
+        ]
       }
     },
     {
@@ -3027,7 +3834,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          }
+        ]
       }
     },
     {
@@ -3055,7 +3871,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          }
+        ]
       }
     },
     {
@@ -3083,7 +3908,23 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          },
+          {
+            "name": "protection_rule_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the protection rule."
+          }
+        ]
       }
     },
     {
@@ -3097,7 +3938,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          }
+        ]
       }
     },
     {
@@ -3111,7 +3961,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          }
+        ]
       }
     },
     {
@@ -3139,7 +3998,23 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          },
+          {
+            "name": "secret_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the secret."
+          }
+        ]
       }
     },
     {
@@ -3167,7 +4042,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          }
+        ]
       }
     },
     {
@@ -3209,7 +4093,23 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "environment_name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The name of the variable."
+          }
+        ]
       }
     },
     {
@@ -3261,7 +4161,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "file_sha",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
       }
     },
     {
@@ -3299,7 +4207,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/git/ref/{ref}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The Git reference. For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+          }
+        ]
       }
     },
     {
@@ -3313,7 +4230,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "tag_sha",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
       }
     },
     {
@@ -3351,7 +4276,22 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "recursive",
+            "in": "query",
+            "type": "string",
+            "summary": "Setting this parameter to any value returns the objects or subtrees referenced by the tree specified in `:tree_sha`. For example, setting `recursive` to any of the following will enable returning objects or subtrees: `0`, `1`, `\"true\"`, and `\"false\"`. Omit this parameter to prevent recursively returning objects or subtrees."
+          },
+          {
+            "name": "tree_sha",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The SHA1 value or ref (branch or tag) name of the tree."
+          }
+        ]
       }
     },
     {
@@ -3379,7 +4319,26 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "hook_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "success",
+              "failure"
+            ],
+            "summary": "Returns webhook deliveries filtered by delivery outcome classification based on `status_code` range. A `status` of `success` returns deliveries with a `status_code` in the 200-399 range (inclusive). A `status` of `failure` returns deliveries with a `status_code` in the 400-599 range (inclusive)."
+          }
+        ]
       }
     },
     {
@@ -3393,7 +4352,22 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "delivery_id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "hook_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+          }
+        ]
       }
     },
     {
@@ -3587,7 +4561,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/import/authors",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "type": "integer",
+            "summary": "A user ID. Only return users with an ID greater than this ID."
+          }
+        ]
       }
     },
     {
@@ -3871,7 +4853,32 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "comment_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the comment."
+          },
+          {
+            "name": "content",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "+1",
+              "-1",
+              "laugh",
+              "confused",
+              "heart",
+              "hooray",
+              "rocket",
+              "eyes"
+            ],
+            "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to an issue comment."
+          }
+        ]
       }
     },
     {
@@ -3933,7 +4940,22 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "assignee",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "issue_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the issue."
+          }
+        ]
       }
     },
     {
@@ -3947,7 +4969,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "issue_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the issue."
+          }
+        ]
       }
     },
     {
@@ -4009,7 +5040,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "issue_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the issue."
+          }
+        ]
       }
     },
     {
@@ -4023,7 +5063,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "issue_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the issue."
+          }
+        ]
       }
     },
     {
@@ -4079,7 +5128,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "issue_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the issue."
+          }
+        ]
       }
     },
     {
@@ -4093,7 +5151,32 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "content",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "+1",
+              "-1",
+              "laugh",
+              "confused",
+              "heart",
+              "hooray",
+              "rocket",
+              "eyes"
+            ],
+            "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to an issue."
+          },
+          {
+            "name": "issue_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the issue."
+          }
+        ]
       }
     },
     {
@@ -4179,7 +5262,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "issue_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the issue."
+          }
+        ]
       }
     },
     {
@@ -4241,7 +5333,14 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/license",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "query",
+            "summary": "The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`."
+          }
+        ]
       }
     },
     {
@@ -4279,7 +5378,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/milestones/{milestone_number}/labels",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "milestone_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the milestone."
+          }
+        ]
       }
     },
     {
@@ -4293,7 +5401,33 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/notifications",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "all",
+            "in": "query",
+            "type": "boolean",
+            "summary": "If `true`, show notifications marked as read."
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "type": "string",
+            "summary": "Only show notifications updated before the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+          },
+          {
+            "name": "participating",
+            "in": "query",
+            "type": "boolean",
+            "summary": "If `true`, only shows notifications in which the user is directly participating or mentioned."
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "type": "string",
+            "summary": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+          }
+        ]
       }
     },
     {
@@ -4469,7 +5603,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/pages/builds/{build_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "build_id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ]
       }
     },
     {
@@ -4507,7 +5649,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "pages_deployment_id",
+            "in": "path",
+            "required": true,
+            "summary": "The ID of the Pages deployment. You can also give the commit SHA of the deployment."
+          }
+        ]
       }
     },
     {
@@ -4629,7 +5779,32 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "comment_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the comment."
+          },
+          {
+            "name": "content",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "+1",
+              "-1",
+              "laugh",
+              "confused",
+              "heart",
+              "hooray",
+              "rocket",
+              "eyes"
+            ],
+            "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to a pull request review comment."
+          }
+        ]
       }
     },
     {
@@ -4715,7 +5890,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/pulls/{pull_number}/commits",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "pull_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the pull request."
+          }
+        ]
       }
     },
     {
@@ -4729,7 +5913,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/pulls/{pull_number}/files",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "pull_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the pull request."
+          }
+        ]
       }
     },
     {
@@ -4743,7 +5936,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "pull_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the pull request."
+          }
+        ]
       }
     },
     {
@@ -4781,7 +5983,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "pull_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the pull request."
+          }
+        ]
       }
     },
     {
@@ -4795,7 +6006,23 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "pull_number",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The number that identifies the pull request."
+          },
+          {
+            "name": "review_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the review."
+          }
+        ]
       }
     },
     {
@@ -4809,7 +6036,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/readme",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "query",
+            "type": "string",
+            "summary": "The name of the commit/branch/tag. Default: the repository’s default branch."
+          }
+        ]
       }
     },
     {
@@ -4823,7 +6058,22 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/readme/{dir}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "dir",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The alternate path to look for a README file"
+          },
+          {
+            "name": "ref",
+            "in": "query",
+            "type": "string",
+            "summary": "The name of the commit/branch/tag. Default: the repository’s default branch."
+          }
+        ]
       }
     },
     {
@@ -4837,7 +6087,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "asset_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the asset."
+          }
+        ]
       }
     },
     {
@@ -4865,7 +6124,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "release_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the release."
+          }
+        ]
       }
     },
     {
@@ -4893,7 +6161,30 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "content",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "+1",
+              "laugh",
+              "heart",
+              "hooray",
+              "rocket",
+              "eyes"
+            ],
+            "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to a release."
+          },
+          {
+            "name": "release_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the release."
+          }
+        ]
       }
     },
     {
@@ -4955,7 +6246,56 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/rulesets/rule-suites",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "actor_name",
+            "in": "query",
+            "type": "string",
+            "summary": "The handle for the GitHub user account to filter on. When specified, only rule evaluations triggered by this actor will be returned."
+          },
+          {
+            "name": "evaluate_status",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "all",
+              "active",
+              "evaluate"
+            ],
+            "summary": "The evaluate status to filter on. When specified, only rule suites resulting from rulesets with the specified evaluate status will be returned."
+          },
+          {
+            "name": "ref",
+            "in": "query",
+            "type": "string",
+            "summary": "The name of the ref. Cannot contain wildcard characters. Optionally prefix with `refs/heads/` to limit to branches or `refs/tags/` to limit to tags. Omit the prefix to search across all refs. When specified, only rule evaluations triggered for this ref will be returned."
+          },
+          {
+            "name": "rule_suite_result",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "pass",
+              "fail",
+              "bypass",
+              "all"
+            ],
+            "summary": "The rule suite results to filter on. When specified, only suites with this result will be returned."
+          },
+          {
+            "name": "time_period",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "hour",
+              "day",
+              "week",
+              "month"
+            ],
+            "summary": "The time period to filter by."
+          }
+        ]
       }
     },
     {
@@ -4969,7 +6309,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "rule_suite_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The unique identifier of the rule suite result."
+          }
+        ]
       }
     },
     {
@@ -4983,7 +6332,16 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ruleset_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The ID of the ruleset."
+          }
+        ]
       }
     },
     {
@@ -4997,7 +6355,23 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ruleset_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The ID of the ruleset."
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "The ID of the version"
+          }
+        ]
       }
     },
     {
@@ -5011,7 +6385,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "alert_number",
+            "in": "path",
+            "required": true,
+            "summary": "The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation."
+          }
+        ]
       }
     },
     {
@@ -5309,7 +6691,19 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/traffic/clones",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "per",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "day",
+              "week"
+            ],
+            "summary": "The time frame to display results for."
+          }
+        ]
       }
     },
     {
@@ -5351,7 +6745,19 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/traffic/views",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "per",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "day",
+              "week"
+            ],
+            "summary": "The time frame to display results for."
+          }
+        ]
       }
     },
     {

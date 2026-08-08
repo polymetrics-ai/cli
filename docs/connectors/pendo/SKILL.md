@@ -57,93 +57,93 @@ Reads Pendo Engage visitors, accounts, product objects, guides, reports, metadat
 - visitors:
   - primary key: id
   - cursor: lastVisit
-  - fields: accountId(), email(), id(), lastVisit()
+  - fields: accountId(string), email(string), id(string), lastVisit(string)
 - accounts:
   - primary key: id
   - cursor: lastVisit
-  - fields: id(), lastVisit(), name()
+  - fields: id(string), lastVisit(string), name(string)
 - pages:
   - primary key: id
   - cursor: lastUpdated
-  - fields: id(), lastUpdated(), name()
+  - fields: id(string), lastUpdated(string), name(string)
 - features:
   - primary key: id
   - cursor: lastUpdated
-  - fields: id(), lastUpdated(), name()
+  - fields: id(string), lastUpdated(string), name(string)
 - page_by_id:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - pages_by_ids:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - feature_by_id:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - features_by_ids:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - tracktypes:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - tracktype_by_id:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - visitor_by_id:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - visitor_history:
   - primary key: ts, type
-  - fields: ts(), type()
+  - fields: ts(string), type(string)
 - account_by_id:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - bulkdelete_requests:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - bulkdelete_request:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - segments:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - segment_by_id:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - segment_status:
   - primary key: requestId
-  - fields: requestId()
+  - fields: requestId(string)
 - reports:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - report_results_json:
 - guides:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - guide_by_id:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - guide_history:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - guide_order:
 - metadata_schema:
 - metadata_dependencies:
 - metadata_field_dependencies:
 - blacklist:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - blacklist_by_type:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - servers:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - server_by_name:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - servers_by_flag:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - feedback_options:
 
 ## Sync Modes

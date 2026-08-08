@@ -45,36 +45,36 @@ CONFIGURATION
 ETL STREAMS
   sites:
     primary key: site_url
-    fields: permission_level(), site_url()
+    fields: permission_level(string), site_url(string)
   site_details:
     primary key: site_url
-    fields: permission_level(), site_url()
+    fields: permission_level(string), site_url(string)
   sitemaps:
     primary key: site_url, path
-    fields: errors(), is_pending(), is_sitemaps_index(), last_downloaded(), last_submitted(), path(), site_url(), type(), warnings()
+    fields: errors(string), is_pending(boolean), is_sitemaps_index(boolean), last_downloaded(string), last_submitted(string), path(string), site_url(string), type(string), warnings(string)
   sitemap_details:
     primary key: site_url, path
-    fields: errors(), is_pending(), is_sitemaps_index(), last_downloaded(), last_submitted(), path(), site_url(), type(), warnings()
+    fields: errors(string), is_pending(boolean), is_sitemaps_index(boolean), last_downloaded(string), last_submitted(string), path(string), site_url(string), type(string), warnings(string)
   search_analytics_by_date:
     primary key: site_url, search_type, date
     cursor: date
-    fields: clicks(), ctr(), date(), impressions(), position(), search_type(), site_url()
+    fields: clicks(number), ctr(number), date(string), impressions(number), position(number), search_type(string), site_url(string)
   search_analytics_by_country:
     primary key: site_url, search_type, date, country
     cursor: date
-    fields: clicks(), country(), ctr(), date(), impressions(), position(), search_type(), site_url()
+    fields: clicks(number), country(string), ctr(number), date(string), impressions(number), position(number), search_type(string), site_url(string)
   search_analytics_by_device:
     primary key: site_url, search_type, date, device
     cursor: date
-    fields: clicks(), ctr(), date(), device(), impressions(), position(), search_type(), site_url()
+    fields: clicks(number), ctr(number), date(string), device(string), impressions(number), position(number), search_type(string), site_url(string)
   search_analytics_by_page:
     primary key: site_url, search_type, date, page
     cursor: date
-    fields: clicks(), ctr(), date(), impressions(), page(), position(), search_type(), site_url()
+    fields: clicks(number), ctr(number), date(string), impressions(number), page(string), position(number), search_type(string), site_url(string)
   search_analytics_by_query:
     primary key: site_url, search_type, date, query
     cursor: date
-    fields: clicks(), ctr(), date(), impressions(), position(), query(), search_type(), site_url()
+    fields: clicks(number), ctr(number), date(string), impressions(number), position(number), query(string), search_type(string), site_url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -135,8 +135,8 @@ COMMAND SURFACE
     search-analytics by-page - Read Search Analytics rows grouped by date and page. [intent=etl availability=implemented stream=search_analytics_by_page]
     search-analytics by-query - Read Search Analytics rows grouped by date and query. [intent=etl availability=implemented stream=search_analytics_by_query]
   Typed Direct Reads
-    direct url-inspection inspect - Run the official URL Inspection operation as a typed bounded direct read. [intent=direct_read availability=implemented operation=google-search-console.urlinspection_index_inspect]; risk: low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL-shaped fields; flags: --inspection-url (required), --site-url (required), --language-code
-    direct mobile-friendly-test run - Run the official Mobile Friendly Test operation as a typed bounded direct read. [intent=direct_read availability=implemented operation=google-search-console.mobile_friendly_test_run]; risk: low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL/screenshot-shaped fields; flags: --url (required), --request-screenshot
+    direct url-inspection inspect - Run the official URL Inspection operation as a typed bounded direct read. [intent=direct_read availability=implemented operation=google-search-console.urlinspection_index_inspect]; risk: low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL-shaped fields; flags: --inspection-url (required), --site-url (required), --language-code, --page, --page-cursor
+    direct mobile-friendly-test run - Run the official Mobile Friendly Test operation as a typed bounded direct read. [intent=direct_read availability=implemented operation=google-search-console.mobile_friendly_test_run]; risk: low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL/screenshot-shaped fields; flags: --url (required), --request-screenshot, --page, --page-cursor
   Help topics:
     parity - Google's current Discovery document lists 11 unique Search Console operations. Five reach ETL streams, four reach typed reverse-ETL writes, and URL Inspection plus Mobile-Friendly Test reach typed bounded direct reads. There are no generic raw HTTP, body, query, binary, CDC, excluded, or planned operations.
 

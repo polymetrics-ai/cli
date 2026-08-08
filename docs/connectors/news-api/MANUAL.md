@@ -45,14 +45,14 @@ ETL STREAMS
   everything:
     primary key: url
     cursor: published_at
-    fields: author(), content(), description(), published_at(), source_id(), source_name(), title(), url(), url_to_image()
+    fields: author(string), content(string), description(string), published_at(string), source_id(string), source_name(string), title(string), url(string), url_to_image(string)
   top_headlines:
     primary key: url
     cursor: published_at
-    fields: author(), content(), description(), published_at(), source_id(), source_name(), title(), url(), url_to_image()
+    fields: author(string), content(string), description(string), published_at(string), source_id(string), source_name(string), title(string), url(string), url_to_image(string)
   sources:
     primary key: id
-    fields: category(), country(), description(), id(), language(), name(), url()
+    fields: category(string), country(string), description(string), id(string), language(string), name(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

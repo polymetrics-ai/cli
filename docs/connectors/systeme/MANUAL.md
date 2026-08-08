@@ -34,22 +34,22 @@ ETL STREAMS
   contacts:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), id()
+    fields: created_at(string), email(string), id(string)
   tags:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   contact_fields:
     primary key: id
-    fields: id(), slug(), type()
+    fields: id(string), slug(string), type(string)
   funnels:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   funnel_steps:
     primary key: funnel_id, id
-    fields: funnel_id(), id(), name()
+    fields: funnel_id(string), id(string), name(string)
   webhooks:
     primary key: id
-    fields: event(), id(), url()
+    fields: event(string), id(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

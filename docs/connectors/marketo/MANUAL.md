@@ -37,13 +37,13 @@ CONFIGURATION
 ETL STREAMS
   leads:
     primary key: id
-    fields: createdAt(), email(), id(), updatedAt()
+    fields: createdAt(string), email(string), id(integer), updatedAt(string)
   programs:
     primary key: id
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(integer), name(string), updatedAt(string)
   activities:
     primary key: id
-    fields: activityDate(), activityTypeId(), id(), leadId()
+    fields: activityDate(string), activityTypeId(integer), id(integer), leadId(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

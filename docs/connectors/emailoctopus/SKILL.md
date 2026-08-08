@@ -37,19 +37,19 @@ Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list c
 
 - lists:
   - primary key: id
-  - fields: created_at(), double_opt_in(), id(), name(), pending_count(), subscribed_count(), unsubscribed_count()
+  - fields: created_at(string), double_opt_in(boolean), id(string), name(string), pending_count(integer), subscribed_count(integer), unsubscribed_count(integer)
 - campaigns:
   - primary key: id
-  - fields: created_at(), from_email_address(), from_name(), id(), name(), sent_at(), status(), subject()
+  - fields: created_at(string), from_email_address(string), from_name(string), id(string), name(string), sent_at(string), status(string), subject(string)
 - list_contacts:
   - primary key: id
-  - fields: created_at(), email_address(), fields(), id(), last_updated_at(), status(), tags()
+  - fields: created_at(string), email_address(string), fields(object), id(string), last_updated_at(string), status(string), tags(array)
 - list_tags:
   - primary key: tag
-  - fields: tag()
+  - fields: tag(string)
 - campaign_summary_reports:
   - primary key: campaign_id
-  - fields: bounced_hard(), bounced_soft(), campaign_id(), clicked_total(), clicked_unique(), complained(), id(), opened_total(), opened_unique(), sent(), unsubscribed()
+  - fields: bounced_hard(integer), bounced_soft(integer), campaign_id(string), clicked_total(integer), clicked_unique(integer), complained(integer), id(string), opened_total(integer), opened_unique(integer), sent(integer), unsubscribed(integer)
 
 ## Sync Modes
 

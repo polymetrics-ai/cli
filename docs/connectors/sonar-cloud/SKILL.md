@@ -42,40 +42,40 @@ Reads SonarCloud issues, components, projects, hotspots, rules, metrics, languag
 - issues:
   - primary key: key
   - cursor: createdAt
-  - fields: author(), component(), createdAt(), creationDate(), key(), line(), message(), organization(), project(), rule(), severity(), status(), tags(), type(), updateDate()
+  - fields: author(string), component(string), createdAt(string), creationDate(string), key(string), line(integer), message(string), organization(string), project(string), rule(string), severity(string), status(string), tags(array), type(string), updateDate(string)
 - components:
   - primary key: key
   - cursor: createdAt
-  - fields: createdAt(), key(), name(), organization(), project(), qualifier(), visibility()
+  - fields: createdAt(string), key(string), name(string), organization(string), project(string), qualifier(string), visibility(string)
 - quality_gates:
   - primary key: id
   - cursor: createdAt
-  - fields: createdAt(), id(), isBuiltIn(), isDefault(), name()
+  - fields: createdAt(string), id(string), isBuiltIn(boolean), isDefault(boolean), name(string)
 - measures:
   - primary key: metric
   - cursor: createdAt
-  - fields: bestValue(), component(), createdAt(), metric(), value()
+  - fields: bestValue(boolean), component(string), createdAt(string), metric(string), value(string)
 - projects:
   - primary key: key
-  - fields: key(), lastAnalysisDate(), name(), organization(), qualifier(), revision(), visibility()
+  - fields: key(string), lastAnalysisDate(string), name(string), organization(string), qualifier(string), revision(string), visibility(string)
 - hotspots:
   - primary key: key
-  - fields: assignee(), author(), component(), creationDate(), key(), line(), message(), project(), securityCategory(), status(), updateDate(), vulnerabilityProbability()
+  - fields: assignee(string), author(string), component(string), creationDate(string), key(string), line(integer), message(string), project(string), securityCategory(string), status(string), updateDate(string), vulnerabilityProbability(string)
 - languages:
   - primary key: key
-  - fields: key(), name()
+  - fields: key(string), name(string)
 - metrics:
   - primary key: key
-  - fields: custom(), description(), direction(), domain(), hidden(), id(), key(), name(), qualitative(), type()
+  - fields: custom(boolean), description(string), direction(integer), domain(string), hidden(boolean), id(string), key(string), name(string), qualitative(boolean), type(string)
 - rules:
   - primary key: key
-  - fields: createdAt(), isExternal(), isTemplate(), key(), lang(), langName(), name(), repo(), severity(), status(), tags(), type(), updatedAt()
+  - fields: createdAt(string), isExternal(boolean), isTemplate(boolean), key(string), lang(string), langName(string), name(string), repo(string), severity(string), status(string), tags(array), type(string), updatedAt(string)
 - webhooks:
   - primary key: key
-  - fields: hasSecret(), key(), name(), url()
+  - fields: hasSecret(boolean), key(string), name(string), url(string)
 - project_analyses:
   - primary key: key
-  - fields: buildString(), date(), events(), key(), projectVersion(), revision()
+  - fields: buildString(string), date(string), events(array), key(string), projectVersion(string), revision(string)
 
 ## Sync Modes
 

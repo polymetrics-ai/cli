@@ -38,46 +38,46 @@ CONFIGURATION
 ETL STREAMS
   users:
     primary key: id
-    fields: created_at(), id(), platform(), status(), updated_at()
+    fields: created_at(string), id(string), platform(string), status(string), updated_at(string)
   accounts:
     primary key: id
-    fields: created_at(), id(), platform(), status(), updated_at()
+    fields: created_at(string), id(string), platform(string), status(string), updated_at(string)
   profiles:
     primary key: id
-    fields: created_at(), id(), platform(), status(), updated_at()
+    fields: created_at(string), id(string), platform(string), status(string), updated_at(string)
   social_contents:
     primary key: id
-    fields: created_at(), id(), platform(), status(), updated_at()
+    fields: created_at(string), id(string), platform(string), status(string), updated_at(string)
   work_platforms:
     primary key: id
-    fields: category(), created_at(), id(), logo_url(), name(), status(), updated_at()
+    fields: category(string), created_at(string), id(string), logo_url(string), name(string), status(string), updated_at(string)
   audience:
     primary key: account_id
-    fields: account_id(), age_group(), cities(), countries(), follower_count(), gender(), languages(), platform_username()
+    fields: account_id(string), age_group(array), cities(array), countries(array), follower_count(integer), gender(array), languages(array), platform_username(string)
   social_content_groups:
     primary key: id
-    fields: account_id(), created_at(), id(), platform(), status(), title(), type(), updated_at()
+    fields: account_id(string), created_at(string), id(string), platform(string), status(string), title(string), type(string), updated_at(string)
   social_comments:
     primary key: id
-    fields: account_id(), commenter_username(), content_id(), created_at(), id(), like_count(), platform(), reply_count(), text(), updated_at()
+    fields: account_id(string), commenter_username(string), content_id(string), created_at(string), id(string), like_count(integer), platform(string), reply_count(integer), text(string), updated_at(string)
   social_income_transactions:
     primary key: id
-    fields: account_id(), amount(), created_at(), currency_code(), id(), platform(), transaction_date(), type(), updated_at()
+    fields: account_id(string), amount(number), created_at(string), currency_code(string), id(string), platform(string), transaction_date(string), type(string), updated_at(string)
   social_income_payouts:
     primary key: id
-    fields: account_id(), amount(), created_at(), currency_code(), id(), payout_date(), platform(), type(), updated_at()
+    fields: account_id(string), amount(number), created_at(string), currency_code(string), id(string), payout_date(string), platform(string), type(string), updated_at(string)
   commerce_income_transactions:
     primary key: id
-    fields: account_id(), amount(), created_at(), currency_code(), id(), platform(), transaction_date(), type(), updated_at()
+    fields: account_id(string), amount(number), created_at(string), currency_code(string), id(string), platform(string), transaction_date(string), type(string), updated_at(string)
   commerce_income_payouts:
     primary key: id
-    fields: account_id(), amount(), created_at(), currency_code(), id(), payout_date(), platform(), updated_at()
+    fields: account_id(string), amount(number), created_at(string), currency_code(string), id(string), payout_date(string), platform(string), updated_at(string)
   commerce_income_balances:
     primary key: id
-    fields: account_id(), amount(), balance_date(), created_at(), currency_code(), id(), platform(), updated_at()
+    fields: account_id(string), amount(number), balance_date(string), created_at(string), currency_code(string), id(string), platform(string), updated_at(string)
   webhooks:
     primary key: id
-    fields: created_at(), events(), id(), status(), updated_at(), url()
+    fields: created_at(string), events(array), id(string), status(string), updated_at(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

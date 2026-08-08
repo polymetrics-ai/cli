@@ -37,29 +37,29 @@ Reads Coassemble courses, screen types, collections, clients, users, learner tra
 
 - courses:
   - primary key: id
-  - fields: active(), description(), id(), identified(), image(), is_sharable(), key(), paid(), private(), title()
+  - fields: active(boolean), description(string), id(integer), identified(boolean), image(string), is_sharable(boolean), key(string), paid(boolean), private(boolean), title(string)
 - screen_types:
-  - fields: icon(), id(), name(), premium(), title()
+  - fields: icon(string), id(integer), name(string), premium(boolean), title(string)
 - trackings:
-  - fields: completed(), course_id(), id(), identifier(), progress(), status()
+  - fields: completed(boolean), course_id(integer), id(integer), identifier(string), progress(number), status(string)
 - collections:
   - primary key: id
-  - fields: active(), clientIdentifier(), created(), deleted(), description(), id(), identifier(), key(), title(), updated()
+  - fields: active(boolean), clientIdentifier(string), created(string), deleted(boolean), description(string), id(integer), identifier(string), key(string), title(string), updated(string)
 - clients:
   - primary key: clientIdentifier
-  - fields: clientIdentifier(), created(), updated(), userCount()
+  - fields: clientIdentifier(string), created(string), updated(string), userCount(integer)
 - users:
   - primary key: identifier
-  - fields: avatar(), clientIdentifier(), created(), identifier(), name(), testMode(), updated()
+  - fields: avatar(string), clientIdentifier(string), created(string), identifier(string), name(string), testMode(boolean), updated(string)
 - user_trackings:
   - primary key: identifier
-  - fields: avatar(), clientIdentifier(), identifier(), name(), totals(), trackings()
+  - fields: avatar(string), clientIdentifier(string), identifier(string), name(string), totals(object), trackings(array)
 - collection_trackings:
   - primary key: id
-  - fields: collection_id(), commenced(), completed(), courses(), id(), identifier(), name(), progressPercent(), totalTime()
+  - fields: collection_id(string), commenced(string), completed(string), courses(array), id(integer), identifier(string), name(string), progressPercent(number), totalTime(number)
 - translations:
   - primary key: id, language
-  - fields: course_id(), id(), language(), missingScreens()
+  - fields: course_id(string), id(integer), language(string), missingScreens(integer)
 
 ## Sync Modes
 

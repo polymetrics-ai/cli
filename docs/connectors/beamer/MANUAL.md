@@ -36,30 +36,30 @@ ETL STREAMS
   nps:
     primary key: id
     cursor: date
-    fields: browser(), city(), country(), date(), feedback(), filter(), id(), language(), origin(), os(), refUrl(), score(), url(), userEmail(), userFirstName(), userId(), userLastName()
+    fields: browser(string), city(string), country(string), date(string), feedback(string), filter(string), id(string), language(string), origin(string), os(string), refUrl(string), score(number), url(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
   posts:
     primary key: id
     cursor: date
-    fields: category(), clicks(), content(), date(), feedbackEnabled(), id(), published(), reactionsEnabled(), title(), url(), views()
+    fields: category(string), clicks(integer), content(string), date(string), feedbackEnabled(boolean), id(string), published(boolean), reactionsEnabled(boolean), title(string), url(string), views(integer)
   feature_requests:
     primary key: id
     cursor: date
-    fields: commentsCount(), content(), date(), id(), status(), title(), url(), userEmail(), userId(), votesCount()
+    fields: commentsCount(integer), content(string), date(string), id(string), status(string), title(string), url(string), userEmail(string), userId(string), votesCount(integer)
   comments:
     primary key: id
     cursor: date
-    fields: content(), date(), featureRequestId(), id(), postId(), userEmail(), userFirstName(), userId(), userLastName()
+    fields: content(string), date(string), featureRequestId(string), id(string), postId(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
   post_reactions:
     primary key: id
     cursor: date
-    fields: date(), id(), postTitle(), post_id(), reaction(), url(), userEmail(), userFirstName(), userId(), userLastName()
+    fields: date(string), id(string), postTitle(string), post_id(string), reaction(string), url(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
   feature_request_votes:
     primary key: id
     cursor: date
-    fields: date(), featureRequestTitle(), feature_request_id(), id(), url(), userEmail(), userFirstName(), userId(), userLastName()
+    fields: date(string), featureRequestTitle(string), feature_request_id(string), id(string), url(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
   users:
     primary key: beamerId
-    fields: beamerId(), browser(), city(), country(), filter(), firstSeen(), ip(), language(), lastSeen(), latitude(), longitude(), os(), userEmail(), userFirstName(), userId(), userLastName()
+    fields: beamerId(string), browser(string), city(string), country(string), filter(string), firstSeen(string), ip(string), language(string), lastSeen(string), latitude(string), longitude(string), os(string), userEmail(string), userFirstName(string), userId(string), userLastName(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

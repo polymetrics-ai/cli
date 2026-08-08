@@ -67,63 +67,63 @@ CONFIGURATION
 ETL STREAMS
   account_configuration:
     primary key: account_id
-    fields: account_domain(), account_id(), app_id(), bundle_id(), bundle_type(), datacenter(), organisation_domain(), organisation_id(), plan_type()
+    fields: account_domain(string), account_id(integer), app_id(string), bundle_id(integer), bundle_type(string), datacenter(string), organisation_domain(string), organisation_id(integer), plan_type(string)
   agents:
     primary key: id
     cursor: updated_time
-    fields: avatar(), biography(), created_time(), email(), first_name(), groups(), id(), is_deactivated(), is_deleted(), last_name(), role_id(), social_profiles(), updated_time()
+    fields: avatar(object), biography(string), created_time(string), email(string), first_name(string), groups(array), id(string), is_deactivated(boolean), is_deleted(boolean), last_name(string), role_id(string), social_profiles(array), updated_time(string)
   agent_details:
     primary key: id
     cursor: updated_time
-    fields: avatar(), biography(), created_time(), email(), first_name(), groups(), id(), is_deactivated(), is_deleted(), last_name(), role_id(), social_profiles(), updated_time()
+    fields: avatar(object), biography(string), created_time(string), email(string), first_name(string), groups(array), id(string), is_deactivated(boolean), is_deleted(boolean), last_name(string), role_id(string), social_profiles(array), updated_time(string)
   agent_statuses:
     primary key: id
-    fields: enabled(), id(), name(), type()
+    fields: enabled(boolean), id(string), name(string), type(string)
   users:
     primary key: id
     cursor: updated_time
-    fields: avatar(), created_time(), email(), first_name(), id(), last_name(), phone(), properties(), reference_id(), restore_id(), updated_time()
+    fields: avatar(object), created_time(string), email(string), first_name(string), id(string), last_name(string), phone(string), properties(array), reference_id(string), restore_id(string), updated_time(string)
   user_details:
     primary key: id
     cursor: updated_time
-    fields: avatar(), created_time(), email(), first_name(), id(), last_name(), phone(), properties(), reference_id(), restore_id(), updated_time()
+    fields: avatar(object), created_time(string), email(string), first_name(string), id(string), last_name(string), phone(string), properties(array), reference_id(string), restore_id(string), updated_time(string)
   user_conversations:
     primary key: id
-    fields: app_id(), assigned_agent_id(), assigned_group_id(), channel_id(), created_time(), id(), messages(), priority(), properties(), status(), updated_time(), user_id()
+    fields: app_id(string), assigned_agent_id(string), assigned_group_id(string), channel_id(string), created_time(string), id(string), messages(array), priority(string), properties(object), status(string), updated_time(string), user_id(string)
   conversation_detail:
     primary key: id
-    fields: app_id(), assigned_agent_id(), assigned_group_id(), channel_id(), created_time(), id(), messages(), priority(), properties(), status(), updated_time(), user_id()
+    fields: app_id(string), assigned_agent_id(string), assigned_group_id(string), channel_id(string), created_time(string), id(string), messages(array), priority(string), properties(object), status(string), updated_time(string), user_id(string)
   conversation_messages:
     primary key: id
-    fields: actor_id(), actor_type(), app_id(), conversation_id(), created_time(), id(), message_parts(), message_type(), updated_time()
+    fields: actor_id(string), actor_type(string), app_id(string), conversation_id(string), created_time(string), id(string), message_parts(array), message_type(string), updated_time(string)
   conversation_fields:
     primary key: name
-    fields: choices(), label(), name(), required(), type()
+    fields: choices(array), label(string), name(string), required(boolean), type(string)
   groups:
     primary key: id
-    fields: created_time(), description(), id(), name(), routing_type(), updated_time()
+    fields: created_time(string), description(string), id(string), name(string), routing_type(string), updated_time(string)
   channels:
     primary key: id
     cursor: updated_time
-    fields: created_time(), enabled(), icon(), id(), locale(), name(), public(), tags(), updated_time(), welcome_message()
+    fields: created_time(string), enabled(boolean), icon(object), id(string), locale(string), name(string), public(boolean), tags(array), updated_time(string), welcome_message(object)
   roles:
     primary key: id
-    fields: description(), id(), name(), role()
+    fields: description(string), id(string), name(string), role(string)
   outbound_messages:
     primary key: id
-    fields: created_time(), from(), id(), provider(), request_id(), status(), template(), to(), updated_time()
+    fields: created_time(string), from(object), id(string), provider(string), request_id(string), status(string), template(object), to(object), updated_time(string)
   report_status:
     primary key: id
-    fields: id(), interval(), link(), links(), status()
+    fields: id(string), interval(string), link(object), links(array), status(string)
   historical_metrics:
     primary key: metric_type
-    fields: aggregator(), data(), end(), filters(), interval(), metric_type(), metrics(), start()
+    fields: aggregator(string), data(array), end(string), filters(object), interval(string), metric_type(string), metrics(array), start(string)
   instant_metrics:
     primary key: metric_type
-    fields: aggregator(), data(), end(), filters(), interval(), metric_type(), metrics(), start()
+    fields: aggregator(string), data(array), end(string), filters(object), interval(string), metric_type(string), metrics(array), start(string)
   business_hours_status:
     primary key: group_id
-    fields: business_hours_id(), group_id(), timezone(), within_business_hours()
+    fields: business_hours_id(string), group_id(string), timezone(string), within_business_hours(boolean)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -242,7 +242,7 @@ COMMAND SURFACE
   Freshchat CSAT write commands
     csat create - Plan creation of a Freshchat CSAT rating. [intent=reverse_etl availability=implemented write=create_csat_rating]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Creates a CSAT rating for a Freshchat conversation.; flags: --conversation-id, --rating, --comment
   Planned bounded provider-search commands
-    direct users fetch - Planned bounded subset fetch for up to 100 Freshchat user ids. [intent=direct_read availability=planned]; approval: none until #2985 provides executable provider_search/provider_query safety; no live call is available today.; risk: medium; notes: Blocked on #2985 typed provider-search/query foundation. The official request body is ids[] with a provider-documented maximum of 100 users; no raw body escape hatch is exposed.; flags: --ids
+    direct users fetch - Planned bounded subset fetch for up to 100 Freshchat user ids. [intent=direct_read availability=planned]; approval: none until #2985 provides executable provider_search/provider_query safety; no live call is available today.; risk: medium; notes: Blocked on #2985 typed provider-search/query foundation. The official request body is ids[] with a provider-documented maximum of 100 users; no raw body escape hatch is exposed.; flags: --ids, --page, --page-cursor
   Planned binary/multipart commands
     binary files upload - Planned Freshchat file upload. [intent=direct_write availability=planned]; approval: blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.; risk: high; notes: Blocked binary/file operation. Official API accepts one multipart file with a documented 25 MB cap; this connector currently accepts no filesystem path or binary payload.; flags: --file
     binary images upload - Planned Freshchat image upload. [intent=direct_write availability=planned]; approval: blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.; risk: high; notes: Blocked binary/file operation. Official API accepts multipart image input; this connector currently accepts no filesystem path or binary payload.; flags: --image

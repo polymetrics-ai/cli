@@ -40,21 +40,21 @@ Reads RingCentral extensions, call logs, messages, contacts, and devices through
 
 - extensions:
   - primary key: id
-  - fields: extension_number(), id(), name(), status(), stream(), type()
+  - fields: extension_number(string), id(string), name(string), status(string), stream(string), type(string)
 - call_log:
   - primary key: id
   - cursor: start_time
-  - fields: direction(), id(), result(), start_time(), stream(), type()
+  - fields: direction(string), id(string), result(string), start_time(string), stream(string), type(string)
 - messages:
   - primary key: id
   - cursor: creation_time
-  - fields: creation_time(), direction(), id(), stream(), subject(), type()
+  - fields: creation_time(string), direction(string), id(string), stream(string), subject(string), type(string)
 - contacts:
   - primary key: id
-  - fields: company(), email(), first_name(), id(), last_name(), stream()
+  - fields: company(string), email(string), first_name(string), id(string), last_name(string), stream(string)
 - devices:
   - primary key: id
-  - fields: id(), name(), status(), stream(), type()
+  - fields: id(string), name(string), status(string), stream(string), type(string)
 
 ## Sync Modes
 

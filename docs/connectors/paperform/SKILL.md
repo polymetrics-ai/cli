@@ -37,11 +37,11 @@ Reads Paperform forms and form submissions through the Paperform REST API.
 - forms:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), slug(), title(), updated_at()
+  - fields: created_at(string), id(string), slug(string), title(string), updated_at(string)
 - submissions:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), data(), form_id(), id(), updated_at()
+  - fields: created_at(string), data(object), form_id(string), id(string), updated_at(string)
 
 ## Sync Modes
 

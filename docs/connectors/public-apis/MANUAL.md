@@ -33,7 +33,7 @@ CONFIGURATION
 ETL STREAMS
   entries:
     primary key: id
-    fields: api(), auth(), category(), cors(), description(), https(), id(), link()
+    fields: api(string), auth(string), category(string), cors(string), description(string), https(boolean), id(string), link(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

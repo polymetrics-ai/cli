@@ -36,25 +36,25 @@ Reads SavvyCal events, scheduling links, contacts, time zones, webhooks, and wor
 
 - events:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - links:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - contacts:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - time_zones:
   - primary key: name
-  - fields: abbreviation(), display_name(), dst(), name(), utc_offset()
+  - fields: abbreviation(string), display_name(string), dst(boolean), name(string), utc_offset(integer)
 - webhooks:
   - primary key: id
-  - fields: events(), id(), inserted_at(), updated_at(), url()
+  - fields: events(array), id(string), inserted_at(string), updated_at(string), url(string)
 - workflows:
   - primary key: id
-  - fields: id(), inserted_at(), name(), scope_slug(), updated_at()
+  - fields: id(string), inserted_at(string), name(string), scope_slug(string), updated_at(string)
 - workflow_rules:
   - primary key: id
-  - fields: id(), position(), type(), workflow_id()
+  - fields: id(string), position(integer), type(string), workflow_id(string)
 
 ## Sync Modes
 

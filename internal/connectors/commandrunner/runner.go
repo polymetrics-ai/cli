@@ -27,7 +27,12 @@ type Request struct {
 	Config   connectors.RuntimeConfig
 	Limit    int
 	MaxBytes int
-	Preview  bool
+	// Page and PageCursor navigate a direct read's declared pagination. A
+	// direct read returns ONE page; these say which one. They are ignored by
+	// every other intent.
+	Page       int
+	PageCursor string
+	Preview    bool
 	// DestRoot is the directory a binary_download command writes beneath.
 	// Required for that intent and ignored by every other one.
 	DestRoot string
@@ -386,7 +391,25 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	}
 }
 
+// directReadPageFlagNames are consumed as Request.Page/Request.PageCursor
+// rather than as command flags. Only this intent can honour them, so they are
+// dropped here and nowhere earlier: every other intent then keeps its existing
+// "unknown flag --page" refusal instead of accepting and ignoring them.
+var directReadPageFlagNames = []string{"page", "page-cursor"}
+
+func withoutDirectReadPageFlags(flags map[string][]string) map[string][]string {
+	out := make(map[string][]string, len(flags))
+	for name, values := range flags {
+		out[name] = values
+	}
+	for _, name := range directReadPageFlagNames {
+		delete(out, name)
+	}
+	return out
+}
+
 func runDirectRead(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
+	req.Flags = withoutDirectReadPageFlags(req.Flags)
 	if cmd.Operation != "" {
 		return runOperationDirectRead(ctx, connector, cmd, req)
 	}
@@ -417,8 +440,13 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Query:        query,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
+		Page:         req.Page,
+		PageCursor:   req.PageCursor,
 	})
 	if err != nil {
+		return Result{}, err
+	}
+	if err := assertDirectReadNavigated(connector, cmd, req, direct); err != nil {
 		return Result{}, err
 	}
 	return Result{
@@ -426,6 +454,28 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Command:    cmd.Path,
 		DirectRead: &direct,
 	}, nil
+}
+
+// assertDirectReadNavigated is the general guard against a direct-read
+// executor that ACCEPTS page navigation and ignores it.
+//
+// Page and PageCursor are handed to whatever DirectReader/OperationDirectReader
+// a connector supplies, and nothing in the type system makes an implementation
+// honour them. One that does not returns a zero-value DirectReadPage, so the
+// caller gets page one at status 200 with nothing saying the request was
+// discarded — precisely the accepted-and-ignored wrongness --page exists to
+// remove, pointed at navigation instead of at records.
+//
+// The check is on the reported page rather than on an opt-in interface so a
+// future executor cannot regress by forgetting to declare anything.
+func assertDirectReadNavigated(connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request, result connectors.DirectReadResult) error {
+	if req.Page <= 1 && req.PageCursor == "" {
+		return nil
+	}
+	if result.Page.Strategy != "" {
+		return nil
+	}
+	return fmt.Errorf("connector %q command %q accepted page navigation but reported no page context; its direct read cannot address another page", connector.Name(), cmd.Path)
 }
 
 func runOperationDirectRead(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
@@ -464,8 +514,13 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		Body:         body,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
+		Page:         req.Page,
+		PageCursor:   req.PageCursor,
 	})
 	if err != nil {
+		return Result{}, err
+	}
+	if err := assertDirectReadNavigated(connector, cmd, req, direct); err != nil {
 		return Result{}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil

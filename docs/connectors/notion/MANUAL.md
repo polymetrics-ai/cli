@@ -36,25 +36,25 @@ ETL STREAMS
   databases:
     primary key: id
     cursor: last_edited_time
-    fields: archived(), created_time(), id(), in_trash(), last_edited_time(), object(), parent(), title(), url()
+    fields: archived(boolean), created_time(string), id(string), in_trash(boolean), last_edited_time(string), object(string), parent(object), title(array), url(string)
   pages:
     primary key: id
     cursor: last_edited_time
-    fields: archived(), created_time(), id(), in_trash(), last_edited_time(), object(), parent(), properties(), url()
+    fields: archived(boolean), created_time(string), id(string), in_trash(boolean), last_edited_time(string), object(string), parent(object), properties(object), url(string)
   users:
     primary key: id
-    fields: avatar_url(), bot(), id(), name(), object(), person(), type()
+    fields: avatar_url(string), bot(object), id(string), name(string), object(string), person(object), type(string)
   custom_emojis:
     primary key: id
-    fields: id(), name(), object(), url()
+    fields: id(string), name(string), object(string), url(string)
   file_uploads:
     primary key: id
     cursor: last_edited_time
-    fields: content_length(), content_type(), created_time(), expiry_time(), filename(), id(), last_edited_time(), number_of_parts(), object(), status(), upload_url()
+    fields: content_length(integer), content_type(string), created_time(string), expiry_time(string), filename(string), id(string), last_edited_time(string), number_of_parts(object), object(string), status(string), upload_url(string)
   views:
     primary key: id
     cursor: last_edited_time
-    fields: created_time(), data_source_id(), id(), last_edited_time(), name(), object(), parent(), type()
+    fields: created_time(string), data_source_id(string), id(string), last_edited_time(string), name(string), object(string), parent(object), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -200,24 +200,24 @@ COMMAND SURFACE
     custom-emojis list - List Notion custom emojis as ETL records. [intent=etl availability=implemented stream=custom_emojis]
     file-uploads list - List Notion file uploads as ETL records. [intent=etl availability=implemented stream=file_uploads]
     views list - List Notion views as ETL records. [intent=etl availability=implemented stream=views]
-    async-task get - Retrieve an async task [intent=direct_read availability=implemented operation=notion.retrieve_async_task]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --task-id (required)
-    block get - Retrieve a block [intent=direct_read availability=implemented operation=notion.retrieve_block]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --block-id (required)
-    block children list - Retrieve block children [intent=direct_read availability=implemented operation=notion.retrieve_block_children]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --block-id (required), --start-cursor, --page-size
-    comment list - List comments [intent=direct_read availability=implemented operation=notion.list_comments]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --block-id (required), --start-cursor, --page-size
-    comment get - Retrieve a comment [intent=direct_read availability=implemented operation=notion.retrieve_comment]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --comment-id (required)
-    data-source get - Retrieve a data source [intent=direct_read availability=implemented operation=notion.retrieve_data_source]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --data-source-id (required)
-    data-source templates list - List templates in a data source [intent=direct_read availability=implemented operation=notion.list_data_source_templates]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --data-source-id (required), --name, --start-cursor, --page-size
-    database get - Retrieve a database [intent=direct_read availability=implemented operation=notion.retrieve_database]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --database-id (required)
-    file-upload get - Retrieve a file upload [intent=direct_read availability=implemented operation=notion.retrieve_file_upload]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --file-upload-id (required)
-    page get - Retrieve a page [intent=direct_read availability=implemented operation=notion.retrieve_page]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --page-id (required), --filter-properties
-    page markdown get - Retrieve a page as markdown [intent=direct_read availability=implemented operation=notion.retrieve_page_markdown]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --page-id (required), --include-transcript
-    page property get - Retrieve a page property item [intent=direct_read availability=implemented operation=notion.retrieve_page_property]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --page-id (required), --property-id (required), --start-cursor, --page-size
-    user me get - Retrieve your token's bot user [intent=direct_read availability=implemented operation=notion.retrieve_bot_user]; notes: Bounded Notion read; fixed method and path with typed request fields.
-    user get - Retrieve a user [intent=direct_read availability=implemented operation=notion.retrieve_user]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --user-id (required)
-    view get - Retrieve a view [intent=direct_read availability=implemented operation=notion.retrieve_view]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --view-id (required)
-    view query results get - Get view query results [intent=direct_read availability=implemented operation=notion.retrieve_view_query_results]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --view-id (required), --query-id (required), --start-cursor, --page-size
-    data-source query - Query a data source [intent=direct_read availability=implemented operation=notion.query_data_source]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --data-source-id (required), --filter-properties, --start-cursor, --page-size, --is-archived, --result-type
-    meeting-note query - Query meeting notes [intent=direct_read availability=implemented operation=notion.query_meeting_notes]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --limit
+    async-task get - Retrieve an async task [intent=direct_read availability=implemented operation=notion.retrieve_async_task]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --task-id (required), --page, --page-cursor
+    block get - Retrieve a block [intent=direct_read availability=implemented operation=notion.retrieve_block]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --block-id (required), --page, --page-cursor
+    block children list - Retrieve block children [intent=direct_read availability=implemented operation=notion.retrieve_block_children]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --block-id (required), --page-size, --page, --page-cursor
+    comment list - List comments [intent=direct_read availability=implemented operation=notion.list_comments]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --block-id (required), --page-size, --page, --page-cursor
+    comment get - Retrieve a comment [intent=direct_read availability=implemented operation=notion.retrieve_comment]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --comment-id (required), --page, --page-cursor
+    data-source get - Retrieve a data source [intent=direct_read availability=implemented operation=notion.retrieve_data_source]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --data-source-id (required), --page, --page-cursor
+    data-source templates list - List templates in a data source [intent=direct_read availability=implemented operation=notion.list_data_source_templates]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --data-source-id (required), --name, --page-size, --page, --page-cursor
+    database get - Retrieve a database [intent=direct_read availability=implemented operation=notion.retrieve_database]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --database-id (required), --page, --page-cursor
+    file-upload get - Retrieve a file upload [intent=direct_read availability=implemented operation=notion.retrieve_file_upload]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --file-upload-id (required), --page, --page-cursor
+    page get - Retrieve a page [intent=direct_read availability=implemented operation=notion.retrieve_page]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --page-id (required), --filter-properties, --page, --page-cursor
+    page markdown get - Retrieve a page as markdown [intent=direct_read availability=implemented operation=notion.retrieve_page_markdown]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --page-id (required), --include-transcript, --page, --page-cursor
+    page property get - Retrieve a page property item [intent=direct_read availability=implemented operation=notion.retrieve_page_property]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --page-id (required), --property-id (required), --page-size, --page, --page-cursor
+    user me get - Retrieve your token's bot user [intent=direct_read availability=implemented operation=notion.retrieve_bot_user]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --page, --page-cursor
+    user get - Retrieve a user [intent=direct_read availability=implemented operation=notion.retrieve_user]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --user-id (required), --page, --page-cursor
+    view get - Retrieve a view [intent=direct_read availability=implemented operation=notion.retrieve_view]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --view-id (required), --page, --page-cursor
+    view query results get - Get view query results [intent=direct_read availability=implemented operation=notion.retrieve_view_query_results]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --view-id (required), --query-id (required), --page-size, --page, --page-cursor
+    data-source query - Query a data source [intent=direct_read availability=implemented operation=notion.query_data_source]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --data-source-id (required), --filter-properties, --page-size, --is-archived, --result-type, --page, --page-cursor
+    meeting-note query - Query meeting notes [intent=direct_read availability=implemented operation=notion.query_meeting_notes]; notes: Bounded Notion read; fixed method and path with typed request fields.; flags: --limit, --page, --page-cursor
     meeting-note create - Create a meeting note [intent=reverse_etl availability=implemented write=create_meeting_note]; approval: reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.; risk: medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.; flags: --language, --title
     block update - Update a block [intent=reverse_etl availability=implemented write=update_block]; approval: reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.; risk: medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.; flags: --block-id (required), --in-trash
     block delete - Delete a block [intent=reverse_etl availability=implemented write=delete_block]; approval: reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.; risk: high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.; flags: --block-id (required)

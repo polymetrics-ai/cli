@@ -36,19 +36,19 @@ Reads TikTok Business advertisers, campaigns, ad groups, and ads through the Tik
 
 - advertisers:
   - primary key: advertiser_id
-  - fields: advertiser_id(), advertiser_name(), company(), country(), currency(), role(), status(), timezone()
+  - fields: advertiser_id(string), advertiser_name(string), company(string), country(string), currency(string), role(string), status(string), timezone(string)
 - campaigns:
   - primary key: campaign_id
   - cursor: modify_time
-  - fields: advertiser_id(), budget(), budget_mode(), campaign_id(), campaign_name(), create_time(), modify_time(), objective_type(), operation_status()
+  - fields: advertiser_id(string), budget(number), budget_mode(string), campaign_id(string), campaign_name(string), create_time(string), modify_time(string), objective_type(string), operation_status(string)
 - adgroups:
   - primary key: adgroup_id
   - cursor: modify_time
-  - fields: adgroup_id(), adgroup_name(), advertiser_id(), budget(), budget_mode(), campaign_id(), create_time(), modify_time(), operation_status(), placement_type()
+  - fields: adgroup_id(string), adgroup_name(string), advertiser_id(string), budget(number), budget_mode(string), campaign_id(string), create_time(string), modify_time(string), operation_status(string), placement_type(string)
 - ads:
   - primary key: ad_id
   - cursor: modify_time
-  - fields: ad_id(), ad_name(), adgroup_id(), advertiser_id(), call_to_action(), campaign_id(), create_time(), modify_time(), operation_status()
+  - fields: ad_id(string), ad_name(string), adgroup_id(string), advertiser_id(string), call_to_action(string), campaign_id(string), create_time(string), modify_time(string), operation_status(string)
 
 ## Sync Modes
 

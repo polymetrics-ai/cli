@@ -40,7 +40,7 @@ Reads Adjust report-service report rows for configured dimensions and metrics. R
 ## ETL Streams
 
 - reports:
-  - fields: app(), clicks(), cost(), country(), date(), installs()
+  - fields: app(string), clicks(number), cost(number), country(string), date(string), installs(number)
 
 ## Sync Modes
 

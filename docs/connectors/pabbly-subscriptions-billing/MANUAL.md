@@ -37,21 +37,21 @@ ETL STREAMS
   customers:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), customer_id(), email(), id(), plan_id(), status()
+    fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), plan_id(string), status(string)
   subscriptions:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), customer_id(), email(), id(), plan_id(), status()
+    fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), plan_id(string), status(string)
   plans:
     primary key: id
-    fields: amount(), created_at(), currency(), customer_id(), email(), id(), plan_id(), status()
+    fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), plan_id(string), status(string)
   invoices:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), customer_id(), email(), id(), plan_id(), status()
+    fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), plan_id(string), status(string)
   products:
     primary key: id
-    fields: createdAt(), description(), id(), notification_email(), product_name(), redirect_url(), updatedAt()
+    fields: createdAt(string), description(string), id(string), notification_email(string), product_name(string), redirect_url(string), updatedAt(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

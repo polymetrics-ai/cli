@@ -42,10 +42,10 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
 
 - indices:
   - primary key: index
-  - fields: docs.count(), index()
+  - fields: docs.count(string), index(string)
 - documents:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 
 ## Sync Modes
 

@@ -35,25 +35,25 @@ Reads Ubidots devices, variables, variable values, device groups, device types, 
 
 - devices:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - variables:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - dashboards:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - events:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - device_groups:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - device_types:
   - primary key: id
-  - fields: created_at(), id(), label(), name()
+  - fields: created_at(string), id(string), label(string), name(string)
 - variable_values:
   - primary key: variable_id, timestamp
-  - fields: context(), timestamp(), value(), variable_id()
+  - fields: context(object), timestamp(integer), value(number), variable_id(string)
 
 ## Sync Modes
 

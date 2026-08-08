@@ -72,272 +72,272 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
 
 - app:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - data:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - blog_categories:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - blog_category:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - blog_posts:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - blog_post:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - blog_tags:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - blog_tag:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - brands:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - brand:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - business:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - features:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - categories:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - category:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - choice_sets:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - choice_set:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - collect_locations:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - collect_location:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - custom_fields:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - custom_field:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - customers:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), updated_at()
+  - fields: email(string), id(string), name(string), updated_at(string)
 - customer:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - digital_files:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - digital_file:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - events:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - event:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - filter_groups:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - filter_group:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - gift_vouchers:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - gift_voucher:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - incomplete_orders:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - incomplete_order:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - newsletter_subscribers:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - newsletter_subscriber:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - nexuses:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - offers:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - offer:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - order_statuses:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - orders:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), status(), updated_at()
+  - fields: id(string), name(string), status(string), updated_at(string)
 - search:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - order:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - pages:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - page:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - payment_methods:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - products:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), sku(), updated_at()
+  - fields: id(string), name(string), sku(string), updated_at(string)
 - search_2:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - product:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - bulk_prices:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - bulk_price:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - choices:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - choice:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - customization_fields:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - extras:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - images:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - options:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - option:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - reviews:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - variations:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - variation:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - redirects:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - redirect:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - sales:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - sale:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - shipping_rates:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - shipping_rate:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - shipping_zones:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - shipping_zone:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - disputes:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - dispute:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - payouts:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - payout:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - transactions:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - transaction:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - stock:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - stock_requests:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - theme_assets:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - themes:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - theme:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - trade_customer_product_prices:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - trade_customer_product_price:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - trade_groups:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - trade_group:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - vouchers:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - voucher:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - webhooks:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - webhook:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - wishlists:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 - wishlist:
   - primary key: id
-  - fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  - fields: email(string), id(string), name(string), sku(string), status(string), title(string), updatedAt(string), updated_at(string)
 
 ## Sync Modes
 

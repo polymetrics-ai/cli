@@ -37,16 +37,16 @@ Reads public KYVE pools, stakers, funders, and Cosmos validators through the KYV
 
 - pools:
   - primary key: id
-  - fields: id(), name(), runtime()
+  - fields: id(string), name(string), runtime(string)
 - stakers:
   - primary key: address
-  - fields: address(), amount()
+  - fields: address(string), amount(string)
 - funders:
   - primary key: address
-  - fields: address(), amount()
+  - fields: address(string), amount(string)
 - validators:
   - primary key: operator_address
-  - fields: moniker(), operator_address(), status()
+  - fields: moniker(string), operator_address(string), status(string)
 
 ## Sync Modes
 

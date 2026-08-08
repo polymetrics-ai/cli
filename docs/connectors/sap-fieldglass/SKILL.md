@@ -36,13 +36,13 @@ Reads SAP Fieldglass workers, job postings, and time sheets through the SAP Fiel
 
 - workers:
   - primary key: id
-  - fields: id(), name(), status(), stream()
+  - fields: id(string), name(string), status(string), stream(string)
 - job_postings:
   - primary key: id
-  - fields: id(), name(), status(), stream()
+  - fields: id(string), name(string), status(string), stream(string)
 - time_sheets:
   - primary key: id
-  - fields: id(), name(), status(), stream()
+  - fields: id(string), name(string), status(string), stream(string)
 
 ## Sync Modes
 

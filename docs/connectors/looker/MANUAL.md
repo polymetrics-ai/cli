@@ -37,19 +37,19 @@ CONFIGURATION
 ETL STREAMS
   users:
     primary key: id
-    fields: display_name(), email(), id()
+    fields: display_name(string), email(string), id(string)
   groups:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   folders:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   looks:
     primary key: id
-    fields: folder_id(), id(), title()
+    fields: folder_id(string), id(string), title(string)
   dashboards:
     primary key: id
-    fields: folder_id(), id(), title()
+    fields: folder_id(string), id(string), title(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

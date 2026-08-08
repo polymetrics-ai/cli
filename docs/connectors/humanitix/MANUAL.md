@@ -37,19 +37,19 @@ ETL STREAMS
   events:
     primary key: _id
     cursor: updatedAt
-    fields: _id(), createdAt(), currency(), endDate(), location(), markedAsSoldOut(), name(), organiserId(), public(), published(), slug(), startDate(), updatedAt(), userId()
+    fields: _id(string), createdAt(string), currency(string), endDate(string), location(string), markedAsSoldOut(boolean), name(string), organiserId(string), public(boolean), published(boolean), slug(string), startDate(string), updatedAt(string), userId(string)
   tags:
     primary key: _id
     cursor: updatedAt
-    fields: _id(), createdAt(), location(), name(), updatedAt(), userId()
+    fields: _id(string), createdAt(string), location(string), name(string), updatedAt(string), userId(string)
   orders:
     primary key: _id
     cursor: updatedAt
-    fields: _id(), completedAt(), createdAt(), currency(), email(), eventDateId(), eventId(), financialStatus(), firstName(), lastName(), manualOrder(), mobile(), orderName(), status(), total(), updatedAt()
+    fields: _id(string), completedAt(string), createdAt(string), currency(string), email(string), eventDateId(string), eventId(string), financialStatus(string), firstName(string), lastName(string), manualOrder(boolean), mobile(string), orderName(string), status(string), total(number), updatedAt(string)
   tickets:
     primary key: _id
     cursor: updatedAt
-    fields: _id(), createdAt(), currency(), eventDateId(), eventId(), firstName(), isDonation(), lastName(), number(), orderId(), orderName(), price(), status(), ticketTypeId(), ticketTypeName(), total(), updatedAt()
+    fields: _id(string), createdAt(string), currency(string), eventDateId(string), eventId(string), firstName(string), isDonation(boolean), lastName(string), number(number), orderId(string), orderName(string), price(number), status(string), ticketTypeId(string), ticketTypeName(string), total(number), updatedAt(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

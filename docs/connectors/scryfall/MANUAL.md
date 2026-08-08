@@ -33,10 +33,10 @@ CONFIGURATION
 ETL STREAMS
   cards:
     primary key: id
-    fields: id(), name(), set()
+    fields: id(string), name(string), set(string)
   sets:
     primary key: id
-    fields: id(), name(), set()
+    fields: id(string), name(string), set(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

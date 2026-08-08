@@ -35,85 +35,85 @@ Reads cost, budget, resource-management, segment, notification, and integration 
 
 - costs:
   - primary key: id
-  - fields: amount(), date(), id(), service()
+  - fields: amount(string), date(string), id(string), service(string)
 - cost_reports:
   - primary key: token
-  - fields: created_at(), date_interval(), filter(), folder_token(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), date_interval(string), filter(string), folder_token(string), title(string), token(string), updated_at(string), workspace_token(string)
 - budgets:
   - primary key: token
-  - fields: created_at(), name(), period_amount(), period_duration(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), name(string), period_amount(string), period_duration(string), token(string), updated_at(string), workspace_token(string)
 - folders:
   - primary key: token
-  - fields: created_at(), parent_folder_token(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), parent_folder_token(string), title(string), token(string), updated_at(string), workspace_token(string)
 - dashboards:
   - primary key: token
-  - fields: created_at(), date_interval(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), date_interval(string), title(string), token(string), updated_at(string), workspace_token(string)
 - business_metrics:
   - primary key: token
-  - fields: created_at(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), title(string), token(string), updated_at(string), workspace_token(string)
 - resource_reports:
   - primary key: token
-  - fields: created_at(), filter(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), filter(string), title(string), token(string), updated_at(string), workspace_token(string)
 - recommendations:
   - primary key: token
-  - fields: created_at(), monthly_savings(), state(), token(), type(), updated_at()
+  - fields: created_at(string), monthly_savings(string), state(string), token(string), type(string), updated_at(string)
 - teams:
   - primary key: token
-  - fields: created_at(), name(), token(), updated_at()
+  - fields: created_at(string), name(string), token(string), updated_at(string)
 - saved_filters:
   - primary key: token
-  - fields: created_at(), filter(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), filter(string), title(string), token(string), updated_at(string), workspace_token(string)
 - workspaces:
   - primary key: token
-  - fields: created_at(), name(), token(), updated_at()
+  - fields: created_at(string), name(string), token(string), updated_at(string)
 - virtual_tag_configs:
   - primary key: token
-  - fields: backfill_until(), created_at(), key(), token(), updated_at()
+  - fields: backfill_until(string), created_at(string), key(string), token(string), updated_at(string)
 - tags:
   - primary key: key
-  - fields: key(), values_count()
+  - fields: key(string), values_count(integer)
 - cost_alerts:
   - primary key: token
-  - fields: created_at(), filter(), threshold(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), filter(string), threshold(string), title(string), token(string), updated_at(string), workspace_token(string)
 - budget_alerts:
   - primary key: token
-  - fields: budget_token(), created_at(), threshold(), token(), updated_at(), user_token()
+  - fields: budget_token(string), created_at(string), threshold(string), token(string), updated_at(string), user_token(string)
 - anomaly_alerts:
   - primary key: token
-  - fields: created_at(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), title(string), token(string), updated_at(string), workspace_token(string)
 - managed_accounts:
   - primary key: token
-  - fields: created_at(), name(), token(), updated_at()
+  - fields: created_at(string), name(string), token(string), updated_at(string)
 - financial_commitments:
   - primary key: token
-  - fields: commitment_type(), created_at(), provider(), token(), updated_at()
+  - fields: commitment_type(string), created_at(string), provider(string), token(string), updated_at(string)
 - segments:
   - primary key: token
-  - fields: created_at(), description(), filter(), parent_segment_token(), priority(), title(), token(), track_unallocated(), updated_at(), workspace_token()
+  - fields: created_at(string), description(string), filter(string), parent_segment_token(string), priority(integer), title(string), token(string), track_unallocated(boolean), updated_at(string), workspace_token(string)
 - report_notifications:
   - primary key: token
-  - fields: change(), cost_report_token(), created_at(), frequency(), recipient_channels(), title(), token(), updated_at(), user_tokens()
+  - fields: change(string), cost_report_token(string), created_at(string), frequency(string), recipient_channels(array), title(string), token(string), updated_at(string), user_tokens(array)
 - recommendation_views:
   - primary key: token
-  - fields: account_ids(), billing_account_ids(), created_at(), end_date(), min_savings(), provider_ids(), regions(), start_date(), tag_key(), tag_value(), title(), token(), types(), updated_at(), workspace_token()
+  - fields: account_ids(array), billing_account_ids(array), created_at(string), end_date(string), min_savings(number), provider_ids(array), regions(array), start_date(string), tag_key(string), tag_value(string), title(string), token(string), types(array), updated_at(string), workspace_token(string)
 - network_flow_reports:
   - primary key: token
-  - fields: created_at(), date_interval(), end_date(), filter(), flow_direction(), flow_weight(), groupings(), start_date(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), date_interval(string), end_date(string), filter(string), flow_direction(string), flow_weight(string), groupings(array), start_date(string), title(string), token(string), updated_at(string), workspace_token(string)
 - kubernetes_efficiency_reports:
   - primary key: token
-  - fields: aggregated_by(), created_at(), date_bucket(), date_interval(), end_date(), filter(), groupings(), start_date(), title(), token(), updated_at(), workspace_token()
+  - fields: aggregated_by(string), created_at(string), date_bucket(string), date_interval(string), end_date(string), filter(string), groupings(array), start_date(string), title(string), token(string), updated_at(string), workspace_token(string)
 - anomaly_notifications:
   - primary key: token
-  - fields: cost_report_token(), created_at(), recipient_channels(), threshold(), token(), updated_at(), user_tokens()
+  - fields: cost_report_token(string), created_at(string), recipient_channels(array), threshold(integer), token(string), updated_at(string), user_tokens(array)
 - canvases:
   - primary key: token
-  - fields: created_at(), prompt(), title(), token(), updated_at(), workspace_token()
+  - fields: created_at(string), prompt(string), title(string), token(string), updated_at(string), workspace_token(string)
 - invoices:
   - primary key: token
-  - fields: account_token(), billing_period_end(), billing_period_start(), created_at(), status(), token(), total(), updated_at()
+  - fields: account_token(string), billing_period_end(string), billing_period_start(string), created_at(string), status(string), token(string), total(string), updated_at(string)
 - integrations:
   - primary key: token
-  - fields: account_identifier(), created_at(), provider(), token(), updated_at()
+  - fields: account_identifier(string), created_at(string), provider(string), token(string), updated_at(string)
 
 ## Sync Modes
 

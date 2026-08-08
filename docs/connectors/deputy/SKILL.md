@@ -36,31 +36,31 @@ Reads Deputy locations, employees, departments, timesheets, tasks, leave, roster
 
 - locations:
   - primary key: id
-  - fields: active(), address(), code(), company_name(), country(), created(), creator(), id(), modified()
+  - fields: active(boolean), address(integer), code(string), company_name(string), country(integer), created(string), creator(integer), id(integer), modified(string)
 - employees:
   - primary key: id
-  - fields: active(), company(), created(), display_name(), first_name(), id(), last_name(), modified(), role()
+  - fields: active(boolean), company(integer), created(string), display_name(string), first_name(string), id(integer), last_name(string), modified(string), role(integer)
 - departments:
   - primary key: id
-  - fields: active(), company(), created(), creator(), id(), modified(), operational_unit_name()
+  - fields: active(boolean), company(integer), created(string), creator(integer), id(integer), modified(string), operational_unit_name(string)
 - timesheets:
   - primary key: id
-  - fields: created(), date(), employee(), end_time(), id(), is_in_progress(), modified(), operational_unit(), start_time(), total_time()
+  - fields: created(string), date(string), employee(integer), end_time(integer), id(integer), is_in_progress(boolean), modified(string), operational_unit(integer), start_time(integer), total_time(number)
 - tasks:
   - primary key: id
-  - fields: completed(), created(), creator(), due_time(), id(), modified(), priority(), title()
+  - fields: completed(boolean), created(string), creator(integer), due_time(string), id(integer), modified(string), priority(integer), title(string)
 - leave:
   - primary key: id
-  - fields: all_day(), comment(), created(), creator(), date_end(), date_start(), days(), employee(), id(), leave_rule(), modified(), status()
+  - fields: all_day(boolean), comment(string), created(string), creator(integer), date_end(string), date_start(string), days(number), employee(integer), id(integer), leave_rule(integer), modified(string), status(integer)
 - rosters:
   - primary key: id
-  - fields: cost(), created(), creator(), date(), employee(), end_time(), id(), modified(), open(), operational_unit(), published(), start_time(), total_time()
+  - fields: cost(number), created(string), creator(integer), date(string), employee(integer), end_time(integer), id(integer), modified(string), open(boolean), operational_unit(integer), published(boolean), start_time(integer), total_time(number)
 - webhooks:
   - primary key: id
-  - fields: address(), created(), creator(), enabled(), id(), modified(), topic(), type()
+  - fields: address(string), created(string), creator(integer), enabled(boolean), id(integer), modified(string), topic(string), type(string)
 - teams:
   - primary key: id
-  - fields: created(), creator(), id(), leader_employee(), modified(), name()
+  - fields: created(string), creator(integer), id(integer), leader_employee(integer), modified(string), name(string)
 
 ## Sync Modes
 

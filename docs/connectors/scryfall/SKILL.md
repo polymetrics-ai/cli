@@ -35,10 +35,10 @@ Reads cards and sets from the public Scryfall API. Read-only and credential-free
 
 - cards:
   - primary key: id
-  - fields: id(), name(), set()
+  - fields: id(string), name(string), set(string)
 - sets:
   - primary key: id
-  - fields: id(), name(), set()
+  - fields: id(string), name(string), set(string)
 
 ## Sync Modes
 

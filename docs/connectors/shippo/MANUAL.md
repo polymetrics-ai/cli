@@ -34,19 +34,19 @@ ETL STREAMS
   addresses:
     primary key: id
     cursor: updated_at
-    fields: email(), id(), name(), updated_at()
+    fields: email(string), id(string), name(string), updated_at(string)
   parcels:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), status(), updated_at()
+    fields: id(string), name(string), status(string), updated_at(string)
   shipments:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), status(), updated_at()
+    fields: id(string), name(string), status(string), updated_at(string)
   transactions:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), status(), updated_at()
+    fields: id(string), name(string), status(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

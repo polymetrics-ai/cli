@@ -44,19 +44,19 @@ Reads current, historical, forecast, marine, and location-autocomplete weather d
 
 - current:
   - primary key: id
-  - fields: current(), id(), location()
+  - fields: current(object), id(string), location(object)
 - historical:
   - primary key: id
-  - fields: historical(), id(), location()
+  - fields: historical(object), id(string), location(object)
 - forecast:
   - primary key: id
-  - fields: forecast(), id(), location()
+  - fields: forecast(object), id(string), location(object)
 - marine:
   - primary key: id
-  - fields: current(), id(), location()
+  - fields: current(object), id(string), location(object)
 - autocomplete:
   - primary key: name, region, country, lat, lon
-  - fields: country(), lat(), lon(), name(), region(), timezone_id(), utc_offset()
+  - fields: country(string), lat(string), lon(string), name(string), region(string), timezone_id(string), utc_offset(string)
 
 ## Sync Modes
 

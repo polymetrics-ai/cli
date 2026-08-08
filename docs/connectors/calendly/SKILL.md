@@ -47,49 +47,49 @@ Reads Calendly scheduled events (and their invitees), event types, organization 
 - scheduled_events:
   - primary key: id
   - cursor: start_time
-  - fields: cancellation(), created_at(), end_time(), event_guests(), event_memberships(), event_type(), id(), invitees_counter(), location(), name(), start_time(), status(), updated_at(), uri()
+  - fields: cancellation(object), created_at(string), end_time(string), event_guests(array), event_memberships(array), event_type(string), id(string), invitees_counter(object), location(object), name(string), start_time(string), status(string), updated_at(string), uri(string)
 - event_types:
   - primary key: id
   - cursor: updated_at
-  - fields: active(), booking_method(), color(), created_at(), deleted_at(), description_html(), description_plain(), duration(), id(), kind(), name(), pooling_type(), scheduling_url(), secret(), slug(), type(), updated_at(), uri()
+  - fields: active(boolean), booking_method(string), color(string), created_at(string), deleted_at(string), description_html(string), description_plain(string), duration(integer), id(string), kind(string), name(string), pooling_type(string), scheduling_url(string), secret(boolean), slug(string), type(string), updated_at(string), uri(string)
 - organization_memberships:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), organization(), role(), updated_at(), uri(), user(), user_email(), user_name()
+  - fields: created_at(string), id(string), organization(string), role(string), updated_at(string), uri(string), user(string), user_email(string), user_name(string)
 - groups:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), organization(), updated_at(), uri()
+  - fields: created_at(string), id(string), name(string), organization(string), updated_at(string), uri(string)
 - users:
   - primary key: id
-  - fields: avatar_url(), created_at(), current_organization(), email(), id(), name(), scheduling_url(), slug(), timezone(), updated_at(), uri()
+  - fields: avatar_url(string), created_at(string), current_organization(string), email(string), id(string), name(string), scheduling_url(string), slug(string), timezone(string), updated_at(string), uri(string)
 - routing_forms:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), organization(), questions(), updated_at(), uri()
+  - fields: created_at(string), id(string), name(string), organization(string), questions(array), updated_at(string), uri(string)
 - routing_form_submissions:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), questions_and_answers(), routing_form(), submitter(), submitter_type(), tracking(), updated_at(), uri()
+  - fields: created_at(string), id(string), questions_and_answers(array), routing_form(string), submitter(string), submitter_type(string), tracking(object), updated_at(string), uri(string)
 - webhook_subscriptions:
   - primary key: id
   - cursor: updated_at
-  - fields: callback_url(), created_at(), creator(), events(), id(), organization(), retry_started_at(), scope(), state(), updated_at(), uri(), user()
+  - fields: callback_url(string), created_at(string), creator(string), events(array), id(string), organization(string), retry_started_at(string), scope(string), state(string), updated_at(string), uri(string), user(string)
 - user_availability_schedules:
   - primary key: id
-  - fields: default(), id(), name(), rules(), timezone(), uri()
+  - fields: default(boolean), id(string), name(string), rules(array), timezone(string), uri(string)
 - group_relationships:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), group(), id(), organization(), owner(), updated_at(), uri()
+  - fields: created_at(string), group(string), id(string), organization(string), owner(string), updated_at(string), uri(string)
 - activity_log_entries:
   - primary key: id
   - cursor: occurred_at
-  - fields: action(), actor(), details(), id(), namespace(), occurred_at(), organization(), uri()
+  - fields: action(string), actor(object), details(object), id(string), namespace(string), occurred_at(string), organization(string), uri(string)
 - invitees:
   - primary key: id
   - cursor: updated_at
-  - fields: cancel_url(), cancellation(), created_at(), email(), event(), first_name(), id(), last_name(), name(), new_invitee(), old_invitee(), payment(), questions_and_answers(), reschedule_url(), rescheduled(), routing_form_submission(), scheduled_event_id(), status(), timezone(), tracking(), updated_at(), uri()
+  - fields: cancel_url(string), cancellation(object), created_at(string), email(string), event(string), first_name(string), id(string), last_name(string), name(string), new_invitee(string), old_invitee(string), payment(object), questions_and_answers(array), reschedule_url(string), rescheduled(boolean), routing_form_submission(string), scheduled_event_id(string), status(string), timezone(string), tracking(object), updated_at(string), uri(string)
 
 ## Sync Modes
 

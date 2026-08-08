@@ -34,15 +34,15 @@ ETL STREAMS
   documents:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name(), status(), updated_at()
+    fields: created_at(string), id(string), name(string), status(string), updated_at(string)
   templates:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(string), name(string), updated_at(string)
   recipients:
     primary key: id
     cursor: created_at
-    fields: created_at(), document_id(), email(), id(), status()
+    fields: created_at(string), document_id(string), email(string), id(string), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

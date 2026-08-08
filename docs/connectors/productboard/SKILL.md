@@ -36,16 +36,16 @@ Reads Productboard features, notes, components, and products through the public 
 
 - features:
   - primary key: id
-  - fields: created_at(), id(), name(), status(), title(), updated_at()
+  - fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
 - notes:
   - primary key: id
-  - fields: created_at(), id(), name(), status(), title(), updated_at()
+  - fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
 - components:
   - primary key: id
-  - fields: created_at(), id(), name(), status(), title(), updated_at()
+  - fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
 - products:
   - primary key: id
-  - fields: created_at(), id(), name(), status(), title(), updated_at()
+  - fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
 
 ## Sync Modes
 

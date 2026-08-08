@@ -38,16 +38,16 @@ CONFIGURATION
 ETL STREAMS
   products:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(string), name(string), updated_at(string)
   reports:
     primary key: id
-    fields: created_at(), id(), name(), product_id(), type(), updated_at()
+    fields: created_at(string), id(string), name(string), product_id(string), type(string), updated_at(string)
   events:
     primary key: id
-    fields: created_at(), display_name(), id(), name(), product_id()
+    fields: created_at(string), display_name(string), id(string), name(string), product_id(string)
   properties:
     primary key: id
-    fields: created_at(), display_name(), id(), name(), product_id(), type()
+    fields: created_at(string), display_name(string), id(string), name(string), product_id(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

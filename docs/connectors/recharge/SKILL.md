@@ -37,13 +37,13 @@ Reads Recharge customers, subscriptions, and orders through the Recharge REST AP
 
 - customers:
   - primary key: id
-  - fields: created_at(), email(), id(), updated_at()
+  - fields: created_at(string), email(string), id(integer), updated_at(string)
 - subscriptions:
   - primary key: id
-  - fields: created_at(), customer_id(), id(), status(), updated_at()
+  - fields: created_at(string), customer_id(integer), id(integer), status(string), updated_at(string)
 - orders:
   - primary key: id
-  - fields: created_at(), customer_id(), id(), status(), updated_at()
+  - fields: created_at(string), customer_id(integer), id(integer), status(string), updated_at(string)
 
 ## Sync Modes
 

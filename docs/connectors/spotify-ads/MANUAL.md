@@ -35,27 +35,27 @@ CONFIGURATION
 ETL STREAMS
   ad_accounts:
     primary key: id
-    fields: country(), id(), name()
+    fields: country(string), id(string), name(string)
   campaigns:
     primary key: id
-    fields: id(), name(), objective(), status()
+    fields: id(string), name(string), objective(string), status(string)
   ad_sets:
     primary key: id
-    fields: id(), name(), objective(), status()
+    fields: id(string), name(string), objective(string), status(string)
   ads:
     primary key: id
-    fields: id(), name(), objective(), status()
+    fields: id(string), name(string), objective(string), status(string)
   businesses:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(string), name(string), updated_at(string)
   business_ad_accounts:
     primary key: id
-    fields: business_id(), country_code(), created_at(), currency_code(), id(), name(), status(), updated_at()
+    fields: business_id(string), country_code(string), created_at(string), currency_code(string), id(string), name(string), status(string), updated_at(string)
   assets:
     primary key: id
     cursor: updated_at
-    fields: asset_type(), created_at(), id(), name(), status(), updated_at()
+    fields: asset_type(string), created_at(string), id(string), name(string), status(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

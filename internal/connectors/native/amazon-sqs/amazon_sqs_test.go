@@ -3,6 +3,7 @@ package amazonsqs_test
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -1615,4 +1616,142 @@ func hasAllStrings(values []string, wants []string) bool {
 		}
 	}
 	return true
+}
+
+// TestOperationDirectReadReportsAndHonoursSQSPages closes the gap where the
+// six amazon-sqs direct reads documented --page/--page-cursor, accepted them,
+// and returned page one. The SQS Query API pages by an opaque NextToken, so
+// the cursor must reach the wire and the returned page must say where it sits.
+func TestOperationDirectReadReportsAndHonoursSQSPages(t *testing.T) {
+	var sawTokens []string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		sawTokens = append(sawTokens, r.Form.Get("NextToken"))
+		if r.Form.Get("NextToken") == "page-two" {
+			_, _ = w.Write([]byte(`<ListQueuesResponse><ListQueuesResult><QueueUrl>https://sqs.us-east-1.amazonaws.com/123/c</QueueUrl></ListQueuesResult></ListQueuesResponse>`))
+			return
+		}
+		_, _ = w.Write([]byte(`<ListQueuesResponse><ListQueuesResult><QueueUrl>https://sqs.us-east-1.amazonaws.com/123/a</QueueUrl><QueueUrl>https://sqs.us-east-1.amazonaws.com/123/b</QueueUrl><NextToken>page-two</NextToken></ListQueuesResult></ListQueuesResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+
+	first, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queues", Config: cfg})
+	if err != nil {
+		t.Fatalf("OperationDirectRead list_queues: %v", err)
+	}
+	if first.Page.Records != 2 {
+		t.Fatalf("page.records = %d, want 2", first.Page.Records)
+	}
+	if first.Page.Complete {
+		t.Fatal("page.complete = true while a NextToken was returned")
+	}
+	if !first.Page.HasMore || first.Page.NextCursor != "page-two" {
+		t.Fatalf("page has_more/next_cursor = %v/%q, want true/page-two", first.Page.HasMore, first.Page.NextCursor)
+	}
+
+	second, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queues", Config: cfg, PageCursor: first.Page.NextCursor})
+	if err != nil {
+		t.Fatalf("OperationDirectRead list_queues(cursor): %v", err)
+	}
+	if len(sawTokens) != 2 || sawTokens[1] != "page-two" {
+		t.Fatalf("NextToken values sent = %#v, want the cursor on the second request", sawTokens)
+	}
+	if second.Page.Records != 1 || !second.Page.Complete {
+		t.Fatalf("second page records/complete = %d/%v, want 1/true", second.Page.Records, second.Page.Complete)
+	}
+	if got := len(first.Body.(map[string]any)["queue_urls"].([]string)) + len(second.Body.(map[string]any)["queue_urls"].([]string)); got != 3 {
+		t.Fatalf("records reached across pages = %d, want 3", got)
+	}
+}
+
+// TestOperationDirectReadRefusesSQSNavigationItCannotHonour: SQS has no
+// addressable page number, and three of its reads return a single object. Both
+// must be refused rather than answered with page one.
+func TestOperationDirectReadRefusesSQSNavigationItCannotHonour(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits++
+		_, _ = w.Write([]byte(`<ListQueuesResponse><ListQueuesResult></ListQueuesResult></ListQueuesResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	for _, tc := range []struct {
+		name string
+		req  connectors.OperationDirectReadRequest
+		want string
+	}{
+		{name: "page number on a cursor read", req: connectors.OperationDirectReadRequest{Operation: "list_queues", Page: 3}, want: "no addressable page number"},
+		{name: "cursor on a single-object read", req: connectors.OperationDirectReadRequest{Operation: "get_queue_url", PageCursor: "abc"}, want: "cannot address a page by cursor"},
+		{name: "page number on a single-object read", req: connectors.OperationDirectReadRequest{Operation: "get_queue_url", Page: 2}, want: "cannot address page 2"},
+		{name: "cursor alongside next_token", req: connectors.OperationDirectReadRequest{Operation: "list_queues", PageCursor: "abc", Body: map[string]any{"next_token": "xyz"}}, want: "they select different pages"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			before := hits
+			req := tc.req
+			req.Config = cfg
+			if req.Operation == "get_queue_url" {
+				req.Body = map[string]any{"queue_name": "orders"}
+			}
+			_, err := c.OperationDirectRead(context.Background(), req)
+			if err == nil {
+				t.Fatal("navigation the operation cannot honour returned no error, want a refusal")
+			}
+			if !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("error = %q, want it to contain %q", err.Error(), tc.want)
+			}
+			if hits != before {
+				t.Fatal("the refused navigation still reached AWS")
+			}
+		})
+	}
+}
+
+// TestManifestRequiredFieldsCarryOnlyFieldNames pins the machine contract.
+// required_fields is published by `pm connectors inspect --json` as a list of
+// FIELD NAMES; the either/or constraint travels in required_any_fields instead,
+// so a machine consumer never reads a synthesized sentence as a field.
+func TestManifestRequiredFieldsCarryOnlyFieldNames(t *testing.T) {
+	manifest := native.New().Manifest()
+	var checked int
+	for _, action := range manifest.WriteActions {
+		for _, field := range action.RequiredFields {
+			if strings.ContainsAny(field, " +") {
+				t.Fatalf("write action %q required_fields contains %q, which is not a field name", action.Name, field)
+			}
+		}
+		switch action.Name {
+		case "set_queue_attributes":
+			checked++
+			if len(action.RequiredFields) != 0 {
+				t.Fatalf("set_queue_attributes required_fields = %v, want empty", action.RequiredFields)
+			}
+			if fmt.Sprint(action.RequiredAnyFields) != "[[attributes] [attribute_name attribute_value]]" {
+				t.Fatalf("set_queue_attributes required_any_fields = %v", action.RequiredAnyFields)
+			}
+		case "tag_queue":
+			checked++
+			if fmt.Sprint(action.RequiredAnyFields) != "[[tags] [tag_key tag_value]]" {
+				t.Fatalf("tag_queue required_any_fields = %v", action.RequiredAnyFields)
+			}
+		}
+		for _, group := range action.RequiredAnyFields {
+			for _, field := range group {
+				for _, optional := range action.OptionalFields {
+					if field == optional {
+						t.Fatalf("write action %q lists %q as both required-any and optional", action.Name, field)
+					}
+				}
+			}
+		}
+	}
+	if checked != 2 {
+		t.Fatalf("checked %d either/or actions, want 2", checked)
+	}
 }

@@ -34,19 +34,19 @@ CONFIGURATION
 ETL STREAMS
   catalog:
     primary key: id
-    fields: containerType(), createdAt(), datasetType(), id(), path(), tag(), type()
+    fields: containerType(string), createdAt(string), datasetType(string), id(string), path(array), tag(string), type(string)
   reflections:
     primary key: id
-    fields: createdAt(), datasetId(), enabled(), id(), name(), status(), type(), updatedAt()
+    fields: createdAt(string), datasetId(string), enabled(boolean), id(string), name(string), status(object), type(string), updatedAt(string)
   sources:
     primary key: id
-    fields: createdAt(), id(), name(), path(), tag(), type()
+    fields: createdAt(string), id(string), name(string), path(array), tag(string), type(string)
   users:
     primary key: id
-    fields: active(), email(), firstName(), id(), lastName(), name()
+    fields: active(boolean), email(string), firstName(string), id(string), lastName(string), name(string)
   roles:
     primary key: id
-    fields: description(), id(), memberCount(), name(), roles(), type()
+    fields: description(string), id(string), memberCount(integer), name(string), roles(array), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

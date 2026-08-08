@@ -41,32 +41,32 @@ Reads Pingdom checks, probes, actions, maintenance windows/occurrences, alerting
 
 - checks:
   - primary key: id
-  - fields: hostname(), id(), lasterrortime(), lastresponsetime(), lasttesttime(), name(), resolution(), status(), tags(), type()
+  - fields: hostname(string), id(integer), lasterrortime(integer), lastresponsetime(integer), lasttesttime(integer), name(string), resolution(integer), status(string), tags(array), type(string)
 - probes:
   - primary key: id
-  - fields: active(), city(), country(), hostname(), id(), ip(), name()
+  - fields: active(boolean), city(string), country(string), hostname(string), id(integer), ip(string), name(string)
 - actions:
   - primary key: id
-  - fields: checkid(), checkname(), contactname(), id(), status(), time(), via()
+  - fields: checkid(integer), checkname(string), contactname(string), id(integer), status(string), time(integer), via(integer)
 - maintenance:
   - primary key: id
-  - fields: description(), effectiveto(), from(), id(), recurrencetype(), repeatevery(), to()
+  - fields: description(string), effectiveto(integer), from(integer), id(integer), recurrencetype(string), repeatevery(integer), to(integer)
 - reference:
-  - fields: checktypes(), probes(), regions()
+  - fields: checktypes(object), probes(object), regions(object)
 - alerting_contacts:
   - primary key: id
-  - fields: id(), name(), notification_targets(), owner(), paused(), teams(), type()
+  - fields: id(integer), name(string), notification_targets(object), owner(boolean), paused(boolean), teams(array), type(string)
 - alerting_teams:
   - primary key: id
-  - fields: id(), members(), name()
+  - fields: id(integer), members(array), name(string)
 - maintenance_occurrences:
   - primary key: id
-  - fields: from(), id(), maintenanceid(), to()
+  - fields: from(integer), id(integer), maintenanceid(integer), to(integer)
 - credits:
-  - fields: autofillsms(), autofillsms_amount(), autofillsms_when_left(), availablechecks(), availablerumsites(), availablesms(), availablesmstests(), checklimit(), max_sms_overage(), useddefault(), usedtransaction()
+  - fields: autofillsms(boolean), autofillsms_amount(integer), autofillsms_when_left(integer), availablechecks(integer), availablerumsites(integer), availablesms(integer), availablesmstests(integer), checklimit(integer), max_sms_overage(integer), useddefault(integer), usedtransaction(integer)
 - tms_checks:
   - primary key: id
-  - fields: active(), created_at(), id(), interval(), last_downtime_end(), last_downtime_start(), modified_at(), name(), region(), status(), tags(), type()
+  - fields: active(boolean), created_at(integer), id(integer), interval(integer), last_downtime_end(integer), last_downtime_start(integer), modified_at(integer), name(string), region(string), status(string), tags(array), type(string)
 
 ## Sync Modes
 

@@ -32,64 +32,64 @@ CONFIGURATION
 ETL STREAMS
   resources:
     primary key: _id
-    fields: _id(), createdDate(), email(), firstName(), lastName(), note(), role(), status(), type()
+    fields: _id(string), createdDate(string), email(string), firstName(string), lastName(string), note(string), role(string), status(string), type(string)
   projects:
     primary key: _id
-    fields: _id(), budgetCashAmount(), budgetCurrency(), budgetHours(), createdDate(), name(), note(), projectCode(), status(), updatedDate()
+    fields: _id(string), budgetCashAmount(number), budgetCurrency(string), budgetHours(number), createdDate(string), name(string), note(string), projectCode(string), status(string), updatedDate(string)
   clients:
     primary key: _id
-    fields: _id(), createdDate(), email(), name(), note(), phone()
+    fields: _id(string), createdDate(string), email(string), name(string), note(string), phone(string)
   events:
     primary key: _id
-    fields: _id(), backgroundColor(), createdDate(), eventCode(), metadata(), name(), updatedDate()
+    fields: _id(string), backgroundColor(string), createdDate(string), eventCode(string), metadata(string), name(string), updatedDate(string)
   holidays:
     primary key: _id
-    fields: _id(), date(), end(), holidayGroup(), name(), start()
+    fields: _id(string), date(string), end(string), holidayGroup(string), name(string), start(string)
   bookings:
     primary key: _id
-    fields: _id(), category(), end(), note(), project(), resource(), start(), state()
+    fields: _id(string), category(string), end(string), note(string), project(string), resource(string), start(string), state(string)
   billing_rates:
     primary key: _id
-    fields: _id(), createdDate(), currency(), label(), metadata(), rate(), updatedDate()
+    fields: _id(string), createdDate(string), currency(string), label(string), metadata(string), rate(number), updatedDate(string)
   booking_categories:
     primary key: _id
-    fields: _id(), categoryGroupId(), categoryGroupName(), createdDate(), gridColor(), group(), name(), type(), updatedDate()
+    fields: _id(string), categoryGroupId(string), categoryGroupName(string), createdDate(string), gridColor(string), group(string), name(string), type(string), updatedDate(string)
   resource_custom_field_templates:
     primary key: _id
-    fields: _id(), allowMultipleValues(), canResourceEdit(), category(), characterLimit(), choices(), createdDate(), defaultRadioId(), defaultValue(), filterGrid(), instructions(), isChoicesSortedAlphabetically(), isRequired(), label(), maxValue(), minValue(), placeholderText(), status(), stepValue(), type(), updatedDate(), weekStartOn()
+    fields: _id(string), allowMultipleValues(boolean), canResourceEdit(boolean), category(string), characterLimit(integer), choices(array), createdDate(string), defaultRadioId(string), defaultValue(string), filterGrid(boolean), instructions(string), isChoicesSortedAlphabetically(boolean), isRequired(boolean), label(string), maxValue(number), minValue(number), placeholderText(string), status(string), stepValue(number), type(string), updatedDate(string), weekStartOn(integer)
   project_custom_field_templates:
     primary key: _id
-    fields: _id(), allowMultipleValues(), canResourceEdit(), category(), characterLimit(), choices(), createdDate(), defaultRadioId(), defaultValue(), filterGrid(), instructions(), isChoicesSortedAlphabetically(), isRequired(), label(), maxValue(), minValue(), placeholderText(), status(), stepValue(), type(), updatedDate(), weekStartOn()
+    fields: _id(string), allowMultipleValues(boolean), canResourceEdit(boolean), category(string), characterLimit(integer), choices(array), createdDate(string), defaultRadioId(string), defaultValue(string), filterGrid(boolean), instructions(string), isChoicesSortedAlphabetically(boolean), isRequired(boolean), label(string), maxValue(number), minValue(number), placeholderText(string), status(string), stepValue(number), type(string), updatedDate(string), weekStartOn(integer)
   project_groups:
     primary key: _id
-    fields: _id(), createdDate(), metadata(), name(), parentGroupId(), projects(), updatedDate()
+    fields: _id(string), createdDate(string), metadata(string), name(string), parentGroupId(string), projects(array), updatedDate(string)
   resource_groups:
     primary key: _id
-    fields: _id(), approvers(), createdDate(), metadata(), name(), parentGroupId(), resources(), updatedDate()
+    fields: _id(string), approvers(array), createdDate(string), metadata(string), name(string), parentGroupId(string), resources(array), updatedDate(string)
   cost_categories:
     primary key: _id
-    fields: _id(), createdDate(), name(), updatedDate()
+    fields: _id(string), createdDate(string), name(string), updatedDate(string)
   project_managers:
     primary key: _id
-    fields: _id(), createdDate(), email(), firstName(), isProjectManager(), lastName(), links(), metadata(), note(), role(), status(), updatedDate()
+    fields: _id(string), createdDate(string), email(string), firstName(string), isProjectManager(boolean), lastName(string), links(object), metadata(string), note(string), role(string), status(string), updatedDate(string)
   project_tags:
     primary key: _id
-    fields: _id(), category(), value()
+    fields: _id(string), category(string), value(string)
   resource_tags:
     primary key: _id
-    fields: _id(), category(), value()
+    fields: _id(string), category(string), value(string)
   time_entries:
     primary key: _id
-    fields: _id(), categoryName(), categoryTemplateId(), createdDate(), creator(), date(), locked(), metadata(), minutes(), note(), project(), projectName(), projectStatus(), projectType(), resource(), status(), updatedDate()
+    fields: _id(string), categoryName(string), categoryTemplateId(string), createdDate(string), creator(string), date(string), locked(boolean), metadata(string), minutes(integer), note(string), project(string), projectName(string), projectStatus(string), projectType(string), resource(string), status(string), updatedDate(string)
   unassigned_work:
     primary key: _id
-    fields: _id(), value()
+    fields: _id(string), value(string)
   vacations:
     primary key: _id
-    fields: _id(), approvalInfo(), creatorId(), end(), metadata(), minutesPerDay(), percentAllocation(), resource(), resourceType(), start(), state(), title(), type()
+    fields: _id(string), approvalInfo(object), creatorId(string), end(string), metadata(string), minutesPerDay(integer), percentAllocation(string), resource(string), resourceType(string), start(string), state(string), title(string), type(string)
   webhook_subscriptions:
     primary key: _id
-    fields: _id(), companyId(), creationDate(), event(), target_url()
+    fields: _id(string), companyId(string), creationDate(string), event(string), target_url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -405,22 +405,22 @@ COMMAND SURFACE
     unassigned-work list - List Hubplanner unassigned work as ETL records. [intent=etl availability=implemented stream=unassigned_work]
     vacations list - List Hubplanner vacations as ETL records. [intent=etl availability=implemented stream=vacations]
     webhook-subscriptions list - List Hubplanner webhook subscriptions as ETL records. [intent=etl availability=implemented stream=webhook_subscriptions]
-    billing-rates get - Get a Hubplanner billing rate by id. [intent=direct_read availability=implemented operation=hubplanner.billing_rates_get]; flags: --id
-    booking-categories get - Get a Hubplanner booking category by id. [intent=direct_read availability=implemented operation=hubplanner.booking_categories_get]; flags: --id
-    bookings get - Get a Hubplanner booking by id. [intent=direct_read availability=implemented operation=hubplanner.bookings_get]; flags: --id
-    clients get - Get a Hubplanner client by id. [intent=direct_read availability=implemented operation=hubplanner.clients_get]; flags: --id
-    events get - Get a Hubplanner event by id. [intent=direct_read availability=implemented operation=hubplanner.events_get]; flags: --id
-    project-groups get - Get a Hubplanner project group by id. [intent=direct_read availability=implemented operation=hubplanner.project_groups_get]; flags: --id
-    holidays get - Get a Hubplanner holiday by id. [intent=direct_read availability=implemented operation=hubplanner.holidays_get]; flags: --id
-    milestones get - Get a Hubplanner milestone by id. [intent=direct_read availability=implemented operation=hubplanner.milestones_get]; flags: --id
-    cost-categories get - Get a Hubplanner project cost category by id. [intent=direct_read availability=implemented operation=hubplanner.cost_categories_get]; flags: --id
-    projects get - Get a Hubplanner project by id. [intent=direct_read availability=implemented operation=hubplanner.projects_get]; flags: --id
-    resources get - Get a Hubplanner resource by id. [intent=direct_read availability=implemented operation=hubplanner.resources_get]; flags: --id
-    time-entries get - Get a Hubplanner time entry by id. [intent=direct_read availability=implemented operation=hubplanner.time_entries_get]; flags: --id
-    unassigned-work get - Get a Hubplanner unassigned-work record by id. [intent=direct_read availability=implemented operation=hubplanner.unassigned_work_get]; flags: --id
-    vacations get - Get a Hubplanner vacation by id. [intent=direct_read availability=implemented operation=hubplanner.vacations_get]; flags: --id
-    resource-custom-fields search - Search Hubplanner resource custom field templates. [intent=direct_read availability=implemented operation=hubplanner.resource_custom_field_template_search]; flags: --type, --label, --required
-    project-custom-fields search - Search Hubplanner project custom field templates. [intent=direct_read availability=implemented operation=hubplanner.project_custom_field_template_search]; flags: --type, --label, --required
+    billing-rates get - Get a Hubplanner billing rate by id. [intent=direct_read availability=implemented operation=hubplanner.billing_rates_get]; flags: --id, --page, --page-cursor
+    booking-categories get - Get a Hubplanner booking category by id. [intent=direct_read availability=implemented operation=hubplanner.booking_categories_get]; flags: --id, --page, --page-cursor
+    bookings get - Get a Hubplanner booking by id. [intent=direct_read availability=implemented operation=hubplanner.bookings_get]; flags: --id, --page, --page-cursor
+    clients get - Get a Hubplanner client by id. [intent=direct_read availability=implemented operation=hubplanner.clients_get]; flags: --id, --page, --page-cursor
+    events get - Get a Hubplanner event by id. [intent=direct_read availability=implemented operation=hubplanner.events_get]; flags: --id, --page, --page-cursor
+    project-groups get - Get a Hubplanner project group by id. [intent=direct_read availability=implemented operation=hubplanner.project_groups_get]; flags: --id, --page, --page-cursor
+    holidays get - Get a Hubplanner holiday by id. [intent=direct_read availability=implemented operation=hubplanner.holidays_get]; flags: --id, --page, --page-cursor
+    milestones get - Get a Hubplanner milestone by id. [intent=direct_read availability=implemented operation=hubplanner.milestones_get]; flags: --id, --page, --page-cursor
+    cost-categories get - Get a Hubplanner project cost category by id. [intent=direct_read availability=implemented operation=hubplanner.cost_categories_get]; flags: --id, --page, --page-cursor
+    projects get - Get a Hubplanner project by id. [intent=direct_read availability=implemented operation=hubplanner.projects_get]; flags: --id, --page, --page-cursor
+    resources get - Get a Hubplanner resource by id. [intent=direct_read availability=implemented operation=hubplanner.resources_get]; flags: --id, --page, --page-cursor
+    time-entries get - Get a Hubplanner time entry by id. [intent=direct_read availability=implemented operation=hubplanner.time_entries_get]; flags: --id, --page, --page-cursor
+    unassigned-work get - Get a Hubplanner unassigned-work record by id. [intent=direct_read availability=implemented operation=hubplanner.unassigned_work_get]; flags: --id, --page, --page-cursor
+    vacations get - Get a Hubplanner vacation by id. [intent=direct_read availability=implemented operation=hubplanner.vacations_get]; flags: --id, --page, --page-cursor
+    resource-custom-fields search - Search Hubplanner resource custom field templates. [intent=direct_read availability=implemented operation=hubplanner.resource_custom_field_template_search]; flags: --type, --label, --required, --page, --page-cursor
+    project-custom-fields search - Search Hubplanner project custom field templates. [intent=direct_read availability=implemented operation=hubplanner.project_custom_field_template_search]; flags: --type, --label, --required, --page, --page-cursor
     billing-rates create - Plan or preview Hubplanner write action `create_billing_rate`. [intent=reverse_etl availability=implemented write=create_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner billing rate; flags: --label, --rate, --currency
     billing-rates update - Plan or preview Hubplanner write action `update_billing_rate`. [intent=reverse_etl availability=implemented write=update_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner billing rate; flags: --id, --label, --rate, --currency
     billing-rates delete - Plan or preview Hubplanner write action `delete_billing_rate`. [intent=reverse_etl availability=implemented write=delete_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner billing rate; flags: --id

@@ -43,28 +43,28 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
 - tasks:
   - primary key: id
   - cursor: date_updated
-  - fields: creator_id(), date_closed(), date_created(), date_updated(), folder_id(), id(), list_id(), name(), space_id(), status(), url()
+  - fields: creator_id(integer), date_closed(string), date_created(string), date_updated(string), folder_id(string), id(string), list_id(string), name(string), space_id(string), status(string), url(string)
 - teams:
   - primary key: id
-  - fields: avatar(), color(), id(), name()
+  - fields: avatar(string), color(string), id(string), name(string)
 - spaces:
   - primary key: id
-  - fields: archived(), id(), multiple_assignees(), name(), private()
+  - fields: archived(boolean), id(string), multiple_assignees(boolean), name(string), private(boolean)
 - folders:
   - primary key: id
-  - fields: archived(), hidden(), id(), name(), orderindex(), space_id(), task_count()
+  - fields: archived(boolean), hidden(boolean), id(string), name(string), orderindex(integer), space_id(string), task_count(string)
 - lists:
   - primary key: id
-  - fields: archived(), id(), name(), orderindex(), space_id(), task_count()
+  - fields: archived(boolean), id(string), name(string), orderindex(integer), space_id(string), task_count(integer)
 - goals:
   - primary key: id
-  - fields: archived(), color(), creator(), date_created(), description(), due_date(), id(), multiple_owners(), name(), percent_completed(), private(), start_date(), team_id()
+  - fields: archived(boolean), color(string), creator(integer), date_created(string), description(string), due_date(string), id(string), multiple_owners(boolean), name(string), percent_completed(integer), private(boolean), start_date(string), team_id(string)
 - space_tags:
   - primary key: name
-  - fields: name(), space_id(), tag_bg(), tag_fg()
+  - fields: name(string), space_id(string), tag_bg(string), tag_fg(string)
 - webhooks:
   - primary key: id
-  - fields: client_id(), endpoint(), events(), folder_id(), health(), id(), list_id(), space_id(), task_id(), team_id(), userid()
+  - fields: client_id(string), endpoint(string), events(array), folder_id(integer), health(object), id(string), list_id(integer), space_id(integer), task_id(string), team_id(integer), userid(integer)
 
 ## Sync Modes
 

@@ -34,7 +34,7 @@ CONFIGURATION
 ETL STREAMS
   usage:
     primary key: app_id
-    fields: app_id(), daily_average(), days_elapsed(), days_remaining(), plan(), requests(), requests_quota(), requests_remaining(), status()
+    fields: app_id(string), daily_average(integer), days_elapsed(integer), days_remaining(integer), plan(string), requests(integer), requests_quota(integer), requests_remaining(integer), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

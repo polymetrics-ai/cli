@@ -33,10 +33,10 @@ CONFIGURATION
 ETL STREAMS
   latest:
     primary key: num
-    fields: alt(), day(), img(), link(), month(), news(), num(), safe_title(), title(), transcript(), year()
+    fields: alt(string), day(string), img(string), link(string), month(string), news(string), num(number), safe_title(string), title(string), transcript(string), year(string)
   comic:
     primary key: num
-    fields: alt(), day(), img(), link(), month(), news(), num(), safe_title(), title(), transcript(), year()
+    fields: alt(string), day(string), img(string), link(string), month(string), news(string), num(number), safe_title(string), title(string), transcript(string), year(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

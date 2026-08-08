@@ -35,50 +35,50 @@ ETL STREAMS
   parties:
     primary key: id
     cursor: updated_at
-    fields: about(), created_at(), first_name(), id(), job_title(), last_contacted_at(), last_name(), organisation_name(), owner(), title(), type(), updated_at()
+    fields: about(string), created_at(string), first_name(string), id(integer), job_title(string), last_contacted_at(string), last_name(string), organisation_name(string), owner(string), title(string), type(string), updated_at(string)
   opportunities:
     primary key: id
     cursor: updated_at
-    fields: closed_on(), created_at(), description(), expected_close_on(), id(), lost_reason(), milestone_id(), milestone_name(), name(), party_id(), probability(), updated_at(), value_amount(), value_currency()
+    fields: closed_on(string), created_at(string), description(string), expected_close_on(string), id(integer), lost_reason(string), milestone_id(integer), milestone_name(string), name(string), party_id(integer), probability(number), updated_at(string), value_amount(number), value_currency(string)
   kases:
     primary key: id
     cursor: updated_at
-    fields: closed_on(), created_at(), description(), id(), name(), owner(), party_id(), status(), updated_at()
+    fields: closed_on(string), created_at(string), description(string), id(integer), name(string), owner(string), party_id(integer), status(string), updated_at(string)
   tasks:
     primary key: id
     cursor: updated_at
-    fields: category_id(), created_at(), description(), detail(), due_on(), id(), kase_id(), opportunity_id(), party_id(), status(), updated_at()
+    fields: category_id(integer), created_at(string), description(string), detail(string), due_on(string), id(integer), kase_id(integer), opportunity_id(integer), party_id(integer), status(string), updated_at(string)
   users:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), status(), updated_at(), username()
+    fields: created_at(string), email(string), id(integer), name(string), status(string), updated_at(string), username(string)
   tags:
     primary key: id
-    fields: color(), id(), name()
+    fields: color(string), id(integer), name(string)
   custom_fields:
     primary key: id
-    fields: entity_type(), id(), name(), restricted_to_type(), tag(), type()
+    fields: entity_type(string), id(integer), name(string), restricted_to_type(string), tag(string), type(string)
   teams:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   pipelines:
     primary key: id
-    fields: created_at(), default(), display_order(), id(), name(), updated_at()
+    fields: created_at(string), default(boolean), display_order(integer), id(integer), name(string), updated_at(string)
   milestones:
     primary key: id
-    fields: id(), name(), pipeline_id(), probability()
+    fields: id(integer), name(string), pipeline_id(integer), probability(number)
   lost_reasons:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   categories:
     primary key: id
-    fields: color(), id(), name()
+    fields: color(string), id(integer), name(string)
   boards:
     primary key: id
-    fields: created_at(), entity_type(), id(), name(), updated_at()
+    fields: created_at(string), entity_type(string), id(integer), name(string), updated_at(string)
   stages:
     primary key: id
-    fields: board_id(), display_order(), id(), name()
+    fields: board_id(integer), display_order(integer), id(integer), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

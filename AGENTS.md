@@ -179,6 +179,102 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 - Resolve a Claude review thread only after every actionable finding has been addressed or
   explicitly dispositioned; resolve the conversation in GitHub rather than with a bot command.
 
+## Direct Reads Return One Page, And Say So
+
+A direct read is page-wise exploration, not bulk extraction: the ETL path stores
+what it reads, a direct read does not. One request, one page.
+
+Five rules keep that honest; all exist because the direct-read executor once sent
+no page-size parameter at all, so every connector returned the provider's default
+page (GitHub's is 30) at `status: 200` with nothing saying more remained.
+
+- Paging navigation is DERIVED from the connector's own declared pagination
+  spec (`streams.json` `base.pagination`) through `engine/paginate.go`, the
+  same seven strategies the ETL path consumes. Never hand-author an opaque
+  provider cursor into `cli_surface.json` or `operations.json`: direct reads
+  use `--page`/`--page-cursor` as their only navigation channels. A declared
+  size/window or addressable-position control (for example Notion's
+  `page-size` or Bahmni's `start-index`) may remain only when the engine sends
+  and accounts for it; legacy cursors such as Notion `start-cursor` and Gong
+  `cursor` are generated-surface drift and are removed by `surface-sync`. The
+  executor is `internal/connectors/engine/direct_read_paginate.go`.
+- A result must never imply a completeness it cannot prove. `DirectReadPage`
+  carries `complete` plus a `reason`, and `--page`/`--page-cursor` are how a
+  caller reaches the rest. Strategies that address pages by number
+  (`page_number`, `offset_limit` — the two whose `Next()` ignores the response)
+  accept `--page`; every other strategy (`cursor`, `next_url`, `link_header`,
+  `start_index`) hands back `next_cursor` instead, and asking one of them for a
+  page number is refused rather than quietly answered with page one.
+  `page_number`/`offset_limit` stop on a SHORT page, so `complete` is asserted
+  only when the size the paginator compared against is the size that reached the
+  wire; otherwise it stays false with reason `page_size_not_requested`. `size`
+  reports only what actually reached the wire.
+- The caller's own value always wins over a derived paging value: every engine
+  value goes in the BASE position of `mergeQuery`, so an explicit `--page-size 5`
+  is not overwritten by a declared 100. The paginator is then BUILT from that
+  effective size (`effectiveDirectReadPageSize`), because a stop threshold of
+  100 against a 5-record page would call page one complete. The one pairing that
+  cannot be resolved that way — a raw paging parameter alongside
+  `--page`/`--page-cursor` — is refused before the request, never ranked
+  silently, and the refusal names the request parameter rather than inventing a
+  flag spelling the caller never typed.
+- Where a caller navigates through the connector's own paging parameter, the
+  result carries no `number`/`next_number`: the engine did not choose the
+  window, so it has no page number it can honestly name. An addressable
+  strategy also carries no `next_cursor`, because it would refuse that cursor
+  on the way back in; the token strategies still report the `next_cursor` their
+  own response produced. `has_more` reports whether records remain either way.
+- A direct-read executor that reports no page context has not navigated.
+  `commandrunner.assertDirectReadNavigated` refuses `--page`/`--page-cursor`
+  against a zero `DirectReadPage` rather than returning page one at exit 0, which
+  is what the native amazon-sqs reader used to do. That guard is on the RESULT,
+  not on an opt-in interface, so a new executor cannot regress by forgetting to
+  declare anything.
+
+Regression tests assert RETURNED RECORD COUNTS against a known-larger fixture, in
+`engine/direct_read_pagination_test.go`. Never assert exit status for this class:
+the original defect exited 0 while discarding 97% of a collection.
+
+**Connector commands do not go through Cobra.** `newRootCmd` sets
+`DisableFlagParsing: true` with `ArbitraryArgs`, and `executeRootCmd`
+short-circuits to `RunE` for any argument that is not a registered top-level
+command, so every `pm <connector> ...` invocation is parsed by the hand-rolled
+`internal/cli/parse.go` instead. Cobra wraps only the legacy top-level commands.
+This is why connector commands have no shell completion and why nothing binds
+into Viper's precedence chain. It is NOT why they lack validation: required
+flags, enum values, minimums and item counts are all enforced engine-side in
+`commandrunner` (`validateRequiredCommandFlags`, `validateFlagValue`), before any
+network call, which is why they protect every caller rather than only the CLI.
+This fact explained a defect nobody could see; do not rediscover it the hard way.
+
+## Command Parameters Are Derived, Never Hand-Authored
+
+A `direct_read` command's flags come from the connector's own provider
+specification, not from authoring. `connectorgen params-import` writes the
+accepted parameter set into `operations.json` as `rest.parameters`;
+`surface-sync` derives the command flags from it and only ever ADDS, so a
+hand-authored flag is left as written. The split keeps CI hermetic —
+`surface-sync --check` needs no artifact and no network.
+
+Never hand-author an opaque provider cursor (`cursor`, `start_cursor`,
+`page_token`, and equivalents). Navigation is answered by `--page` or
+`--page-cursor` from the declared pagination spec, and a raw cursor flag is a
+second unchecked way to page that bypasses the completeness contract. A
+declared page/window control (`page_size`, `per_page`, `limit`, `offset`) is
+kept only when the runtime can honor the caller's value and report the actual
+window it sent.
+
+`params-import` drops a parameter by MEANING, not by the names one bundle
+declares: a well-known paging name, or any parameter whose own specification
+calls it a cursor or pagination. That is why github's `after`/`before` cursors
+are excluded while the `before` on `/repos/{owner}/{repo}/notifications`, an ISO
+8601 timestamp filter, is kept. The only config-driven exclusion is a path
+variable the operation's own `rest.path` interpolates (`{owner}`/`{repo}`);
+skipping every `spec.json` property instead dropped github's ETL-only `since`,
+a filter nothing else supplies. The authoring rule lives in
+`docs/migration/conventions.md` §2.9; the user-facing surface is
+`docs/direct-read-pages-and-parameters.md`.
+
 ## Command Surface Must Stay Executable
 
 `availability: implemented` is a claim the runtime has to honour. Two rules keep

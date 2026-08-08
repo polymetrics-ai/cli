@@ -37,11 +37,11 @@ Reads Wasabi account and bucket storage statistics from the Wasabi Stats API.
 - bucket_stats:
   - primary key: id
   - cursor: date
-  - fields: bucket(), date(), id(), storage_bytes()
+  - fields: bucket(string), date(string), id(string), storage_bytes(integer)
 - account_stats:
   - primary key: id
   - cursor: date
-  - fields: date(), id(), object_count(), storage_bytes()
+  - fields: date(string), id(string), object_count(integer), storage_bytes(integer)
 
 ## Sync Modes
 

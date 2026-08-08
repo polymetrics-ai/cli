@@ -33,16 +33,16 @@ CONFIGURATION
 ETL STREAMS
   tables:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
   documents:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
   collections:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
   questions:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

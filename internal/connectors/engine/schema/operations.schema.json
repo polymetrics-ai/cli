@@ -96,6 +96,22 @@
               "path": { "type": "string" },
               "content_type": { "type": "string" },
               "max_bytes": { "type": "integer" },
+              "parameters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "in"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": { "type": "string" },
+                    "in": { "type": "string", "enum": ["query", "path"] },
+                    "type": { "type": "string" },
+                    "required": { "type": "boolean" },
+                    "values": { "type": "array", "items": { "type": "string" } },
+                    "summary": { "type": "string" }
+                  }
+                }
+              },
               "query": {
                 "type": "object",
                 "additionalProperties": true

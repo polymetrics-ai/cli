@@ -34,20 +34,20 @@ ETL STREAMS
   offers:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), status(), title(), updated_at()
+    fields: created_at(string), id(integer), status(string), title(string), updated_at(string)
   candidates:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), updated_at()
+    fields: created_at(string), email(string), id(integer), name(string), updated_at(string)
   departments:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   sources:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   tags:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

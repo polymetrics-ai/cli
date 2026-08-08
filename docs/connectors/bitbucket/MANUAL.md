@@ -86,399 +86,399 @@ CONFIGURATION
 ETL STREAMS
   repositories:
     primary key: uuid
-    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), description(string), fork_policy(string), full_name(string), has_issues(string), has_wiki(string), is_private(string), language(string), links(object), mainbranch(string), name(string), owner(string), parent(string), project(string), scm(string), size(string), slug(string), type(string), updated_on(string), uuid(string)
   hook_events:
-    fields: created_on(), links(), name(), repository(), slug(), type(), updated_on(), uuid(), workspace()
+    fields: created_on(string), links(object), name(string), repository(string), slug(string), type(string), updated_on(string), uuid(string), workspace(string)
   hook_events_subject_type:
     primary key: event
-    fields: category(), created_on(), description(), event(), label(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: category(string), created_on(string), description(string), event(string), label(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace:
     primary key: uuid
-    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), description(string), fork_policy(string), full_name(string), has_issues(string), has_wiki(string), is_private(string), language(string), links(object), mainbranch(string), name(string), owner(string), parent(string), project(string), scm(string), size(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug:
     primary key: uuid
-    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), description(string), fork_policy(string), full_name(string), has_issues(string), has_wiki(string), is_private(string), language(string), links(object), mainbranch(string), name(string), owner(string), parent(string), project(string), scm(string), size(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_branch_restrictions:
     primary key: id
-    fields: branch_match_kind(), branch_type(), created_on(), groups(), id(), kind(), links(), name(), pattern(), slug(), type(), updated_on(), users(), uuid(), value()
+    fields: branch_match_kind(string), branch_type(string), created_on(string), groups(string), id(string), kind(string), links(object), name(string), pattern(string), slug(string), type(string), updated_on(string), users(string), uuid(string), value(string)
   repositories_workspace_repo_slug_branch_restrictions_id:
     primary key: id
-    fields: branch_match_kind(), branch_type(), created_on(), groups(), id(), kind(), links(), name(), pattern(), slug(), type(), updated_on(), users(), uuid(), value()
+    fields: branch_match_kind(string), branch_type(string), created_on(string), groups(string), id(string), kind(string), links(object), name(string), pattern(string), slug(string), type(string), updated_on(string), users(string), uuid(string), value(string)
   repositories_workspace_repo_slug_branching_model:
-    fields: branch_types(), created_on(), development(), links(), name(), production(), slug(), type(), updated_on(), uuid()
+    fields: branch_types(string), created_on(string), development(string), links(object), name(string), production(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_branching_model_settings:
-    fields: branch_types(), created_on(), development(), links(), name(), production(), slug(), type(), updated_on(), uuid()
+    fields: branch_types(string), created_on(string), development(string), links(object), name(string), production(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit:
     primary key: hash
-    fields: author(), committer(), created_on(), date(), hash(), links(), message(), name(), parents(), participants(), repository(), slug(), summary(), type(), updated_on(), uuid()
+    fields: author(string), committer(string), created_on(string), date(string), hash(string), links(object), message(string), name(string), parents(string), participants(string), repository(string), slug(string), summary(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_comments:
     primary key: id
-    fields: commit(), content(), created_on(), deleted(), id(), inline(), links(), name(), parent(), slug(), type(), updated_on(), user(), uuid()
+    fields: commit(string), content(string), created_on(string), deleted(string), id(string), inline(string), links(object), name(string), parent(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_comments_comment_id:
     primary key: id
-    fields: commit(), content(), created_on(), deleted(), id(), inline(), links(), name(), parent(), slug(), type(), updated_on(), user(), uuid()
+    fields: commit(string), content(string), created_on(string), deleted(string), id(string), inline(string), links(object), name(string), parent(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name:
-    fields: _attributes(), created_on(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: _attributes(string), created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_pullrequests:
     primary key: id
-    fields: author(), close_source_branch(), closed_by(), comment_count(), created_on(), destination(), draft(), id(), links(), merge_commit(), name(), participants(), queued(), reason(), rendered(), reviewers(), slug(), source(), state(), summary(), task_count(), title(), type(), updated_on(), uuid()
+    fields: author(string), close_source_branch(string), closed_by(string), comment_count(string), created_on(string), destination(string), draft(string), id(string), links(object), merge_commit(string), name(string), participants(string), queued(string), reason(string), rendered(string), reviewers(string), slug(string), source(string), state(string), summary(string), task_count(string), title(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_reports:
     primary key: external_id
-    fields: created_on(), data(), details(), external_id(), link(), links(), logo_url(), name(), remote_link_enabled(), report_type(), reporter(), result(), slug(), title(), type(), updated_on(), uuid()
+    fields: created_on(string), data(string), details(string), external_id(string), link(string), links(object), logo_url(string), name(string), remote_link_enabled(string), report_type(string), reporter(string), result(string), slug(string), title(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_reports_reportid:
     primary key: external_id
-    fields: created_on(), data(), details(), external_id(), link(), links(), logo_url(), name(), remote_link_enabled(), report_type(), reporter(), result(), slug(), title(), type(), updated_on(), uuid()
+    fields: created_on(string), data(string), details(string), external_id(string), link(string), links(object), logo_url(string), name(string), remote_link_enabled(string), report_type(string), reporter(string), result(string), slug(string), title(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations:
     primary key: external_id
-    fields: annotation_type(), created_on(), details(), external_id(), line(), link(), links(), name(), path(), result(), severity(), slug(), summary(), type(), updated_on(), uuid()
+    fields: annotation_type(string), created_on(string), details(string), external_id(string), line(string), link(string), links(object), name(string), path(string), result(string), severity(string), slug(string), summary(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid:
     primary key: external_id
-    fields: annotation_type(), created_on(), details(), external_id(), line(), link(), links(), name(), path(), result(), severity(), slug(), summary(), type(), updated_on(), uuid()
+    fields: annotation_type(string), created_on(string), details(string), external_id(string), line(string), link(string), links(object), name(string), path(string), result(string), severity(string), slug(string), summary(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_statuses:
     primary key: key
-    fields: created_on(), description(), key(), links(), name(), refname(), slug(), state(), type(), updated_on(), url(), uuid()
+    fields: created_on(string), description(string), key(string), links(object), name(string), refname(string), slug(string), state(string), type(string), updated_on(string), url(string), uuid(string)
   repositories_workspace_repo_slug_commit_commit_statuses_build_key:
     primary key: key
-    fields: created_on(), description(), key(), links(), name(), refname(), slug(), state(), type(), updated_on(), url(), uuid()
+    fields: created_on(string), description(string), key(string), links(object), name(string), refname(string), slug(string), state(string), type(string), updated_on(string), url(string), uuid(string)
   repositories_workspace_repo_slug_commits:
     primary key: hash
-    fields: author(), committer(), created_on(), date(), hash(), links(), message(), name(), parents(), slug(), summary(), type(), updated_on(), uuid()
+    fields: author(string), committer(string), created_on(string), date(string), hash(string), links(object), message(string), name(string), parents(string), slug(string), summary(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_commits_revision:
     primary key: hash
-    fields: author(), committer(), created_on(), date(), hash(), links(), message(), name(), parents(), slug(), summary(), type(), updated_on(), uuid()
+    fields: author(string), committer(string), created_on(string), date(string), hash(string), links(object), message(string), name(string), parents(string), slug(string), summary(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_components:
     primary key: id
-    fields: created_on(), id(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), id(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_components_component_id:
     primary key: id
-    fields: created_on(), id(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), id(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_default_reviewers:
     primary key: uuid
-    fields: created_on(), display_name(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), display_name(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_default_reviewers_target_username:
     primary key: uuid
-    fields: created_on(), display_name(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), display_name(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_deploy_keys:
     primary key: id
-    fields: added_on(), comment(), created_on(), id(), key(), label(), last_used(), links(), name(), owner(), repository(), slug(), type(), updated_on(), uuid()
+    fields: added_on(string), comment(string), created_on(string), id(string), key(string), label(string), last_used(string), links(object), name(string), owner(string), repository(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_deploy_keys_key_id:
     primary key: id
-    fields: added_on(), comment(), created_on(), id(), key(), label(), last_used(), links(), name(), owner(), repository(), slug(), type(), updated_on(), uuid()
+    fields: added_on(string), comment(string), created_on(string), id(string), key(string), label(string), last_used(string), links(object), name(string), owner(string), repository(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_deployments:
     primary key: uuid
-    fields: created_on(), environment(), links(), name(), release(), slug(), state(), type(), updated_on(), uuid()
+    fields: created_on(string), environment(string), links(object), name(string), release(string), slug(string), state(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables:
     primary key: uuid
-    fields: created_on(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), key(string), links(object), name(string), secured(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_deployments_deployment_uuid:
     primary key: uuid
-    fields: created_on(), environment(), links(), name(), release(), slug(), state(), type(), updated_on(), uuid()
+    fields: created_on(string), environment(string), links(object), name(string), release(string), slug(string), state(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_diffstat_spec:
-    fields: created_on(), lines_added(), lines_removed(), links(), name(), new(), old(), slug(), status(), type(), updated_on(), uuid()
+    fields: created_on(string), lines_added(string), lines_removed(string), links(object), name(string), new(string), old(string), slug(string), status(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_effective_branching_model:
-    fields: branch_types(), created_on(), development(), links(), name(), production(), slug(), type(), updated_on(), uuid()
+    fields: branch_types(string), created_on(string), development(string), links(object), name(string), production(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_effective_default_reviewers:
     primary key: uuid
-    fields: created_on(), links(), name(), reviewer_type(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), reviewer_type(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_environments:
     primary key: uuid
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_environments_environment_uuid:
     primary key: uuid
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_file_conflicts_spec:
     primary key: path
-    fields: created_on(), links(), message(), name(), path(), scenario(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), links(object), message(string), name(string), path(string), scenario(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_filehistory_commit_path:
     primary key: path
-    fields: attributes(), commit(), created_on(), escaped_path(), links(), name(), path(), slug(), type(), updated_on(), uuid()
+    fields: attributes(string), commit(string), created_on(string), escaped_path(string), links(object), name(string), path(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_forks:
     primary key: uuid
-    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), description(string), fork_policy(string), full_name(string), has_issues(string), has_wiki(string), is_private(string), language(string), links(object), mainbranch(string), name(string), owner(string), parent(string), project(string), scm(string), size(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_hooks:
     primary key: uuid
-    fields: active(), created_at(), created_on(), description(), events(), links(), name(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
+    fields: active(string), created_at(string), created_on(string), description(string), events(string), links(object), name(string), secret_set(string), slug(string), subject(string), subject_type(string), type(string), updated_on(string), url(string), uuid(string)
   repositories_workspace_repo_slug_hooks_uid:
     primary key: uuid
-    fields: active(), created_at(), created_on(), description(), events(), links(), name(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
+    fields: active(string), created_at(string), created_on(string), description(string), events(string), links(object), name(string), secret_set(string), slug(string), subject(string), subject_type(string), type(string), updated_on(string), url(string), uuid(string)
   repositories_workspace_repo_slug_issues:
     primary key: id
-    fields: assignee(), component(), content(), created_on(), edited_on(), id(), kind(), links(), milestone(), name(), priority(), reporter(), repository(), slug(), state(), title(), type(), updated_on(), uuid(), version(), votes()
+    fields: assignee(string), component(string), content(string), created_on(string), edited_on(string), id(string), kind(string), links(object), milestone(string), name(string), priority(string), reporter(string), repository(string), slug(string), state(string), title(string), type(string), updated_on(string), uuid(string), version(string), votes(string)
   repositories_workspace_repo_slug_issues_import:
-    fields: count(), created_on(), links(), name(), pct(), phase(), slug(), status(), total(), type(), updated_on(), uuid()
+    fields: count(string), created_on(string), links(object), name(string), pct(string), phase(string), slug(string), status(string), total(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_issues_issue_id:
     primary key: id
-    fields: assignee(), component(), content(), created_on(), edited_on(), id(), kind(), links(), milestone(), name(), priority(), reporter(), repository(), slug(), state(), title(), type(), updated_on(), uuid(), version(), votes()
+    fields: assignee(string), component(string), content(string), created_on(string), edited_on(string), id(string), kind(string), links(object), milestone(string), name(string), priority(string), reporter(string), repository(string), slug(string), state(string), title(string), type(string), updated_on(string), uuid(string), version(string), votes(string)
   repositories_workspace_repo_slug_issues_issue_id_attachments:
     primary key: name
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_issues_issue_id_changes:
     primary key: id
-    fields: changes(), created_on(), id(), issue(), links(), message(), name(), slug(), type(), updated_on(), user(), uuid()
+    fields: changes(string), created_on(string), id(string), issue(string), links(object), message(string), name(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_issues_issue_id_changes_change_id:
     primary key: id
-    fields: changes(), created_on(), id(), issue(), links(), message(), name(), slug(), type(), updated_on(), user(), uuid()
+    fields: changes(string), created_on(string), id(string), issue(string), links(object), message(string), name(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_issues_issue_id_comments:
     primary key: id
-    fields: content(), created_on(), deleted(), id(), inline(), issue(), links(), name(), parent(), slug(), type(), updated_on(), user(), uuid()
+    fields: content(string), created_on(string), deleted(string), id(string), inline(string), issue(string), links(object), name(string), parent(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_issues_issue_id_comments_comment_id:
     primary key: id
-    fields: content(), created_on(), deleted(), id(), inline(), issue(), links(), name(), parent(), slug(), type(), updated_on(), user(), uuid()
+    fields: content(string), created_on(string), deleted(string), id(string), inline(string), issue(string), links(object), name(string), parent(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_merge_base_revspec:
     primary key: hash
-    fields: author(), committer(), created_on(), date(), hash(), links(), message(), name(), parents(), participants(), repository(), slug(), summary(), type(), updated_on(), uuid()
+    fields: author(string), committer(string), created_on(string), date(string), hash(string), links(object), message(string), name(string), parents(string), participants(string), repository(string), slug(string), summary(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_milestones:
     primary key: id
-    fields: created_on(), id(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), id(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_milestones_milestone_id:
     primary key: id
-    fields: created_on(), id(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), id(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_override_settings:
-    fields: created_on(), links(), name(), override_settings(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), links(object), name(string), override_settings(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_permissions_config_groups:
-    fields: created_on(), group(), links(), name(), permission(), repository(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), group(string), links(object), name(string), permission(string), repository(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_permissions_config_groups_group_slug:
-    fields: created_on(), group(), links(), name(), permission(), repository(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), group(string), links(object), name(string), permission(string), repository(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_permissions_config_users:
-    fields: created_on(), links(), name(), permission(), repository(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), permission(string), repository(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_permissions_config_users_selected_user_id:
-    fields: created_on(), links(), name(), permission(), repository(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), permission(string), repository(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_pipelines:
     primary key: uuid
-    fields: build_number(), build_seconds_used(), completed_on(), configuration_sources(), created_on(), creator(), links(), name(), repository(), slug(), state(), target(), trigger(), type(), updated_on(), uuid(), variables()
+    fields: build_number(string), build_seconds_used(string), completed_on(string), configuration_sources(string), created_on(string), creator(string), links(object), name(string), repository(string), slug(string), state(string), target(string), trigger(string), type(string), updated_on(string), uuid(string), variables(string)
   repositories_workspace_repo_slug_pipelines_config:
-    fields: created_on(), enabled(), links(), name(), repository(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), enabled(string), links(object), name(string), repository(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_caches:
     primary key: key_hash
-    fields: created_on(), file_size_bytes(), key_hash(), links(), name(), path(), pipeline_uuid(), slug(), step_uuid(), type(), updated_on(), uuid()
+    fields: created_on(string), file_size_bytes(string), key_hash(string), links(object), name(string), path(string), pipeline_uuid(string), slug(string), step_uuid(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid_content_uri:
     primary key: uri
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), uri(), uuid()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uri(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_runners:
     primary key: uuid
-    fields: created_on(), labels(), links(), name(), oauth_client(), slug(), state(), type(), updated_on(), uuid()
+    fields: created_on(string), labels(string), links(object), name(string), oauth_client(string), slug(string), state(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid:
     primary key: uuid
-    fields: created_on(), labels(), links(), name(), oauth_client(), slug(), state(), type(), updated_on(), uuid()
+    fields: created_on(string), labels(string), links(object), name(string), oauth_client(string), slug(string), state(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_schedules:
     primary key: uuid
-    fields: created_on(), cron_pattern(), enabled(), links(), name(), slug(), target(), type(), updated_on(), uuid()
+    fields: created_on(string), cron_pattern(string), enabled(string), links(object), name(string), slug(string), target(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid:
     primary key: uuid
-    fields: created_on(), cron_pattern(), enabled(), links(), name(), slug(), target(), type(), updated_on(), uuid()
+    fields: created_on(string), cron_pattern(string), enabled(string), links(object), name(string), slug(string), target(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid_executions:
     primary key: uuid
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_ssh_key_pair:
-    fields: created_on(), links(), name(), public_key(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), links(object), name(string), public_key(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts:
     primary key: uuid
-    fields: created_on(), hostname(), links(), name(), public_key(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), hostname(string), links(object), name(string), public_key(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid:
     primary key: uuid
-    fields: created_on(), hostname(), links(), name(), public_key(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), hostname(string), links(object), name(string), public_key(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_variables:
     primary key: uuid
-    fields: created_on(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), key(string), links(object), name(string), secured(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid:
     primary key: uuid
-    fields: created_on(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), key(string), links(object), name(string), secured(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_pipeline_uuid:
     primary key: uuid
-    fields: build_number(), build_seconds_used(), completed_on(), configuration_sources(), created_on(), creator(), links(), name(), repository(), slug(), state(), target(), trigger(), type(), updated_on(), uuid(), variables()
+    fields: build_number(string), build_seconds_used(string), completed_on(string), configuration_sources(string), created_on(string), creator(string), links(object), name(string), repository(string), slug(string), state(string), target(string), trigger(string), type(string), updated_on(string), uuid(string), variables(string)
   repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps:
     primary key: uuid
-    fields: completed_on(), created_on(), image(), links(), name(), script_commands(), setup_commands(), slug(), started_on(), state(), type(), updated_on(), uuid()
+    fields: completed_on(string), created_on(string), image(string), links(object), name(string), script_commands(string), setup_commands(string), slug(string), started_on(string), state(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid:
     primary key: uuid
-    fields: completed_on(), created_on(), image(), links(), name(), script_commands(), setup_commands(), slug(), started_on(), state(), type(), updated_on(), uuid()
+    fields: completed_on(string), created_on(string), image(string), links(object), name(string), script_commands(string), setup_commands(string), slug(string), started_on(string), state(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_properties_app_key_property_name:
-    fields: _attributes(), created_on(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: _attributes(string), created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pullrequests:
     primary key: id
-    fields: author(), close_source_branch(), closed_by(), comment_count(), created_on(), destination(), draft(), id(), links(), merge_commit(), name(), participants(), queued(), reason(), rendered(), reviewers(), slug(), source(), state(), summary(), task_count(), title(), type(), updated_on(), uuid()
+    fields: author(string), close_source_branch(string), closed_by(string), comment_count(string), created_on(string), destination(string), draft(string), id(string), links(object), merge_commit(string), name(string), participants(string), queued(string), reason(string), rendered(string), reviewers(string), slug(string), source(string), state(string), summary(string), task_count(string), title(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pullrequests_pull_request_id:
     primary key: id
-    fields: author(), close_source_branch(), closed_by(), comment_count(), created_on(), destination(), draft(), id(), links(), merge_commit(), name(), participants(), queued(), reason(), rendered(), reviewers(), slug(), source(), state(), summary(), task_count(), title(), type(), updated_on(), uuid()
+    fields: author(string), close_source_branch(string), closed_by(string), comment_count(string), created_on(string), destination(string), draft(string), id(string), links(object), merge_commit(string), name(string), participants(string), queued(string), reason(string), rendered(string), reviewers(string), slug(string), source(string), state(string), summary(string), task_count(string), title(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pullrequests_pull_request_id_comments:
     primary key: id
-    fields: content(), created_on(), deleted(), id(), inline(), links(), name(), parent(), pending(), pullrequest(), resolution(), slug(), type(), updated_on(), user(), uuid()
+    fields: content(string), created_on(string), deleted(string), id(string), inline(string), links(object), name(string), parent(string), pending(string), pullrequest(string), resolution(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id:
     primary key: id
-    fields: content(), created_on(), deleted(), id(), inline(), links(), name(), parent(), pending(), pullrequest(), resolution(), slug(), type(), updated_on(), user(), uuid()
+    fields: content(string), created_on(string), deleted(string), id(string), inline(string), links(object), name(string), parent(string), pending(string), pullrequest(string), resolution(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   repositories_workspace_repo_slug_pullrequests_pull_request_id_statuses:
     primary key: key
-    fields: created_on(), description(), key(), links(), name(), refname(), slug(), state(), type(), updated_on(), url(), uuid()
+    fields: created_on(string), description(string), key(string), links(object), name(string), refname(string), slug(string), state(string), type(string), updated_on(string), url(string), uuid(string)
   repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks:
     primary key: id
-    fields: comment(), content(), created_on(), creator(), id(), links(), name(), pending(), resolved_by(), resolved_on(), slug(), state(), type(), updated_on(), uuid()
+    fields: comment(string), content(string), created_on(string), creator(string), id(string), links(object), name(string), pending(string), resolved_by(string), resolved_on(string), slug(string), state(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id:
     primary key: id
-    fields: comment(), content(), created_on(), creator(), id(), links(), name(), pending(), resolved_by(), resolved_on(), slug(), state(), type(), updated_on(), uuid()
+    fields: comment(string), content(string), created_on(string), creator(string), id(string), links(object), name(string), pending(string), resolved_by(string), resolved_on(string), slug(string), state(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name:
-    fields: _attributes(), created_on(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: _attributes(string), created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_refs:
     primary key: name
-    fields: created_on(), links(), name(), slug(), target(), type(), updated_on(), uuid()
+    fields: created_on(string), links(object), name(string), slug(string), target(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_refs_branches:
     primary key: name
-    fields: created_on(), default_merge_strategy(), links(), merge_strategies(), name(), slug(), target(), type(), updated_on(), uuid()
+    fields: created_on(string), default_merge_strategy(string), links(object), merge_strategies(string), name(string), slug(string), target(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_refs_branches_name:
     primary key: name
-    fields: created_on(), default_merge_strategy(), links(), merge_strategies(), name(), slug(), target(), type(), updated_on(), uuid()
+    fields: created_on(string), default_merge_strategy(string), links(object), merge_strategies(string), name(string), slug(string), target(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_refs_tags:
     primary key: name
-    fields: created_on(), date(), links(), message(), name(), slug(), tagger(), target(), type(), updated_on(), uuid()
+    fields: created_on(string), date(string), links(object), message(string), name(string), slug(string), tagger(string), target(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_refs_tags_name:
     primary key: name
-    fields: created_on(), date(), links(), message(), name(), slug(), tagger(), target(), type(), updated_on(), uuid()
+    fields: created_on(string), date(string), links(object), message(string), name(string), slug(string), tagger(string), target(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_src:
-    fields: commit(), created_on(), links(), name(), path(), slug(), type(), updated_on(), uuid()
+    fields: commit(string), created_on(string), links(object), name(string), path(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_versions:
     primary key: id
-    fields: created_on(), id(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), id(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_versions_version_id:
     primary key: id
-    fields: created_on(), id(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), id(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   repositories_workspace_repo_slug_watchers:
     primary key: uuid
-    fields: created_on(), display_name(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), display_name(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   snippets:
     primary key: id
-    fields: created_on(), creator(), id(), is_private(), links(), name(), owner(), scm(), slug(), title(), type(), updated_on(), uuid()
+    fields: created_on(string), creator(string), id(string), is_private(string), links(object), name(string), owner(string), scm(string), slug(string), title(string), type(string), updated_on(string), uuid(string)
   snippets_workspace:
     primary key: id
-    fields: created_on(), creator(), id(), is_private(), links(), name(), owner(), scm(), slug(), title(), type(), updated_on(), uuid()
+    fields: created_on(string), creator(string), id(string), is_private(string), links(object), name(string), owner(string), scm(string), slug(string), title(string), type(string), updated_on(string), uuid(string)
   snippets_workspace_encoded_id:
     primary key: id
-    fields: created_on(), creator(), id(), is_private(), links(), name(), owner(), scm(), slug(), title(), type(), updated_on(), uuid()
+    fields: created_on(string), creator(string), id(string), is_private(string), links(object), name(string), owner(string), scm(string), slug(string), title(string), type(string), updated_on(string), uuid(string)
   snippets_workspace_encoded_id_comments:
     primary key: id
-    fields: created_on(), id(), links(), name(), slug(), snippet(), type(), updated_on(), uuid()
+    fields: created_on(string), id(string), links(object), name(string), slug(string), snippet(string), type(string), updated_on(string), uuid(string)
   snippets_workspace_encoded_id_comments_comment_id:
     primary key: id
-    fields: created_on(), id(), links(), name(), slug(), snippet(), type(), updated_on(), uuid()
+    fields: created_on(string), id(string), links(object), name(string), slug(string), snippet(string), type(string), updated_on(string), uuid(string)
   snippets_workspace_encoded_id_commits:
     primary key: hash
-    fields: author(), committer(), created_on(), date(), hash(), links(), message(), name(), parents(), slug(), snippet(), summary(), type(), updated_on(), uuid()
+    fields: author(string), committer(string), created_on(string), date(string), hash(string), links(object), message(string), name(string), parents(string), slug(string), snippet(string), summary(string), type(string), updated_on(string), uuid(string)
   snippets_workspace_encoded_id_commits_revision:
     primary key: hash
-    fields: author(), committer(), created_on(), date(), hash(), links(), message(), name(), parents(), slug(), snippet(), summary(), type(), updated_on(), uuid()
+    fields: author(string), committer(string), created_on(string), date(string), hash(string), links(object), message(string), name(string), parents(string), slug(string), snippet(string), summary(string), type(string), updated_on(string), uuid(string)
   snippets_workspace_encoded_id_node_id:
     primary key: id
-    fields: created_on(), creator(), id(), is_private(), links(), name(), owner(), scm(), slug(), title(), type(), updated_on(), uuid()
+    fields: created_on(string), creator(string), id(string), is_private(string), links(object), name(string), owner(string), scm(string), slug(string), title(string), type(string), updated_on(string), uuid(string)
   snippets_workspace_encoded_id_watchers:
     primary key: uuid
-    fields: created_on(), display_name(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), display_name(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   teams_username_pipelines_config_variables:
     primary key: uuid
-    fields: created_on(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), key(string), links(object), name(string), secured(string), slug(string), type(string), updated_on(string), uuid(string)
   teams_username_pipelines_config_variables_variable_uuid:
     primary key: uuid
-    fields: created_on(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), key(string), links(object), name(string), secured(string), slug(string), type(string), updated_on(string), uuid(string)
   user:
     primary key: uuid
-    fields: created_on(), display_name(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), display_name(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   user_permissions_repositories:
-    fields: created_on(), links(), name(), permission(), repository(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), permission(string), repository(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   user_permissions_workspaces:
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), user(), uuid(), workspace()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), user(string), uuid(string), workspace(string)
   user_workspaces:
-    fields: administrator(), created_on(), links(), name(), slug(), type(), updated_on(), uuid(), workspace()
+    fields: administrator(string), created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string), workspace(string)
   user_workspaces_workspace_permission:
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), user(), uuid(), workspace()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), user(string), uuid(string), workspace(string)
   user_workspaces_workspace_permissions_repositories:
-    fields: created_on(), links(), name(), permission(), repository(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), permission(string), repository(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   users_selected_user:
     primary key: uuid
-    fields: created_on(), display_name(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), display_name(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   users_selected_user_gpg_keys:
     primary key: fingerprint
-    fields: added_on(), created_on(), expires_on(), fingerprint(), key(), key_id(), last_used(), links(), name(), owner(), parent_fingerprint(), slug(), subkeys(), type(), updated_on(), uuid()
+    fields: added_on(string), created_on(string), expires_on(string), fingerprint(string), key(string), key_id(string), last_used(string), links(object), name(string), owner(string), parent_fingerprint(string), slug(string), subkeys(string), type(string), updated_on(string), uuid(string)
   users_selected_user_gpg_keys_fingerprint:
     primary key: fingerprint
-    fields: added_on(), created_on(), expires_on(), fingerprint(), key(), key_id(), last_used(), links(), name(), owner(), parent_fingerprint(), slug(), subkeys(), type(), updated_on(), uuid()
+    fields: added_on(string), created_on(string), expires_on(string), fingerprint(string), key(string), key_id(string), last_used(string), links(object), name(string), owner(string), parent_fingerprint(string), slug(string), subkeys(string), type(string), updated_on(string), uuid(string)
   users_selected_user_pipelines_config_variables:
     primary key: uuid
-    fields: created_on(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), key(string), links(object), name(string), secured(string), slug(string), type(string), updated_on(string), uuid(string)
   users_selected_user_pipelines_config_variables_variable_uuid:
     primary key: uuid
-    fields: created_on(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), key(string), links(object), name(string), secured(string), slug(string), type(string), updated_on(string), uuid(string)
   users_selected_user_properties_app_key_property_name:
-    fields: _attributes(), created_on(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: _attributes(string), created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   users_selected_user_ssh_keys:
     primary key: fingerprint
-    fields: comment(), created_on(), expires_on(), fingerprint(), key(), label(), last_used(), links(), name(), owner(), slug(), type(), updated_on(), uuid()
+    fields: comment(string), created_on(string), expires_on(string), fingerprint(string), key(string), label(string), last_used(string), links(object), name(string), owner(string), slug(string), type(string), updated_on(string), uuid(string)
   users_selected_user_ssh_keys_key_id:
     primary key: fingerprint
-    fields: comment(), created_on(), expires_on(), fingerprint(), key(), label(), last_used(), links(), name(), owner(), slug(), type(), updated_on(), uuid()
+    fields: comment(string), created_on(string), expires_on(string), fingerprint(string), key(string), label(string), last_used(string), links(object), name(string), owner(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces:
     primary key: uuid
-    fields: created_on(), forking_mode(), is_privacy_enforced(), is_private(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), forking_mode(string), is_privacy_enforced(string), is_private(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace:
     primary key: uuid
-    fields: created_on(), forking_mode(), is_privacy_enforced(), is_private(), links(), name(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), forking_mode(string), is_privacy_enforced(string), is_private(string), links(object), name(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_hooks:
     primary key: uuid
-    fields: active(), created_at(), created_on(), description(), events(), links(), name(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
+    fields: active(string), created_at(string), created_on(string), description(string), events(string), links(object), name(string), secret_set(string), slug(string), subject(string), subject_type(string), type(string), updated_on(string), url(string), uuid(string)
   workspaces_workspace_hooks_uid:
     primary key: uuid
-    fields: active(), created_at(), created_on(), description(), events(), links(), name(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
+    fields: active(string), created_at(string), created_on(string), description(string), events(string), links(object), name(string), secret_set(string), slug(string), subject(string), subject_type(string), type(string), updated_on(string), url(string), uuid(string)
   workspaces_workspace_members:
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), user(), uuid(), workspace()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), user(string), uuid(string), workspace(string)
   workspaces_workspace_members_member:
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), user(), uuid(), workspace()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), user(string), uuid(string), workspace(string)
   workspaces_workspace_permissions:
-    fields: created_on(), links(), name(), slug(), type(), updated_on(), user(), uuid(), workspace()
+    fields: created_on(string), links(object), name(string), slug(string), type(string), updated_on(string), user(string), uuid(string), workspace(string)
   workspaces_workspace_permissions_repositories:
-    fields: created_on(), links(), name(), permission(), repository(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), permission(string), repository(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   workspaces_workspace_permissions_repositories_repo_slug:
-    fields: created_on(), links(), name(), permission(), repository(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), permission(string), repository(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   workspaces_workspace_pipelines_config_runners:
     primary key: uuid
-    fields: created_on(), labels(), links(), name(), oauth_client(), slug(), state(), type(), updated_on(), uuid()
+    fields: created_on(string), labels(string), links(object), name(string), oauth_client(string), slug(string), state(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_pipelines_config_runners_runner_uuid:
     primary key: uuid
-    fields: created_on(), labels(), links(), name(), oauth_client(), slug(), state(), type(), updated_on(), uuid()
+    fields: created_on(string), labels(string), links(object), name(string), oauth_client(string), slug(string), state(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_pipelines_config_variables:
     primary key: uuid
-    fields: created_on(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), key(string), links(object), name(string), secured(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_pipelines_config_variables_variable_uuid:
     primary key: uuid
-    fields: created_on(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), key(string), links(object), name(string), secured(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects:
     primary key: uuid
-    fields: created_on(), description(), has_publicly_visible_repos(), is_private(), key(), links(), name(), owner(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), description(string), has_publicly_visible_repos(string), is_private(string), key(string), links(object), name(string), owner(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects_project_key:
     primary key: uuid
-    fields: created_on(), description(), has_publicly_visible_repos(), is_private(), key(), links(), name(), owner(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), description(string), has_publicly_visible_repos(string), is_private(string), key(string), links(object), name(string), owner(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects_project_key_branching_model:
-    fields: branch_types(), created_on(), development(), links(), name(), production(), slug(), type(), updated_on(), uuid()
+    fields: branch_types(string), created_on(string), development(string), links(object), name(string), production(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects_project_key_branching_model_settings:
-    fields: branch_types(), created_on(), development(), links(), name(), production(), slug(), type(), updated_on(), uuid()
+    fields: branch_types(string), created_on(string), development(string), links(object), name(string), production(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects_project_key_default_reviewers:
     primary key: uuid
-    fields: created_on(), links(), name(), reviewer_type(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), reviewer_type(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   workspaces_workspace_projects_project_key_default_reviewers_selected_user:
     primary key: account_id
-    fields: account_id(), account_status(), created_on(), display_name(), has_2fa_enabled(), is_staff(), links(), name(), nickname(), slug(), type(), updated_on(), uuid()
+    fields: account_id(string), account_status(string), created_on(string), display_name(string), has_2fa_enabled(string), is_staff(string), links(object), name(string), nickname(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects_project_key_deploy_keys:
     primary key: id
-    fields: added_on(), comment(), created_by(), created_on(), id(), key(), label(), last_used(), links(), name(), project(), slug(), type(), updated_on(), uuid()
+    fields: added_on(string), comment(string), created_by(string), created_on(string), id(string), key(string), label(string), last_used(string), links(object), name(string), project(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects_project_key_deploy_keys_key_id:
     primary key: id
-    fields: added_on(), comment(), created_by(), created_on(), id(), key(), label(), last_used(), links(), name(), project(), slug(), type(), updated_on(), uuid()
+    fields: added_on(string), comment(string), created_by(string), created_on(string), id(string), key(string), label(string), last_used(string), links(object), name(string), project(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects_project_key_permissions_config_groups:
-    fields: created_on(), group(), links(), name(), permission(), project(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), group(string), links(object), name(string), permission(string), project(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects_project_key_permissions_config_groups_group_slug:
-    fields: created_on(), group(), links(), name(), permission(), project(), slug(), type(), updated_on(), uuid()
+    fields: created_on(string), group(string), links(object), name(string), permission(string), project(string), slug(string), type(string), updated_on(string), uuid(string)
   workspaces_workspace_projects_project_key_permissions_config_users:
-    fields: created_on(), links(), name(), permission(), project(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), permission(string), project(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id:
-    fields: created_on(), links(), name(), permission(), project(), slug(), type(), updated_on(), user(), uuid()
+    fields: created_on(string), links(object), name(string), permission(string), project(string), slug(string), type(string), updated_on(string), user(string), uuid(string)
   workspaces_workspace_pullrequests_selected_user:
     primary key: id
-    fields: author(), close_source_branch(), closed_by(), comment_count(), created_on(), destination(), draft(), id(), links(), merge_commit(), name(), participants(), queued(), reason(), rendered(), reviewers(), slug(), source(), state(), summary(), task_count(), title(), type(), updated_on(), uuid()
+    fields: author(string), close_source_branch(string), closed_by(string), comment_count(string), created_on(string), destination(string), draft(string), id(string), links(object), merge_commit(string), name(string), participants(string), queued(string), reason(string), rendered(string), reviewers(string), slug(string), source(string), state(string), summary(string), task_count(string), title(string), type(string), updated_on(string), uuid(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -726,8 +726,8 @@ COMMAND SURFACE
   Reverse ETL writes
   Planned bounded direct/binary operations
   Other Commands
-    search code - Planned bounded Bitbucket provider search/query command; blocked pending shared provider-query foundation #2985. [intent=direct_read availability=planned operation=get_teams_username_search_code]; approval: blocked pending #2985; risk: planned bounded provider query; no raw query escape hatch is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.
-    downloads get - Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation. [intent=direct_read availability=planned operation=get_repositories_workspace_repo_slug_downloads_filename]; approval: blocked pending bounded binary executor; risk: planned bounded binary transfer; no generic byte-stream command is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.
+    search code - Planned bounded Bitbucket provider search/query command; blocked pending shared provider-query foundation #2985. [intent=direct_read availability=planned operation=get_teams_username_search_code]; approval: blocked pending #2985; risk: planned bounded provider query; no raw query escape hatch is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.; flags: --page, --page-cursor
+    downloads get - Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation. [intent=direct_read availability=planned operation=get_repositories_workspace_repo_slug_downloads_filename]; approval: blocked pending bounded binary executor; risk: planned bounded binary transfer; no generic byte-stream command is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.; flags: --page, --page-cursor
   Help topics:
     bitbucket-auth - Use OAuth access tokens or username/app-password credentials from the credential store; never pass secrets in command text.
     bitbucket-writes - Implemented Bitbucket writes are closed-schema repository creation and path-only DELETE reverse-ETL actions; untyped JSON-body mutations remain blocked.

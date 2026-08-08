@@ -37,10 +37,10 @@ Reads Convex tables and documents through the deployment HTTP API.
 
 - tables:
   - primary key: name
-  - fields: name()
+  - fields: name(string)
 - documents:
   - primary key: id
-  - fields: _id(), id()
+  - fields: _id(string), id(string)
 
 ## Sync Modes
 

@@ -42,10 +42,10 @@ CONFIGURATION
 ETL STREAMS
   projects:
     primary key: id
-    fields: closed(), color(), groupId(), id(), kind(), name(), permission(), sortOrder(), viewMode()
+    fields: closed(string), color(string), groupId(string), id(string), kind(string), name(string), permission(string), sortOrder(integer), viewMode(string)
   tasks:
     primary key: id
-    fields: completedTime(), content(), desc(), dueDate(), id(), isAllDay(), modifiedTime(), priority(), projectId(), reminders(), repeatFlag(), sortOrder(), startDate(), status(), timeZone(), title()
+    fields: completedTime(string), content(string), desc(string), dueDate(string), id(string), isAllDay(string), modifiedTime(string), priority(integer), projectId(string), reminders(array), repeatFlag(string), sortOrder(integer), startDate(string), status(integer), timeZone(string), title(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -40,7 +40,7 @@ CONFIGURATION
 ETL STREAMS
   forms:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

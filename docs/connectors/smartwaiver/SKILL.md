@@ -38,22 +38,22 @@ Reads Smartwaiver waivers, checkins, templates, published keys, user info, and a
 
 - waivers:
   - primary key: waiverId
-  - fields: createdOn(), email(), expirationDate(), expired(), firstName(), lastName(), templateId(), title(), verified(), waiverId()
+  - fields: createdOn(string), email(string), expirationDate(string), expired(boolean), firstName(string), lastName(string), templateId(string), title(string), verified(boolean), waiverId(string)
 - checkins:
   - primary key: checkinId
-  - fields: checkinId(), date(), dateSigned(), firstName(), lastName(), templateId(), waiverId()
+  - fields: checkinId(string), date(string), dateSigned(string), firstName(string), lastName(string), templateId(string), waiverId(string)
 - templates:
   - primary key: templateId
-  - fields: kioskUrl(), publishedOn(), publishedVersion(), templateId(), title(), webUrl()
+  - fields: kioskUrl(string), publishedOn(string), publishedVersion(integer), templateId(string), title(string), webUrl(string)
 - published_keys:
   - primary key: key
-  - fields: createdAt(), key(), label()
+  - fields: createdAt(string), key(string), label(string)
 - user_info:
   - primary key: username
-  - fields: email(), ipAddress(), signupDate(), username()
+  - fields: email(string), ipAddress(string), signupDate(string), username(string)
 - settings:
   - primary key: type
-  - fields: settings(), type()
+  - fields: settings(object), type(string)
 
 ## Sync Modes
 

@@ -40,25 +40,25 @@ CONFIGURATION
 ETL STREAMS
   photos:
     primary key: id
-    fields: alt(), id(), photographer(), photographer_url(), src(), url()
+    fields: alt(string), id(integer), photographer(string), photographer_url(string), src(object), url(string)
   curated_photos:
     primary key: id
-    fields: alt(), id(), photographer(), photographer_url(), src(), url()
+    fields: alt(string), id(integer), photographer(string), photographer_url(string), src(object), url(string)
   videos:
     primary key: id
-    fields: duration(), id(), image(), url(), user()
+    fields: duration(integer), id(integer), image(string), url(string), user(object)
   popular_videos:
     primary key: id
-    fields: duration(), id(), image(), url(), user()
+    fields: duration(integer), id(integer), image(string), url(string), user(object)
   featured_collections:
     primary key: id
-    fields: description(), id(), media_count(), photos_count(), private(), title(), videos_count()
+    fields: description(string), id(string), media_count(integer), photos_count(integer), private(boolean), title(string), videos_count(integer)
   my_collections:
     primary key: id
-    fields: description(), id(), media_count(), photos_count(), private(), title(), videos_count()
+    fields: description(string), id(string), media_count(integer), photos_count(integer), private(boolean), title(string), videos_count(integer)
   collection_media:
     primary key: id
-    fields: alt(), collection_id(), duration(), height(), id(), image(), photographer(), photographer_url(), src(), type(), url(), user(), video_files(), video_pictures(), width()
+    fields: alt(string), collection_id(string), duration(integer), height(integer), id(integer), image(string), photographer(string), photographer_url(string), src(object), type(string), url(string), user(object), video_files(array), video_pictures(array), width(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

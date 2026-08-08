@@ -33,13 +33,13 @@ CONFIGURATION
 ETL STREAMS
   workspaces:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
+    fields: id(string), name(string), slug(string), updated_at(string)
   sources:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
+    fields: id(string), name(string), slug(string), updated_at(string)
   destinations:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
+    fields: id(string), name(string), slug(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

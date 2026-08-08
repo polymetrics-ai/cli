@@ -275,9 +275,13 @@ not a full override by default.
   required command flag mapped to `body.*`.
   `internal/connectors/engine/schema/cli_surface.schema.json` is the schema source of truth, and
   `connectorgen validate` rejects unsupported formats, operators, fallback namespaces, unmapped
-  constraint targets, missing required body mappings, and multi-line validation messages. The
-  command fields that are derivable from `operations.json` — `api_surface`, flag `maps_to`,
-  `output_policy`, and `rest.max_bytes` — are not hand-authored:
+  constraint targets, missing required body mappings, and multi-line validation messages. A
+  `direct_read` command's page-navigation flags are runtime-owned exactly as the binary-download
+  destination flags are: `--page` and `--page-cursor` are declared once in
+  `internal/connectors/direct_read_page_flags.json` and answered from the connector's own declared
+  pagination spec, so no bundle declares them (see AGENTS.md, "Direct Reads Return One Page, And
+  Say So"). The command fields that are derivable from `operations.json` — `api_surface`, flag
+  `maps_to`, `output_policy`, and `rest.max_bytes` — are not hand-authored:
   `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
   "Command Surface Must Stay Executable"). The same command generates the embedded
   `operation_endpoint_ledger.json` runtime projection from `api_surface.json` and
@@ -329,6 +333,81 @@ not a full override by default.
   connector-specific cleanup behavior. `internal/connectors/engine/schema/certification.schema.json`
   is the schema source of truth, and `connectorgen validate` scans the raw file for secret-shaped
   literals.
+
+## 2.9 Command parameters and paging are DERIVED — never hand-author them
+
+Two parts of a `direct_read` command's surface are generated from declarations
+you already own. Hand-writing either one is a bug, not a shortcut.
+
+### Paging
+
+Never declare an opaque provider cursor (`cursor`, `start_cursor`,
+`page_token`, or an equivalent) on a command. Navigation comes from the
+connector's `streams.json` `base.pagination` spec, which the direct-read
+executor consumes through the same seven strategies the ETL path uses. The
+runtime supplies `--page` (for `page_number` and `offset_limit`, the only
+strategies with an addressable page number) and `--page-cursor` (for `cursor`,
+`next_url`, `link_header`). A raw cursor flag gives a caller a second,
+unchecked route that bypasses the completeness contract and is removed by
+`surface-sync`.
+
+A declared page/window or addressable-position control such as Notion's
+`page-size` or Bahmni's `start-index` is different: keep it only when the
+runtime sends the caller's value and reports the window it actually used. The
+executor honours that value over a declared default and measures completeness
+against the effective size. Legacy opaque cursors such as Notion
+`start-cursor` and Gong `cursor` are generated-surface drift, not precedent.
+
+### Other parameters
+
+Do not hand-author a flag for a parameter the provider specification already
+documents. Import it instead:
+
+```sh
+go run ./cmd/connectorgen params-import <connector> --artifact <spec.json>
+go run ./cmd/connectorgen surface-sync internal/connectors/defs
+```
+
+`params-import` writes the accepted parameter set into `operations.json` under
+`rest.parameters` (name, location, type, requiredness, enum values, summary).
+`surface-sync` then derives the command flags from it. The split exists so CI
+stays hermetic: `surface-sync --check` verifies drift with no artifact and no
+network.
+
+The import deliberately drops two classes of parameter:
+
+- **paging parameters**, for the reason above. The test is the parameter's
+  MEANING, not the names your bundle happens to declare: a well-known paging
+  name (`page`, `per_page`, `cursor`, `offset`, `limit`, `start_index`, …) is
+  dropped, and so is any parameter whose own specification describes it as a
+  cursor or as pagination. github's `after`/`before` cursors are dropped that
+  way even though its spec declares `page`/`per_page`; the `before` on
+  `/repos/{owner}/{repo}/notifications` is an ISO 8601 timestamp filter and is
+  kept.
+- **a path variable the connection supplies** — `{owner}`/`{repo}` in an
+  operation's own `rest.path`, resolved from `spec.json` config through
+  templating, so turning it into a flag would make every command demand a value
+  the connection already knows. This is scoped to the path template on purpose:
+  a config key nothing interpolates into the request (github's ETL-only `since`)
+  IS imported, because no other mechanism supplies it.
+
+### What you still author by hand
+
+A flag the derivation cannot know about, and a better summary or narrower type
+than the specification carries. `surface-sync` only ever **adds** derived flags;
+a flag you already declared is left exactly as written.
+
+### Verifying
+
+```sh
+go run ./cmd/connectorgen params-import <connector> --artifact <spec.json> --check
+go run ./cmd/connectorgen surface-sync --check internal/connectors/defs
+go run ./cmd/connectorgen validate internal/connectors/defs
+```
+
+`validate` rejects a malformed `rest.parameters` entry at build time — an `in`
+outside `query|path` fails with the exact JSON pointer — so a declaration that
+could not produce a valid command never reaches the runtime.
 
 ## 3. The engine dialect reference
 

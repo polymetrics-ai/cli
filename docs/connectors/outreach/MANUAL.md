@@ -84,295 +84,295 @@ ETL STREAMS
   prospects:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), type(), updated_at()
+    fields: created_at(string), email(string), id(string), name(string), type(string), updated_at(string)
   accounts:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), type(), updated_at()
+    fields: created_at(string), email(string), id(string), name(string), type(string), updated_at(string)
   sequences:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), type(), updated_at()
+    fields: created_at(string), email(string), id(string), name(string), type(string), updated_at(string)
   mailings:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), id(), name(), type(), updated_at()
+    fields: created_at(string), email(string), id(string), name(string), type(string), updated_at(string)
   account_notes:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   account_note:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   account:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   audit_logs:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   batch_items:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   batch_item:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   batches:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   batch:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   call_dispositions:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   call_disposition:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   call_purposes:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   call_purpose:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   calls:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   call:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   compliance_requests:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   compliance_request:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   content_categories:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   content_category:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   content_category_memberships:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   content_category_membership:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   content_category_ownerships:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   duties:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   email_addresses:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   email_address:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   events:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   event:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   favorites:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   favorite:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   import:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   kaia_recordings:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   kaia_recording:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   mail_aliases:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   mail_alias:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   mailboxes:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   mailbox:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   mailing:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   opportunities:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   opportunity:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   opportunity_prospect_roles:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   opportunity_prospect_role:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   opportunity_stages:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   opportunity_stage:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   org_setting:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   personas:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   persona:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   phone_numbers:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   phone_number:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   products:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   product:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   profiles:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   profile:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   prospect_notes:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   prospect_note:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   prospect:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   purchases:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   purchase:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   recipients:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   recipient:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   roles:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   role:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   rulesets:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   ruleset:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   sequence_states:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   sequence_state:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   sequence_steps:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   sequence_step:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   sequence_templates:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   sequence_template:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   sequence:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   snippets:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   snippet:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   stages:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   stage:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   task_dispositions:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   task_disposition:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   task_priorities:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   task_priority:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   task_purposes:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   task_purpose:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   tasks:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   task:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   teams:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   team:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   templates:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   template:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   users:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   user:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   webhooks:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   webhook:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   schema_definitions:
     primary key: name
-    fields: definitions(), name(), stability(), type()
+    fields: definitions(object), name(string), stability(string), type(string)
   custom_object_records:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
   custom_object_record:
     primary key: id
-    fields: attributes(), id(), links(), relationships(), type()
+    fields: attributes(object), id(string), links(object), relationships(object), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

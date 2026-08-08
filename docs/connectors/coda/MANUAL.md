@@ -36,25 +36,25 @@ CONFIGURATION
 ETL STREAMS
   docs:
     primary key: id
-    fields: browserLink(), createdAt(), folderId(), href(), id(), name(), owner(), ownerName(), type(), updatedAt(), workspaceId()
+    fields: browserLink(string), createdAt(string), folderId(string), href(string), id(string), name(string), owner(string), ownerName(string), type(string), updatedAt(string), workspaceId(string)
   tables:
     primary key: id
-    fields: browserLink(), doc_id(), href(), id(), name(), rowCount(), tableType(), type()
+    fields: browserLink(string), doc_id(string), href(string), id(string), name(string), rowCount(integer), tableType(string), type(string)
   pages:
     primary key: id
-    fields: browserLink(), contentType(), doc_id(), href(), id(), name(), subtitle(), type()
+    fields: browserLink(string), contentType(string), doc_id(string), href(string), id(string), name(string), subtitle(string), type(string)
   formulas:
     primary key: id
-    fields: doc_id(), href(), id(), name(), type()
+    fields: doc_id(string), href(string), id(string), name(string), type(string)
   controls:
     primary key: id
-    fields: controlType(), doc_id(), href(), id(), name(), type()
+    fields: controlType(string), doc_id(string), href(string), id(string), name(string), type(string)
   columns:
     primary key: id
-    fields: calculated(), defaultValue(), display(), doc_id(), format(), formula(), href(), id(), name(), table_id(), type()
+    fields: calculated(boolean), defaultValue(string), display(boolean), doc_id(string), format(object), formula(string), href(string), id(string), name(string), table_id(string), type(string)
   rows:
     primary key: id
-    fields: browserLink(), createdAt(), doc_id(), href(), id(), index(), name(), table_id(), type(), updatedAt(), values()
+    fields: browserLink(string), createdAt(string), doc_id(string), href(string), id(string), index(integer), name(string), table_id(string), type(string), updatedAt(string), values(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

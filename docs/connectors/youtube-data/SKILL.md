@@ -42,34 +42,34 @@ Reads channels, videos, playlists, playlist items, comment threads, search resul
 
 - channels:
   - primary key: id
-  - fields: id(), title(), view_count()
+  - fields: id(string), title(string), view_count(string)
 - videos:
   - primary key: id
-  - fields: id(), published_at(), title()
+  - fields: id(string), published_at(string), title(string)
 - playlists:
   - primary key: id
-  - fields: id(), published_at(), title()
+  - fields: id(string), published_at(string), title(string)
 - playlist_items:
   - primary key: id
   - cursor: published_at
-  - fields: id(), playlist_id(), published_at(), title(), video_id()
+  - fields: id(string), playlist_id(string), published_at(string), title(string), video_id(string)
 - comment_threads:
   - primary key: id
   - cursor: published_at
-  - fields: id(), published_at(), text(), video_id()
+  - fields: id(string), published_at(string), text(string), video_id(string)
 - search:
   - primary key: id
   - cursor: published_at
-  - fields: id(), published_at(), title()
+  - fields: id(string), published_at(string), title(string)
 - video_categories:
   - primary key: id
-  - fields: id(), title()
+  - fields: id(string), title(string)
 - i18n_regions:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - i18n_languages:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 
 ## Sync Modes
 

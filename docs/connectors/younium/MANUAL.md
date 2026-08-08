@@ -37,27 +37,27 @@ ETL STREAMS
   accounts:
     primary key: id
     cursor: updated_at
-    fields: account_id(), id(), name(), updated_at()
+    fields: account_id(string), id(string), name(string), updated_at(string)
   subscriptions:
     primary key: id
     cursor: updated_at
-    fields: account_id(), id(), name(), updated_at()
+    fields: account_id(string), id(string), name(string), updated_at(string)
   invoices:
     primary key: id
     cursor: updated_at
-    fields: account_id(), id(), name(), updated_at()
+    fields: account_id(string), id(string), name(string), updated_at(string)
   products:
     primary key: id
-    fields: id(), name(), updated_at()
+    fields: id(string), name(string), updated_at(string)
   payment_terms:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   currencies:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   webhooks:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

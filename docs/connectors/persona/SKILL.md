@@ -36,19 +36,19 @@ Reads Persona inquiries, accounts, reports, transactions, and cases, and perform
 
 - inquiries:
   - primary key: id
-  - fields: attributes(), id(), relationships(), type()
+  - fields: attributes(object), id(string), relationships(object), type(string)
 - accounts:
   - primary key: id
-  - fields: attributes(), id(), relationships(), type()
+  - fields: attributes(object), id(string), relationships(object), type(string)
 - reports:
   - primary key: id
-  - fields: attributes(), id(), relationships(), type()
+  - fields: attributes(object), id(string), relationships(object), type(string)
 - transactions:
   - primary key: id
-  - fields: attributes(), id(), relationships(), type()
+  - fields: attributes(object), id(string), relationships(object), type(string)
 - cases:
   - primary key: id
-  - fields: attributes(), id(), relationships(), type()
+  - fields: attributes(object), id(string), relationships(object), type(string)
 
 ## Sync Modes
 

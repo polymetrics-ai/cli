@@ -37,19 +37,19 @@ Reads PagerDuty incidents, users, services, and teams through the REST API.
 - incidents:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), incident_number(), status(), title()
+  - fields: created_at(string), id(string), incident_number(integer), status(string), title(string)
 - users:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), email(), id(), name(), role()
+  - fields: created_at(string), email(string), id(string), name(string), role(string)
 - services:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), description(), id(), name(), status()
+  - fields: created_at(string), description(string), id(string), name(string), status(string)
 - teams:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), description(), id(), name()
+  - fields: created_at(string), description(string), id(string), name(string)
 
 ## Sync Modes
 

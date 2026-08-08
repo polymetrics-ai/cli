@@ -45,34 +45,34 @@ CONFIGURATION
 ETL STREAMS
   workspaces:
     primary key: id
-    fields: created_time(), id(), name()
+    fields: created_time(string), id(string), name(string)
   views:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   tables:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   organizations:
     primary key: orgId
-    fields: createdBy(), createdByZuId(), isDefault(), numberOfworkspaces(), orgDesc(), orgId(), orgName(), planName(), role()
+    fields: createdBy(string), createdByZuId(string), isDefault(boolean), numberOfworkspaces(integer), orgDesc(string), orgId(string), orgName(string), planName(string), role(string)
   recent_views:
     primary key: viewId
-    fields: viewId(), viewLastAccessedTime(), viewName(), viewType(), workspaceId(), workspaceName()
+    fields: viewId(string), viewLastAccessedTime(string), viewName(string), viewType(string), workspaceId(string), workspaceName(string)
   shared_workspaces:
     primary key: workspaceId
-    fields: createdBy(), createdTime(), isDefault(), orgId(), workspaceDesc(), workspaceId(), workspaceName()
+    fields: createdBy(string), createdTime(string), isDefault(boolean), orgId(string), workspaceDesc(string), workspaceId(string), workspaceName(string)
   shared_dashboards:
     primary key: viewId
-    fields: createdBy(), createdTime(), folderId(), isFavorite(), lastModifiedBy(), lastModifiedTime(), orgId(), parentViewId(), sharedBy(), viewDesc(), viewId(), viewName(), viewType(), workspaceId()
+    fields: createdBy(string), createdTime(string), folderId(string), isFavorite(boolean), lastModifiedBy(string), lastModifiedTime(string), orgId(string), parentViewId(string), sharedBy(string), viewDesc(string), viewId(string), viewName(string), viewType(string), workspaceId(string)
   folders:
     primary key: folderId
-    fields: folderDesc(), folderId(), folderIndex(), folderName(), isDefault(), parentFolderId()
+    fields: folderDesc(string), folderId(string), folderIndex(integer), folderName(string), isDefault(boolean), parentFolderId(string)
   query_tables:
     primary key: viewId
-    fields: createdBy(), createdTime(), description(), folderId(), isFavorite(), lastModifiedBy(), lastModifiedTime(), orgId(), parentViewId(), sharedBy(), type(), viewId(), viewName(), workspaceId()
+    fields: createdBy(string), createdTime(string), description(string), folderId(string), isFavorite(boolean), lastModifiedBy(string), lastModifiedTime(string), orgId(string), parentViewId(string), sharedBy(string), type(string), viewId(string), viewName(string), workspaceId(string)
   datasources:
     primary key: datasourceId
-    fields: datasourceId(), datasourceName(), lastDataSyncStatus(), lastDataSyncTime(), nextScheduleTime(), schedule(), source(), syncIntervalId(), syncUsed(), tableDetails(), totalSyncAllowed()
+    fields: datasourceId(string), datasourceName(string), lastDataSyncStatus(string), lastDataSyncTime(string), nextScheduleTime(string), schedule(string), source(string), syncIntervalId(string), syncUsed(string), tableDetails(array), totalSyncAllowed(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

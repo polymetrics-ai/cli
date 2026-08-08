@@ -34,19 +34,19 @@ CONFIGURATION
 ETL STREAMS
   inquiries:
     primary key: id
-    fields: attributes(), id(), relationships(), type()
+    fields: attributes(object), id(string), relationships(object), type(string)
   accounts:
     primary key: id
-    fields: attributes(), id(), relationships(), type()
+    fields: attributes(object), id(string), relationships(object), type(string)
   reports:
     primary key: id
-    fields: attributes(), id(), relationships(), type()
+    fields: attributes(object), id(string), relationships(object), type(string)
   transactions:
     primary key: id
-    fields: attributes(), id(), relationships(), type()
+    fields: attributes(object), id(string), relationships(object), type(string)
   cases:
     primary key: id
-    fields: attributes(), id(), relationships(), type()
+    fields: attributes(object), id(string), relationships(object), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

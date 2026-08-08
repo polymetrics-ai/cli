@@ -50,75 +50,75 @@ ETL STREAMS
   reviews:
     primary key: id
     cursor: created_at
-    fields: body(), created_at(), curated(), hidden(), id(), product_external_id(), published(), rating(), reviewer_email(), reviewer_id(), reviewer_name(), source(), title(), updated_at(), verified()
+    fields: body(string), created_at(string), curated(string), hidden(boolean), id(integer), product_external_id(string), published(boolean), rating(integer), reviewer_email(string), reviewer_id(integer), reviewer_name(string), source(string), title(string), updated_at(string), verified(string)
   products:
     primary key: id
     cursor: created_at
-    fields: created_at(), external_id(), handle(), id(), title(), updated_at(), url()
+    fields: created_at(string), external_id(string), handle(string), id(integer), title(string), updated_at(string), url(string)
   widgets:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name(), status(), updated_at(), widget_type()
+    fields: created_at(string), id(integer), name(string), status(string), updated_at(string), widget_type(string)
   product_review_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   preview_badge_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   featured_carousel_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   reviews_tab_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   all_reviews_page_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   verified_badge_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   all_reviews_count_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   all_reviews_rating_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   shop_reviews_count_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   shop_reviews_rating_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   widget_settings:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   html_miracle_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   checkout_comments_widget:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   reviews_count:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
   review:
     primary key: id
-    fields: body(), created_at(), curated(), has_published_pictures(), has_published_videos(), hidden(), id(), pictures(), product_external_id(), product_handle(), product_title(), rating(), reviewer(), reviewer_email(), reviewer_id(), reviewer_name(), source(), title(), updated_at(), verified()
+    fields: body(string), created_at(string), curated(string), has_published_pictures(boolean), has_published_videos(boolean), hidden(boolean), id(integer), pictures(array), product_external_id(string), product_handle(string), product_title(string), rating(integer), reviewer(object), reviewer_email(string), reviewer_id(integer), reviewer_name(string), source(string), title(string), updated_at(string), verified(string)
   reviewer:
     primary key: id
-    fields: accepts_marketing(), email(), external_id(), id(), name(), phone(), tags(), unsubscribed_at()
+    fields: accepts_marketing(boolean), email(string), external_id(integer), id(integer), name(string), phone(string), tags(array), unsubscribed_at(string)
   webhooks:
     primary key: id
-    fields: failure_count(), id(), key(), url()
+    fields: failure_count(integer), id(integer), key(string), url(string)
   webhook:
     primary key: id
-    fields: failure_count(), id(), key(), url()
+    fields: failure_count(integer), id(integer), key(string), url(string)
   shop_info:
     primary key: id
-    fields: awesome(), country(), created_at(), currency(), custom_domain(), domain(), email(), id(), name(), owner(), phone(), plan(), platform(), timezone(), updated_at(), widget_version()
+    fields: awesome(boolean), country(string), created_at(string), currency(string), custom_domain(string), domain(string), email(string), id(integer), name(string), owner(string), phone(string), plan(string), platform(string), timezone(string), updated_at(string), widget_version(string)
   settings:
     primary key: id
-    fields: badge(), count(), html(), id(), message(), rating(), settings(), value(), widget()
+    fields: badge(string), count(integer), html(string), id(string), message(string), rating(integer), settings(string), value(integer), widget(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

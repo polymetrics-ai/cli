@@ -44,31 +44,31 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
 - deployments:
   - primary key: id
   - cursor: created
-  - fields: created(), id(), name(), state()
+  - fields: created(integer), id(string), name(string), state(string)
 - projects:
   - primary key: id
-  - fields: accountId(), createdAt(), framework(), id(), name(), updatedAt()
+  - fields: accountId(string), createdAt(integer), framework(string), id(string), name(string), updatedAt(integer)
 - teams:
   - primary key: id
-  - fields: id(), name(), slug()
+  - fields: id(string), name(string), slug(string)
 - domains:
   - primary key: id
-  - fields: createdAt(), id(), name(), teamId(), verified()
+  - fields: createdAt(integer), id(string), name(string), teamId(string), verified(boolean)
 - project_env_vars:
   - primary key: id
-  - fields: createdAt(), id(), key(), project_id(), target(), type(), updatedAt()
+  - fields: createdAt(integer), id(string), key(string), project_id(string), target(array), type(string), updatedAt(integer)
 - aliases:
   - primary key: uid
-  - fields: alias(), created(), createdAt(), deployment(), deploymentId(), projectId(), uid()
+  - fields: alias(string), created(string), createdAt(integer), deployment(object), deploymentId(string), projectId(string), uid(string)
 - webhooks:
   - primary key: id
-  - fields: createdAt(), events(), id(), ownerId(), projectIds(), updatedAt(), url()
+  - fields: createdAt(integer), events(array), id(string), ownerId(string), projectIds(array), updatedAt(integer), url(string)
 - log_drains:
   - primary key: id
-  - fields: createdAt(), deliveryFormat(), environments(), id(), name(), projectIds(), samplingRate(), sources(), updatedAt(), url()
+  - fields: createdAt(integer), deliveryFormat(string), environments(array), id(string), name(string), projectIds(array), samplingRate(number), sources(array), updatedAt(integer), url(string)
 - edge_configs:
   - primary key: id
-  - fields: createdAt(), digest(), id(), itemCount(), ownerId(), sizeInBytes(), slug(), updatedAt()
+  - fields: createdAt(integer), digest(string), id(string), itemCount(integer), ownerId(string), sizeInBytes(integer), slug(string), updatedAt(integer)
 
 ## Sync Modes
 

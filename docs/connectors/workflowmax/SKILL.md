@@ -39,11 +39,11 @@ Reads and writes WorkflowMax jobs, clients, and client contacts through the real
 - jobs:
   - primary key: uuid
   - cursor: updated_at
-  - fields: budget(), clientContactUUID(), clientOrderNumber(), clientUUID(), completedDate(), description(), dueDate(), jobCategoryUUID(), jobNumber(), jobStatusUUID(), name(), priority(), startDate(), updated_at(), uuid()
+  - fields: budget(number), clientContactUUID(string), clientOrderNumber(string), clientUUID(string), completedDate(string), description(string), dueDate(string), jobCategoryUUID(string), jobNumber(string), jobStatusUUID(string), name(string), priority(string), startDate(string), updated_at(string), uuid(string)
 - clients:
   - primary key: uuid
   - cursor: updated_at
-  - fields: archived(), clientManagerUUID(), exportCode(), favorite(), jobManagerUUID(), name(), prospect(), referralSource(), updated_at(), uuid()
+  - fields: archived(boolean), clientManagerUUID(string), exportCode(string), favorite(boolean), jobManagerUUID(string), name(string), prospect(boolean), referralSource(string), updated_at(string), uuid(string)
 
 ## Sync Modes
 

@@ -42,19 +42,19 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
 
 - bookings:
   - primary key: id
-  - fields: createdAt(), description(), end(), eventTypeId(), id(), start(), status(), title(), uid(), updatedAt()
+  - fields: createdAt(string), description(string), end(string), eventTypeId(integer), id(integer), start(string), status(string), title(string), uid(string), updatedAt(string)
 - schedules:
   - primary key: id
-  - fields: id(), isDefault(), name(), ownerId(), timeZone()
+  - fields: id(integer), isDefault(boolean), name(string), ownerId(integer), timeZone(string)
 - event_types:
   - primary key: id
-  - fields: description(), hidden(), id(), length(), position(), slug(), title()
+  - fields: description(string), hidden(boolean), id(integer), length(integer), position(integer), slug(string), title(string)
 - webhooks:
   - primary key: id
-  - fields: active(), id(), payloadTemplate(), secret(), subscriberUrl(), triggers(), userId()
+  - fields: active(boolean), id(integer), payloadTemplate(string), secret(string), subscriberUrl(string), triggers(array), userId(integer)
 - my_profile:
   - primary key: id
-  - fields: email(), id(), name(), timeFormat(), timeZone(), username(), weekStart()
+  - fields: email(string), id(integer), name(string), timeFormat(integer), timeZone(string), username(string), weekStart(string)
 
 ## Sync Modes
 

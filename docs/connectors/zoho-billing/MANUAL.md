@@ -41,15 +41,15 @@ ETL STREAMS
   customers:
     primary key: id
     cursor: updated_at
-    fields: customer_id(), display_name(), id(), name(), status(), updated_at(), updated_time()
+    fields: customer_id(string), display_name(string), id(string), name(string), status(string), updated_at(string), updated_time(string)
   subscriptions:
     primary key: id
     cursor: updated_at
-    fields: id(), name(), status(), subscription_id(), updated_at(), updated_time()
+    fields: id(string), name(string), status(string), subscription_id(string), updated_at(string), updated_time(string)
   invoices:
     primary key: id
     cursor: updated_at
-    fields: id(), invoice_id(), invoice_number(), name(), status(), updated_at(), updated_time()
+    fields: id(string), invoice_id(string), invoice_number(string), name(string), status(string), updated_at(string), updated_time(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

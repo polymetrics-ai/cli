@@ -42,17 +42,17 @@ ETL STREAMS
   transactions:
     primary key: transactionId
     cursor: transactionDate
-    fields: amount_currency(), amount_value(), bookingEntry(), feeType(), orderId(), payoutId(), salesRecordReference(), transactionDate(), transactionId(), transactionMemo(), transactionStatus(), transactionType()
+    fields: amount_currency(string), amount_value(string), bookingEntry(string), feeType(string), orderId(string), payoutId(string), salesRecordReference(string), transactionDate(string), transactionId(string), transactionMemo(string), transactionStatus(string), transactionType(string)
   payouts:
     primary key: payoutId
     cursor: payoutDate
-    fields: amount_currency(), amount_value(), payoutDate(), payoutId(), payoutInstrument_accountLastFourDigits(), payoutInstrument_nickname(), payoutStatus(), payoutStatusDescription(), transactionCount()
+    fields: amount_currency(string), amount_value(string), payoutDate(string), payoutId(string), payoutInstrument_accountLastFourDigits(string), payoutInstrument_nickname(string), payoutStatus(string), payoutStatusDescription(string), transactionCount(integer)
   transfers:
     primary key: transferId
     cursor: transferDate
-    fields: amount_currency(), amount_value(), reason(), transferDate(), transferId(), transferStatus(), transferType()
+    fields: amount_currency(string), amount_value(string), reason(string), transferDate(string), transferId(string), transferStatus(string), transferType(string)
   seller_funds_summary:
-    fields: availableFunds_currency(), availableFunds_value(), fundsOnHold_currency(), fundsOnHold_value(), processingFunds_currency(), processingFunds_value(), totalFunds_currency(), totalFunds_value()
+    fields: availableFunds_currency(string), availableFunds_value(string), fundsOnHold_currency(string), fundsOnHold_value(string), processingFunds_currency(string), processingFunds_value(string), totalFunds_currency(string), totalFunds_value(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

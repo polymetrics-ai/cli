@@ -36,68 +36,68 @@ ETL STREAMS
   shipments:
     primary key: id
     cursor: created_at
-    fields: batch_id(), batch_status(), created_at(), id(), is_return(), mode(), object(), reference(), status(), tracking_code(), updated_at()
+    fields: batch_id(string), batch_status(string), created_at(string), id(string), is_return(boolean), mode(string), object(string), reference(string), status(string), tracking_code(string), updated_at(string)
   trackers:
     primary key: id
     cursor: created_at
-    fields: carrier(), created_at(), est_delivery_date(), id(), mode(), object(), shipment_id(), signed_by(), status(), status_detail(), tracking_code(), updated_at()
+    fields: carrier(string), created_at(string), est_delivery_date(string), id(string), mode(string), object(string), shipment_id(string), signed_by(string), status(string), status_detail(string), tracking_code(string), updated_at(string)
   addresses:
     primary key: id
     cursor: created_at
-    fields: city(), company(), country(), created_at(), email(), id(), mode(), name(), object(), phone(), residential(), state(), street1(), street2(), updated_at(), zip()
+    fields: city(string), company(string), country(string), created_at(string), email(string), id(string), mode(string), name(string), object(string), phone(string), residential(boolean), state(string), street1(string), street2(string), updated_at(string), zip(string)
   parcels:
     primary key: id
     cursor: created_at
-    fields: created_at(), height(), id(), length(), mode(), object(), predefined_package(), updated_at(), weight(), width()
+    fields: created_at(string), height(number), id(string), length(number), mode(string), object(string), predefined_package(string), updated_at(string), weight(number), width(number)
   insurances:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), id(), mode(), object(), provider(), reference(), shipment_id(), status(), tracking_code(), updated_at()
+    fields: amount(string), created_at(string), id(string), mode(string), object(string), provider(string), reference(string), shipment_id(string), status(string), tracking_code(string), updated_at(string)
   batches:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), label_url(), mode(), num_shipments(), object(), pickup(), reference(), scan_form(), shipments(), state(), status(), updated_at()
+    fields: created_at(string), id(string), label_url(string), mode(string), num_shipments(integer), object(string), pickup(object), reference(string), scan_form(object), shipments(array), state(string), status(object), updated_at(string)
   carrier_accounts:
     primary key: id
-    fields: billing_type(), clone(), created_at(), description(), fields(), id(), logo(), object(), readable(), reference(), type(), updated_at()
+    fields: billing_type(string), clone(boolean), created_at(string), description(string), fields(object), id(string), logo(string), object(string), readable(string), reference(string), type(string), updated_at(string)
   carrier_metadata:
     primary key: name
-    fields: human_readable(), name(), predefined_packages(), service_levels()
+    fields: human_readable(string), name(string), predefined_packages(array), service_levels(array)
   carrier_types:
     primary key: type
-    fields: fields(), logo(), object(), readable(), type()
+    fields: fields(object), logo(string), object(string), readable(string), type(string)
   end_shippers:
     primary key: id
-    fields: city(), company(), country(), created_at(), email(), id(), mode(), name(), object(), phone(), state(), street1(), street2(), updated_at(), zip()
+    fields: city(string), company(string), country(string), created_at(string), email(string), id(string), mode(string), name(string), object(string), phone(string), state(string), street1(string), street2(string), updated_at(string), zip(string)
   events:
     primary key: id
     cursor: created_at
-    fields: created_at(), description(), id(), mode(), object(), status(), user_id()
+    fields: created_at(string), description(string), id(string), mode(string), object(string), status(string), user_id(string)
   claims:
     primary key: id
     cursor: created_at
-    fields: approved_amount(), attachments(), created_at(), history(), id(), insurance_id(), mode(), object(), requested_amount(), shipment_id(), status(), status_detail(), tracking_code(), type(), updated_at()
+    fields: approved_amount(string), attachments(array), created_at(string), history(array), id(string), insurance_id(string), mode(string), object(string), requested_amount(string), shipment_id(string), status(string), status_detail(string), tracking_code(string), type(string), updated_at(string)
   pickups:
     primary key: id
     cursor: created_at
-    fields: address(), confirmation(), created_at(), id(), instructions(), is_account_address(), max_datetime(), min_datetime(), mode(), object(), pickup_rates(), reference(), status(), updated_at()
+    fields: address(object), confirmation(string), created_at(string), id(string), instructions(string), is_account_address(boolean), max_datetime(string), min_datetime(string), mode(string), object(string), pickup_rates(array), reference(string), status(string), updated_at(string)
   refunds:
     primary key: id
     cursor: created_at
-    fields: carrier(), confirmation_number(), created_at(), id(), object(), shipment_id(), status(), tracking_code(), updated_at()
+    fields: carrier(string), confirmation_number(string), created_at(string), id(string), object(string), shipment_id(string), status(string), tracking_code(string), updated_at(string)
   scan_forms:
     primary key: id
     cursor: created_at
-    fields: address(), batch_id(), confirmation(), created_at(), form_file_type(), form_url(), id(), message(), object(), status(), tracking_codes(), updated_at()
+    fields: address(object), batch_id(string), confirmation(string), created_at(string), form_file_type(string), form_url(string), id(string), message(string), object(string), status(string), tracking_codes(array), updated_at(string)
   child_users:
     primary key: id
-    fields: children(), created_at(), default_carbon_offset(), id(), name(), object(), parent_id(), phone_number(), verified()
+    fields: children(array), created_at(string), default_carbon_offset(boolean), id(string), name(string), object(string), parent_id(string), phone_number(string), verified(boolean)
   referral_customers:
     primary key: id
-    fields: balance(), children(), created_at(), default_carbon_offset(), email(), id(), name(), object(), parent_id(), phone_number(), price_per_shipment(), verified()
+    fields: balance(string), children(array), created_at(string), default_carbon_offset(boolean), email(string), id(string), name(string), object(string), parent_id(string), phone_number(string), price_per_shipment(string), verified(boolean)
   webhooks:
     primary key: id
-    fields: created_at(), custom_headers(), disabled_at(), id(), mode(), object(), url()
+    fields: created_at(string), custom_headers(array), disabled_at(string), id(string), mode(string), object(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

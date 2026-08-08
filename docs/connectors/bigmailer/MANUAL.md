@@ -34,53 +34,53 @@ CONFIGURATION
 ETL STREAMS
   brands:
     primary key: id
-    fields: connection_id(), contact_limit(), created(), from_email(), from_name(), id(), name(), num_contacts()
+    fields: connection_id(string), contact_limit(integer), created(integer), from_email(string), from_name(string), id(string), name(string), num_contacts(integer)
   users:
     primary key: id
-    fields: created(), email(), id(), name(), role()
+    fields: created(integer), email(string), id(string), name(string), role(string)
   contacts:
     primary key: id
-    fields: brand_id(), created(), email(), id(), num_complaints(), num_hard_bounces(), num_soft_bounces(), unsubscribe_all()
+    fields: brand_id(string), created(integer), email(string), id(string), num_complaints(integer), num_hard_bounces(integer), num_soft_bounces(integer), unsubscribe_all(boolean)
   lists:
     primary key: id
-    fields: brand_id(), created(), id(), name(), num_contacts()
+    fields: brand_id(string), created(integer), id(string), name(string), num_contacts(integer)
   fields:
     primary key: id
-    fields: brand_id(), created(), id(), name(), tag(), type()
+    fields: brand_id(string), created(integer), id(string), name(string), tag(string), type(string)
   connections:
     primary key: id
-    fields: created(), id(), name(), type()
+    fields: created(integer), id(string), name(string), type(string)
   message_types:
     primary key: id
-    fields: brand_id(), created(), id(), name(), type()
+    fields: brand_id(string), created(integer), id(string), name(string), type(string)
   segments:
     primary key: id
-    fields: brand_id(), conditions(), created(), id(), name(), operator()
+    fields: brand_id(string), conditions(array), created(integer), id(string), name(string), operator(string)
   senders:
     primary key: id
-    fields: bounce_dns_records(), bounce_domain(), bounce_verified(), brand_id(), created(), dns_records(), id(), identity(), identity_type(), share_type(), verified()
+    fields: bounce_dns_records(object), bounce_domain(string), bounce_verified(boolean), brand_id(string), created(integer), dns_records(object), id(string), identity(string), identity_type(string), share_type(string), verified(boolean)
   templates:
     primary key: id
-    fields: brand_id(), created(), id(), name(), shared_with_account(), type()
+    fields: brand_id(string), created(integer), id(string), name(string), shared_with_account(boolean), type(string)
   suppression_lists:
     primary key: id
-    fields: brand_id(), created(), file_name(), file_size(), id()
+    fields: brand_id(string), created(integer), file_name(string), file_size(integer), id(string)
   bulk_campaigns:
     primary key: id
     cursor: created
-    fields: brand_id(), created(), excluded_list_ids(), from(), id(), list_ids(), message_type_id(), name(), num_clicks(), num_opens(), num_rejected(), num_sent(), num_total_clicks(), reply_to(), scheduled_for(), segment_id(), status(), subject(), suppression_list_id()
+    fields: brand_id(string), created(integer), excluded_list_ids(array), from(object), id(string), list_ids(array), message_type_id(string), name(string), num_clicks(integer), num_opens(integer), num_rejected(integer), num_sent(integer), num_total_clicks(integer), reply_to(object), scheduled_for(integer), segment_id(string), status(string), subject(string), suppression_list_id(string)
   rss_campaigns:
     primary key: id
     cursor: created
-    fields: brand_id(), created(), excluded_list_ids(), feed_url(), frequency(), from(), hour(), id(), list_ids(), message_type_id(), minutes(), name(), reply_to(), segment_id(), status(), subject(), suppression_list_id()
+    fields: brand_id(string), created(integer), excluded_list_ids(array), feed_url(string), frequency(object), from(object), hour(integer), id(string), list_ids(array), message_type_id(string), minutes(integer), name(string), reply_to(object), segment_id(string), status(string), subject(string), suppression_list_id(string)
   transactional_campaigns:
     primary key: id
     cursor: created
-    fields: brand_id(), created(), from(), id(), list_id(), message_type_id(), name(), num_clicks(), num_complaints(), num_hard_bounces(), num_opens(), num_rejected(), num_sent(), num_soft_bounces(), num_total_clicks(), num_total_opens(), num_unsubscribes(), reply_to(), status(), subject()
+    fields: brand_id(string), created(integer), from(object), id(string), list_id(string), message_type_id(string), name(string), num_clicks(integer), num_complaints(integer), num_hard_bounces(integer), num_opens(integer), num_rejected(integer), num_sent(integer), num_soft_bounces(integer), num_total_clicks(integer), num_total_opens(integer), num_unsubscribes(integer), reply_to(object), status(string), subject(string)
   test_campaigns:
     primary key: id
     cursor: created
-    fields: brand_id(), created(), feed_url(), from(), id(), name(), num_sent(), recipients(), reply_to(), sent(), started(), status(), subject()
+    fields: brand_id(string), created(integer), feed_url(string), from(object), id(string), name(string), num_sent(integer), recipients(array), reply_to(object), sent(integer), started(integer), status(string), subject(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

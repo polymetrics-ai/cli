@@ -34,22 +34,22 @@ ETL STREAMS
   tasks:
     primary key: id
     cursor: createdAt
-    fields: assigneesIds(), completed(), completedAt(), createdAt(), createdUserId(), deleted(), description(), id(), index(), lastActivityAt(), listIds(), model(), name(), parentTaskId(), status(), url()
+    fields: assigneesIds(array), completed(boolean), completedAt(string), createdAt(string), createdUserId(string), deleted(boolean), description(string), id(string), index(integer), lastActivityAt(string), listIds(array), model(string), name(string), parentTaskId(string), status(string), url(string)
   lists:
     primary key: id
     cursor: createdAt
-    fields: createdAt(), defaultList(), description(), id(), key(), model(), name(), type(), updatedAt(), url(), userId(), visualization()
+    fields: createdAt(string), defaultList(boolean), description(string), id(string), key(string), model(string), name(string), type(string), updatedAt(string), url(string), userId(string), visualization(string)
   field_templates:
     primary key: id
-    fields: archived(), hidden(), id(), labels(), model(), name(), required(), standardType(), type()
+    fields: archived(boolean), hidden(boolean), id(string), labels(array), model(string), name(string), required(boolean), standardType(string), type(string)
   users:
     primary key: id
     cursor: createdAt
-    fields: admin(), createdAt(), deleted(), email(), firstname(), id(), key(), lastname(), model(), signedUpAt(), state(), username()
+    fields: admin(boolean), createdAt(string), deleted(boolean), email(string), firstname(string), id(string), key(string), lastname(string), model(string), signedUpAt(string), state(string), username(string)
   workspace:
     primary key: id
     cursor: createdAt
-    fields: createdAt(), createdUserId(), frozen(), id(), key(), model(), name(), url(), urlType()
+    fields: createdAt(string), createdUserId(string), frozen(boolean), id(string), key(string), model(string), name(string), url(string), urlType(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -35,11 +35,11 @@ ETL STREAMS
   schedule:
     primary key: id
     cursor: airdate
-    fields: airdate(), airtime(), id(), name(), show_id(), show_name()
+    fields: airdate(string), airtime(string), id(integer), name(string), show_id(integer), show_name(string)
   web_schedule:
     primary key: id
     cursor: airdate
-    fields: airdate(), airtime(), id(), name(), show_id(), show_name()
+    fields: airdate(string), airtime(string), id(integer), name(string), show_id(integer), show_name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

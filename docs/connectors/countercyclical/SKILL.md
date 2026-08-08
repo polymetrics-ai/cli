@@ -36,22 +36,22 @@ Reads Countercyclical investments, valuations, research memos, teams, assumption
 
 - investments:
   - primary key: id
-  - fields: cik(), country(), createdAt(), description(), editedName(), employees(), exchange(), figi(), financingType(), id(), industry(), isArchived(), isFavorite(), isLocked(), lei(), marketType(), name(), sector(), tickerSymbol(), updatedAt(), visibility(), website()
+  - fields: cik(string), country(string), createdAt(string), description(string), editedName(string), employees(integer), exchange(string), figi(string), financingType(string), id(string), industry(string), isArchived(boolean), isFavorite(boolean), isLocked(boolean), lei(string), marketType(string), name(string), sector(string), tickerSymbol(string), updatedAt(string), visibility(string), website(string)
 - valuations:
   - primary key: id
-  - fields: createdAt(), delineation(), description(), discountRate(), endingQuarter(), endingYear(), growthMetric(), growthRate(), id(), isFavorite(), name(), shareToken(), startingQuarter(), startingYear(), status(), terminalPeriod(), terminalRate(), updatedAt()
+  - fields: createdAt(string), delineation(string), description(string), discountRate(number), endingQuarter(integer), endingYear(integer), growthMetric(string), growthRate(number), id(string), isFavorite(boolean), name(string), shareToken(string), startingQuarter(integer), startingYear(integer), status(string), terminalPeriod(string), terminalRate(number), updatedAt(string)
 - memos:
   - primary key: id
-  - fields: archived(), backgroundColor(), bannerVisible(), body(), createdAt(), documentType(), emoji(), favorited(), foregroundColor(), id(), locked(), publiclyVisible(), sourcesVisible(), title(), tocVisible(), updatedAt(), views()
+  - fields: archived(boolean), backgroundColor(string), bannerVisible(boolean), body(string), createdAt(string), documentType(string), emoji(string), favorited(boolean), foregroundColor(string), id(string), locked(boolean), publiclyVisible(boolean), sourcesVisible(boolean), title(string), tocVisible(boolean), updatedAt(string), views(integer)
 - teams:
   - primary key: id
-  - fields: id(), title()
+  - fields: id(string), title(string)
 - assumptions:
   - primary key: id
-  - fields: discountRate(), id(), name()
+  - fields: discountRate(string), id(string), name(string)
 - pipelines:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 
 ## Sync Modes
 

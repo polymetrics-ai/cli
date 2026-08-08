@@ -41,17 +41,17 @@ ETL STREAMS
   signature_requests:
     primary key: signature_request_id
     cursor: created_at
-    fields: created_at(), has_error(), is_complete(), is_declined(), message(), requester_email_address(), signature_request_id(), subject(), test_mode(), title()
+    fields: created_at(integer), has_error(boolean), is_complete(boolean), is_declined(boolean), message(string), requester_email_address(string), signature_request_id(string), subject(string), test_mode(boolean), title(string)
   templates:
     primary key: template_id
     cursor: updated_at
-    fields: is_creator(), is_embedded(), is_locked(), message(), template_id(), title(), updated_at()
+    fields: is_creator(boolean), is_embedded(boolean), is_locked(boolean), message(string), template_id(string), title(string), updated_at(integer)
   team_members:
     primary key: account_id
-    fields: account_id(), email_address(), role()
+    fields: account_id(string), email_address(string), role(string)
   account:
     primary key: account_id
-    fields: account_id(), email_address(), is_paid_hf(), is_paid_hs(), locale(), role_code()
+    fields: account_id(string), email_address(string), is_paid_hf(boolean), is_paid_hs(boolean), locale(string), role_code(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

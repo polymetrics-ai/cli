@@ -39,16 +39,16 @@ Reads Google Admin SDK Directory users, groups, organizational units, and Chrome
 
 - users:
   - primary key: id
-  - fields: id(), name(), org_unit_path(), primary_email()
+  - fields: id(string), name(string), org_unit_path(string), primary_email(string)
 - groups:
   - primary key: id
-  - fields: description(), email(), id(), name()
+  - fields: description(string), email(string), id(string), name(string)
 - orgunits:
   - primary key: id
-  - fields: description(), id(), name(), org_unit_path()
+  - fields: description(string), id(string), name(string), org_unit_path(string)
 - chromeos_devices:
   - primary key: id
-  - fields: id(), org_unit_path(), serial_number(), status()
+  - fields: id(string), org_unit_path(string), serial_number(string), status(string)
 
 ## Sync Modes
 

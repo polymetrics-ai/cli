@@ -43,73 +43,73 @@ CONFIGURATION
 ETL STREAMS
   shops:
     primary key: id
-    fields: id(), sales_channel(), title()
+    fields: id(integer), sales_channel(string), title(string)
   products:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), sales_channel(), status(), title(), updated_at(), visible()
+    fields: created_at(string), id(string), sales_channel(string), status(string), title(string), updated_at(string), visible(boolean)
   orders:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), sales_channel(), status(), title(), updated_at(), visible()
+    fields: created_at(string), id(string), sales_channel(string), status(string), title(string), updated_at(string), visible(boolean)
   blueprints:
     primary key: id
-    fields: id(), title()
+    fields: id(integer), title(string)
   print_providers:
     primary key: id
-    fields: id(), title()
+    fields: id(integer), title(string)
   blueprint_detail:
     primary key: id
-    fields: brand(), description(), id(), images(), model(), title()
+    fields: brand(string), description(string), id(integer), images(array), model(string), title(string)
   blueprint_print_providers:
     primary key: id
-    fields: decoration_methods(), id(), title()
+    fields: decoration_methods(array), id(integer), title(string)
   blueprint_variants:
     primary key: id
-    fields: blueprint_id(), decoration_methods(), id(), is_available(), options(), placeholders(), print_provider_id(), title()
+    fields: blueprint_id(string), decoration_methods(array), id(integer), is_available(boolean), options(object), placeholders(array), print_provider_id(string), title(string)
   shipping_profiles:
     primary key: variant_ids
-    fields: additional_items(), blueprint_id(), countries(), first_item(), handling_time(), print_provider_id(), variant_ids()
+    fields: additional_items(object), blueprint_id(string), countries(array), first_item(object), handling_time(object), print_provider_id(string), variant_ids(array)
   print_provider_detail:
     primary key: id
-    fields: blueprints(), id(), location(), title()
+    fields: blueprints(array), id(integer), location(object), title(string)
   product_detail:
     primary key: id
     cursor: updated_at
-    fields: blueprint_id(), created_at(), description(), external(), id(), images(), is_locked(), options(), print_areas(), print_provider_id(), sales_channel(), shop_id(), tags(), title(), updated_at(), user_id(), variants(), visible()
+    fields: blueprint_id(integer), created_at(string), description(string), external(object), id(string), images(array), is_locked(boolean), options(array), print_areas(array), print_provider_id(integer), sales_channel(string), shop_id(integer), tags(array), title(string), updated_at(string), user_id(integer), variants(array), visible(boolean)
   product_gpsr:
     primary key: title
-    fields: text(), title()
+    fields: text(string), title(string)
   order_detail:
     primary key: id
     cursor: updated_at
-    fields: address_to(), app_order_id(), created_at(), id(), line_items(), metadata(), shipping_method(), status(), updated_at()
+    fields: address_to(object), app_order_id(string), created_at(string), id(string), line_items(array), metadata(object), shipping_method(integer), status(string), updated_at(string)
   uploads:
     primary key: id
     cursor: upload_time
-    fields: file_name(), height(), id(), mime_type(), preview_url(), size(), upload_time(), width()
+    fields: file_name(string), height(integer), id(string), mime_type(string), preview_url(string), size(integer), upload_time(string), width(integer)
   upload_detail:
     primary key: id
     cursor: upload_time
-    fields: file_name(), height(), id(), mime_type(), preview_url(), size(), upload_time(), width()
+    fields: file_name(string), height(integer), id(string), mime_type(string), preview_url(string), size(integer), upload_time(string), width(integer)
   webhooks:
     primary key: id
-    fields: id(), shop_id(), topic(), url()
+    fields: id(string), shop_id(string), topic(string), url(string)
   v2_shipping_methods:
     primary key: id
-    fields: attributes(), blueprint_id(), id(), print_provider_id(), type()
+    fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), type(string)
   v2_shipping_standard:
     primary key: id
-    fields: attributes(), blueprint_id(), id(), print_provider_id(), shipping_method(), type()
+    fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), shipping_method(string), type(string)
   v2_shipping_priority:
     primary key: id
-    fields: attributes(), blueprint_id(), id(), print_provider_id(), shipping_method(), type()
+    fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), shipping_method(string), type(string)
   v2_shipping_express:
     primary key: id
-    fields: attributes(), blueprint_id(), id(), print_provider_id(), shipping_method(), type()
+    fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), shipping_method(string), type(string)
   v2_shipping_economy:
     primary key: id
-    fields: attributes(), blueprint_id(), id(), print_provider_id(), shipping_method(), type()
+    fields: attributes(object), blueprint_id(string), id(string), print_provider_id(string), shipping_method(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

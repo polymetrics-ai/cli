@@ -38,14 +38,14 @@ Reads Customerly users, leads, and accounts, and writes user/lead/tag/message/at
 - users:
   - primary key: user_id, email
   - cursor: last_update
-  - fields: city(), country(), create_date(), crmhero_user_id(), email(), first_seen_at(), last_activity(), last_update(), name(), role(), sub_active(), sub_status(), timezone(), user_id(), username()
+  - fields: city(string), country(string), create_date(string), crmhero_user_id(string), email(string), first_seen_at(string), last_activity(string), last_update(string), name(string), role(string), sub_active(boolean), sub_status(string), timezone(string), user_id(integer), username(string)
 - leads:
   - primary key: crmhero_user_id
   - cursor: last_update
-  - fields: city(), country(), create_date(), crmhero_user_id(), email(), last_update(), name(), role(), sub_active(), sub_status(), timezone(), username()
+  - fields: city(string), country(string), create_date(string), crmhero_user_id(string), email(string), last_update(string), name(string), role(string), sub_active(boolean), sub_status(string), timezone(string), username(string)
 - accounts:
   - primary key: account_id
-  - fields: account_id(), email()
+  - fields: account_id(integer), email(string)
 
 ## Sync Modes
 

@@ -38,17 +38,17 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
 
 - forms:
   - primary key: id
-  - fields: createdAt(), id(), isClosed(), name(), numberOfSubmissions(), status(), updatedAt(), workspaceId()
+  - fields: createdAt(string), id(string), isClosed(boolean), name(string), numberOfSubmissions(integer), status(string), updatedAt(string), workspaceId(string)
 - workspaces:
   - primary key: id
-  - fields: createdAt(), createdByUserId(), folders(), id(), index(), invites(), members(), name(), updatedAt()
+  - fields: createdAt(string), createdByUserId(string), folders(array), id(string), index(integer), invites(array), members(array), name(string), updatedAt(string)
 - webhooks:
   - primary key: id
-  - fields: createdAt(), eventTypes(), externalSubscriber(), formId(), httpHeaders(), id(), isEnabled(), lastSyncedAt(), signingSecret(), updatedAt(), url()
+  - fields: createdAt(string), eventTypes(array), externalSubscriber(string), formId(string), httpHeaders(array), id(string), isEnabled(boolean), lastSyncedAt(string), signingSecret(string), updatedAt(string), url(string)
 - submissions:
   - primary key: id
   - cursor: submitted_at
-  - fields: formId(), form_id(), id(), isCompleted(), pdfUrl(), previewUrl(), responses(), submittedAt(), submitted_at()
+  - fields: formId(string), form_id(string), id(string), isCompleted(boolean), pdfUrl(string), previewUrl(string), responses(array), submittedAt(string), submitted_at(string)
 
 ## Sync Modes
 

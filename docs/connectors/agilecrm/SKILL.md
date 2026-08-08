@@ -38,30 +38,30 @@ Reads AgileCRM contacts, deals, tasks, milestone pipelines, campaigns, and suppo
 - contacts:
   - primary key: id
   - cursor: created_time
-  - fields: created_time(), id(), lead_score(), owner_id(), properties(), star_value(), tags(), type(), updated_time()
+  - fields: created_time(integer), id(integer), lead_score(integer), owner_id(string), properties(array), star_value(integer), tags(array), type(string), updated_time(integer)
 - deals:
   - primary key: id
   - cursor: created_time
-  - fields: close_date(), created_time(), expected_value(), id(), milestone(), name(), owner_id(), pipeline_id(), probability()
+  - fields: close_date(integer), created_time(integer), expected_value(number), id(integer), milestone(string), name(string), owner_id(string), pipeline_id(integer), probability(integer)
 - tasks:
   - primary key: id
   - cursor: created_time
-  - fields: created_time(), due(), id(), is_complete(), owner_id(), priority_type(), status(), subject(), type()
+  - fields: created_time(integer), due(integer), id(integer), is_complete(boolean), owner_id(string), priority_type(string), status(string), subject(string), type(string)
 - milestone:
   - primary key: id
-  - fields: id(), milestones(), name(), pipeline_default()
+  - fields: id(integer), milestones(string), name(string), pipeline_default(boolean)
 - campaigns:
   - primary key: id
   - cursor: created_time
-  - fields: created_time(), creatorName(), domainUserId(), id(), name(), rules(), updated_time()
+  - fields: created_time(integer), creatorName(string), domainUserId(integer), id(integer), name(string), rules(string), updated_time(integer)
 - tickets_filters:
   - primary key: id
   - cursor: updated_time
-  - fields: conditions(), id(), is_default_filter(), name(), owner_id(), updated_time()
+  - fields: conditions(array), id(integer), is_default_filter(boolean), name(string), owner_id(integer), updated_time(integer)
 - tickets:
   - primary key: id
   - cursor: last_updated_time
-  - fields: contactID(), created_time(), filter_id(), id(), is_favorite(), is_spam(), last_updated_time(), priority(), requester_email(), requester_name(), source(), status(), subject(), type()
+  - fields: contactID(integer), created_time(integer), filter_id(string), id(integer), is_favorite(boolean), is_spam(boolean), last_updated_time(integer), priority(string), requester_email(string), requester_name(string), source(string), status(string), subject(string), type(string)
 
 ## Sync Modes
 

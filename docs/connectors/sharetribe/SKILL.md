@@ -36,25 +36,25 @@ Reads and writes Sharetribe listings, users, transactions, availability, stock, 
 
 - listings:
   - primary key: id
-  - fields: attributes(), id(), type(), updated_at()
+  - fields: attributes(object), id(string), type(string), updated_at(string)
 - users:
   - primary key: id
-  - fields: attributes(), id(), type(), updated_at()
+  - fields: attributes(object), id(string), type(string), updated_at(string)
 - transactions:
   - primary key: id
-  - fields: attributes(), id(), type(), updated_at()
+  - fields: attributes(object), id(string), type(string), updated_at(string)
 - events:
   - primary key: id
-  - fields: attributes(), id(), type(), updated_at()
+  - fields: attributes(object), id(string), type(string), updated_at(string)
 - marketplace:
   - primary key: id
-  - fields: attributes(), id(), type()
+  - fields: attributes(object), id(string), type(string)
 - files:
   - primary key: id
-  - fields: attributes(), id(), relationships(), type()
+  - fields: attributes(object), id(string), relationships(object), type(string)
 - file_attachments:
   - primary key: id
-  - fields: attributes(), id(), relationships(), type()
+  - fields: attributes(object), id(string), relationships(object), type(string)
 
 ## Sync Modes
 

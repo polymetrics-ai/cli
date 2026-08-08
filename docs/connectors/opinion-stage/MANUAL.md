@@ -33,13 +33,13 @@ CONFIGURATION
 ETL STREAMS
   items:
     primary key: id
-    fields: created(), embed(), id(), links(), modified(), relationships(), status(), title(), type()
+    fields: created(string), embed(object), id(string), links(object), modified(string), relationships(object), status(string), title(string), type(string)
   responses:
     primary key: id
-    fields: answers(), created(), duration(), id(), item_id(), links(), result(), result_text(), result_title(), type(), utm()
+    fields: answers(array), created(string), duration(number), id(string), item_id(string), links(object), result(object), result_text(string), result_title(string), type(string), utm(object)
   questions:
     primary key: id
-    fields: created(), id(), item_id(), kind(), lead(), modified(), title(), type()
+    fields: created(string), id(string), item_id(string), kind(string), lead(boolean), modified(string), title(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -71,7 +71,7 @@ func (c Connector) Manifest() connectors.Manifest {
 	actions := make([]connectors.WriteActionSpec, 0, len(sqsWriteActions))
 	for _, name := range sortedWriteActionNames() {
 		def := sqsWriteActions[name]
-		actions = append(actions, connectors.WriteActionSpec{Name: def.name, RequiredFields: append([]string(nil), def.required...), OptionalFields: optionalFields(def), Method: def.method, Path: def.path, RedactFields: append([]string(nil), def.redact...), Risk: def.risk, Confirm: def.confirm})
+		actions = append(actions, connectors.WriteActionSpec{Name: def.name, RequiredFields: append([]string(nil), def.required...), RequiredAnyFields: documentedRequiredAnyFields(def), OptionalFields: optionalFields(def), Method: def.method, Path: def.path, RedactFields: append([]string(nil), def.redact...), Risk: def.risk, Confirm: def.confirm})
 	}
 	return connectors.Manifest{
 		Metadata:     c.Metadata(),
@@ -88,10 +88,42 @@ func (c Connector) Manifest() connectors.Manifest {
 	}
 }
 
+// documentedRequiredAnyFields projects a write action's either/or requirement
+// onto the manifest.
+//
+// The manifest previously carried def.required alone, which silently dropped
+// requiredAny — so a generated manual listed set_queue_attributes's
+// attribute_name/attribute_value/attributes as merely optional while
+// validateSQSRequiredFields rejects a write that supplies none of them. The
+// documented contract understated the enforced one, which is the same class of
+// defect as a read that reports a completeness it does not have.
+//
+// It projects the GROUPS, not a rendered sentence: WriteActionSpec.RequiredFields
+// is a list of field names that `pm connectors inspect --json` publishes, and
+// the renderer composes the prose from the groups instead.
+func documentedRequiredAnyFields(def writeActionDef) [][]string {
+	if len(def.requiredAny) == 0 {
+		return nil
+	}
+	out := make([][]string, 0, len(def.requiredAny))
+	for _, group := range def.requiredAny {
+		out = append(out, append([]string(nil), group...))
+	}
+	return out
+}
+
 func optionalFields(def writeActionDef) []string {
 	required := map[string]bool{}
 	for _, field := range def.required {
 		required[field] = true
+	}
+	// A field named by any requiredAny group is part of the required contract,
+	// not an optional extra; listing it as optional contradicts the required
+	// line rendered from the same definition.
+	for _, group := range def.requiredAny {
+		for _, field := range group {
+			required[field] = true
+		}
 	}
 	var out []string
 	for _, field := range def.allowed {

@@ -39,23 +39,23 @@ Reads RepairShopr customers, tickets, invoices, estimates, and assets through th
 - customers:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), email(), id(), name(), phone(), stream(), updated_at()
+  - fields: created_at(string), email(string), id(string), name(string), phone(string), stream(string), updated_at(string)
 - tickets:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_id(), id(), number(), status(), stream(), subject(), updated_at()
+  - fields: customer_id(string), id(string), number(string), status(string), stream(string), subject(string), updated_at(string)
 - invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_id(), id(), number(), status(), stream(), total(), updated_at()
+  - fields: customer_id(string), id(string), number(string), status(string), stream(string), total(string), updated_at(string)
 - estimates:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_id(), id(), number(), status(), stream(), total(), updated_at()
+  - fields: customer_id(string), id(string), number(string), status(string), stream(string), total(string), updated_at(string)
 - assets:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_id(), id(), name(), serial_number(), stream(), updated_at()
+  - fields: customer_id(string), id(string), name(string), serial_number(string), stream(string), updated_at(string)
 
 ## Sync Modes
 

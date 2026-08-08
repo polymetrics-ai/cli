@@ -39,16 +39,16 @@ Reads Twelve Data time series, quotes, stocks, and forex pair reference data.
 - time_series:
   - primary key: symbol, datetime
   - cursor: datetime
-  - fields: close(), datetime(), high(), low(), open(), symbol(), volume()
+  - fields: close(string), datetime(string), high(string), low(string), open(string), symbol(string), volume(string)
 - quote:
   - primary key: symbol
-  - fields: close(), currency(), name(), symbol()
+  - fields: close(string), currency(string), name(string), symbol(string)
 - stocks:
   - primary key: symbol
-  - fields: currency(), name(), symbol()
+  - fields: currency(string), name(string), symbol(string)
 - forex_pairs:
   - primary key: symbol
-  - fields: currency(), name(), symbol()
+  - fields: currency(string), name(string), symbol(string)
 
 ## Sync Modes
 

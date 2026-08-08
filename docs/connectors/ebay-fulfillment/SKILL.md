@@ -49,19 +49,19 @@ Reads eBay seller orders, exploded line items, shipping fulfillments, and paymen
 - orders:
   - primary key: order_id
   - cursor: creation_date
-  - fields: buyer_username(), creation_date(), last_modified_date(), legacy_order_id(), line_item_count(), order_fulfillment_status(), order_id(), order_payment_status(), sales_record_reference(), seller_id(), total_currency(), total_value()
+  - fields: buyer_username(string), creation_date(string), last_modified_date(string), legacy_order_id(string), line_item_count(integer), order_fulfillment_status(string), order_id(string), order_payment_status(string), sales_record_reference(string), seller_id(string), total_currency(string), total_value(string)
 - order_line_items:
   - primary key: line_item_id
   - cursor: creation_date
-  - fields: creation_date(), legacy_item_id(), line_item_fulfillment_status(), line_item_id(), order_id(), quantity(), sku(), title(), total_currency(), total_value()
+  - fields: creation_date(string), legacy_item_id(string), line_item_fulfillment_status(string), line_item_id(string), order_id(string), quantity(integer), sku(string), title(string), total_currency(string), total_value(string)
 - shipping_fulfillments:
   - primary key: order_id
   - cursor: creation_date
-  - fields: creation_date(), legacy_order_id(), order_fulfillment_status(), order_id(), ship_to_city(), ship_to_country_code(), ship_to_name(), ship_to_postal_code(), ship_to_state_or_province(), shipping_step()
+  - fields: creation_date(string), legacy_order_id(string), order_fulfillment_status(string), order_id(string), ship_to_city(string), ship_to_country_code(string), ship_to_name(string), ship_to_postal_code(string), ship_to_state_or_province(string), shipping_step(string)
 - payment_disputes:
   - primary key: payment_dispute_id
   - cursor: open_date
-  - fields: amount_currency(), amount_value(), buyer_username(), dispute_state(), dispute_status(), open_date(), order_id(), payment_dispute_id(), reason()
+  - fields: amount_currency(string), amount_value(string), buyer_username(string), dispute_state(string), dispute_status(string), open_date(string), order_id(string), payment_dispute_id(string), reason(string)
 
 ## Sync Modes
 

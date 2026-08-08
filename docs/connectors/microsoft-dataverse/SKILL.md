@@ -43,19 +43,19 @@ Reads Microsoft Dataverse accounts, contacts, leads, opportunities, and users th
 
 - accounts:
   - primary key: id
-  - fields: created_on(), email(), id(), modified_on(), name()
+  - fields: created_on(string), email(string), id(string), modified_on(string), name(string)
 - contacts:
   - primary key: id
-  - fields: created_on(), email(), id(), modified_on(), name()
+  - fields: created_on(string), email(string), id(string), modified_on(string), name(string)
 - leads:
   - primary key: id
-  - fields: created_on(), email(), id(), modified_on(), name()
+  - fields: created_on(string), email(string), id(string), modified_on(string), name(string)
 - opportunities:
   - primary key: id
-  - fields: created_on(), email(), id(), modified_on(), name()
+  - fields: created_on(string), email(string), id(string), modified_on(string), name(string)
 - systemusers:
   - primary key: id
-  - fields: created_on(), email(), id(), modified_on(), name()
+  - fields: created_on(string), email(string), id(string), modified_on(string), name(string)
 
 ## Sync Modes
 

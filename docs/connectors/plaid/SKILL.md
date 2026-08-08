@@ -40,10 +40,10 @@ Reads Plaid institutions and category metadata through read-only POST endpoints.
 
 - institutions:
   - primary key: institution_id
-  - fields: country_codes(), institution_id(), name()
+  - fields: country_codes(string), institution_id(string), name(string)
 - categories:
   - primary key: category_id
-  - fields: category_id(), group(), hierarchy()
+  - fields: category_id(string), group(string), hierarchy(string)
 
 ## Sync Modes
 

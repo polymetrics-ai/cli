@@ -36,34 +36,34 @@ ETL STREAMS
   jobs:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), title()
+    fields: created_at(string), id(string), title(string)
   candidates:
     primary key: id
-    fields: created_at(), email(), first_name(), id(), last_name()
+    fields: created_at(string), email(string), first_name(string), id(string), last_name(string)
   job_applications:
     primary key: id
-    fields: candidate_id(), created_at(), id(), job_id()
+    fields: candidate_id(string), created_at(string), id(string), job_id(string)
   departments:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   locations:
     primary key: id
-    fields: city(), country(), id(), name()
+    fields: city(string), country(string), id(string), name(string)
   roles:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   stages:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   teams:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   users:
     primary key: id
-    fields: created_at(), email(), id(), name()
+    fields: created_at(string), email(string), id(string), name(string)
   regions:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

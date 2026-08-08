@@ -39,24 +39,24 @@ ETL STREAMS
   properties:
     primary key: id
     cursor: last_seen_date
-    fields: address(), city(), id(), last_seen_date(), property_type(), state(), zip_code()
+    fields: address(string), city(string), id(string), last_seen_date(string), property_type(string), state(string), zip_code(string)
   sale_listings:
     primary key: id
     cursor: last_seen_date
-    fields: address(), id(), last_seen_date(), price(), property_type()
+    fields: address(string), id(string), last_seen_date(string), price(number), property_type(string)
   rental_listings:
     primary key: id
     cursor: last_seen_date
-    fields: address(), id(), last_seen_date(), property_type(), rent()
+    fields: address(string), id(string), last_seen_date(string), property_type(string), rent(number)
   markets:
     primary key: id
-    fields: city(), id(), state(), zip_code()
+    fields: city(string), id(string), state(string), zip_code(string)
   value_estimates:
     primary key: id
-    fields: address(), id(), price()
+    fields: address(string), id(string), price(number)
   rental_estimates:
     primary key: id
-    fields: address(), id(), rent()
+    fields: address(string), id(string), rent(number)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

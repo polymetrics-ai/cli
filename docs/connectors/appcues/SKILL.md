@@ -41,53 +41,53 @@ Reads and manages Appcues in-app guidance experiences (flows, Flows 2.0, pins, m
 - flows:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), createdBy(), id(), name(), published(), state(), updatedAt(), updatedBy()
+  - fields: createdAt(string), createdBy(string), id(string), name(string), published(boolean), state(string), updatedAt(string), updatedBy(string)
 - flows_v2:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), createdBy(), frequency(), id(), name(), published(), tag_ids(), updatedAt(), updatedBy()
+  - fields: createdAt(string), createdBy(string), frequency(string), id(string), name(string), published(boolean), tag_ids(array), updatedAt(string), updatedBy(string)
 - segments:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), description(), id(), name(), updatedAt()
+  - fields: createdAt(string), description(string), id(string), name(string), updatedAt(string)
 - tags:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), id(), name(), updatedAt()
+  - fields: createdAt(string), id(string), name(string), updatedAt(string)
 - checklists:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), id(), name(), published(), state(), updatedAt()
+  - fields: createdAt(string), id(string), name(string), published(boolean), state(string), updatedAt(string)
 - banners:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), id(), name(), published(), state(), updatedAt()
+  - fields: createdAt(string), id(string), name(string), published(boolean), state(string), updatedAt(string)
 - pins:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), frequency(), id(), name(), published(), tag_ids(), type(), updatedAt()
+  - fields: createdAt(string), frequency(string), id(string), name(string), published(boolean), tag_ids(array), type(string), updatedAt(string)
 - mobile_experiences:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), frequency(), id(), name(), platform(), published(), updatedAt()
+  - fields: createdAt(string), frequency(string), id(string), name(string), platform(string), published(boolean), updatedAt(string)
 - launchpads:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), frequency(), id(), name(), published(), tag_ids(), type(), updatedAt()
+  - fields: createdAt(string), frequency(string), id(string), name(string), published(boolean), tag_ids(array), type(string), updatedAt(string)
 - embeds:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), id(), name(), published(), state(), updatedAt()
+  - fields: createdAt(string), id(string), name(string), published(boolean), state(string), updatedAt(string)
 - nps:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), id(), name(), published(), state(), updatedAt()
+  - fields: createdAt(string), id(string), name(string), published(boolean), state(string), updatedAt(string)
 - jobs:
   - primary key: id
-  - fields: id(), name(), started_at(), status(), url()
+  - fields: id(string), name(string), started_at(string), status(string), url(string)
 - sdk_keys:
   - primary key: id
-  - fields: created_at(), id(), name(), tag_field()
+  - fields: created_at(string), id(string), name(string), tag_field(string)
 
 ## Sync Modes
 

@@ -693,7 +693,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 	}
 }
 
-func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
+func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
 	if err := safety.ValidateIdentifier(connectorName, "connector"); err != nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
@@ -737,7 +737,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		return err
 	}
 	return withApp(root, func(a *app.App) error {
-		return runConnectorCommand(ctx, a, connectorName, args, stdout, jsonOut)
+		return runConnectorCommand(ctx, a, connectorName, args, stdout, stderr, jsonOut)
 	})
 }
 
@@ -784,6 +784,7 @@ func connectorHelpFlagsArePassive(flags parsedFlags, surface *connectors.Command
 	declared := map[string]bool{
 		"credential": true, "connection": true, "config": true,
 		"limit": true, "max-bytes": true,
+		"page": true, "page-cursor": true,
 		"dest-root": true, "file-name": true,
 	}
 	for _, flag := range surface.GlobalFlags {
@@ -946,8 +947,26 @@ func renderConnectorCommandDetail(connectorName string, surface *connectors.Comm
 		}
 	}
 	writeConnectorDownloadFlags(&b, cmd)
+	writeConnectorPageFlags(&b, cmd)
 	writeConnectorGlobalFlags(&b, surface)
 	return b.String()
+}
+
+// writeConnectorPageFlags documents the page-navigation flags that only a
+// direct_read command accepts. A direct read returns one page, so a caller
+// told that more records remain needs these documented to fetch them.
+//
+// Like the download flags, they come from connectors.DirectReadPageFlags
+// rather than from literals here, so runtime help and the generated
+// manual/skill/website docs cannot document different flags.
+func writeConnectorPageFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
+	if cmd.Intent != "direct_read" {
+		return
+	}
+	b.WriteString("\nPAGE FLAGS\n")
+	for _, flag := range connectors.DirectReadPageFlags() {
+		writeConnectorFlag(b, flag)
+	}
 }
 
 // writeConnectorDownloadFlags documents the destination flags that only a
@@ -1090,7 +1109,7 @@ func connectorCommandSuggestion(surface *connectors.CommandSurface, path []strin
 	return ""
 }
 
-func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
+func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
@@ -1118,6 +1137,15 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if err != nil {
 		return err
 	}
+	page, pageCursor, err := connectorCommandPage(flags)
+	if err != nil {
+		return err
+	}
+	// The page flags stay in commandFlags on purpose: only a direct_read can
+	// honour them, and the runner drops them for that intent alone. Stripping
+	// them here for every intent made `--page 3` on an ETL command
+	// accepted-and-ignored, which is the same quiet wrongness --page exists to
+	// remove.
 	commandFlags := map[string][]string{}
 	for name, values := range flags.values {
 		switch name {
@@ -1150,13 +1178,15 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 
 	rows := make([]connectors.Record, 0, limit)
 	result, err := commandrunner.Run(ctx, connector, commandrunner.Request{
-		Path:     path,
-		Flags:    commandFlags,
-		Config:   cfg,
-		Limit:    limit,
-		MaxBytes: maxBytes,
-		DestRoot: flags.first("dest-root"),
-		FileName: flags.first("file-name"),
+		Path:       path,
+		Flags:      commandFlags,
+		Config:     cfg,
+		Limit:      limit,
+		MaxBytes:   maxBytes,
+		Page:       page,
+		PageCursor: pageCursor,
+		DestRoot:   flags.first("dest-root"),
+		FileName:   flags.first("file-name"),
 	}, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
@@ -1184,7 +1214,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	}
 	if result.DirectRead != nil {
 		if jsonOut {
-			return writeJSON(stdout, envelope{
+			out := envelope{
 				"kind":      "ConnectorCommandDirectRead",
 				"connector": result.Connector,
 				"command":   result.Command,
@@ -1192,10 +1222,19 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 				"path":      result.DirectRead.Path,
 				"status":    result.DirectRead.Status,
 				"response":  result.DirectRead.Body,
-			})
+			}
+			// A connector that reports no page context has none; an all-zero
+			// page would read as a measured, incomplete result.
+			if directReadPageIsReported(result.DirectRead.Page) {
+				out["page"] = result.DirectRead.Page
+			}
+			return writeJSON(stdout, out)
 		}
 		b, _ := json.MarshalIndent(result.DirectRead.Body, "", "  ")
 		_, _ = fmt.Fprintln(stdout, string(b))
+		// A human reading this must not have to infer completeness from the row
+		// count. The notice goes to stderr so piping the body stays lossless.
+		writeDirectReadPageNotice(stderr, result.DirectRead.Page)
 		return nil
 	}
 	if jsonOut {
@@ -1249,6 +1288,35 @@ func connectorCommandMaxBytes(flags parsedFlags) (int, error) {
 		return 0, validationErrorf("invalid --max-bytes %d, want a positive integer", maxBytes)
 	}
 	return maxBytes, nil
+}
+
+// connectorCommandPage resolves --page and --page-cursor, the two ways to name
+// which page of a direct read to return. A direct read is page-wise
+// exploration, so the caller navigates; it never silently returns page one
+// when it was asked for another.
+//
+// They are mutually exclusive by construction: a connector's declared strategy
+// addresses pages either by number (page_number, offset_limit) or by opaque
+// token, never both. The engine rejects the pairing that does not match the
+// declared strategy.
+func connectorCommandPage(flags parsedFlags) (int, string, error) {
+	raw := flags.first("page")
+	page, err := parseIntFlag("page", raw, 0)
+	if err != nil {
+		return 0, "", err
+	}
+	// Only an absent --page means "unset". Treating an explicit --page 0 as
+	// unset returned page one for a page nobody has, and let
+	// `--page 0 --page-cursor X` slip past the mutual-exclusion check below as
+	// though only the cursor had been passed.
+	if raw != "" && page < 1 {
+		return 0, "", validationErrorf("invalid --page %d, want a positive page number", page)
+	}
+	cursor := flags.first("page-cursor")
+	if raw != "" && cursor != "" {
+		return 0, "", validationErrorf("--page and --page-cursor are mutually exclusive; a connector addresses pages either by number or by cursor")
+	}
+	return page, cursor, nil
 }
 
 func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, credential string, config map[string]string, path []string, commandFlags map[string][]string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
@@ -1840,4 +1908,60 @@ func validateCredentialConfig(a *app.App, connector string, config map[string]st
 
 func appRegistry() *connectors.Registry {
 	return bundleregistry.New()
+}
+
+// writeDirectReadPageNotice tells a human reader when the page they just
+// received is not the whole collection, and how to ask for the rest.
+//
+// Without it the human-readable path is exactly the failure this change
+// exists to remove: a short result that looks complete. It writes to stderr so
+// that piping the body stays lossless.
+func writeDirectReadPageNotice(stderr io.Writer, page connectors.DirectReadPage) {
+	if stderr == nil || page.Complete || !directReadPageIsReported(page) {
+		return
+	}
+	switch {
+	case page.NextNumber > 0:
+		_, _ = fmt.Fprintf(stderr, "note: page %d of a paged result (%d records); more remain — rerun with --page %d\n", page.Number, page.Records, page.NextNumber)
+	case page.NextCursor != "":
+		_, _ = fmt.Fprintf(stderr, "note: partial result (%d records); more remain — rerun with --page-cursor %s\n", page.Records, page.NextCursor)
+	case page.HasMore:
+		// A caller who paged by setting the connector's own paging parameter
+		// owns the position, so there is no --page or --page-cursor to offer.
+		_, _ = fmt.Fprintf(stderr, "note: partial result (%d records); more remain — advance the paging parameter you supplied\n", page.Records)
+	case page.Reason == connectors.DirectReadPageReasonAmbiguous:
+		_, _ = fmt.Fprintf(stderr, "note: %d array elements returned across more than one top-level array; the paged collection cannot be identified, so completeness cannot be confirmed\n", page.Records)
+	default:
+		_, _ = fmt.Fprintf(stderr, "note: %d records returned; %s\n", page.Records, directReadPageIncompleteReason(page))
+	}
+}
+
+// directReadPageIsReported separates "this read has no page information" from
+// "this read is incomplete". Printing an incompleteness claim with an empty
+// parenthetical for a read nothing measured says something untrue.
+//
+// It is also the invariant commandrunner enforces: a direct-read executor that
+// reports no page context has not navigated, so it may not be handed --page or
+// --page-cursor and quietly answer with page one.
+func directReadPageIsReported(page connectors.DirectReadPage) bool {
+	return page.Strategy != ""
+}
+
+func directReadPageIncompleteReason(page connectors.DirectReadPage) string {
+	switch page.Reason {
+	case connectors.DirectReadPageReasonNoPagination:
+		return "this connector declares no pagination strategy, so completeness cannot be confirmed"
+	case connectors.DirectReadPageReasonDeclaredNone:
+		return `this connector declares pagination type "none", so completeness cannot be confirmed`
+	case connectors.DirectReadPageReasonNotAddressable:
+		return fmt.Sprintf("the declared %q pagination cannot page this request, so completeness cannot be confirmed", page.Strategy)
+	case connectors.DirectReadPageReasonInvalidSpec:
+		return fmt.Sprintf("this connector's declared %q pagination is unusable, so completeness cannot be confirmed", page.Strategy)
+	case connectors.DirectReadPageReasonSizeNotRequested:
+		return fmt.Sprintf("the declared %q pagination names no page-size parameter, so the provider chose the page size and completeness cannot be confirmed", page.Strategy)
+	case "":
+		return "result is not confirmed complete"
+	default:
+		return fmt.Sprintf("result is not confirmed complete (%s)", page.Reason)
+	}
 }

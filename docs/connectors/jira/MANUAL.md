@@ -35,13 +35,13 @@ ETL STREAMS
   issues:
     primary key: id
     cursor: updated
-    fields: assignee(), created(), id(), issuetype(), key(), priority(), project(), reporter(), self(), status(), summary(), updated()
+    fields: assignee(string), created(string), id(string), issuetype(string), key(string), priority(string), project(string), reporter(string), self(string), status(string), summary(string), updated(string)
   projects:
     primary key: id
-    fields: id(), isPrivate(), key(), name(), projectTypeKey(), self(), simplified(), style()
+    fields: id(string), isPrivate(boolean), key(string), name(string), projectTypeKey(string), self(string), simplified(boolean), style(string)
   users:
     primary key: accountId
-    fields: accountId(), accountType(), active(), displayName(), emailAddress(), self()
+    fields: accountId(string), accountType(string), active(boolean), displayName(string), emailAddress(string), self(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

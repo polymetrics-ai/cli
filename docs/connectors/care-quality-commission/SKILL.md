@@ -36,13 +36,13 @@ Reads Care Quality Commission (CQC) registered locations, providers, and inspect
 
 - locations:
   - primary key: locationId
-  - fields: locationId(), locationName(), postalCode()
+  - fields: locationId(string), locationName(string), postalCode(string)
 - providers:
   - primary key: providerId
-  - fields: providerId(), providerName()
+  - fields: providerId(string), providerName(string)
 - inspection_areas:
   - primary key: inspectionAreaId
-  - fields: endDate(), inspectionAreaId(), inspectionAreaName(), inspectionAreaType(), inspectionCategories(), orgInspectionAreaRetirementDate(), status(), supersededBy()
+  - fields: endDate(string), inspectionAreaId(string), inspectionAreaName(string), inspectionAreaType(string), inspectionCategories(array), orgInspectionAreaRetirementDate(string), status(string), supersededBy(string)
 
 ## Sync Modes
 

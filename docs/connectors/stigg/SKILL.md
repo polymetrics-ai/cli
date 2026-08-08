@@ -35,16 +35,16 @@ Reads Stigg products, plans, customers, and subscriptions through the Stigg Grap
 
 - products:
   - primary key: id
-  - fields: displayName(), id(), refId(), status()
+  - fields: displayName(string), id(string), refId(string), status(string)
 - plans:
   - primary key: id
-  - fields: displayName(), id(), refId(), status()
+  - fields: displayName(string), id(string), refId(string), status(string)
 - customers:
   - primary key: id
-  - fields: displayName(), id(), refId(), status()
+  - fields: displayName(string), id(string), refId(string), status(string)
 - subscriptions:
   - primary key: id
-  - fields: customerId(), id(), refId(), status()
+  - fields: customerId(string), id(string), refId(string), status(string)
 
 ## Sync Modes
 

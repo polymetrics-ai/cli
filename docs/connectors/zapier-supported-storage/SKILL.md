@@ -37,7 +37,7 @@ Reads and writes Zapier Storage key/value records.
 - records:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), key(), updated_at(), value()
+  - fields: id(string), key(string), updated_at(string), value(string)
 
 ## Sync Modes
 

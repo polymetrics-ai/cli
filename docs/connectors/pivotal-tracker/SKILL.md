@@ -35,16 +35,16 @@ Reads Pivotal Tracker projects, stories, iterations, and epics through API v5.
 
 - projects:
   - primary key: id
-  - fields: id(), name(), state(), updated_at()
+  - fields: id(integer), name(string), state(string), updated_at(string)
 - stories:
   - primary key: id
-  - fields: id(), name(), state(), updated_at()
+  - fields: id(integer), name(string), state(string), updated_at(string)
 - iterations:
   - primary key: id
-  - fields: id(), name(), state(), updated_at()
+  - fields: id(integer), name(string), state(string), updated_at(string)
 - epics:
   - primary key: id
-  - fields: id(), name(), state(), updated_at()
+  - fields: id(integer), name(string), state(string), updated_at(string)
 
 ## Sync Modes
 

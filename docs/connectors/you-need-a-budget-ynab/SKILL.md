@@ -41,31 +41,31 @@ Reads YNAB budgets, accounts, categories, payees, months, transactions, and sche
 - budgets:
   - primary key: id
   - cursor: updated_at
-  - fields: currency_format(), date_format(), first_month(), id(), last_modified_on(), last_month(), name(), updated_at()
+  - fields: currency_format(object), date_format(object), first_month(string), id(string), last_modified_on(string), last_month(string), name(string), updated_at(string)
 - accounts:
   - primary key: id
   - cursor: updated_at
-  - fields: balance(), cleared_balance(), closed(), deleted(), id(), last_reconciled_at(), name(), on_budget(), type(), uncleared_balance(), updated_at()
+  - fields: balance(integer), cleared_balance(integer), closed(boolean), deleted(boolean), id(string), last_reconciled_at(string), name(string), on_budget(boolean), type(string), uncleared_balance(integer), updated_at(string)
 - transactions:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), amount(), approved(), category_id(), category_name(), cleared(), date(), deleted(), id(), memo(), name(), payee_id(), payee_name(), updated_at()
+  - fields: account_id(string), amount(integer), approved(boolean), category_id(string), category_name(string), cleared(string), date(string), deleted(boolean), id(string), memo(string), name(string), payee_id(string), payee_name(string), updated_at(string)
 - categories:
   - primary key: id
   - cursor: updated_at
-  - fields: categories(), deleted(), hidden(), id(), internal(), name(), updated_at()
+  - fields: categories(array), deleted(boolean), hidden(boolean), id(string), internal(boolean), name(string), updated_at(string)
 - payees:
   - primary key: id
   - cursor: updated_at
-  - fields: deleted(), id(), name(), transfer_account_id(), updated_at()
+  - fields: deleted(boolean), id(string), name(string), transfer_account_id(string), updated_at(string)
 - months:
   - primary key: id
   - cursor: updated_at
-  - fields: activity(), age_of_money(), budgeted(), deleted(), id(), income(), month(), note(), to_be_budgeted(), updated_at()
+  - fields: activity(integer), age_of_money(integer), budgeted(integer), deleted(boolean), id(string), income(integer), month(string), note(string), to_be_budgeted(integer), updated_at(string)
 - scheduled_transactions:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), amount(), category_id(), category_name(), date_first(), date_next(), deleted(), flag_color(), frequency(), id(), memo(), name(), payee_id(), payee_name(), updated_at()
+  - fields: account_id(string), amount(integer), category_id(string), category_name(string), date_first(string), date_next(string), deleted(boolean), flag_color(string), frequency(string), id(string), memo(string), name(string), payee_id(string), payee_name(string), updated_at(string)
 
 ## Sync Modes
 

@@ -34,19 +34,19 @@ CONFIGURATION
 ETL STREAMS
   avatars:
     primary key: id
-    fields: avatar_id(), id(), name()
+    fields: avatar_id(string), id(string), name(string)
   tags:
     primary key: id
-    fields: avatar_id(), id(), name()
+    fields: avatar_id(string), id(string), name(string)
   custom_fields:
     primary key: id
-    fields: avatar_id(), id(), name()
+    fields: avatar_id(string), id(string), name(string)
   sequences:
     primary key: id
-    fields: avatar_id(), id(), name()
+    fields: avatar_id(string), id(string), name(string)
   subscribers:
     primary key: id
-    fields: avatar_id(), id(), name()
+    fields: avatar_id(string), id(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

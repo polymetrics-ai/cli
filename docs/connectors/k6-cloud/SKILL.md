@@ -37,13 +37,13 @@ Reads k6 Cloud organizations, projects, and load tests through the k6 Cloud REST
 
 - organizations:
   - primary key: id
-  - fields: billing_address(), billing_country(), billing_email(), created(), description(), id(), is_default(), is_saml_org(), name(), owner_id(), updated(), vat_number()
+  - fields: billing_address(string), billing_country(string), billing_email(string), created(string), description(string), id(integer), is_default(boolean), is_saml_org(boolean), name(string), owner_id(integer), updated(string), vat_number(string)
 - k6_tests:
   - primary key: id
-  - fields: created(), id(), last_test_run_id(), name(), project_id(), script(), test_run_ids(), updated(), user_id()
+  - fields: created(string), id(integer), last_test_run_id(string), name(string), project_id(integer), script(string), test_run_ids(array), updated(string), user_id(integer)
 - projects:
   - primary key: id
-  - fields: created(), description(), id(), is_default(), name(), organization_id(), updated()
+  - fields: created(string), description(string), id(integer), is_default(boolean), name(string), organization_id(integer), updated(string)
 
 ## Sync Modes
 

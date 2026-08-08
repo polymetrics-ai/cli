@@ -36,19 +36,19 @@ Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers; crea
 
 - avatars:
   - primary key: id
-  - fields: avatar_id(), id(), name()
+  - fields: avatar_id(string), id(string), name(string)
 - tags:
   - primary key: id
-  - fields: avatar_id(), id(), name()
+  - fields: avatar_id(string), id(string), name(string)
 - custom_fields:
   - primary key: id
-  - fields: avatar_id(), id(), name()
+  - fields: avatar_id(string), id(string), name(string)
 - sequences:
   - primary key: id
-  - fields: avatar_id(), id(), name()
+  - fields: avatar_id(string), id(string), name(string)
 - subscribers:
   - primary key: id
-  - fields: avatar_id(), id(), name()
+  - fields: avatar_id(string), id(string), name(string)
 
 ## Sync Modes
 

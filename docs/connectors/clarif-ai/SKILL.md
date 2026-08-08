@@ -44,19 +44,19 @@ Reads Clarifai applications, datasets, models, model versions, and workflows, an
 
 - applications:
   - primary key: id
-  - fields: created_at(), default_language(), description(), id(), modified_at(), name(), user_id()
+  - fields: created_at(string), default_language(string), description(string), id(string), modified_at(string), name(string), user_id(string)
 - datasets:
   - primary key: id
-  - fields: app_id(), created_at(), default_processing_info(), description(), id(), modified_at(), user_id()
+  - fields: app_id(string), created_at(string), default_processing_info(object), description(string), id(string), modified_at(string), user_id(string)
 - models:
   - primary key: id
-  - fields: app_id(), created_at(), id(), model_type_id(), modified_at(), name(), user_id(), visibility()
+  - fields: app_id(string), created_at(string), id(string), model_type_id(string), modified_at(string), name(string), user_id(string), visibility(object)
 - model_versions:
   - primary key: id
-  - fields: app_id(), created_at(), description(), id(), modified_at(), status(), user_id()
+  - fields: app_id(string), created_at(string), description(string), id(string), modified_at(string), status(object), user_id(string)
 - workflows:
   - primary key: id
-  - fields: app_id(), created_at(), id(), modified_at(), user_id(), version()
+  - fields: app_id(string), created_at(string), id(string), modified_at(string), user_id(string), version(object)
 
 ## Sync Modes
 

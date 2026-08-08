@@ -34,69 +34,69 @@ CONFIGURATION
 ETL STREAMS
   booking_line_items:
     primary key: id
-    fields: _object(), id(), units()
+    fields: _object(string), id(string), units(integer)
   bookings:
     primary key: id
-    fields: _object(), created_at(), id(), name(), status(), updated_at()
+    fields: _object(string), created_at(string), id(string), name(string), status(string), updated_at(string)
   commercial_invoices:
     primary key: id
-    fields: _object(), digitization_status(), id(), invoice_number(), updated_at()
+    fields: _object(string), digitization_status(string), id(string), invoice_number(string), updated_at(string)
   customs_entries:
     primary key: id
-    fields: _object(), entry_number(), id(), status()
+    fields: _object(string), entry_number(string), id(string), status(string)
   documents:
     primary key: id
-    fields: _object(), archived_at(), document_type(), file_link(), file_name(), id(), memo()
+    fields: _object(string), archived_at(string), document_type(string), file_link(string), file_name(string), id(string), memo(string)
   events:
     primary key: id
-    fields: _object(), created_at(), id(), occurred_at(), type(), version()
+    fields: _object(string), created_at(string), id(string), occurred_at(string), type(string), version(string)
   invoices:
     primary key: id
     cursor: updated_at
-    fields: _object(), created_at(), currency(), due_date(), id(), invoice_number(), issued_date(), status(), total(), updated_at()
+    fields: _object(string), created_at(string), currency(string), due_date(string), id(string), invoice_number(string), issued_date(string), status(string), total(string), updated_at(string)
   companies:
     primary key: id
     cursor: updated_at
-    fields: _object(), created_at(), dba_name(), id(), legal_name(), name(), updated_at()
+    fields: _object(string), created_at(string), dba_name(string), id(string), legal_name(string), name(string), updated_at(string)
   company_entities:
     primary key: id
-    fields: _object(), id(), name(), ref()
+    fields: _object(string), id(string), name(string), ref(string)
   contacts:
     primary key: id
-    fields: _object(), email(), id(), name(), phone_number()
+    fields: _object(string), email(string), id(string), name(string), phone_number(string)
   locations:
     primary key: id
     cursor: updated_at
-    fields: _object(), city(), country_code(), created_at(), id(), name(), state(), street_address(), updated_at(), zip()
+    fields: _object(string), city(string), country_code(string), created_at(string), id(string), name(string), state(string), street_address(string), updated_at(string), zip(string)
   my_company:
     primary key: id
-    fields: _object(), editable(), id(), name(), ref()
+    fields: _object(string), editable(boolean), id(string), name(string), ref(string)
   container_legs:
     primary key: id
-    fields: _object(), id()
+    fields: _object(string), id(string)
   containers:
     primary key: id
-    fields: _object(), container_number(), container_size(), container_type(), id()
+    fields: _object(string), container_number(string), container_size(string), container_type(string), id(string)
   ports:
     primary key: id
-    fields: _object(), country_code(), id(), name(), port_name(), port_type()
+    fields: _object(string), country_code(string), id(string), name(string), port_name(string), port_type(string)
   products:
     primary key: id
     cursor: updated_at
-    fields: _object(), country_of_origin(), created_at(), description(), hts_code(), id(), name(), sku(), updated_at()
+    fields: _object(string), country_of_origin(string), created_at(string), description(string), hts_code(string), id(string), name(string), sku(string), updated_at(string)
   purchase_order_line_items:
     primary key: id
-    fields: _object(), id(), item_key(), line_item_number(), units()
+    fields: _object(string), id(string), item_key(string), line_item_number(integer), units(integer)
   purchase_orders:
     primary key: id
-    fields: _object(), created_at(), id(), name(), status(), updated_at()
+    fields: _object(string), created_at(string), id(string), name(string), status(string), updated_at(string)
   shipment_legs:
     primary key: id
-    fields: _object(), id(), transportation_mode()
+    fields: _object(string), id(string), transportation_mode(string)
   shipments:
     primary key: id
     cursor: updated_at
-    fields: _object(), created_at(), destination_port(), estimated_arrival_date(), estimated_departure_date(), freight_type(), id(), origin_port(), status(), transportation_mode(), updated_at()
+    fields: _object(string), created_at(string), destination_port(string), estimated_arrival_date(string), estimated_departure_date(string), freight_type(string), id(string), origin_port(string), status(string), transportation_mode(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

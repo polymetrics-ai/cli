@@ -37,16 +37,16 @@ Reads pretix organizers, events, items, and orders through the pretix REST API.
 
 - organizers:
   - primary key: id
-  - fields: id(), name(), slug()
+  - fields: id(string), name(object), slug(string)
 - events:
   - primary key: id
-  - fields: id(), name(), slug(), updated_at()
+  - fields: id(string), name(object), slug(string), updated_at(string)
 - items:
   - primary key: id
-  - fields: code(), id(), name(), slug()
+  - fields: code(string), id(integer), name(object), slug(string)
 - orders:
   - primary key: id
-  - fields: code(), id(), name()
+  - fields: code(string), id(string), name(object)
 
 ## Sync Modes
 

@@ -58,205 +58,205 @@ ETL STREAMS
   accounts:
     primary key: id
     cursor: modifiedTime
-    fields: accountTypeId(), createdTime(), entityType(), id(), industryId(), isHotLead(), modifiedTime(), name(), url()
+    fields: accountTypeId(integer), createdTime(string), entityType(string), id(integer), industryId(integer), isHotLead(boolean), modifiedTime(string), name(string), url(string)
   contacts:
     primary key: id
     cursor: modifiedTime
-    fields: createdTime(), description(), entityType(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), description(string), entityType(string), htmlUrl(string), id(integer), modifiedTime(string), name(string)
   leads:
     primary key: id
     cursor: modifiedTime
-    fields: closedTime(), confidence(), createdTime(), entityType(), id(), isOverdue(), modifiedTime(), name(), status(), value()
+    fields: closedTime(string), confidence(integer), createdTime(string), entityType(string), id(integer), isOverdue(boolean), modifiedTime(string), name(string), status(integer), value(string)
   activities:
     primary key: id
     cursor: modifiedTime
-    fields: activityTypeId(), createdTime(), description(), entityType(), id(), isFlagged(), logNote(), modifiedTime(), name(), status()
+    fields: activityTypeId(integer), createdTime(string), description(string), entityType(string), id(integer), isFlagged(boolean), logNote(string), modifiedTime(string), name(string), status(integer)
   users:
     primary key: id
-    fields: createdTime(), emails(), entityType(), id(), isAdministrator(), isEnabled(), modifiedTime(), name()
+    fields: createdTime(string), emails(string), entityType(string), id(integer), isAdministrator(boolean), isEnabled(boolean), modifiedTime(string), name(string)
   account:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   account_custom_fields:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   account_custom_field_attributes:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   account_list_items:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   account_list_fields:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   account_types:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   activity:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   activity_types:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   audiences:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   competitor_maps:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   competitor_map:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   competitors:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   competitor:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   contact:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   contact_custom_fields:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   contact_custom_field_attributes:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   contact_list_items:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   contact_list_fields:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   editions:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   edition:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   email:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   events:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   deleted_events:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   saved_filters:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   forms:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   form_field:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   form:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   industries:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   industry:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   invoices:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   invoice:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead_custom_fields:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead_installments:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead_stages:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead_custom_field_attributes:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead_list_items:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead_list_fields:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead_reports:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   markets:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   market:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   notes:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   note:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead_outcomes:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   lead_outcome:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   product_categories:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   product_category:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   product_maps:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   product_map:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   products:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   product:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   quotes:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   quote:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   sources:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   stages:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   pipelines:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   tags:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   tasks:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   task:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   territories:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
   user:
     primary key: id
-    fields: createdTime(), deletedTime(), href(), htmlUrl(), id(), modifiedTime(), name()
+    fields: createdTime(string), deletedTime(string), href(string), htmlUrl(string), id(string), modifiedTime(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -35,26 +35,26 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
 
 - campaigns:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 - orders:
   - primary key: id
-  - fields: campaign_id(), created_at(), id(), payment_status()
+  - fields: campaign_id(string), created_at(string), id(string), payment_status(string)
 - rewards:
   - primary key: id
-  - fields: created_at(), id(), order_id(), status()
+  - fields: created_at(string), id(string), order_id(string), status(string)
 - funding_sources:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 - products:
   - primary key: id
-  - fields: category(), countries(), currency_codes(), description(), disclosure(), documents(), id(), images(), name(), skus(), subcategory(), usage_instructions()
+  - fields: category(string), countries(array), currency_codes(array), description(string), disclosure(string), documents(array), id(string), images(array), name(string), skus(array), subcategory(string), usage_instructions(string)
 - invoices:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency_code(), id(), international(), orders(), paid_at(), po_number(), rewards(), status()
+  - fields: amount(number), created_at(string), currency_code(string), id(string), international(boolean), orders(array), paid_at(string), po_number(string), rewards(array), status(string)
 - members:
   - primary key: id
-  - fields: active(), email(), id(), name(), role(), status()
+  - fields: active(boolean), email(string), id(string), name(string), role(string), status(string)
 
 ## Sync Modes
 

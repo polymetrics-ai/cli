@@ -276,6 +276,11 @@ type DirectReadRequest struct {
 	MaxBytes     int
 	OutputPolicy string
 	RedactFields []string
+	// Page selects an addressable page (page_number/offset_limit strategies);
+	// PageCursor selects one by opaque token. They are mutually exclusive, and
+	// both are answered by the previous read's DirectReadPage.
+	Page       int
+	PageCursor string
 }
 
 type OperationDirectReadRequest struct {
@@ -287,6 +292,9 @@ type OperationDirectReadRequest struct {
 	MaxBytes     int
 	OutputPolicy string
 	RedactFields []string
+	// Page and PageCursor mirror DirectReadRequest's navigation inputs.
+	Page       int
+	PageCursor string
 }
 
 type DirectReadResult struct {
@@ -295,6 +303,85 @@ type DirectReadResult struct {
 	Path      string `json:"path"`
 	Status    int    `json:"status"`
 	Body      any    `json:"body"`
+	// Page answers "is this all of it?" — the question a direct-read caller
+	// previously had no way to ask. A single Status+Body cannot represent
+	// page 2..N, so before this field a truncated collection and a complete
+	// one were indistinguishable at status 200.
+	Page DirectReadPage `json:"page"`
+}
+
+// Reasons a direct read's page is not confirmed complete. They are declared
+// beside DirectReadPage so the engine that sets them and the CLI that renders
+// them cannot drift.
+//
+// The four not-paged reasons are deliberately distinct. Telling a caller that
+// a connector "declares no pagination strategy" when it declares a working one
+// — and most of them do — is the same class of untruth as an unsignalled
+// truncation, just pointed the other way.
+const (
+	DirectReadPageReasonMorePages = "more_pages"
+	// DirectReadPageReasonNoPagination: the bundle declares no pagination spec
+	// at all, so nothing could prove where this page sits.
+	DirectReadPageReasonNoPagination = "pagination_not_declared"
+	// DirectReadPageReasonDeclaredNone: the bundle explicitly declares
+	// pagination type "none". One request is the whole request it knows how to
+	// make, but the declaration is not proof that the provider agrees.
+	DirectReadPageReasonDeclaredNone = "pagination_declared_none"
+	// DirectReadPageReasonNotAddressable: a real strategy is declared, but it
+	// cannot page THIS request — a POST read carries its selection in a body
+	// no query-param strategy can express.
+	DirectReadPageReasonNotAddressable = "pagination_not_addressable_for_request"
+	// DirectReadPageReasonInvalidSpec: a strategy is declared but its spec is
+	// unusable, so paging degraded to a single page for this connector alone.
+	DirectReadPageReasonInvalidSpec = "pagination_spec_invalid"
+	DirectReadPageReasonAmbiguous   = "ambiguous_collection_shape"
+	// DirectReadPageReasonSizeNotRequested: the declared strategy stops on a
+	// SHORT page, but the size it compared against is not the size the request
+	// carried, so the comparison proves nothing. Usually the spec names no
+	// size/limit parameter at all and the provider applied its own default;
+	// it also covers a caller-supplied size the walk could not adopt as its
+	// threshold. Either way, asserting completeness would claim something
+	// nothing measured.
+	DirectReadPageReasonSizeNotRequested = "page_size_not_requested"
+)
+
+// DirectReadPage is the page context of one direct read.
+//
+// A direct read is page-wise EXPLORATION, not bulk extraction: it returns one
+// page and tells the caller how to reach the next. (Bulk extraction is the ETL
+// path, which stores what it reads; a direct read does not.) Complete is the
+// load-bearing field — false means records exist that this result does not
+// contain, and Reason says why the page stopped there.
+type DirectReadPage struct {
+	// Strategy is the pagination type the bundle declares, or "none" when it
+	// declares one that cannot page (or declares nothing at all).
+	Strategy string `json:"strategy"`
+	// Records counts the rows on THIS page; 0 for a response that is not a
+	// collection. When Reason is ambiguous_collection_shape it counts every
+	// top-level array element instead, because which array pages is unknown
+	// but how many rows arrived is not.
+	Records int `json:"records"`
+	// Size is the page size actually put on the wire. It is omitted when the
+	// declared spec names no size parameter, since the provider then applied
+	// its own default and no size was requested at all.
+	Size int `json:"size,omitempty"`
+	// Number is the addressable page number. Only page_number and offset_limit
+	// have one; cursor, next_url and link_header address pages by opaque token
+	// and leave this zero.
+	Number int `json:"number,omitempty"`
+	// HasMore reports that the provider has at least one further page.
+	HasMore bool `json:"has_more"`
+	// NextNumber is the page to request next, set only for addressable
+	// strategies.
+	NextNumber int `json:"next_number,omitempty"`
+	// NextCursor is the opaque token to request next, set for the strategies
+	// that have no addressable page number.
+	NextCursor string `json:"next_cursor,omitempty"`
+	// Complete is true only when this page is provably the whole collection.
+	Complete bool `json:"complete"`
+	// Reason names why Complete is false — one of the DirectReadPageReason
+	// constants above.
+	Reason string `json:"reason,omitempty"`
 }
 
 type DirectReader interface {

@@ -39,7 +39,7 @@ ETL STREAMS
   datasets:
     primary key: id
     cursor: updated_at
-    fields: dataset_name(), id(), raw_data(), raw_data_string(), updated_at()
+    fields: dataset_name(string), id(string), raw_data(object), raw_data_string(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

@@ -16,6 +16,16 @@ const sharedFlags = JSON.parse(
   ),
 );
 
+const pageFlags = JSON.parse(
+  readFileSync(
+    resolve(
+      dirname(fileURLToPath(import.meta.url)),
+      '../../internal/connectors/direct_read_page_flags.json',
+    ),
+    'utf8',
+  ),
+);
+
 const surfaceWith = (command) => ({
   usage: 'pm acme <command>',
   commands: [{ path: 'artifact download', flags: [], ...command }],
@@ -38,9 +48,27 @@ test('a binary_download command documents the runtime destination flags', () => 
 
 test('other intents are left exactly as the bundle declares them', () => {
   const mapped = mapCLISurface(
-    surfaceWith({ intent: 'direct_read', flags: [{ name: 'issue-id', type: 'string' }] }),
+    surfaceWith({ intent: 'etl', flags: [{ name: 'issue-id', type: 'string' }] }),
   );
   assert.deepEqual(flagNames(mapped), ['issue-id']);
+});
+
+// A direct read returns ONE page, so the website must document how to ask for
+// the next one. The flags come from the same JSON the runtime embeds, so the
+// catalog page cannot advertise a different navigation surface than the CLI.
+test('a direct_read command documents the runtime page flags', () => {
+  const mapped = mapCLISurface(
+    surfaceWith({ intent: 'direct_read', flags: [{ name: 'issue-id', type: 'string' }] }),
+  );
+  assert.deepEqual(flagNames(mapped), ['issue-id', ...pageFlags.map((flag) => flag.name)]);
+});
+
+test('re-mapping a direct_read command does not duplicate the page flags', () => {
+  const once = mapCLISurface(
+    surfaceWith({ intent: 'direct_read', flags: [{ name: 'issue-id', type: 'string' }] }),
+  );
+  const twice = mapCLISurface({ ...once, commands: once.commands });
+  assert.deepEqual(flagNames(twice), flagNames(once));
 });
 
 test('declared scalar minima remain in website data', () => {

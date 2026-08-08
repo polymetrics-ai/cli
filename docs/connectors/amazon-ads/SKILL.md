@@ -41,25 +41,25 @@ Reads Amazon Advertising profiles, Sponsored Products campaigns, ad groups, prod
 
 - profiles:
   - primary key: profile_id
-  - fields: account_id(), account_name(), account_type(), country_code(), currency_code(), daily_budget(), marketplace_string_id(), profile_id(), timezone()
+  - fields: account_id(string), account_name(string), account_type(string), country_code(string), currency_code(string), daily_budget(number), marketplace_string_id(string), profile_id(integer), timezone(string)
 - campaigns:
   - primary key: campaign_id
-  - fields: campaign_id(), campaign_type(), daily_budget(), end_date(), name(), portfolio_id(), premium_bid_adjustment(), start_date(), state(), targeting_type()
+  - fields: campaign_id(integer), campaign_type(string), daily_budget(number), end_date(string), name(string), portfolio_id(integer), premium_bid_adjustment(boolean), start_date(string), state(string), targeting_type(string)
 - ad_groups:
   - primary key: ad_group_id
-  - fields: ad_group_id(), campaign_id(), default_bid(), name(), state()
+  - fields: ad_group_id(integer), campaign_id(integer), default_bid(number), name(string), state(string)
 - portfolios:
   - primary key: portfolio_id
-  - fields: in_budget(), name(), portfolio_id(), state()
+  - fields: in_budget(boolean), name(string), portfolio_id(integer), state(string)
 - keywords:
   - primary key: keyword_id
-  - fields: ad_group_id(), bid(), campaign_id(), keyword_id(), keyword_text(), match_type(), state()
+  - fields: ad_group_id(integer), bid(number), campaign_id(integer), keyword_id(integer), keyword_text(string), match_type(string), state(string)
 - product_ads:
   - primary key: ad_id
-  - fields: ad_group_id(), ad_id(), asin(), campaign_id(), serving_status(), sku(), state()
+  - fields: ad_group_id(integer), ad_id(integer), asin(string), campaign_id(integer), serving_status(string), sku(string), state(string)
 - negative_keywords:
   - primary key: keyword_id
-  - fields: ad_group_id(), campaign_id(), keyword_id(), keyword_text(), match_type(), state()
+  - fields: ad_group_id(integer), campaign_id(integer), keyword_id(integer), keyword_text(string), match_type(string), state(string)
 
 ## Sync Modes
 

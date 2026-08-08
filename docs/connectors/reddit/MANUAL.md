@@ -41,11 +41,11 @@ ETL STREAMS
   posts:
     primary key: id
     cursor: created_utc
-    fields: author(), created_utc(), id(), name(), permalink(), subreddit(), title()
+    fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
   comments:
     primary key: id
     cursor: created_utc
-    fields: author(), body(), created_utc(), id(), name(), permalink(), subreddit()
+    fields: author(string), body(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

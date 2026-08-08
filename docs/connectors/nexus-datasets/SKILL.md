@@ -41,7 +41,7 @@ Reads records from a configured Infor Nexus export dataset through the Infor Nex
 - datasets:
   - primary key: id
   - cursor: updated_at
-  - fields: dataset_name(), id(), raw_data(), raw_data_string(), updated_at()
+  - fields: dataset_name(string), id(string), raw_data(object), raw_data_string(string), updated_at(string)
 
 ## Sync Modes
 

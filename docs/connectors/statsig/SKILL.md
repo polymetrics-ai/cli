@@ -35,40 +35,40 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
 
 - feature_gates:
   - primary key: id
-  - fields: description(), id(), isEnabled(), name(), status()
+  - fields: description(string), id(string), isEnabled(boolean), name(string), status(string)
 - dynamic_configs:
   - primary key: id
-  - fields: description(), id(), isEnabled(), name(), status()
+  - fields: description(string), id(string), isEnabled(boolean), name(string), status(string)
 - experiments:
   - primary key: id
-  - fields: description(), id(), isEnabled(), name(), status()
+  - fields: description(string), id(string), isEnabled(boolean), name(string), status(string)
 - segments:
   - primary key: id
-  - fields: description(), id(), isEnabled(), name(), status()
+  - fields: description(string), id(string), isEnabled(boolean), name(string), status(string)
 - target_apps:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - tags:
   - primary key: id
-  - fields: description(), id(), isCore(), name()
+  - fields: description(string), id(string), isCore(boolean), name(string)
 - keys:
   - primary key: key
-  - fields: description(), environments(), key(), lastUsed(), primaryTargetApp(), scopes(), secondaryTargetApps(), status(), type()
+  - fields: description(string), environments(array), key(string), lastUsed(string), primaryTargetApp(string), scopes(array), secondaryTargetApps(array), status(string), type(string)
 - holdouts:
   - primary key: id
-  - fields: createdTime(), creatorEmail(), creatorID(), creatorName(), description(), experimentIDs(), gateIDs(), id(), idType(), isEnabled(), isGlobal(), lastModifiedTime(), lastModifierID(), layerIDs(), name(), passPercentage(), status(), team(), teamID()
+  - fields: createdTime(number), creatorEmail(string), creatorID(string), creatorName(string), description(string), experimentIDs(array), gateIDs(array), id(string), idType(string), isEnabled(boolean), isGlobal(boolean), lastModifiedTime(number), lastModifierID(string), layerIDs(array), name(string), passPercentage(number), status(string), team(string), teamID(string)
 - layers:
   - primary key: id
-  - fields: createdTime(), creatorEmail(), creatorID(), creatorName(), description(), id(), idType(), isImplicitLayer(), lastModifiedTime(), lastModifierID(), name(), team(), teamID()
+  - fields: createdTime(number), creatorEmail(string), creatorID(string), creatorName(string), description(string), id(string), idType(string), isImplicitLayer(boolean), lastModifiedTime(number), lastModifierID(string), name(string), team(string), teamID(string)
 - users:
   - primary key: userID
-  - fields: email(), firstName(), lastName(), role(), userID()
+  - fields: email(string), firstName(string), lastName(string), role(string), userID(string)
 - audit_logs:
   - primary key: id
-  - fields: actionType(), changeLog(), date(), id(), modifierEmail(), name(), tags(), targetAppIDs(), time(), updatedBy(), updatedByUserID()
+  - fields: actionType(string), changeLog(string), date(string), id(string), modifierEmail(string), name(string), tags(array), targetAppIDs(array), time(number), updatedBy(string), updatedByUserID(string)
 - environments:
   - primary key: name
-  - fields: id(), isProduction(), name(), requiresReleasePipeline(), requiresReview()
+  - fields: id(string), isProduction(boolean), name(string), requiresReleasePipeline(boolean), requiresReview(boolean)
 
 ## Sync Modes
 

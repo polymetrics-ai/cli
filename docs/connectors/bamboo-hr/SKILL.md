@@ -66,256 +66,256 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 
 - employees:
   - primary key: id
-  - fields: department(), display_name(), division(), first_name(), id(), job_title(), last_name(), location(), mobile_phone(), photo_url(), preferred_name(), supervisor(), work_email(), work_phone()
+  - fields: department(string), display_name(string), division(string), first_name(string), id(string), job_title(string), last_name(string), location(string), mobile_phone(string), photo_url(string), preferred_name(string), supervisor(string), work_email(string), work_phone(string)
 - meta_fields:
   - primary key: id
-  - fields: alias(), deprecated(), id(), name(), type()
+  - fields: alias(string), deprecated(boolean), id(string), name(string), type(string)
 - meta_lists:
   - primary key: field_id
-  - fields: alias(), field_id(), manageable(), multiple(), name(), options()
+  - fields: alias(string), field_id(string), manageable(boolean), multiple(boolean), name(string), options(array)
 - time_off_types:
   - primary key: id
-  - fields: color(), icon(), id(), name(), units()
+  - fields: color(string), icon(string), id(string), name(string), units(string)
 - applications:
   - primary key: id
-  - fields: applicant(), appliedDate(), id(), job(), rating(), status()
+  - fields: applicant(object), appliedDate(string), id(integer), job(object), rating(integer), status(object)
 - application_details:
   - primary key: id
-  - fields: answer(), archivedDate(), editedDate(), editedEndDate(), hasRevisions(), id(), isArchived(), question()
+  - fields: answer(object), archivedDate(string), editedDate(string), editedEndDate(string), hasRevisions(boolean), id(string), isArchived(boolean), question(object)
 - hiring_leads:
   - primary key: employeeId
-  - fields: employeeId(), preferredFullName()
+  - fields: employeeId(integer), preferredFullName(string)
 - job_summaries:
   - primary key: id
-  - fields: activeApplicantsCount(), department(), hiringLead(), id(), location(), newApplicantsCount(), postedDate(), postingUrl(), status(), title(), totalApplicantsCount()
+  - fields: activeApplicantsCount(integer), department(object), hiringLead(object), id(integer), location(object), newApplicantsCount(integer), postedDate(string), postingUrl(string), status(object), title(object), totalApplicantsCount(integer)
 - company_locations:
   - primary key: id
-  - fields: addressLine1(), addressLine2(), city(), country(), description(), id(), name(), phone(), state(), zipcode()
+  - fields: addressLine1(string), addressLine2(string), city(string), country(object), description(string), id(integer), name(string), phone(string), state(object), zipcode(string)
 - statuses:
   - primary key: id
-  - fields: code(), description(), enabled(), id(), manageable(), name(), translatedName()
+  - fields: code(string), description(string), enabled(boolean), id(string), manageable(boolean), name(string), translatedName(string)
 - company_benefits:
   - primary key: id
-  - fields: allowsCatchUp(), allowsSuperCatchUp(), benefitVendorId(), companyDeductionId(), deductionTypeId(), endDate(), id(), name(), startDate(), type()
+  - fields: allowsCatchUp(boolean), allowsSuperCatchUp(boolean), benefitVendorId(string), companyDeductionId(string), deductionTypeId(string), endDate(string), id(string), name(string), startDate(string), type(string)
 - company_benefit_types:
   - primary key: id
-  - fields: canBeAcaPlan(), canCoExistEnrollment(), id(), isReimbursementPlan(), name(), slug()
+  - fields: canBeAcaPlan(boolean), canCoExistEnrollment(boolean), id(string), isReimbursementPlan(boolean), name(string), slug(string)
 - company_benefit:
   - primary key: benefitVendorId
-  - fields: benefitType(), benefitVendorId(), deductionTypeId(), description(), endDate(), meetAcaMin(), minEssentialCoverage(), name(), planUrl(), reimbursementAmount(), reimbursementFrequency(), safeHarbor(), ssoLoginUrl(), ssoLoginUrlLinkText(), startDate()
+  - fields: benefitType(string), benefitVendorId(string), deductionTypeId(integer), description(string), endDate(string), meetAcaMin(string), minEssentialCoverage(string), name(string), planUrl(string), reimbursementAmount(number), reimbursementFrequency(string), safeHarbor(string), ssoLoginUrl(string), ssoLoginUrlLinkText(string), startDate(string)
 - employee_benefits:
   - primary key: employeeId
-  - fields: employeeBenefit(), employeeId(), payFrequency()
+  - fields: employeeBenefit(array), employeeId(integer), payFrequency(string)
 - member_benefit_events:
   - primary key: memberId
-  - fields: coverages(), memberId()
+  - fields: coverages(array), memberId(string)
 - benefit_coverages:
   - primary key: id
-  - fields: benefitPlanId(), description(), id(), shortName(), sortOrder()
+  - fields: benefitPlanId(string), description(string), id(string), shortName(string), sortOrder(string)
 - member_benefits:
   - primary key: memberId
-  - fields: memberId(), plans(), subscriberId()
+  - fields: memberId(string), plans(array), subscriberId(string)
 - benefit_deduction_types:
   - primary key: id
-  - fields: additionalDescription(), allowableBenefitTypes(), canBeCollectedByTrax(), deductionNote(), deductionNoteLink(), deductionNoteLinkText(), deductionTypeName(), defaultDeductionCode(), hideAnnualMax(), id(), managedDeductionType(), nonBenefitDeductionType(), subTypeText(), subTypes()
+  - fields: additionalDescription(string), allowableBenefitTypes(array), canBeCollectedByTrax(boolean), deductionNote(string), deductionNoteLink(string), deductionNoteLinkText(string), deductionTypeName(string), defaultDeductionCode(string), hideAnnualMax(boolean), id(integer), managedDeductionType(string), nonBenefitDeductionType(boolean), subTypeText(string), subTypes(array)
 - company_profile_integrations:
   - primary key: id
-  - fields: id(), integrations()
+  - fields: id(string), integrations(array)
 - company_eins:
   - primary key: id
-  - fields: eins(), id()
+  - fields: eins(array), id(string)
 - company_information:
   - primary key: id
-  - fields: address(), displayName(), id(), legalName(), phone()
+  - fields: address(object), displayName(string), id(string), legalName(string), phone(string)
 - reports:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - report_by_id:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - datasets_v1:
   - primary key: id
-  - fields: id(), label(), name()
+  - fields: id(string), label(string), name(string)
 - fields_from_dataset_v1:
   - primary key: id
-  - fields: entityName(), id(), label(), name(), parentName(), parentType()
+  - fields: entityName(string), id(string), label(string), name(string), parentName(string), parentType(string)
 - employee_dependents:
   - primary key: id
-  - fields: addressLine1(), addressLine2(), city(), country(), dateOfBirth(), employeeId(), firstName(), gender(), homePhone(), id(), isStudent(), isUsCitizen(), lastName(), maskedSIN(), maskedSSN(), middleName(), relationship(), state(), zipCode()
+  - fields: addressLine1(string), addressLine2(string), city(string), country(string), dateOfBirth(string), employeeId(string), firstName(string), gender(string), homePhone(string), id(string), isStudent(string), isUsCitizen(string), lastName(string), maskedSIN(string), maskedSSN(string), middleName(string), relationship(string), state(string), zipCode(string)
 - employee_dependent:
   - primary key: id
-  - fields: addressLine1(), addressLine2(), city(), country(), dateOfBirth(), employeeId(), firstName(), gender(), homePhone(), id(), isStudent(), isUsCitizen(), lastName(), maskedSIN(), maskedSSN(), middleName(), relationship(), state(), zipCode()
+  - fields: addressLine1(string), addressLine2(string), city(string), country(string), dateOfBirth(string), employeeId(string), firstName(string), gender(string), homePhone(string), id(string), isStudent(string), isUsCitizen(string), lastName(string), maskedSIN(string), maskedSSN(string), middleName(string), relationship(string), state(string), zipCode(string)
 - employee_roster:
   - primary key: employeeId
-  - fields: _restrictedFields(), addressLine1(), addressLine2(), age(), allergies(), bestEmail(), birthDate(), birthplace(), citizenship(), citizenshipId(), city(), compensationChangeReason(), compensationChangeReasonId(), compensationComment(), compensationEffectiveDate(), compensationEndDate(), contractEndDate(), country(), countryId(), departmentId(), departmentName(), dietaryRestrictions(), displayName(), divisionId(), divisionName(), eeoJobCategory(), eeoJobCategoryId(), ein(), eligibleForRehire(), eligibleForRehireId(), employeeId(), employeeName(), employeeNumber(), employmentStatusComment(), employmentStatusEffectiveDate(), employmentStatusId(), employmentStatusName(), employmentType(), employmentTypeId(), ethnicity(), ethnicityId(), facebookUrl(), finalDoseAdministrationDate(), finalPayDate(), firstName(), firstNameLastName(), firstNameMiddleInitial(), flsaCode(), flsaCodeId(), gender(), genderIdentity(), genderIdentityId(), hireDate(), homeEmail(), homePhone(), hoursPerPayCycle(), instagramUrl(), isManager(), jacketSize(), jacketSizeId(), jobInformationEffectiveDate(), jobTitleId(), jobTitleName(), lastName(), linkedinUrl(), locationId(), locationName(), maritalStatus(), middleInitial(), middleName(), mobilePhone(), nationalId(), nationalInsuranceCategory(), nationalInsuranceCategoryId(), nationality(), nationalityId(), nickName(), nin(), noticePeriod(), noticePeriodId(), originalHireDate(), overtime(), overtimeRate(), paidPer(), payRate(), paySchedule(), payScheduleId(), payType(), photoUrl(), pinterestUrl(), preferredName(), preferredNameLastName(), probationEndDate(), pronouns(), pronounsId(), proofOfVaccination(), reportsToId(), reportsToName(), secondaryLanguage(), shirtSize(), shirtSizeId(), sin(), skypeUsername(), ssn(), state(), stateId(), status(), tShirtSize(), tShirtSizeId(), taxTypeId(), teams(), tenure(), terminationDate(), terminationReason(), terminationReasonId(), terminationRegrettable(), terminationRegrettableId(), terminationType(), terminationTypeId(), twitterUrl(), userId(), vaccinationStatus(), vaccinationStatusId(), vaccineReceived(), vaccineReceivedId(), veteranStatus(), veteranStatusId(), workEmail(), workPhone(), workPhoneExtension(), zipcode()
+  - fields: _restrictedFields(array), addressLine1(string), addressLine2(string), age(string), allergies(string), bestEmail(string), birthDate(string), birthplace(string), citizenship(string), citizenshipId(string), city(string), compensationChangeReason(string), compensationChangeReasonId(string), compensationComment(string), compensationEffectiveDate(string), compensationEndDate(string), contractEndDate(string), country(string), countryId(string), departmentId(string), departmentName(string), dietaryRestrictions(string), displayName(string), divisionId(string), divisionName(string), eeoJobCategory(string), eeoJobCategoryId(string), ein(string), eligibleForRehire(string), eligibleForRehireId(string), employeeId(string), employeeName(string), employeeNumber(string), employmentStatusComment(string), employmentStatusEffectiveDate(string), employmentStatusId(string), employmentStatusName(string), employmentType(string), employmentTypeId(string), ethnicity(string), ethnicityId(string), facebookUrl(string), finalDoseAdministrationDate(string), finalPayDate(string), firstName(string), firstNameLastName(string), firstNameMiddleInitial(string), flsaCode(string), flsaCodeId(string), gender(string), genderIdentity(string), genderIdentityId(array), hireDate(string), homeEmail(string), homePhone(string), hoursPerPayCycle(string), instagramUrl(string), isManager(boolean), jacketSize(string), jacketSizeId(string), jobInformationEffectiveDate(string), jobTitleId(string), jobTitleName(string), lastName(string), linkedinUrl(string), locationId(string), locationName(string), maritalStatus(string), middleInitial(string), middleName(string), mobilePhone(string), nationalId(string), nationalInsuranceCategory(string), nationalInsuranceCategoryId(string), nationality(string), nationalityId(string), nickName(string), nin(string), noticePeriod(string), noticePeriodId(string), originalHireDate(string), overtime(string), overtimeRate(object), paidPer(string), payRate(object), paySchedule(string), payScheduleId(string), payType(string), photoUrl(string), pinterestUrl(string), preferredName(string), preferredNameLastName(string), probationEndDate(string), pronouns(string), pronounsId(string), proofOfVaccination(boolean), reportsToId(string), reportsToName(string), secondaryLanguage(string), shirtSize(string), shirtSizeId(string), sin(string), skypeUsername(string), ssn(string), state(string), stateId(string), status(string), tShirtSize(string), tShirtSizeId(string), taxTypeId(string), teams(array), tenure(string), terminationDate(string), terminationReason(string), terminationReasonId(string), terminationRegrettable(string), terminationRegrettableId(string), terminationType(string), terminationTypeId(string), twitterUrl(string), userId(string), vaccinationStatus(string), vaccinationStatusId(string), vaccineReceived(string), vaccineReceivedId(string), veteranStatus(string), veteranStatusId(array), workEmail(string), workPhone(string), workPhoneExtension(string), zipcode(string)
 - changed_employee_ids:
   - primary key: id
-  - fields: employees(), id(), latest()
+  - fields: employees(object), id(string), latest(string)
 - changed_employee_table_data:
   - primary key: id
-  - fields: employees(), id(), table()
+  - fields: employees(object), id(string), table(string)
 - time_off_balance:
   - primary key: id
-  - fields: balance(), end(), id(), name(), policyType(), timeOffType(), units(), usedYearToDate()
+  - fields: balance(string), end(string), id(string), name(string), policyType(string), timeOffType(string), units(string), usedYearToDate(string)
 - employee_time_off_policies:
   - primary key: timeOffPolicyId
-  - fields: accrualStartDate(), timeOffPolicyId(), timeOffTypeId()
+  - fields: accrualStartDate(string), timeOffPolicyId(string), timeOffTypeId(integer)
 - employee_table_data:
   - primary key: id
-  - fields: employeeId(), id()
+  - fields: employeeId(string), id(string)
 - all_currency_types:
   - primary key: id
-  - fields: code(), id(), name(), symbol(), symbolPosition()
+  - fields: code(string), id(integer), name(string), symbol(string), symbolPosition(integer)
 - states_by_country_id:
   - primary key: id
-  - fields: id(), iso(), label(), name()
+  - fields: id(integer), iso(string), label(string), name(string)
 - tabular_fields:
   - primary key: id
-  - fields: alias(), fields(), id()
+  - fields: alias(string), fields(array), id(string)
 - time_off_policies:
   - primary key: id
-  - fields: effectiveDate(), id(), name(), timeOffTypeId(), type()
+  - fields: effectiveDate(string), id(integer), name(string), timeOffTypeId(integer), type(string)
 - users:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - goals:
   - primary key: id
-  - fields: actions(), alignsWithOptionId(), completionDate(), description(), dueDate(), id(), lastChangedDateTime(), milestones(), percentComplete(), sharedWithEmployeeIds(), status(), title()
+  - fields: actions(object), alignsWithOptionId(string), completionDate(string), description(string), dueDate(string), id(string), lastChangedDateTime(string), milestones(array), percentComplete(integer), sharedWithEmployeeIds(array), status(string), title(string)
 - goals_aggregate_v1:
   - primary key: id
-  - fields: actions(), alignsWithOptionId(), completionDate(), description(), dueDate(), id(), lastChangedDateTime(), milestones(), percentComplete(), sharedWithEmployeeIds(), status(), title()
+  - fields: actions(object), alignsWithOptionId(string), completionDate(string), description(string), dueDate(string), id(string), lastChangedDateTime(string), milestones(array), percentComplete(integer), sharedWithEmployeeIds(array), status(string), title(string)
 - alignable_goal_options:
   - primary key: id
-  - fields: id(), title()
+  - fields: id(string), title(string)
 - goal_creation_permission:
   - primary key: id
-  - fields: canCreateGoals(), id()
+  - fields: canCreateGoals(boolean), id(string)
 - goals_filters_v1:
   - primary key: id
-  - fields: count(), id(), name()
+  - fields: count(integer), id(string), name(string)
 - goal_share_options:
   - primary key: employeeId
-  - fields: displayFirstName(), employeeId(), lastName(), photoUrl(), userId()
+  - fields: displayFirstName(string), employeeId(integer), lastName(string), photoUrl(string), userId(integer)
 - goal_aggregate:
   - primary key: id
-  - fields: authorUserId(), canDelete(), canEdit(), createdAt(), id(), text()
+  - fields: authorUserId(integer), canDelete(boolean), canEdit(boolean), createdAt(string), id(string), text(string)
 - goal_comments:
   - primary key: id
-  - fields: authorUserId(), canDelete(), canEdit(), createdAt(), id(), text()
+  - fields: authorUserId(integer), canDelete(boolean), canEdit(boolean), createdAt(string), id(string), text(string)
 - company_report:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - scheduling_list_schedules:
   - primary key: id
-  - fields: createdAt(), deletedAt(), earlyClockInThreshold(), employeeIds(), id(), locationId(), managerUserIds(), name(), startOfWeek(), timezone(), updatedAt()
+  - fields: createdAt(string), deletedAt(string), earlyClockInThreshold(integer), employeeIds(array), id(string), locationId(integer), managerUserIds(array), name(string), startOfWeek(string), timezone(string), updatedAt(string)
 - scheduling_get_schedule:
   - primary key: id
-  - fields: createdAt(), deletedAt(), earlyClockInThreshold(), employeeIds(), id(), locationId(), managerUserIds(), name(), startOfWeek(), timezone(), updatedAt()
+  - fields: createdAt(string), deletedAt(string), earlyClockInThreshold(integer), employeeIds(array), id(string), locationId(integer), managerUserIds(array), name(string), startOfWeek(string), timezone(string), updatedAt(string)
 - scheduling_list_shift_assessments:
   - primary key: id
-  - fields: createdAt(), date(), employeeId(), id(), result(), shiftId(), updatedAt(), violations()
+  - fields: createdAt(string), date(string), employeeId(integer), id(string), result(), shiftId(string), updatedAt(string), violations(array)
 - scheduling_list_shifts:
   - primary key: id
-  - fields: capacity(), color(), createdAt(), deletedAt(), employeeIds(), end(), id(), name(), recurrenceDtend(), recurrenceDtstart(), recurrenceId(), recurrenceRule(), recurrenceUntil(), scheduleId(), start(), status(), timezone(), unpublishedChanges(), updatedAt()
+  - fields: capacity(integer), color(string), createdAt(string), deletedAt(string), employeeIds(array), end(string), id(string), name(string), recurrenceDtend(string), recurrenceDtstart(string), recurrenceId(string), recurrenceRule(string), recurrenceUntil(string), scheduleId(string), start(string), status(), timezone(string), unpublishedChanges(object), updatedAt(string)
 - scheduling_get_shift:
   - primary key: id
-  - fields: capacity(), color(), createdAt(), deletedAt(), employeeIds(), end(), id(), name(), recurrenceDtend(), recurrenceDtstart(), recurrenceId(), recurrenceRule(), recurrenceUntil(), scheduleId(), start(), status(), timezone(), unpublishedChanges(), updatedAt()
+  - fields: capacity(integer), color(string), createdAt(string), deletedAt(string), employeeIds(array), end(string), id(string), name(string), recurrenceDtend(string), recurrenceDtstart(string), recurrenceId(string), recurrenceRule(string), recurrenceUntil(string), scheduleId(string), start(string), status(), timezone(string), unpublishedChanges(object), updatedAt(string)
 - scheduling_list_timezones:
   - primary key: id
-  - fields: id(), name(), offset()
+  - fields: id(string), name(string), offset(string)
 - break_assessments:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - break_policies:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - break_policy:
   - primary key: id
-  - fields: allEmployeesAssigned(), createdAt(), deletedAt(), description(), id(), name(), updatedAt()
+  - fields: allEmployeesAssigned(boolean), createdAt(string), deletedAt(string), description(string), id(string), name(string), updatedAt(string)
 - break_policy_breaks:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - break_policy_employees:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - break:
   - primary key: id
-  - fields: availabilityEndTime(), availabilityMaxHoursWorked(), availabilityMinHoursWorked(), availabilityStartTime(), availabilityType(), createdAt(), deletedAt(), duration(), id(), name(), paid(), policyId(), updatedAt()
+  - fields: availabilityEndTime(string), availabilityMaxHoursWorked(number), availabilityMinHoursWorked(number), availabilityStartTime(string), availabilityType(), createdAt(string), deletedAt(string), duration(integer), id(string), name(string), paid(boolean), policyId(string), updatedAt(string)
 - employee_break_availabilities:
   - primary key: id
-  - fields: availabilityType(), available(), availableAfterMinutesWorked(), availableAt(), availableIn(), calculatedAt(), duration(), effectiveAt(), id(), name(), paid(), policyId(), recordedDuration(), timezone(), unavailableAt(), unavailableIn()
+  - fields: availabilityType(), available(boolean), availableAfterMinutesWorked(integer), availableAt(string), availableIn(integer), calculatedAt(string), duration(integer), effectiveAt(string), id(string), name(string), paid(boolean), policyId(string), recordedDuration(integer), timezone(string), unavailableAt(string), unavailableIn(integer)
 - employee_break_policies:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - projects:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - project:
   - primary key: id
-  - fields: allEmployeesAssigned(), archived(), billable(), createdAt(), deletedAt(), employeeIds(), hasTasks(), id(), includeInPayroll(), name(), updatedAt()
+  - fields: allEmployeesAssigned(boolean), archived(boolean), billable(boolean), createdAt(string), deletedAt(string), employeeIds(array), hasTasks(boolean), id(integer), includeInPayroll(boolean), name(string), updatedAt(string)
 - project_tasks:
   - primary key: id
-  - fields: billable(), createdAt(), deletedAt(), id(), name(), projectId(), updatedAt()
+  - fields: billable(boolean), createdAt(string), deletedAt(string), id(integer), name(string), projectId(integer), updatedAt(string)
 - shift_differentials:
   - primary key: id
-  - fields: _links(), data(), id(), meta()
+  - fields: _links(object), data(array), id(string), meta(object)
 - shift_differential:
   - primary key: id
-  - fields: end(), endDay(), id(), start(), startDay()
+  - fields: end(string), endDay(string), id(integer), start(string), startDay(string)
 - task:
   - primary key: id
-  - fields: billable(), createdAt(), deletedAt(), id(), name(), projectId(), updatedAt()
+  - fields: billable(boolean), createdAt(string), deletedAt(string), id(integer), name(string), projectId(integer), updatedAt(string)
 - time_off_requests:
   - primary key: id
-  - fields: actions(), amount(), created(), dates(), employeeId(), end(), id(), name(), notes(), start(), status(), type()
+  - fields: actions(object), amount(object), created(string), dates(object), employeeId(string), end(string), id(string), name(string), notes(object), start(string), status(object), type(object)
 - whos_out:
   - primary key: id
-  - fields: employeeId(), end(), id(), name(), start(), type()
+  - fields: employeeId(integer), end(string), id(integer), name(string), start(string), type(string)
 - timesheet_entries:
   - primary key: id
-  - fields: approved(), approvedAt(), createdAt(), date(), employeeId(), end(), hours(), id(), note(), projectInfo(), start(), timezone(), type(), updatedAt()
+  - fields: approved(boolean), approvedAt(string), createdAt(string), date(string), employeeId(integer), end(string), hours(number), id(integer), note(string), projectInfo(object), start(string), timezone(string), type(string), updatedAt(string)
 - time_tracking_record:
   - primary key: employeeId
-  - fields: adjustedHours(), dateAdjusted(), dateHoursWorked(), departmentId(), divisionId(), employeeId(), holidayId(), hoursWorked(), jobCode(), jobData(), jobTitleId(), payCode(), payRate(), project(), projectId(), rateType(), shiftDifferential(), shiftDifferentialId(), taskId(), timeTrackingId(), type()
+  - fields: adjustedHours(string), dateAdjusted(string), dateHoursWorked(string), departmentId(string), divisionId(string), employeeId(string), holidayId(string), hoursWorked(string), jobCode(string), jobData(string), jobTitleId(string), payCode(string), payRate(string), project(object), projectId(string), rateType(string), shiftDifferential(object), shiftDifferentialId(string), taskId(string), timeTrackingId(string), type(string)
 - training_categories:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - training_types:
   - primary key: id
-  - fields: id()
+  - fields: id(string)
 - webhooks:
   - primary key: id
-  - fields: created(), id(), lastSent(), name(), url()
+  - fields: created(string), id(string), lastSent(string), name(string), url(string)
 - monitor_fields:
   - primary key: id
-  - fields: alias(), id(), name()
+  - fields: alias(string), id(string), name(string)
 - post_fields:
   - primary key: id
-  - fields: alias(), id(), name(), pageId(), tableId(), type()
+  - fields: alias(string), id(integer), name(string), pageId(integer), tableId(integer), type(string)
 - webhook:
   - primary key: id
-  - fields: duplicatePostString(), error(), id(), monitorFields(), postFields(), unknownFields()
+  - fields: duplicatePostString(array), error(string), id(string), monitorFields(array), postFields(array), unknownFields(array)
 - employee_time_off_policies_v1_1:
   - primary key: timeOffPolicyId
-  - fields: accrualStartDate(), timeOffPolicyId(), timeOffTypeId()
+  - fields: accrualStartDate(string), timeOffPolicyId(string), timeOffTypeId(integer)
 - goals_aggregate_v1_1:
   - primary key: id
-  - fields: actions(), alignsWithOptionId(), completionDate(), description(), dueDate(), id(), lastChangedDateTime(), milestones(), percentComplete(), sharedWithEmployeeIds(), status(), title()
+  - fields: actions(object), alignsWithOptionId(string), completionDate(string), description(string), dueDate(string), id(string), lastChangedDateTime(string), milestones(array), percentComplete(integer), sharedWithEmployeeIds(array), status(string), title(string)
 - goals_filters_v1_1:
   - primary key: id
-  - fields: actions(), count(), id(), name()
+  - fields: actions(object), count(integer), id(string), name(string)
 - datasets_v1_2:
   - primary key: id
-  - fields: id(), label(), name()
+  - fields: id(string), label(string), name(string)
 - fields_from_dataset_v1_2:
   - primary key: id
-  - fields: entityName(), id(), label(), name(), parentName(), parentType()
+  - fields: entityName(string), id(string), label(string), name(string), parentName(string), parentType(string)
 - goals_aggregate_v1_2:
   - primary key: id
-  - fields: actions(), alignsWithOptionId(), completionDate(), description(), dueDate(), id(), lastChangedDateTime(), milestones(), percentComplete(), sharedWithEmployeeIds(), status(), title()
+  - fields: actions(object), alignsWithOptionId(string), completionDate(string), description(string), dueDate(string), id(string), lastChangedDateTime(string), milestones(array), percentComplete(integer), sharedWithEmployeeIds(array), status(string), title(string)
 - goals_filters_v1_2:
   - primary key: id
-  - fields: actions(), count(), id(), name()
+  - fields: actions(object), count(integer), id(string), name(string)
 
 ## Sync Modes
 

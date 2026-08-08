@@ -35,13 +35,13 @@ CONFIGURATION
 ETL STREAMS
   boards:
     primary key: id
-    fields: closed(), dateLastActivity(), desc(), id(), idOrganization(), name(), shortUrl(), url()
+    fields: closed(boolean), dateLastActivity(string), desc(string), id(string), idOrganization(string), name(string), shortUrl(string), url(string)
   lists:
     primary key: id
-    fields: closed(), id(), idBoard(), name(), pos(), subscribed()
+    fields: closed(boolean), id(string), idBoard(string), name(string), pos(number), subscribed(boolean)
   checklists:
     primary key: id
-    fields: id(), idBoard(), idCard(), name(), pos()
+    fields: id(string), idBoard(string), idCard(string), name(string), pos(number)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -33,7 +33,7 @@ CONFIGURATION
 ETL STREAMS
   project:
     primary key: name
-    fields: author(), author_email(), classifiers(), description(), home_page(), keywords(), license(), name(), project_url(), project_urls(), requires_python(), summary(), version(), yanked()
+    fields: author(string), author_email(string), classifiers(array), description(string), home_page(string), keywords(string), license(string), name(string), project_url(string), project_urls(object), requires_python(string), summary(string), version(string), yanked(boolean)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

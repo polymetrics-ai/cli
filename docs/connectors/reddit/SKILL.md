@@ -43,11 +43,11 @@ Reads subreddit posts and comments through the Reddit OAuth API listing endpoint
 - posts:
   - primary key: id
   - cursor: created_utc
-  - fields: author(), created_utc(), id(), name(), permalink(), subreddit(), title()
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
 - comments:
   - primary key: id
   - cursor: created_utc
-  - fields: author(), body(), created_utc(), id(), name(), permalink(), subreddit()
+  - fields: author(string), body(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string)
 
 ## Sync Modes
 

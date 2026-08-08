@@ -35,7 +35,7 @@ ETL STREAMS
   records:
     primary key: id
     cursor: updated_at
-    fields: id(), key(), updated_at(), value()
+    fields: id(string), key(string), updated_at(string), value(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
