@@ -107,7 +107,10 @@ func TestMySQLContainerHarness(t *testing.T) {
 
 	endpoint, err := harness.Start(ctx)
 	if err != nil {
-		t.Fatal("MySQL database container did not start")
+		// Harness errors contain only the safe operation stage and exit class;
+		// preserve that reason so an opted-in live test never fails as an
+		// unhelpful generic red result (and never exposes connection material).
+		t.Fatalf("MySQL database container did not start: %v", err)
 	}
 	config := mysqlConfig(endpoint)
 	connector := native.New()

@@ -2,34 +2,43 @@
 
 | ID | Guarantee | Red assertion | Green proof |
 | --- | --- | --- | --- |
-| H1 | Scoped execution | Missing integration opt-in or `POLYMETRICS_PODMAN_CONNECTION` cannot create a live pass. | Tagged test visibly skips before startup with its reason; `TestNewRejectsUnscopedConnection` refuses empty, whitespace and argument-injecting connections; the passing live run passed `--connection fm-cli-db-harness-r1` to every Podman child. |
-| H2 | Resource isolation | A run can use a predictable/shared container or volume name. | Generated names carry a crypto-random suffix; every command targets only those names. Engines are sequential through a bounded slot, released on every exit path (`TestStartReleasesTheEngineSlotOnEveryExitPath`). |
-| H3 | Cleanup | An assertion failure or interrupt can strand a container, volume, or pulled image. | `TestCloseDuringCreateStillRemovesTheCreatedResource` fires Close from inside a create and asserts nothing is left behind; `TestStartRefusesToCreateAfterClose` proves no create follows cleanup; `-race` clean. Two live failing runs (before the reserved-word fixes) left zero containers, volumes or images. |
-| H4 | Image ownership | Cleanup deletes an image reference this run did not create. | Ownership is claimed from this run's own successful pull and its run-specific generated tag, never inferred from an earlier inspect. `TestCleanupKeepsSourceImageOnlyWhenOptedIn` covers the keep-image opt-in. |
-| H5 | Non-default endpoint | The connector silently assumes the engine default host port. | `TestStartPublishesOnlyLoopback` and `TestParseMappedPortRefusesTheEngineDefaultPort`: the publish is `127.0.0.1::<port>` and a mapping back to the engine default is rejected before config is built. |
-| H6 | Host-disk reclamation | Removing an image frees space inside the VM but leaves the host's sparse disk file inflated. | Measured: one `fstrim` returned 241 of ~950 MiB; a second returned effectively all of it (machine `.raw` 2609.0 -> 3563.4 -> 2609.4 MiB). `TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup` asserts **two** passes, after container cleanup. A full live run moved the `.raw` by +0.2 MiB. |
-| M1 | Honest declaration | MySQL can claim logical replication or public CDC without executable binlog code. | `binlog_replication` is closed-schema valid; bundle/executor descriptors match and public CDC is true only for the executable connector. |
-| M2 | SQL safety | Stream/schema/cursor strings can be concatenated unvalidated. | Unit tests reject unsafe identifiers and reads use only quoted validated identifiers plus parameter values. |
-| M3 | Paging/incremental | Reads only prove one record or ignore state. | Live seed/read results prove multiple request pages and exact cursor filtering. |
-| M4 | Change capture | A binlog event succeeds without emitting/asserting a real row change or safely committing state. | Real insert/update/delete events are decoded, delivered, and their file/position state commits only after acknowledgement. |
-| M5 | Direct-read page-context boundary | A native SQL ETL reader can be mistaken for an HTTP direct-read endpoint and silently return one page without #3902 context. | `TestReadIsETLNotPagewiseDirectRead` proves MySQL exposes neither `DirectReader` nor `OperationDirectReader`; it has no REST/direct-read surface. Its `Read` drains deterministic keyset SQL pages into the sync pipeline under `page_size` and `read_limit`, and the live proof asserts five records with `page_size=2`. |
+| H1 | Scoped execution | A missing or unsafe Podman connection can fall through to the global default. | `TestNewRejectsUnscopedConnection` rejects empty, whitespace, and argument-injecting names; every runner invocation receives the supplied connection. |
+| H2 | Isolation and sequencing | Runs can collide on a resource name or multiply database peak disk/memory. | Random generated container/volume/tag names are unit-tested; `TestStartReleasesTheEngineSlotOnEveryExitPath` proves the default one-slot semaphore returns on success and failure. |
+| H3 | Unconditional cleanup | Assertion failure or interrupt can leave a container, volume, or image behind. | `TestCloseDuringCreateStillRemovesTheCreatedResource` and `TestStartRefusesToCreateAfterClose` cover the create/interrupt race; `Close` continues all cleanup stages and the live post-run scoped listings were empty. |
+| H4 | Image ownership | Cleanup guesses whether a shared image existed and deletes another run's reference. | A successful pull is immediately re-tagged to a run-specific local reference before startup; `TestStartUsesGeneratedImageReferenceWithoutInspectingSource` and `TestCleanupKeepsSourceImageOnlyWhenOptedIn` cover ownership and retention. |
+| H5 | Non-default endpoint | A connector silently assumes 3306 on the host. | `TestStartPublishesOnlyLoopback` asserts `127.0.0.1::<port>` publishing; `TestParseMappedPortRefusesTheEngineDefaultPort` refuses a default host mapping. |
+| H6 | Host-disk reclamation | Removing an image returns space only inside the VM. | `TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup` asserts two explicit `fstrim` passes after cleanup; the live test records before/after byte counts and fails if the reclaimed run exceeds ordinary build noise. |
+| M1 | Honest CDC declaration | MySQL can advertise generic/logical CDC without an executable binlog reader. | Closed-schema validation accepts only `binlog_replication`; descriptor/executor tests and the live row-event proof earn `cdc: true`. |
+| M2 | SQL safety | Stream/schema/cursor values are concatenated into SQL. | Identifier tests reject unsafe values; queries quote only validated identifiers and bind all values. |
+| M3 | Complete ETL paging and incrementals | A read proves a single record or repeats/skips at shared cursor values. | Keyset query tests cover primary-key and `(cursor, primary_key)` boundaries; the real five-row seed with `page_size=2` proves multiple pages and exact incremental rows. |
+| M4 | Change capture state | Binlog rows can advance state before acknowledgement or be projected against changed metadata. | CDC tests bind checkpoint to ordered column fingerprint and position/row ordinal; live insert/update/delete events assert actual returned rows. |
+| M5 | #3902 direct-read boundary | A database ETL reader is mistaken for a pagewise HTTP direct-read command and omits page context. | `TestReadIsETLNotPagewiseDirectRead` proves MySQL exposes neither `DirectReader` nor `OperationDirectReader`; the SQL `Read` drains its bounded pages to ETL rather than returning an exploratory page. |
+| T1 | TLS is enforced, not declared | A strict TLS mode can quietly downgrade or be ignored by replication. | TLS-less server tests make strict modes refuse; certificate tests prove verification; live checks use the server's own `Ssl_cipher`; the binlog syncer receives the same TLS config. |
+| T2 | SQL option shape does not drift | MySQL and PostgreSQL expose incompatible TLS field names or validation. | `sqltls` centralizes the vocabulary. PostgreSQL's definition accepts the runtime vocabulary and `TestPostgresPoolConfigUsesSharedTransportSecurityOptions` proves CA/server-name application and no strict plaintext fallback. |
 
-## Red evidence
+## Red / Green execution evidence
+
+**Red — initial implementation:**
 
 ```text
 go test -count=1 ./internal/connectors ./internal/connectors/native/dbtest \
-  -run 'Test(ChangefeedDescriptorAcceptsBinlogReplication|NewRejectsUnscopedDockerContext|Cleanup)'
-
-mysql_binlog_changefeed_test.go: binlog_replication was rejected as an unsupported mechanism
-harness_test.go: New and Config were undefined because no harness existed
+  -run 'Test(ChangefeedDescriptorAcceptsBinlogReplication|NewRejectsUnscopedConnection|Cleanup)'
 ```
 
-The red command failed as intended before the vocabulary and harness implementation existed. Its
-focused green equivalent passed after implementation. The final tagged Podman proof passed
-in 53.48 seconds against MySQL 8.4.11 and asserted real check, catalog, paged full read,
-incremental read, and insert/update/delete binlog events.
-| T1 | Transport security is enforced, not declared | A mode can be declared and silently ignored, or a strict mode can quietly downgrade to plaintext. | `TestStrictTransportSecurityIsNotDowngradedAgainstATLSLessServer` dials a hand-written TLS-less MySQL handshake: `required`/`verify-ca`/`verify-identity` all refuse, `preferred`/`disabled` connect. `TestVerifyCARejectsAChainOutsideTheConfiguredRoot` proves chain verification is real. Live subtests read the server's own `Ssl_cipher` for every mode. |
-| T2 | No cross-connector drift | MySQL and PostgreSQL grow two spellings of one choice. | One `sqltls` vocabulary; `TestSSLModeAcceptsTheSharedCanonicalVocabulary` pins that existing libpq values keep byte-identical behaviour while canonical names are also accepted. |
-| T3 | PostgreSQL configuration is executable | The shared TLS fields parse in MySQL but PostgreSQL's definition rejects them, or Catalog/Read ignore the requested verified server name. | **Red:** `TestDefinitionAcceptsSharedTransportSecurityVocabulary` rejected `disabled` at the embedded definition boundary. **Green:** the PostgreSQL schema accepts each runtime spelling; `TestPostgresPoolConfigUsesSharedTransportSecurityOptions` proves `sslrootcert` reaches pgx, `sslservername` becomes TLS SNI/verification name, strict verification has no plaintext fallback, and Check/Catalog/Read use the same `openPool` path. |
-| C1 | Catalog never over-promises | One unquotable table name makes the whole database undiscoverable, or discovery advertises a stream every read would reject. | `TestCatalogSkipsUnreadableIdentifiersWithoutFailingDiscovery` keeps the readable tables and re-parses every advertised stream through the reader's own `qualifyStream`. |
-| P1 | Release portability | `syscall.Statfs` is Unix-only and breaks the Windows release build. | Split by build tag; `GOOS=windows go build ./...` passes. |
+This failed as intended before the harness, MySQL connector, and `binlog_replication` vocabulary
+existed.
+
+**Green — implementation:** the focused equivalent passed after those components were added.
+
+**Red — post-rebase TLS reconciliation:**
+
+```text
+go test -count=1 -timeout 20m ./internal/connectors/native/postgres
+```
+
+`TestDefinitionAcceptsSharedTransportSecurityVocabulary` initially failed because the embedded
+PostgreSQL schema rejected `disabled` even though `resolveConfig` accepted it.
+
+**Green — post-rebase TLS reconciliation:** the same package passed after adding the shared schema
+keys, `poolConfig`, and unified `openPool` usage; MySQL, PostgreSQL, and `sqltls` focused tests then
+passed together.

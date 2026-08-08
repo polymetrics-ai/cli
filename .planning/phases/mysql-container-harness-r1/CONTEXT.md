@@ -3,54 +3,57 @@
 ## Intent
 
 Deliver one reusable, opt-in Podman integration-test harness and prove it with exactly one new
-Tier-3 native database connector: MySQL. The harness must start one isolated, pinned-image
-container; seed deterministic multi-page data; exercise check, catalog, snapshot, incremental, and
-binary-log CDC paths; and reclaim its container, named volume, and generated run-specific image
-reference on every exit path.
+Tier-3 native database connector: MySQL. The harness starts one isolated, pinned-image container;
+seeds deterministic multi-page data; exercises check, catalog, snapshot, incremental, and binary-log
+CDC paths; and reclaims its container, named volume, and run-owned image references on every exit
+path.
 
-## Constraints selected from the task
+## Scope and constraints
 
-- The test is sequential and opt-in (`POLYMETRICS_DATABASE_INTEGRATION=1`). Its visible skip when
-  that opt-in or an explicit `POLYMETRICS_PODMAN_CONNECTION` is absent is intentional. The documented
-  command always supplies both, so it cannot report a false live pass.
-- The harness never invokes an unscoped Docker command. It passes only a caller-supplied
-  `--connection` on every child command; it neither changes a global default nor refers to a
-  shared runtime.
-- A host port is dynamically assigned by Docker and refused if it resolves to the database default.
-  The connector receives host and port as separate configuration fields; no endpoint is logged.
-- The MySQL image is `docker.io/library/mysql:8.4.11`, pinned by tag. The harness creates and always
-  removes a unique run-specific tag; it never removes the shared pinned source image, whether that
-  source was already cached or was pulled for the run.
-- Podman is deliberately not used: three independent Podman machines on this host, including the
-  Podman is used. The earlier "Podman machines will not start" conclusion was a symptom, not a
-  cause: a 10-hour-hung `podman machine start` held the global machine-start lock, and
-  Podman/applehv allows only one running VM at a time. Clearing that made a normal machine
-  start work first time.
-  Removing an image frees space inside the VM but leaves the host's sparse disk file
-  inflated, so `POLYMETRICS_DATABASE_RECLAIM_DISK=1` trims the backing machine twice after
-  container cleanup. One pass was measured insufficient.
-  teardown and before the after-disk measurement. That destructive reset is opt-in and is intended
-  only for the disposable default profile used by this test.
-- The MySQL test database uses its isolated ephemeral server configuration. No credential or
-  connection string is emitted, recorded, or placed in fixture data.
-- The connector is Tier-3/dynamic-schema like PostgreSQL and is registered through the native
-  MySQL factory, so production registry calls reach its wire-protocol check, catalog, read, and CDC
-  implementation.
-- MySQL binary logs are a distinct source mechanism, so the shared closed changefeed vocabulary
-  gains `binlog_replication` in lockstep in Go validation and JSON Schema. This is the minimum
-  shared declaration change necessary for an honest MySQL declaration, not a generic transport.
+- The tagged test is sequential and opt-in (`POLYMETRICS_DATABASE_INTEGRATION=1`). A missing
+  opt-in or `POLYMETRICS_PODMAN_CONNECTION` produces a visible skip; once opted in, startup or
+  reachability failure is red, never a green no-op.
+- Every container command has the caller-supplied `--connection`; the harness never uses or mutates
+  the Podman global default. Machine trim uses the explicit configured machine name.
+- The host port is Podman-assigned on loopback and is rejected if it equals the
+  engine default. The connector receives host and port as separate fields; it does not construct a
+  logged endpoint.
+- The MySQL source image is pinned at `docker.io/library/mysql:8.4.11`. Each run creates a unique
+  local tag, then cleanup attempts container → volume → run tag → pulled source image even after an
+  earlier cleanup error. `POLYMETRICS_DATABASE_KEEP_IMAGE=1` is the only retention opt-in.
+- `POLYMETRICS_DATABASE_RECLAIM_DISK=1` runs two explicit `fstrim` passes against the configured
+  machine after Podman cleanup. This is required on macOS VM-backed storage to return freed guest
+  blocks to the host sparse disk.
+- The test database uses only its isolated ephemeral server configuration. No credential or
+  connection string is printed, logged, or stored.
+- MySQL is a dynamic-schema Tier-3 native connector. Its binary-log mechanism is declared through
+  the closed `binlog_replication` vocabulary only because a matching live executor exists.
+
+## Post-rebase reconciliation — 2026-08-08
+
+- Rebased the branch onto current `origin/main`, including the warehouse layout, Parquet/DuckDB,
+  direct-read page-context, and derived-command-parameter changes. `connectorgen surface-sync`
+  was rerun and reported zero fields to fill or correct; docs/catalog and website artifacts were
+  regenerated rather than hand-merged.
+- #3902's `DirectReadPage` contract governs one-page HTTP/API exploration. MySQL declares no REST
+  operation or direct-read command and does not implement `DirectReader`; its `Read` is ETL bulk
+  extraction that drains deterministic keyset SQL pages subject to `page_size` and `read_limit`.
+  `TestReadIsETLNotPagewiseDirectRead` makes that boundary explicit.
+- The captain's shared SQL TLS ruling still required a narrow PostgreSQL adjustment. PostgreSQL now
+  resolves the same `sslmode` / `sslrootcert` / `sslservername` options and routes Check, Catalog,
+  and Read through one pool constructor. This touches no PostgreSQL write path.
 
 ## Inline GSD fallback
 
-`scripts/gsd doctor`, all five required source resolutions/prompts, and
-`go run ./cmd/agentcontractgen check` succeeded. This work is an issue-shaped firstmate task rather
-than a numbered roadmap phase, and compatible isolated GSD workers are unavailable/forbidden by the
-single-worker delivery contract. Discussion, planning, execution, verification, and review are
-therefore recorded inline in this phase directory.
+`scripts/gsd doctor`, source resolution and generated prompts for `discuss-phase`,
+`plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review`, plus
+`go run ./cmd/agentcontractgen check`, were completed. This firstmate task has no compatible
+isolated GSD worker and the delivery contract forbids role spawning, so the lifecycle and TDD
+evidence are maintained inline in this phase directory.
 
 ## Required skills loaded
 
-`golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`,
+`golang-how-to`, `golang-cli`, `golang-design-patterns`, `golang-structs-interfaces`,
 `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`,
-`golang-concurrency`, `golang-database`, `golang-documentation`,
-`golang-dependency-management`, and `golang-pkg-go-dev`.
+`golang-concurrency`, `golang-database`, `golang-documentation`, `golang-dependency-management`,
+and `golang-pkg-go-dev`.

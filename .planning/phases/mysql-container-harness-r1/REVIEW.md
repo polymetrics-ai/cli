@@ -1,30 +1,37 @@
 # Review — MySQL container harness R1
 
-`scripts/gsd sources code-review` and its generated prompt were resolved. The official workflow
-expects a GSD reviewer worker, which this task's single-worker contract does not permit, so the
-review was completed inline over the changed Go, bundle, test, generated-doc, and dependency files.
+`scripts/gsd sources code-review` and its generated prompt were resolved. The canonical contract
+forbids spawning the prescribed reviewer role in this task, so this is the required inline review.
 
-## Review focus
+## Reviewed surfaces
 
-- Docker commands always receive a caller-supplied context; no global context mutation or Podman
-  command remains in the harness.
-- Generated resource names are owned by the run; cleanup is idempotent, continues after an error,
-  and removes only the unique image reference created for that run.
-- Host-disk reclaim follows container cleanup and remains an explicit opt-in. It trims the
-  backing machine rather than destroying it; one pass was measured insufficient, so it runs twice.
-- The native MySQL path validates identifiers, uses parameters for cursor values, never exposes
-  caller configuration in identifier/connection errors, and has no write operation.
-- The binlog declaration, Go closed vocabulary, executor descriptor, checkpoint timing, and live
-  row-event test all agree.
-- The only new direct dependency is the approved MySQL client/replication module; final module
-  verification and vulnerability scanning are clean.
+- `dbtest` scopes every container command to its supplied Podman connection, allocates only
+  run-named resources, and runs all cleanup stages after failure/interrupt. The narrow machine
+  command receives its explicit machine name only for opt-in disk reclaim.
+- MySQL's full and incremental reader uses validated identifiers, parameterized keyset boundaries,
+  primary-key tie-breaking, and bounded pages. The native reader does not masquerade as #3902
+  page-wise direct-read functionality.
+- MySQL CDC declaration, closed vocabulary, descriptor, row-image fail-closure, checkpoint
+  fingerprint, and live executor align. `cdc: true` is not claimed by a stub.
+- TLS is fail-closed outside `preferred`; normal MySQL and replication connections share the same
+  configuration. PostgreSQL now consumes the same explicit options through `openPool` for Check,
+  Catalog, and Read, without touching its write path.
+- Definition docs, generated catalog data, website data, and the operation surface were regenerated
+  and inspected. The unrelated warehouse catalog wording produced by current-main's docs generator
+  is derived current-main drift, not a hand edit.
+- The dependency is direct, MIT-licensed, externally maintained, vulnerability-scanned, and has a
+  recorded binary-cost decision point.
 
-## Findings
+## Findings and disposition
 
-The follow-up review repaired native registry installation, ambiguous Docker resource ownership,
-unconditional generated-image cleanup, complete primary-key-tiebroken read paging, lossless cursor
-state and value projection, schema-bound CDC checkpoints, binlog row-format and statement-event
-fail-closure, per-row CDC dedupe state, and CDC readiness synchronization. The focused repair test
-is recorded by this gate; the outer pipeline owns the remaining test, lint, build, and review phases.
+| Finding | Disposition |
+| --- | --- |
+| PostgreSQL accepted canonical TLS aliases in runtime code but its definition rejected them before invocation. | Fixed in `41275a450`; red/green tests prove definition/runtime/pool alignment. |
+| A native SQL ETL reader could be mistaken for a #3902 page-context direct reader. | Documented and locked by `e36fbebc2`; no `DirectReader` is exposed. |
+| An opted-in live startup failure lost its sanitized stage reason. | Fixed locally: the integration test now displays the safe harness stage without exposing endpoint or authentication material. |
+| Earlier planning/PR text claimed actions on other Podman machines. | Removed; current evidence records only the task-owned machine created and removed during this verification. |
 
-Verdict: review findings addressed; GitHub automated-review routing remains a PR-stage responsibility.
+## Verdict
+
+No unresolved implementation finding remains. Automated GitHub review and CI are PR-stage gates;
+their outcome must be recorded before handoff.
