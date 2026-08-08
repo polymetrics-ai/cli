@@ -228,6 +228,59 @@ contract changes: this corrects the bundle-internal execution target behind exis
 commands. Runtime help/manual/website regeneration is intentionally not applicable;
 the rebuilt binary's existing command help remains rechecked as part of live reachability.
 
+## Namespace override gap — live write E2E prerequisite (2026-08-08)
+
+Captain-directed live coverage proved a second definition-owned behavior defect before the
+write-scoped token was used: an accepted `--config namespace=library` was silently discarded.
+`streams.json` (the `repositories`, `tags`, `repository_detail`, and `tag_detail` ETL streams)
+and the base health check all interpolated `config.docker_username`, so they issued requests for
+the authentication identity (`polymetrics`) rather than the requested target namespace. The
+result was a misleading Docker Hub 404, not an operator error.
+
+**Decision.** `docker_username` remains the Docker Hub login identity used only by the custom
+authentication hook. Introduce a distinct, required `namespace` configuration property for the
+target Hub namespace and interpolate it in every stream path and the health check. The declarative
+engine supports static schema defaults only; it has no safe cross-key "namespace defaults to
+docker_username" facility. Making `namespace` required is therefore deliberately fail-closed and
+avoids another accepted-then-discarded configuration value. This is connector-local: no shared
+engine or auth-hook behavior changes.
+
+**GSD inline fallback.** Before this slice, I ran `scripts/gsd doctor`, resolved `discuss-phase`,
+`plan-phase --gaps --tdd`, `execute-phase --gaps-only`, `verify-work`, and `code-review` with
+`scripts/gsd sources`, and inspected each generated prompt. The parent-worker contract forbids
+role spawning, so this is recorded as an inline manual execution of the same lifecycle. Required
+skills loaded through the project routing file: `golang-how-to`, `golang-cli`, `golang-testing`,
+`golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`,
+`golang-structs-interfaces`, and `golang-documentation`.
+
+### TDD gap slice
+
+1. **Red:** add `internal/connectors/defs/dockerhub/namespace_override_test.go`. Through the real
+   `engine.Read` and `engine.Check` paths against an `httptest` server, pass distinct
+   `docker_username=auth-identity` and `namespace=target-namespace` configuration values. Assert
+   each of the four stream request paths plus the base check route use `target-namespace`, never
+   `auth-identity`. Run the focused test and commit its verbatim failure before touching production
+   JSON.
+2. **Green:** define `namespace` as a required Docker Hub configuration property, replace all four
+   stream path templates and the health-check template with `config.namespace`, regenerate only
+   derivable artifacts, and update generated connector documentation if its generator reports a
+   Docker Hub change.
+3. **Verification:** run the focused package test, Docker Hub validation, surface-sync check,
+   executable command preflight, scoped build/help checks, and the rebuilt binary against the live
+   account. Re-add the local credential via `--from-env` with both `docker_username=polymetrics`
+   and `namespace=polymetrics`, never logging the PAT. Create a unique private repository, prove
+   privacy before image content, push a minimal OCI image through Docker's registry protocol, then
+   read tags and repository detail through `pm`. Do not delete that repository; clean up only
+   uniquely created test resources that are safe to remove.
+
+### CLI/doc parity disposition
+
+The command surface itself is unchanged; this corrects a connector configuration contract behind
+existing commands. The required `namespace` property changes generated configuration documentation,
+so inspect the Docker Hub manual/skill output and website catalog generator result. Recheck
+`pm dockerhub`, the affected command help, `pm help dockerhub`, and docs/website generator scope.
+No page, `per_page`, or `limit` flags are authored; stream pagination remains declaration-derived.
+
 ## Required skills used
 
 Loaded via `.agents/agentic-delivery/references/required-skills-routing.md`:
