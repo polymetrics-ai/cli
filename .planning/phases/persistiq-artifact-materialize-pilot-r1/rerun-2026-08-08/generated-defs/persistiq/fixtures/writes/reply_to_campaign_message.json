@@ -1,0 +1,19 @@
+{
+  "record": {
+    "campaign_id": "campaign_fixture_1",
+    "inbox_message_id": "msg_fixture_1",
+    "body": "Fixture reply body."
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/campaigns/campaign_fixture_1/replies",
+    "body": {
+      "inbox_message_id": "msg_fixture_1",
+      "body": "Fixture reply body."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "errors": null }
+  }
+}

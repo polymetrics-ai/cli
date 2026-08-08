@@ -56,9 +56,23 @@
 
 ## GREEN
 
-- Status: pending the captain-policy implementation and rerun.
-- Test: run the same real-binary sweep against the generated PersistIQ bundle,
-  plus validation, surface-sync check, runtime preflight, and batch gate.
+- Status: confirmed under the captain complete-inventory policy.
+- Tests: `go test -timeout 20m ./cmd/connectorgen`,
+  `go test -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner`,
+  and the real PersistIQ generated-bundle sweep.
+- Captured materializer output (verbatim):
+
+  ```text
+  connectorgen batch materialize: 1 connector(s) materialized, 0 dropped; report .planning/phases/persistiq-artifact-materialize-pilot-r1/rerun-2026-08-08/materialize-report.json
+  ```
+
+- Captured static/runtime evidence: `connectorgen validate` returned zero
+  findings; `surface-sync --check` reported no drift; `batch gate` included
+  one candidate with 21 runtime-preflight checks; and the real binary reached
+  all 24 generated help paths (21 implemented plus 3 intentionally blocked).
+- The three blocked commands were each rejected with
+  `availability=not_implemented` before credentials/network, with no unknown
+  command result.
 - Captured materializer output (verbatim):
 
   ```text
@@ -72,12 +86,14 @@
   executable coverage GET /v1/mailboxes is absent from the cited artifact
   ```
 
-  This is historical Red evidence for the superseded policy. The generated
-  bundle and its commands did not exist in that run; no Green claim is made
-  from it and no generated command is counted reachable.
+  This is historical Red evidence for the superseded policy. It is retained
+  only to show why the captain ruling changed the materializer.
 
-## Refactor / safety
+## REFACTOR / safety
 
 - No new generator, generic write tool, credentials, or gate weakening.
-- Any failed batch stage remains a failed pilot result; it is not papered over
-  by editing the test or source artifact.
+- Materialization now maps unsupported operations into typed metadata and
+  named-dependency commands, while the final gate remains authoritative for
+  implemented claims.
+- The generated PersistIQ bundle was installed only into a temporary embedded
+  binary test and the original source bundle was restored exactly.

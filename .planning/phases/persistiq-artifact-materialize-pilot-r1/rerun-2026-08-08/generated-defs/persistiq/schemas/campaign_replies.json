@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaign_replies",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "from_email": { "type": ["string", "null"] },
+    "to_emails": { "type": ["array", "null"] },
+    "cc_emails": { "type": ["array", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "body": { "type": ["string", "null"] },
+    "preview": { "type": ["string", "null"] },
+    "sent_at": { "type": ["string", "null"] },
+    "sentiment": { "type": ["string", "null"] },
+    "kind": { "type": ["string", "null"] },
+    "lead_id": { "type": ["string", "null"] },
+    "campaign_id": { "type": ["string", "null"], "description": "Stamped by fan_out from the /v1/campaigns list's own id field; overwrites the raw response's own campaign_id after projection." },
+    "step_message_id": { "type": ["string", "null"] }
+  }
+}

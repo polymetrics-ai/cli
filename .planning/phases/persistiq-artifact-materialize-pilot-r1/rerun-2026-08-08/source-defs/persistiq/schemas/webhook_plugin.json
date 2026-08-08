@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhook_plugin",
+  "type": "object",
+  "properties": {
+    "post_new_prospect": { "type": ["boolean", "null"] },
+    "post_new_prospect_url": { "type": ["string", "null"] },
+    "post_updated_prospect": { "type": ["boolean", "null"] },
+    "post_updated_prospect_url": { "type": ["string", "null"] },
+    "raw_events": { "type": ["boolean", "null"] },
+    "raw_events_url": { "type": ["string", "null"] },
+    "post_email_reply": { "type": ["boolean", "null"] },
+    "post_email_reply_url": { "type": ["string", "null"] },
+    "post_email_opened": { "type": ["boolean", "null"] },
+    "post_email_opened_url": { "type": ["string", "null"] }
+  }
+}

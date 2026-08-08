@@ -1,0 +1,1794 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "PersistIQ API V1",
+    "version": "v1",
+    "description": "Public REST API for PersistIQ. Authenticate with your API key in the `x-api-key` header."
+  },
+  "servers": [
+    {
+      "url": "https://api.persistiq.com",
+      "description": "Production"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header",
+        "description": "API key found in Settings > Integrations > API Key"
+      }
+    },
+    "schemas": {
+      "pagination_envelope": {
+        "type": "object",
+        "properties": {
+          "has_more": {
+            "type": "boolean"
+          },
+          "next_page": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "success",
+              "error"
+            ]
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "error_response": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "error"
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "reason": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "lead_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+            }
+          },
+          "creator_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "owner_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "bounced": {
+            "type": "boolean"
+          },
+          "optedout": {
+            "type": "boolean"
+          },
+          "sent_count": {
+            "type": "integer"
+          },
+          "replied_count": {
+            "type": "integer"
+          },
+          "last_sent_at": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "user_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "activated": {
+            "type": "boolean"
+          },
+          "salesforce_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "default_mailbox_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "mailboxes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "campaign_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "campaign_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "creator": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            }
+          },
+          "stats": {
+            "type": "object",
+            "properties": {
+              "prospects_contacted": {
+                "type": "integer"
+              },
+              "prospects_reached": {
+                "type": "integer"
+              },
+              "prospects_opened": {
+                "type": "integer"
+              },
+              "prospects_replied": {
+                "type": "integer"
+              },
+              "prospects_bounced": {
+                "type": "integer"
+              },
+              "prospects_optedout": {
+                "type": "integer"
+              },
+              "total_prospects": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "campaign_lead_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "campaign_id": {
+            "type": "string"
+          },
+          "mailbox_id": {
+            "type": "string"
+          },
+          "lead": {
+            "$ref": "#/components/schemas/lead_type"
+          }
+        }
+      },
+      "lead_field_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "lead_status_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "dnc_domain_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "tag_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "event_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "event_type": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+            }
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      },
+      "webhook_plugin_type": {
+        "type": "object",
+        "properties": {
+          "post_new_prospect": {
+            "type": "boolean"
+          },
+          "post_new_prospect_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "post_updated_prospect": {
+            "type": "boolean"
+          },
+          "post_updated_prospect_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "raw_events": {
+            "type": "boolean"
+          },
+          "raw_events_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "post_email_reply": {
+            "type": "boolean"
+          },
+          "post_email_reply_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "post_email_opened": {
+            "type": "boolean"
+          },
+          "post_email_opened_url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "reply_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "from_email": {
+            "type": "string",
+            "nullable": true
+          },
+          "to_emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc_emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string",
+            "nullable": true
+          },
+          "body": {
+            "type": "string",
+            "nullable": true
+          },
+          "preview": {
+            "type": "string",
+            "nullable": true
+          },
+          "sent_at": {
+            "type": "string",
+            "nullable": true
+          },
+          "sentiment": {
+            "type": "string",
+            "nullable": true
+          },
+          "kind": {
+            "type": "string"
+          },
+          "lead_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "campaign_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "step_message_id": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "api_key": [
+
+      ]
+    }
+  ],
+  "paths": {
+    "/v1/campaigns/{campaign_id}/leads": {
+      "get": {
+        "summary": "List leads in a campaign",
+        "tags": [
+          "Campaign Leads"
+        ],
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "Campaign hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "campaign leads listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "campaign_leads": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/campaign_lead_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a lead to a campaign",
+        "tags": [
+          "Campaign Leads"
+        ],
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "Campaign hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lead added to campaign",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "campaign_lead": {
+                      "$ref": "#/components/schemas/campaign_lead_type"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "lead_id": {
+                    "type": "string",
+                    "description": "Hashed ID of the lead to add"
+                  },
+                  "mailbox_id": {
+                    "type": "string",
+                    "description": "Hashed ID of the mailbox to use (optional, defaults to campaign owner mailbox)"
+                  },
+                  "skip_if_exists": {
+                    "type": "boolean",
+                    "description": "If true, return existing campaign lead instead of error"
+                  },
+                  "override_lead_limit": {
+                    "type": "boolean",
+                    "description": "Override campaign lead limit"
+                  },
+                  "leads": {
+                    "type": "array",
+                    "description": "Bulk add: array of lead IDs (up to 100)",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/campaigns/{campaign_id}/leads/{id}": {
+      "delete": {
+        "summary": "Remove a lead from a campaign",
+        "tags": [
+          "Campaign Leads"
+        ],
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "Campaign hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Lead hashed ID to remove",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lead removed from campaign"
+          },
+          "400": {
+            "description": "lead not in campaign",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/campaigns": {
+      "get": {
+        "summary": "List campaigns",
+        "tags": [
+          "Campaigns"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "Filter by campaign name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "owner_id",
+            "in": "query",
+            "required": false,
+            "description": "Filter by owner (user) hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lead_id",
+            "in": "query",
+            "required": false,
+            "description": "Filter campaigns containing this lead (hashed ID)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "campaigns listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "campaigns": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/campaign_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a campaign",
+        "tags": [
+          "Campaigns"
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "campaign created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/campaign_type"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "missing required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reason": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "campaign_name": {
+                    "type": "string",
+                    "description": "Name for the new campaign"
+                  },
+                  "owner_id": {
+                    "type": "string",
+                    "description": "Hashed user ID of the campaign owner"
+                  }
+                },
+                "required": [
+                  "campaign_name",
+                  "owner_id"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/campaigns/duplicate": {
+      "post": {
+        "summary": "Duplicate a campaign",
+        "tags": [
+          "Campaigns"
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "campaign duplicated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/campaign_type"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "missing required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reason": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "campaign_id": {
+                    "type": "string",
+                    "description": "Hashed ID of the campaign to duplicate"
+                  },
+                  "owner_id": {
+                    "type": "string",
+                    "description": "Hashed user ID for the duplicated campaign owner"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name for the duplicated campaign (optional)"
+                  }
+                },
+                "required": [
+                  "campaign_id",
+                  "owner_id"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/dnc_domains": {
+      "get": {
+        "summary": "List Do-Not-Contact domains",
+        "tags": [
+          "DNC Domains"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DNC domains listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "dnc_domains": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/dnc_domain_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a DNC domain",
+        "tags": [
+          "DNC Domains"
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "DNC domain created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "dnc_domain": {
+                      "$ref": "#/components/schemas/dnc_domain_type"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Domain name to add to DNC list (e.g. \"example.com\")"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/events": {
+      "get": {
+        "summary": "List events",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "description": "Filter by event group",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "campaign",
+            "in": "query",
+            "required": false,
+            "description": "Filter by campaign hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lead",
+            "in": "query",
+            "required": false,
+            "description": "Filter by lead hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "description": "Filter by user hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "description": "Filter events after this ISO 8601 timestamp",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "description": "Filter events before this ISO 8601 timestamp",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "events listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/event_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/lead_fields": {
+      "get": {
+        "summary": "List lead fields",
+        "tags": [
+          "Lead Fields"
+        ],
+        "responses": {
+          "200": {
+            "description": "lead fields listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "lead_fields": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/lead_field_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/lead_statuses": {
+      "get": {
+        "summary": "List lead statuses",
+        "tags": [
+          "Lead Statuses"
+        ],
+        "responses": {
+          "200": {
+            "description": "lead statuses listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "lead_statuses": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/lead_status_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/leads": {
+      "get": {
+        "summary": "List leads",
+        "tags": [
+          "Leads"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "description": "Filter by lead status name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status_id",
+            "in": "query",
+            "required": false,
+            "description": "Filter by lead status ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_after",
+            "in": "query",
+            "required": false,
+            "description": "Filter leads updated after this ISO 8601 timestamp",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_after",
+            "in": "query",
+            "required": false,
+            "description": "Filter leads created after this ISO 8601 timestamp",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "description": "Filter by lead email",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "leads listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "leads": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/lead_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a lead",
+        "tags": [
+          "Leads"
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "lead created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "lead": {
+                      "$ref": "#/components/schemas/lead_type"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "dup": {
+                    "type": "string",
+                    "enum": [
+                      "update",
+                      "skip"
+                    ],
+                    "description": "Duplicate handling: \"update\" or \"skip\""
+                  },
+                  "creator_id": {
+                    "type": "string",
+                    "description": "Hashed user ID of the lead creator"
+                  },
+                  "lead": {
+                    "type": "object",
+                    "description": "Lead data fields (email, first_name, last_name, company_name, etc.)",
+                    "additionalProperties": {
+                    }
+                  }
+                },
+                "required": [
+                  "lead"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/leads/{id}": {
+      "get": {
+        "summary": "Get a lead",
+        "tags": [
+          "Leads"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Lead hashed ID or email address",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lead found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "lead": {
+                      "$ref": "#/components/schemas/lead_type"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "lead not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a lead",
+        "tags": [
+          "Leads"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Lead hashed ID or email address",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lead updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "lead": {
+                      "$ref": "#/components/schemas/lead_type"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "Lead status name"
+                  },
+                  "status_id": {
+                    "type": "string",
+                    "description": "Lead status hashed ID"
+                  },
+                  "owner_id": {
+                    "type": "string",
+                    "description": "New owner (user) hashed ID"
+                  },
+                  "bounced": {
+                    "type": "boolean"
+                  },
+                  "optedout": {
+                    "type": "boolean"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Lead data fields to update",
+                    "additionalProperties": {
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/campaigns/{campaign_id}/replies": {
+      "get": {
+        "summary": "List replies for a campaign",
+        "tags": [
+          "Replies"
+        ],
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "Campaign hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "lead_id",
+            "in": "query",
+            "required": false,
+            "description": "Filter by lead hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "required": false,
+            "description": "Filter replies sent on or after this date (ISO 8601)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "required": false,
+            "description": "Filter replies sent on or before this date (ISO 8601)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "replies listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "replies": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/reply_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "campaign not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Reply to an inbox message in a campaign",
+        "tags": [
+          "Replies"
+        ],
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "Campaign hashed ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "reply queued for sending",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "queued"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request (missing params or message not in campaign)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "campaign or inbox message not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "mailbox disconnected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "inbox_message_id",
+                  "body"
+                ],
+                "properties": {
+                  "inbox_message_id": {
+                    "type": "string",
+                    "description": "Hashed ID of the inbox message to reply to"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "HTML body of the reply"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tags": {
+      "get": {
+        "summary": "List tags",
+        "tags": [
+          "Tags"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tags listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/tag_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/users": {
+      "get": {
+        "summary": "List all users",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "users listed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/user_type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error_response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhook_plugin": {
+      "get": {
+        "summary": "Get webhook plugin settings",
+        "tags": [
+          "Webhook Plugin"
+        ],
+        "responses": {
+          "200": {
+            "description": "webhook settings returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/webhook_plugin_type"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update webhook plugin settings",
+        "tags": [
+          "Webhook Plugin"
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "webhook settings updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/webhook_plugin_type"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "post_new_prospect": {
+                    "type": "boolean",
+                    "description": "Enable webhook for new prospects"
+                  },
+                  "post_new_prospect_url": {
+                    "type": "string",
+                    "description": "Webhook URL for new prospects"
+                  },
+                  "post_updated_prospect": {
+                    "type": "boolean",
+                    "description": "Enable webhook for updated prospects"
+                  },
+                  "post_updated_prospect_url": {
+                    "type": "string",
+                    "description": "Webhook URL for updated prospects"
+                  },
+                  "raw_events": {
+                    "type": "boolean",
+                    "description": "Enable webhook for raw events"
+                  },
+                  "raw_events_url": {
+                    "type": "string",
+                    "description": "Webhook URL for raw events"
+                  },
+                  "post_email_reply": {
+                    "type": "boolean",
+                    "description": "Enable webhook for email reply received"
+                  },
+                  "post_email_reply_url": {
+                    "type": "string",
+                    "description": "Webhook URL for email reply received"
+                  },
+                  "post_email_opened": {
+                    "type": "boolean",
+                    "description": "Enable webhook for email opened"
+                  },
+                  "post_email_opened_url": {
+                    "type": "string",
+                    "description": "Webhook URL for email opened"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
