@@ -69,6 +69,31 @@ func TestRunSurfaceReconcileCoversSensitiveDirectWriteWithRuntimePreflight(t *te
 	}
 }
 
+// TestRunSurfaceReconcileCoversBinaryDownloadWithRuntimePreflight keeps binary
+// coverage accountable to the actual executor admission check. The fixture
+// turns YouTube's already implemented bounded download into one blocked
+// binary_read source row, then requires reconciliation to promote it only
+// after commandrunner.Preflight accepts the command.
+func TestRunSurfaceReconcileCoversBinaryDownloadWithRuntimePreflight(t *testing.T) {
+	root, surfacePath := writeSurfaceReconcileBinaryDownloadFixture(t)
+
+	stats, err := reconcileBundle(filepath.Join(root, "youtube-analytics"), false, "", "provider_module=reports")
+	if err != nil {
+		t.Fatalf("reconcileBundle: %v", err)
+	}
+	if stats.Covered != 1 || stats.Blocked != 0 || stats.Refused != 0 {
+		t.Fatalf("stats = %+v, want one runtime-covered binary download", stats)
+	}
+
+	endpoint := readSurfaceReconcileEndpointAt(t, surfacePath, "GET", "/v1/media/{path}?alt=media")
+	if endpoint.Operation != nil {
+		t.Fatalf("reconciled binary endpoint still has operation = %+v", endpoint.Operation)
+	}
+	if endpoint.CoveredBy == nil || endpoint.CoveredBy.DirectRead != "reports download" {
+		t.Fatalf("reconciled covered_by = %+v, want runtime-reachable binary_download command", endpoint.CoveredBy)
+	}
+}
+
 func TestRunSurfaceReconcileHelp(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	if code := run([]string{"surface-reconcile", "--help"}, &stdout, &stderr); code != 0 {
@@ -135,7 +160,7 @@ func TestSurfaceReconcileKeepsUnreachableRowsBlockedAndRefusesUnknownModel(t *te
 	})
 
 	t.Run("unsupported operation model", func(t *testing.T) {
-		root, surfacePath := writeSurfaceReconcileFixture(t, "implemented", "binary_read")
+		root, surfacePath := writeSurfaceReconcileFixture(t, "implemented", "local_workflow")
 		before, err := os.ReadFile(surfacePath)
 		if err != nil {
 			t.Fatalf("read fixture before refusal: %v", err)
@@ -241,6 +266,59 @@ func writeSurfaceReconcileDirectWriteFixture(t *testing.T) (string, string) {
 	}
 	t.Fatal("Gong fixture lacks meetings integration-status command")
 	return "", ""
+}
+
+func writeSurfaceReconcileBinaryDownloadFixture(t *testing.T) (string, string) {
+	t.Helper()
+	root := t.TempDir()
+	sourceRoot, err := repoRoot()
+	if err != nil {
+		t.Fatalf("repoRoot: %v", err)
+	}
+	source := filepath.Join(sourceRoot, "internal", "connectors", "defs", "youtube-analytics")
+	target := filepath.Join(root, "youtube-analytics")
+	if err := copySurfaceReconcileTree(source, target); err != nil {
+		t.Fatalf("copy YouTube Analytics fixture: %v", err)
+	}
+
+	surfacePath := filepath.Join(target, "api_surface.json")
+	var surface map[string]any
+	raw, err := os.ReadFile(surfacePath)
+	if err != nil {
+		t.Fatalf("read fixture api surface: %v", err)
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("decode fixture api surface: %v", err)
+	}
+	endpoints, ok := surface["endpoints"].([]any)
+	if !ok {
+		t.Fatal("fixture api surface endpoints are not an array")
+	}
+	found := false
+	for _, rawEndpoint := range endpoints {
+		endpoint, ok := rawEndpoint.(map[string]any)
+		if !ok {
+			t.Fatal("fixture api surface endpoint is not an object")
+		}
+		if endpoint["method"] != "GET" || endpoint["path"] != "/v1/media/{path}?alt=media" {
+			continue
+		}
+		delete(endpoint, "covered_by")
+		endpoint["operation"] = map[string]any{
+			"model":              "binary_read",
+			"status":             "blocked",
+			"risk":               "medium",
+			"blocked_by_default": true,
+			"reason":             "Missing runtime-proven binary-download endpoint reconciliation.",
+			"notes":              "provider_module=reports",
+		}
+		found = true
+	}
+	if !found {
+		t.Fatal("YouTube Analytics fixture lacks binary report download endpoint")
+	}
+	writeSurfaceReconcileJSON(t, surfacePath, surface)
+	return root, surfacePath
 }
 
 func writeSurfaceReconcileFixture(t *testing.T, availability, model string, commandOperation ...string) (string, string) {
