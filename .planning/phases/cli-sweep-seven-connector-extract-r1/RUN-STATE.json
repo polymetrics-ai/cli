@@ -1,9 +1,9 @@
 {
   "phase": "cli-sweep-seven-connector-extract-r1",
-  "status": "planned",
+  "status": "red_observed",
   "source_commit": "c28bc75a3",
   "execution_mode": "inline_manual_gsd",
-  "red_failure": "pending target-specific acceptance-test import",
+  "red_failure": "focused source acceptance tests exited 1 against current-main bundle inputs; ledger versions and documented operation/disposition counts are absent",
   "green_evidence": "pending",
   "scope": [
     "workday-rest",
