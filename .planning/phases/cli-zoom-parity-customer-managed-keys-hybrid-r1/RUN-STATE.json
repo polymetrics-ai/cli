@@ -4,7 +4,7 @@
   "sub_issue": 3950,
   "connector": "zoom",
   "provider_module": "customer-managed-keys-hybrid",
-  "state": "direct_write_endpoint_ledger_green",
+  "state": "verified",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -73,8 +73,26 @@
     ]
   },
   "green": {
-    "commit": "",
-    "result": "pending"
+    "commit": "cec675503",
+    "docs_commit": "f86e6a480",
+    "result": "one Customer Managed Keys Hybrid direct_write is runtime-covered; Zoom executable total is 23"
   },
-  "next": "reconcile the one authored Zoom rest_write declaration into covered_by.direct_write, then run the Zoom command surface and binary reachability verification"
+  "review_header_isolation": {
+    "state": "green",
+    "red_commit": "5c9518918",
+    "green_commit": "dfa221bcd",
+    "scope": "an operation-scoped customer-hosted transport clears inherited bundle headers as well as replacing the ordinary auth profile",
+    "verification": [
+      "go test -count=1 -timeout 20m -run TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth ./internal/connectors/engine",
+      "go test -count=1 -timeout 20m ./internal/connectors/engine",
+      "make lint"
+    ]
+  },
+  "verification": {
+    "binary": "freshly built pm passed Zoom/base/group/command help and an isolated plan-preview-approval-confirm-execute CMK lifecycle with redacted response assertions",
+    "surface": "surface-sync --check, full connectorgen validate, and scoped surface-reconcile --check are green",
+    "endpoint_ledger_scope": "base-to-head global endpoint ledger changes resolve only the zoom key",
+    "unsafe_or_disallowed": 0
+  },
+  "next": "complete; choose the next unclaimed Zoom provider-owned category from parent #3915 and begin with a fresh live-artifact audit and RED checkpoint"
 }
