@@ -458,6 +458,31 @@ func TestOperationDirectWriteBase64PathUploadIsPreviewBound(t *testing.T) {
 	}
 }
 
+// TestOperationBase64UploadAdmitsDeclaredMutationRedirect proves that the
+// provider-owned 30x exception is available to the same bounded, approved
+// JSON upload contract as multipart. Zoom's temporary Clips image endpoint
+// explicitly requires this behavior; a generic write must still be refused.
+func TestOperationBase64UploadAdmitsDeclaredMutationRedirect(t *testing.T) {
+	op := OperationSpec{
+		ID:   "zoom.clips.files.temporary_upload",
+		Kind: "rest_write",
+		REST: &RESTOperationSpec{
+			BaseURL: "https://fileapi.zoom.us/v2",
+			Auth:    []AuthSpec{{Mode: "bearer", Token: "{{ secrets.fixture_token }}"}},
+			Base64Upload: &Base64UploadSpec{
+				Source:          "path",
+				SourceField:     "file_path",
+				ContentField:    "file",
+				MaxDecodedBytes: 2 << 20,
+			},
+			Redirect: &MutationRedirectSpec{AllowedHostSuffixes: []string{"zoom.us"}, MaxHops: 1},
+		},
+	}
+	if err := validateOperationMutationRedirectSemantics(0, op); err != nil {
+		t.Fatalf("base64 operation declared redirect = %v, want admitted provider-owned boundary", err)
+	}
+}
+
 func TestOperationDirectWriteLegacyRedactingPolicyNamesKeepResponseBody(t *testing.T) {
 	raw := []byte(`{"ok":true,"token":"server-token","nested":{"value":"visible"}}`)
 	for _, policy := range []string{
