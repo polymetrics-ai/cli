@@ -2,7 +2,7 @@
   "phase": "persistiq-artifact-materialize-pilot-r1",
   "program": "cli-mass-artifact-materialize-r1",
   "connector": "persistiq",
-  "state": "fetched",
+  "state": "failed",
   "manual_gsd_fallback": {
     "used": true,
     "reason": "Pilot is not represented in ROADMAP.md and the available Codex runtime cannot provide the interactive Pi workers.",
@@ -41,7 +41,41 @@
   "tdd": {
     "red_confirmed": true,
     "red_failure": "error: unknown command \"persistiq\"",
-    "green_confirmed": false
+    "green_confirmed": false,
+    "green_blocked_at": "batch_materialize.coverage"
   },
+  "execution": {
+    "timings_seconds": {
+      "identify_link": 0.02,
+      "map_operations": 0.04,
+      "fetch_digest_parse": 2.75,
+      "materialize_and_gates": 16.92,
+      "report": 0.01,
+      "total": 19.74
+    },
+    "batch_plan": {"passed": true, "surveyed_operations": 21, "seconds": 4.87},
+    "batch_materialize": {
+      "passed": false,
+      "materialized": 0,
+      "dropped": 1,
+      "seconds": 2.43,
+      "stage": "coverage",
+      "reason": "executable coverage GET /v1/mailboxes is absent from the cited artifact"
+    },
+    "source_static_checks": {
+      "validate": "pass: 0 findings",
+      "surface_sync_check": "fail: runtime endpoint ledger drift=true",
+      "batch_gate": "fail: legacy v0 provenance refusal",
+      "repository_runtime_preflight_test": "pass; not generated PersistIQ evidence"
+    },
+    "binary_reachability": {
+      "baseline_failed": 1,
+      "generated_commands_checked": 0,
+      "generated_commands_reachable": 0,
+      "generated_commands_failed": 0,
+      "reason": "materialization produced no destination bundle"
+    }
+  },
+  "counts": {"fetched": 1, "parsed": 1, "materialized": 0, "gated": 0, "reachable": 0, "failed": 1},
   "certification": "withheld; never exercised against provider"
 }
