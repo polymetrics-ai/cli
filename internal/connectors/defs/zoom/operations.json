@@ -2227,6 +2227,372 @@
       "auth_scopes": ["dialer:read:admin", "zoom_auto_dialer:read:prospects:admin"],
       "sensitive_policy": {"redact_fields": ["annual_revenue", "assignee_user_id", "call_list_id", "company", "company_description", "company_linkedIn_url", "company_url", "create_time", "custom_fields", "department", "description", "dialer_status", "dialer_sub_status", "email", "email_addresses", "email_domain", "external_id", "id", "import_from", "industry", "lead_linkedIn_url", "lead_rating", "lead_source", "lead_status", "linkedIn_url", "mailing_city", "mailing_country", "mailing_state", "mailing_street", "mailing_zip_code", "modify_time", "name", "number", "number_of_employees", "phone", "phone_numbers", "primary_name", "primary_phone", "prospect_id", "prospect_type", "secondary_name", "title", "topic", "type"]},
       "rest": {"method": "GET", "path": "/v2/dialer/prospects/{prospectId}", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.list_task_assignees",
+      "kind": "rest_read",
+      "summary": "List assignees of a task",
+      "description": "Bounded Zoom Tasks assignee read. Task and user values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks_assignee:read", "tasks_assignee:read:admin", "tasks:read:assignees", "tasks:read:assignees:admin"],
+      "sensitive_policy": {"redact_fields": ["assignees", "avatar", "display_name", "email", "task_id", "user_id"]},
+      "rest": {"method": "GET", "path": "/v2/tasks/items/{taskId}/assignees", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.add_task_assignees",
+      "kind": "rest_write",
+      "summary": "Add assignees to a task",
+      "description": "Approval-gated Zoom Tasks assignee invitation through the documented typed request object.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks_assignee:write", "tasks_assignee:write:admin", "tasks:write:assignees", "tasks:write:assignees:admin"],
+      "mutation_class": "update",
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["assignees", "avatar", "display_name", "email", "invite_message", "skip_notifications", "task_id", "user_id"]},
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tasks/items/{taskId}/assignees",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["assignees"],
+          "properties": {
+            "assignees": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["email"], "properties": {"email": {"type": "string"}}}},
+            "invite_message": {"type": "string"},
+            "skip_notifications": {"type": "boolean"}
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.remove_task_assignee",
+      "kind": "rest_write",
+      "summary": "Remove an assignee from a task",
+      "description": "Destructive Zoom Tasks assignee removal. The documented 204 No Content response is status-only success.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": ["tasks_assignee:write", "tasks_assignee:write:admin", "tasks:delete:assignees", "tasks:delete:assignees:admin"],
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {"kind": "destructive"},
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["task_id", "user_id"]},
+      "rest": {"method": "DELETE", "path": "/v2/tasks/items/{taskId}/assignees/{userId}", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.list_task_collaborators",
+      "kind": "rest_read",
+      "summary": "List collaborators of a task",
+      "description": "Bounded Zoom Tasks collaborator read. Task and user values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks_collaborator:read", "tasks_collaborator:read:admin", "tasks:read:list_collaborators", "tasks:read:list_collaborators:admin"],
+      "sensitive_policy": {"redact_fields": ["avatar", "collaborators", "display_name", "email", "task_id", "user_id"]},
+      "rest": {"method": "GET", "path": "/v2/tasks/items/{taskId}/collaborators", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.add_task_collaborators",
+      "kind": "rest_write",
+      "summary": "Add collaborators to a task",
+      "description": "Approval-gated Zoom Tasks collaborator invitation through the documented typed request object.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks_collaborator:write", "tasks_collaborator:write:admin", "tasks:write:collaborators", "tasks:write:collaborators:admin"],
+      "mutation_class": "update",
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["avatar", "collaborators", "display_name", "email", "invite_message", "skip_notifications", "task_id", "user_id"]},
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tasks/items/{taskId}/collaborators",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["collaborators"],
+          "properties": {
+            "collaborators": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["email"], "properties": {"email": {"type": "string"}}}},
+            "invite_message": {"type": "string"},
+            "skip_notifications": {"type": "boolean"}
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.remove_task_collaborator",
+      "kind": "rest_write",
+      "summary": "Remove a collaborator from a task",
+      "description": "Destructive Zoom Tasks collaborator removal. The documented 204 No Content response is status-only success.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": ["tasks_collaborator:write", "tasks_collaborator:write:admin", "tasks:delete:collaborator", "tasks:delete:collaborator:admin"],
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {"kind": "destructive"},
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["task_id", "user_id"]},
+      "rest": {"method": "DELETE", "path": "/v2/tasks/items/{taskId}/collaborators/{userId}", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.list_task_comments",
+      "kind": "rest_read",
+      "summary": "List comments on a task",
+      "description": "Bounded Zoom Tasks comment read. Comment, mention, task, and paging response values are redacted.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks_comment:read", "tasks_comment:read:admin", "tasks:read:comments", "tasks:read:comments:admin"],
+      "sensitive_policy": {"redact_fields": ["attributes", "avatar", "comment_id", "comments", "content", "content_text", "display_name", "email", "link", "mention", "next_page_token", "task_id", "text", "user_id"]},
+      "rest": {"method": "GET", "path": "/v2/tasks/items/{taskId}/comments", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.add_task_comment",
+      "kind": "rest_write",
+      "summary": "Add a comment to a task",
+      "description": "Approval-gated Zoom Tasks comment creation through the documented typed content-fragment object.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks_comment:write", "tasks_comment:write:admin", "tasks:write:comment", "tasks:write:comment:admin"],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["attributes", "avatar", "comment_id", "content", "content_text", "display_name", "email", "link", "mention", "task_id", "text", "user_id"]},
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tasks/items/{taskId}/comments",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["content", "content_text"],
+          "properties": {
+            "content": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["order"], "minProperties": 2, "properties": {"order": {"type": "number"}, "attributes": {"type": "object", "additionalProperties": false, "minProperties": 1, "properties": {"link": {"type": "string"}}}, "mention": {"type": "object", "additionalProperties": false, "minProperties": 1, "properties": {"email": {"type": "string"}, "user_id": {"type": "string"}}}, "text": {"type": "string"}}}},
+            "content_text": {"type": "string"}
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.delete_task_comment",
+      "kind": "rest_write",
+      "summary": "Delete a task comment",
+      "description": "Destructive Zoom Tasks comment deletion. The documented 204 No Content response is status-only success.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": ["tasks_comment:write", "tasks_comment:write:admin", "tasks:delete:comment", "tasks:delete:comment:admin"],
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {"kind": "destructive"},
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["comment_id", "task_id"]},
+      "rest": {"method": "DELETE", "path": "/v2/tasks/items/{taskId}/comments/{commentId}", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.upload_task_file",
+      "kind": "rest_write",
+      "summary": "Upload a Zoom Tasks JSON file",
+      "description": "Approval-gated Zoom Tasks file upload. The provider permits only a bounded .json source and requires one declared Zoom-host redirect replay with bearer retention.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks_file:write", "tasks_file:write:admin", "tasks:write:file", "tasks:write:file:admin"],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["file", "file_id", "file_name", "file_size"]},
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tasks/files",
+        "base_url": "https://fileapi.zoom.us",
+        "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}],
+        "content_type": "multipart/form-data",
+        "body_schema": {"type": "object", "additionalProperties": false, "required": ["file"], "properties": {"file": {"type": "string"}}},
+        "multipart": {
+          "max_bytes": 10485760,
+          "parts": [{"name": "file", "type": "file", "field": "file", "required": true, "max_bytes": 10485760, "content_type": "application/json", "content_validation": "json", "allowed_file_extensions": [".json"]}]
+        },
+        "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1},
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.submit_task_import",
+      "kind": "rest_write",
+      "summary": "Submit a Zoom Tasks import job",
+      "description": "Approval-gated import submission for a previously uploaded Slack Lists file through the documented typed mapping object.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks:write", "tasks:write:admin", "tasks:write:import", "tasks:write:import:admin"],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["file_id", "import_id", "status_mapping", "user_mapping"]},
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tasks/imports",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["file_id", "source"],
+          "properties": {
+            "file_id": {"type": "string"},
+            "source": {"type": "string", "enum": ["slack_lists"]},
+            "status_mapping": {"type": "object", "additionalProperties": true},
+            "user_mapping": {"type": "object", "additionalProperties": true}
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_task_import",
+      "kind": "rest_read",
+      "summary": "Get a Zoom Tasks import job",
+      "description": "Bounded Zoom Tasks import-job status read. Job, project, source record, and warning data are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks:read", "tasks:read:admin", "tasks:read:import", "tasks:read:import:admin"],
+      "sensitive_policy": {"redact_fields": ["error", "failed_task_details", "file_id", "import_id", "project_id", "project_link", "project_name", "record_id", "title", "unmapped_users", "warnings"]},
+      "rest": {"method": "GET", "path": "/v2/tasks/imports/{importId}", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.list_tasks",
+      "kind": "rest_read",
+      "summary": "List Zoom Tasks items",
+      "description": "Bounded Zoom Tasks item read. Task, participant, attachment, meeting, and response paging values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks:read", "tasks:read:admin", "tasks:read:list_tasks", "tasks:read:list_tasks:admin"],
+      "sensitive_policy": {"redact_fields": ["associated_meeting", "assignees", "attachment_id", "avatar", "collaborators", "description", "display_name", "download_url", "email", "file_name", "friendly_task_id", "link", "next_page_token", "task_id", "tasks", "tasks_attachments", "title", "user_id"]},
+      "rest": {"method": "GET", "path": "/v2/tasks/items", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.create_task",
+      "kind": "rest_write",
+      "summary": "Create a Zoom Task",
+      "description": "Approval-gated Zoom Tasks creation through the documented closed task object without attachments.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks:write", "tasks:write:task"],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["assignees", "collaborators", "description", "due_date", "email", "friendly_task_id", "invite_message", "link", "task_id", "title", "user_id"]},
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tasks/items",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["title"],
+          "properties": {
+            "assignees": {"type": "array", "maxItems": 20, "items": {"type": "object", "additionalProperties": false, "properties": {"email": {"type": "string"}}}},
+            "collaborators": {"type": "array", "maxItems": 20, "items": {"type": "object", "additionalProperties": false, "properties": {"email": {"type": "string"}}}},
+            "description": {"type": "string"},
+            "due_date": {"type": "string"},
+            "invite_message": {"type": "string"},
+            "is_public": {"type": "boolean"},
+            "priority": {"type": "string", "enum": ["Low", "Medium", "High", "Highest"]},
+            "skip_notifications": {"type": "boolean"},
+            "starred": {"type": "boolean"},
+            "status": {"type": "string", "enum": ["To do", "In progress", "Done", "Blocked", "Recommended"]},
+            "title": {"type": "string"}
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_task",
+      "kind": "rest_read",
+      "summary": "Get a Zoom Task",
+      "description": "Bounded Zoom Tasks detail read. Task, participant, attachment, meeting, and source values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["tasks:read", "tasks:read:admin", "tasks:read:task", "tasks:read:task:admin"],
+      "sensitive_policy": {"redact_fields": ["associated_meeting", "assignees", "attachment_id", "avatar", "collaborators", "description", "display_name", "download_url", "email", "file_name", "friendly_task_id", "link", "source_type", "task_id", "tasks_attachments", "title", "user_id"]},
+      "rest": {"method": "GET", "path": "/v2/tasks/items/{taskId}", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.delete_task",
+      "kind": "rest_write",
+      "summary": "Delete a Zoom Task",
+      "description": "Destructive Zoom Tasks deletion. The provider permanently deletes the task and its associated data, and returns 204 No Content status-only success.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": ["tasks:delete", "tasks:delete:admin", "tasks:delete:task", "tasks:delete:task:admin"],
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {"kind": "destructive"},
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["task_id"]},
+      "rest": {"method": "DELETE", "path": "/v2/tasks/items/{taskId}", "max_bytes": 1048576}
+    },
+    {
+      "id": "zoom.update_task",
+      "kind": "rest_write",
+      "summary": "Update a Zoom Task",
+      "description": "Approval-gated Zoom Tasks partial update through the documented closed task-field object. The 204 response is status-only success.",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": ["tasks:write", "tasks:write:admin", "tasks:update:task", "tasks:update:task:admin"],
+      "mutation_class": "update",
+      "batchable": false,
+      "sensitive_policy": {"redact_fields": ["description", "due_date", "task_id", "title"]},
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/tasks/items/{taskId}",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "description": {"type": "string"},
+            "due_date": {"type": "string"},
+            "is_public": {"type": "boolean"},
+            "priority": {"type": "string", "enum": ["Low", "Medium", "High", "Highest"]},
+            "starred": {"type": "boolean"},
+            "status": {"type": "string", "enum": ["To do", "In progress", "Done", "Blocked", "Recommended"]},
+            "title": {"type": "string"}
+          }
+        },
+        "max_bytes": 1048576
+      }
     }
   ]
 }

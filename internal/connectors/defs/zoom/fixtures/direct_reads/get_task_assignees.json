@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "body": {
+    "task_id": "fixture-task-assignees",
+    "assignees": [{
+      "user_id": "fixture-task-assignee-user",
+      "display_name": "Fixture Task Assignee",
+      "email": "fixture.task.assignee@example.invalid",
+      "avatar": "https://example.invalid/fixture-task-assignee.png"
+    }]
+  }
+}

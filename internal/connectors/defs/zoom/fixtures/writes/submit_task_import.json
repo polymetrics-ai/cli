@@ -1,0 +1,19 @@
+{
+  "record": {
+    "file_id": "fixture-task-upload-file",
+    "source": "slack_lists",
+    "status_mapping": {"Not started": "To do"},
+    "user_mapping": {"fixture-task-source-user": "fixture.task.user@example.invalid"}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/tasks/imports",
+    "body": {
+      "file_id": "fixture-task-upload-file",
+      "source": "slack_lists",
+      "status_mapping": {"Not started": "To do"},
+      "user_mapping": {"fixture-task-source-user": "fixture.task.user@example.invalid"}
+    }
+  },
+  "response": {"status": 202, "body": {"import_id": "fixture-task-import", "status": "pending", "submitted_at": "2026-08-08T10:00:00Z"}}
+}

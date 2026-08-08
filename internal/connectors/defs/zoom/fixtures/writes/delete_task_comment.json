@@ -1,0 +1,4 @@
+{
+  "expect": {"method": "DELETE", "path": "/v2/tasks/items/fixture-task-comment/comments/fixture-task-comment"},
+  "response": {"status": 204}
+}

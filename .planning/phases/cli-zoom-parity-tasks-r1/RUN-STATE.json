@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-tasks-r1",
   "issue": 3939,
   "parent_issue": 3915,
-  "status": "json-file-foundation-green",
+  "status": "verified-review-green",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -35,8 +35,8 @@
   },
   "foundation": "required: redirect-safe typed multipart rest_write for the documented fileapi.zoom.us 30x bearer-preserving upload",
   "red": "captured: command surface test failed on 67/1775/38/24 target totals and 17 unknown Tasks paths; declared multipart redirect test failed because rest.redirect is absent",
-  "green": "redirect and JSON-file foundations captured: declared multipart redirect plus bounded JSON content/extension validation passed engine, connsdk, commandrunner, and connectorgen tests",
+  "green": "all 17 Tasks actions are declared and fixture-executed; exact compiled-binary base, namespace, group, and command help routes exited zero",
   "json_file_foundation": "green captured: only a declared .json source with a complete JSON document and application/json part header reaches the provider; malformed or wrong-extension files fail before send",
-  "verification": "pending",
-  "review": "pending"
+  "verification": "passed: source/ledger audit, real preflight, six read and eleven write fixtures, 204 status-only/delete-confirmation cases, generated output scope, fresh binary routes, scoped test/vet/lint/docs/smoke/contract/surface/boundary/release gates",
+  "review": "passed: inline manual code-review found no actionable source-contract, authorization, redaction, redirect-boundary, generated-scope, or test coverage finding"
 }

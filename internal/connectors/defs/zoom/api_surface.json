@@ -21608,222 +21608,120 @@
     {
       "method": "GET",
       "path": "/v2/tasks/items/{taskId}/assignees",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get assignees of a task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/assignees; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks assignees list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/tasks/items/{taskId}/assignees",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Add assignees to a task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/assignees; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks assignees add"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/tasks/items/{taskId}/assignees/{userId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Remove Assignee from task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/assignees/{userId}; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks assignees remove"
       }
     },
     {
       "method": "GET",
       "path": "/v2/tasks/items/{taskId}/collaborators",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get collaborators of a task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/collaborators; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks collaborators list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/tasks/items/{taskId}/collaborators",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Add collaborators to a task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/collaborators; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks collaborators add"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/tasks/items/{taskId}/collaborators/{userId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Remove collaborator from task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/collaborators/{userId}; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks collaborators remove"
       }
     },
     {
       "method": "GET",
       "path": "/v2/tasks/items/{taskId}/comments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get a task's comments; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/comments; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks comments list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/tasks/items/{taskId}/comments",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Add a comment to a task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/comments; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks comments add"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/tasks/items/{taskId}/comments/{commentId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Delete a task's comment; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}/comments/{commentId}; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks comments delete"
       }
     },
     {
       "method": "POST",
       "path": "/v2/tasks/files",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with the existing typed multipart writes.json path, but blocked until a Zoom-local bounded file contract, allowed-media/size policy, approval path, and fixtures are declared. The rest_write direct executor is JSON/form only, so it is not this operation path.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Upload a file in tasks; provider_server=https://api.zoom.us/v2; provider_path=/tasks/files; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05; provider_evidence=request body explicitly declares multipart/form-data"
+      "covered_by": {
+        "direct_write": "tasks files upload"
       }
     },
     {
       "method": "POST",
       "path": "/v2/tasks/imports",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Submit a task import job; provider_server=https://api.zoom.us/v2; provider_path=/tasks/imports; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks imports submit"
       }
     },
     {
       "method": "GET",
       "path": "/v2/tasks/imports/{importId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get import job status; provider_server=https://api.zoom.us/v2; provider_path=/tasks/imports/{importId}; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks imports get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/tasks/items",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=List tasks; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks items list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/tasks/items",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Create a new task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks items create"
       }
     },
     {
       "method": "GET",
       "path": "/v2/tasks/items/{taskId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Get task details; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "tasks items get"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/tasks/items/{taskId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Delete a task; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks items delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/tasks/items/{taskId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/tasks.md",
-        "notes": "classification=implementable_now; provider_module=tasks; operation_title=Update task fields; provider_server=https://api.zoom.us/v2; provider_path=/tasks/items/{taskId}; artifact=https://developers.zoom.us/docs/api/tasks.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "tasks items update"
       }
     },
     {

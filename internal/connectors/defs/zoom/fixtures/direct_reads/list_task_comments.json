@@ -1,0 +1,24 @@
+{
+  "status": 200,
+  "body": {
+    "comments": [{
+      "comment_id": "fixture-task-comment",
+      "content": [{
+        "order": 0,
+        "text": "Fixture Task private comment",
+        "attributes": {"link": "https://example.invalid/fixture-task-comment"},
+        "mention": {
+          "user_id": "fixture-task-mentioned-user",
+          "display_name": "Fixture Task Mention",
+          "email": "fixture.task.mention@example.invalid",
+          "avatar": "https://example.invalid/fixture-task-mention.png"
+        }
+      }],
+      "content_text": "Fixture Task private comment",
+      "create_time": 1752715586000
+    }],
+    "next_page_token": "fixture-task-comments-page-token",
+    "page_size": 10,
+    "total_records": 1
+  }
+}

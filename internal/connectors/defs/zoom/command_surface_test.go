@@ -6,6 +6,9 @@ package zoom
 import (
 	"context"
 	"encoding/json"
+	"io"
+	"mime"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -938,6 +941,605 @@ func TestAutoDialerDirectWriteCommandsExecuteWithFixtures(t *testing.T) {
 	if requests != len(actions) {
 		t.Fatalf("Auto Dialer write fixtures received %d requests, want %d", requests, len(actions))
 	}
+}
+
+// TestTasksDirectReadCommandsExecuteWithFixtures runs each documented Tasks
+// GET through the real command runner. It locks exact paths and bearer use,
+// forbids synthesized paging/filter flags, and proves named response redaction
+// without reaching Zoom.
+func TestTasksDirectReadCommandsExecuteWithFixtures(t *testing.T) {
+	const accessToken = "fixture-tasks-access-token"
+	type taskReadAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		requestPath       string
+		fixture           string
+		status            int
+		response          json.RawMessage
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []taskReadAction{
+		{
+			name:              "list assignees",
+			path:              []string{"tasks", "assignees", "list"},
+			flags:             map[string][]string{"task-id": {"fixture-task-assignees"}},
+			requestPath:       "/v2/tasks/items/fixture-task-assignees/assignees",
+			fixture:           "get_task_assignees.json",
+			responseSensitive: []string{"fixture-task-assignees", "fixture-task-assignee-user", "Fixture Task Assignee", "fixture.task.assignee@example.invalid"},
+			responseMarkers:   []string{"task_id", "assignees"},
+		},
+		{
+			name:              "list collaborators",
+			path:              []string{"tasks", "collaborators", "list"},
+			flags:             map[string][]string{"task-id": {"fixture-task-collaborators"}},
+			requestPath:       "/v2/tasks/items/fixture-task-collaborators/collaborators",
+			fixture:           "get_task_collaborators.json",
+			responseSensitive: []string{"fixture-task-collaborators", "fixture-task-collaborator-user", "Fixture Task Collaborator", "fixture.task.collaborator@example.invalid"},
+			responseMarkers:   []string{"task_id", "collaborators"},
+		},
+		{
+			name:              "list comments",
+			path:              []string{"tasks", "comments", "list"},
+			flags:             map[string][]string{"task-id": {"fixture-task-comment"}},
+			requestPath:       "/v2/tasks/items/fixture-task-comment/comments",
+			fixture:           "list_task_comments.json",
+			responseSensitive: []string{"fixture-task-comment", "Fixture Task private comment", "fixture.task.mention@example.invalid", "fixture-task-comments-page-token"},
+			responseMarkers:   []string{"comments", "next_page_token"},
+		},
+		{
+			name:              "get import",
+			path:              []string{"tasks", "imports", "get"},
+			flags:             map[string][]string{"import-id": {"fixture-task-import"}},
+			requestPath:       "/v2/tasks/imports/fixture-task-import",
+			fixture:           "get_task_import.json",
+			responseSensitive: []string{"fixture-task-import", "Fixture Task Project", "fixture-task-source-record", "fixture task import error"},
+			responseMarkers:   []string{"import_id", "project_name", "failed_task_details", "error"},
+		},
+		{
+			name:              "list items",
+			path:              []string{"tasks", "items", "list"},
+			requestPath:       "/v2/tasks/items",
+			fixture:           "list_tasks.json",
+			responseSensitive: []string{"fixture-task-list-item", "Fixture Task list title", "fixture.task.list@example.invalid", "fixture-task-items-page-token"},
+			responseMarkers:   []string{"tasks", "next_page_token"},
+		},
+		{
+			name:              "get item",
+			path:              []string{"tasks", "items", "get"},
+			flags:             map[string][]string{"task-id": {"fixture-task-detail"}},
+			requestPath:       "/v2/tasks/items/fixture-task-detail",
+			fixture:           "get_task.json",
+			responseSensitive: []string{"fixture-task-detail", "Fixture Task detail title", "fixture.task.detail@example.invalid", "fixture-task-attachment", "fixture-task-meeting-uuid"},
+			responseMarkers:   []string{"task_id", "title", "tasks_attachments", "associated_meeting"},
+		},
+	}
+	byRequest := make(map[string]*taskReadAction, len(actions))
+	for i := range actions {
+		actions[i].status, actions[i].response = zoomDirectReadFixture(t, actions[i].fixture)
+		byRequest[http.MethodGet+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Tasks read fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Tasks read fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Tasks read fixture received undeclared query or paging input")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(action.status)
+		_, _ = w.Write(action.response)
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	config := connectors.RuntimeConfig{
+		Config:  map[string]string{"base_url": server.URL + "/v2"},
+		Secrets: map[string]string{"access_token": accessToken},
+	}
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   action.path,
+				Flags:  action.flags,
+				Config: config,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for a Tasks direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q): %v", strings.Join(action.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != action.status {
+				t.Fatalf("Run(%q) result = %#v, want status %d", strings.Join(action.path, " "), result.DirectRead, action.status)
+			}
+			encoded, err := json.Marshal(result.DirectRead.Body)
+			if err != nil {
+				t.Fatalf("marshal Tasks read response: %v", err)
+			}
+			for index, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatalf("Tasks read response exposed declared or generic sensitive field %d", index)
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("Tasks read response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Tasks read fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+// TestTasksDirectWriteCommandsExecuteWithFixtures runs every non-upload Tasks
+// mutation through plan, no-network preview, approval, and execute. The upload
+// has its own test below because its provider-declared fileapi redirect must be
+// exercised through the fixed origin rather than the normal Zoom base URL.
+func TestTasksDirectWriteCommandsExecuteWithFixtures(t *testing.T) {
+	const (
+		credentialName = "zoom-tasks-fixture"
+		accessToken    = "fixture-tasks-access-token"
+	)
+	type taskWriteAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		rootFlag          string
+		fixture           string
+		method            string
+		requestPath       string
+		expectedBody      json.RawMessage
+		status            int
+		response          json.RawMessage
+		destructive       bool
+		inputSensitive    []string
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []taskWriteAction{
+		{
+			name:              "add assignees",
+			path:              []string{"tasks", "assignees", "add"},
+			flags:             map[string][]string{"task-id": {"fixture-task-assignees"}},
+			rootFlag:          "request",
+			fixture:           "add_task_assignees.json",
+			inputSensitive:    []string{"fixture.task.assignee@example.invalid", "Fixture Task assignee invitation"},
+			responseSensitive: []string{"fixture-task-assignees", "fixture-task-assignee-user", "Fixture Task Assignee", "fixture.task.assignee@example.invalid"},
+			responseMarkers:   []string{"task_id", "assignees"},
+		},
+		{
+			name:        "remove assignee",
+			path:        []string{"tasks", "assignees", "remove"},
+			flags:       map[string][]string{"task-id": {"fixture-task-assignees"}, "user-id": {"fixture-task-assignee-user"}},
+			fixture:     "remove_task_assignee.json",
+			destructive: true,
+		},
+		{
+			name:              "add collaborators",
+			path:              []string{"tasks", "collaborators", "add"},
+			flags:             map[string][]string{"task-id": {"fixture-task-collaborators"}},
+			rootFlag:          "request",
+			fixture:           "add_task_collaborators.json",
+			inputSensitive:    []string{"fixture.task.collaborator@example.invalid", "Fixture Task collaborator invitation"},
+			responseSensitive: []string{"fixture-task-collaborators", "fixture-task-collaborator-user", "Fixture Task Collaborator", "fixture.task.collaborator@example.invalid"},
+			responseMarkers:   []string{"task_id", "collaborators"},
+		},
+		{
+			name:        "remove collaborator",
+			path:        []string{"tasks", "collaborators", "remove"},
+			flags:       map[string][]string{"task-id": {"fixture-task-collaborators"}, "user-id": {"fixture-task-collaborator-user"}},
+			fixture:     "remove_task_collaborator.json",
+			destructive: true,
+		},
+		{
+			name:              "add comment",
+			path:              []string{"tasks", "comments", "add"},
+			flags:             map[string][]string{"task-id": {"fixture-task-comment"}},
+			rootFlag:          "comment",
+			fixture:           "add_task_comment.json",
+			inputSensitive:    []string{"Fixture Task comment text", "https://example.invalid/fixture-task-comment"},
+			responseSensitive: []string{"fixture-task-comment", "Fixture Task comment text"},
+			responseMarkers:   []string{"comment_id", "content", "content_text"},
+		},
+		{
+			name:        "delete comment",
+			path:        []string{"tasks", "comments", "delete"},
+			flags:       map[string][]string{"task-id": {"fixture-task-comment"}, "comment-id": {"fixture-task-comment"}},
+			fixture:     "delete_task_comment.json",
+			destructive: true,
+		},
+		{
+			name: "submit import",
+			path: []string{"tasks", "imports", "submit"},
+			flags: map[string][]string{
+				"file-id":        {"fixture-task-upload-file"},
+				"source":         {"slack_lists"},
+				"status-mapping": {`{"Not started":"To do"}`},
+				"user-mapping":   {`{"fixture-task-source-user":"fixture.task.user@example.invalid"}`},
+			},
+			fixture:           "submit_task_import.json",
+			inputSensitive:    []string{"fixture-task-upload-file", "Not started", "fixture-task-source-user", "fixture.task.user@example.invalid"},
+			responseSensitive: []string{"fixture-task-import"},
+			responseMarkers:   []string{"import_id"},
+		},
+		{
+			name:              "create item",
+			path:              []string{"tasks", "items", "create"},
+			rootFlag:          "task",
+			fixture:           "create_task.json",
+			inputSensitive:    []string{"Fixture Task create title", "Fixture Task create description", "fixture.task.create.assignee@example.invalid", "fixture.task.create.collaborator@example.invalid"},
+			responseSensitive: []string{"fixture-task-created", "Fixture Task create title", "Fixture Task create description", "fixture.task.create.assignee@example.invalid", "FIXTURE-TASK-3"},
+			responseMarkers:   []string{"task_id", "title", "description", "assignees", "collaborators", "friendly_task_id", "link"},
+		},
+		{
+			name:        "delete item",
+			path:        []string{"tasks", "items", "delete"},
+			flags:       map[string][]string{"task-id": {"fixture-task-delete"}},
+			fixture:     "delete_task.json",
+			destructive: true,
+		},
+		{
+			name:           "update item",
+			path:           []string{"tasks", "items", "update"},
+			flags:          map[string][]string{"task-id": {"fixture-task-update"}},
+			rootFlag:       "task",
+			fixture:        "update_task.json",
+			inputSensitive: []string{"Fixture Task updated title", "Fixture Task updated description"},
+		},
+	}
+	byRequest := make(map[string]*taskWriteAction, len(actions))
+	for i := range actions {
+		fixture := zoomSCIM2WriteFixture(t, actions[i].fixture)
+		actions[i].method = fixture.Expect.Method
+		actions[i].requestPath = fixture.Expect.Path
+		actions[i].expectedBody = fixture.Expect.Body
+		actions[i].status = fixture.Response.Status
+		actions[i].response = fixture.Response.Body
+		if actions[i].rootFlag != "" {
+			if actions[i].flags == nil {
+				actions[i].flags = map[string][]string{}
+			}
+			var record any
+			if err := json.Unmarshal(fixture.Record, &record); err != nil {
+				t.Fatalf("decode Tasks fixture record %s: %v", actions[i].fixture, err)
+			}
+			compactRecord, err := json.Marshal(record)
+			if err != nil {
+				t.Fatalf("compact Tasks fixture record %s: %v", actions[i].fixture, err)
+			}
+			actions[i].flags[actions[i].rootFlag] = []string{string(compactRecord)}
+		}
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Tasks write fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Tasks write fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Tasks write fixture received undeclared query or paging input")
+		}
+		if len(action.expectedBody) == 0 {
+			var unexpected any
+			if err := json.NewDecoder(request.Body).Decode(&unexpected); err == nil {
+				t.Fatal("Tasks no-body action unexpectedly sent a request body")
+			}
+		} else {
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("Tasks body action did not declare JSON content")
+			}
+			var got, want any
+			if err := json.NewDecoder(request.Body).Decode(&got); err != nil {
+				t.Fatalf("decode Tasks action body: %v", err)
+			}
+			if err := json.Unmarshal(action.expectedBody, &want); err != nil {
+				t.Fatalf("decode Tasks fixture body: %v", err)
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatal("Tasks action body did not contain exactly the declared documented fields")
+			}
+		}
+		if len(action.response) > 0 {
+			w.Header().Set("Content-Type", "application/json")
+		}
+		w.WriteHeader(action.status)
+		if len(action.response) > 0 {
+			_, _ = w.Write(action.response)
+		}
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s): %v", action.name, err)
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config:    map[string]string{"base_url": server.URL + "/v2"},
+		Secrets:   map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			beforeRequests := requests
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("Tasks plan did not produce a no-network preview and single-use approval")
+			}
+			if action.destructive != (plan.ConfirmationChallenge == string(connectors.ConfirmationKindDestructive)) {
+				t.Fatal("Tasks plan did not retain the declared destructive confirmation policy")
+			}
+			encodedPlan, err := json.Marshal(plan.Sample)
+			if err != nil {
+				t.Fatalf("marshal Tasks plan sample: %v", err)
+			}
+			for index, raw := range action.inputSensitive {
+				if strings.Contains(string(encodedPlan), raw) {
+					t.Fatalf("Tasks plan sample exposed declared sensitive input %d", index)
+				}
+			}
+			if requests != beforeRequests {
+				t.Fatal("Tasks plan or preview reached the fixture endpoint")
+			}
+
+			runRequest := app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}
+			if action.destructive {
+				if _, err := application.RunReverseETL(context.Background(), runRequest); err == nil {
+					t.Fatal("Tasks DELETE execution bypassed typed destructive confirmation")
+				}
+				if requests != beforeRequests {
+					t.Fatal("unconfirmed Tasks DELETE reached the fixture endpoint")
+				}
+				runRequest.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+			}
+			run, err := application.RunReverseETL(context.Background(), runRequest)
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != action.status {
+				t.Fatalf("Tasks run = %#v, want completed declared action status %d", run, action.status)
+			}
+			if len(action.response) == 0 {
+				if run.OperationDirectWrite.Body != nil {
+					t.Fatal("Tasks status-only action returned an invented response body")
+				}
+				return
+			}
+			encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+			if err != nil {
+				t.Fatalf("marshal Tasks action response: %v", err)
+			}
+			for index, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatalf("Tasks action response exposed declared or generic sensitive field %d", index)
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("Tasks action response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Tasks write fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+// TestTasksUploadDirectWriteExecutesWithFixture exercises the provider's
+// unusual fixed fileapi origin and documented bearer-preserving 30x replay.
+// The test transport owns both Zoom-host names, so the real command lifecycle
+// is exercised without a live request or any caller-selected redirect target.
+func TestTasksUploadDirectWriteExecutesWithFixture(t *testing.T) {
+	const (
+		credentialName = "zoom-tasks-upload-fixture"
+		accessToken    = "fixture-tasks-upload-access-token"
+	)
+	fixture := zoomSCIM2WriteFixture(t, "upload_task_file.json")
+	var record struct {
+		File string `json:"file"`
+	}
+	if err := json.Unmarshal(fixture.Record, &record); err != nil {
+		t.Fatalf("decode Tasks upload fixture record: %v", err)
+	}
+	if record.File == "" {
+		t.Fatal("Tasks upload fixture record lacks file")
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	sourcePath := filepath.Join(root, ".polymetrics", filepath.FromSlash(record.File))
+	if err := os.MkdirAll(filepath.Dir(sourcePath), 0o755); err != nil {
+		t.Fatalf("MkdirAll Tasks upload source: %v", err)
+	}
+	sourceContent := []byte(`{"items":["fixture-task-upload"]}`)
+	if err := os.WriteFile(sourcePath, sourceContent, 0o600); err != nil {
+		t.Fatalf("WriteFile Tasks upload source: %v", err)
+	}
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	flags := map[string][]string{"file-path": {record.File}}
+	if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: []string{"tasks", "files", "upload"}, Flags: flags}); err != nil {
+		t.Fatalf("BuildWriteCommand(tasks files upload): %v", err)
+	}
+
+	initialCalls, redirectCalls := 0, 0
+	originalTransport := http.DefaultTransport
+	http.DefaultTransport = zoomRoundTripperFunc(func(request *http.Request) (*http.Response, error) {
+		defer func() { _ = request.Body.Close() }()
+		if request.Method != fixture.Expect.Method || request.URL.Path != fixture.Expect.Path {
+			t.Fatalf("Tasks upload transport request = %s %s, want %s %s", request.Method, request.URL.Path, fixture.Expect.Method, fixture.Expect.Path)
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Tasks upload transport did not receive the declared bearer credential")
+		}
+		switch request.URL.Host {
+		case "fileapi.zoom.us":
+			initialCalls++
+			if request.URL.RawQuery != "" {
+				t.Fatal("Tasks upload initial request carried undeclared query input")
+			}
+			assertTasksUploadMultipart(t, request, sourceContent, filepath.Base(record.File))
+			return &http.Response{
+				StatusCode: http.StatusTemporaryRedirect,
+				Header:     http.Header{"Location": []string{"https://uploads.zoom.us/v2/tasks/files?fixture-signed-redirect=opaque"}},
+				Body:       io.NopCloser(strings.NewReader("")),
+				Request:    request,
+			}, nil
+		case "uploads.zoom.us":
+			redirectCalls++
+			if request.URL.RawQuery != "fixture-signed-redirect=opaque" {
+				t.Fatal("Tasks upload redirect request did not preserve the provider-supplied signed query")
+			}
+			assertTasksUploadMultipart(t, request, sourceContent, filepath.Base(record.File))
+			return &http.Response{
+				StatusCode: fixture.Response.Status,
+				Header:     http.Header{"Content-Type": []string{"application/json"}},
+				Body:       io.NopCloser(strings.NewReader(string(fixture.Response.Body))),
+				Request:    request,
+			}, nil
+		default:
+			t.Fatalf("Tasks upload transport received unexpected host %q", request.URL.Host)
+			return nil, nil
+		}
+	})
+	t.Cleanup(func() { http.DefaultTransport = originalTransport })
+
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config:    map[string]string{"base_url": "https://api.zoom.us/v2"},
+		Secrets:   map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+		Connector:  zoomBundleName,
+		Credential: credentialName,
+		Path:       []string{"tasks", "files", "upload"},
+		Flags:      flags,
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand(tasks files upload): %v", err)
+	}
+	if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+		t.Fatal("Tasks upload plan did not produce a no-network preview and single-use approval")
+	}
+	encodedPlan, err := json.Marshal(plan.Sample)
+	if err != nil {
+		t.Fatalf("marshal Tasks upload plan sample: %v", err)
+	}
+	if strings.Contains(string(encodedPlan), record.File) {
+		t.Fatal("Tasks upload plan sample exposed the declared source path")
+	}
+	if initialCalls != 0 || redirectCalls != 0 {
+		t.Fatal("Tasks upload plan or preview reached the fixture transport")
+	}
+
+	run, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL(tasks files upload): %v", err)
+	}
+	if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != fixture.Response.Status {
+		t.Fatalf("Tasks upload run = %#v, want completed declared action status %d", run, fixture.Response.Status)
+	}
+	encodedResponse, err := json.Marshal(run.OperationDirectWrite.Body)
+	if err != nil {
+		t.Fatalf("marshal Tasks upload response: %v", err)
+	}
+	if strings.Contains(string(encodedResponse), "fixture-task-upload-file") || !strings.Contains(string(encodedResponse), "\"file_id_redacted\":true") {
+		t.Fatal("Tasks upload response did not redact the provider file identifier")
+	}
+	if initialCalls != 1 || redirectCalls != 1 {
+		t.Fatalf("Tasks upload transport calls initial=%d redirected=%d, want one each", initialCalls, redirectCalls)
+	}
+}
+
+func assertTasksUploadMultipart(t *testing.T, request *http.Request, want []byte, wantName string) {
+	t.Helper()
+	mediaType, params, err := mime.ParseMediaType(request.Header.Get("Content-Type"))
+	if err != nil || mediaType != "multipart/form-data" || params["boundary"] == "" {
+		t.Fatalf("Tasks upload content type = %q, want multipart/form-data with boundary", request.Header.Get("Content-Type"))
+	}
+	reader := multipart.NewReader(request.Body, params["boundary"])
+	part, err := reader.NextPart()
+	if err != nil {
+		t.Fatalf("read Tasks upload multipart part: %v", err)
+	}
+	defer func() { _ = part.Close() }()
+	if part.FormName() != "file" || part.FileName() != wantName {
+		t.Fatalf("Tasks upload part = field %q file %q, want file %q", part.FormName(), part.FileName(), wantName)
+	}
+	if part.Header.Get("Content-Type") != "application/json" {
+		t.Fatalf("Tasks upload part content type = %q, want application/json", part.Header.Get("Content-Type"))
+	}
+	got, err := io.ReadAll(part)
+	if err != nil {
+		t.Fatalf("read Tasks upload multipart content: %v", err)
+	}
+	if string(got) != string(want) {
+		t.Fatal("Tasks upload multipart content does not match the approved source snapshot")
+	}
+	if _, err := reader.NextPart(); err != io.EOF {
+		t.Fatalf("Tasks upload multipart has an undeclared extra part: %v", err)
+	}
+}
+
+type zoomRoundTripperFunc func(*http.Request) (*http.Response, error)
+
+func (fn zoomRoundTripperFunc) RoundTrip(request *http.Request) (*http.Response, error) {
+	return fn(request)
 }
 
 // verifyDirectWriteOperationCommands is the direct-write counterpart of

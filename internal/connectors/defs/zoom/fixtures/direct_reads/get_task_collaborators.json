@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "body": {
+    "task_id": "fixture-task-collaborators",
+    "collaborators": [{
+      "user_id": "fixture-task-collaborator-user",
+      "display_name": "Fixture Task Collaborator",
+      "email": "fixture.task.collaborator@example.invalid",
+      "avatar": "https://example.invalid/fixture-task-collaborator.png"
+    }]
+  }
+}
