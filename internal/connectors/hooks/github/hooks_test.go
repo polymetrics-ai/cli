@@ -553,10 +553,10 @@ func TestConnectorName(t *testing.T) {
 // whatever the caller sent" — a `repo unarchive` that forwards an empty body
 // silently does nothing while reporting success.
 //
-// They pin through MapWriteRecord rather than ExecuteWrite because both actions
-// carry a destructive typed confirmation, and the engine refuses to prepare a
-// destructive action whose hook overrides execution: the preview an operator
-// approves would not be the request that runs.
+// They pin through MapWriteRecord rather than ExecuteWrite so both stay on the
+// declarative path: a hook that overrides execution builds a request the
+// preview never saw, so the digest an operator approves would not be the
+// request that runs.
 func TestMapWriteRecord_ArchiveRepoPinsArchivedTrue(t *testing.T) {
 	h := githubhooks.New()
 	action := engine.WriteAction{Name: "archive_repo", Method: "PATCH", Path: "/repos/{owner}/{repo}"}
@@ -572,10 +572,10 @@ func TestMapWriteRecord_ArchiveRepoPinsArchivedTrue(t *testing.T) {
 		t.Fatalf("archive record = %+v, want archived=true", pinned)
 	}
 	if handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, nil); handled || err != nil {
-		t.Fatalf("ExecuteWrite() = (%v, %v), want (false, nil): a destructive action must stay declarative", handled, err)
+		t.Fatalf("ExecuteWrite() = (%v, %v), want (false, nil): the pinned-body action must stay declarative", handled, err)
 	}
 	if h.HandlesWriteAction(action) {
-		t.Fatal("HandlesWriteAction(archive_repo) = true; the engine reads this to refuse a destructive hook-executed action")
+		t.Fatal("HandlesWriteAction(archive_repo) = true; the engine reads this to route the action away from the declarative path")
 	}
 }
 
@@ -596,10 +596,10 @@ func TestMapWriteRecord_UnarchiveRepoPinsArchivedFalse(t *testing.T) {
 		t.Fatalf("unarchive record = %+v, want archived=false", pinned)
 	}
 	if handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, nil); handled || err != nil {
-		t.Fatalf("ExecuteWrite() = (%v, %v), want (false, nil): a destructive action must stay declarative", handled, err)
+		t.Fatalf("ExecuteWrite() = (%v, %v), want (false, nil): the pinned-body action must stay declarative", handled, err)
 	}
 	if h.HandlesWriteAction(action) {
-		t.Fatal("HandlesWriteAction(unarchive_repo) = true; the engine reads this to refuse a destructive hook-executed action")
+		t.Fatal("HandlesWriteAction(unarchive_repo) = true; the engine reads this to route the action away from the declarative path")
 	}
 }
 
