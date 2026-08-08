@@ -81,7 +81,11 @@ func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batch
 		if currentURLErr != nil {
 			return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference page URL %q is unsafe: %v", current.URL, currentURLErr)
 		}
-		for _, link := range batchHTMLReferenceLinks(current.Raw, currentURL) {
+		links, linksErr := batchHTMLReferenceLinks(current.Raw, currentURL)
+		if linksErr != nil {
+			return batchArtifactInventory{}, linksErr
+		}
+		for _, link := range links {
 			if seen[link] {
 				continue
 			}
@@ -204,32 +208,33 @@ func batchReferenceURLHasSuffix(rawURL string, suffixes ...string) bool {
 	return false
 }
 
-func batchHTMLReferenceLinks(raw []byte, base *url.URL) []string {
+func batchHTMLReferenceLinks(raw []byte, base *url.URL) ([]string, error) {
 	if base == nil {
-		return nil
+		return nil, nil
 	}
 	links := map[string]bool{}
-	addLink := func(candidate string) {
+	addLink := func(candidate string) error {
 		candidate = strings.TrimSpace(nethtml.UnescapeString(candidate))
 		if !isLikelyBatchReferenceLink(candidate) {
-			return
+			return nil
 		}
 		parsed, err := url.Parse(candidate)
 		if err != nil {
-			return
+			return batchArtifactInventoryUnknown("official reference contains a malformed selected link")
 		}
 		resolved := base.ResolveReference(parsed)
 		resolved.Fragment = ""
 		resolved.RawFragment = ""
 		if resolved.Scheme != "https" || resolved.Host == "" || resolved.User != nil {
-			return
+			return nil
 		}
 		if !strings.EqualFold(strings.TrimSuffix(resolved.Hostname(), "."), strings.TrimSuffix(base.Hostname(), ".")) {
-			return
+			return nil
 		}
 		if validateBatchReferenceURLObject(resolved) == nil {
 			links[resolved.String()] = true
 		}
+		return nil
 	}
 	tokenizer := nethtml.NewTokenizer(bytes.NewReader(raw))
 	for {
@@ -245,18 +250,22 @@ func batchHTMLReferenceLinks(raw []byte, base *url.URL) []string {
 			if attribute.Key != "href" && attribute.Key != "src" {
 				continue
 			}
-			addLink(attribute.Val)
+			if err := addLink(attribute.Val); err != nil {
+				return nil, err
+			}
 		}
 	}
 	for _, match := range batchMarkdownReferenceLink.FindAllSubmatch(raw, -1) {
-		addLink(string(match[1]))
+		if err := addLink(string(match[1])); err != nil {
+			return nil, err
+		}
 	}
 	out := make([]string, 0, len(links))
 	for link := range links {
 		out = append(out, link)
 	}
 	sort.Strings(out)
-	return out
+	return out, nil
 }
 
 func validateBatchReferenceURLObject(parsed *url.URL) error {

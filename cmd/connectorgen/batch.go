@@ -181,7 +181,11 @@ func runBatchPlan(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 
-	manifest := newBatchManifest(ledger, opts, mode, selected)
+	manifest, err := newBatchManifest(ledger, opts, mode, selected)
+	if err != nil {
+		logf(stderr, "connectorgen batch plan: %v\n", err)
+		return 1
+	}
 	if err := writeBatchManifest(opts.outPath, manifest); err != nil {
 		logf(stderr, "connectorgen batch plan: write manifest: %v\n", err)
 		return 1
@@ -408,10 +412,8 @@ func validateBatchCandidate(record batchLedgerRecord, opts batchPlanOptions) err
 	if err := validateBatchArtifactURL(record.ArtifactURL); err != nil {
 		return err
 	}
-	if reference := strings.TrimSpace(record.ProviderReferenceURL); reference != "" {
-		if _, err := parseBatchReferenceURL(reference); err != nil {
-			return fmt.Errorf("provider_reference_url: %w", err)
-		}
+	if _, err := canonicalBatchProviderReferenceURL(record.ProviderReferenceURL); err != nil {
+		return fmt.Errorf("provider_reference_url: %w", err)
 	}
 	if strings.TrimSpace(record.AuthModel) == "" {
 		return errors.New("auth_model is required")
@@ -457,9 +459,13 @@ func sortBatchRecords(records []batchLedgerRecord) {
 	})
 }
 
-func newBatchManifest(ledger batchLedger, opts batchPlanOptions, mode string, records []batchLedgerRecord) BatchManifest {
+func newBatchManifest(ledger batchLedger, opts batchPlanOptions, mode string, records []batchLedgerRecord) (BatchManifest, error) {
 	connectors := make([]BatchManifestConnector, 0, len(records))
 	for _, record := range records {
+		reference, err := canonicalBatchProviderReferenceURL(record.ProviderReferenceURL)
+		if err != nil {
+			return BatchManifest{}, fmt.Errorf("selected connector %q: provider_reference_url: %w", record.Connector, err)
+		}
 		reason := "selected by machine-readable evidence: done ledger record, public versioned OpenAPI/Swagger artifact, recorded retrieval date, and bounded measured operation count"
 		if mode == "explicit" {
 			reason = "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
@@ -475,7 +481,7 @@ func newBatchManifest(ledger batchLedger, opts batchPlanOptions, mode string, re
 				Version:     record.ArtifactVersion,
 				RetrievedAt: record.RetrievedAt,
 			},
-			ProviderReferenceURL: record.ProviderReferenceURL,
+			ProviderReferenceURL: reference,
 			AuthModel:            record.AuthModel,
 			AccessModel:          record.AccessModel,
 			EvidenceSource:       record.EvidenceSource,
@@ -499,7 +505,19 @@ func newBatchManifest(ledger batchLedger, opts batchPlanOptions, mode string, re
 			Criteria:      "status=done; authoritative artifact_kind=openapi|swagger|openapi_fragments|postman|html_reference; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope",
 		},
 		Connectors: connectors,
+	}, nil
+}
+
+func canonicalBatchProviderReferenceURL(raw string) (string, error) {
+	reference := strings.TrimSpace(raw)
+	if reference == "" {
+		return "", nil
 	}
+	parsed, err := parseBatchReferenceURL(reference)
+	if err != nil {
+		return "", err
+	}
+	return parsed.String(), nil
 }
 
 func writeBatchManifest(path string, manifest BatchManifest) error {
@@ -739,10 +757,25 @@ func readBatchManifest(path string) (BatchManifest, error) {
 		}
 		return BatchManifest{}, fmt.Errorf("decode manifest trailing data: %w", err)
 	}
+	if err := canonicalizeBatchManifestProviderReferences(&manifest); err != nil {
+		return BatchManifest{}, err
+	}
 	if err := validateBatchManifest(manifest); err != nil {
 		return BatchManifest{}, err
 	}
 	return manifest, nil
+}
+
+func canonicalizeBatchManifestProviderReferences(manifest *BatchManifest) error {
+	for index := range manifest.Connectors {
+		candidate := &manifest.Connectors[index]
+		reference, err := canonicalBatchProviderReferenceURL(candidate.ProviderReferenceURL)
+		if err != nil {
+			return fmt.Errorf("manifest connector %q: provider_reference_url: %w", candidate.Connector, err)
+		}
+		candidate.ProviderReferenceURL = reference
+	}
+	return nil
 }
 
 func validateBatchManifest(manifest BatchManifest) error {
@@ -770,10 +803,8 @@ func validateBatchManifest(manifest BatchManifest) error {
 		if err := validateBatchArtifactURL(candidate.Artifact.URL); err != nil {
 			return fmt.Errorf("manifest connector %q: %w", candidate.Connector, err)
 		}
-		if reference := strings.TrimSpace(candidate.ProviderReferenceURL); reference != "" {
-			if _, err := parseBatchReferenceURL(reference); err != nil {
-				return fmt.Errorf("manifest connector %q: provider_reference_url: %w", candidate.Connector, err)
-			}
+		if _, err := canonicalBatchProviderReferenceURL(candidate.ProviderReferenceURL); err != nil {
+			return fmt.Errorf("manifest connector %q: provider_reference_url: %w", candidate.Connector, err)
 		}
 		if !supportedBatchArtifactKinds[candidate.Artifact.Kind] {
 			return fmt.Errorf("manifest connector %q: artifact.kind %q is not an authoritative supported source", candidate.Connector, candidate.Artifact.Kind)

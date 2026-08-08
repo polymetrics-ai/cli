@@ -45,6 +45,10 @@ on; PR #3957 must land before any production sweep begins.
 
 ## Pilot evidence
 
+PersistIQ is retained as the original end-to-end pilot under the superseding
+426 order, not as an additional post-freeze pilot. Watchmode, DocuSeal, Float,
+and Copper are the four staged source-shape evidence bundles in this PR.
+
 | Connector | Artifact | Mapped | ETL / reverse ETL / direct read / direct write / binary / unknown | Implemented | Named dependency | Discrepancy | Reachable |
 |---|---|---:|---|---:|---:|---:|---:|
 | PersistIQ | OpenAPI 3.0.1, 47,796 bytes | 21 | 11 / 7 / 1 / 2 / 0 / 0 | 21 | 3 | 3 | 24/24 |

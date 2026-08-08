@@ -883,7 +883,11 @@ func validateBatchArtifactURLObjectWithQuery(parsed *url.URL, allowQuery bool) e
 		return errors.New("artifact request URL must not include query or fragment components")
 	}
 	if allowQuery {
-		for key := range parsed.Query() {
+		query, err := url.ParseQuery(parsed.RawQuery)
+		if err != nil {
+			return errors.New("artifact reference query must be well-formed")
+		}
+		for key := range query {
 			if batchArtifactCredentialQueryParameter(key) {
 				return errors.New("artifact reference query must not contain credential-shaped parameters")
 			}
@@ -2058,7 +2062,7 @@ func materializedEndpointAlternatives(alternatives []batchArtifactEndpointAltern
 }
 
 func batchArtifactEndpointKey(method, path string) string {
-	return method + "\x00" + path
+	return strings.ToUpper(strings.TrimSpace(method)) + "\x00" + path
 }
 
 func copyMaterializedClassifier(dst *engine.SurfaceEndpoint, src engine.SurfaceEndpoint) {

@@ -105,6 +105,44 @@ func TestBatchPlanWritesDeterministicEvidenceManifest(t *testing.T) {
 	}
 }
 
+func TestBatchPlanCanonicalizesProviderReferenceURL(t *testing.T) {
+	record := batchLedgerRecordFixture("acme", 23, "2026-08-06")
+	record["provider_reference_url"] = " https://example.test/reference "
+	ledger := writeBatchLedger(t, []map[string]any{record})
+	manifestPath := filepath.Join(t.TempDir(), "batch.json")
+	var stdout, stderr bytes.Buffer
+
+	if code := run([]string{"batch", "plan", "--ledger", ledger, "--out", manifestPath, "--connector", "acme"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("batch plan exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	raw, err := os.ReadFile(manifestPath)
+	if err != nil {
+		t.Fatalf("read manifest: %v", err)
+	}
+	if !strings.Contains(string(raw), `"provider_reference_url": "https://example.test/reference"`) {
+		t.Fatalf("planned manifest = %s, want canonical provider reference URL", raw)
+	}
+}
+
+func TestReadBatchManifestCanonicalizesProviderReferenceURL(t *testing.T) {
+	path := writeBatchManifestFixture(t, "cli-surface")
+	manifest, err := readBatchManifest(path)
+	if err != nil {
+		t.Fatalf("read fixture manifest: %v", err)
+	}
+	manifest.Connectors[0].ProviderReferenceURL = " https://example.test/reference "
+	if err := writeBatchManifest(path, manifest); err != nil {
+		t.Fatalf("write manifest with padded reference: %v", err)
+	}
+	manifest, err = readBatchManifest(path)
+	if err != nil {
+		t.Fatalf("read manifest with padded reference: %v", err)
+	}
+	if got := manifest.Connectors[0].ProviderReferenceURL; got != "https://example.test/reference" {
+		t.Fatalf("provider reference URL = %q, want canonical URL", got)
+	}
+}
+
 func TestBatchNamespaceRendersContextualHelp(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 
@@ -714,20 +752,18 @@ func TestBatchMaterializeRetainsSourceCoverageWhenArtifactIdentityDiffers(t *tes
 			wantDiscrepancy: true,
 		},
 		{
-			name:            "method case is distinct",
-			sourceMethod:    "get",
-			sourcePath:      "/widgets",
-			artifactMethod:  http.MethodGet,
-			artifactPath:    "/widgets",
-			wantDiscrepancy: true,
+			name:           "method case is equivalent",
+			sourceMethod:   "get",
+			sourcePath:     "/widgets",
+			artifactMethod: http.MethodGet,
+			artifactPath:   "/widgets",
 		},
 		{
-			name:            "artifact method case is distinct",
-			sourceMethod:    http.MethodGet,
-			sourcePath:      "/widgets",
-			artifactMethod:  "get",
-			artifactPath:    "/widgets",
-			wantDiscrepancy: true,
+			name:           "artifact method case is equivalent",
+			sourceMethod:   http.MethodGet,
+			sourcePath:     "/widgets",
+			artifactMethod: "get",
+			artifactPath:   "/widgets",
 		},
 	}
 
@@ -939,6 +975,39 @@ func TestMaterializeAPISurfaceDisambiguatesIdenticalReferenceArtifacts(t *testin
 	}
 	if provenance := engine.ValidateSurfaceProvenance(&surface); provenance.Status != engine.SurfaceProvenanceComplete || len(provenance.Issues) != 0 {
 		t.Fatalf("surface provenance = %+v, want complete distinct-reference evidence", provenance)
+	}
+}
+
+func TestMaterializeAPISurfaceMatchesMethodsCaseInsensitively(t *testing.T) {
+	bundle := engine.Bundle{
+		Surface: &engine.APISurface{
+			API: "Example API",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    " get ",
+				Path:      "/widgets",
+				CoveredBy: &engine.SurfaceCoverage{Stream: "widgets"},
+			}},
+		},
+		Streams: []engine.StreamSpec{{Name: "widgets"}},
+	}
+	candidate := BatchManifestConnector{Connector: "cli-surface", Artifact: BatchArtifact{
+		Kind:    "openapi",
+		URL:     "https://provider.example/openapi.json",
+		Version: "3.1.0",
+	}}
+	surface, err := materializeAPISurface(bundle, candidate, "2026-08-08", strings.Repeat("a", 64), []batchArtifactEndpoint{{
+		Method: http.MethodGet,
+		Path:   "/widgets",
+	}})
+	if err != nil {
+		t.Fatalf("materialize case-variant endpoint: %v", err)
+	}
+	if len(surface.Endpoints) != 1 {
+		t.Fatalf("materialized endpoints = %+v, want one reconciled endpoint", surface.Endpoints)
+	}
+	endpoint := surface.Endpoints[0]
+	if endpoint.Method != http.MethodGet || endpoint.CoveredBy == nil || endpoint.CoveredBy.Stream != "widgets" || endpoint.Discrepancy != "" {
+		t.Fatalf("reconciled endpoint = %+v, want artifact method with existing classifier and no discrepancy", endpoint)
 	}
 }
 
@@ -1342,6 +1411,15 @@ func TestParseBatchHTMLReferenceStripsLinkedDocumentFragment(t *testing.T) {
 	}
 }
 
+func TestParseBatchHTMLReferenceFailsClosedForMalformedSelectedLink(t *testing.T) {
+	root := []byte(`<html><body><p>GET /widgets</p><a href="/openapi%zz.json">OpenAPI export</a></body></html>`)
+	_, err := parseBatchHTMLReference(root, batchArtifactSource{URL: "https://provider.example/reference", Kind: "html_reference", Retrieved: "2026-08-08"}, nil)
+	var unknown *batchArtifactInventoryUnknownError
+	if !errors.As(err, &unknown) || !strings.Contains(err.Error(), "malformed selected link") {
+		t.Fatalf("parse error = %v, want malformed-link unknown inventory", err)
+	}
+}
+
 func TestParseBatchHTMLReferenceFailsClosedForSelectedLinkFailures(t *testing.T) {
 	rootURL := "https://provider.example/reference"
 	machineURL := "https://provider.example/openapi.json"
@@ -1459,6 +1537,13 @@ func TestParseBatchReferenceURLRejectsCredentialQueryAliases(t *testing.T) {
 				t.Fatalf("parseBatchReferenceURL(%q) error = %v, want credential-query rejection", key, err)
 			}
 		})
+	}
+}
+
+func TestParseBatchReferenceURLRejectsMalformedQuery(t *testing.T) {
+	_, err := parseBatchReferenceURL("https://example.test/openapi.json?api_key=fixture;v=1")
+	if err == nil || !strings.Contains(err.Error(), "well-formed") {
+		t.Fatalf("parseBatchReferenceURL malformed query error = %v, want rejection", err)
 	}
 }
 
