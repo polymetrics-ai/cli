@@ -109,10 +109,6 @@ var supportedBatchArtifactKinds = map[string]bool{
 	"openapi_fragments": true,
 	"postman":           true,
 	"html_reference":    true,
-	"api_blueprint":     true,
-	"graphql":           true,
-	"asyncapi":          true,
-	"wsdl":              true,
 }
 
 type batchPlanOptions struct {
@@ -500,7 +496,7 @@ func newBatchManifest(ledger batchLedger, opts batchPlanOptions, mode string, re
 			RequestedSize: opts.size,
 			MinOperations: opts.minOperations,
 			MaxOperations: opts.maxOperations,
-			Criteria:      "status=done; authoritative artifact_kind=openapi|swagger|openapi_fragments|postman|html_reference|api_blueprint|graphql|asyncapi|wsdl; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope",
+			Criteria:      "status=done; authoritative artifact_kind=openapi|swagger|openapi_fragments|postman|html_reference; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope",
 		},
 		Connectors: connectors,
 	}

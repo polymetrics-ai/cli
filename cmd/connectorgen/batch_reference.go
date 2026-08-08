@@ -43,15 +43,17 @@ func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batch
 	sources := []batchArtifactSource{source}
 	inventory := batchArtifactInventory{}
 	totalBytes := len(raw)
-	for len(queue) > 0 && len(seen) <= maxBatchArtifactReferenceDocuments {
+	for len(queue) > 0 {
 		current := queue[0]
 		queue = queue[1:]
 
 		machineSource := current.Source
 		machineSource.Kind = "official-reference"
-		if machine, machineErr := parseBatchOpenAPIArtifactSource(current.Raw, machineSource, fetch); machineErr == nil {
-			inventory = mergeBatchArtifactInventories(inventory, machine)
-		} else if machine, machineErr := parseBatchPostmanArtifact(current.Raw, machineSource); machineErr == nil {
+		machine, isMachine, machineErr := parseBatchReferenceMachineArtifact(current.Raw, machineSource, fetch)
+		if machineErr != nil {
+			return batchArtifactInventory{}, machineErr
+		}
+		if isMachine {
 			inventory = mergeBatchArtifactInventories(inventory, machine)
 		}
 
@@ -76,12 +78,18 @@ func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batch
 		}
 
 		for _, link := range batchHTMLReferenceLinks(current.Raw, rootURL) {
-			if seen[link] || len(seen) >= maxBatchArtifactReferenceDocuments || fetch == nil {
+			if seen[link] {
 				continue
+			}
+			if fetch == nil {
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference link %q cannot be fetched during traversal", link)
+			}
+			if len(seen) >= maxBatchArtifactReferenceDocuments {
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference traversal exceeds the %d-document limit", maxBatchArtifactReferenceDocuments)
 			}
 			linkRaw, linkErr := fetch(link)
 			if linkErr != nil {
-				continue
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference link %q could not be fetched: %v", link, linkErr)
 			}
 			if len(linkRaw) > maxMaterializeArtifactBytes || totalBytes > maxBatchArtifactReferenceBytes-len(linkRaw) {
 				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference traversal exceeds the bounded %d-byte source budget", maxBatchArtifactReferenceBytes)
@@ -105,6 +113,91 @@ func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batch
 		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference traversal found no explicit operations or linked machine-readable contract")
 	}
 	return inventory, nil
+}
+
+func parseBatchReferenceArtifact(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
+	inventory, isMachine, err := parseBatchReferenceMachineArtifact(raw, source, fetch)
+	if err != nil {
+		return batchArtifactInventory{}, err
+	}
+	if isMachine {
+		return inventory, nil
+	}
+	return parseBatchHTMLReference(raw, source, fetch)
+}
+
+func parseBatchReferenceMachineArtifact(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, bool, error) {
+	inventory, openAPIErr := parseBatchOpenAPIArtifactSource(raw, source, fetch)
+	if openAPIErr == nil {
+		return inventory, true, nil
+	}
+	inventory, postmanErr := parseBatchPostmanArtifact(raw, source)
+	if postmanErr == nil {
+		return inventory, true, nil
+	}
+	if batchReferenceLooksLikeMachineArtifact(raw, source.URL) {
+		return batchArtifactInventory{}, true, batchArtifactInventoryUnknown("official reference %q is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: %v; Postman: %v", source.URL, openAPIErr, postmanErr)
+	}
+	if !batchReferenceLooksLikeText(raw, source.URL) {
+		return batchArtifactInventory{}, true, batchArtifactInventoryUnknown("official reference %q is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document", source.URL)
+	}
+	return batchArtifactInventory{}, false, nil
+}
+
+func batchReferenceLooksLikeMachineArtifact(raw []byte, sourceURL string) bool {
+	trimmed := bytes.TrimSpace(raw)
+	document, err := parseBatchArtifactDocument(raw, batchArtifactSource{})
+	if err == nil {
+		fields, fieldsErr := batchYAMLFields(document.Root)
+		if fieldsErr == nil {
+			if _, ok := fields["openapi"]; ok {
+				return true
+			}
+			if _, ok := fields["swagger"]; ok {
+				return true
+			}
+			if info, ok := fields["info"]; ok {
+				if infoFields, infoErr := batchYAMLFields(info); infoErr == nil {
+					if schema, schemaErr := batchYAMLFieldString(infoFields, "schema"); schemaErr == nil && strings.Contains(strings.ToLower(schema), "postman") {
+						return true
+					}
+				}
+			}
+			if len(trimmed) > 0 && trimmed[0] == '{' {
+				if _, ok := fields["item"]; ok {
+					return true
+				}
+			}
+		}
+	}
+	return batchReferenceURLHasSuffix(sourceURL, ".json", ".yaml", ".yml")
+}
+
+func batchReferenceLooksLikeText(raw []byte, sourceURL string) bool {
+	lower := strings.ToLower(string(raw))
+	if batchHTMLExplicitOperation.Match(raw) || batchMarkdownReferenceLink.Match(raw) {
+		return true
+	}
+	for _, marker := range []string{"<html", "<!doctype html", "<a ", "<a>", "<body", "<article", "<main"} {
+		if strings.Contains(lower, marker) {
+			return true
+		}
+	}
+	return batchReferenceURLHasSuffix(sourceURL, ".html", ".htm", ".md", ".txt")
+}
+
+func batchReferenceURLHasSuffix(rawURL string, suffixes ...string) bool {
+	parsed, err := url.Parse(rawURL)
+	if err != nil {
+		return false
+	}
+	path := strings.ToLower(parsed.Path)
+	for _, suffix := range suffixes {
+		if strings.HasSuffix(path, suffix) {
+			return true
+		}
+	}
+	return false
 }
 
 func batchHTMLReferenceLinks(raw []byte, base *url.URL) []string {

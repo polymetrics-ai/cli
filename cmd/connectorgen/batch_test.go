@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -30,6 +31,26 @@ func TestBatchPlanRejectsMissingRetrievalDate(t *testing.T) {
 	}
 	if !strings.Contains(stderr.String(), "retrieved_at") {
 		t.Fatalf("batch plan stderr = %q, want retrieval-date evidence error", stderr.String())
+	}
+}
+
+func TestBatchPlanRejectsArtifactKindsWithoutParsers(t *testing.T) {
+	for _, kind := range []string{"api_blueprint", "graphql", "asyncapi", "wsdl"} {
+		t.Run(kind, func(t *testing.T) {
+			record := batchLedgerRecordFixture("acme", 23, "2026-08-06")
+			record["artifact_kind"] = kind
+			ledger := writeBatchLedger(t, []map[string]any{record})
+			out := filepath.Join(t.TempDir(), "batch.json")
+			var stdout, stderr bytes.Buffer
+
+			code := run([]string{"batch", "plan", "--ledger", ledger, "--out", out, "--connector", "acme"}, &stdout, &stderr)
+			if code == 0 {
+				t.Fatalf("batch plan accepted unsupported artifact kind %q; stdout=%s stderr=%s", kind, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(stderr.String(), "artifact_kind is "+strconv.Quote(kind)) {
+				t.Fatalf("batch plan stderr = %q, want unsupported artifact kind %q", stderr.String(), kind)
+			}
+		})
 	}
 }
 
@@ -1195,6 +1216,65 @@ func TestParseBatchHTMLReferenceTraversesMarkdownMachineSource(t *testing.T) {
 	}
 	if len(inventory.Endpoints) != 2 || len(inventory.Sources) != 2 {
 		t.Fatalf("Markdown/source inventory = %+v, want explicit GET plus linked POST and two sources", inventory)
+	}
+}
+
+func TestParseBatchHTMLReferenceFailsClosedForSelectedLinkFailures(t *testing.T) {
+	rootURL := "https://provider.example/reference"
+	machineURL := "https://provider.example/openapi.json"
+	root := []byte(`<html><body><p>GET /widgets</p><a href="/openapi.json">OpenAPI export</a></body></html>`)
+	tests := []struct {
+		name     string
+		raw      []byte
+		fetchErr error
+		want     string
+	}{
+		{
+			name:     "incomplete response",
+			fetchErr: batchArtifactInventoryUnknown("artifact response is incomplete: received HTTP 206 Partial Content"),
+			want:     "HTTP 206",
+		},
+		{
+			name: "malformed machine artifact",
+			raw:  []byte(`{"openapi":"3.1.0","paths":[]}`),
+			want: "machine-readable artifact",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := parseBatchHTMLReference(root, batchArtifactSource{URL: rootURL, Kind: "html_reference", Retrieved: "2026-08-08"}, func(rawURL string) ([]byte, error) {
+				if rawURL != machineURL {
+					t.Fatalf("traversed URL = %q, want official machine source", rawURL)
+				}
+				if test.fetchErr != nil {
+					return nil, test.fetchErr
+				}
+				return test.raw, nil
+			})
+			var unknown *batchArtifactInventoryUnknownError
+			if !errors.As(err, &unknown) || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("parse error = %v, want unknown inventory containing %q", err, test.want)
+			}
+		})
+	}
+}
+
+func TestParseBatchHTMLReferenceFailsClosedAtDocumentLimit(t *testing.T) {
+	var root strings.Builder
+	root.WriteString("<html><body>GET /widgets")
+	for index := 0; index < maxBatchArtifactReferenceDocuments; index++ {
+		root.WriteString(`<a href="/reference/`)
+		root.WriteString(strconv.Itoa(index))
+		root.WriteString(`">Reference</a>`)
+	}
+	root.WriteString("</body></html>")
+
+	_, err := parseBatchHTMLReference([]byte(root.String()), batchArtifactSource{URL: "https://provider.example/reference", Kind: "html_reference", Retrieved: "2026-08-08"}, func(string) ([]byte, error) {
+		return []byte("GET /linked"), nil
+	})
+	var unknown *batchArtifactInventoryUnknownError
+	if !errors.As(err, &unknown) || !strings.Contains(err.Error(), "document limit") {
+		t.Fatalf("parse error = %v, want unknown inventory document-limit failure", err)
 	}
 }
 

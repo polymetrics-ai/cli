@@ -429,21 +429,10 @@ func parseBatchArtifactByKind(raw []byte, source batchArtifactSource, fetch batc
 		return parseBatchPostmanArtifact(raw, source)
 	case "openapi", "swagger":
 		return parseBatchOpenAPIArtifactSource(raw, source, fetch)
-	case "openapi_fragments":
-		return parseBatchHTMLReference(raw, source, fetch)
-	case "html_reference", "official-reference":
-		if inventory, err := parseBatchOpenAPIArtifactSource(raw, source, fetch); err == nil {
-			return inventory, nil
-		}
-		if inventory, err := parseBatchPostmanArtifact(raw, source); err == nil {
-			return inventory, nil
-		}
-		return parseBatchHTMLReference(raw, source, fetch)
+	case "openapi_fragments", "html_reference", "official-reference":
+		return parseBatchReferenceArtifact(raw, source, fetch)
 	default:
-		if inventory, err := parseBatchOpenAPIArtifactSource(raw, source, fetch); err == nil {
-			return inventory, nil
-		}
-		return parseBatchPostmanArtifact(raw, source)
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("unsupported artifact kind %q", source.Kind)
 	}
 }
 
