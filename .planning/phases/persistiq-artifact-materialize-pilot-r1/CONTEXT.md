@@ -67,6 +67,11 @@ connectors are outside this phase.
   flagged-discrepancy, and reachable counts separately, with wall-clock times
   for each locked step. The 392-connector pool remains deferred until the
   captain reviews this pilot.
+- **D-10:** Batch materialization is authoring-only and never runs the
+  repository-wide gate per candidate. Fetch is bounded/concurrent, mapping and
+  materialization run across staged batches, and one final gate scans the
+  complete staged result. Batch boundaries remain commit/review boundaries;
+  only a failed final gate triggers narrowed diagnostic gating.
 
 ### the agent's Discretion
 

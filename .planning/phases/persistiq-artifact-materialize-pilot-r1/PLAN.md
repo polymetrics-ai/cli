@@ -58,6 +58,16 @@ wall-clock timing and counts. Stop after PersistIQ.
 - Structural parse/provenance failures still fail the pilot. Do not
   hand-author a replacement generator or weaken a gate.
 
+### Batch efficiency ruling
+
+The captain's measured baseline separates the cheap per-connector work from
+the repository-wide gate. `batch materialize` therefore performs no runtime
+preflight; `batch gate` remains the single gate over the staged result. For a
+future eligible-pool run, fetches are bounded/concurrent, materialization is
+performed in review-sized batches, and validate/surface-sync/runtime
+preflight/reachability run once over the combined staged result. A failed
+combined gate is then narrowed to the implicated batch for diagnosis.
+
 ### Slice 5 — real binary reachability and report
 
 - Build the real `pm` binary from the staged/installed PersistIQ bundle.

@@ -35,6 +35,15 @@
 - Missing executor/foundation is a visible gap, not a drop. The implemented
   availability invariant remains enforced by runtime preflight.
 
+### Batch gate placement
+
+- Materialization is intentionally not a gate: it does not invoke the
+  repository-wide runtime-preflight sweep per connector. The report's
+  `runtime_preflight_commands` remains zero until `batch gate` runs over the
+  staged result.
+- This preserves review-sized batch boundaries without paying the full sweep
+  once for every candidate.
+
 ### Captain-ruling Red run
 
 - Command: `go test -timeout 20m ./cmd/connectorgen -run
