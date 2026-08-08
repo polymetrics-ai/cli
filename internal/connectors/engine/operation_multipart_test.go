@@ -94,6 +94,87 @@ func TestOperationDirectWriteMetadataRecognizesTypedMultipartRestWrite(t *testin
 	}
 }
 
+// TestOperationDirectWriteMultipartValidatesDeclaredJSONFile proves that a
+// provider's `.json only` upload rule is enforced as an actual file contract,
+// rather than weakened to text/plain merely because MIME sniffing has no JSON
+// magic signature. Zoom Tasks adopts this bounded declaration.
+func TestOperationDirectWriteMultipartValidatesDeclaredJSONFile(t *testing.T) {
+	rest := strings.Replace(
+		validMultipartRestWrite,
+		`"content_type": "text/plain",
+				"allowed_media_types": ["text/plain"]`,
+		`"content_type": "application/json",
+				"content_validation": "json",
+				"allowed_file_extensions": [".json"]`,
+		1,
+	)
+	bundle, err := Load(multipartRestWriteBundleFS(rest, "rest_write"), "acme")
+	if err != nil {
+		t.Fatalf("Load declared JSON multipart contract: %v", err)
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		if err := request.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("ParseMultipartForm: %v", err)
+		}
+		files := request.MultipartForm.File["attachment"]
+		if len(files) != 1 || files[0].Filename != "valid.json" {
+			t.Fatalf("multipart JSON file = %#v, want valid.json", files)
+		}
+		if !strings.HasPrefix(files[0].Header.Get("Content-Type"), "application/json") {
+			t.Fatalf("multipart JSON content type = %q, want application/json", files[0].Header.Get("Content-Type"))
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		_, _ = w.Write([]byte(`{"file_id":"fixture-json-file"}`))
+	}))
+	defer server.Close()
+	bundle.HTTP = HTTPBase{URL: server.URL}
+
+	dir := t.TempDir()
+	validPayload := []byte(`{"records":[{"title":"fixture"}]}`)
+	validPath := writeMultipartOperationSource(t, dir, "valid.json", validPayload)
+	valid := multipartOperationRequest(dir, validPath, validPayload)
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, valid, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite valid JSON: %v", err)
+	}
+	valid.PreviewDigest = preview.Digest
+	valid.Approval = approvedEvidenceForPreview(t, preview)
+	if result, err := OperationDirectWrite(context.Background(), bundle, valid, nil); err != nil || result.Status != http.StatusCreated {
+		t.Fatalf("OperationDirectWrite valid JSON = %#v, %v; want 201", result, err)
+	}
+
+	for _, invalid := range []struct {
+		name    string
+		file    string
+		payload []byte
+		want    string
+	}{
+		{name: "rejects a non-json extension", file: "valid.txt", payload: validPayload, want: "allowed file extensions"},
+		{name: "rejects malformed JSON", file: "invalid.json", payload: []byte(`{"records":`), want: "valid JSON"},
+	} {
+		t.Run(invalid.name, func(t *testing.T) {
+			path := writeMultipartOperationSource(t, dir, invalid.file, invalid.payload)
+			req := multipartOperationRequest(dir, path, invalid.payload)
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite %s: %v", invalid.name, err)
+			}
+			req.PreviewDigest = preview.Digest
+			req.Approval = approvedEvidenceForPreview(t, preview)
+			if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), invalid.want) {
+				t.Fatalf("OperationDirectWrite %s error = %v, want %q", invalid.name, err, invalid.want)
+			}
+		})
+	}
+	if requests != 1 {
+		t.Fatalf("JSON multipart fixture requests = %d, want only valid upload", requests)
+	}
+}
+
 // TestOperationDirectWriteMultipartFollowsDeclaredRedirect captures the
 // provider-required exception to ordinary direct-write redirect refusal. The
 // declaration is closed: only the declared localhost suffix may receive the

@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-tasks-r1",
   "issue": 3939,
   "parent_issue": 3915,
-  "status": "foundation-green",
+  "status": "json-file-foundation-red-captured",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -35,7 +35,8 @@
   },
   "foundation": "required: redirect-safe typed multipart rest_write for the documented fileapi.zoom.us 30x bearer-preserving upload",
   "red": "captured: command surface test failed on 67/1775/38/24 target totals and 17 unknown Tasks paths; declared multipart redirect test failed because rest.redirect is absent",
-  "green": "foundation captured: closed declared multipart redirect passed engine, connsdk, and commandrunner tests; connector authoring pending",
+  "green": "redirect foundation captured: closed declared multipart redirect passed engine, connsdk, and commandrunner tests",
+  "json_file_foundation": "red captured: the Tasks .json-only declaration is rejected because multipart parts lack content_validation and allowed_file_extensions; implementation pending",
   "verification": "pending",
   "review": "pending"
 }

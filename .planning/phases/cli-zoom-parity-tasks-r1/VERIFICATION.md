@@ -6,6 +6,8 @@
 - [ ] RED capture committed before all production declaration/foundation changes.
 - [x] Redirect-safe multipart foundation proves bearer replay, multipart snapshot rebuild, fixed
   base/bearer/suffix boundaries, 307/308-only behavior, hop caps, and signed-target redaction.
+- [ ] JSON-only file foundation proves valid JSON reaches the provider while malformed or
+  non-`.json` sources are rejected before network dispatch.
 - [ ] All 17 command paths pass real commandrunner preflight.
 - [ ] Six direct reads and eleven direct writes run against isolated exact fixtures.
 - [ ] Four DELETEs and task PATCH assert 204 status-only semantics; DELETEs require destructive

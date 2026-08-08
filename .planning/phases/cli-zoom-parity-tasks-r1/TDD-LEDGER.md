@@ -86,6 +86,27 @@ load validation, suffix/wildcard/IP rejection, source-base containment, status/m
 hop caps, and signed redirect-value redaction. They also exercise the existing command runner so
 the added requester field does not change ordinary strict-write preflight behavior.
 
+## RED JSON-file foundation — captured before JSON validation production changes
+
+The published upload supports only `.json` files. A typed declaration must not pretend that MIME
+sniffing verifies JSON: Go reports ordinary JSON as text/plain. The new test therefore declared a
+bounded `content_validation: "json"` and `.json` extension list, then proved the existing schema
+cannot express either constraint before production code changed.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteMultipartValidatesDeclaredJSONFile$'
+--- FAIL: TestOperationDirectWriteMultipartValidatesDeclaredJSONFile (0.00s)
+    operation_multipart_test.go:113: Load declared JSON multipart contract: load bundle acme: operations.json: /operations/0/rest/multipart/parts/1/allowed_file_extensions: additional property not allowed
+FAIL
+FAIL    polymetrics.ai/internal/connectors/engine  0.748s
+FAIL
+```
+
+The command exited `1`, as required. This red checkpoint contains only its test and evidence; no
+multipart JSON-file implementation has been added yet.
+
+## GREEN JSON-file foundation — pending
+
 ## GREEN connector — pending
 
 ## Verification/review — pending

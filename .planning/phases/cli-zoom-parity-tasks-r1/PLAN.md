@@ -94,6 +94,17 @@ same-provider cross-host redirect while retaining credentials. It is not a gener
 write facility; its scope and future connector applicability will be stated in the parent handoff
 and eventual PR body.
 
+### JSON-file validation foundation discovered during authoring
+
+The artifact additionally permits only `.json` task files. The existing multipart media guard uses
+`http.DetectContentType`, which correctly treats ordinary JSON as `text/plain`; declaring
+`application/json` in its current allowlist would therefore reject valid documents, while declaring
+`text/plain` would silently admit arbitrary text. A second, separate foundation is required before
+the upload contract can be honest: a declaration-owned JSON content validator and a closed
+case-insensitive `.json` source-extension list. It validates the bounded snapshot before any wire
+send and binds both constraints into preview, without introducing caller-selected content types,
+extensions, or generic upload behavior.
+
 ## Locked decisions
 
 - Implement every audited operation: six bounded `rest_read` / `direct_read` commands and eleven
@@ -126,9 +137,12 @@ and eventual PR body.
 3. **GREEN foundation** — add the redirect-safe typed multipart capability in its own commits and
    prove allowed redirect, bearer retention, bounded hop/method/body behavior, unapproved-host
    refusal, downgrade refusal, and unchanged ordinary no-redirect behavior.
-4. **GREEN connector** — declare typed Tasks operations/commands/fixtures, reconcile only Tasks
+4. **RED/Green JSON-file foundation** — after discovering the `.json` MIME-sniffing gap, capture
+   the rejected declaration first, then add closed JSON syntax/extension validation in its own
+   commits and prove malformed/wrong-extension files never reach the provider.
+5. **GREEN connector** — declare typed Tasks operations/commands/fixtures, reconcile only Tasks
    rows, generate derived metadata/docs/site, and test every command through the live runner.
-5. **Verify/review** — run fixture lifecycle tests, surface/ledger checks, fresh binary base/group/
+6. **Verify/review** — run fixture lifecycle tests, surface/ledger checks, fresh binary base/group/
    every-command help, generated-output scope checks, and inline review.
 
 ## Target accounting
