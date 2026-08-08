@@ -91,6 +91,7 @@
             "type": "string",
             "enum": [
               "implemented",
+              "not_implemented",
               "partial",
               "planned",
               "excluded",

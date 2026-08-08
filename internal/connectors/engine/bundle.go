@@ -651,12 +651,13 @@ type SurfaceArtifact struct {
 
 // SurfaceEndpoint is one api_surface.json endpoint entry.
 type SurfaceEndpoint struct {
-	Method     string             `json:"method,omitempty"`
-	Path       string             `json:"path,omitempty"`
-	Provenance *SurfaceProvenance `json:"provenance,omitempty"`
-	CoveredBy  *SurfaceCoverage   `json:"covered_by,omitempty"`
-	Excluded   *SurfaceExclusion  `json:"excluded,omitempty"`
-	Operation  *SurfaceOperation  `json:"operation,omitempty"`
+	Method      string             `json:"method,omitempty"`
+	Path        string             `json:"path,omitempty"`
+	Discrepancy string             `json:"discrepancy,omitempty"`
+	Provenance  *SurfaceProvenance `json:"provenance,omitempty"`
+	CoveredBy   *SurfaceCoverage   `json:"covered_by,omitempty"`
+	Excluded    *SurfaceExclusion  `json:"excluded,omitempty"`
+	Operation   *SurfaceOperation  `json:"operation,omitempty"`
 }
 
 // SurfaceProvenance cites one operation-specific provider source in a v2

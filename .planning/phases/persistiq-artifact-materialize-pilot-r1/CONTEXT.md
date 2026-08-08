@@ -1,7 +1,7 @@
 # PersistIQ artifact materialization pilot - Context
 
 **Gathered:** 2026-08-08
-**Status:** Ready for planning
+**Status:** In execution under captain ruling
 
 <domain>
 ## Phase Boundary
@@ -53,6 +53,20 @@ connectors are outside this phase.
 - **D-06:** Every command's reachability check is a real built `pm` binary
   invocation using help/no-network arguments; exit status alone is not enough.
   Record unknown-command and other failures by command.
+- **D-07:** The captain's rerun policy supersedes the earlier fail-closed
+  coverage decision: every operation documented by the fetched artifact is
+  represented in the generated bundle, even when no executor exists yet.
+  Unsupported operations become `not_implemented` commands with a
+  machine-checkable `named_dependency=<slug>` note; they are never silently
+  omitted or marked implemented.
+- **D-08:** Existing source-surface operations absent from the fetched artifact
+  remain in the materialized surface and carry the exact discrepancy marker
+  `present-in-surface-absent-from-artifact`. PersistIQ's `/v1/mailboxes`,
+  `/v1/activities`, and `/v1/accounts` are the required pilot cases.
+- **D-09:** The rerun reports mapped, implemented, named-dependency,
+  flagged-discrepancy, and reachable counts separately, with wall-clock times
+  for each locked step. The 392-connector pool remains deferred until the
+  captain reviews this pilot.
 
 ### the agent's Discretion
 
