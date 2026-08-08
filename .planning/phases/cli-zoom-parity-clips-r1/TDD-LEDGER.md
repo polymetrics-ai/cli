@@ -83,10 +83,28 @@ FAIL
 The fixtures use synthetic values only; no credential, token-derived value, or signed URL was
 emitted.
 
-## GREEN foundations — pending
+## GREEN foundations
 
-Record each independent green foundation command and its safety regressions here before connector
-authoring.
+### Root JSON-array direct writes — green 2026-08-08
+
+Implemented the closed `json_array` flag type only for declared operation-body mappings. The
+typed value now survives command shaping, plan persistence, preview hashing, typed approval, and
+execution; it cannot map to a path, query, or arbitrary generic request body. Existing persisted
+object-body plans continue to fall back to `connector_command_record`.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/app -run 'TestDirectWriteCommandPlanPreviewApprovalAndExecute|TestDirectWriteCommandRootJSONArrayPlanPreviewApprovalAndExecute'
+ok  polymetrics.ai/internal/app
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestCoerceFlagValueAcceptsJSONArray$'
+ok  polymetrics.ai/internal/connectors/commandrunner
+```
+
+The root-array lifecycle test proves a declared `json_array` reaches one POST only after
+plan/preview/typed confirmation, stores the real body separately from the legacy record shape,
+and exposes only a redacted plan sample. Object-body lifecycle regression remains green.
+
+Remaining foundations: declared bearer redirect; operation-level bounded base64 path upload.
 
 ## GREEN connector — pending
 

@@ -1044,8 +1044,8 @@ func checkCLISurfaceDirectWriteOperationSafety(
 			// shaper and validated again at command runtime.
 		case mapsTo == "body":
 			bodyMapped = true
-			if flag.Type != "json_object" {
-				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) root body flag --%s must use json_object", i, cmd.Path, flag.Name)})
+			if flag.Type != "json_object" && flag.Type != "json_array" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) root body flag --%s must use json_object or json_array", i, cmd.Path, flag.Name)})
 			}
 			if rootBodyFlag != "" {
 				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flags --%s and --%s both map to the root body", i, cmd.Path, rootBodyFlag, flag.Name)})
@@ -1208,11 +1208,11 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s allow_empty is supported only for string flags", i, cmd.Path, flag.Name)})
 		}
 		mapsTo := strings.TrimSpace(flag.MapsTo)
-		if flag.Type == "json_object" && mapsTo != "body" && !strings.HasPrefix(mapsTo, "body.") {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s json_object type may map only to an operation body", i, cmd.Path, flag.Name)})
+		if (flag.Type == "json_object" || flag.Type == "json_array") && mapsTo != "body" && !strings.HasPrefix(mapsTo, "body.") {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s JSON type may map only to an operation body", i, cmd.Path, flag.Name)})
 		}
-		if mapsTo == "body" && flag.Type != "json_object" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s root body mapping requires json_object type", i, cmd.Path, flag.Name)})
+		if mapsTo == "body" && flag.Type != "json_object" && flag.Type != "json_array" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s root body mapping requires json_object or json_array type", i, cmd.Path, flag.Name)})
 		}
 		if mapsTo == "body" && cmd.Intent != "direct_write" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s root body mapping is supported only for direct_write", i, cmd.Path, flag.Name)})
@@ -1617,6 +1617,8 @@ func cliFlagTypeMatchesSchema(flagType string, node *cliRecordSchemaNode) bool {
 		return schemaTypes["array"] || schemaTypes["any"]
 	case "json_object":
 		return schemaTypes["object"] || schemaTypes["any"]
+	case "json_array":
+		return schemaTypes["array"] || schemaTypes["any"]
 	default:
 		return false
 	}

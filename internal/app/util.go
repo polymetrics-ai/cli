@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -191,7 +192,7 @@ func connectorCommandPlanHash(planName, connector, credential string, config map
 // connector-command plan hash. The path/query/body fields are all part of the
 // approved request, so they must be bound before a preview can mint a
 // single-use approval token.
-func operationConnectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, operation string, pathParams, query map[string]string, body connectors.Record, payloadIdentity []PayloadIdentity) (string, error) {
+func operationConnectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, operation string, pathParams, query map[string]string, body any, payloadIdentity []PayloadIdentity) (string, error) {
 	payload := map[string]any{
 		"name":         planName,
 		"connector":    connector,
@@ -203,7 +204,7 @@ func operationConnectorCommandPlanHash(planName, connector, credential string, c
 		"path_params":  cloneStringMap(pathParams),
 		"query":        cloneStringMap(query),
 		"record_count": 1,
-		"body":         cloneRecord(body),
+		"body":         cloneOperationCommandBodyValue(body),
 	}
 	if len(payloadIdentity) > 0 {
 		payload["payload_identity"] = append([]PayloadIdentity(nil), payloadIdentity...)
@@ -243,9 +244,16 @@ func payloadIdentitiesForRecords(projectDir string, records []connectors.Record)
 // payloadIdentitiesForConnectorCommand uses the connector's closed operation
 // metadata for multipart source fields. Older non-multipart direct writes keep
 // their established file_path discovery behavior.
-func payloadIdentitiesForConnectorCommand(projectDir string, connector connectors.Connector, operation string, record connectors.Record) ([]PayloadIdentity, error) {
+func payloadIdentitiesForConnectorCommand(projectDir string, connector connectors.Connector, operation string, body any) ([]PayloadIdentity, error) {
+	record, objectBody := body.(map[string]any)
+	if !objectBody {
+		if strings.TrimSpace(operation) == "" {
+			return nil, fmt.Errorf("connector command record must be a JSON object")
+		}
+		record = nil
+	}
 	if strings.TrimSpace(operation) == "" {
-		return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
+		return payloadIdentitiesForRecords(projectDir, []connectors.Record{connectors.Record(record)})
 	}
 	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
@@ -259,9 +267,63 @@ func payloadIdentitiesForConnectorCommand(projectDir string, connector connector
 		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
 	}
 	if metadata.PayloadFileFields != nil {
-		return payloadIdentitiesForDeclaredFields(projectDir, []connectors.Record{record}, metadata.PayloadFileFields)
+		if !objectBody && len(metadata.PayloadFileFields) > 0 {
+			return nil, fmt.Errorf("connector %q operation %q declares local payload fields but its command body is not a JSON object", connector.Name(), operation)
+		}
+		return payloadIdentitiesForDeclaredFields(projectDir, []connectors.Record{connectors.Record(record)}, metadata.PayloadFileFields)
 	}
-	return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
+	if !objectBody {
+		return nil, nil
+	}
+	return payloadIdentitiesForRecords(projectDir, []connectors.Record{connectors.Record(record)})
+}
+
+func marshalOperationCommandBody(body any) (json.RawMessage, error) {
+	raw, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("encode operation command body: %w", err)
+	}
+	return json.RawMessage(raw), nil
+}
+
+func operationCommandBodyForPlan(plan ReversePlan) (any, error) {
+	if len(plan.ConnectorCommandBody) == 0 {
+		// Plans created before root-array support persisted direct-write objects
+		// solely in ConnectorCommandRecord. Preserve their executable meaning.
+		return map[string]any(deepCloneRecord(plan.ConnectorCommandRecord)), nil
+	}
+	decoder := json.NewDecoder(bytes.NewReader(plan.ConnectorCommandBody))
+	decoder.UseNumber()
+	var body any
+	if err := decoder.Decode(&body); err != nil {
+		return nil, fmt.Errorf("decode operation command body: %w", err)
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		return nil, fmt.Errorf("decode operation command body: expected one JSON value")
+	}
+	return cloneOperationCommandBodyValue(body), nil
+}
+
+func cloneOperationCommandBodyValue(body any) any {
+	switch typed := body.(type) {
+	case connectors.Record:
+		return deepCloneRecord(typed)
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, value := range typed {
+			out[key] = cloneOperationCommandBodyValue(value)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for index, value := range typed {
+			out[index] = cloneOperationCommandBodyValue(value)
+		}
+		return out
+	default:
+		return body
+	}
 }
 
 // payloadIdentitiesForDeclaredFields captures only declaration-owned file

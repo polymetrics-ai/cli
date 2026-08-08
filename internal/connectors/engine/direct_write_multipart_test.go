@@ -251,7 +251,7 @@ func TestOperationDirectWriteMultipartRejectsUnsafeSourcesBeforeNetwork(t *testi
 					t.Fatalf("WriteFile outside source: %v", err)
 				}
 				t.Cleanup(func() { _ = os.Remove(outside) })
-				req.Body["media_file_path"] = outside
+				req.Body.(map[string]any)["media_file_path"] = outside
 				digest := sha256.Sum256(payload)
 				req.Config.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(0, "media_file_path")] = hex.EncodeToString(digest[:])
 			},
@@ -351,7 +351,7 @@ func TestOperationDirectWriteMultipartRejectsAggregateOverflowBeforeNetwork(t *t
 	}}
 	req := multipartOperationRequest(dir, firstPath, firstPayload)
 	secondDigest := sha256.Sum256(secondPayload)
-	req.Body["second_file_path"] = secondPath
+	req.Body.(map[string]any)["second_file_path"] = secondPath
 	req.Config.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(0, "second_file_path")] = hex.EncodeToString(secondDigest[:])
 	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
 	if err != nil {

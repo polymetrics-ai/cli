@@ -6,7 +6,7 @@
   comparison recorded before RED.
 - [x] Prior-worker five-file handoff inspected without copying or deleting the old worktree.
 - [x] RED capture committed before production declaration or foundation changes.
-- [ ] Closed root-array direct-write foundation is green with object-body regressions.
+- [x] Closed root-array direct-write foundation is green with object-body regressions.
 - [ ] Declared bearer redirect foundation is green without permitting arbitrary credential forwarding.
 - [ ] Closed operation-level base64 image upload foundation is green with pre-network bounds,
   media/name, snapshot, and redaction assertions.

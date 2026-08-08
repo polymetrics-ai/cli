@@ -37,7 +37,7 @@ type preparedOperationDirectWrite struct {
 	path        string
 	requestPath string
 	query       url.Values
-	body        map[string]any
+	body        any
 	form        url.Values
 	format      string
 	policy      string
@@ -116,9 +116,8 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		case "json":
 			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, prepared.maxBytes)
 		case "none":
-			// prepared.body is a typed nil map for a declared no-body action.
-			// Passing that map through an interface would serialize it as JSON
-			// null, so pass an untyped nil and preserve the provider's actual
+			// Passing an absent body through an interface would serialize it as
+			// JSON null, so pass an untyped nil and preserve the provider's actual
 			// empty-body contract.
 			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, nil, prepared.maxBytes)
 		case "multipart":
@@ -132,7 +131,11 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			// shared part declaration, keeping root confinement, regular-file,
 			// aggregate-cap, and approved-digest behavior exactly in one place.
 			action := WriteAction{Name: prepared.op.ID, Multipart: prepared.op.REST.Multipart}
-			multipart, buildErr := buildMultipartPayload(action, connectors.Record(prepared.body), 0, prepared.cfg, root)
+			object, ok := prepared.body.(map[string]any)
+			if !ok {
+				return fmt.Errorf("operation %q multipart body must be a JSON object", prepared.op.ID)
+			}
+			multipart, buildErr := buildMultipartPayload(action, connectors.Record(object), 0, prepared.cfg, root)
 			if buildErr != nil {
 				return buildErr
 			}
@@ -241,13 +244,14 @@ func operationDirectWriteRedactFields(op OperationSpec, requested []string) []st
 	return fields
 }
 
-func operationDirectWriteRedactionValues(body map[string]any, fields []string) []string {
-	if len(body) == 0 || len(fields) == 0 {
+func operationDirectWriteRedactionValues(body any, fields []string) []string {
+	object, ok := body.(map[string]any)
+	if !ok || len(object) == 0 || len(fields) == 0 {
 		return nil
 	}
 	seen := make(map[string]bool)
 	for _, field := range fields {
-		value, err := resolveRecordPathValue(copyRecordMap(body), strings.Split(field, "."))
+		value, err := resolveRecordPathValue(copyRecordMap(object), strings.Split(field, "."))
 		if err != nil {
 			continue
 		}
@@ -409,7 +413,11 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	var form url.Values
 	var encodedBody string
 	if format == "multipart" {
-		canonical, canonicalErr := prepareCanonicalOperationMultipart(op, connectors.Record(body), 0, cfg, true)
+		object, ok := body.(map[string]any)
+		if !ok {
+			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q multipart body must be a JSON object", op.ID)
+		}
+		canonical, canonicalErr := prepareCanonicalOperationMultipart(op, connectors.Record(object), 0, cfg, true)
 		if canonicalErr != nil {
 			return preparedOperationDirectWrite{}, canonicalErr
 		}
@@ -548,13 +556,33 @@ func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath string) 
 	return fmt.Errorf("api_surface endpoint %s %s not found", method, endpointPath)
 }
 
-func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]any, error) {
+func operationWriteBody(op OperationSpec, overrides any) (any, error) {
 	if op.REST == nil {
 		return nil, nil
 	}
-	body := cloneAnyMap(op.REST.Body)
-	for key, value := range overrides {
-		body[key] = value
+	var body any
+	switch typed := overrides.(type) {
+	case nil:
+		body = cloneAnyMap(op.REST.Body)
+	case connectors.Record:
+		object := cloneAnyMap(op.REST.Body)
+		for key, value := range typed {
+			object[key] = value
+		}
+		body = object
+	case map[string]any:
+		object := cloneAnyMap(op.REST.Body)
+		for key, value := range typed {
+			object[key] = value
+		}
+		body = object
+	case []any:
+		if len(op.REST.Body) != 0 {
+			return nil, fmt.Errorf("operation %q root JSON array cannot be combined with declared object body defaults", op.ID)
+		}
+		body = cloneOperationBodyValue(typed)
+	default:
+		return nil, fmt.Errorf("operation %q request body must be a JSON object or array", op.ID)
 	}
 	if len(op.REST.BodySchema) > 0 {
 		sch, err := CompileSchema(op.REST.BodySchema)
@@ -565,13 +593,45 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 			return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
 		}
 	}
-	if len(body) == 0 {
+	if operationWriteBodyEmpty(body) {
 		return nil, nil
 	}
 	return body, nil
 }
 
-func operationDirectWriteContentType(op OperationSpec, body map[string]any) (contentType, format string, err error) {
+func operationWriteBodyEmpty(body any) bool {
+	switch typed := body.(type) {
+	case nil:
+		return true
+	case map[string]any:
+		return len(typed) == 0
+	default:
+		// An explicit empty array is a real JSON request body (`[]`), not an
+		// absent body. Its schema may intentionally allow zero items.
+		return false
+	}
+}
+
+func cloneOperationBodyValue(body any) any {
+	switch typed := body.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, value := range typed {
+			out[key] = cloneOperationBodyValue(value)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for index, value := range typed {
+			out[index] = cloneOperationBodyValue(value)
+		}
+		return out
+	default:
+		return body
+	}
+}
+
+func operationDirectWriteContentType(op OperationSpec, body any) (contentType, format string, err error) {
 	if op.REST == nil {
 		return "", "", fmt.Errorf("operation %q has no rest declaration", op.ID)
 	}
@@ -583,7 +643,7 @@ func operationDirectWriteContentType(op OperationSpec, body map[string]any) (con
 		return "multipart/form-data", "multipart", nil
 	}
 	if declared == "" {
-		if len(body) == 0 {
+		if operationWriteBodyEmpty(body) {
 			return "", "none", nil
 		}
 		return "application/json", "json", nil
@@ -594,12 +654,12 @@ func operationDirectWriteContentType(op OperationSpec, body map[string]any) (con
 	}
 	switch strings.ToLower(mediaType) {
 	case "application/json":
-		if len(body) == 0 {
+		if operationWriteBodyEmpty(body) {
 			return "", "none", nil
 		}
 		return "application/json", "json", nil
 	case "application/x-www-form-urlencoded":
-		if len(body) == 0 {
+		if operationWriteBodyEmpty(body) {
 			return "", "none", nil
 		}
 		return "application/x-www-form-urlencoded", "form", nil
@@ -608,7 +668,7 @@ func operationDirectWriteContentType(op OperationSpec, body map[string]any) (con
 	}
 }
 
-func operationDirectWritePreparedBody(op OperationSpec, body map[string]any, format string, maxBytes int) (url.Values, string, error) {
+func operationDirectWritePreparedBody(op OperationSpec, body any, format string, maxBytes int) (url.Values, string, error) {
 	switch format {
 	case "none":
 		return nil, "", nil
@@ -622,7 +682,11 @@ func operationDirectWritePreparedBody(op OperationSpec, body map[string]any, for
 		}
 		return nil, string(raw), nil
 	case "form":
-		form, err := operationDirectWriteForm(body)
+		object, ok := body.(map[string]any)
+		if !ok {
+			return nil, "", fmt.Errorf("operation %q form body must be a JSON object", op.ID)
+		}
+		form, err := operationDirectWriteForm(object)
 		if err != nil {
 			return nil, "", fmt.Errorf("operation %q form body: %w", op.ID, err)
 		}

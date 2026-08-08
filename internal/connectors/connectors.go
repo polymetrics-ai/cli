@@ -421,11 +421,16 @@ type OperationDirectReadPreflighter interface {
 // issued for that exact preview; the engine consumes it at its shared write
 // gate immediately before dispatch.
 type OperationDirectWriteRequest struct {
-	Operation    string
-	Config       RuntimeConfig
-	PathParams   map[string]string
-	Query        map[string]string
-	Body         map[string]any
+	Operation  string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+	// Body is the closed JSON value produced by the command's declared flags.
+	// Most operations use an object, but a provider can document an exact root
+	// JSON array. The command runner admits that shape only for a declared
+	// direct_write body and the engine validates it against the operation's
+	// body_schema before preview or dispatch.
+	Body         any
 	OutputPolicy string
 	// RedactFields supplies additional declared response/error fields for a
 	// redacted direct-write policy. Operation-level sensitive_policy fields are
