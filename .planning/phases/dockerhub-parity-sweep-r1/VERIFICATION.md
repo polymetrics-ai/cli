@@ -2,33 +2,74 @@
 
 ## Result
 
-Live E2E completed as far as the supplied Docker Hub account permits. The repaired
-binary reached every one of the 54 documented command routes. The full read/auth
-vector is now complete: all **28 read operations** (including all three HEAD
-status-only paths) and all **3 authentication operations** were attempted. Together
-with the earlier one-time private-repository create, **32 operations made a real
-provider request: 4 worked and 28 failed**. The remaining **22** are writes that
-need the captain-held write-scoped credential, a writable repository, or a real SCIM
-organization bearer credential.
+The write-scoped continuation supersedes the initial read-only account result below.
+The repaired binary reached every documented Docker Hub command route; each count
+here is **one final classification per one of the 54 artifact operations**, so repeat
+probes are not double-counted. **50/54 operations made a real provider request: 10
+worked and 40 returned a specific, surfaced error. Four are deliberately untestable
+with machine-checkable named dependencies.**
 
 | Metric | Count |
 | --- | ---: |
 | Documented/implemented operations | 54 |
-| Requested read/auth live vector | 31 |
-| Read operations attempted (includes 3 HEAD checks) | 28 |
-| Authentication operations attempted | 3 |
-| Earlier private-repository create attempted | 1 |
-| Live-exercised (`worked + failed`) | 32 |
-| Worked | 4 |
-| Failed | 28 |
-| Untestable, with concrete reason below | 22 |
+| Live-exercised (`worked + failed`) | 50 |
+| Worked | 10 |
+| Failed with an explicit nonzero result | 40 |
+| Untestable, with concrete reason below | 4 |
 | Binary routes reachable with `--help` | 54/54 |
 
 The bare `pm dockerhub` namespace command also rendered contextual help and exited
 successfully. The isolated project root and all E2E output remain ignored; no secret,
 approval token, response body, or token-derived value was printed or committed.
 
-## Mandatory private-repository/image chain
+### Final per-operation live ledger
+
+`[redacted]` is the intentionally discarded provider body. It is part of the exact
+observed `pm` error string, not a rewritten success or a hidden retry.
+
+| Final result | Operations | Count |
+| --- | --- | ---: |
+| Worked | `repositories list`; `repository detail list` (live `--config namespace=library` proof); `tags list`; `tag detail list`; `repository check`; `repository tags check`; `repository tag check`; `repository immutable-tags verify`; `repository create`; `repository immutable-tags update` | 10 |
+| `http 403 for <resolved Docker Hub URL>: [redacted]` | `access-tokens list/get/create/update/delete`; `audit-logs actions list/list`; `groups list/get/members list/create/replace/update/delete/members add/members remove`; `invites list/bulk-create/cancel`; `org access-tokens list/get/update/delete`; `org members list/update/remove/export`; `org settings get`; `repository group assign` was not in this group (see HTTP 400); all listed 403s exited nonzero with the concrete endpoint in the `pm` error | 28 |
+| `http 401 for <resolved Docker Hub URL>: [redacted]` | `scim-resource-types list/get`; `scim-schemas list/get`; `scim-service-provider-config get`; `scim-users list/get`; `auth token create`; `auth login create`; `auth 2fa-login create` | 10 |
+| `http 400 for https://hub.docker.com/v2/repositories/polymetrics/pm-e2e-20260808-173040/groups: [redacted]` | `repository group assign` with deliberately invalid `group_id=0`, after plan/preview/approval | 1 |
+| `http 405 for https://hub.docker.com/v2/invites/0/resend: [redacted]` | `invites resend` with deliberately nonexistent `id=0`, after plan/preview/approval | 1 |
+| Untestable | `org access-tokens create` — `Named dependency: least-privilege typed reverse-ETL source record with resources[] plus Docker Hub organization-token permission`; `org settings update` — `Named dependency: Docker Hub organization settings read/write permission to preserve the current values`; `scim-users create/update` — `Named dependency: valid Docker Hub Enterprise organization SCIM bearer token` | 4 |
+
+The prior SCIM-only probe remains valid: only `scim_bearer_token` was configured;
+every dispatched SCIM request was nonzero (HTTP 401). The canonical colon-bearing
+schema URN first hit local path validation, then a URL-safe sentinel reached Docker
+Hub and returned the recorded 401. This does not prove the bearer is present on the
+wire, so the classification was deliberately not changed.
+
+### Mandatory private-repository/image chain — completed
+
+Created and intentionally retained private repository:
+
+```text
+polymetrics/pm-e2e-20260808-173040
+```
+
+The approval-gated `repository create` run completed (`records_succeeded=1`), and
+`pm dockerhub repository detail list` returned `is_private: true` **before** any
+image transfer. `docker` then pushed the zero-layer `e2e` image through Docker's
+Registry v2 protocol. `docker manifest inspect` confirmed a schema-2 image manifest;
+`pm dockerhub tags list`, `tag detail list`, `repository detail list`, and both tag
+HEAD checks read the resulting repository/tag state successfully. The repository was
+not deleted.
+
+`pm` cannot drive the image push or OCI-manifest read itself. This is an honest,
+out-of-surface gap: neither appears among the Docker Hub OpenAPI artifact's 54
+management operations or the connector's command surface; image transfer is Docker
+Registry v2 protocol work and needs its own declared connector/protocol foundation.
+
+The namespace repair is also live-proven: a fresh
+`repository detail list --config namespace=library --config repository=alpine`
+returned the public `library/alpine` record (rather than the prior misleading
+`polymetrics/alpine` 404). The regression test covers the remaining three streams
+and the check route with distinct auth identity and target namespace values.
+
+## Historical initial read-only private-repository attempt (superseded)
 
 The live `repository create` plan and preview resolved exactly:
 

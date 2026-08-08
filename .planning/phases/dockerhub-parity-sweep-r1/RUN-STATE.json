@@ -2,7 +2,7 @@
   "phase": "dockerhub-parity-sweep-r1",
   "program": "cli-connector-parity-programme-pilot",
   "connector": "dockerhub",
-  "state": "implemented_live_read_auth_e2e_complete_write_scope_pending",
+  "state": "implemented_live_e2e_complete_rate_limit_gap_planned",
   "generated_from": null,
   "artifact": {
     "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
@@ -60,22 +60,29 @@
     "green_evidence": "go test ./cmd/connectorgen/ (whole package) PASS; go run ./cmd/connectorgen validate internal/connectors/defs (whole repo) -> 551 connectors, 0 findings; go test ./internal/connectors/commandrunner/ -run TestEveryImplementedCommandPassesRuntimePreflight PASS (all 551 connectors); go test ./internal/connectors/engine/... PASS including 5 new HEAD-support tests; go test ./internal/connectors/hooks/dockerhub/... PASS (22 tests); go test ./internal/connectors/conformance/... PASS; go run ./cmd/connectorgen surface-sync --check -> 0 corrections; make connector-boundary -> clean; make lint 0 issues; make tidy-check, agent-contract-check, smoke-no-build, release-workflow-check all pass; gofmt/go vet clean; go build ./... clean; full go test ./internal/cli/... PASS including TestGoldenTranscripts (diff scoped to 9 root-listing subtests' tagline); binary built and exercised: pm connectors inspect dockerhub --json (write:true), bare pm dockerhub, --help on all 54 commands, and a genuine live loopback HTTP round trip proving the new HEAD status-only path end-to-end (server observed a real HEAD request, CLI returned {status_code:200})."
   },
   "live_e2e": {
-    "attempted_operations": 32,
-    "worked_operations": 4,
-    "failed_operations": 28,
-    "untestable_operations": 22,
+    "attempted_operations": 50,
+    "worked_operations": 10,
+    "failed_operations": 40,
+    "untestable_operations": 4,
     "read_auth_vector_attempted": 31,
     "read_operations_attempted": 28,
     "head_status_only_operations_attempted": 3,
     "authentication_operations_attempted": 3,
     "binary_help_routes_reachable": "54/54",
-    "private_repository_create": "HTTP 403 after corrected request; no repository created",
-    "image_push_readback": "not possible without a writable repository",
+    "private_repository_create": "completed: polymetrics/pm-e2e-20260808-173040; pm repository detail proved is_private=true before image transfer; repository intentionally retained",
+    "image_push_readback": "minimal zero-layer e2e image pushed with Docker Registry v2 protocol; pm tags list, tag detail list, repository detail list, and both tag HEAD checks succeeded; pm itself has no Registry v2 push or OCI-manifest command in this 54-operation Hub API surface",
     "scim_only_credential": "only scim_bearer_token configured; seven command paths had explicit nonzero outcomes (six HTTP 401; canonical schema URN locally rejected for ':' then URL-safe sentinel HTTP 401); no classification change",
     "permission_rejection": "access-tokens list exited nonzero with explicit redacted HTTP 403 for https://hub.docker.com/v2/access-tokens; not silent",
     "authentication_fixture_runs": "all three plan/preview/approve lifecycles reached provider and returned HTTP 401 using deliberately invalid non-secret fixtures",
     "evidence": ".planning/phases/dockerhub-parity-sweep-r1/VERIFICATION.md",
-    "runtime_fix": "strict write ALPN pinned to http/1.1 after local HTTP/2 regression reproduction"
+    "runtime_fix": "strict write ALPN pinned to http/1.1 after local HTTP/2 regression reproduction",
+    "namespace_override_live_proof": "repository detail list with --config namespace=library and repository=alpine returned library/alpine, proving namespace is no longer accepted then discarded",
+    "write_failures": "28 explicit HTTP 403 operations, 10 explicit HTTP 401 operations, repository group assign HTTP 400 on deliberately invalid group_id=0, invites resend HTTP 405 on deliberately nonexistent id=0; see VERIFICATION.md",
+    "untestable_named_dependencies": [
+      "org access-tokens create: least-privilege typed reverse-ETL source record with resources[] plus Docker Hub organization-token permission",
+      "org settings update: Docker Hub organization settings read/write permission to preserve current values",
+      "scim-users create/update: valid Docker Hub Enterprise organization SCIM bearer token"
+    ]
   },
   "foundations_built": [
     {
@@ -103,5 +110,5 @@
       "unblocks": "any connector with a documented HEAD-only existence-check endpoint (previously none could use one; dockerhub is the first)"
     }
   ],
-  "next_action": "read/auth E2E coverage is complete and committed separately; captain-held Docker Hub write scope plus a valid organization SCIM bearer credential are needed for the remaining private-repository/image chain and 22 mutation operations"
+  "next_action": "captain-ordered Docker Hub rate-limit proof: verify the existing requester limiter stops a configured budget before the registry pull limit, then use Docker's free ratelimitpreview HEAD probe to prove provider headroom remains"
 }
