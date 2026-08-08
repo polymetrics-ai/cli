@@ -39,21 +39,22 @@ type batchLedger struct {
 }
 
 type batchLedgerRecord struct {
-	Connector          string `json:"connector"`
-	Status             string `json:"status"`
-	OperationsTotal    *int   `json:"operations_total"`
-	OperationsRead     *int   `json:"operations_read"`
-	OperationsWrite    *int   `json:"operations_write"`
-	ArtifactURL        string `json:"artifact_url"`
-	ArtifactKind       string `json:"artifact_kind"`
-	ArtifactVersion    string `json:"artifact_version"`
-	RetrievedAt        string `json:"retrieved_at"`
-	AuthModel          string `json:"auth_model"`
-	AccessModel        string `json:"access_model"`
-	EvidenceSource     string `json:"evidence_source"`
-	CountingNote       string `json:"counting_note"`
-	ProcessedAt        string `json:"processed_at"`
-	ScopeInCurrentDefs bool   `json:"scope_in_current_defs"`
+	Connector            string `json:"connector"`
+	Status               string `json:"status"`
+	OperationsTotal      *int   `json:"operations_total"`
+	OperationsRead       *int   `json:"operations_read"`
+	OperationsWrite      *int   `json:"operations_write"`
+	ArtifactURL          string `json:"artifact_url"`
+	ArtifactKind         string `json:"artifact_kind"`
+	ArtifactVersion      string `json:"artifact_version"`
+	ProviderReferenceURL string `json:"provider_reference_url"`
+	RetrievedAt          string `json:"retrieved_at"`
+	AuthModel            string `json:"auth_model"`
+	AccessModel          string `json:"access_model"`
+	EvidenceSource       string `json:"evidence_source"`
+	CountingNote         string `json:"counting_note"`
+	ProcessedAt          string `json:"processed_at"`
+	ScopeInCurrentDefs   bool   `json:"scope_in_current_defs"`
 }
 
 // BatchManifest is the checked-in, immutable batch input. It captures the
@@ -81,17 +82,18 @@ type BatchSelection struct {
 }
 
 type BatchManifestConnector struct {
-	Connector       string        `json:"connector"`
-	OperationsTotal int           `json:"operations_total"`
-	OperationsRead  int           `json:"operations_read"`
-	OperationsWrite int           `json:"operations_write"`
-	Artifact        BatchArtifact `json:"artifact"`
-	AuthModel       string        `json:"auth_model"`
-	AccessModel     string        `json:"access_model"`
-	EvidenceSource  string        `json:"evidence_source"`
-	CountingNote    string        `json:"counting_note"`
-	ProcessedAt     string        `json:"processed_at"`
-	SelectionReason string        `json:"selection_reason"`
+	Connector            string        `json:"connector"`
+	OperationsTotal      int           `json:"operations_total"`
+	OperationsRead       int           `json:"operations_read"`
+	OperationsWrite      int           `json:"operations_write"`
+	Artifact             BatchArtifact `json:"artifact"`
+	ProviderReferenceURL string        `json:"provider_reference_url,omitempty"`
+	AuthModel            string        `json:"auth_model"`
+	AccessModel          string        `json:"access_model"`
+	EvidenceSource       string        `json:"evidence_source"`
+	CountingNote         string        `json:"counting_note"`
+	ProcessedAt          string        `json:"processed_at"`
+	SelectionReason      string        `json:"selection_reason"`
 }
 
 type BatchArtifact struct {
@@ -99,6 +101,18 @@ type BatchArtifact struct {
 	Kind        string `json:"kind"`
 	Version     string `json:"version"`
 	RetrievedAt string `json:"retrieved_at"`
+}
+
+var supportedBatchArtifactKinds = map[string]bool{
+	"openapi":           true,
+	"swagger":           true,
+	"openapi_fragments": true,
+	"postman":           true,
+	"html_reference":    true,
+	"api_blueprint":     true,
+	"graphql":           true,
+	"asyncapi":          true,
+	"wsdl":              true,
 }
 
 type batchPlanOptions struct {
@@ -383,8 +397,8 @@ func validateBatchCandidate(record batchLedgerRecord, opts batchPlanOptions) err
 	if record.Status != "done" {
 		return fmt.Errorf("status is %q, want done", record.Status)
 	}
-	if record.ArtifactKind != "openapi" && record.ArtifactKind != "swagger" {
-		return fmt.Errorf("artifact_kind is %q, want openapi or swagger", record.ArtifactKind)
+	if !supportedBatchArtifactKinds[record.ArtifactKind] {
+		return fmt.Errorf("artifact_kind is %q, want an authoritative machine-readable or provider-reference source", record.ArtifactKind)
 	}
 	if strings.TrimSpace(record.ArtifactVersion) == "" {
 		return errors.New("artifact_version is required")
@@ -397,6 +411,11 @@ func validateBatchCandidate(record batchLedgerRecord, opts batchPlanOptions) err
 	}
 	if err := validateBatchArtifactURL(record.ArtifactURL); err != nil {
 		return err
+	}
+	if reference := strings.TrimSpace(record.ProviderReferenceURL); reference != "" {
+		if _, err := parseBatchReferenceURL(reference); err != nil {
+			return fmt.Errorf("provider_reference_url: %w", err)
+		}
 	}
 	if strings.TrimSpace(record.AuthModel) == "" {
 		return errors.New("auth_model is required")
@@ -460,12 +479,13 @@ func newBatchManifest(ledger batchLedger, opts batchPlanOptions, mode string, re
 				Version:     record.ArtifactVersion,
 				RetrievedAt: record.RetrievedAt,
 			},
-			AuthModel:       record.AuthModel,
-			AccessModel:     record.AccessModel,
-			EvidenceSource:  record.EvidenceSource,
-			CountingNote:    record.CountingNote,
-			ProcessedAt:     record.ProcessedAt,
-			SelectionReason: reason,
+			ProviderReferenceURL: record.ProviderReferenceURL,
+			AuthModel:            record.AuthModel,
+			AccessModel:          record.AccessModel,
+			EvidenceSource:       record.EvidenceSource,
+			CountingNote:         record.CountingNote,
+			ProcessedAt:          record.ProcessedAt,
+			SelectionReason:      reason,
 		})
 	}
 	return BatchManifest{
@@ -480,7 +500,7 @@ func newBatchManifest(ledger batchLedger, opts batchPlanOptions, mode string, re
 			RequestedSize: opts.size,
 			MinOperations: opts.minOperations,
 			MaxOperations: opts.maxOperations,
-			Criteria:      "status=done; artifact_kind=openapi|swagger; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope",
+			Criteria:      "status=done; authoritative artifact_kind=openapi|swagger|openapi_fragments|postman|html_reference|api_blueprint|graphql|asyncapi|wsdl; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope",
 		},
 		Connectors: connectors,
 	}
@@ -754,8 +774,13 @@ func validateBatchManifest(manifest BatchManifest) error {
 		if err := validateBatchArtifactURL(candidate.Artifact.URL); err != nil {
 			return fmt.Errorf("manifest connector %q: %w", candidate.Connector, err)
 		}
-		if candidate.Artifact.Kind != "openapi" && candidate.Artifact.Kind != "swagger" {
-			return fmt.Errorf("manifest connector %q: artifact.kind %q is not openapi or swagger", candidate.Connector, candidate.Artifact.Kind)
+		if reference := strings.TrimSpace(candidate.ProviderReferenceURL); reference != "" {
+			if _, err := parseBatchReferenceURL(reference); err != nil {
+				return fmt.Errorf("manifest connector %q: provider_reference_url: %w", candidate.Connector, err)
+			}
+		}
+		if !supportedBatchArtifactKinds[candidate.Artifact.Kind] {
+			return fmt.Errorf("manifest connector %q: artifact.kind %q is not an authoritative supported source", candidate.Connector, candidate.Artifact.Kind)
 		}
 		if strings.TrimSpace(candidate.Artifact.Version) == "" {
 			return fmt.Errorf("manifest connector %q: artifact.version is required", candidate.Connector)
@@ -850,22 +875,33 @@ func batchCandidateProvenance(surface *engine.APISurface, candidate BatchManifes
 	default:
 		return fmt.Errorf("api_surface.json provenance status %q is not complete", provenance.Status)
 	}
-	if len(surface.Artifacts) != 1 {
-		return fmt.Errorf("api_surface.json has %d provenance artifacts; batch candidates require exactly one manifest artifact URL %q", len(surface.Artifacts), candidate.Artifact.URL)
+	if len(surface.Artifacts) == 0 {
+		return fmt.Errorf("api_surface.json has no provenance artifacts; batch candidates require the manifest artifact URL %q", candidate.Artifact.URL)
 	}
-	artifact := surface.Artifacts[0]
-	if artifact.URL != candidate.Artifact.URL {
-		return fmt.Errorf("provenance artifact URL %q does not match manifest artifact URL %q", artifact.URL, candidate.Artifact.URL)
+	artifacts := make(map[string]engine.SurfaceArtifact, len(surface.Artifacts))
+	rootFound := false
+	for _, artifact := range surface.Artifacts {
+		if artifact.URL == candidate.Artifact.URL {
+			rootFound = true
+		}
+		artifacts[artifact.ID] = artifact
+	}
+	if !rootFound {
+		if len(surface.Artifacts) == 1 {
+			return fmt.Errorf("provenance artifact URL %q does not match manifest artifact URL %q", surface.Artifacts[0].URL, candidate.Artifact.URL)
+		}
+		return fmt.Errorf("provenance artifacts do not include manifest artifact URL %q", candidate.Artifact.URL)
 	}
 	for i, endpoint := range surface.Endpoints {
 		if endpoint.Provenance == nil {
 			return fmt.Errorf("endpoint %d (%s %s) provenance is required", i, endpoint.Method, endpoint.Path)
 		}
-		if endpoint.Provenance.Artifact != artifact.ID {
-			return fmt.Errorf("endpoint %d (%s %s) provenance artifact %q does not match manifest artifact %q", i, endpoint.Method, endpoint.Path, endpoint.Provenance.Artifact, artifact.ID)
+		artifact, ok := artifacts[endpoint.Provenance.Artifact]
+		if !ok {
+			return fmt.Errorf("endpoint %d (%s %s) provenance artifact %q does not resolve to a cited artifact", i, endpoint.Method, endpoint.Path, endpoint.Provenance.Artifact)
 		}
-		if endpoint.Provenance.SourceURL != candidate.Artifact.URL {
-			return fmt.Errorf("endpoint %d (%s %s) provenance source_url %q does not match manifest artifact URL %q", i, endpoint.Method, endpoint.Path, endpoint.Provenance.SourceURL, candidate.Artifact.URL)
+		if endpoint.Provenance.SourceURL != artifact.URL {
+			return fmt.Errorf("endpoint %d (%s %s) provenance source_url %q does not match cited artifact URL %q", i, endpoint.Method, endpoint.Path, endpoint.Provenance.SourceURL, artifact.URL)
 		}
 	}
 	return nil

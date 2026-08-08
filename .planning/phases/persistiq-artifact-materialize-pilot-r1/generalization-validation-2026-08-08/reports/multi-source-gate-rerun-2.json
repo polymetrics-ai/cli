@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/multi-source-pilot-manifest.json",
+  "candidates": 4,
+  "included": [
+    {
+      "connector": "watchmode",
+      "commands_checked": 13,
+      "declared_operations": 45,
+      "operation_split": {
+        "executable": 13,
+        "provider_blocked": 23,
+        "excluded": 9
+      },
+      "warnings": []
+    },
+    {
+      "connector": "docuseal",
+      "commands_checked": 9,
+      "declared_operations": 34,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 0,
+        "excluded": 24
+      },
+      "warnings": []
+    },
+    {
+      "connector": "float",
+      "commands_checked": 5,
+      "declared_operations": 104,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 58,
+        "excluded": 41
+      },
+      "warnings": []
+    },
+    {
+      "connector": "copper",
+      "commands_checked": 5,
+      "declared_operations": 82,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 40,
+        "excluded": 37
+      },
+      "warnings": []
+    }
+  ],
+  "dropped": [],
+  "provenance_refusals": 0,
+  "surveyed_operations": {
+    "total": 216,
+    "read": 115,
+    "write": 101
+  },
+  "declared_operations": 265,
+  "operation_split": {
+    "executable": 33,
+    "provider_blocked": 121,
+    "excluded": 111
+  }
+}

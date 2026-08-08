@@ -3,7 +3,7 @@
   "program": "cli-mass-artifact-materialize-r1",
   "connector": "persistiq",
   "state": "passed_static_gates",
-  "policy": "captain_complete_inventory_and_single_final_gate",
+  "policy": "captain_complete_inventory_multisource_and_single_final_gate",
   "manual_gsd_fallback": {
     "used": true,
     "reason": "Pilot is not represented in ROADMAP.md and the available Codex runtime cannot provide the interactive Pi workers.",
@@ -21,9 +21,9 @@
       "go vet ./cmd/connectorgen",
       "go build ./cmd/pm",
       "go run ./cmd/agentcontractgen check",
-      "connectorgen validate generated PersistIQ bundle",
-      "surface-sync --check generated PersistIQ result",
-      "connectorgen batch gate generated PersistIQ result",
+      "connectorgen validate existing 551-bundle corpus and staged pilots",
+      "surface-sync --check existing 551-bundle corpus and staged pilots",
+      "connectorgen batch gate combined staged pilots",
       "TestEveryImplementedCommandPassesRuntimePreflight",
       "real pm binary reachability sweep",
       "git diff --check"
@@ -33,7 +33,8 @@
     "eligible_pool": 392,
     "pilot_only": true,
     "excluded_connectors_touched": 0,
-    "second_connector_started": false
+    "production_sweep_started": false,
+    "staged_generalization": ["watchmode", "docuseal", "float", "copper"]
   },
   "artifact": {
     "url": "https://persistiq.com/api-docs/v1/swagger.json",
@@ -123,5 +124,14 @@
     "status": "withheld",
     "provider_exercised": false,
     "note": "implemented, not certified, never exercised against the provider"
+  },
+  "multi_source_generalization": {
+    "materialized": 4,
+    "gated": 4,
+    "dropped": 0,
+    "mapped": {"watchmode": 23, "docuseal": 34, "float": 102, "copper": 77},
+    "reachable": {"watchmode": "45/45", "docuseal": "34/34", "float": "104/104", "copper": "not_claimed_legacy_native_scaffold"},
+    "failed": 0,
+    "evidence": "generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md"
   }
 }

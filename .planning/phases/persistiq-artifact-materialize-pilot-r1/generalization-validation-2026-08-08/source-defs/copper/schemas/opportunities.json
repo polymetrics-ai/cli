@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "opportunities",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "integer"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "primary_contact_id": {
+      "type": "integer"
+    },
+    "assignee_id": {
+      "type": "integer"
+    },
+    "pipeline_id": {
+      "type": "integer"
+    },
+    "pipeline_stage_id": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string"
+    },
+    "monetary_value": {
+      "type": "number"
+    },
+    "win_probability": {
+      "type": "number"
+    },
+    "close_date": {
+      "type": "string"
+    },
+    "date_created": {
+      "type": "integer"
+    },
+    "date_modified": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "date_modified"
+}

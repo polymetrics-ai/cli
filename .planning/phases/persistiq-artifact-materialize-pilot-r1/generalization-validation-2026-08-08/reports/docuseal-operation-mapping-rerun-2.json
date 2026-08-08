@@ -1,0 +1,525 @@
+{
+  "connector": "docuseal",
+  "mapped": 34,
+  "buckets": {
+    "etl": 4,
+    "reverse_etl": 6,
+    "direct_read": 3,
+    "direct_write": 10,
+    "binary_download": 0,
+    "unclassified": 11
+  },
+  "discrepancies": 0,
+  "operations": [
+    {
+      "method": "GET",
+      "path": "/submissions",
+      "bucket": "etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions",
+      "bucket": "reverse_etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions/docx",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions/docx\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions/emails",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions/emails\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions/html",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions/html\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions/pdf",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions/pdf\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/submissions/{id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions/{id}\"].get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/submissions/{id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions/{id}\"].put"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/submissions/{id}",
+      "bucket": "reverse_etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions/{id}\"].delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/submissions/{id}/documents",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submissions/{id}/documents\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/submitters",
+      "bucket": "etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submitters\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/submitters/{id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submitters/{id}\"].get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/submitters/{id}",
+      "bucket": "reverse_etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/submitters/{id}\"].put"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates",
+      "bucket": "etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/docx",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates/docx\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/html",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates/html\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/merge",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates/merge\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/pdf",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates/pdf\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/{id}",
+      "bucket": "etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates/{id}\"].get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/templates/{id}",
+      "bucket": "reverse_etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates/{id}\"].put"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/templates/{id}",
+      "bucket": "reverse_etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates/{id}\"].delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/{id}/clone",
+      "bucket": "reverse_etl",
+      "disposition": "covered",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates/{id}/clone\"].post"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/templates/{id}/documents",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "paths[\"/templates/{id}/documents\"].put"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "formCompletedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"formCompletedWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "formDeclinedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"formDeclinedWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "formStartedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"formStartedWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "formViewedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"formViewedWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "submissionArchivedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"submissionArchivedWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "submissionCompletedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"submissionCompletedWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "submissionCreatedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"submissionCreatedWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "submissionExpiredWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"submissionExpiredWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "templateArchivedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"templateArchivedWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "templateCreatedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"templateCreatedWebhook\"].post"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "templateUpdatedWebhook#POST",
+      "bucket": "unclassified",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "docuseal-artifact-2026-08-08",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+        "coordinate": "webhooks[\"templateUpdatedWebhook\"].post"
+      }
+    }
+  ]
+}

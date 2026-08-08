@@ -1,6 +1,7 @@
 # PersistIQ artifact materialization pilot - plan
 
-> **Scope locked by captain:** one connector only. This phase is a documented
+> **Scope locked by captain:** generator capability plus staged validation
+> pilots only. This phase is a documented
 > inline/manual GSD fallback because the pilot is not in `ROADMAP.md` and the
 > available Codex runtime cannot provide the interactive Pi phase workers.
 > The fallback does not waive red/green evidence or any static gate.
@@ -14,14 +15,16 @@ generated command through the real no-credential `pm` binary, and report exact
 wall-clock timing and counts. Before the generator PR merges, validate the
 same policy against three deliberately different eligible shapes: a
 read-only OpenAPI connector, a write-heavy OpenAPI connector, and a public
-Swagger-2 connector. These are evidence-only staged bundles; do not add them
-to `internal/connectors/defs` or start the eligible-392 generation.
+Swagger-2 connector. Add Copper as a non-OpenAPI Postman fallback proof. All
+generated bundles are evidence-only; do not add them to
+`internal/connectors/defs` or start the eligible-392 generation.
 
-The generalization result is recorded in
+The multi-source generalization result is recorded in
 [`generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md`](generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md).
-It records one passing Watchmode validation and two generator refusals
-(DocuSeal top-level webhooks and Float external Swagger path-item references),
-so this evidence does not declare the generator ready.
+Watchmode, DocuSeal, and Float pass after top-level webhook and external
+path-item support. Copper's staged static fallback passes; its current native
+scaffold has no embedded command surface, so its real-binary reachability is
+explicitly not claimed.
 
 ## Timed pilot slices
 
@@ -93,10 +96,27 @@ combined gate is then narrowed to the implicated batch for diagnosis.
 - Use `watchmode`, `docuseal`, and `float` as the deliberately different
   shapes; record the Web Scraper partner-gated planner refusal and Ding
   Connect HTTP 403 substitution in the evidence.
-- Run the same static and real-binary gates for every candidate that emits a
-  bundle. A candidate dropped by artifact inventory is a generator failure,
-  not a success with zero commands.
-- Do not call the generator ready when any selected candidate fails.
+- Run one combined static gate over the staged Watchmode, DocuSeal, Float, and
+  optional Copper outputs. A candidate dropped by artifact inventory is a
+  generator failure, not a success with zero commands.
+- Run real-binary reachability for every command of the three runtime-capable
+  structured pilots. Record Copper's legacy-scaffold limitation rather than
+  manufacturing a reachability claim.
+- The required three pilots now pass; this remains generator evidence, not
+  provider certification, and the eligible-392 sweep remains deferred.
+
+### Multi-source contract extension
+
+- Read `CAPTAIN-ORDER-multisource-mapping.md` before implementation.
+- Source order is OpenAPI/Swagger plus local/remote references and webhooks,
+  then provider machine exports such as Postman, then bounded official
+  HTML/Markdown/source traversal.
+- Normalize every operation with URL, kind, version, retrieval date, hash, and
+  exact coordinate. Merge canonically; preserve source disagreements as
+  alternatives; never let a narrow artifact delete an existing operation.
+- Keep fallback/traversal bounded, HTTPS-safe, connector-scoped, cached, and
+  resumable. Unknown or ambiguous extraction remains visible and cannot become
+  an implemented command.
 
 ## Captain-ruling rerun policy
 

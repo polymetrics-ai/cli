@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/departments", "query": { "per-page": "1" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

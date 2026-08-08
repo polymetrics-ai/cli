@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/people",
+    "query": {
+      "page": "2",
+      "per-page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "people_id": 201,
+        "name": "Fixture Person 201",
+        "email": "fixture201@example.com",
+        "job_title": "Engineer",
+        "role_id": 1,
+        "department_id": 1,
+        "people_type_id": 1,
+        "active": 1,
+        "employee_type": 0,
+        "start_date": "2026-01-01",
+        "created": "2026-01-01T00:00:00Z",
+        "modified": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

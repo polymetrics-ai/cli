@@ -6,13 +6,12 @@
 <domain>
 ## Phase Boundary
 
-Run exactly one end-to-end connector pilot for `persistiq`: identify its ledger
-artifact URL, map all 21 documented operations to the repository operation
-model, fetch and parse the provider artifact, materialize and gate the bundle,
-and report per-step wall-clock time plus real fetched/parsed/materialized/gated/
-reachable/failed counts. Do not start a second connector or the 392-connector
-pool. The 28 connectors already live in main and the nine elsewhere-owned
-connectors are outside this phase.
+Run the PersistIQ end-to-end pilot, then validate the generator capability with
+staged, evidence-only generalization shapes. The later captain extension adds
+Watchmode, DocuSeal, Float, and an optional Copper Postman fallback proof; no
+generated pilot bundle enters `internal/connectors/defs`. Do not start the
+eligible-392 production pool. The 28 connectors already live in main and the
+nine elsewhere-owned connectors remain outside this phase.
 
 </domain>
 
@@ -72,6 +71,17 @@ connectors are outside this phase.
   materialization run across staged batches, and one final gate scans the
   complete staged result. Batch boundaries remain commit/review boundaries;
   only a failed final gate triggers narrowed diagnostic gating.
+- **D-11:** The multi-source contract is authoritative for generator
+  validation: try OpenAPI/Swagger and bounded local/remote refs/webhooks,
+  provider machine exports such as Postman, then bounded official
+  HTML/Markdown/source traversal. Normalize every operation with source URL,
+  kind, version, retrieval date, SHA-256, exact coordinate, and preserved
+  alternatives. A narrower artifact cannot delete an existing operation, and
+  ambiguous extraction remains visible as an unknown/disposition gap.
+- **D-12:** The three required generalization pilots must pass after webhook
+  and external-reference support. Copper is additional static fallback
+  evidence; its legacy native scaffold has no generated command surface, so
+  reachability is not claimed for it.
 
 ### the agent's Discretion
 
@@ -89,6 +99,7 @@ connectors are outside this phase.
 ### Task and lifecycle contract
 
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-mass-artifact-materialize-r1/CAPTAIN-ORDER-mass-materialize.md` — authoritative correction, pilot order, gates, and certification boundary.
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-mass-artifact-materialize-r1/CAPTAIN-ORDER-multisource-mapping.md` — authoritative source order, provenance, fallback, and traversal contract.
 - `AGENTS.md` — mandatory issue-first GSD lifecycle, connector-surface rules, and verification commands.
 - `.agents/agentic-delivery/references/required-skills-routing.md` — required Go and connector skills.
 - `.agents/agentic-delivery/references/gsd-pi-adapter.md` — repo-local GSD command resolution and manual fallback rules.
@@ -153,7 +164,7 @@ exercises both read and write mapping without provider credentials.
 - Bulk fetching/materialization of the eligible 392 connectors.
 - Feasibility planning for the 99 unresolved connectors, including AI prose
   extraction and its mandatory validation/reachability failure behavior.
-- Any second connector in this worktree.
+- Production generation of the eligible 392 and the seven-connector consolidation until PR #3957 merges.
 
 </deferred>
 

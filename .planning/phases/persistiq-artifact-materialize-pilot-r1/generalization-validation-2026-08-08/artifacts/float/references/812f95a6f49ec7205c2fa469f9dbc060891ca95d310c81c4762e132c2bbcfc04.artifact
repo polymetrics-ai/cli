@@ -1,0 +1,171 @@
+definitions:
+  DeletedTaskRecord:
+    type: object
+    required:
+    - id
+    - timestamp
+    properties:
+      id:
+        type: integer
+        example: 987654
+        description: The ID of the deleted allocation as a task
+      timestamp:
+        type: string
+        format: date-time
+        example: "2026-01-09T10:30:00Z"
+        description: ISO date-time when the record was deleted
+
+  DeletedTimeoffRecord:
+    type: object
+    required:
+    - id
+    - timestamp
+    properties:
+      id:
+        type: integer
+        example: 45678
+        description: The ID of the deleted time off entry
+      timestamp:
+        type: string
+        format: date-time
+        example: "2026-01-09T14:15:00Z"
+        description: ISO date-time when the record was deleted
+
+  DeletedLoggedTimeRecord:
+    type: object
+    required:
+    - id
+    - timestamp
+    properties:
+      id:
+        type: string
+        example: "5e38963be429adc74664c777"
+        description: The ID of the deleted logged time entry
+      timestamp:
+        type: string
+        format: date-time
+        example: "2026-01-09T16:45:00Z"
+        description: ISO date-time when the record was deleted
+
+  DeletedTasksListResponse:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/DeletedTaskRecord"
+
+  DeletedTimeoffsListResponse:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/DeletedTimeoffRecord"
+
+  DeletedLoggedTimeListResponse:
+    type: object
+    required:
+    - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/DeletedLoggedTimeRecord"
+
+deleted-tasks:
+  get:
+    tags:
+    - Delete Log
+    summary: List deleted allocations as tasks
+    description: |
+      Returns a list of deleted allocations (as task IDs) and timestamps. Records are retained for 72 hours.
+      Operates on an at-least-once delivery guarantee; use the record ID as a deduplication key.
+    operationId: getDeletedTasks
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/cursor"
+    - $ref: "../swagger-api-v3.yaml#/parameters/limit"
+    responses:
+      200:
+        description: List of deleted allocations as task records
+        schema:
+          $ref: "#/definitions/DeletedTasksListResponse"
+        headers:
+          X-Pagination-Next-Cursor:
+            type: string
+            description: Cursor for the next page of results
+          X-Pagination-Has-More:
+            type: string
+            description: "`true` if more results are available, `false` otherwise"
+      401:
+        description: Unauthorized
+      403:
+        description: Delete tracking is not enabled for tasks
+      429:
+        description: Rate limit exceeded
+
+deleted-timeoffs:
+  get:
+    tags:
+    - Delete Log
+    summary: List deleted time off entries
+    description: |
+      Returns a list of deleted time off IDs and timestamps. Records are retained for 72 hours.
+      Operates on an at-least-once delivery guarantee; use the record ID as a deduplication key.
+    operationId: getDeletedTimeoffs
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/cursor"
+    - $ref: "../swagger-api-v3.yaml#/parameters/limit"
+    responses:
+      200:
+        description: List of deleted time off records
+        schema:
+          $ref: "#/definitions/DeletedTimeoffsListResponse"
+        headers:
+          X-Pagination-Next-Cursor:
+            type: string
+            description: Cursor for the next page of results
+          X-Pagination-Has-More:
+            type: string
+            description: "`true` if more results are available, `false` otherwise"
+      401:
+        description: Unauthorized
+      403:
+        description: Delete tracking is not enabled for time off
+      429:
+        description: Rate limit exceeded
+
+deleted-logged-time:
+  get:
+    tags:
+    - Delete Log
+    summary: List deleted logged time entries
+    description: |
+      Returns a list of deleted logged time IDs and timestamps. Records are retained for 72 hours.
+      Operates on an at-least-once delivery guarantee; use the record ID as a deduplication key.
+    operationId: getDeletedLoggedTime
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/cursor"
+    - $ref: "../swagger-api-v3.yaml#/parameters/limit"
+    responses:
+      200:
+        description: List of deleted logged time records
+        schema:
+          $ref: "#/definitions/DeletedLoggedTimeListResponse"
+        headers:
+          X-Pagination-Next-Cursor:
+            type: string
+            description: Cursor for the next page of results
+          X-Pagination-Has-More:
+            type: string
+            description: "`true` if more results are available, `false` otherwise"
+      401:
+        description: Unauthorized
+      403:
+        description: Delete tracking is not enabled for logged time
+      429:
+        description: Rate limit exceeded

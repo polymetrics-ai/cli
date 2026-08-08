@@ -1,0 +1,510 @@
+definitions:
+  ProjectExpenseExpanded:
+    type: "object"
+    title: "ProjectExpense"
+    required:
+      - "name"
+      - "date"
+      - "cost"
+      - "project_id"
+    properties:
+      id:
+        type: "integer"
+        description: "The ID of the project expense"
+        readOnly: true
+        example: 32198
+      name:
+        type: "string"
+        description: "The name of the project expense"
+        maxLength: 200
+        example: "Equipment rental"
+      date:
+        type: "string"
+        description: "The date of the project expense"
+        format: "date"
+        example: "2025-07-01"
+      cost:
+        type: "string"
+        description: "The cost of the project expense"
+        example: "1500.0000"
+      billable:
+        type: "integer"
+        description: "Whether this expense is billable. Only billable projects can have billable expenses. `1` = Billable, `0` = Non-billable"
+        example: 1
+      markup:
+        type: "string"
+        description: "The markup percentage as a decimal string. Only billable expenses can be marked up"
+        example: "25.0000"
+      markup_type:
+        type: "integer"
+        description: "The type of markup applied. `0` = Percentage, `1` = Fixed amount"
+        example: 0
+      quantity:
+        type: "integer"
+        description: "The quantity of this expense"
+        minimum: 1
+        example: 1
+
+  ProjectPhaseExpanded:
+    type: "object"
+    title: "ProjectPhase"
+    properties:
+      phase_id:
+        type: "integer"
+        description: "The ID of this phase"
+        example: 6754
+      name:
+        type: "string"
+        description: "The name of the phase"
+        example: "Design"
+      color:
+        type: "string"
+        description: "Phase's color in hexadecimal"
+        example: "0095D7"
+      budget:
+        type: "number"
+        description: "The budget amount when the project uses phase-level budgets (`budget_priority` = `1`); otherwise `null`"
+        example: 1000.50
+      start_date:
+        type: "string"
+        format: "date"
+        example: "2024-12-12"
+        description: "The start date of this phase"
+      end_date:
+        type: "string"
+        format: "date"
+        example: "2025-02-23"
+        description: "The end date of this phase"
+
+  ProjectTeamMemberExpanded:
+    type: "object"
+    title: "ProjectTeamMember"
+    properties:
+      people_id:
+        type: "integer"
+        description: "The ID of the person"
+        example: 17391001
+      role_id:
+        type: "integer"
+        description: "The ID of a role"
+        example: 17391001
+      hourly_rate:
+        type: "number"
+        description: "The project hourly rate for this team member. Becomes read-only once `rate_card_id` is set on the project — the value is set automatically from the rate card's role rate and cannot be submitted"
+        format: "float"
+        example: 75.0
+      phase_id:
+        type: "integer"
+        description: "The phase ID, `0` indicates it does not belong to a phase"
+        example: 0
+
+  ProjectTaskExpanded:
+    type: "object"
+    title: "ProjectTask"
+    properties:
+      task_meta_id:
+        type: "integer"
+        example: 4567
+        description: "The ID of the project task (named for backwards compatibility)"
+        readOnly: true
+      project_id:
+        type: "integer"
+        example: 32154
+        description: "The ID of the project the project task belongs to"
+      phase_id:
+        type: "integer"
+        example: 123
+        description: "The ID of the phase the project task belongs to; `0` indicates it does not belong to a phase"
+        default: 0
+      task_name:
+        type: "string"
+        example: "Design"
+        description: "The name of the project task, an empty string is valid and is the default on the UI when a project task has not been chosen"
+        minLength: 0
+        maxLength: 200
+      billable:
+        type: "integer"
+        example: 1
+        description: "`1` = Billable, `0` = Non-billable - Billable project tasks may not belong to non-billable projects or phases"
+      budget:
+        type: "number"
+        example: 100.99
+        description: "The budget amount for 'hours by task' or 'fee by task' project budgets"
+      count_tasks:
+        type: "integer"
+        example: 150
+        description: "The number of allocations (`task_id`) this project task is associated with."
+        readOnly: true
+      count_logged_time:
+        type: "integer"
+        example: 100
+        description: "The number of logged time entries (`logged_time_id`) this project task is associated with."
+        readOnly: true
+      created:
+        type: "string"
+        example: "2023-10-22 23:11:23.578"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2023-11-11 07:38:44"
+        description: "Date this record was last modified"
+        readOnly: true
+
+  Project:
+    type: "object"
+    title: "Project"
+    required:
+      - "name"
+    properties:
+      project_id:
+        type: "integer"
+        example: 4567
+        description: "The ID of the project"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Website Redesign"
+        description: "The name of the project"
+        maxLength: 200
+      project_code:
+        type: "string"
+        example: "PRJ-123456"
+        description: "An optional third-party identifier unique across all projects enforced using case-insensitive comparison"
+        maxLength: 32
+      client_id:
+        type: "integer"
+        example: 45672
+        description: "The ID of the project's client"
+      color:
+        type: "string"
+        example: "0095D7"
+        description: "Project's color in hexadecimal"
+      notes:
+        type: "string"
+        example: "Due at the start of July. Paul to present"
+        description: "Notes for this project"
+      tags:
+        type: "array"
+        example:
+          - "digital"
+          - "pitch"
+        description: "List of tags"
+        items:
+          type: "string"
+      budget_type:
+        type: "integer"
+        example: 1
+        description: "Is there a project budget? `1` = Total hours, `2` = Total fee, `3` = Hourly fee"
+      budget_total:
+        type: "number"
+        example: 1000.50
+        description: "The budget amount for Total hours or Total fee project budgets. Displays as `null` for Hourly fee, Phase and Task budgets, also see `budget_priority`"
+      budget_per_phase:
+        type: "integer"
+        example: 1
+        description: "(**Deprecated** - see `budget_priority`): Is the budget set per Phase? `1` = Yes, `0` = No"
+      budget_priority:
+        type: "integer"
+        example: 0
+        description: "Defines which level the budget will be determined from; `0` = Project, `1` = Phase, `2` = Task. For non-project levels, the total budget can be calculated from the sum of budgets in each Phase or Task"
+      default_hourly_rate:
+        type: "string"
+        example: "55.50"
+        description: "The default hourly rate for fee-based budgets, the request also accepts a decimal `number`. If `rate_card_id` is also set on the project, the rate card takes priority and this field is not used to determine bill rates"
+      non_billable:
+        type: "integer"
+        example: 1
+        description: "Is this project billable? `0` = Billable, `1` = Non-billable"
+      status:
+        type: "integer"
+        example: 2
+        description: "The status of the project `0` = Draft, `1` = Tentative, `2` = Confirmed, `3` = Completed, `4` = Canceled. If both `status` and `stage_id` are provided, `stage_id` takes precedence. If only `status` is provided, the first available stage for that status will be automatically selected."
+      stage_id:
+        type: "integer"
+        example: 1
+        description: "The ID of the project stage for this project. This field takes precedence over `status` when both are provided. If omitted, the first available stage related to the project's `status` will be used."
+      tentative:
+        type: "integer"
+        example: 0
+        description: "(**Deprecated** - see `status`): Is this project tentative? `1` = Yes, `0` = No"
+
+      locked_task_list:
+        type: "integer"
+        example: 1
+        description: "Are members locked from adding project tasks (Only Project Managers can add to this list)? 1 = Yes, locked to project editors, 0 = No, anyone can add tasks"
+      active:
+        type: "integer"
+        example: 1
+        description: "Is this project active or archived? `1` = Active, `0` = Archived"
+      project_manager:
+        type: "integer"
+        example: 17393464
+        description: "Account ID of the assigned project manager"
+      all_pms_schedule:
+        type: "integer"
+        example: 0
+        description: "Do all project managers have scheduling rights? `1` = Yes, `0` = No"
+      created:
+        type: "string"
+        example: "2024-10-30 02:40:40.000"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2024-11-14 03:02:05.000"
+        description: "Date this record was last modified"
+        readOnly: true
+      start_date:
+        type: "string"
+        example: "2024-11-07"
+        description: "The start date of this project which is either manually set or calculated from the earliest phase, milestone, allocation, or logged time"
+      end_date:
+        type: "string"
+        example: "2025-01-18"
+        description: "The end date of this project which is either manually set or calculated from the latest phase, milestone, allocation, or logged time"
+      expenses:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProjectExpenseExpanded"
+        description: "`expand` field. The expenses assigned to this project"
+      project_tasks:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProjectTaskExpanded"
+        description: "`expand` field. A list of the project tasks available in this project"
+      phases:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProjectPhaseExpanded"
+        description: "`expand` field. A list of phases on this project (`phase_id`, `name`, `color`, `budget`, `start_date`, `end_date`), the list may be empty"
+      project_team:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProjectTeamMemberExpanded"
+        description: "`expand` field. A list of project-level team members by `people_id`, `role_id`, and `hourly_rate`. Only entries with `phase_id` = `0` are returned; for phase-specific roles and rates use `GET /phases?project_id=project_id` and add `expand=phase_team`"
+      currency_code:
+        type: "string"
+        example: "CAD"
+        description: "`expand` field. The ISO 4217 currency code assigned to this project. Only returned when using `expand=currency`. Can be set via POST and PATCH; the value must correspond to a `target_currency` in the company's currencies list"
+      fx_rate:
+        type: "number"
+        format: "float"
+        example: 1.39
+        description: "`expand` field. The exchange rate applied to this project's currency. Only returned when using `expand=currency`. If omitted on POST or PATCH, the default `fx_rate` from the matching currency record is used"
+      rate_card_id:
+        type: "integer"
+        example: 95020
+        description: "The ID of the [rate card](/api_reference#Rate_Cards) applied to this project. Only supported for fee-based budgets (`budget_type` = `2` or `3`). When set, it determines the bill rate for each project team member based on their role, taking priority over `default_hourly_rate` and any per-person `hourly_rate` on `project_team`. Set to `null` to remove the rate card from the project"
+
+  ProjectWithProjectTeam:
+    allOf:
+      - $ref: "#/definitions/Project"
+      - properties:
+          project_team:
+            type: "object"
+            description: "Manages the composition and details of the project team."
+            properties:
+              set:
+                type: "array"
+                description: "Replaces the entire current project team with the provided team. Using this will ignore `add` and `del` actions. Caution: This action removes all members not in the `set` list, along with their associated items"
+                items:
+                  type: "object"
+                  required:
+                    - "people_id"
+                  properties:
+                    people_id:
+                      type: "integer"
+                      description: "Unique identifier for a team member"
+                      example: 17391001
+                    role_id:
+                      type: "integer"
+                      description: "The ID of a role"
+                      example: 17391001
+                    hourly_rate:
+                      type: "number"
+                      description: "Hourly rate for the team member. This field is optional. Cannot be set once the project has a `rate_card_id` applied — the rate card determines the rate for each role instead"
+                      format: "float"
+                      example: 75.0
+              add:
+                type: "array"
+                description: "Adds new team members to the project"
+                items:
+                  type: "object"
+                  required:
+                    - "people_id"
+                  properties:
+                    people_id:
+                      type: "integer"
+                      description: "Unique identifier for a team member"
+                      example: 17391002
+                    role_id:
+                      type: "integer"
+                      description: "The ID of a role"
+                      example: 17391001
+                    hourly_rate:
+                      type: "number"
+                      description: "Hourly rate for the team member. This field is optional. Cannot be set once the project has a `rate_card_id` applied — the rate card determines the rate for each role instead"
+                      format: "float"
+                      example: 65.0
+              del:
+                type: "array"
+                description: "Removes team members from the project using their 'people_id'. Caution: Removing members will delete their associated items"
+                example:
+                  - 17391002
+                  - 17391003
+                items:
+                  type: "integer"
+
+parameters:
+  project_id:
+    name: "project_id"
+    in: "path"
+    description: "The project's ID"
+    required: true
+    type: "integer"
+  project_code:
+    name: "project_code"
+    in: "query"
+    description: "Case-insensitive, URL encoded match of a project code to filter the list response to a single project"
+    required: false
+    type: "string"
+  non_billable:
+    name: non_billable
+    in: "query"
+    description: Filter response on `0` = billable or `1` = non-billable projects
+    required: false
+    type: integer
+  status:
+    name: status
+    in: "query"
+    description: Filter response on the `status` of a project
+    required: false
+    type: integer
+  expand:
+    name: "expand"
+    in: "query"
+    description: "Comma-delimited values expands the response with additional fields: `expenses`, `phases`, `project_tasks`, `project_team`, `currency`"
+    required: false
+    type: "string"
+
+projects:
+  get:
+    tags:
+      - "Projects"
+    summary: "List projects"
+    operationId: "getProjects"
+    parameters:
+      - $ref: "#/parameters/project_code"
+      - $ref: "../swagger-api-v3.yaml#/parameters/client_id"
+      - $ref: "../swagger-api-v3.yaml#/parameters/active"
+      - $ref: "#/parameters/non_billable"
+      - $ref: "#/parameters/status"
+      - $ref: "../swagger-api-v3.yaml#/parameters/tag_name"
+      - $ref: "../swagger-api-v3.yaml#/parameters/page"
+      - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+      - $ref: "../swagger-api-v3.yaml#/parameters/sort"
+      - $ref: "../swagger-api-v3.yaml#/parameters/modified_since"
+      - $ref: "../swagger-api-v3.yaml#/parameters/fields"
+      - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "The list of projects"
+        schema:
+          type: "array"
+          title: "Array of projects"
+          items:
+            $ref: "#/definitions/Project"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+      - "Projects"
+    summary: "Add a new project"
+    operationId: "addProject"
+    parameters:
+      - in: "body"
+        name: "data"
+        description: "The project to create, read-only fields are ignored"
+        required: false
+        schema:
+          $ref: "#/definitions/Project"
+    responses:
+      201:
+        description: "If the project was successfully created, the response returns the full information about that project."
+        schema:
+          $ref: "#/definitions/Project"
+      422:
+        description: "Data validation failure."
+
+projects-id:
+  get:
+    tags:
+      - "Projects"
+    summary: "Retrieve a single project."
+    description: "Retrieve a single project"
+    operationId: "getProject"
+    parameters:
+      - $ref: "#/parameters/project_id"
+      - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "Details of a single project"
+        schema:
+          $ref: "#/definitions/Project"
+      404:
+        description: "The project does not exist."
+  delete:
+    tags:
+      - "Projects"
+    summary: "Delete a project"
+    description: "Deleting a project will delete all associated allocations (`task_id`) and logged time, as well as any phases and associations, this is an irreversible action"
+    operationId: "deleteProject"
+    parameters:
+      - $ref: "#/parameters/project_id"
+    responses:
+      204:
+        description: "Delete successful, all associated allocations, logged time and phases for this `project_id` have also been deleted"
+      404:
+        description: "The project does not exist."
+  patch:
+    tags:
+      - "Projects"
+    summary: "Update a project's details, read-only fields are ignored"
+    description: >
+      To update the project team including unassigned roles there are 3 actions on the `project_team` field; `set`, `add` and `del`:
+        * Use `set` as an array of project team objects of `people_id`,`role_id` and `hourly_rate` to replace all people and their project rates
+        * Use `add` as an array of project team objects of `people_id`, `role_id` and `hourly_rate` to add additional people and their roles & rates
+        * Use `del` as an array of `people_id` to remove people from the project_team
+
+        To assign a role to a project, `set` or `add` a `role_id` to the project_team object without a `people_id`. An unassigned role placeholder will be returned in the response. See the [Using unassigned roles](/tutorial_unassigned_roles.html) tutorial for more details.
+
+      CAUTION: `set` and `del` actions that remove people will **cascade-delete** all associated Allocations (`task_id`) and Logged time for that person on the project.
+    operationId: "updateProject"
+    parameters:
+      - $ref: "#/parameters/project_id"
+      - $ref: "#/parameters/expand"
+      - in: "body"
+        name: "data"
+        description: "The project data to update, read-only fields are ignored"
+        required: false
+        schema:
+          $ref: "#/definitions/ProjectWithProjectTeam"
+    responses:
+      200:
+        description: "On a successful update of a project, the response returns the full information about that project."
+        schema:
+          $ref: "#/definitions/Project"
+      422:
+        description: "Data validation failure, see error for details"

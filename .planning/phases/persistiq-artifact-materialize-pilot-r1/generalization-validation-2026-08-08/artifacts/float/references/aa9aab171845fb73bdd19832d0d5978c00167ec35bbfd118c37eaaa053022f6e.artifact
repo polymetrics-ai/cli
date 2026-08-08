@@ -1,0 +1,186 @@
+definitions:
+  ProjectStage:
+    type: "object"
+    title: "ProjectStage"
+    required:
+    - "name"
+    - "project_status"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+        description: "The ID of the project stage"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Likely"
+        description: "The name of the project stage, must be unique across all stages"
+        maxLength: 50
+      description:
+        type: "string"
+        example: "Set expectations without notifications or time tracking. Team allocations are visible everywhere."
+        description: "A description of the project stage"
+        maxLength: 100
+      project_status:
+        type: "integer"
+        example: 1
+        description: "The project status associated with this stage `0` = Draft, `1` = Tentative, `2` = Confirmed, `3` = Completed, `4` = Canceled. Required to create a stage and cannot be changed later"
+      active:
+        type: "integer"
+        example: 1
+        description: "Is this project stage active? `1` = Active, `0` = Archived"
+      sort_order:
+        type: "integer"
+        example: 1
+        description: "The sort order for displaying project stages, defaults to `10` if not provided"
+      color:
+        type: "string"
+        example: "0B752E"
+        description: "Hex color for the project stage. Allowed values: `344765` (Grey blue, default for draft & canceled), `0B752E` (Green, default for confirmed), `BD4B00` (Orange, default for tentative), `2E5FE8` (Bright blue, default for complete), `9D1010` (Red). If `null` or omitted, the default color from the project_status will apply."
+      created:
+        type: "string"
+        example: "2024-10-30 02:40:40"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2024-11-14 03:02:05"
+        description: "Date this record was last modified"
+        readOnly: true
+      created_by:
+        type: "integer"
+        example: 80851
+        description: "Account ID of the person who created this project stage"
+        readOnly: true
+      modified_by:
+        type: "integer"
+        example: 80851
+        description: "Account ID of the person who last modified this project stage"
+        readOnly: true
+      project_count:
+        type: "integer"
+        example: 15
+        description: "`expand` field. Number of projects currently using this project stage"
+        readOnly: true
+
+parameters:
+  id:
+    name: "id"
+    in: "path"
+    description: "The project stage's ID"
+    required: true
+    type: "integer"
+  expand:
+    name: "expand"
+    in: "query"
+    description: "Comma-delimited values expands the response with additional fields: `project_count`"
+    required: false
+    type: "string"
+
+project-stages:
+  get:
+    tags:
+    - "Project Stages"
+    summary: "List project stages"
+    operationId: "getProjectStages"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/active"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/sort"
+    - $ref: "../swagger-api-v3.yaml#/parameters/fields"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "The list of project stages"
+        schema:
+          type: "array"
+          title: "Array of project stages"
+          items:
+            $ref: "#/definitions/ProjectStage"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Project Stages"
+    summary: "Add a new project stage"
+    operationId: "addProjectStage"
+    parameters:
+    - in: "body"
+      name: "data"
+      description: "The project stage to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/ProjectStage"
+    responses:
+      201:
+        description: "If the project stage was successfully created, the response returns the full information about that project stage."
+        schema:
+          $ref: "#/definitions/ProjectStage"
+      422:
+        description: "Data validation failure."
+
+project-stages-id:
+  get:
+    tags:
+    - "Project Stages"
+    summary: "Retrieve a single project stage."
+    description: "Retrieve a single project stage"
+    operationId: "getProjectStage"
+    parameters:
+    - $ref: "#/parameters/id"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "Details of a single project stage"
+        schema:
+          $ref: "#/definitions/ProjectStage"
+      404:
+        description: "The project stage does not exist."
+  delete:
+    tags:
+    - "Project Stages"
+    summary: "Delete a project stage"
+    description: "Deleting a project stage will remove it from the available stages for projects, this is an irreversible action"
+    operationId: "deleteProjectStage"
+    parameters:
+    - $ref: "#/parameters/id"
+    responses:
+      204:
+        description: "Delete successful, the project stage has been removed"
+      404:
+        description: "The project stage does not exist."
+      422:
+        description: "Data validation failure. The project stage cannot be deleted if it is currently linked to projects."
+  patch:
+    tags:
+    - "Project Stages"
+    summary: "Update a project stage's details, read-only fields are ignored"
+    description: "Stages may be updated or archived, `project_status` cannot be changed"
+    operationId: "updateProjectStage"
+    parameters:
+    - $ref: "#/parameters/id"
+    - in: "body"
+      name: "data"
+      description: "The project stage data to update, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/ProjectStage"
+    responses:
+      200:
+        description: "On a successful update of a project stage, the response returns the full information about that project stage."
+        schema:
+          $ref: "#/definitions/ProjectStage"
+      422:
+        description: "Data validation failure."

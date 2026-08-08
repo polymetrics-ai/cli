@@ -1,0 +1,47 @@
+connector	command	exit
+watchmode	__namespace__	0
+watchmode	api get autocomplete-search	0
+watchmode	api get changes new-people	0
+watchmode	api get changes new-titles	0
+watchmode	api get changes titles-details-changed	0
+watchmode	api get changes titles-episodes-changed	0
+watchmode	api get changes titles-sources-changed	0
+watchmode	api get genres	0
+watchmode	api get list-titles	0
+watchmode	api get networks	0
+watchmode	api get person person-id	0
+watchmode	api get regions	0
+watchmode	api get releases	0
+watchmode	api get search	0
+watchmode	api get sources	0
+watchmode	api get status	0
+watchmode	api get title title-id cast-crew	0
+watchmode	api get title title-id details	0
+watchmode	api get title title-id episodes	0
+watchmode	api get title title-id episodes episode-id	0
+watchmode	api get title title-id incorrect-data	0
+watchmode	api get title title-id seasons	0
+watchmode	api get title title-id sources	0
+watchmode	api get title-release-dates	0
+watchmode	api get v1 autocomplete-search	0
+watchmode	api get v1 changes new-people	0
+watchmode	api get v1 changes new-titles	0
+watchmode	api get v1 changes titles-details-changed	0
+watchmode	api get v1 changes titles-episodes-changed	0
+watchmode	api get v1 changes titles-sources-changed	0
+watchmode	api get v1 status	0
+watchmode	api get v1 title title-id incorrect-data	0
+watchmode	api get v1 title-release-dates	0
+watchmode	genres list	0
+watchmode	networks list	0
+watchmode	person details list	0
+watchmode	regions list	0
+watchmode	releases list	0
+watchmode	search list	0
+watchmode	sources list	0
+watchmode	title cast crew list	0
+watchmode	title details list	0
+watchmode	title episodes list	0
+watchmode	title seasons list	0
+watchmode	title sources list	0
+watchmode	titles list	0

@@ -18,6 +18,8 @@
         "properties": {
           "id": { "type": "string" },
           "url": { "type": "string" },
+          "kind": { "type": "string" },
+          "version": { "type": "string" },
           "retrieved_at": { "type": "string" },
           "sha256": { "type": "string" }
         }
@@ -40,7 +42,28 @@
             "additionalProperties": false,
             "properties": {
               "artifact": { "type": "string" },
-              "source_url": { "type": "string" }
+              "source_url": { "type": "string" },
+              "source_kind": { "type": "string" },
+              "version": { "type": "string" },
+              "retrieved_at": { "type": "string" },
+              "sha256": { "type": "string" },
+              "coordinate": { "type": "string" },
+              "alternatives": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["source_url"],
+                  "properties": {
+                    "source_url": { "type": "string" },
+                    "source_kind": { "type": "string" },
+                    "version": { "type": "string" },
+                    "retrieved_at": { "type": "string" },
+                    "sha256": { "type": "string" },
+                    "coordinate": { "type": "string" }
+                  }
+                }
+              }
             }
           },
           "covered_by": {

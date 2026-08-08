@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "people",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "prefix": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "integer"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "emails": {
+      "type": "array"
+    },
+    "phone_numbers": {
+      "type": "array"
+    },
+    "assignee_id": {
+      "type": "integer"
+    },
+    "contact_type_id": {
+      "type": "integer"
+    },
+    "date_created": {
+      "type": "integer"
+    },
+    "date_modified": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "date_modified"
+}

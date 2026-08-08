@@ -1,0 +1,154 @@
+definitions:
+  Milestone:
+    type: "object"
+    required:
+    - "date"
+    - "name"
+    - "project_id"
+    properties:
+      milestone_id:
+        type: "integer"
+        example: 1
+        description: "The ID of this milestone"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Sprint #14"
+        description: "The name of the milestone"
+        maxLength: 200
+      project_id:
+        type: "integer"
+        example: 1
+        description: "The project that this milestone belongs to"
+      phase_id:
+        type: "integer"
+        example: 1
+        description: "The phase that this milestone belongs to"
+      date:
+        type: "string"
+        example: "2019-12-01 09:00"
+        description: "Start date of the milestone"
+      end_date:
+        type: "string"
+        example: "2019-12-05 17:00"
+        description: "End date of the milestone if more than 1 day"
+      created:
+        type: "string"
+        example: "2019-05-07 10:26:49"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2019-05-07 11:26:49"
+        description: "Date this record was last modified"
+        readOnly: true
+        title: "Milestone"
+
+milestones:
+  get:
+    tags:
+    - "Milestones"
+    summary: "List project milestones"
+    operationId: "getMilestones"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/client_id"
+    - $ref: "../swagger-api-v3.yaml#/parameters/project_id"
+    - $ref: "../swagger-api-v3.yaml#/parameters/phase_id"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    responses:
+      200:
+        description: "list of milestones for a project"
+        schema:
+          type: "array"
+          title: "Array of milestones"
+          items:
+            $ref: "#/definitions/Milestone"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Milestones"
+    summary: "Add a new project milestone"
+    operationId: "addMilestone"
+    parameters:
+    - in: "body"
+      name: "milestone"
+      description: "The milestone to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/Milestone"
+    responses:
+      201:
+        description: "If the milestone was successfully created, the response returns\
+          \ the full information about that milestone."
+        schema:
+          $ref: "#/definitions/Milestone"
+      422:
+        description: "Data validation failure if fields are missing or the milestone\
+          \ already exists.\n"
+
+milestones-id:
+  get:
+    tags:
+    - "Milestones"
+    summary: "Retrieve a single milestone"
+    description: "Returns a single milestone."
+    operationId: "getMilestone"
+    parameters:
+    - name: "milestone_id"
+      in: "path"
+      description: "The milestone's ID"
+      required: true
+      type: "integer"
+    responses:
+      200:
+        description: "A milestone"
+        schema:
+          $ref: "#/definitions/Milestone"
+  delete:
+    tags:
+    - "Milestones"
+    summary: "Delete a milestone"
+    operationId: "deleteMilestone"
+    parameters:
+    - name: "milestone_id"
+      in: "path"
+      description: "milestone id to delete"
+      required: true
+      type: "integer"
+    responses:
+      204:
+        description: Delete successful.
+      404:
+        description: "The milestone does not exist."
+  patch:
+    tags:
+    - "Milestones"
+    summary: "Update a milestone's details, read-only fields are ignored"
+    operationId: "updateMilestone"
+    parameters:
+    - name: "milestone_id"
+      in: "path"
+      description: "The milestone's ID"
+      required: true
+      type: "integer"
+    responses:
+      200:
+        description: "On a successful update of a milestone, the response returns\
+          \ the full information about that milestone."
+        schema:
+          $ref: "#/definitions/Milestone"
+      422:
+        description: "Data validation failure.\n"

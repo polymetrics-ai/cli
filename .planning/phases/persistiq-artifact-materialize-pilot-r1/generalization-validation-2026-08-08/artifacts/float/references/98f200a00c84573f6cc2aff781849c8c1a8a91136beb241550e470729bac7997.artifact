@@ -1,0 +1,122 @@
+definitions:
+  Client:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      client_id:
+        type: "integer"
+        example: 1
+        description: "The ID of this client"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Red Circle"
+        description: "The name of the client"
+        maxLength: 200
+    title: "Client"
+
+clients:
+  get:
+    tags:
+    - "Clients"
+    summary: "List clients"
+    operationId: "getClients"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    responses:
+      200:
+        description: "List of clients"
+        schema:
+          type: "array"
+          title: "Array of clients"
+          items:
+            $ref: "#/definitions/Client"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Clients"
+    summary: "Add a new client"
+    operationId: "addClient"
+    parameters:
+    - in: "body"
+      name: "data"
+      description: "The client to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/Client"
+    responses:
+      201:
+        description: "If the client was successfully created, the response returns\
+          \ the full information about that client."
+        schema:
+          $ref: "#/definitions/Client"
+      422:
+        description: "Data validation failure.\n"
+
+clients-id:
+  get:
+    tags:
+    - "Clients"
+    summary: "Retrieve a single client"
+    description: "Returns a single client."
+    operationId: "getClient"
+    parameters:
+    - name: "client_id"
+      in: "path"
+      description: "The client's ID"
+      required: true
+      type: "integer"
+    responses:
+      200:
+        description: "A client"
+        schema:
+          $ref: "#/definitions/Client"
+  delete:
+    tags:
+    - "Clients"
+    summary: "Delete a client"
+    operationId: "deleteClient"
+    parameters:
+    - name: "client_id"
+      in: "path"
+      description: "client id to delete"
+      required: true
+      type: "integer"
+    responses:
+      204:
+        description: "Delete successful, if this `client_id` is currently used in any project it will be set to `null`."
+      404:
+        description: "The client does not exist."
+  patch:
+    tags:
+    - "Clients"
+    summary: "Update a client's name, read-only fields are ignored"
+    operationId: "updateClient"
+    parameters:
+    - name: "client_id"
+      in: "path"
+      description: "The client's ID"
+      required: true
+      type: "integer"
+    responses:
+      200:
+        description: "On a successful update of a client, the response returns the\
+          \ full information about that client."
+        schema:
+          $ref: "#/definitions/Client"
+      422:
+        description: "Data validation failure.\n"

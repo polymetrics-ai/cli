@@ -66,6 +66,7 @@ type BatchMaterializeIncluded struct {
 // owns URL/date/digest only; this report preserves the provider version rather
 // than inventing another shared provenance field.
 type BatchMaterialArtifact struct {
+	Kind        string `json:"kind"`
 	URL         string `json:"url"`
 	Version     string `json:"version"`
 	RetrievedAt string `json:"retrieved_at"`
@@ -261,12 +262,12 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, batchArtifactDropStage(err, "artifact_fetch"), err)
 	}
-	artifactEndpoints, err := parseBatchOpenAPIArtifact(rawArtifact)
+	artifactInventory, err := parseBatchManifestArtifact(opts, candidate, rawArtifact)
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, batchArtifactDropStage(err, "artifact_parse"), err)
 	}
 	sha := fmt.Sprintf("%x", sha256.Sum256(rawArtifact))
-	surface, err := materializeAPISurface(bundle, candidate, opts.retrievedAt, sha, artifactEndpoints)
+	surface, err := materializeAPISurface(bundle, candidate, opts.retrievedAt, sha, artifactInventory.Endpoints, artifactInventory.Sources)
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "coverage", err)
 	}
@@ -312,12 +313,13 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	return BatchMaterializeIncluded{
 		Connector: candidate.Connector,
 		Artifact: BatchMaterialArtifact{
+			Kind:        candidate.Artifact.Kind,
 			URL:         candidate.Artifact.URL,
 			Version:     candidate.Artifact.Version,
 			RetrievedAt: opts.retrievedAt,
 			SHA256:      sha,
 		},
-		ArtifactOperations:       len(artifactEndpoints),
+		ArtifactOperations:       len(artifactInventory.Endpoints),
 		DeclaredOperations:       split.total(),
 		OperationSplit:           split,
 		CLICommands:              len(cli.Commands),
@@ -327,6 +329,168 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 		RuntimePreflightCommands: 0,
 		OperationExecutors:       len(operations),
 	}, nil
+}
+
+func parseBatchManifestArtifact(opts batchMaterializeOptions, candidate BatchManifestConnector, raw []byte) (batchArtifactInventory, error) {
+	source := batchArtifactSource{
+		URL:       candidate.Artifact.URL,
+		Kind:      candidate.Artifact.Kind,
+		Version:   candidate.Artifact.Version,
+		Retrieved: opts.retrievedAt,
+		SHA256:    fmt.Sprintf("%x", sha256.Sum256(raw)),
+	}
+	fetch := batchArtifactSourceFetcher(opts, candidate)
+	primary, primaryErr := parseBatchArtifactByKind(raw, source, fetch)
+	if primaryErr == nil {
+		if candidate.ProviderReferenceURL != "" && len(primary.Endpoints) < candidate.OperationsTotal && candidate.ProviderReferenceURL != candidate.Artifact.URL {
+			referenceRaw, err := fetch(candidate.ProviderReferenceURL)
+			if err != nil {
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact yielded %d operation(s), below the ledger's %d; official reference fallback %q could not be fetched: %v", len(primary.Endpoints), candidate.OperationsTotal, candidate.ProviderReferenceURL, err)
+			}
+			referenceSource := source
+			referenceSource.URL = candidate.ProviderReferenceURL
+			referenceSource.Kind = "official-reference"
+			referenceSource.SHA256 = fmt.Sprintf("%x", sha256.Sum256(referenceRaw))
+			fallback, fallbackErr := parseBatchArtifactByKind(referenceRaw, referenceSource, fetch)
+			if fallbackErr != nil {
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact yielded %d operation(s), below the ledger's %d; official reference fallback %q could not be parsed: %v", len(primary.Endpoints), candidate.OperationsTotal, candidate.ProviderReferenceURL, fallbackErr)
+			}
+			primary = mergeBatchArtifactInventories(primary, fallback)
+		}
+		return primary, nil
+	}
+	if candidate.ProviderReferenceURL != "" && candidate.ProviderReferenceURL != candidate.Artifact.URL {
+		referenceRaw, err := fetch(candidate.ProviderReferenceURL)
+		if err != nil {
+			return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact parse failed (%v), and official reference fallback %q could not be fetched: %v", primaryErr, candidate.ProviderReferenceURL, err)
+		}
+		referenceSource := source
+		referenceSource.URL = candidate.ProviderReferenceURL
+		referenceSource.Kind = "official-reference"
+		referenceSource.SHA256 = fmt.Sprintf("%x", sha256.Sum256(referenceRaw))
+		fallback, fallbackErr := parseBatchArtifactByKind(referenceRaw, referenceSource, fetch)
+		if fallbackErr != nil {
+			return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact parse failed (%v), and official reference fallback %q could not be parsed: %v", primaryErr, candidate.ProviderReferenceURL, fallbackErr)
+		}
+		return fallback, nil
+	}
+	return batchArtifactInventory{}, primaryErr
+}
+
+func parseBatchOpenAPIArtifactSource(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
+	inventory, err := parseBatchOpenAPIArtifactAt(raw, source.URL, fetch)
+	if err != nil {
+		return batchArtifactInventory{}, err
+	}
+	for index := range inventory.Sources {
+		if inventory.Sources[index].Retrieved == "" {
+			inventory.Sources[index].Retrieved = source.Retrieved
+		}
+		if inventory.Sources[index].Kind == "" || inventory.Sources[index].Kind == "openapi" && source.Kind == "swagger" {
+			inventory.Sources[index].Kind = source.Kind
+		}
+		if inventory.Sources[index].Version == "" {
+			inventory.Sources[index].Version = source.Version
+		}
+	}
+	for index := range inventory.Endpoints {
+		endpoint := &inventory.Endpoints[index]
+		if endpoint.SourceURL == "" {
+			endpoint.SourceURL = source.URL
+		}
+		if endpoint.SourceKind == "" {
+			endpoint.SourceKind = source.Kind
+		}
+		if endpoint.SourceVersion == "" {
+			endpoint.SourceVersion = source.Version
+		}
+		if endpoint.SourceRetrieved == "" {
+			endpoint.SourceRetrieved = source.Retrieved
+		}
+		if endpoint.SourceSHA256 == "" && endpoint.SourceURL == source.URL {
+			endpoint.SourceSHA256 = source.SHA256
+		}
+	}
+	return inventory, nil
+}
+
+type batchArtifactEndpointAlternative struct {
+	SourceURL        string
+	SourceKind       string
+	SourceVersion    string
+	SourceRetrieved  string
+	SourceSHA256     string
+	SourceCoordinate string
+}
+
+func parseBatchArtifactByKind(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
+	switch strings.ToLower(strings.TrimSpace(source.Kind)) {
+	case "postman":
+		return parseBatchPostmanArtifact(raw, source)
+	case "openapi", "swagger":
+		return parseBatchOpenAPIArtifactSource(raw, source, fetch)
+	case "openapi_fragments":
+		return parseBatchHTMLReference(raw, source, fetch)
+	case "html_reference", "official-reference":
+		if inventory, err := parseBatchOpenAPIArtifactSource(raw, source, fetch); err == nil {
+			return inventory, nil
+		}
+		if inventory, err := parseBatchPostmanArtifact(raw, source); err == nil {
+			return inventory, nil
+		}
+		return parseBatchHTMLReference(raw, source, fetch)
+	default:
+		if inventory, err := parseBatchOpenAPIArtifactSource(raw, source, fetch); err == nil {
+			return inventory, nil
+		}
+		return parseBatchPostmanArtifact(raw, source)
+	}
+}
+
+func mergeBatchArtifactInventories(primary, fallback batchArtifactInventory) batchArtifactInventory {
+	merged := batchArtifactInventory{
+		Endpoints: append([]batchArtifactEndpoint(nil), primary.Endpoints...),
+		Sources:   append([]batchArtifactSource(nil), primary.Sources...),
+	}
+	seenSources := map[string]bool{}
+	for _, source := range merged.Sources {
+		seenSources[source.URL] = true
+	}
+	for _, source := range fallback.Sources {
+		if source.URL != "" && !seenSources[source.URL] {
+			seenSources[source.URL] = true
+			merged.Sources = append(merged.Sources, source)
+		}
+	}
+	seenEndpoints := map[string]int{}
+	for index, endpoint := range merged.Endpoints {
+		seenEndpoints[batchArtifactEndpointKey(endpoint.Method, endpoint.Path)] = index
+	}
+	for _, endpoint := range fallback.Endpoints {
+		key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
+		if index, exists := seenEndpoints[key]; exists {
+			if endpoint.SourceURL != "" && (endpoint.SourceURL != merged.Endpoints[index].SourceURL || endpoint.SourceCoordinate != merged.Endpoints[index].SourceCoordinate) {
+				merged.Endpoints[index].Alternatives = append(merged.Endpoints[index].Alternatives, batchArtifactEndpointAlternative{
+					SourceURL:        endpoint.SourceURL,
+					SourceKind:       endpoint.SourceKind,
+					SourceVersion:    endpoint.SourceVersion,
+					SourceRetrieved:  endpoint.SourceRetrieved,
+					SourceSHA256:     endpoint.SourceSHA256,
+					SourceCoordinate: endpoint.SourceCoordinate,
+				})
+			}
+			continue
+		}
+		seenEndpoints[key] = len(merged.Endpoints)
+		merged.Endpoints = append(merged.Endpoints, endpoint)
+	}
+	sort.Slice(merged.Endpoints, func(i, j int) bool {
+		if merged.Endpoints[i].Path != merged.Endpoints[j].Path {
+			return merged.Endpoints[i].Path < merged.Endpoints[j].Path
+		}
+		return batchArtifactMethodRank(merged.Endpoints[i].Method) < batchArtifactMethodRank(merged.Endpoints[j].Method)
+	})
+	return merged
 }
 
 type batchBundleCollisionError struct {
@@ -501,7 +665,7 @@ func readBatchMaterializeArtifactCache(dir, connector string) ([]byte, error) {
 		return nil, err
 	}
 	var matches []string
-	for _, extension := range []string{".json", ".yaml", ".yml"} {
+	for _, extension := range []string{".json", ".yaml", ".yml", ".txt", ".md", ".html", ".htm"} {
 		candidate := filepath.Join(root, connector+extension)
 		info, err := os.Stat(candidate)
 		if err == nil && info.Mode().IsRegular() {
@@ -514,7 +678,7 @@ func readBatchMaterializeArtifactCache(dir, connector string) ([]byte, error) {
 	}
 	if len(matches) != 1 {
 		if len(matches) == 0 {
-			return nil, fmt.Errorf("artifact cache has no %s.{json,yaml,yml}", connector)
+			return nil, fmt.Errorf("artifact cache has no %s.{json,yaml,yml,txt,md,html,htm}", connector)
 		}
 		return nil, fmt.Errorf("artifact cache has multiple files for %s", connector)
 	}
@@ -535,22 +699,71 @@ func readBoundedArtifactFile(path string) ([]byte, error) {
 	return os.ReadFile(path)
 }
 
+func batchArtifactSourceFetcher(opts batchMaterializeOptions, candidate BatchManifestConnector) batchArtifactFetchFunc {
+	return func(rawURL string) ([]byte, error) {
+		if opts.artifactDir != "" {
+			cachePath, err := batchArtifactReferenceCachePath(opts.artifactDir, candidate.Connector, rawURL)
+			if err != nil {
+				return nil, err
+			}
+			if raw, cacheErr := readBoundedArtifactFile(cachePath); cacheErr == nil {
+				return raw, nil
+			} else if !errors.Is(cacheErr, os.ErrNotExist) {
+				return nil, fmt.Errorf("read cached external artifact %q: %w", rawURL, cacheErr)
+			}
+			raw, err := fetchBatchMaterializeSource(rawURL)
+			if err != nil {
+				return nil, err
+			}
+			if err := writeBatchFile(cachePath, raw); err != nil {
+				return nil, fmt.Errorf("cache external artifact %q: %w", rawURL, err)
+			}
+			return raw, nil
+		}
+		return fetchBatchMaterializeSource(rawURL)
+	}
+}
+
+func batchArtifactReferenceCachePath(dir, connector, rawURL string) (string, error) {
+	if err := validateBatchConnectorName(connector); err != nil {
+		return "", err
+	}
+	root, err := filepath.Abs(dir)
+	if err != nil {
+		return "", err
+	}
+	digest := fmt.Sprintf("%x", sha256.Sum256([]byte(rawURL)))
+	return filepath.Join(root, connector, "references", digest+".artifact"), nil
+}
+
 func fetchBatchMaterializeArtifact(rawURL string) ([]byte, error) {
 	parsed, err := parseBatchArtifactURL(rawURL)
 	if err != nil {
 		return nil, err
 	}
+	return fetchBatchMaterializeURL(parsed, false)
+}
+
+func fetchBatchMaterializeSource(rawURL string) ([]byte, error) {
+	parsed, err := parseBatchReferenceURL(rawURL)
+	if err != nil {
+		return nil, err
+	}
+	return fetchBatchMaterializeURL(parsed, true)
+}
+
+func fetchBatchMaterializeURL(parsed *url.URL, allowQuery bool) ([]byte, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	lookup := batchArtifactLookupIPAddr(net.DefaultResolver.LookupIPAddr)
-	if err := validateBatchArtifactRequestURL(ctx, parsed, lookup); err != nil {
+	if err := validateBatchArtifactRequestURLWithQuery(ctx, parsed, lookup, allowQuery); err != nil {
 		return nil, fmt.Errorf("validate artifact destination: %w", err)
 	}
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, parsed.String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("build artifact request: %w", err)
 	}
-	response, err := newBatchArtifactHTTPClient(lookup).Do(request)
+	response, err := newBatchArtifactHTTPClientWithQuery(lookup, allowQuery).Do(request)
 	if err != nil {
 		return nil, fmt.Errorf("fetch artifact: %w", err)
 	}
@@ -637,8 +850,29 @@ func parseBatchArtifactURL(raw string) (*url.URL, error) {
 	return parsed, nil
 }
 
+func parseBatchReferenceURL(raw string) (*url.URL, error) {
+	if raw == "" || raw != strings.TrimSpace(raw) {
+		return nil, errors.New("official reference URL must be a non-empty absolute HTTPS URL")
+	}
+	parsed, err := url.Parse(raw)
+	if err != nil || !parsed.IsAbs() || parsed.Scheme != "https" || parsed.Host == "" {
+		return nil, errors.New("official reference URL must be an absolute HTTPS URL")
+	}
+	if parsed.User != nil || parsed.Fragment != "" || strings.Contains(raw, "#") {
+		return nil, errors.New("official reference URL must not include userinfo or fragments")
+	}
+	if err := validateBatchArtifactURLObjectWithQuery(parsed, true); err != nil {
+		return nil, err
+	}
+	return parsed, nil
+}
+
 func validateBatchArtifactRequestURL(ctx context.Context, parsed *url.URL, lookup batchArtifactLookupIPAddr) error {
-	if err := validateBatchArtifactURLObject(parsed); err != nil {
+	return validateBatchArtifactRequestURLWithQuery(ctx, parsed, lookup, false)
+}
+
+func validateBatchArtifactRequestURLWithQuery(ctx context.Context, parsed *url.URL, lookup batchArtifactLookupIPAddr, allowQuery bool) error {
+	if err := validateBatchArtifactURLObjectWithQuery(parsed, allowQuery); err != nil {
 		return err
 	}
 	_, err := batchArtifactPublicAddresses(ctx, parsed.Hostname(), lookup)
@@ -646,14 +880,28 @@ func validateBatchArtifactRequestURL(ctx context.Context, parsed *url.URL, looku
 }
 
 func validateBatchArtifactURLObject(parsed *url.URL) error {
+	return validateBatchArtifactURLObjectWithQuery(parsed, false)
+}
+
+func validateBatchArtifactURLObjectWithQuery(parsed *url.URL, allowQuery bool) error {
 	if parsed == nil || !parsed.IsAbs() || parsed.Scheme != "https" || parsed.Host == "" {
 		return errors.New("artifact request URL must be an absolute HTTPS URL")
 	}
 	if parsed.User != nil {
 		return errors.New("artifact request URL must not include userinfo")
 	}
-	if parsed.RawQuery != "" || parsed.ForceQuery || parsed.Fragment != "" {
+	if (!allowQuery && (parsed.RawQuery != "" || parsed.ForceQuery)) || parsed.Fragment != "" {
 		return errors.New("artifact request URL must not include query or fragment components")
+	}
+	if allowQuery {
+		for key := range parsed.Query() {
+			lower := strings.ToLower(key)
+			for _, marker := range []string{"token", "secret", "password", "credential", "authorization", "api_key", "access_key"} {
+				if strings.Contains(lower, marker) {
+					return errors.New("artifact reference query must not contain credential-shaped parameters")
+				}
+			}
+		}
 	}
 	host := strings.TrimSuffix(strings.ToLower(parsed.Hostname()), ".")
 	if host == "" || strings.Contains(host, "%") || host == "localhost" || strings.HasSuffix(host, ".localhost") {
@@ -666,6 +914,10 @@ func validateBatchArtifactURLObject(parsed *url.URL) error {
 }
 
 func newBatchArtifactHTTPClient(lookup batchArtifactLookupIPAddr) *http.Client {
+	return newBatchArtifactHTTPClientWithQuery(lookup, false)
+}
+
+func newBatchArtifactHTTPClientWithQuery(lookup batchArtifactLookupIPAddr, allowQuery bool) *http.Client {
 	dialer := &net.Dialer{}
 	transport := &http.Transport{
 		Proxy: nil,
@@ -681,7 +933,7 @@ func newBatchArtifactHTTPClient(lookup batchArtifactLookupIPAddr) *http.Client {
 		Timeout:   30 * time.Second,
 		Transport: transport,
 		CheckRedirect: func(request *http.Request, _ []*http.Request) error {
-			return validateBatchArtifactRequestURL(request.Context(), request.URL, lookup)
+			return validateBatchArtifactRequestURLWithQuery(request.Context(), request.URL, lookup, allowQuery)
 		},
 	}
 }
@@ -767,58 +1019,590 @@ func batchArtifactIPIsPublic(address netip.Addr) bool {
 }
 
 type batchArtifactEndpoint struct {
-	Method  string
-	Path    string
-	Summary string
+	Method           string
+	Path             string
+	Summary          string
+	SourceURL        string
+	SourceKind       string
+	SourceVersion    string
+	SourceRetrieved  string
+	SourceSHA256     string
+	SourceCoordinate string
+	Alternatives     []batchArtifactEndpointAlternative
+	Webhook          bool
+}
+
+// batchArtifactSource is one provider-owned document used to establish one or
+// more normalized operations. References are retained as separate sources so
+// each endpoint can cite the exact document that supplied its path item.
+type batchArtifactSource struct {
+	URL       string
+	Kind      string
+	Version   string
+	Retrieved string
+	SHA256    string
+}
+
+type batchArtifactInventory struct {
+	Endpoints []batchArtifactEndpoint
+	Sources   []batchArtifactSource
+}
+
+type batchArtifactFetchFunc func(string) ([]byte, error)
+
+type batchArtifactDocument struct {
+	Root   *yaml.Node
+	Source batchArtifactSource
+	Base   *url.URL
+}
+
+const (
+	maxBatchArtifactReferenceDocuments = 64
+	maxBatchArtifactReferenceBytes     = 64 << 20
+)
+
+type batchArtifactResolver struct {
+	fetch      batchArtifactFetchFunc
+	documents  map[string]batchArtifactDocument
+	sources    []batchArtifactSource
+	fetched    int
+	totalBytes int
 }
 
 func parseBatchOpenAPIArtifact(raw []byte) ([]batchArtifactEndpoint, error) {
+	inventory, err := parseBatchOpenAPIArtifactAt(raw, "", nil)
+	if err != nil {
+		return nil, err
+	}
+	return inventory.Endpoints, nil
+}
+
+// parseBatchOpenAPIArtifactAt is the source-aware parser used by materialize
+// and by traversal tests. fetch is called only for validated HTTPS external
+// references and is bounded by the caller's artifact fetcher.
+func parseBatchOpenAPIArtifactAt(raw []byte, sourceURL string, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
+	source := batchArtifactSource{URL: sourceURL, Kind: "openapi", SHA256: fmt.Sprintf("%x", sha256.Sum256(raw))}
+	document, err := parseBatchArtifactDocument(raw, source)
+	if err != nil {
+		return batchArtifactInventory{}, fmt.Errorf("decode OpenAPI or Swagger artifact: %w", err)
+	}
+	fields, err := batchYAMLFields(document.Root)
+	if err != nil {
+		return batchArtifactInventory{}, errors.New("artifact root must be a mapping")
+	}
+	openAPI, err := batchYAMLFieldString(fields, "openapi")
+	if err != nil {
+		return batchArtifactInventory{}, fmt.Errorf("artifact openapi field: %w", err)
+	}
+	swagger, err := batchYAMLFieldString(fields, "swagger")
+	if err != nil {
+		return batchArtifactInventory{}, fmt.Errorf("artifact swagger field: %w", err)
+	}
+	switch {
+	case openAPI != "" && strings.HasPrefix(openAPI, "3.") && swagger == "":
+		source.Kind = "openapi"
+		source.Version = openAPI
+	case swagger == "2.0" && openAPI == "":
+		source.Kind = "swagger"
+		source.Version = swagger
+	case openAPI == "" && swagger == "":
+		return batchArtifactInventory{}, errors.New("artifact is not an OpenAPI or Swagger document")
+	default:
+		return batchArtifactInventory{}, fmt.Errorf("artifact must declare OpenAPI 3.x or Swagger 2.0 (openapi=%q swagger=%q)", openAPI, swagger)
+	}
+	document.Source = source
+	resolver := newBatchArtifactResolver(document, fetch)
+	endpoints := make([]batchArtifactEndpoint, 0)
+	seen := map[string]bool{}
+	if paths, ok := fields["paths"]; ok {
+		pathEndpoints, err := batchArtifactEndpointsFromDocument(resolver, document, paths)
+		if err != nil {
+			return batchArtifactInventory{}, err
+		}
+		for _, endpoint := range pathEndpoints {
+			key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
+			if seen[key] {
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("duplicate operation %s %s", endpoint.Method, endpoint.Path)
+			}
+			seen[key] = true
+			endpoints = append(endpoints, endpoint)
+		}
+	}
+	if webhooks, ok := fields["webhooks"]; ok {
+		webhookEndpoints, err := batchArtifactWebhookEndpoints(resolver, document, webhooks)
+		if err != nil {
+			return batchArtifactInventory{}, err
+		}
+		for _, endpoint := range webhookEndpoints {
+			key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
+			if seen[key] {
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("duplicate operation %s %s", endpoint.Method, endpoint.Path)
+			}
+			seen[key] = true
+			endpoints = append(endpoints, endpoint)
+		}
+	}
+	if len(endpoints) == 0 {
+		return batchArtifactInventory{}, errors.New("artifact has no HTTP or webhook operations")
+	}
+	sort.Slice(endpoints, func(i, j int) bool {
+		if endpoints[i].Path != endpoints[j].Path {
+			return endpoints[i].Path < endpoints[j].Path
+		}
+		return batchArtifactMethodRank(endpoints[i].Method) < batchArtifactMethodRank(endpoints[j].Method)
+	})
+	return batchArtifactInventory{Endpoints: endpoints, Sources: resolver.sources}, nil
+}
+
+func parseBatchArtifactDocument(raw []byte, source batchArtifactSource) (batchArtifactDocument, error) {
 	decoder := yaml.NewDecoder(bytes.NewReader(raw))
 	var document yaml.Node
 	if err := decoder.Decode(&document); err != nil {
-		return nil, fmt.Errorf("decode OpenAPI or Swagger artifact: %w", err)
+		return batchArtifactDocument{}, err
 	}
 	var trailing yaml.Node
 	if err := decoder.Decode(&trailing); err != io.EOF {
 		if err != nil {
-			return nil, fmt.Errorf("decode OpenAPI or Swagger artifact: %w", err)
+			return batchArtifactDocument{}, err
 		}
-		return nil, batchArtifactInventoryUnknown("artifact contains multiple YAML documents")
+		return batchArtifactDocument{}, batchArtifactInventoryUnknown("artifact contains multiple YAML documents")
 	}
 	root, err := batchYAMLDeref(yamlDocumentRoot(&document))
 	if err != nil {
-		return nil, err
+		return batchArtifactDocument{}, err
 	}
-	fields, err := batchYAMLFields(root)
+	if _, err := batchYAMLFields(root); err != nil {
+		return batchArtifactDocument{}, errors.New("artifact root must be a mapping")
+	}
+	if source.SHA256 == "" {
+		source.SHA256 = fmt.Sprintf("%x", sha256.Sum256(raw))
+	}
+	var base *url.URL
+	if source.URL != "" {
+		base, _ = url.Parse(source.URL)
+	}
+	return batchArtifactDocument{Root: root, Source: source, Base: base}, nil
+}
+
+func newBatchArtifactResolver(root batchArtifactDocument, fetch batchArtifactFetchFunc) *batchArtifactResolver {
+	resolver := &batchArtifactResolver{
+		fetch:     fetch,
+		documents: map[string]batchArtifactDocument{},
+		sources:   []batchArtifactSource{},
+	}
+	key := root.Source.URL
+	if key == "" {
+		key = "<root>"
+	}
+	resolver.documents[key] = root
+	if root.Source.URL != "" {
+		resolver.sources = append(resolver.sources, root.Source)
+	}
+	return resolver
+}
+
+func (resolver *batchArtifactResolver) documentKey(document batchArtifactDocument) string {
+	if document.Source.URL == "" {
+		return "<root>"
+	}
+	return document.Source.URL
+}
+
+func (resolver *batchArtifactResolver) resolvePathItem(document batchArtifactDocument, pathItem *yaml.Node, refs map[string]bool) (*yaml.Node, batchArtifactDocument, error) {
+	pathItem, err := batchYAMLDeref(pathItem)
 	if err != nil {
-		return nil, errors.New("artifact root must be a mapping")
+		return nil, document, err
 	}
-	openAPI, err := batchYAMLFieldString(fields, "openapi")
+	fields, err := batchYAMLFields(pathItem)
 	if err != nil {
-		return nil, fmt.Errorf("artifact openapi field: %w", err)
+		return nil, document, batchArtifactInventoryUnknown("path item is not a mapping")
 	}
-	swagger, err := batchYAMLFieldString(fields, "swagger")
+	refNode, hasRef := fields["$ref"]
+	if !hasRef {
+		return pathItem, document, nil
+	}
+	ref, err := batchYAMLFieldString(fields, "$ref")
+	if err != nil || ref == "" {
+		return nil, document, batchArtifactInventoryUnknown("path-item reference must be a non-empty string")
+	}
+	for _, key := range batchYAMLFieldNames(fields) {
+		if key == "$ref" || key == "summary" || key == "description" || strings.HasPrefix(key, "x-") {
+			continue
+		}
+		return nil, document, batchArtifactInventoryUnknown("path-item reference %q has unsupported sibling %q", ref, key)
+	}
+	cycleKey := resolver.documentKey(document) + "#" + ref
+	if refs[cycleKey] {
+		return nil, document, batchArtifactInventoryUnknown("path-item reference cycle at %q", ref)
+	}
+	refs[cycleKey] = true
+	defer delete(refs, cycleKey)
+	target, targetDocument, err := resolver.resolveReference(document, ref)
 	if err != nil {
-		return nil, fmt.Errorf("artifact swagger field: %w", err)
+		return nil, document, err
 	}
-	switch {
-	case openAPI != "" && strings.HasPrefix(openAPI, "3.") && swagger == "":
-	case swagger == "2.0" && openAPI == "":
-	case openAPI == "" && swagger == "":
-		return nil, errors.New("artifact is not an OpenAPI or Swagger document")
-	default:
-		return nil, fmt.Errorf("artifact must declare OpenAPI 3.x or Swagger 2.0 (openapi=%q swagger=%q)", openAPI, swagger)
+	if target == refNode {
+		return nil, document, batchArtifactInventoryUnknown("path-item reference %q resolves to itself", ref)
 	}
-	if webhooks, ok := fields["webhooks"]; ok {
-		if err := batchArtifactWebhooksUnknown(webhooks); err != nil {
-			return nil, err
+	return resolver.resolvePathItem(targetDocument, target, refs)
+}
+
+func (resolver *batchArtifactResolver) resolveReference(document batchArtifactDocument, reference string) (*yaml.Node, batchArtifactDocument, error) {
+	parsed, err := url.Parse(reference)
+	if err != nil {
+		return nil, document, batchArtifactInventoryUnknown("path-item reference %q is not a valid URL reference", reference)
+	}
+	if parsed.Scheme == "" && parsed.Host == "" && parsed.Path == "" {
+		node, err := resolveBatchArtifactJSONPointer(document.Root, parsed.Fragment, reference)
+		return node, document, err
+	}
+	if document.Base == nil {
+		return nil, document, batchArtifactInventoryUnknown("external path-item reference %q has no HTTPS base URL", reference)
+	}
+	resolvedURL := document.Base.ResolveReference(parsed)
+	fragment := resolvedURL.Fragment
+	resolvedURL.Fragment = ""
+	if err := validateBatchArtifactURLObject(resolvedURL); err != nil {
+		return nil, document, batchArtifactInventoryUnknown("external path-item reference %q is unsafe: %v", reference, err)
+	}
+	external, err := resolver.loadExternal(resolvedURL)
+	if err != nil {
+		return nil, document, err
+	}
+	node, err := resolveBatchArtifactJSONPointer(external.Root, fragment, reference)
+	return node, external, err
+}
+
+func (resolver *batchArtifactResolver) loadExternal(resolvedURL *url.URL) (batchArtifactDocument, error) {
+	key := resolvedURL.String()
+	if document, ok := resolver.documents[key]; ok {
+		return document, nil
+	}
+	if resolver.fetch == nil {
+		return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item reference %q cannot be fetched during materialization", key)
+	}
+	if resolver.fetched >= maxBatchArtifactReferenceDocuments {
+		return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item reference limit %d exceeded", maxBatchArtifactReferenceDocuments)
+	}
+	resolver.fetched++
+	raw, err := resolver.fetch(key)
+	if err != nil {
+		return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item reference %q fetch failed: %v", key, err)
+	}
+	if len(raw) > maxMaterializeArtifactBytes || resolver.totalBytes > maxBatchArtifactReferenceBytes-len(raw) {
+		return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item references exceed the bounded %d-byte source budget", maxBatchArtifactReferenceBytes)
+	}
+	resolver.totalBytes += len(raw)
+	source := batchArtifactSource{URL: key, Kind: "referenced-document", SHA256: fmt.Sprintf("%x", sha256.Sum256(raw))}
+	document, err := parseBatchArtifactDocument(raw, source)
+	if err != nil {
+		return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item reference %q is not a single mapping document: %v", key, err)
+	}
+	if fields, fieldsErr := batchYAMLFields(document.Root); fieldsErr == nil {
+		if version, versionErr := batchYAMLFieldString(fields, "openapi"); versionErr == nil && strings.HasPrefix(version, "3.") {
+			document.Source.Kind, document.Source.Version = "openapi", version
+		} else if version, versionErr := batchYAMLFieldString(fields, "swagger"); versionErr == nil && version == "2.0" {
+			document.Source.Kind, document.Source.Version = "swagger", version
 		}
 	}
-	paths, ok := fields["paths"]
-	if !ok {
-		return nil, errors.New("artifact has no paths")
+	resolver.documents[key] = document
+	resolver.sources = append(resolver.sources, document.Source)
+	return document, nil
+}
+
+func batchArtifactEndpointsFromDocument(resolver *batchArtifactResolver, document batchArtifactDocument, paths *yaml.Node) ([]batchArtifactEndpoint, error) {
+	fields, err := batchYAMLFields(paths)
+	if err != nil {
+		return nil, errors.New("artifact paths must be a mapping")
 	}
-	return batchArtifactEndpointsFromPaths(root, paths)
+	endpoints := make([]batchArtifactEndpoint, 0)
+	for _, path := range batchYAMLFieldNames(fields) {
+		if strings.HasPrefix(path, "x-") {
+			continue
+		}
+		if path == "" || path != strings.TrimSpace(path) || !strings.HasPrefix(path, "/") {
+			return nil, fmt.Errorf("artifact path %q must be non-empty and connector-relative", path)
+		}
+		pathEndpoints, err := batchArtifactPathItemEndpointsWithResolver(resolver, document, path, fields[path])
+		if err != nil {
+			return nil, err
+		}
+		endpoints = append(endpoints, pathEndpoints...)
+	}
+	return endpoints, nil
+}
+
+func batchArtifactWebhookEndpoints(resolver *batchArtifactResolver, document batchArtifactDocument, webhooks *yaml.Node) ([]batchArtifactEndpoint, error) {
+	fields, err := batchYAMLFields(webhooks)
+	if err != nil {
+		return nil, batchArtifactInventoryUnknown("top-level webhooks is not a mapping")
+	}
+	endpoints := make([]batchArtifactEndpoint, 0)
+	for _, name := range batchYAMLFieldNames(fields) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		if strings.TrimSpace(name) == "" || strings.ContainsAny(name, "\r\n") {
+			return nil, batchArtifactInventoryUnknown("top-level webhooks has an invalid name")
+		}
+		pathEndpoints, err := batchArtifactPathItemEndpointsWithResolver(resolver, document, name, fields[name])
+		if err != nil {
+			return nil, batchArtifactInventoryUnknown("top-level webhook %q: %v", name, err)
+		}
+		if len(pathEndpoints) == 0 {
+			return nil, batchArtifactInventoryUnknown("top-level webhook %q has no HTTP operations", name)
+		}
+		for _, endpoint := range pathEndpoints {
+			originalMethod := endpoint.Method
+			endpoint.Method = "WEBHOOK"
+			endpoint.Path = name + "#" + strings.ToUpper(originalMethod)
+			endpoint.Webhook = true
+			endpoint.SourceCoordinate = fmt.Sprintf("webhooks[%q].%s", name, strings.ToLower(originalMethod))
+			endpoints = append(endpoints, endpoint)
+		}
+	}
+	return endpoints, nil
+}
+
+func batchArtifactPathItemEndpointsWithResolver(resolver *batchArtifactResolver, document batchArtifactDocument, path string, pathItem *yaml.Node) ([]batchArtifactEndpoint, error) {
+	resolved, resolvedDocument, err := resolver.resolvePathItem(document, pathItem, map[string]bool{})
+	if err != nil {
+		return nil, err
+	}
+	fields, err := batchYAMLFields(resolved)
+	if err != nil {
+		return nil, batchArtifactInventoryUnknown("path %q has a non-mapping path item", path)
+	}
+	endpoints := make([]batchArtifactEndpoint, 0)
+	for _, key := range batchYAMLFieldNames(fields) {
+		value := fields[key]
+		method, isHTTPMethod := batchArtifactHTTPMethodForPathItemKey(key)
+		if isHTTPMethod {
+			endpoint, err := batchArtifactEndpointFromOperation(path, method, value)
+			if err != nil {
+				return nil, err
+			}
+			endpoint.SourceURL = resolvedDocument.Source.URL
+			endpoint.SourceKind = resolvedDocument.Source.Kind
+			endpoint.SourceVersion = resolvedDocument.Source.Version
+			endpoint.SourceRetrieved = resolvedDocument.Source.Retrieved
+			endpoint.SourceSHA256 = resolvedDocument.Source.SHA256
+			if endpoint.SourceCoordinate == "" {
+				endpoint.SourceCoordinate = fmt.Sprintf("paths[%q].%s", path, strings.ToLower(method))
+			}
+			endpoints = append(endpoints, endpoint)
+			continue
+		}
+		if strings.HasPrefix(key, "x-") {
+			continue
+		}
+		switch key {
+		case "$ref", "summary", "description", "servers", "parameters":
+			continue
+		default:
+			return nil, batchArtifactInventoryUnknown("path %q has unsupported path-item field %q", path, key)
+		}
+	}
+	return endpoints, nil
+}
+
+// batchArtifactEndpointsFromPaths remains the local-only helper used by
+// narrow parser tests and callers that do not have a source URL. Materialize
+// uses the source-aware variant above so external references are traversed.
+func batchArtifactEndpointsFromPaths(root, paths *yaml.Node) ([]batchArtifactEndpoint, error) {
+	root, err := batchYAMLDeref(root)
+	if err != nil {
+		return nil, err
+	}
+	document := batchArtifactDocument{Root: root, Source: batchArtifactSource{Kind: "openapi"}}
+	resolver := newBatchArtifactResolver(document, nil)
+	return batchArtifactEndpointsFromDocument(resolver, document, paths)
+}
+
+func parseBatchPostmanArtifact(raw []byte, source batchArtifactSource) (batchArtifactInventory, error) {
+	var collection struct {
+		Info struct {
+			Schema  string          `json:"schema"`
+			Version json.RawMessage `json:"version"`
+		} `json:"info"`
+		Item []json.RawMessage `json:"item"`
+	}
+	if err := json.Unmarshal(raw, &collection); err != nil {
+		return batchArtifactInventory{}, fmt.Errorf("decode Postman collection: %w", err)
+	}
+	if len(collection.Item) == 0 {
+		return batchArtifactInventory{}, errors.New("Postman collection has no request items")
+	}
+	source.Kind = "postman"
+	if source.Version == "" {
+		if version := strings.TrimSpace(string(collection.Info.Version)); version != "" && version != "null" {
+			var versionString string
+			if json.Unmarshal(collection.Info.Version, &versionString) == nil {
+				source.Version = versionString
+			}
+		}
+	}
+	if source.SHA256 == "" {
+		source.SHA256 = fmt.Sprintf("%x", sha256.Sum256(raw))
+	}
+	endpoints := make([]batchArtifactEndpoint, 0)
+	seen := map[string]bool{}
+	var walk func([]json.RawMessage, string) error
+	walk = func(items []json.RawMessage, coordinate string) error {
+		for index, rawItem := range items {
+			var item struct {
+				Name    string            `json:"name"`
+				Item    []json.RawMessage `json:"item"`
+				Request json.RawMessage   `json:"request"`
+			}
+			if err := json.Unmarshal(rawItem, &item); err != nil {
+				return batchArtifactInventoryUnknown("Postman item %s is not an object: %v", coordinate, err)
+			}
+			itemCoordinate := fmt.Sprintf("%s.item[%d]", coordinate, index)
+			if len(item.Item) > 0 {
+				if err := walk(item.Item, itemCoordinate); err != nil {
+					return err
+				}
+			}
+			if len(item.Request) == 0 || string(item.Request) == "null" {
+				continue
+			}
+			method, path, err := parseBatchPostmanRequest(item.Request)
+			if err != nil {
+				return batchArtifactInventoryUnknown("Postman request %s: %v", itemCoordinate, err)
+			}
+			key := batchArtifactEndpointKey(method, path)
+			if seen[key] {
+				continue
+			}
+			seen[key] = true
+			endpoints = append(endpoints, batchArtifactEndpoint{
+				Method:           method,
+				Path:             path,
+				Summary:          strings.TrimSpace(item.Name),
+				SourceURL:        source.URL,
+				SourceKind:       source.Kind,
+				SourceVersion:    source.Version,
+				SourceRetrieved:  source.Retrieved,
+				SourceSHA256:     source.SHA256,
+				SourceCoordinate: itemCoordinate + ".request.url",
+			})
+		}
+		return nil
+	}
+	if err := walk(collection.Item, "collection"); err != nil {
+		return batchArtifactInventory{}, err
+	}
+	if len(endpoints) == 0 {
+		return batchArtifactInventory{}, errors.New("Postman collection has no callable HTTP requests")
+	}
+	sort.Slice(endpoints, func(i, j int) bool {
+		if endpoints[i].Path != endpoints[j].Path {
+			return endpoints[i].Path < endpoints[j].Path
+		}
+		return batchArtifactMethodRank(endpoints[i].Method) < batchArtifactMethodRank(endpoints[j].Method)
+	})
+	sources := []batchArtifactSource{}
+	if source.URL != "" {
+		sources = append(sources, source)
+	}
+	return batchArtifactInventory{Endpoints: endpoints, Sources: sources}, nil
+}
+
+func parseBatchPostmanRequest(raw json.RawMessage) (string, string, error) {
+	var object struct {
+		Method string          `json:"method"`
+		URL    json.RawMessage `json:"url"`
+	}
+	if err := json.Unmarshal(raw, &object); err != nil {
+		var rawURL string
+		if string(raw) == "" || json.Unmarshal(raw, &rawURL) != nil {
+			return "", "", errors.New("request must be an object or URL string")
+		}
+		return http.MethodGet, normalizeBatchPostmanPath(rawURL), nil
+	}
+	method := strings.ToUpper(strings.TrimSpace(object.Method))
+	if method == "" {
+		method = http.MethodGet
+	}
+	if len(object.URL) == 0 || string(object.URL) == "null" {
+		return "", "", errors.New("request URL is required")
+	}
+	var rawURL string
+	if json.Unmarshal(object.URL, &rawURL) == nil {
+		return method, normalizeBatchPostmanPath(rawURL), nil
+	}
+	var structured struct {
+		Raw  string   `json:"raw"`
+		Path []string `json:"path"`
+	}
+	if err := json.Unmarshal(object.URL, &structured); err != nil {
+		return "", "", errors.New("request URL must be a string or object")
+	}
+	if len(structured.Path) > 0 {
+		return method, normalizeBatchPostmanPath(strings.Join(structured.Path, "/")), nil
+	}
+	if strings.TrimSpace(structured.Raw) == "" {
+		return "", "", errors.New("request URL has neither raw nor path")
+	}
+	return method, normalizeBatchPostmanPath(structured.Raw), nil
+}
+
+func normalizeBatchPostmanPath(raw string) string {
+	path := strings.TrimSpace(raw)
+	if path == "" {
+		return "/"
+	}
+	if strings.HasPrefix(path, "{{") {
+		if end := strings.Index(path, "}}"); end >= 0 {
+			path = path[end+2:]
+		}
+	}
+	if parsed, err := url.Parse(path); err == nil && parsed.IsAbs() {
+		path = parsed.EscapedPath()
+	} else {
+		if cut := strings.IndexAny(path, "?#"); cut >= 0 {
+			path = path[:cut]
+		}
+	}
+	if path == "" {
+		path = "/"
+	}
+	if !strings.HasPrefix(path, "/") {
+		path = "/" + path
+	}
+	var builder strings.Builder
+	for len(path) > 0 {
+		open := strings.Index(path, "{{")
+		if open < 0 {
+			builder.WriteString(path)
+			break
+		}
+		builder.WriteString(path[:open])
+		close := strings.Index(path[open+2:], "}}")
+		if close < 0 {
+			builder.WriteString(path[open:])
+			break
+		}
+		close += open + 2
+		name := strings.TrimSpace(path[open+2 : close])
+		if name == "" {
+			builder.WriteString("{}")
+		} else {
+			builder.WriteByte('{')
+			builder.WriteString(name)
+			builder.WriteByte('}')
+		}
+		path = path[close+2:]
+	}
+	path = builder.String()
+	segments := strings.Split(path, "/")
+	for index, segment := range segments {
+		if strings.HasPrefix(segment, ":") && len(segment) > 1 {
+			segments[index] = "{" + segment[1:] + "}"
+		}
+	}
+	return strings.Join(segments, "/")
 }
 
 func yamlDocumentRoot(document *yaml.Node) *yaml.Node {
@@ -912,145 +1696,20 @@ func batchYAMLFieldString(fields map[string]*yaml.Node, key string) (string, err
 	return strings.TrimSpace(node.Value), nil
 }
 
-func batchArtifactWebhooksUnknown(node *yaml.Node) error {
-	fields, err := batchYAMLFields(node)
-	if err != nil {
-		return batchArtifactInventoryUnknown("top-level webhooks is not a mapping")
-	}
-	names := make([]string, 0, len(fields))
-	for _, name := range batchYAMLFieldNames(fields) {
-		if strings.HasPrefix(name, "x-") {
-			continue
-		}
-		if strings.TrimSpace(name) == "" {
-			return batchArtifactInventoryUnknown("top-level webhooks has an empty name")
-		}
-		names = append(names, name)
-	}
-	if len(names) == 0 {
-		return nil
-	}
-	return batchArtifactInventoryUnknown("top-level webhooks (%s) cannot be represented as provider request paths", strings.Join(names, ", "))
-}
-
-func batchArtifactEndpointsFromPaths(root, paths *yaml.Node) ([]batchArtifactEndpoint, error) {
-	fields, err := batchYAMLFields(paths)
-	if err != nil {
-		return nil, errors.New("artifact paths must be a mapping")
-	}
-	endpoints := make([]batchArtifactEndpoint, 0)
-	seen := map[string]bool{}
-	for _, path := range batchYAMLFieldNames(fields) {
-		if strings.HasPrefix(path, "x-") {
-			continue
-		}
-		if path == "" || path != strings.TrimSpace(path) || !strings.HasPrefix(path, "/") {
-			return nil, fmt.Errorf("artifact path %q must be non-empty and connector-relative", path)
-		}
-		pathEndpoints, err := batchArtifactPathItemEndpoints(root, path, fields[path])
-		if err != nil {
-			return nil, err
-		}
-		for _, endpoint := range pathEndpoints {
-			key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
-			if seen[key] {
-				return nil, batchArtifactInventoryUnknown("duplicate operation %s %s", endpoint.Method, endpoint.Path)
-			}
-			seen[key] = true
-			endpoints = append(endpoints, endpoint)
-		}
-	}
-	if len(endpoints) == 0 {
-		return nil, errors.New("artifact has no HTTP operations")
-	}
-	sort.Slice(endpoints, func(i, j int) bool {
-		if endpoints[i].Path != endpoints[j].Path {
-			return endpoints[i].Path < endpoints[j].Path
-		}
-		return batchArtifactMethodRank(endpoints[i].Method) < batchArtifactMethodRank(endpoints[j].Method)
-	})
-	return endpoints, nil
-}
-
-func batchArtifactPathItemEndpoints(root *yaml.Node, path string, pathItem *yaml.Node) ([]batchArtifactEndpoint, error) {
-	resolved, err := resolveBatchArtifactPathItem(root, pathItem, map[string]bool{})
-	if err != nil {
-		return nil, err
-	}
-	fields, err := batchYAMLFields(resolved)
-	if err != nil {
-		return nil, batchArtifactInventoryUnknown("path %q has a non-mapping path item", path)
-	}
-	endpoints := make([]batchArtifactEndpoint, 0)
-	for _, key := range batchYAMLFieldNames(fields) {
-		value := fields[key]
-		method, isHTTPMethod := batchArtifactHTTPMethodForPathItemKey(key)
-		if isHTTPMethod {
-			endpoint, err := batchArtifactEndpointFromOperation(path, method, value)
-			if err != nil {
-				return nil, err
-			}
-			endpoints = append(endpoints, endpoint)
-			continue
-		}
-		if strings.HasPrefix(key, "x-") {
-			continue
-		}
-		switch key {
-		case "$ref", "summary", "description", "servers", "parameters":
-			continue
-		default:
-			return nil, batchArtifactInventoryUnknown("path %q has unsupported path-item field %q", path, key)
-		}
-	}
-	return endpoints, nil
-}
-
-func resolveBatchArtifactPathItem(root, pathItem *yaml.Node, refs map[string]bool) (*yaml.Node, error) {
-	pathItem, err := batchYAMLDeref(pathItem)
-	if err != nil {
-		return nil, err
-	}
-	fields, err := batchYAMLFields(pathItem)
-	if err != nil {
-		return nil, batchArtifactInventoryUnknown("path item is not a mapping")
-	}
-	refNode, hasRef := fields["$ref"]
-	if !hasRef {
-		return pathItem, nil
-	}
-	ref, err := batchYAMLFieldString(fields, "$ref")
-	if err != nil || ref == "" {
-		return nil, batchArtifactInventoryUnknown("path-item reference must be a non-empty string")
-	}
-	for _, key := range batchYAMLFieldNames(fields) {
-		if key == "$ref" || key == "summary" || key == "description" || strings.HasPrefix(key, "x-") {
-			continue
-		}
-		return nil, batchArtifactInventoryUnknown("path-item reference %q has unsupported sibling %q", ref, key)
-	}
-	if refs[ref] {
-		return nil, batchArtifactInventoryUnknown("path-item reference cycle at %q", ref)
-	}
-	refs[ref] = true
-	defer delete(refs, ref)
-	target, err := resolveBatchArtifactLocalReference(root, ref)
-	if err != nil {
-		return nil, err
-	}
-	if target == refNode {
-		return nil, batchArtifactInventoryUnknown("path-item reference %q resolves to itself", ref)
-	}
-	return resolveBatchArtifactPathItem(root, target, refs)
-}
-
 func resolveBatchArtifactLocalReference(root *yaml.Node, reference string) (*yaml.Node, error) {
 	if !strings.HasPrefix(reference, "#") {
 		return nil, batchArtifactInventoryUnknown("external path-item reference %q cannot be exhaustively resolved", reference)
 	}
-	pointer, err := url.PathUnescape(strings.TrimPrefix(reference, "#"))
-	if err != nil || pointer == "" || !strings.HasPrefix(pointer, "/") {
-		return nil, batchArtifactInventoryUnknown("local path-item reference %q is not a JSON pointer", reference)
+	return resolveBatchArtifactJSONPointer(root, strings.TrimPrefix(reference, "#"), reference)
+}
+
+func resolveBatchArtifactJSONPointer(root *yaml.Node, pointer, reference string) (*yaml.Node, error) {
+	pointer, err := url.PathUnescape(pointer)
+	if err != nil || (pointer != "" && !strings.HasPrefix(pointer, "/")) {
+		return nil, batchArtifactInventoryUnknown("path-item reference %q is not a JSON pointer", reference)
+	}
+	if pointer == "" {
+		return batchYAMLDeref(root)
 	}
 	node := root
 	for _, rawToken := range strings.Split(strings.TrimPrefix(pointer, "/"), "/") {
@@ -1200,9 +1859,37 @@ func batchArtifactMethodRank(method string) int {
 	}
 }
 
-func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnector, retrievedAt, sha string, artifactEndpoints []batchArtifactEndpoint) (engine.APISurface, error) {
+func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnector, retrievedAt, sha string, artifactEndpoints []batchArtifactEndpoint, sourceLists ...[]batchArtifactSource) (engine.APISurface, error) {
 	if bundle.Surface == nil {
 		return engine.APISurface{}, errors.New("api_surface.json is required")
+	}
+	sources := []batchArtifactSource{{
+		URL:       candidate.Artifact.URL,
+		Kind:      candidate.Artifact.Kind,
+		Version:   candidate.Artifact.Version,
+		Retrieved: retrievedAt,
+		SHA256:    sha,
+	}}
+	if len(sourceLists) > 0 && len(sourceLists[0]) > 0 {
+		provided := append([]batchArtifactSource(nil), sourceLists[0]...)
+		sources = []batchArtifactSource{}
+		rootFound := false
+		for _, source := range provided {
+			if source.URL == candidate.Artifact.URL {
+				rootFound = true
+				if source.SHA256 == "" {
+					source.SHA256 = sha
+				}
+				if source.Retrieved == "" {
+					source.Retrieved = retrievedAt
+				}
+			}
+			sources = append(sources, source)
+		}
+		if !rootFound {
+			root := batchArtifactSource{URL: candidate.Artifact.URL, Kind: candidate.Artifact.Kind, Version: candidate.Artifact.Version, Retrieved: retrievedAt, SHA256: sha}
+			sources = append([]batchArtifactSource{root}, sources...)
+		}
 	}
 	artifactKeys := make(map[string]bool, len(artifactEndpoints))
 	for _, endpoint := range artifactEndpoints {
@@ -1216,28 +1903,69 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 		}
 		existingExact[key] = endpoint
 	}
-	artifactID := fmt.Sprintf("%s-artifact-%s", candidate.Connector, retrievedAt)
+	artifactIDs := make(map[string]string, len(sources))
+	artifacts := make([]engine.SurfaceArtifact, 0, len(sources))
+	for index, source := range sources {
+		if strings.TrimSpace(source.URL) == "" {
+			continue
+		}
+		id := fmt.Sprintf("%s-artifact-%s", candidate.Connector, retrievedAt)
+		if index > 0 || source.URL != candidate.Artifact.URL {
+			digest := source.SHA256
+			if digest == "" {
+				digest = fmt.Sprintf("%x", sha256.Sum256([]byte(source.URL)))
+			}
+			id = fmt.Sprintf("%s-artifact-ref-%s", candidate.Connector, digest[:16])
+		}
+		if prior, exists := artifactIDs[source.URL]; exists {
+			id = prior
+		} else {
+			artifactIDs[source.URL] = id
+			artifacts = append(artifacts, engine.SurfaceArtifact{
+				ID:          id,
+				URL:         source.URL,
+				Kind:        source.Kind,
+				Version:     source.Version,
+				RetrievedAt: firstNonEmpty(source.Retrieved, retrievedAt),
+				SHA256:      source.SHA256,
+			})
+		}
+	}
+	artifactID := artifactIDs[candidate.Artifact.URL]
+	if artifactID == "" {
+		return engine.APISurface{}, errors.New("root artifact source is missing from normalized source inventory")
+	}
 	surface := engine.APISurface{
 		API:                    materializedAPIName(bundle.Surface.API, candidate.Artifact.Version),
 		Docs:                   bundle.Surface.Docs,
 		ReviewedAt:             retrievedAt,
 		OperationLedgerVersion: 2,
-		Scope:                  fmt.Sprintf("Provider-artifact inventory generated from the cited %s artifact (%d documented HTTP operations). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with %s.", candidate.Artifact.Kind, len(artifactEndpoints), materializeSurfaceDiscrepancy),
-		Artifacts: []engine.SurfaceArtifact{{
-			ID:          artifactID,
-			URL:         candidate.Artifact.URL,
-			RetrievedAt: retrievedAt,
-			SHA256:      sha,
-		}},
-		Endpoints: make([]engine.SurfaceEndpoint, 0, len(artifactEndpoints)),
+		Scope:                  fmt.Sprintf("Provider-artifact inventory generated from the cited %s artifact (%d documented operations across %d provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with %s.", candidate.Artifact.Kind, len(artifactEndpoints), len(artifacts), materializeSurfaceDiscrepancy),
+		Artifacts:              artifacts,
+		Endpoints:              make([]engine.SurfaceEndpoint, 0, len(artifactEndpoints)),
 	}
 	for _, artifactEndpoint := range artifactEndpoints {
+		endpointSourceURL := artifactEndpoint.SourceURL
+		if endpointSourceURL == "" {
+			endpointSourceURL = candidate.Artifact.URL
+		}
+		endpointArtifactID := artifactIDs[endpointSourceURL]
+		if endpointArtifactID == "" {
+			endpointSourceURL = candidate.Artifact.URL
+			endpointArtifactID = artifactID
+		}
 		endpoint := engine.SurfaceEndpoint{
 			Method: artifactEndpoint.Method,
 			Path:   artifactEndpoint.Path,
 			Provenance: &engine.SurfaceProvenance{
-				Artifact:  artifactID,
-				SourceURL: candidate.Artifact.URL,
+				Artifact:     endpointArtifactID,
+				SourceURL:    endpointSourceURL,
+				SourceKind:   artifactEndpoint.SourceKind,
+				Version:      artifactEndpoint.SourceVersion,
+				RetrievedAt:  firstNonEmpty(artifactEndpoint.SourceRetrieved, retrievedAt),
+				SHA256:       artifactEndpoint.SourceSHA256,
+				Coordinate:   artifactEndpoint.SourceCoordinate,
+				Alternatives: materializedEndpointAlternatives(artifactEndpoint.Alternatives),
 			},
 		}
 		if operation := batchProtocolMetadataOperation(artifactEndpoint.Method); operation != nil {
@@ -1261,8 +1989,13 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 			Method: existing.Method,
 			Path:   existing.Path,
 			Provenance: &engine.SurfaceProvenance{
-				Artifact:  artifactID,
-				SourceURL: candidate.Artifact.URL,
+				Artifact:    artifactID,
+				SourceURL:   candidate.Artifact.URL,
+				SourceKind:  candidate.Artifact.Kind,
+				Version:     candidate.Artifact.Version,
+				RetrievedAt: retrievedAt,
+				SHA256:      sha,
+				Coordinate:  fmt.Sprintf("existing-surface[%s %s]", existing.Method, existing.Path),
 			},
 			Discrepancy: materializeSurfaceDiscrepancy,
 		}
@@ -1282,6 +2015,27 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 		return engine.APISurface{}, err
 	}
 	return surface, nil
+}
+
+func materializedEndpointAlternatives(alternatives []batchArtifactEndpointAlternative) []engine.SurfaceProvenanceAlternative {
+	if len(alternatives) == 0 {
+		return nil
+	}
+	out := make([]engine.SurfaceProvenanceAlternative, 0, len(alternatives))
+	for _, alternative := range alternatives {
+		if strings.TrimSpace(alternative.SourceURL) == "" {
+			continue
+		}
+		out = append(out, engine.SurfaceProvenanceAlternative{
+			SourceURL:   alternative.SourceURL,
+			SourceKind:  alternative.SourceKind,
+			Version:     alternative.SourceVersion,
+			RetrievedAt: alternative.SourceRetrieved,
+			SHA256:      alternative.SourceSHA256,
+			Coordinate:  alternative.SourceCoordinate,
+		})
+	}
+	return out
 }
 
 func batchArtifactEndpointKey(method, path string) string {
@@ -1349,6 +2103,16 @@ func batchArtifactMutationMethod(method string) bool {
 
 func defaultMaterializedOperation(endpoint batchArtifactEndpoint) *engine.SurfaceOperation {
 	dependency, dependencyReason := materializedNamedDependency(endpoint.Method, endpoint.Path, "")
+	if endpoint.Webhook {
+		return &engine.SurfaceOperation{
+			Model:            "disallowed",
+			Status:           "blocked",
+			Risk:             "medium",
+			BlockedByDefault: true,
+			Reason:           "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+			Notes:            materializedNamedDependencyNote(dependency, dependencyReason),
+		}
+	}
 	switch endpoint.Method {
 	case http.MethodGet, http.MethodHead:
 		return &engine.SurfaceOperation{
@@ -1384,6 +2148,8 @@ func materializedNamedDependency(method, path, reason string) (string, string) {
 	method = strings.ToUpper(strings.TrimSpace(method))
 	lowerReason := strings.ToLower(reason)
 	switch {
+	case method == "WEBHOOK":
+		return "engine.webhook_receiver_executor", "the runtime has no inbound webhook receiver executor for top-level webhook operations"
 	case method == http.MethodGet || method == http.MethodHead:
 		return "engine.direct_read_executor", "the direct-read executor has no non-redacting output policy for this provider operation"
 	case strings.Contains(lowerReason, "wrapper") || strings.Contains(lowerReason, "envelope"):
@@ -1456,7 +2222,7 @@ func materializeOperationCatalog(bundle engine.Bundle, surface engine.APISurface
 			ID:           id,
 			Summary:      fmt.Sprintf("%s %s", endpoint.Method, endpoint.Path),
 			Description:  endpoint.Operation.Reason,
-			SourceURL:    candidate.Artifact.URL,
+			SourceURL:    endpoint.Provenance.SourceURL,
 			Risk:         endpoint.Operation.Risk,
 			Approval:     "not implemented: " + dependencyReason,
 			OutputPolicy: "json",

@@ -1,0 +1,294 @@
+definitions:
+  Phase:
+    type: "object"
+    required:
+    - "name"
+    - "project_id"
+    - "start_date"
+    - "end_date"
+    properties:
+      phase_id:
+        type: "integer"
+        example: 6754
+        description: "The ID of this phase"
+        readOnly: true
+      project_id:
+        type: "integer"
+        example: 4567
+        description: "The ID of the project to which this phase belongs"
+      name:
+        type: "string"
+        example: "Design"
+        description: "The name of the phase"
+        maxLength: 200
+      color:
+        type: "string"
+        example: "0095D7"
+        description: "Phase's color in hexadecimal (defaults to project color)"
+      notes:
+        type: "string"
+        example: "Due at the start of July. Paul to present"
+        description: "Notes for this phase"
+      start_date:
+        type: "string"
+        format: "date:YYYY-MM-DD"
+        example: "2024-12-12"
+        description: "The start date of this phase which is either manually set or calculated from the earliest milestone, allocation, or logged time within this phase"
+      end_date:
+        type: "string"
+        format: "date:YYYY-MM-DD"
+        example: "2025-02-23"
+        description: "The end date of this phase which is either manually set or calculated from the latest milestone, allocation, or logged time within this phase"
+      budget_total:
+        type: "number"
+        example: 1000.50
+        description: "The budget amount for 'hours by phase' or 'fee by phase' project budgets"
+      default_hourly_rate:
+        type: "string"
+        example: "55.50"
+        description: "The default hourly rate for fee-based budgets, the request also accepts a decimal `number`"
+      non_billable:
+        type: "integer"
+        example: 1
+        description: "Is this phase billable? `0` = Billable, `1` = Non-billable"
+      status:
+        type: "integer"
+        example: 2
+        description: "The status of the phase `0` = Draft, `1` = Tentative, `2` = Confirmed, `3` = Completed, `4` = Canceled. Draft phases can belong to a project of any status. Tentative phases must belong to tentative or confirmed projects. Confirmed, completed, and canceled phases must match their project's status"
+      tentative:
+        type: "integer"
+        example: 0
+        description: "(**Deprecated** - see `status`): Is this phase tentative? `1` = Yes, `0` = No"
+      active:
+        type: "integer"
+        example: 1
+        description: "Is this phase active or archived? `1` = Active, `0` = Archived"
+      created:
+        type: "string"
+        example: "2025-01-03 07:45:37"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2025-01-11 06:38:44"
+        description: "Date this record was last modified"
+        readOnly: true
+      phase_team:
+        type: "array"
+        items:
+          $ref: "#/definitions/PhaseTeamMemberExpanded"
+        description: "`expand` field. A list of assignees on this phase by `people_id`, `role_id`, and `hourly_rate`, the list may be empty"
+    title: "Phase"
+  PhaseTeamMemberExpanded:
+    type: "object"
+    title: "PhaseTeamMember"
+    properties:
+      people_id:
+        type: "integer"
+        description: "The ID of the person"
+        example: 17391001
+      role_id:
+        type: "integer"
+        description: "The ID of a role used in this phase, this may be different from the person's role on the project"
+        example: 2137
+      hourly_rate:
+        type: "number"
+        description: "The phase hourly rate for this team member"
+        format: "float"
+        example: 75.0  
+  PhaseWithPhaseTeam:
+    allOf:
+      - $ref: '#/definitions/Phase'
+      - properties:
+          phase_team:
+            type: "object"
+            description: "Manages the composition and details of the phase team."
+            properties:
+              set:
+                type: "array"
+                description: "Replaces the entire current phase team with the provided team. Using this will ignore `add` and `del` actions. Caution: This action removes all members not in the `set` list, along with their associated items."
+                items:
+                  type: "object"
+                  required:
+                    - "people_id"
+                  properties:
+                    people_id:
+                      type: "integer"
+                      description: "Unique identifier for a team member."
+                      example: 17391001
+                    role_id:
+                      type: "integer"
+                      description: "The ID of a role, if not provided, the person's project role will be used"
+                      example: 2137
+                    hourly_rate:
+                      type: "number"
+                      description: "Hourly rate for the team member. This field is optional."
+                      format: "float"
+                      example: 75.0
+              add:
+                type: "array"
+                description: "Adds new team members to the phase."
+                items:
+                  type: "object"
+                  required:
+                    - "people_id"
+                  properties:
+                    people_id:
+                      type: "integer"
+                      description: "Unique identifier for a team member."
+                      example: 17391002
+                    role_id:
+                      type: "integer"
+                      description: "The ID of a role, if not provided, the person's project role will be used"
+                      example: 2137
+                    hourly_rate:
+                      type: "number"
+                      description: "Hourly rate for the team member. This field is optional."
+                      format: "float"
+                      example: 65.0
+              del:
+                type: "array"
+                description: "Removes team members from the phase using their 'people_id'. Caution: Removing members will delete their associated items."
+                example:
+                - 17391002
+                - 17391003
+                items:
+                  type: "integer"
+
+parameters:
+  phase_id:
+    name: "phase_id"
+    in: "path"
+    description: "The phase's ID"
+    required: true
+    type: "integer"
+  non_billable:
+    name: non_billable
+    in: "query"
+    description: Filter response on `0` = billable or `1` = non-billable phases
+    required: false
+    type: integer
+  expand:
+    name: "expand"
+    in: "query"
+    description: "Comma-delimited values expands the response with additional fields: `phase_tasks`, `phase_team`"
+    required: false
+    type: "string"
+
+phases:
+  get:
+    tags:
+    - "Phases"
+    summary: "List phases"
+    operationId: "getPhases"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/project_id"
+    - $ref: "../swagger-api-v3.yaml#/parameters/active"
+    - $ref: "#/parameters/non_billable"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/sort"
+    - $ref: "../swagger-api-v3.yaml#/parameters/modified_since"
+    - $ref: "../swagger-api-v3.yaml#/parameters/fields"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "The list of phases"
+        schema:
+          type: "array"
+          title: "Array of phases"
+          items:
+            $ref: "#/definitions/Phase"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Phases"
+    summary: "Add a new phase"
+    operationId: "addPhase"
+    parameters:
+    - in: "body"
+      name: "data"
+      description: "The phase to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/Phase"
+    responses:
+      201:
+        description: "If the phase was successfully created, the response returns the full information about that phase."
+        schema:
+          $ref: "#/definitions/Phase"
+      422:
+        description: "Data validation failure."
+
+phases-id:
+  get:
+    tags:
+    - "Phases"
+    summary: "Retrieve a single phase."
+    description: "Retrieve a single phase"
+    operationId: "getPhase"
+    parameters:
+    - $ref: "#/parameters/phase_id"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "Details of a single phase"
+        schema:
+          $ref: "#/definitions/Phase"
+      404:
+        description: "The phase does not exist."
+  delete:
+    tags:
+    - "Phases"
+    summary: "Delete a phase"
+    description: "Deleting a phase will delete all associated allocations (`task_id`) and logged time, this is an irreversible action"
+    operationId: "deletePhase"
+    parameters:
+    - $ref: "#/parameters/phase_id"
+    responses:
+      204:
+        description: "Delete successful, all associated allocations and logged time for this `phase_id` have also been deleted"
+      404:
+        description: "The phase does not exist."
+  patch:
+    tags:
+    - "Phases"
+    summary: "Update a phase's details"
+    description: >
+      To update the phase team including unassigned roles there are 3 actions on the `phase_team` field; `set`, `add` and `del`:
+        * Use `set` as an array of phase team objects of `people_id`, `role_id` and `hourly_rate` to replace all people and their phase roles & rates
+        * Use `add` as an array of phase team objects of `people_id`, `role_id` and `hourly_rate` to add additional people and their roles & rates
+        * Use `del` as an array of `people_id` to remove people from the phase_team
+
+        To assign a role to a phase, `set` or `add` a `role_id` to the phase_team object without a `people_id`. An unassigned role placeholder will be returned in the response. See the [Using unassigned roles](/tutorial_unassigned_roles.html) tutorial for more details.
+
+      CAUTION: `set` and `del` actions that remove people will cascade delete all associated Allocations (`task_id`) and Logged time for that person on the phase.
+    operationId: "updatePhase"
+    parameters:
+    - $ref: "#/parameters/phase_id"
+    - $ref: "#/parameters/expand"
+    - in: "body"
+      name: "data"
+      description: "The phase data to update, read-only fields are ignored"
+      required: true
+      schema:
+        $ref: "#/definitions/PhaseWithPhaseTeam"
+    responses:
+      200:
+        description: "On a successful update of a phase, the response returns the full information about that phase."
+        schema:
+          $ref: "#/definitions/Phase"
+      422:
+        description: "Data validation failure."

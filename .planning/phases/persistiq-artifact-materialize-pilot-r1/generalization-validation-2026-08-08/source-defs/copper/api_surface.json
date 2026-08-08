@@ -1,0 +1,43 @@
+{
+  "api": "Copper legacy connector hook surface",
+  "docs": "https://developer.copper.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy copper connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/copper, which delegates to internal/connectors/copper until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper people read path",
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper companies read path",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper opportunities read path",
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper leads read path",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/copper tasks read path",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    }
+  ]
+}

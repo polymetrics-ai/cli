@@ -1,0 +1,1170 @@
+{
+  "connector": "copper",
+  "mapped": 77,
+  "buckets": {
+    "etl": 0,
+    "reverse_etl": 0,
+    "direct_read": 29,
+    "direct_write": 48,
+    "binary_download": 0,
+    "unclassified": 0
+  },
+  "discrepancies": 5,
+  "operations": [
+    {
+      "method": "POST",
+      "path": "/",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[10].item[3].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[0].item[0].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activities",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[7].item[1].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activities/search",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[7].item[3].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activities/{delete_activity_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[7].item[2].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{example_activity_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[7].item[0].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity_types",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[7].item[4].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[3].item[1].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/search",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[3].item[4].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{delete_company_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[3].item[3].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{example_company_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[3].item[0].request.url"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{example_company_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[3].item[2].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{example_company_id}/activities",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[3].item[5].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_types",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[2].item[7].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_activity_types",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[6].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_activity_types",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[8].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_activity_types/{custom_activity_type_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[7].request.url"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_activity_types/{custom_activity_type_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[9].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field_definitions",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[0].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_field_definitions",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[1].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field_definitions/{custom_field_definition_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[4].request.url"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_field_definitions/{custom_field_definition_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[2].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_field_definitions/{custom_field_definition_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[3].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_sources",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[9].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lead_statuses",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[10].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[1].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads/search",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[7].request.url"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/leads/upsert",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[4].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/leads/{example_lead_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[0].request.url"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/leads/{example_lead_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[2].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/leads/{example_lead_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[3].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads/{example_lead_id}/activities",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[8].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads/{example_leadconvert_id}/convert",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[1].item[6].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/loss_reasons",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[4].item[7].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[4].item[1].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunities/search",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[4].item[4].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/opportunities/{delete_opportunity_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[4].item[3].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{example_opportunity_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[4].item[0].request.url"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/opportunities/{example_opportunity_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[4].item[2].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[2].item[2].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/fetch_by_email",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[2].item[1].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/search",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[2].item[5].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{example_person_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[2].item[0].request.url"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/people/{example_person_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[2].item[3].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{example_person_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[2].item[4].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people/{example_person_id}/activities",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[2].item[6].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipeline_stages",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[4].item[9].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipeline_stages/pipeline/{pipeline_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[4].item[10].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[4].item[8].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[5].item[1].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/search",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[5].item[4].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{delete_project_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[5].item[3].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{example_project_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[5].item[0].request.url"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects/{example_project_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[5].item[2].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/related_links",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[1].item[0].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/related_links",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[1].item[1].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/related_links/{connection_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[1].item[2].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/search",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[8].item[0].item[5].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[6].item[1].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks/search",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[6].item[4].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/{delete_task_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[6].item[3].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{example_task_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[6].item[0].request.url"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tasks/{example_task_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[6].item[2].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/search",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[0].item[2].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{example_user_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[0].item[1].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[11].item[2].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[11].item[0].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{example_webhook_id}",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[11].item[1].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks{example_webhook_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[11].item[3].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/files",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[10].item[0].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{entity_id}/files",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[10].item[4].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/files/s3_signed_url",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[10].item[2].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/files/{file_id}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[10].item[1].request.url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{entity_id}/related",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[9].item[2].request.url"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{entity_id}/related",
+      "bucket": "direct_write",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[9].item[3].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/related/",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[9].item[0].request.url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/related/{related_entity_name}",
+      "bucket": "direct_read",
+      "disposition": "blocked",
+      "provenance": {
+        "artifact": "copper-artifact-2026-08-08",
+        "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "source_kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be",
+        "coordinate": "collection.item[9].item[1].request.url"
+      }
+    }
+  ]
+}
