@@ -620,7 +620,7 @@ func TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload(
 	})
 }
 
-func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
+func TestDirectWriteCommandFailureRedactsDeclaredOutputPolicyContent(t *testing.T) {
 	ctx := context.Background()
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -654,11 +654,11 @@ func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
 	if calls != 1 || run.Status != "failed" {
 		t.Fatalf("failed run/calls = %+v/%d, want one failed direct write", run, calls)
 	}
-	if !strings.Contains(err.Error(), "server-token") {
-		t.Fatalf("RunReverseETL error = %q, want complete provider error content", err)
+	if strings.Contains(err.Error(), "server-token") || !strings.Contains(err.Error(), "http 500") || !strings.Contains(err.Error(), "[redacted]") {
+		t.Fatalf("RunReverseETL error = %q, want a status-bearing redacted provider error", err)
 	}
-	if !strings.Contains(run.Error, "server-token") {
-		t.Fatalf("persisted direct-write error = %q, want complete provider error content", run.Error)
+	if strings.Contains(run.Error, "server-token") || !strings.Contains(run.Error, "http 500") || !strings.Contains(run.Error, "[redacted]") {
+		t.Fatalf("persisted direct-write error = %q, want a status-bearing redacted provider error", run.Error)
 	}
 }
 

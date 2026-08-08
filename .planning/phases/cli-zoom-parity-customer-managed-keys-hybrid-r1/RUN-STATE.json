@@ -4,7 +4,7 @@
   "sub_issue": 3950,
   "connector": "zoom",
   "provider_module": "customer-managed-keys-hybrid",
-  "state": "planned",
+  "state": "foundation_green",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -39,14 +39,14 @@
     "reverse_etl_writes": 2
   },
   "red": {
-    "commit": "",
-    "command": "",
-    "result": "pending"
+    "commit": "5a0172053",
+    "command": "go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/app ./internal/connectors/defs/zoom/...",
+    "result": "failed as expected: json_redacted response/error and plan samples leaked, secret-sensitive writes lacked typed confirmation, and the one Zoom direct_write command was absent"
   },
   "foundation": {
     "name": "declared direct-write redacted output and sensitive confirmation",
-    "red_commit": "",
-    "green_commit": "",
+    "red_commit": "5a0172053",
+    "green_commit": "recorded after this foundation commit",
     "scope": "response/error/plan redaction and typed confirmation for secret-sensitive rest_write operations"
   },
   "green": {

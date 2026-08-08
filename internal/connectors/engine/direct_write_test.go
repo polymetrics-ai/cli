@@ -420,8 +420,8 @@ func TestOperationDirectWriteNeverRetriesNonIdempotentFailure(t *testing.T) {
 
 	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
 		t.Fatal("OperationDirectWrite error = nil, want HTTP 500")
-	} else if !strings.Contains(err.Error(), "server-token") {
-		t.Fatalf("OperationDirectWrite error = %q, want complete response error content", err)
+	} else if strings.Contains(err.Error(), "server-token") || !strings.Contains(err.Error(), "http 500") || !strings.Contains(err.Error(), "[redacted]") {
+		t.Fatalf("OperationDirectWrite error = %q, want a status-bearing redacted response error", err)
 	}
 	if calls != 1 {
 		t.Fatalf("non-idempotent write calls = %d, want exactly 1", calls)

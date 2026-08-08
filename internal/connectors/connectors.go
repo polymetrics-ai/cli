@@ -427,8 +427,9 @@ type OperationDirectWriteRequest struct {
 	Query        map[string]string
 	Body         map[string]any
 	OutputPolicy string
-	// RedactFields remains part of the request contract for compatibility, but
-	// rest_write does not strip runtime content from it.
+	// RedactFields supplies additional declared response/error fields for a
+	// redacted direct-write policy. Operation-level sensitive_policy fields are
+	// always included by the engine; callers cannot use this to weaken them.
 	RedactFields  []string
 	Approval      *WriteApprovalEvidence
 	PreviewDigest string

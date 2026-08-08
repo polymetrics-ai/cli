@@ -15,6 +15,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/transportpolicy"
+	"polymetrics.ai/internal/safety"
 )
 
 const (
@@ -76,6 +77,8 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 	if err != nil {
 		return connectors.OperationDirectWriteResult{}, err
 	}
+	redactFields := operationDirectWriteRedactFields(prepared.op, req.RedactFields)
+	redactionValues := operationDirectWriteRedactionValues(prepared.body, redactFields)
 
 	var result connectors.OperationDirectWriteResult
 	err = ExecutePreparedWrite(ctx, prepared.prepared, req.Approval, req.PreviewDigest, func(gated context.Context) error {
@@ -125,7 +128,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(err)
+			message := operationDirectWriteErrorText(err, prepared.policy, redactFields, redactionValues)
 			if hint != "" {
 				message += ": " + hint
 			}
@@ -137,7 +140,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if len(response.Body) > prepared.maxBytes {
 			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
 		}
-		body, err := operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes)
+		body, err := operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes, redactFields)
 		if err != nil {
 			return err
 		}
@@ -157,20 +160,92 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 	return result, nil
 }
 
-// operationDirectWriteErrorText deliberately renders the captured HTTP error
-// directly instead of using HTTPError.Error, whose shared read-safe rendering
-// removes response content. rest_write output is complete by captain policy;
-// the requester's existing capture bound still limits the amount retained.
-func operationDirectWriteErrorText(err error) string {
+// operationDirectWriteErrorText retains the request URL and status while
+// applying a declared redacted output policy to provider diagnostics. A
+// secret-returning operation must never turn an echoed request or response
+// into a terminal-visible secret; non-JSON diagnostics therefore remain
+// intentionally opaque under json_redacted rather than guessing their shape.
+func operationDirectWriteErrorText(err error, policy string, redactFields, redactionValues []string) string {
 	var httpErr *connsdk.HTTPError
 	if errors.As(err, &httpErr) {
 		message := strings.TrimSpace(httpErr.Body)
 		if message == "" {
 			message = http.StatusText(httpErr.Status)
 		}
-		return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+		if policy != directWritePolicyJSONRedacted {
+			return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+		}
+		message = redactOperationDirectWriteErrorBody(message, policy, redactFields)
+		message = redactWriteLiterals(message, redactionValues)
+		return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message))
 	}
-	return err.Error()
+	if policy != directWritePolicyJSONRedacted {
+		return err.Error()
+	}
+	return safety.RedactErrorText(redactWriteLiterals(err.Error(), redactionValues))
+}
+
+func redactOperationDirectWriteErrorBody(message, policy string, redactFields []string) string {
+	if policy != directWritePolicyJSONRedacted {
+		return message
+	}
+	decoded, err := decodeDirectReadBody([]byte(message), maxOperationDirectWriteBytes)
+	if err != nil {
+		return "provider response redacted"
+	}
+	decoded = redactJSONValue(decoded)
+	decoded = redactNamedJSONFields(decoded, redactFields)
+	encoded, err := json.Marshal(decoded)
+	if err != nil {
+		return "provider response redacted"
+	}
+	return string(encoded)
+}
+
+func operationDirectWriteRedactFields(op OperationSpec, requested []string) []string {
+	seen := make(map[string]struct{}, len(requested))
+	fields := make([]string, 0, len(requested))
+	add := func(raw string) {
+		field := strings.TrimPrefix(strings.TrimSpace(raw), "record.")
+		if field == "" {
+			return
+		}
+		if _, duplicate := seen[field]; duplicate {
+			return
+		}
+		seen[field] = struct{}{}
+		fields = append(fields, field)
+	}
+	if op.SensitivePolicy != nil {
+		for _, field := range op.SensitivePolicy.RedactFields {
+			add(field)
+		}
+	}
+	for _, field := range requested {
+		add(field)
+	}
+	sort.Strings(fields)
+	return fields
+}
+
+func operationDirectWriteRedactionValues(body map[string]any, fields []string) []string {
+	if len(body) == 0 || len(fields) == 0 {
+		return nil
+	}
+	seen := make(map[string]bool)
+	for _, field := range fields {
+		value, err := resolveRecordPathValue(copyRecordMap(body), strings.Split(field, "."))
+		if err != nil {
+			continue
+		}
+		collectWriteRedactionValues(value, seen)
+	}
+	values := make([]string, 0, len(seen))
+	for value := range seen {
+		values = append(values, value)
+	}
+	sortWriteRedactionLiterals(values)
+	return values
 }
 
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
@@ -560,7 +635,7 @@ func validateOperationDirectWriteOutputPolicy(policy string) error {
 	}
 }
 
-func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (any, error) {
+func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int, declaredRedactFields ...[]string) (any, error) {
 	if policy == directWritePolicyNone {
 		return nil, nil
 	}
@@ -568,13 +643,20 @@ func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (
 	if err != nil {
 		return nil, fmt.Errorf("operation direct write response is not JSON: %w", err)
 	}
+	var redactFields []string
+	if len(declaredRedactFields) > 0 {
+		redactFields = declaredRedactFields[0]
+	}
 	switch policy {
-	case directWritePolicyJSON,
-		directWritePolicyJSONRedacted,
+	case directWritePolicyJSON:
+		return decoded, nil
+	case directWritePolicyJSONRedacted:
+		return redactNamedJSONFields(redactJSONValue(decoded), redactFields), nil
+	case
 		directWritePolicyWriteResultRedacted,
 		directWritePolicyGongBoundedInputRedacted:
-		// The legacy policy names remain valid declaration values, but direct
-		// writes retain their complete decoded response content.
+		// These legacy policy names retain their established response behavior.
+		// json_redacted is the explicit opt-in for a secret-returning response.
 		return decoded, nil
 	default:
 		return nil, fmt.Errorf("operation direct write output policy %q is not supported", policy)

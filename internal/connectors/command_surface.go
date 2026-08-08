@@ -70,8 +70,10 @@ type CommandSurfaceCommand struct {
 	Examples      []string
 	APISurface    []CommandSurfaceEndpointRef
 	OutputPolicy  string
-	// RedactFields is retained for bundle compatibility. Commandrunner does not
-	// use it to mutate connector-command records or errors, or forward it to
+	// RedactFields is retained for bundle compatibility. For direct_write it
+	// controls plan-sample presentation only; the raw private execution record
+	// remains intact and operation-level sensitive_policy controls runtime
+	// response/error redaction. Other command intents do not forward it to
 	// executor requests.
 	RedactFields []string
 	Risk         string
