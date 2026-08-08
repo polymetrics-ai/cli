@@ -44,6 +44,28 @@ FAIL
 The captured RED state is test-only, will be committed and pushed as its own checkpoint, and
 contains no provider credential or token value.
 
+## GREEN foundation — OAuth client credentials with HTTP Basic client auth
+
+Commit `c3038e29c` adds a narrow reusable `client_auth: basic` option to the existing
+`oauth2_client_credentials` contract. Empty or `form` retains the established form-post behavior;
+`basic` moves only client ID/secret into HTTP Basic and leaves `grant_type`, scope, and declared
+extra parameters in the form. Unsupported styles, and `client_auth` on non-client-credentials
+auth modes, fail static validation.
+
+The RED raw-bundle test now loads the declared field and proves the exact token-wire contract:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk ./internal/connectors/engine
+ok  polymetrics.ai/internal/connectors/connsdk
+ok  polymetrics.ai/internal/connectors/engine
+```
+
+The test asserts that client credentials are absent from the token request form and present only
+in Basic, then confirms the received access token becomes the API request bearer header. All test
+values are synthetic and no value is emitted. This foundation is independent of and precedes the
+Zoom Chatbot declaration; it unblocks any connector whose documented OAuth client credentials use
+the standard Basic client-auth style.
+
 ## Planned GREEN contracts
 
 - `client_auth: basic` makes the token request use HTTP Basic for the client ID/secret and keeps
