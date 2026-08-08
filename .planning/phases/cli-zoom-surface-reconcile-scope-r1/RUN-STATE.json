@@ -2,7 +2,7 @@
   "phase": "cli-zoom-surface-reconcile-scope-r1",
   "parent_issue": 3915,
   "consumer_issue": 3946,
-  "state": "red_captured",
+  "state": "green_verified",
   "manual_gsd_fallback": {
     "reason": "named phase is not initialized in gsd-sdk; use the parent contract's inline single-worker fallback",
     "role_spawning": "forbidden by parent contract"
@@ -11,5 +11,9 @@
     "command": "go test -count=1 ./cmd/connectorgen -run TestRunSurfaceReconcileNotesContainsScopesOperationRows",
     "result": "failed as expected: unknown flag --notes-contains"
   },
-  "next": "commit and push the red test checkpoint before changing connectorgen"
+  "green": {
+    "command": "go test -count=1 ./cmd/connectorgen",
+    "result": "passed"
+  },
+  "next": "commit and push the reusable foundation, then use it to reconcile the Healthcare category only"
 }

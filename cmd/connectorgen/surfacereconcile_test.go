@@ -83,7 +83,7 @@ func TestRunSurfaceReconcileNotesContainsScopesOperationRows(t *testing.T) {
 func TestSurfaceReconcileKeepsUnreachableRowsBlockedAndRefusesUnknownModel(t *testing.T) {
 	t.Run("declared but planned command", func(t *testing.T) {
 		root, surfacePath := writeSurfaceReconcileFixture(t, "planned", "direct_read")
-		stats, err := reconcileBundle(filepath.Join(root, "gong"), false, "")
+		stats, err := reconcileBundle(filepath.Join(root, "gong"), false, "", "")
 		if err != nil {
 			t.Fatalf("reconcileBundle: %v", err)
 		}
@@ -101,7 +101,7 @@ func TestSurfaceReconcileKeepsUnreachableRowsBlockedAndRefusesUnknownModel(t *te
 
 	t.Run("implemented command rejected by runtime preflight", func(t *testing.T) {
 		root, surfacePath := writeSurfaceReconcileFixture(t, "implemented", "direct_read", "gong.not_declared")
-		stats, err := reconcileBundle(filepath.Join(root, "gong"), false, "")
+		stats, err := reconcileBundle(filepath.Join(root, "gong"), false, "", "")
 		if err != nil {
 			t.Fatalf("reconcileBundle: %v", err)
 		}
@@ -120,7 +120,7 @@ func TestSurfaceReconcileKeepsUnreachableRowsBlockedAndRefusesUnknownModel(t *te
 		if err != nil {
 			t.Fatalf("read fixture before refusal: %v", err)
 		}
-		stats, err := reconcileBundle(filepath.Join(root, "gong"), false, "")
+		stats, err := reconcileBundle(filepath.Join(root, "gong"), false, "", "")
 		if err != nil {
 			t.Fatalf("reconcileBundle: %v", err)
 		}
