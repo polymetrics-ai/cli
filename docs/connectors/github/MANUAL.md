@@ -36,6 +36,9 @@ CONFIGURATION
   installation_repository_ids
   owner
   public_access
+  rate_limit_account
+  rate_limit_ip
+  rate_limit_repository
   repo
   since
   private_key (secret)

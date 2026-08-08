@@ -388,6 +388,31 @@ $ pm github repo delete --credential github-local
   Confirmation required: --confirm destructive
 ```
 
+## Cycle 12 interim verification — GitHub rate policy and regenerated artifacts
+
+The red/green evidence for the GitHub rate-policy declaration, full-surface
+proof accounting harness, and codeload redirect repair is recorded in
+`TDD-LEDGER.md` cycles 12a–12c.  This interim check records the generated
+artifact boundary before a credential-backed proof run:
+
+```
+$ go test -timeout 20m ./internal/cli/ -run GoldenTranscript -count=1
+ok   polymetrics.ai/internal/cli
+
+$ pm docs validate
+Validated connector docs in docs/connectors
+```
+
+`pm docs generate`, `pm skills generate`, and the website catalog generator
+were run from the current branch.  Their GitHub outputs are retained exactly
+from that generation; the unrelated generator drift already present on the
+base was not included in this connector-only PR.  Parsed catalog comparison
+confirmed that each shared catalog has one changed entry, `github`, and the
+golden transcript comparison confirmed that the only changed transcript is
+`connectors_inspect_github_json` (its GitHub manifest gains the three declared
+rate-limit configuration fields).  `pm docs validate` and the golden test pass
+against those regenerated artifacts.
+
 Derived artifacts regenerated and confined to github --
 `internal/connectors/defs/github/cli_surface.json`,
 `docs/connectors/github/{MANUAL,SKILL}.md`, `docs/skills/pm-github/SKILL.md`,
