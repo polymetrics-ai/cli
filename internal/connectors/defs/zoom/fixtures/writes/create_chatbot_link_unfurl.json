@@ -1,0 +1,15 @@
+{
+  "record": {
+    "content": "{\"type\":\"message\",\"text\":\"fixture unfurl\"}"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/im/chat/users/fixture-chatbot-user/unfurls/fixture-trigger",
+    "body": {
+      "content": "{\"type\":\"message\",\"text\":\"fixture unfurl\"}"
+    }
+  },
+  "response": {
+    "status": 204
+  }
+}

@@ -4,7 +4,7 @@
   "sub_issue": 3944,
   "connector": "zoom",
   "provider_module": "chatbot",
-  "state": "red_captured",
+  "state": "fixture_red_captured",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -56,5 +56,9 @@
       "go test -count=1 -timeout 20m ./internal/connectors/commandrunner ./cmd/connectorgen"
     ]
   },
-  "next": "author the four-operation Zoom Chatbot declaration and its isolated token/API fixtures"
+  "fixture_red": {
+    "command": "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...",
+    "result": "failed as expected: target counts remain 23/1819/1, all four Chatbot paths are unknown, and the end-to-end fixture cannot build the send command"
+  },
+  "next": "author the four-operation Zoom Chatbot declaration and regenerate its derived surface"
 }

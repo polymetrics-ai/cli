@@ -1316,6 +1316,291 @@ func TestCustomerManagedKeysHybridCommandExecutesWithFixture(t *testing.T) {
 	}
 }
 
+// TestChatbotCommandsExecuteWithFixture proves every documented Chatbot write
+// reaches the real plan/preview/approval lifecycle through a dedicated Client
+// Credentials token exchange. The loopback transport catches regressions that
+// a declaration-only preflight cannot: Basic client authentication, Bearer
+// action authentication, the provider's exact method/path/body contract,
+// destructive DELETE confirmation, response redaction, and the 204 status-only
+// Link Unfurls action.
+func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
+	const (
+		credentialName = "zoom-chatbot-fixture"
+		clientID       = "fixture-chatbot-client-id"
+		clientSecret   = "fixture-chatbot-client-secret"
+		accessToken    = "fixture-chatbot-access-token"
+	)
+
+	type chatbotAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		method            string
+		requestPath       string
+		fixture           string
+		expectedBody      map[string]any
+		destructive       bool
+		expectsBody       bool
+		inputSensitive    []string
+		responseSensitive []string
+		status            int
+		response          json.RawMessage
+	}
+	actions := []chatbotAction{
+		{
+			name:        "send",
+			path:        []string{"chatbot", "messages", "send"},
+			method:      http.MethodPost,
+			requestPath: "/v2/im/chat/messages",
+			fixture:     "send_chatbot_message.json",
+			flags: map[string][]string{
+				"account-id":          {"fixture-chatbot-account"},
+				"content":             {`{"body":[{"type":"section","text":"fixture chatbot message"}]}`},
+				"robot-jid":           {"fixture-robot-jid"},
+				"to-jid":              {"fixture-recipient-jid"},
+				"user-jid":            {"fixture-sender-jid"},
+				"is-markdown-support": {"true"},
+				"reply-to":            {"fixture-reply-jid"},
+				"visible-to-user":     {"true"},
+			},
+			expectedBody: map[string]any{
+				"account_id":          "fixture-chatbot-account",
+				"content":             map[string]any{"body": []any{map[string]any{"type": "section", "text": "fixture chatbot message"}}},
+				"robot_jid":           "fixture-robot-jid",
+				"to_jid":              "fixture-recipient-jid",
+				"user_jid":            "fixture-sender-jid",
+				"is_markdown_support": true,
+				"reply_to":            "fixture-reply-jid",
+				"visible_to_user":     "true",
+			},
+			expectsBody:       true,
+			inputSensitive:    []string{"fixture-chatbot-account", "fixture chatbot message", "fixture-robot-jid", "fixture-recipient-jid", "fixture-sender-jid", "fixture-reply-jid"},
+			responseSensitive: []string{"fixture-chatbot-account", "fixture-chatbot-message", "fixture chatbot response", "fixture-chatbot-response-token"},
+		},
+		{
+			name:        "edit",
+			path:        []string{"chatbot", "messages", "edit"},
+			method:      http.MethodPut,
+			requestPath: "/v2/im/chat/messages/fixture-chatbot-message",
+			fixture:     "edit_chatbot_message.json",
+			flags: map[string][]string{
+				"message-id":          {"fixture-chatbot-message"},
+				"account-id":          {"fixture-chatbot-account"},
+				"content":             {`{"body":[{"type":"section","text":"fixture edited chatbot message"}]}`},
+				"robot-jid":           {"fixture-robot-jid"},
+				"is-markdown-support": {"false"},
+				"user-jid":            {"fixture-sender-jid"},
+			},
+			expectedBody: map[string]any{
+				"account_id":          "fixture-chatbot-account",
+				"content":             map[string]any{"body": []any{map[string]any{"type": "section", "text": "fixture edited chatbot message"}}},
+				"robot_jid":           "fixture-robot-jid",
+				"is_markdown_support": false,
+				"user_jid":            "fixture-sender-jid",
+			},
+			expectsBody:       true,
+			inputSensitive:    []string{"fixture-chatbot-account", "fixture edited chatbot message", "fixture-robot-jid", "fixture-sender-jid"},
+			responseSensitive: []string{"fixture-chatbot-message", "fixture-robot-jid", "fixture edited chatbot response", "fixture-chatbot-response-token"},
+		},
+		{
+			name:              "delete",
+			path:              []string{"chatbot", "messages", "delete"},
+			method:            http.MethodDelete,
+			requestPath:       "/v2/im/chat/messages/fixture-chatbot-message",
+			fixture:           "delete_chatbot_message.json",
+			flags:             map[string][]string{"message-id": {"fixture-chatbot-message"}},
+			destructive:       true,
+			responseSensitive: []string{"fixture-chatbot-message", "fixture-chatbot-response-token"},
+		},
+		{
+			name:        "link unfurl",
+			path:        []string{"chatbot", "link-unfurls", "create"},
+			method:      http.MethodPost,
+			requestPath: "/v2/im/chat/users/fixture-chatbot-user/unfurls/fixture-trigger",
+			fixture:     "create_chatbot_link_unfurl.json",
+			flags: map[string][]string{
+				"user-id":    {"fixture-chatbot-user"},
+				"trigger-id": {"fixture-trigger"},
+				"content":    {`{"type":"message","text":"fixture unfurl"}`},
+			},
+			expectedBody:   map[string]any{"content": `{"type":"message","text":"fixture unfurl"}`},
+			inputSensitive: []string{`{"type":"message","text":"fixture unfurl"}`},
+		},
+	}
+
+	byRequest := make(map[string]*chatbotAction, len(actions))
+	for i := range actions {
+		actions[i].status, actions[i].response = zoomWriteFixture(t, actions[i].fixture)
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	tokenRequests := 0
+	tokenServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		tokenRequests++
+		if request.Method != http.MethodPost {
+			t.Fatal("Chatbot token fixture did not receive POST")
+		}
+		gotID, gotSecret, ok := request.BasicAuth()
+		if !ok || gotID != clientID || gotSecret != clientSecret {
+			t.Fatal("Chatbot token fixture did not receive declared Basic client authentication")
+		}
+		if err := request.ParseForm(); err != nil {
+			t.Fatalf("parse Chatbot token form: %v", err)
+		}
+		if request.PostForm.Get("grant_type") != "client_credentials" || request.PostForm.Get("client_id") != "" || request.PostForm.Get("client_secret") != "" {
+			t.Fatal("Chatbot token fixture received credentials in the form instead of the declared Basic exchange")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"access_token":"fixture-chatbot-access-token","token_type":"Bearer","expires_in":3600}`))
+	}))
+	defer tokenServer.Close()
+
+	apiRequests := 0
+	apiServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		apiRequests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Chatbot API fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Chatbot API fixture did not receive the token-exchange Bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Chatbot action sent undeclared query or pagination input")
+		}
+		if action.expectedBody == nil {
+			var unexpected any
+			if err := json.NewDecoder(request.Body).Decode(&unexpected); err == nil {
+				t.Fatal("Chatbot no-body action unexpectedly sent a request body")
+			}
+		} else {
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("Chatbot body action did not declare JSON content")
+			}
+			var body map[string]any
+			if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+				t.Fatalf("decode Chatbot action body: %v", err)
+			}
+			if !reflect.DeepEqual(body, action.expectedBody) {
+				t.Fatal("Chatbot action body did not contain exactly the declared typed fields")
+			}
+		}
+		if len(action.response) > 0 {
+			w.Header().Set("Content-Type", "application/json")
+		}
+		w.WriteHeader(action.status)
+		if len(action.response) > 0 {
+			_, _ = w.Write(action.response)
+		}
+	}))
+	defer apiServer.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s) = %v, want declared Chatbot command", action.name, err)
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config: map[string]string{
+			"base_url":          apiServer.URL + "/v2",
+			"chatbot_token_url": tokenServer.URL,
+		},
+		Secrets: map[string]string{
+			"chatbot_client_id":     clientID,
+			"chatbot_client_secret": clientSecret,
+		},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("Chatbot plan did not produce a no-network preview and single-use approval")
+			}
+			if action.destructive != (plan.ConfirmationChallenge == string(connectors.ConfirmationKindDestructive)) {
+				t.Fatal("Chatbot plan did not retain the declared destructive confirmation policy")
+			}
+			encodedPlan, err := json.Marshal(plan.Sample)
+			if err != nil {
+				t.Fatalf("marshal Chatbot plan sample: %v", err)
+			}
+			for _, raw := range action.inputSensitive {
+				if strings.Contains(string(encodedPlan), raw) {
+					t.Fatal("Chatbot plan sample exposed a declared sensitive input")
+				}
+			}
+			if apiRequests != 0 || tokenRequests != 0 {
+				t.Fatal("Chatbot plan or preview reached a fixture endpoint")
+			}
+
+			runRequest := app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}
+			if action.destructive {
+				if _, err := application.RunReverseETL(context.Background(), runRequest); err == nil {
+					t.Fatal("Chatbot DELETE execution bypassed typed destructive confirmation")
+				}
+				if apiRequests != 0 || tokenRequests != 0 {
+					t.Fatal("unconfirmed Chatbot DELETE reached a fixture endpoint")
+				}
+				runRequest.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+			}
+			run, err := application.RunReverseETL(context.Background(), runRequest)
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != action.status {
+				t.Fatal("Chatbot action did not complete with its declared response status")
+			}
+			if !action.expectsBody {
+				if run.OperationDirectWrite.Body != nil {
+					t.Fatal("Chatbot status-only action returned an invented response body")
+				}
+				return
+			}
+			encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+			if err != nil {
+				t.Fatalf("marshal Chatbot action response: %v", err)
+			}
+			for _, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatal("Chatbot action response exposed a declared or generic sensitive field")
+				}
+			}
+			for _, field := range []string{"account_id", "content", "message_id", "robot_jid", "token"} {
+				if !strings.Contains(string(encoded), `"`+field+`_redacted":true`) {
+					t.Fatal("Chatbot action response is missing a required redaction marker")
+				}
+			}
+		})
+	}
+	if apiRequests != len(actions) || tokenRequests != len(actions) {
+		t.Fatal("Chatbot fixtures did not receive exactly one token exchange and one action request per command")
+	}
+}
+
 func assertCobrowseSDKResponseRedacted(t *testing.T, body any, raw, fields []string) {
 	t.Helper()
 	encoded, err := json.Marshal(body)
@@ -1392,8 +1677,8 @@ func zoomWriteFixture(t *testing.T, file string) (int, json.RawMessage) {
 	if err := json.Unmarshal(raw, &fixture); err != nil {
 		t.Fatalf("decode writes fixture %s: %v", file, err)
 	}
-	if fixture.Response.Status == 0 || len(fixture.Response.Body) == 0 {
-		t.Fatalf("writes fixture %s requires response.status and response.body", file)
+	if fixture.Response.Status == 0 {
+		t.Fatalf("writes fixture %s requires response.status", file)
 	}
 	return fixture.Response.Status, fixture.Response.Body
 }

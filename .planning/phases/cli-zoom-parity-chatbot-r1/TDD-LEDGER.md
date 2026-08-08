@@ -86,6 +86,40 @@ ok  polymetrics.ai/cmd/connectorgen
 The foundation is separate from Zoom authoring and unblocks any declared provider operation whose
 named, schema-owned member is an object rather than a scalar or string array.
 
+## RED contract — executable Chatbot fixture lifecycle
+
+Before declaring any Zoom Chatbot operation, four synthetic response fixtures and the
+`TestChatbotCommandsExecuteWithFixture` contract were added. The test builds each real command
+before creating a fixture credential, then exercises the complete no-network plan/preview and
+approved execution lifecycle against separate token/API loopback servers. It requires HTTP Basic
+client credentials at the token endpoint, Bearer auth at the API endpoint, exact request
+method/path/body, DELETE typed confirmation, response redaction, and Link Unfurls' successful
+`204` with no invented response body.
+
+The focused Zoom suite failed against the still-undeclared Chatbot slice as expected:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...
+--- FAIL: TestProviderInventoryLedgerIsComplete (0.03s)
+    command_surface_test.go:155: executable rows = 23, want 27
+    command_surface_test.go:158: operations awaiting Zoom-local contracts = 1819, want 1815
+--- FAIL: TestCoveredStreamsHaveReachableCommands (0.03s)
+    command_surface_test.go:254: reachable direct_write operation commands = 1, want 5
+--- FAIL: TestChatbotDirectWriteCommandsAreReachable (0.03s)
+    command_surface_test.go:279: Preflight("chatbot messages send") = connector command "chatbot messages send" is blocked: unknown command, want declared executable Chatbot action
+    command_surface_test.go:279: Preflight("chatbot messages edit") = connector command "chatbot messages edit" is blocked: unknown command, want declared executable Chatbot action
+    command_surface_test.go:279: Preflight("chatbot messages delete") = connector command "chatbot messages delete" is blocked: unknown command, want declared executable Chatbot action
+    command_surface_test.go:279: Preflight("chatbot link-unfurls create") = connector command "chatbot link-unfurls create" is blocked: unknown command, want declared executable Chatbot action
+--- FAIL: TestChatbotCommandsExecuteWithFixture (0.03s)
+    command_surface_test.go:1502: BuildWriteCommand(send) = connector command "chatbot messages send" is blocked: unknown command, want declared Chatbot command
+FAIL
+FAIL	polymetrics.ai/internal/connectors/defs/zoom	2.783s
+FAIL
+```
+
+This RED checkpoint contains only test/fixture/evidence changes. It does not declare a Zoom
+operation, add a credential field, or alter generated output.
+
 ## Planned GREEN contracts
 
 - `client_auth: basic` makes the token request use HTTP Basic for the client ID/secret and keeps
