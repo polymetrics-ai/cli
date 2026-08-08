@@ -1,0 +1,26 @@
+{
+  "record": {
+    "opportunity": "opportunity_fixture_1",
+    "feedback": "feedback_fixture_1",
+    "completedAt": 1767225601000,
+    "fieldValues": [
+      {
+        "id": "field_fixture_1",
+        "value": "Fixture value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/opportunities/opportunity_fixture_1/feedback/feedback_fixture_1",
+    "body": {
+      "completedAt": 1767225601000,
+      "fieldValues": [
+        {
+          "id": "field_fixture_1",
+          "value": "Fixture value"
+        }
+      ]
+    }
+  }
+}

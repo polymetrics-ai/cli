@@ -1,8 +1,9 @@
 {
   "api": "Help Scout Mailbox API v2 (https://developer.helpscout.com/)",
-  "docs": "https://developer.helpscout.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (conversations, customers, mailboxes, users); Help Scout's write endpoints (conversation reply/note, tag management, customer create/update) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "docs": "https://developer.helpscout.com/mailbox-api/",
+  "reviewed_at": "2026-08-07",
+  "operation_ledger_version": 1,
+  "scope": "144 documented Help Scout Mailbox API operations, re-derived 2026-08-07 from the 146 endpoint pages listed in the shared left-nav of developer.helpscout.com/mailbox-api/ (Help Scout publishes no machine-readable spec; the ledger's recorded .../mailbox-api/endpoints/ URL 404s and is a section prefix, not a page). Each page renders exactly one METHOD+path request line. Deduped on the TEMPLATED path each page publishes in its own Path Parameters block, never on the example URL: 146 pages collapse to 144 operations because original-source is documented once per Accept header and DELETE /v2/customers/{customerId} is documented once with and once without ?async=true. Method split GET 79 / POST 21 / PUT 20 / PATCH 6 / DELETE 18. Every row carries exactly one disposition. The five Mailbox API v3 operations are recorded at their documented host-root path because they lie outside this bundle's /v2 base. Webhook events are excluded by the counting policy and live at developer.helpscout.com/webhooks/; the five /v2/webhooks management endpoints are ordinary operations and are counted.",
   "endpoints": [
     {
       "method": "GET",
@@ -12,10 +13,402 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/v2/conversations",
+      "covered_by": {
+        "write": "create_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/conversations/{conversationId}",
+      "covered_by": {
+        "write": "delete_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/conversations/{conversationId}",
+      "covered_by": {
+        "direct_read": "direct get-conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/conversations/{conversationId}",
+      "covered_by": {
+        "write": "update_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}",
+      "covered_by": {
+        "write": "delete_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/data",
+      "covered_by": {
+        "direct_read": "direct get-attachment-data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/file",
+      "covered_by": {
+        "direct_read": "attachments download"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversations/{conversationId}/chats",
+      "covered_by": {
+        "write": "create_chat_thread"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversations/{conversationId}/customer",
+      "covered_by": {
+        "write": "create_customer_thread"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/conversations/{conversationId}/fields",
+      "covered_by": {
+        "write": "update_custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversations/{conversationId}/notes",
+      "covered_by": {
+        "write": "create_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversations/{conversationId}/phones",
+      "covered_by": {
+        "write": "create_phone_thread"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversations/{conversationId}/reply",
+      "covered_by": {
+        "write": "create_reply_thread"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/conversations/{conversationId}/snooze",
+      "covered_by": {
+        "write": "delete_snooze"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/conversations/{conversationId}/snooze",
+      "covered_by": {
+        "write": "update_snooze"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/conversations/{conversationId}/tags",
+      "covered_by": {
+        "write": "update_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/conversations/{conversationId}/threads",
+      "covered_by": {
+        "stream": "conversations_threads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/conversations/{conversationId}/threads/{threadId}",
+      "covered_by": {
+        "write": "update_thread"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversations/{conversationId}/threads/{threadId}/attachments",
+      "covered_by": {
+        "write": "upload_attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/conversations/{conversationId}/threads/{threadId}/original-source",
+      "covered_by": {
+        "direct_read": "direct get-thread-original-source"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule",
+      "covered_by": {
+        "write": "delete_thread_schedule"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule",
+      "covered_by": {
+        "write": "publish_thread_schedule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule",
+      "covered_by": {
+        "write": "update_thread_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customer-properties",
+      "covered_by": {
+        "stream": "customer_properties"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customer-properties",
+      "covered_by": {
+        "write": "create_customer_property_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customer-properties/{slug}",
+      "covered_by": {
+        "write": "delete_customer_property_definition"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/customers",
       "covered_by": {
         "stream": "customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customerId}",
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customerId}",
+      "covered_by": {
+        "direct_read": "direct get-customer"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/customers/{customerId}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customerId}",
+      "covered_by": {
+        "write": "overwrite_customer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customerId}/address",
+      "covered_by": {
+        "write": "delete_address"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customerId}/address",
+      "covered_by": {
+        "direct_read": "direct get-address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customerId}/address",
+      "covered_by": {
+        "write": "create_address"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customerId}/address",
+      "covered_by": {
+        "write": "update_address"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customerId}/chats",
+      "covered_by": {
+        "stream": "customers_chats"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customerId}/chats",
+      "covered_by": {
+        "write": "create_chat_handle"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customerId}/chats/{chatId}",
+      "covered_by": {
+        "write": "delete_chat_handle"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customerId}/chats/{chatId}",
+      "covered_by": {
+        "write": "update_chat_handles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customerId}/emails",
+      "covered_by": {
+        "stream": "customers_emails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customerId}/emails",
+      "covered_by": {
+        "write": "create_email"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customerId}/emails/{emailId}",
+      "covered_by": {
+        "write": "delete_email"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customerId}/emails/{emailId}",
+      "covered_by": {
+        "write": "update_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customerId}/phones",
+      "covered_by": {
+        "stream": "customers_phones"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customerId}/phones",
+      "covered_by": {
+        "write": "create_phone"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customerId}/phones/{phoneId}",
+      "covered_by": {
+        "write": "delete_phone"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customerId}/phones/{phoneId}",
+      "covered_by": {
+        "write": "update_phone"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/customers/{customerId}/properties",
+      "covered_by": {
+        "write": "update_customer_properties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customerId}/social-profiles",
+      "covered_by": {
+        "stream": "customers_social_profiles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customerId}/social-profiles",
+      "covered_by": {
+        "write": "create_social_profile"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customerId}/social-profiles/{socialProfileId}",
+      "covered_by": {
+        "write": "delete_social_profile"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customerId}/social-profiles/{socialProfileId}",
+      "covered_by": {
+        "write": "update_social_profile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customerId}/websites",
+      "covered_by": {
+        "stream": "customers_websites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customerId}/websites",
+      "covered_by": {
+        "write": "create_website"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customerId}/websites/{websiteId}",
+      "covered_by": {
+        "write": "delete_website"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customerId}/websites/{websiteId}",
+      "covered_by": {
+        "write": "update_website"
       }
     },
     {
@@ -27,6 +420,440 @@
     },
     {
       "method": "GET",
+      "path": "/v2/mailboxes/{mailboxId}",
+      "covered_by": {
+        "direct_read": "direct get-inbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/mailboxes/{mailboxId}/fields",
+      "covered_by": {
+        "stream": "mailboxes_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/mailboxes/{mailboxId}/folders",
+      "covered_by": {
+        "stream": "mailboxes_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/mailboxes/{mailboxId}/routing",
+      "covered_by": {
+        "direct_read": "direct get-routing-configuration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/mailboxes/{mailboxId}/routing",
+      "covered_by": {
+        "write": "update_routing_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/mailboxes/{mailboxId}/saved-replies",
+      "covered_by": {
+        "stream": "mailboxes_saved_replies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/mailboxes/{mailboxId}/saved-replies",
+      "covered_by": {
+        "write": "create_saved_reply"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}",
+      "covered_by": {
+        "write": "delete_saved_reply"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}",
+      "covered_by": {
+        "direct_read": "direct get-saved-reply"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}",
+      "covered_by": {
+        "write": "update_saved_reply"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations",
+      "covered_by": {
+        "write": "create_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/properties",
+      "covered_by": {
+        "stream": "organizations_properties"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/properties",
+      "covered_by": {
+        "write": "create_organization_property_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/properties/{slug}",
+      "covered_by": {
+        "write": "delete_organization_property_definition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/properties/{slug}",
+      "covered_by": {
+        "direct_read": "direct get-organization-property-definition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/properties/{slug}",
+      "covered_by": {
+        "write": "update_organization_property_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{organizationId}",
+      "covered_by": {
+        "write": "delete_organization_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{organizationId}",
+      "covered_by": {
+        "direct_read": "direct get-organization-by-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{organizationId}",
+      "covered_by": {
+        "write": "update_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{organizationId}/conversations",
+      "covered_by": {
+        "stream": "organizations_conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{organizationId}/customers",
+      "covered_by": {
+        "stream": "organizations_customers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/organizations/{organizationId}/properties/{slug}",
+      "covered_by": {
+        "write": "remove_organization_property_value"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/organizations/{organizationId}/properties/{slug}",
+      "covered_by": {
+        "write": "set_organization_property_value"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/ratings/{ratingId}",
+      "covered_by": {
+        "direct_read": "direct get-satisfaction-rating"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/chat",
+      "covered_by": {
+        "direct_read": "direct chat-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/company",
+      "covered_by": {
+        "direct_read": "direct company-overall-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/company/customers-helped",
+      "covered_by": {
+        "direct_read": "direct company-customers-helped"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/company/drilldown",
+      "covered_by": {
+        "direct_read": "direct company-drilldown"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/conversations",
+      "covered_by": {
+        "direct_read": "direct conversations-overall-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/conversations/busy-times",
+      "covered_by": {
+        "direct_read": "direct conversations-busiest-time-of-day"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/conversations/drilldown",
+      "covered_by": {
+        "direct_read": "direct conversations-drilldown"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/conversations/fields-drilldown",
+      "covered_by": {
+        "direct_read": "direct conversations-drilldown-by-field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/conversations/new",
+      "covered_by": {
+        "direct_read": "direct conversations-new-conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/conversations/new-drilldown",
+      "covered_by": {
+        "direct_read": "direct conversations-new-conversations-drilldown"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/conversations/received-messages",
+      "covered_by": {
+        "direct_read": "direct conversations-received-messages-statistics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/conversations/volume-by-channel",
+      "covered_by": {
+        "direct_read": "direct all-channels-volumes-by-channel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/docs",
+      "covered_by": {
+        "direct_read": "direct docs-overall-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/email",
+      "covered_by": {
+        "direct_read": "direct email-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/happiness",
+      "covered_by": {
+        "direct_read": "direct happiness-overall-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/happiness/ratings",
+      "covered_by": {
+        "direct_read": "direct happiness-ratings-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/phone",
+      "covered_by": {
+        "direct_read": "direct phone-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/productivity",
+      "covered_by": {
+        "direct_read": "direct productivity-overall-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/productivity/first-response-time",
+      "covered_by": {
+        "direct_read": "direct productivity-first-response-time"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/productivity/replies-sent",
+      "covered_by": {
+        "direct_read": "direct productivity-replies-sent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/productivity/resolution-time",
+      "covered_by": {
+        "direct_read": "direct productivity-resolution-time"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/productivity/resolved",
+      "covered_by": {
+        "direct_read": "direct productivity-resolved"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/productivity/response-time",
+      "covered_by": {
+        "direct_read": "direct productivity-response-time"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/user",
+      "covered_by": {
+        "direct_read": "direct user-team-overall-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/user/chat",
+      "covered_by": {
+        "direct_read": "direct user-team-chat-report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/user/conversation-history",
+      "covered_by": {
+        "direct_read": "direct user-conversation-history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/user/customers-helped",
+      "covered_by": {
+        "direct_read": "direct user-customers-helped"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/user/drilldown",
+      "covered_by": {
+        "direct_read": "direct user-drill-down"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/user/happiness",
+      "covered_by": {
+        "direct_read": "direct user-happiness"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/user/ratings",
+      "covered_by": {
+        "direct_read": "direct user-happiness-drilldown"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/user/replies",
+      "covered_by": {
+        "direct_read": "direct user-replies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/user/resolutions",
+      "covered_by": {
+        "direct_read": "direct user-resolutions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tags/{tagId}",
+      "covered_by": {
+        "direct_read": "direct get-tag-by-id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/teams/{teamId}/members",
+      "covered_by": {
+        "stream": "teams_members"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/teams/{teamId}/members",
+      "covered_by": {
+        "write": "update_team_members"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v2/users",
       "covered_by": {
         "stream": "users"
@@ -34,34 +861,186 @@
     },
     {
       "method": "POST",
-      "path": "/v2/conversations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented conversation creation"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v2/conversations/{id}/reply",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented conversation replies"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v2/reports/*",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Reporting/analytics endpoints not modeled by legacy"
+      "path": "/v2/users",
+      "covered_by": {
+        "write": "create_user"
       }
     },
     {
       "method": "GET",
       "path": "/v2/users/me",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "authenticated-user profile introspection, not a syncable object stream"
+      "covered_by": {
+        "direct_read": "direct get-resource-owner"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/status",
+      "covered_by": {
+        "stream": "users_status"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/users/{userId}",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/{userId}",
+      "covered_by": {
+        "direct_read": "direct get-user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/{userId}/conversation-reassignment",
+      "covered_by": {
+        "direct_read": "direct get-conversation-reassignment-configuration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/users/{userId}/conversation-reassignment",
+      "covered_by": {
+        "write": "update_conversation_reassignment_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/{userId}/status",
+      "covered_by": {
+        "direct_read": "direct get-user-status"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/users/{userId}/status",
+      "covered_by": {
+        "write": "set_user_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/webhooks/{webhookId}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks/{webhookId}",
+      "covered_by": {
+        "direct_read": "direct get-webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/webhooks/{webhookId}",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workflows",
+      "covered_by": {
+        "stream": "workflows"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/workflows/{workflowId}",
+      "covered_by": {
+        "write": "update_workflow_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/workflows/{workflowId}/run",
+      "covered_by": {
+        "write": "run_manual_workflows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/conversations/{conversationId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
+        "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/conversations/{conversationId}/threads",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
+        "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/customers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
+        "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/system-users",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
+        "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/system-users/{systemUserId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
+        "notes": "Named dependency: rebase this bundle's base_url to the host root (https://api.helpscout.net) and rewrite every stream, write and operation path to carry its own version prefix. That is a small change here - the bundle has few streams - but it changes a SHIPPED spec.json default, so any stored connection whose base_url is https://api.helpscout.net/v2 would start building .../v2/v2/..., which needs a config migration. A user-visible breaking default change does not belong in a parity commit. Recorded at the documented host-root path so it cannot collide with a base-relative v2 row."
       }
     }
   ]

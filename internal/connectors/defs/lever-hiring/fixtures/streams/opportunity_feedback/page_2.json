@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/opportunities/opportunity_fixture_1/feedback",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "opportunity_feedback_fixture_1",
+          "text": "Fixture opportunity feedback",
+          "name": "Fixture opportunity feedback",
+          "createdAt": 1767225601000,
+          "updatedAt": 1767225602000,
+          "opportunity_id": "opportunity_fixture_1"
+        }
+      ],
+      "hasNext": false,
+      "next": null
+    }
+  }
+}

@@ -6,35 +6,41 @@
   captain-authorized `covered_by.writes` engine/schema/validator foundation was added.
 - [x] The post-foundation all-bundle validator checked all 551 connectors with zero findings,
   proving no existing connector behavior changed.
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` succeeds.
-- [ ] `go run ./cmd/connectorgen surface-sync --check` succeeds after regeneration.
-- [ ] The source-derived counts match the seven-row table in `PLAN.md`.
-- [ ] `operation_endpoint_ledger.json` delta names only the seven connectors.
-- [ ] `git diff --name-only` passes the scope fence in `PLAN.md`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` checked 551 connectors with 0 findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` scanned 551 connectors with no drift.
+- [x] The source-derived counts match the seven-row table in `PLAN.md`.
+- [x] `operation_endpoint_ledger.json` delta is confined to chatwoot, jira, lever-hiring, and
+  workday-rest, a subset of the seven-connector allowlist.
+- [x] Final staged-diff scope audit found 162 branch-delta paths, 0 unexpected paths, and 0
+  github/zendesk-support paths.
 
 ## Tests and binary checks
 
-- [ ] Focused seven connector `cmd/connectorgen` tests pass.
-- [ ] `go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight` passes.
-- [ ] `go build -o /tmp/pm-cli-sweep-seven ./cmd/pm` succeeds.
-- [ ] Every implemented command in the seven generated CLI surfaces routes to its own real-binary
-  help `NAME` line; totals are 911, 584, 139, 127, 100, 63, and 60.
-- [ ] `pm help <connector>` and bare `pm <connector>` succeed for all seven.
+- [x] Focused seven connector `cmd/connectorgen` tests pass.
+- [x] `go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight` passes.
+- [x] `go build -o /tmp/pm-cli-sweep-seven ./cmd/pm` succeeds.
+- [x] Every implemented command in the seven generated CLI surfaces routes to its own real-binary
+  help `NAME` line; totals are 911, 584, 139, 127, 100, 63, and 60 (1,984 total).
+- [x] `pm help <connector>` and bare `pm <connector>` succeed for all seven.
 
 ## Docs and website checks
 
-- [ ] `pm docs generate --dir docs/cli --connectors-dir docs/connectors` regenerated connector docs.
-- [ ] `pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs` passes.
-- [ ] `cd website && pnpm run gen:website-data` regenerated website data.
-- [ ] Generated website data reflects all seven connectors and no excluded connector regression.
+- [x] `pm docs generate --dir docs/cli --connectors-dir docs/connectors` regenerated connector docs.
+- [x] `pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs` passes.
+- [x] `cd website && pnpm run gen:website-data` regenerated website data.
+- [x] Generated website data reflects all seven connector counts; no excluded connector input changed.
 
 ## Final local gates
 
-- [ ] Focused affected package tests, `go vet` for affected packages, `make tidy-check`, `make lint`,
-  `make agent-contract-check`, `make connector-boundary`, `make release-workflow-check`, and
-  `scripts/verify-gsd-workflow origin/main` pass as applicable.
-- [ ] GSD `verify-work` and `code-review` prompts were generated and executed inline; findings are
-  recorded and resolved or explicitly handed off.
+- [x] Focused affected package tests, full `cmd/connectorgen`, `internal/connectors/engine`,
+  `internal/connectors/commandrunner`, and full `internal/cli` tests pass; affected-package `go vet`
+  and `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`,
+  `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`,
+  `make connector-boundary`, and `make release-workflow-check` pass.
+- [x] `scripts/verify-gsd-workflow origin/main` reports GSD/TDD evidence for every implementation
+  file changed by this phase.
+- [x] GSD `verify-work` and `code-review` prompts were generated and executed inline under the
+  contract's no-role-spawning fallback; automated PR review remains a firstmate handoff.
 
 ## PR handoff requirement
 

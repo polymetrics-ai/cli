@@ -11,6 +11,9 @@ Generated prompts used:
 ```text
 scripts/gsd prompt discuss-phase cli-sweep-seven-connector-extract-r1 --auto
 scripts/gsd prompt plan-phase cli-sweep-seven-connector-extract-r1 --tdd
+scripts/gsd prompt execute-phase cli-sweep-seven-connector-extract-r1
+scripts/gsd prompt verify-work cli-sweep-seven-connector-extract-r1
+scripts/gsd prompt code-review cli-sweep-seven-connector-extract-r1
 ```
 
 Inline/manual GSD execution is deliberate: this is a single-worker captain assignment, the
@@ -21,7 +24,8 @@ verification, or review.
 Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`,
 `golang-structs-interfaces`, `golang-documentation`, and `vercel-react-best-practices` (generated
-website artifacts only; no React implementation is planned).
+website artifacts only; no React implementation is planned). `golang-lint` was loaded before the
+mandatory review stage; `make lint` reported 0 issues.
 
 ## Scope fence
 
