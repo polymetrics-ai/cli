@@ -173,6 +173,39 @@ states that this reverse-ETL half "could never be tested before." This is the
 first recorded end-to-end PM write exercise. Six PM `create_issue` runs in the
 dedicated repository have all failed with transport EOF.
 
+## Stale pooled-connection replay hypothesis — disproved
+
+This hypothesis was tested before changing production transport behavior. It
+does not explain the live EOF:
+
+- `Requester.do` constructs the JSON body as `bytes.NewReader(payload)`.
+  Although `requestBody.Reader` is declared as `io.Reader`, the concrete
+  `*bytes.Reader` reaches `http.NewRequest`, which populates `Request.GetBody`.
+- `disableTransportReplay` clears `GetBody` only afterward for a strict
+  non-idempotent write. That is deliberate: restoring it would permit an
+  automatic replay that can duplicate an external mutation.
+- `noReplayClient` clones the transport with keep-alives disabled, and the
+  strict request sets `Close=true`; this path has no pooled idle connection to
+  reuse.
+
+The new test uses a primed idle connection with a deterministic pre-write
+failure on its next `POST`, the transport-level equivalent of a stale server
+close. It proves both sides of the contract:
+
+```sh
+go test -timeout 20m ./internal/connectors/connsdk \
+  -run '^(TestRequesterKeepsJSONBodyReplayableBeforeNoReplayPolicy|TestRequesterReplaysReplayableJSONPostAfterStaleIdleWriteFailure|TestRequesterStrictMutationAvoidsStaleIdleConnectionReplay)$' \
+  -count=1
+# ok   polymetrics.ai/internal/connectors/connsdk
+```
+
+The ordinary request retained `GetBody`, retried onto a fresh dial, and reached
+the handler exactly once. The strict mutation instead opened a fresh connection
+before its first send; the injected stale-connection failure never fired, and
+the handler again saw exactly one dispatch. This is a green falsification, not
+a red regression: the proposed failure is absent in the current code, so no
+production change was made or forced.
+
 ## Red/green commands
 
 ```sh

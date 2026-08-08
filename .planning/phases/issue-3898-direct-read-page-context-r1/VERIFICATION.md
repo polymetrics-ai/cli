@@ -59,6 +59,12 @@ node website/scripts/cli-surface.test.mjs 7/7 pass
   received EOF. Header values and credentials were never captured. The private
   repository contains only the four intentional curl/`gh` diagnostic issues;
   no PM write reached it. The live-write completion gate remains blocked.
+- A deterministic stale-idle connection test disproved the proposed missing
+  `GetBody` explanation. JSON already reaches `http.NewRequest` as a concrete
+  `*bytes.Reader`; strict writes deliberately clear replay capability only
+  after construction and instead force a fresh connection. Re-enabling replay
+  would weaken the non-idempotent mutation safety contract, so no such change
+  was made.
 - `docs/connectors/**` regeneration carries unrelated pre-existing drift
   (field types). Verifiable by running `pm docs generate` on a clean tree, which
   changes 1028 files with no code changes at all.

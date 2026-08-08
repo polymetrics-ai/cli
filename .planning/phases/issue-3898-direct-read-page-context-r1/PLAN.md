@@ -118,3 +118,9 @@ result carries the context needed to reach the next one.
     credential or header value. Treat a PM-only failure as a PM transport-path
     defect (including a VPN/proxy interaction specific to that path), not as a
     GitHub-wide outage.
+12. Test the stale keep-alive replay hypothesis without weakening the
+    non-idempotent-write contract: prove whether the JSON body reaches
+    `http.NewRequest` as a concrete `*bytes.Reader`, then use a deterministic
+    stale-idle write failure to distinguish ordinary Go replay from the strict
+    no-replay mutation path. Do not restore `GetBody` for a non-idempotent
+    action unless an idempotency contract makes replay safe.
