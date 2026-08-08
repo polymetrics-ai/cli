@@ -661,7 +661,7 @@ ok   polymetrics.ai/internal/connectors/defs/dockerhub
 
 Audit result: `encodeSurfacePathValue` is the only provider-value caller of the former strict
 identifier validator. Its shared route covers 2,823 typed REST templates (1,303 reads and 1,520
-writes) across 24 JSON bundles. Docker Hub contains the only typed direct-operation SCIM/URN
+writes) across 14 bundles (out of 25 bundles that carry `operations.json`). Docker Hub contains the only typed direct-operation SCIM/URN
 placeholders; HubSpot declares three `emailAddress` placeholders. Other `ValidateIdentifier`
 callers validate local connector, credential, command, flag, or configuration names, not provider
 path values, and intentionally retain the stricter alphabet.

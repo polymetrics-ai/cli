@@ -2,7 +2,7 @@
   "phase": "dockerhub-parity-sweep-r1",
   "program": "cli-connector-parity-programme-pilot",
   "connector": "dockerhub",
-  "state": "implemented_live_e2e_complete_rate_limit_proven",
+  "state": "implemented_reconciled_not_certified_rate_limit_proven",
   "generated_from": null,
   "artifact": {
     "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
@@ -60,29 +60,31 @@
     "green_evidence": "go test ./cmd/connectorgen/ (whole package) PASS; go run ./cmd/connectorgen validate internal/connectors/defs (whole repo) -> 551 connectors, 0 findings; go test ./internal/connectors/commandrunner/ -run TestEveryImplementedCommandPassesRuntimePreflight PASS (all 551 connectors); go test ./internal/connectors/engine/... PASS including 5 new HEAD-support tests; go test ./internal/connectors/hooks/dockerhub/... PASS (22 tests); go test ./internal/connectors/conformance/... PASS; go run ./cmd/connectorgen surface-sync --check -> 0 corrections; make connector-boundary -> clean; make lint 0 issues; make tidy-check, agent-contract-check, smoke-no-build, release-workflow-check all pass; gofmt/go vet clean; go build ./... clean; full go test ./internal/cli/... PASS including TestGoldenTranscripts (diff scoped to 9 root-listing subtests' tagline); binary built and exercised: pm connectors inspect dockerhub --json (write:true), bare pm dockerhub, --help on all 54 commands, and a genuine live loopback HTTP round trip proving the new HEAD status-only path end-to-end (server observed a real HEAD request, CLI returned {status_code:200})."
   },
   "live_e2e": {
-    "attempted_operations": 50,
-    "worked_operations": 10,
-    "failed_operations": 40,
-    "untestable_operations": 4,
-    "read_auth_vector_attempted": 31,
-    "read_operations_attempted": 28,
-    "head_status_only_operations_attempted": 3,
-    "authentication_operations_attempted": 3,
+    "certification": "not certified: every command remains implemented, but provider acceptance is limited to the account and credentials actually held",
+    "current_token_reconciliation": {
+      "documented_operations": 54,
+      "dispatched_to_live_service": 51,
+      "not_dispatched_to_live_service": 3,
+      "bucket_counts": {
+        "PROVEN": 14,
+        "PROVIDER_PLAN_LIMIT": 0,
+        "PROVIDER_PERMISSION": 31,
+        "ENTERPRISE_ONLY": 9
+      }
+    },
     "binary_help_routes_reachable": "54/54",
-    "private_repository_create": "completed: polymetrics/pm-e2e-20260808-173040; pm repository detail proved is_private=true before image transfer; repository intentionally retained",
-    "image_push_readback": "minimal zero-layer e2e image pushed with Docker Registry v2 protocol; pm tags list, tag detail list, repository detail list, and both tag HEAD checks succeeded; pm itself has no Registry v2 push or OCI-manifest command in this 54-operation Hub API surface",
-    "scim_only_credential": "only scim_bearer_token configured; seven command paths had explicit nonzero outcomes (six HTTP 401; canonical schema URN locally rejected for ':' then URL-safe sentinel HTTP 401); no classification change",
-    "permission_rejection": "access-tokens list exited nonzero with explicit redacted HTTP 403 for https://hub.docker.com/v2/access-tokens; not silent",
-    "authentication_fixture_runs": "all three plan/preview/approve lifecycles reached provider and returned HTTP 401 using deliberately invalid non-secret fixtures",
-    "evidence": ".planning/phases/dockerhub-parity-sweep-r1/VERIFICATION.md",
-    "runtime_fix": "strict write ALPN pinned to http/1.1 after local HTTP/2 regression reproduction",
-    "namespace_override_live_proof": "repository detail list with --config namespace=library and repository=alpine returned library/alpine, proving namespace is no longer accepted then discarded",
-    "write_failures": "28 explicit HTTP 403 operations, 10 explicit HTTP 401 operations, repository group assign HTTP 400 on deliberately invalid group_id=0, invites resend HTTP 405 on deliberately nonexistent id=0; see VERIFICATION.md",
-    "untestable_named_dependencies": [
-      "org access-tokens create: least-privilege typed reverse-ETL source record with resources[] plus Docker Hub organization-token permission",
-      "org settings update: Docker Hub organization settings read/write permission to preserve current values",
-      "scim-users create/update: valid Docker Hub Enterprise organization SCIM bearer token"
-    ]
+    "private_repository_fixture": "retained: polymetrics/pm-e2e-20260808-173040; historically created privately before image transfer, but excluded from the current repository-create outcome to prevent stale-state mixing",
+    "image_push_readback": "minimal zero-layer e2e image was pushed with Docker Registry v2 protocol; pm read it through tags, tag detail, repository detail, and status-only checks; pm itself has no Registry v2 push/pull or OCI-manifest operation",
+    "scim_only_credential": "only scim_bearer_token configured; all seven SCIM reads returned explicit HTTP 401, including the canonical schema URN after the local colon-path fix; Docker Hub did not silently fall back to unauthenticated requests",
+    "permission_rejections": "31 current rows are explicit HTTP 403 responses (except org settings update, whose execution was safely withheld because its current settings read is HTTP 403); all are named provider dependencies in VERIFICATION.md",
+    "authentication_fixture_runs": "all three plan/preview/approve lifecycles reached the provider and returned HTTP 401 using deliberately invalid non-secret fixtures; counted as PROVEN routes, not failures",
+    "namespace_override_live_proof": "repository detail list, tags list, and tag detail list with namespace=library and repository=alpine all succeeded, proving namespace is no longer accepted then discarded",
+    "never_dispatched": [
+      "org settings update: Named dependency: Docker Hub organization settings read/write permission on polymetrics, so a safe no-op cannot be formed",
+      "scim-users create: Named dependency: Docker Hub Enterprise organization SCIM entitlement and valid scim_bearer_token",
+      "scim-users update: Named dependency: Docker Hub Enterprise organization SCIM entitlement and valid scim_bearer_token"
+    ],
+    "evidence": ".planning/phases/dockerhub-parity-sweep-r1/VERIFICATION.md"
   },
   "rate_limits": {
     "declaration": "internal/connectors/defs/dockerhub/rate_limits.json",
@@ -124,7 +126,19 @@
         "internal/connectors/conformance/static.go"
       ],
       "unblocks": "any connector with a documented HEAD-only existence-check endpoint (previously none could use one; dockerhub is the first)"
+    },
+    {
+      "name": "safe opaque URL path-segment validation (SCIM URNs and email addresses)",
+      "scope": "shared-runtime",
+      "files": [
+        "internal/safety/safety.go",
+        "internal/safety/safety_test.go",
+        "internal/connectors/engine/direct_read.go",
+        "internal/connectors/engine/direct_read_test.go",
+        "internal/connectors/defs/dockerhub/scim_schema_urn_test.go"
+      ],
+      "unblocks": "declared typed endpoints whose legal opaque one-segment values include colon, plus, or at-sign; local connector/credential identifiers remain strict"
     }
   ],
-  "next_action": "complete: rate-limit proof, final verification, and inline GSD review are recorded; commit and push final evidence"
+  "next_action": "run final scoped/package gates, inline verify-work and code-review, then open the explicitly not-certified parent PR"
 }
