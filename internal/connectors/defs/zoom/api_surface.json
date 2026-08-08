@@ -8201,261 +8201,141 @@
     {
       "method": "GET",
       "path": "/v2/crc/managed_rooms/account_setting",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get Cisco/Polycom Room Account Setting; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms/account_setting; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc managed-rooms account-setting get"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/crc/managed_rooms/account_setting",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with the existing typed multipart writes.json path, but blocked until a Zoom-local bounded file contract, allowed-media/size policy, approval path, and fixtures are declared. The rest_write direct executor is JSON/form only, so it is not this operation path.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Update Cisco/Polycom Room Account Setting; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms/account_setting; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05; provider_evidence=request body explicitly declares multipart/form-data"
+      "covered_by": {
+        "direct_write": "crc managed-rooms account-setting update"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crc/api_connectors",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=List API Connectors; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc api-connectors list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/crc/api_connectors",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Create an API Connector; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc api-connectors create"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crc/api_connectors/{connectorId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get an API Connector; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors/{connectorId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc api-connectors get"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/crc/api_connectors/{connectorId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Delete an API Connector; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors/{connectorId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc api-connectors delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/crc/api_connectors/{connectorId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Update an API Connector; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors/{connectorId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc api-connectors update"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crc/api_connectors/{connectorId}/private_key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get an API Connector's private key; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors/{connectorId}/private_key; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc api-connectors private-key get"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/crc/api_connectors/{connectorId}/private_key",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Update an API Connector's private key; provider_server=https://api.zoom.us/v2; provider_path=/crc/api_connectors/{connectorId}/private_key; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc api-connectors private-key update"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crc/managed_rooms",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=List Managed Rooms; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc managed-rooms list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/crc/managed_rooms",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Create a Managed Room; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc managed-rooms create"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crc/managed_rooms/{deviceId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get a Managed Room; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms/{deviceId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc managed-rooms get"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/crc/managed_rooms/{deviceId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Delete a managed room; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms/{deviceId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc managed-rooms delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/crc/managed_rooms/{deviceId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Update a Managed Room; provider_server=https://api.zoom.us/v2; provider_path=/crc/managed_rooms/{deviceId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc managed-rooms update"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crc/participant_identifier_code",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get participant identifier code; provider_server=https://api.zoom.us/v2; provider_path=/crc/participant_identifier_code; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc participant-identifier-code get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crc/room_templates",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=List Room Templates; provider_server=https://api.zoom.us/v2; provider_path=/crc/room_templates; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc room-templates list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/crc/room_templates",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Create a Room Template; provider_server=https://api.zoom.us/v2; provider_path=/crc/room_templates; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc room-templates create"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crc/room_templates/{templateId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Get a Room Template; provider_server=https://api.zoom.us/v2; provider_path=/crc/room_templates/{templateId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "crc room-templates get"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/crc/room_templates/{templateId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Delete a room template; provider_server=https://api.zoom.us/v2; provider_path=/crc/room_templates/{templateId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc room-templates delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/crc/room_templates/{templateId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/crc.md",
-        "notes": "classification=implementable_now; provider_module=crc; operation_title=Update a Room Template; provider_server=https://api.zoom.us/v2; provider_path=/crc/room_templates/{templateId}; artifact=https://developers.zoom.us/docs/api/crc.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "crc room-templates update"
       }
     },
     {

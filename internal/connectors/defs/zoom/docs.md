@@ -2,8 +2,9 @@
 
 Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.
 The current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes,
-Healthcare clinical-note, Quality Management, Cobrowse SDK, and SCIM2 Group/User routes; every
-declared write action, including Chatbot and SCIM2 actions, remains approval-gated.
+Healthcare clinical-note, Quality Management, Cobrowse SDK, SCIM2 Group/User, Virtual Agent,
+Auto Dialer, Tasks, Workforce Management, Clips, and Conference Room Connector (CRC) routes;
+every declared write action remains approval-gated.
 
 The provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1
 reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build
@@ -14,8 +15,9 @@ three existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list
 "Direct reads" below and "Executable today" in Known limits for the exact current set.
 
 High-risk Zoom write actions are implemented for Chatbot, SCIM2, Healthcare, Quality Management,
-and Customer Managed Keys Hybrid. All remaining provider operations stay explicitly disposed in
-`api_surface.json`; the ledger is not a claim that those operations are executable.
+Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, CRC, and Customer Managed Keys
+Hybrid. All remaining provider operations stay explicitly disposed in `api_surface.json`; the
+ledger is not a claim that those operations are executable.
 
 Service API documentation: https://developers.zoom.us/docs/api/.
 
@@ -219,11 +221,37 @@ inputs for these commands, so none is exposed.
 
 Provider reference for all four routes: https://developers.zoom.us/docs/api/scim2.md.
 
+### Direct reads (CRC module)
+
+The Conference Room Connector artifact was re-fetched from
+https://developers.zoom.us/docs/api/crc.md on 2026-08-08T20:10:59Z (115,915 bytes; SHA-256
+`a631ec0cc101a33df9b6483f772e26b334adc7ab8f6d265cbc6f48c863a8e2ba`). Its nine GET operations
+read sensitive account, connector, room, template, or participant values through
+`json_redacted`; provider response values named as identifiers, private keys, credentials, room
+details, and token-shaped values do not reach CLI output. The artifact's pagination fields are
+response-only, so CRC declares no `page`, `per_page`, `limit`, cursor, or page-size input.
+
+- `pm zoom crc managed-rooms account-setting get` reads GET
+  `/v2/crc/managed_rooms/account_setting` (operation
+  `zoom.get_crc_managed_room_account_setting`).
+- `pm zoom crc api-connectors list`, `... get --connector-id <id>`, and
+  `... private-key get --connector-id <id>` read the provider-defined API Connector collection,
+  one connector, and its private-key response at `/v2/crc/api_connectors`; the private-key route
+  is output-redacted by policy.
+- `pm zoom crc managed-rooms list` and `... get --device-id <id>` read the declared managed-room
+  collection and one room at `/v2/crc/managed_rooms`.
+- `pm zoom crc participant-identifier-code get` reads GET
+  `/v2/crc/participant_identifier_code` (operation
+  `zoom.get_crc_participant_identifier_code`).
+- `pm zoom crc room-templates list` and `... get --template-id <id>` read the declared room
+  template collection and one template at `/v2/crc/room_templates`.
+
 ## Write actions & risks
 
 Read behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My
-Notes, healthcare clinical-note, Quality Management, Cobrowse SDK session, and SCIM2 user/group
-data.
+Notes, healthcare clinical-note, Quality Management, Cobrowse SDK session, SCIM2 user/group,
+Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, and CRC account/connector/room/
+template/participant data.
 
 - `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`
   plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action
@@ -279,31 +307,55 @@ data.
   `/scim2/Users/{userId}` action (`delete_scim2_user`). It requires destructive typed confirmation
   and records the documented `204 No Content` status without inventing a body.
 
+- `pm zoom crc managed-rooms account-setting update --account-settings <json-object>` plans the
+  fixed multipart PATCH `/v2/crc/managed_rooms/account_setting`
+  (`update_crc_managed_room_account_setting`). The named object accepts only the provider's
+  documented account-setting members and the documented `204 No Content` response is status-only.
+
+- `pm zoom crc api-connectors create --api-connector <json-object>`,
+  `... update --connector-id <id> --api-connector <json-object>`, and
+  `... delete --connector-id <id>` plan the provider-defined API Connector POST, PATCH, and DELETE
+  routes. The named object is closed to documented connector fields; deletion requires destructive
+  typed confirmation and its `204` result remains status-only.
+
+- `pm zoom crc api-connectors private-key update --connector-id <id>` plans the fixed private-key
+  regeneration PATCH. It requires typed confirmation even though it is not a DELETE, and its
+  returned private key is always handled through `json_redacted` output rather than emitted.
+
+- `pm zoom crc managed-rooms create --managed-room <json-object>`,
+  `... update --device-id <id> --managed-room <json-object>`, and
+  `... delete --device-id <id>` plan the provider-defined managed-room POST, PATCH, and DELETE
+  routes. The named objects are closed to the provider's fields; deletion requires destructive
+  typed confirmation and all `204` responses are status-only.
+
+- `pm zoom crc room-templates create --room-template <json-object>`,
+  `... update --template-id <id> --room-template <json-object>`, and
+  `... delete --template-id <id>` plan the provider-defined room-template POST, PATCH, and DELETE
+  routes. The named objects remain closed; deletion requires destructive typed confirmation and
+  the documented `204` actions are asserted by status only.
+
 The provider inventory records 1,032 documented writes. The four Chatbot actions above, seven
 SCIM2 actions, the Healthcare completion-status action, the Quality Management interaction-creation
-action, and the Customer Managed Keys Hybrid archival-key action are currently declared; all
-remaining write rows are either blocked on connector-local typed contracts, safety/approval
-evidence, and fixtures, or on the corresponding Zoom account entitlement. Future writes must use
-the existing plan → preview → explicit approval → execute path; destructive operations additionally
-require the typed confirmation gate.
+action, the module-specific typed actions listed in the generated manual, CRC's eleven actions,
+and the Customer Managed Keys Hybrid archival-key action are currently declared; all remaining
+write rows are either blocked on connector-local typed contracts, safety/approval evidence, and
+fixtures, or on the corresponding Zoom account entitlement. Future writes must use the existing
+plan → preview → explicit approval → execute path; destructive operations additionally require the
+typed confirmation gate.
 
 ## Known limits
 
 - Batch default: `read_page_size=100`.
 - Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See
   issue #3915 for the full module-by-module tracking table.
-- Executable today: 38 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
-  bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded
-  `my-notes` module direct reads, 2 Healthcare direct reads, 1 Healthcare PATCH action, 5 Quality
-  Management direct reads, 1 approval-gated Quality Management POST action, 4 sensitive Cobrowse
-  SDK direct reads, 4 sensitive SCIM2 direct reads, 7 approval-gated SCIM2 actions, 4 approval-gated
-  Chatbot actions, and 1 redacted Customer Managed Keys Hybrid archival-key action.
+- Executable today: 143 documented endpoint rows are declared executable. The generated Zoom
+  manual lists each stream, bounded read, download, typed direct write, and reverse-ETL action.
 - Direct-read commands in this connector take only the request inputs the live provider artifact
   expressly documents. Cobrowse's `from`/`to` range is exposed because the operation prose declares
   it as a query input; a response-body field alone (including `page_size` and `next_page_token`) is
   not sufficient evidence of an accepted request parameter. This is a deliberate module-by-module
   scope-narrowing, not an oversight.
-- Pending connector-local delivery: 1,804 operations have no shared foundation blocker, but still
+- Pending connector-local delivery: 1,699 operations have no shared foundation blocker, but still
   need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can
   become commands.
 - Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one

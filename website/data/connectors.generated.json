@@ -383387,7 +383387,7 @@
   {
     "slug": "zoom",
     "name": "Zoom",
-    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, Auto Dialer call history/reports/call lists/prospects, Tasks assignee/collaborator/comment/import/item data, Workforce Management filter/forecast/import/organizational-group/report/schedule/user data, and Clips metadata/collaborator/comment/chapter/transfer data with bounded Clip download through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, and Clips reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, Auto Dialer call history/reports/call lists/prospects, Tasks assignee/collaborator/comment/import/item data, Workforce Management filter/forecast/import/organizational-group/report/schedule/user data, Clips metadata/collaborator/comment/chapter/transfer data, and CRC account/API Connector/managed-room/room-template data with bounded Clip download through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, and Clips reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "integration_type": "api",
     "release_stage": "ga",
@@ -383438,7 +383438,7 @@
       }
     ],
     "cli_surface": {
-      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads and Clip downloads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads and Clip downloads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, CRC, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
       "usage": "pm zoom <group> <command> [flags]",
       "source_cli": {
         "name": "Zoom API reference",
@@ -383558,6 +383558,13 @@
           "title": "Customer Managed Keys Hybrid",
           "commands": [
             "customer-managed-keys-hybrid"
+          ]
+        },
+        {
+          "id": "crc",
+          "title": "Conference Room Connector (CRC)",
+          "commands": [
+            "crc"
           ]
         }
       ],
@@ -388689,6 +388696,687 @@
           "risk": "Returns sensitive key material only through a redacted output policy.",
           "approval": "Requires plan, no-network preview, explicit single-use approval, typed confirmation, then execute.",
           "notes": "Requires an operator-provisioned Customer Managed Keys Hybrid credential with key_connector_base_url ending in /api/v2 and an environment- or stdin-supplied key_connector_jwt. The operation declares its own customer-hosted origin and bearer; it never reuses the ordinary Zoom OAuth bearer."
+        },
+        {
+          "path": "crc managed-rooms account-setting get",
+          "summary": "Get the CRC managed-room account setting.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_crc_managed_room_account_setting",
+          "source_cli_path": "GET /crc/managed_rooms/account_setting",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom crc managed-rooms account-setting get --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Reads sensitive CRC account settings.",
+          "approval": "Read-only; no write approval is required.",
+          "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed."
+        },
+        {
+          "path": "crc managed-rooms account-setting update",
+          "summary": "Update the CRC managed-room account setting.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_crc_managed_room_account_setting",
+          "source_cli_path": "PATCH /crc/managed_rooms/account_setting",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "account-settings",
+              "type": "json_object",
+              "summary": "Closed object of documented CRC account-setting fields.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc managed-rooms account-setting update --credential zoom-fixture --account-settings '{\"enable_1080p\":true}' --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Changes a provider-defined CRC account setting.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named account-settings object is closed to the documented multipart fields; it is not a generic JSON or HTTP write. Its 204 response is status-only success."
+        },
+        {
+          "path": "crc api-connectors list",
+          "summary": "List CRC API Connectors.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_crc_api_connectors",
+          "source_cli_path": "GET /crc/api_connectors",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom crc api-connectors list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Reads sensitive CRC API Connector details.",
+          "approval": "Read-only; no write approval is required.",
+          "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed."
+        },
+        {
+          "path": "crc api-connectors create",
+          "summary": "Create one CRC API Connector.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.create_crc_api_connector",
+          "source_cli_path": "POST /crc/api_connectors",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "api-connector",
+              "type": "json_object",
+              "summary": "Closed object of documented CRC API Connector fields.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc api-connectors create --credential zoom-fixture --api-connector '{\"description\":\"CRC connector\"}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Creates a provider-defined CRC API Connector.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named api-connector object is closed to the documented endpoint fields; it is not a generic JSON or HTTP write."
+        },
+        {
+          "path": "crc api-connectors get",
+          "summary": "Get one CRC API Connector.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_crc_api_connector",
+          "source_cli_path": "GET /crc/api_connectors/{connectorId}",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "connector-id",
+              "type": "string",
+              "summary": "CRC API Connector identifier.",
+              "values": [],
+              "maps_to": "path.connectorId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom crc api-connectors get --credential zoom-fixture --connector-id connector --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Reads sensitive CRC API Connector details.",
+          "approval": "Read-only; no write approval is required.",
+          "notes": "The connector ID is a fixed provider path parameter and is redacted in output."
+        },
+        {
+          "path": "crc api-connectors delete",
+          "summary": "Delete one CRC API Connector.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_crc_api_connector",
+          "source_cli_path": "DELETE /crc/api_connectors/{connectorId}",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "connector-id",
+              "type": "string",
+              "summary": "CRC API Connector identifier to delete.",
+              "values": [],
+              "maps_to": "path.connectorId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc api-connectors delete --credential zoom-fixture --connector-id connector --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Deletes a provider-defined CRC API Connector.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The documented 204 response is status-only success; no response body is invented."
+        },
+        {
+          "path": "crc api-connectors update",
+          "summary": "Update one CRC API Connector.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_crc_api_connector",
+          "source_cli_path": "PATCH /crc/api_connectors/{connectorId}",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "connector-id",
+              "type": "string",
+              "summary": "CRC API Connector identifier to update.",
+              "values": [],
+              "maps_to": "path.connectorId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "api-connector",
+              "type": "json_object",
+              "summary": "Closed object of documented CRC API Connector update fields.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc api-connectors update --credential zoom-fixture --connector-id connector --api-connector '{\"log_level\":\"INFO\"}' --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Changes a provider-defined CRC API Connector.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named api-connector object is closed to documented update members; its 204 response is status-only success."
+        },
+        {
+          "path": "crc api-connectors private-key get",
+          "summary": "Get one CRC API Connector private key.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_crc_api_connector_private_key",
+          "source_cli_path": "GET /crc/api_connectors/{connectorId}/private_key",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "connector-id",
+              "type": "string",
+              "summary": "CRC API Connector identifier.",
+              "values": [],
+              "maps_to": "path.connectorId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom crc api-connectors private-key get --credential zoom-fixture --connector-id connector --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Reads a private key only through redacted output.",
+          "approval": "Read-only; no write approval is required.",
+          "notes": "The declared json_redacted policy prevents the private key from reaching CLI output."
+        },
+        {
+          "path": "crc api-connectors private-key update",
+          "summary": "Regenerate one CRC API Connector private key.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_crc_api_connector_private_key",
+          "source_cli_path": "PATCH /crc/api_connectors/{connectorId}/private_key",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "connector-id",
+              "type": "string",
+              "summary": "CRC API Connector identifier whose private key is regenerated.",
+              "values": [],
+              "maps_to": "path.connectorId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc api-connectors private-key update --credential zoom-fixture --connector-id connector --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Regenerates a private key and returns it only through redacted output.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, typed confirmation, then execute; output remains redacted.",
+          "notes": "This provider-defined secret-returning action has no request body. Its declared typed confirmation and json_redacted output prevent private key disclosure."
+        },
+        {
+          "path": "crc managed-rooms list",
+          "summary": "List CRC managed rooms.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_crc_managed_rooms",
+          "source_cli_path": "GET /crc/managed_rooms",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom crc managed-rooms list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Reads sensitive CRC managed-room details.",
+          "approval": "Read-only; no write approval is required.",
+          "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed."
+        },
+        {
+          "path": "crc managed-rooms create",
+          "summary": "Create one CRC managed room.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.create_crc_managed_room",
+          "source_cli_path": "POST /crc/managed_rooms",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "managed-room",
+              "type": "json_object",
+              "summary": "Closed object of documented CRC managed-room fields.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc managed-rooms create --credential zoom-fixture --managed-room '{\"name\":\"CRC room\"}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Creates a provider-defined CRC managed room.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named managed-room object is closed to documented endpoint fields; credentials and room identifiers are redacted."
+        },
+        {
+          "path": "crc managed-rooms get",
+          "summary": "Get one CRC managed room.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_crc_managed_room",
+          "source_cli_path": "GET /crc/managed_rooms/{deviceId}",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "device-id",
+              "type": "string",
+              "summary": "CRC managed-room device identifier.",
+              "values": [],
+              "maps_to": "path.deviceId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom crc managed-rooms get --credential zoom-fixture --device-id device --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Reads sensitive CRC managed-room details.",
+          "approval": "Read-only; no write approval is required.",
+          "notes": "The device ID is a fixed provider path parameter and is redacted in output."
+        },
+        {
+          "path": "crc managed-rooms delete",
+          "summary": "Delete one CRC managed room.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_crc_managed_room",
+          "source_cli_path": "DELETE /crc/managed_rooms/{deviceId}",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "device-id",
+              "type": "string",
+              "summary": "CRC managed-room device identifier to delete.",
+              "values": [],
+              "maps_to": "path.deviceId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc managed-rooms delete --credential zoom-fixture --device-id device --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Deletes a provider-defined CRC managed room.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The documented 204 response is status-only success; no response body is invented."
+        },
+        {
+          "path": "crc managed-rooms update",
+          "summary": "Update one CRC managed room.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_crc_managed_room",
+          "source_cli_path": "PATCH /crc/managed_rooms/{deviceId}",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "device-id",
+              "type": "string",
+              "summary": "CRC managed-room device identifier to update.",
+              "values": [],
+              "maps_to": "path.deviceId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "managed-room",
+              "type": "json_object",
+              "summary": "Closed object of documented CRC managed-room update fields.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc managed-rooms update --credential zoom-fixture --device-id device --managed-room '{\"enable_1080p\":true}' --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Changes a provider-defined CRC managed room.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named managed-room object is closed to documented update members; its 204 response is status-only success."
+        },
+        {
+          "path": "crc participant-identifier-code get",
+          "summary": "Get the CRC participant identifier code.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_crc_participant_identifier_code",
+          "source_cli_path": "GET /crc/participant_identifier_code",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom crc participant-identifier-code get --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Reads a CRC meeting authentication identifier.",
+          "approval": "Read-only; no write approval is required.",
+          "notes": "The participant identifier code is redacted in output."
+        },
+        {
+          "path": "crc room-templates list",
+          "summary": "List CRC room templates.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_crc_room_templates",
+          "source_cli_path": "GET /crc/room_templates",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom crc room-templates list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Reads sensitive CRC room-template details.",
+          "approval": "Read-only; no write approval is required.",
+          "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed."
+        },
+        {
+          "path": "crc room-templates create",
+          "summary": "Create one CRC room template.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.create_crc_room_template",
+          "source_cli_path": "POST /crc/room_templates",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "room-template",
+              "type": "json_object",
+              "summary": "Closed object of documented CRC room-template fields.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc room-templates create --credential zoom-fixture --room-template '{\"device_type\":\"Cisco Series\",\"name\":\"CRC template\"}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Creates a provider-defined CRC room template.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named room-template object is closed to documented endpoint fields; it is not a generic JSON or HTTP write."
+        },
+        {
+          "path": "crc room-templates get",
+          "summary": "Get one CRC room template.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_crc_room_template",
+          "source_cli_path": "GET /crc/room_templates/{templateId}",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "template-id",
+              "type": "string",
+              "summary": "CRC room-template identifier.",
+              "values": [],
+              "maps_to": "path.templateId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom crc room-templates get --credential zoom-fixture --template-id template --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Reads sensitive CRC room-template details.",
+          "approval": "Read-only; no write approval is required.",
+          "notes": "The template ID is a fixed provider path parameter and is redacted in output."
+        },
+        {
+          "path": "crc room-templates delete",
+          "summary": "Delete one CRC room template.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_crc_room_template",
+          "source_cli_path": "DELETE /crc/room_templates/{templateId}",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "template-id",
+              "type": "string",
+              "summary": "CRC room-template identifier to delete.",
+              "values": [],
+              "maps_to": "path.templateId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc room-templates delete --credential zoom-fixture --template-id template --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Deletes a provider-defined CRC room template.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The documented 204 response is status-only success; no response body is invented."
+        },
+        {
+          "path": "crc room-templates update",
+          "summary": "Update one CRC room template.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_crc_room_template",
+          "source_cli_path": "PATCH /crc/room_templates/{templateId}",
+          "source_url": "https://developers.zoom.us/docs/api/crc.md",
+          "flags": [
+            {
+              "name": "template-id",
+              "type": "string",
+              "summary": "CRC room-template identifier to update.",
+              "values": [],
+              "maps_to": "path.templateId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "room-template",
+              "type": "json_object",
+              "summary": "Closed object of documented CRC room-template update fields.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom crc room-templates update --credential zoom-fixture --template-id template --room-template '{\"name\":\"Renamed template\"}' --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Changes a provider-defined CRC room template.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named room-template object is closed to documented update members; its 204 response is status-only success."
         }
       ],
       "help_topics": [
@@ -388698,7 +389386,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nReads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.\nThe current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes,\nHealthcare clinical-note, Quality Management, Cobrowse SDK, and SCIM2 Group/User routes; every\ndeclared write action, including Chatbot and SCIM2 actions, remains approval-gated.\n\nThe provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1\nreference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build\n`2026-08-03T14-58-19-06-00`, and is being brought to full documented-operation parity one Zoom\nprovider module at a time (see issue #3915 for the module-by-module tracker). Wave 1 exposes the\nthree existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list`, and\n`pm zoom webinars list`. Later waves add bounded direct-read/write commands module by module; see\n\"Direct reads\" below and \"Executable today\" in Known limits for the exact current set.\n\nHigh-risk Zoom write actions are implemented for Chatbot, SCIM2, Healthcare, Quality Management,\nand Customer Managed Keys Hybrid. All remaining provider operations stay explicitly disposed in\n`api_surface.json`; the ledger is not a claim that those operations are executable.\n\nService API documentation: https://developers.zoom.us/docs/api/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token\n  (Authorization: Bearer `<access_token>`). Never logged.\n- `chatbot_client_id` (required for Chatbot commands, secret, string); client ID used only for the\n  declared Chatbot client-credentials exchange. Never logged.\n- `chatbot_client_secret` (required for Chatbot commands, secret, string); client secret used only\n  for the declared Chatbot client-credentials exchange. Never logged.\n- `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL\n  override for tests or proxies.\n- `scim2_base_url` (optional, string); default `https://api.zoom.us`; format `uri`; Zoom SCIM2 API\n  root override for tests or proxies. It is used only by the declared `/scim2` operations and is\n  paired with their declared Bearer authentication.\n- `chatbot_token_url` (optional, string); default `https://api.zoom.us/oauth/token`; format `uri`;\n  Chatbot-only client-credentials token endpoint.\n- `max_pages` (optional, string); default `0`. The field remains in the connection specification,\n  but the current Zoom cursor paginator does not consume it.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; records per page (1-300); sent as the `page_size`\n  query parameter.\n- `user_id` (optional, string); Zoom user ID or email that scopes the `meetings` and `webinars`\n  streams. Set it in credential configuration or override it with `--user-id` for either command.\n\nSecret fields are redacted in logs and write previews: `access_token`, `chatbot_client_id`,\n`chatbot_client_secret`, and `key_connector_jwt`.\n\nDefault configuration values: `base_url=https://api.zoom.us/v2`,\n`scim2_base_url=https://api.zoom.us`, `chatbot_token_url=https://api.zoom.us/oauth/token`,\n`max_pages=0`, `page_size=100`. `max_pages` is materialized as configuration but does not affect\nZoom pagination.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n- Chatbot actions use their own declared client-credentials exchange: the client ID and secret are\n  sent in an HTTP Basic authorization header to `chatbot_token_url`, then the returned access token\n  is used as the action's Bearer credential. They do not reuse `access_token`.\n- SCIM2 Group and User operations use the declared `scim2_base_url` root and the ordinary\n  `access_token` Bearer secret. They do not inherit an ordinary `/v2` request path or any unrelated\n  operation header.\n\nOrdinary API requests use the configured `base_url` value after applying defaults; SCIM2 requests\nuse their operation-scoped `scim2_base_url` declaration.\n\nConnection checks call GET `/users` with query `page_size`=`1`.\n\n## Streams notes\n\nDefault pagination is cursor pagination: send `next_page_token` and take the next token from\n`next_page_token`. The stream command `--limit` bounds emitted records (default 100).\n\n- `users`: `pm zoom users list` reads GET `/v2/users` through stream `users`. Records are at\n  `users`; query `page_size`=`{{ config.page_size }}`; computed output fields are `name` and\n  `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/users.md.\n- `meetings`: `pm zoom meetings list` reads GET `/v2/users/{userId}/meetings` through stream\n  `meetings`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `meetings`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n- `webinars`: `pm zoom webinars list` reads GET `/v2/users/{userId}/webinars` through stream\n  `webinars`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `webinars`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n\n### Direct reads (qss module)\n\nThree bounded, single-request `direct_read` commands read the `qss` (Quality of Service\nSubscription) provider module. Each takes one required typed path-parameter flag and returns the\ndecoded JSON response under the `json_redacted` output policy; unlike the ETL streams above these\nare not paginated by the connector — call again with a different id, there is no `--limit` or\ncursor auto-continuation. Only account/subscriptions with the QSS add-on and a subscribed QSS\nsummary event receive non-empty data; see\n[Zoom's QSS product page](https://explore.zoom.us/en/qss/).\n\n- `pm zoom qss meeting-participants list --meeting-id <id>` reads GET\n  `/v2/metrics/meetings/{meetingId}/participants/qos_summary` (operation\n  `zoom.list_meeting_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss webinar-participants list --webinar-id <id>` reads GET\n  `/v2/metrics/webinars/{webinarId}/participants/qos_summary` (operation\n  `zoom.list_webinar_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss session-users list --session-id <id>` reads GET\n  `/v2/videosdk/sessions/{sessionId}/users/qos_summary` (operation\n  `zoom.list_session_users_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n\nAll three responses carry a `next_page_token` field in Zoom's own schema (used to fetch a further\npage of participants/users, not exposed as a command flag in this slice — see Known limits). The\nshared `json_redacted` output policy redacts any field whose name contains `token`\n(`engine/direct_read.go`'s `shouldRedactJSONField`), so `next_page_token` returns as\n`next_page_token_redacted: true` rather than its wire value even though it is a pagination cursor,\nnot a credential.\n\n### Direct reads (ai-companion module)\n\n- `pm zoom ai-companion conversation-archive get --user-id <id>` reads GET\n  `/v2/aic/users/{userId}/conversation_archive` (operation\n  `zoom.get_ai_companion_conversation_archives`). Provider reference:\n  https://developers.zoom.us/docs/api/ai-companion.md. The response's `aic_history_download_url`\n  and `physical_files[].download_url` fields are redacted by `json_redacted` (both fields' names\n  contain `download`+`url`, matching `shouldRedactJSONField`'s download-URL rule) since they are\n  direct download links to a user's AI conversation history/attachments.\n\n### Direct reads (my-notes module)\n\n- `pm zoom my-notes list` reads GET `/v2/my_notes/notes` (operation `zoom.list_my_notes`). No\n  request parameters; the live artifact documents none. Provider reference:\n  https://developers.zoom.us/docs/api/my-notes.md.\n- `pm zoom my-notes content get --note-id <id> [--include transcript]` reads GET\n  `/v2/my_notes/notes/{noteId}/content` (operation `zoom.get_my_notes_content`). Unlike qss's\n  response-only pagination fields, the `include=transcript` query parameter here is explicitly\n  documented in the provider's operation description prose, so it is exposed as an optional\n  `--include` flag. Provider reference: https://developers.zoom.us/docs/api/my-notes.md.\n\n### Direct reads (healthcare module)\n\nThe Healthcare routes return clinical note content and clinical identifiers, so both commands use\nthe existing `clinical_json_redacted` policy. It redacts note content, EHR appointment/patient/\nprovider identifiers, note owner/modifier identifiers, and token-shaped response fields before\noutput. Sanitized fixtures exercise the returned structure; no provider clinical example is retained\nin this repository.\n\n- `pm zoom healthcare clinical-notes list [--note-owner-user-id <id>] [--meeting-id <id>]` reads\n  GET `/v2/clinical_notes/notes` (operation `zoom.list_clinical_notes`). The two optional filters\n  are explicitly described by Zoom's operation prose. `from`, `to`, `page_size`, and\n  `next_page_token` appear only in the `200` response schema and are not request flags. Provider\n  reference: https://developers.zoom.us/docs/api/healthcare.md.\n- `pm zoom healthcare clinical-notes get --note-id <id>` reads GET\n  `/v2/clinical_notes/notes/{noteId}` (operation `zoom.get_clinical_note`). Provider reference:\n  https://developers.zoom.us/docs/api/healthcare.md.\n\n### Direct reads (quality-management module)\n\nQuality Management responses can carry agent/consumer names, contact values, account/user\nidentifiers, and token-shaped pagination fields. The five bounded reads use `json_redacted` plus a\nconnector-local sensitive field policy, so those values are removed before CLI output. Fixtures are\nsynthetic and do not retain Zoom response examples.\n\n- `pm zoom quality-management automated-evaluations list` reads GET\n  `/v2/qm/automated_evaluations` (operation\n  `zoom.list_quality_management_automated_evaluations`). The provider artifact declares no request\n  parameters; `page_size` and `next_page_token` are response fields, not flags.\n- `pm zoom quality-management evaluations list` reads GET `/v2/qm/evaluation` (operation\n  `zoom.list_quality_management_evaluations`). The provider artifact declares no request parameters.\n- `pm zoom quality-management evaluations get --evaluation-id <id>` reads GET\n  `/v2/qm/evaluation/{evaluationId}` (operation `zoom.get_quality_management_evaluation`).\n- `pm zoom quality-management interactions list` reads GET `/v2/qm/interactions` (operation\n  `zoom.list_quality_management_interactions`). The provider artifact declares no request\n  parameters; response-only date/pagination fields are not flags.\n- `pm zoom quality-management interactions get --interaction-id <id>` reads GET\n  `/v2/qm/interactions/{interactionId}` (operation `zoom.get_quality_management_interaction`).\n  Provider reference for all five routes: https://developers.zoom.us/docs/api/quality-management.md.\n\n### Direct reads (cobrowse-sdk module)\n\nCobrowse SDK responses can contain join-capable session pins, session/user identifiers, display\nnames, connection IDs, IP addresses, and token-shaped pagination fields. The four bounded reads use\n`json_redacted` plus a connector-local sensitive field policy, so those values are removed before\nCLI output. Fixtures are synthetic and do not retain Zoom response examples.\n\n- `pm zoom cobrowse-sdk live-sessions list [--from <YYYY-MM-DD>] [--to <YYYY-MM-DD>]` reads GET\n  `/v2/cobrowsesdk/live_sessions` (operation `zoom.list_cobrowse_live_sessions`). Zoom explicitly\n  permits the optional monthly date range in the operation prose; the range must fall in the past\n  six months. `page_size` and `next_page_token` are response fields, not flags.\n- `pm zoom cobrowse-sdk past-sessions list [--from <YYYY-MM-DD>] [--to <YYYY-MM-DD>]` reads GET\n  `/v2/cobrowsesdk/past_sessions` (operation `zoom.list_cobrowse_past_sessions`) with the same\n  documented monthly range semantics. Response `from`, `to`, `page_size`, and `next_page_token`\n  do not create additional inputs beyond the two explicitly documented query dates.\n- `pm zoom cobrowse-sdk sessions get --session-id <id>` reads GET\n  `/v2/cobrowsesdk/sessions/{sessionId}` (operation `zoom.get_cobrowse_session`).\n- `pm zoom cobrowse-sdk sessions users list --session-id <id>` reads GET\n  `/v2/cobrowsesdk/sessions/{sessionId}/users` (operation `zoom.list_cobrowse_session_users`).\n  Provider reference for all four routes: https://developers.zoom.us/docs/api/cobrowse-sdk.md.\n\n### Direct reads (SCIM2 module)\n\nThe SCIM2 artifact was re-fetched from\nhttps://developers.zoom.us/docs/api/scim2.md on 2026-08-08T13:33:09Z (171,559 bytes; SHA-256\n`ba86462a888677ea38a8bcc0557e9c4cf5809cd78fc6bc7655f85f79e5b27264`). Its four Group/User reads\nuse the provider's root `https://api.zoom.us` server rather than the ordinary `/v2` base. SCIM\nuser/group identifiers, names, contact and organization data, aliases, memberships, and extension\nobjects are redacted from `json_redacted` output. The artifact does not declare standalone paging\ninputs for these commands, so none is exposed.\n\n- `pm zoom scim2 groups list` reads GET `/scim2/Groups` (operation\n  `zoom.list_scim2_groups`).\n- `pm zoom scim2 groups get --group-id <id>` reads GET `/scim2/Groups/{groupId}` (operation\n  `zoom.get_scim2_group`).\n- `pm zoom scim2 users list` reads GET `/scim2/Users` (operation\n  `zoom.list_scim2_users`).\n- `pm zoom scim2 users get --user-id <id>` reads GET `/scim2/Users/{userId}` (operation\n  `zoom.get_scim2_user`).\n\nProvider reference for all four routes: https://developers.zoom.us/docs/api/scim2.md.\n\n## Write actions & risks\n\nRead behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My\nNotes, healthcare clinical-note, Quality Management, Cobrowse SDK session, and SCIM2 user/group\ndata.\n\n- `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`\n  plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action\n  (`update_clinical_note`). It changes a clinical-note completion status and therefore must use the\n  existing plan → preview → explicit approval → execute path. The note ID is redacted in write\n  errors. Zoom's `204 No Content` success response is recorded as a successful action.\n\n- `pm zoom quality-management interactions create --download-url <url>` plans the typed POST\n  `/v2/qm/interactions` action (`create_quality_management_interaction`). It imports a third-party\n  interaction into Quality Management and must use plan → preview → explicit approval → execute.\n  The command exposes each documented optional scalar request field, including nested\n  `interaction_info` fields; if an interaction-info field is supplied, `--interaction-channel-type`\n  is required by Zoom. Download URLs and interaction-info fields are redacted in generic write\n  errors. Fixture execution proves the documented `201 Created` response succeeds.\n\n- `pm zoom chatbot messages send --account-id <id> --content <json-object> --robot-jid <jid>\n  --to-jid <jid> --user-jid <jid>` plans the typed POST `/v2/im/chat/messages` action\n  (`send_chatbot_message`). `content` accepts exactly one provider-defined JSON object, rather than\n  a raw arbitrary body. Account, message, and JID values are redacted.\n\n- `pm zoom chatbot messages edit --message-id <id> --account-id <id> --content <json-object>\n  --robot-jid <jid>` plans the typed PUT `/v2/im/chat/messages/{message_id}` action\n  (`edit_chatbot_message`). It has the same Chatbot-only client-credentials transport and\n  redaction policy.\n\n- `pm zoom chatbot messages delete --message-id <id>` plans the typed DELETE\n  `/v2/im/chat/messages/{message_id}` action (`delete_chatbot_message`). It requires the normal\n  plan/preview/approval flow plus destructive typed confirmation before execute.\n\n- `pm zoom chatbot link-unfurls create --user-id <id> --trigger-id <id> --content <string>` plans\n  the typed POST `/v2/im/chat/users/{userId}/unfurls/{triggerId}` action\n  (`create_chatbot_link_unfurl`). Zoom's `204 No Content` is recorded as a successful status-only\n  action; no response body is invented.\n\n- `pm zoom scim2 groups create --resource <json-object>` plans the typed POST `/scim2/Groups`\n  action (`create_scim2_group`). `--resource` accepts exactly one documented SCIM Group resource at\n  that fixed endpoint; aliases, display names, memberships, and extension fields are redacted.\n- `pm zoom scim2 groups update --group-id <id> --patch <json-object>` plans the typed PATCH\n  `/scim2/Groups/{groupId}` action (`update_scim2_group`). `--patch` accepts exactly one documented\n  SCIM PatchOp object; the documented `204 No Content` response is status-only.\n- `pm zoom scim2 groups delete --group-id <id>` plans the typed DELETE\n  `/scim2/Groups/{groupId}` action (`delete_scim2_group`). It requires destructive typed\n  confirmation and records the documented `204 No Content` status without inventing a body.\n- `pm zoom scim2 users create --resource <json-object>` and `pm zoom scim2 users update --user-id\n  <id> --resource <json-object>` plan the typed POST `/scim2/Users` and PUT\n  `/scim2/Users/{userId}` actions (`create_scim2_user`, `update_scim2_user`). Each named resource\n  flag accepts one documented extensible SCIM User object only for its fixed endpoint; profile,\n  contact, organization, and extension fields are redacted.\n- `pm zoom scim2 users deactivate --user-id <id> --patch <json-object>` plans the typed PATCH\n  `/scim2/Users/{userId}` action (`deactivate_scim2_user`) with one documented activation-state\n  SCIM PatchOp object.\n- `pm zoom scim2 users delete --user-id <id>` plans the typed DELETE\n  `/scim2/Users/{userId}` action (`delete_scim2_user`). It requires destructive typed confirmation\n  and records the documented `204 No Content` status without inventing a body.\n\nThe provider inventory records 1,032 documented writes. The four Chatbot actions above, seven\nSCIM2 actions, the Healthcare completion-status action, the Quality Management interaction-creation\naction, and the Customer Managed Keys Hybrid archival-key action are currently declared; all\nremaining write rows are either blocked on connector-local typed contracts, safety/approval\nevidence, and fixtures, or on the corresponding Zoom account entitlement. Future writes must use\nthe existing plan → preview → explicit approval → execute path; destructive operations additionally\nrequire the typed confirmation gate.\n\n## Known limits\n\n- Batch default: `read_page_size=100`.\n- Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See\n  issue #3915 for the full module-by-module tracking table.\n- Executable today: 38 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3\n  bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded\n  `my-notes` module direct reads, 2 Healthcare direct reads, 1 Healthcare PATCH action, 5 Quality\n  Management direct reads, 1 approval-gated Quality Management POST action, 4 sensitive Cobrowse\n  SDK direct reads, 4 sensitive SCIM2 direct reads, 7 approval-gated SCIM2 actions, 4 approval-gated\n  Chatbot actions, and 1 redacted Customer Managed Keys Hybrid archival-key action.\n- Direct-read commands in this connector take only the request inputs the live provider artifact\n  expressly documents. Cobrowse's `from`/`to` range is exposed because the operation prose declares\n  it as a query input; a response-body field alone (including `page_size` and `next_page_token`) is\n  not sufficient evidence of an accepted request parameter. This is a deliberate module-by-module\n  scope-narrowing, not an oversight.\n- Pending connector-local delivery: 1,804 operations have no shared foundation blocker, but still\n  need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can\n  become commands.\n- Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one\n  Meeting audit trail, and four Phone blocked-list routes) remain blocked until Zoom enables the\n  corresponding product/account capability.\n- Justified exclusions: 54 provider-deprecated operations remain recorded as `deprecated` ledger\n  evidence and are not implemented.\n",
+    "docs_md": "# Overview\n\nReads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.\nThe current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes,\nHealthcare clinical-note, Quality Management, Cobrowse SDK, SCIM2 Group/User, Virtual Agent,\nAuto Dialer, Tasks, Workforce Management, Clips, and Conference Room Connector (CRC) routes;\nevery declared write action remains approval-gated.\n\nThe provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1\nreference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build\n`2026-08-03T14-58-19-06-00`, and is being brought to full documented-operation parity one Zoom\nprovider module at a time (see issue #3915 for the module-by-module tracker). Wave 1 exposes the\nthree existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list`, and\n`pm zoom webinars list`. Later waves add bounded direct-read/write commands module by module; see\n\"Direct reads\" below and \"Executable today\" in Known limits for the exact current set.\n\nHigh-risk Zoom write actions are implemented for Chatbot, SCIM2, Healthcare, Quality Management,\nVirtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, CRC, and Customer Managed Keys\nHybrid. All remaining provider operations stay explicitly disposed in `api_surface.json`; the\nledger is not a claim that those operations are executable.\n\nService API documentation: https://developers.zoom.us/docs/api/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token\n  (Authorization: Bearer `<access_token>`). Never logged.\n- `chatbot_client_id` (required for Chatbot commands, secret, string); client ID used only for the\n  declared Chatbot client-credentials exchange. Never logged.\n- `chatbot_client_secret` (required for Chatbot commands, secret, string); client secret used only\n  for the declared Chatbot client-credentials exchange. Never logged.\n- `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL\n  override for tests or proxies.\n- `scim2_base_url` (optional, string); default `https://api.zoom.us`; format `uri`; Zoom SCIM2 API\n  root override for tests or proxies. It is used only by the declared `/scim2` operations and is\n  paired with their declared Bearer authentication.\n- `chatbot_token_url` (optional, string); default `https://api.zoom.us/oauth/token`; format `uri`;\n  Chatbot-only client-credentials token endpoint.\n- `max_pages` (optional, string); default `0`. The field remains in the connection specification,\n  but the current Zoom cursor paginator does not consume it.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; records per page (1-300); sent as the `page_size`\n  query parameter.\n- `user_id` (optional, string); Zoom user ID or email that scopes the `meetings` and `webinars`\n  streams. Set it in credential configuration or override it with `--user-id` for either command.\n\nSecret fields are redacted in logs and write previews: `access_token`, `chatbot_client_id`,\n`chatbot_client_secret`, and `key_connector_jwt`.\n\nDefault configuration values: `base_url=https://api.zoom.us/v2`,\n`scim2_base_url=https://api.zoom.us`, `chatbot_token_url=https://api.zoom.us/oauth/token`,\n`max_pages=0`, `page_size=100`. `max_pages` is materialized as configuration but does not affect\nZoom pagination.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n- Chatbot actions use their own declared client-credentials exchange: the client ID and secret are\n  sent in an HTTP Basic authorization header to `chatbot_token_url`, then the returned access token\n  is used as the action's Bearer credential. They do not reuse `access_token`.\n- SCIM2 Group and User operations use the declared `scim2_base_url` root and the ordinary\n  `access_token` Bearer secret. They do not inherit an ordinary `/v2` request path or any unrelated\n  operation header.\n\nOrdinary API requests use the configured `base_url` value after applying defaults; SCIM2 requests\nuse their operation-scoped `scim2_base_url` declaration.\n\nConnection checks call GET `/users` with query `page_size`=`1`.\n\n## Streams notes\n\nDefault pagination is cursor pagination: send `next_page_token` and take the next token from\n`next_page_token`. The stream command `--limit` bounds emitted records (default 100).\n\n- `users`: `pm zoom users list` reads GET `/v2/users` through stream `users`. Records are at\n  `users`; query `page_size`=`{{ config.page_size }}`; computed output fields are `name` and\n  `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/users.md.\n- `meetings`: `pm zoom meetings list` reads GET `/v2/users/{userId}/meetings` through stream\n  `meetings`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `meetings`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n- `webinars`: `pm zoom webinars list` reads GET `/v2/users/{userId}/webinars` through stream\n  `webinars`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `webinars`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n\n### Direct reads (qss module)\n\nThree bounded, single-request `direct_read` commands read the `qss` (Quality of Service\nSubscription) provider module. Each takes one required typed path-parameter flag and returns the\ndecoded JSON response under the `json_redacted` output policy; unlike the ETL streams above these\nare not paginated by the connector — call again with a different id, there is no `--limit` or\ncursor auto-continuation. Only account/subscriptions with the QSS add-on and a subscribed QSS\nsummary event receive non-empty data; see\n[Zoom's QSS product page](https://explore.zoom.us/en/qss/).\n\n- `pm zoom qss meeting-participants list --meeting-id <id>` reads GET\n  `/v2/metrics/meetings/{meetingId}/participants/qos_summary` (operation\n  `zoom.list_meeting_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss webinar-participants list --webinar-id <id>` reads GET\n  `/v2/metrics/webinars/{webinarId}/participants/qos_summary` (operation\n  `zoom.list_webinar_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss session-users list --session-id <id>` reads GET\n  `/v2/videosdk/sessions/{sessionId}/users/qos_summary` (operation\n  `zoom.list_session_users_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n\nAll three responses carry a `next_page_token` field in Zoom's own schema (used to fetch a further\npage of participants/users, not exposed as a command flag in this slice — see Known limits). The\nshared `json_redacted` output policy redacts any field whose name contains `token`\n(`engine/direct_read.go`'s `shouldRedactJSONField`), so `next_page_token` returns as\n`next_page_token_redacted: true` rather than its wire value even though it is a pagination cursor,\nnot a credential.\n\n### Direct reads (ai-companion module)\n\n- `pm zoom ai-companion conversation-archive get --user-id <id>` reads GET\n  `/v2/aic/users/{userId}/conversation_archive` (operation\n  `zoom.get_ai_companion_conversation_archives`). Provider reference:\n  https://developers.zoom.us/docs/api/ai-companion.md. The response's `aic_history_download_url`\n  and `physical_files[].download_url` fields are redacted by `json_redacted` (both fields' names\n  contain `download`+`url`, matching `shouldRedactJSONField`'s download-URL rule) since they are\n  direct download links to a user's AI conversation history/attachments.\n\n### Direct reads (my-notes module)\n\n- `pm zoom my-notes list` reads GET `/v2/my_notes/notes` (operation `zoom.list_my_notes`). No\n  request parameters; the live artifact documents none. Provider reference:\n  https://developers.zoom.us/docs/api/my-notes.md.\n- `pm zoom my-notes content get --note-id <id> [--include transcript]` reads GET\n  `/v2/my_notes/notes/{noteId}/content` (operation `zoom.get_my_notes_content`). Unlike qss's\n  response-only pagination fields, the `include=transcript` query parameter here is explicitly\n  documented in the provider's operation description prose, so it is exposed as an optional\n  `--include` flag. Provider reference: https://developers.zoom.us/docs/api/my-notes.md.\n\n### Direct reads (healthcare module)\n\nThe Healthcare routes return clinical note content and clinical identifiers, so both commands use\nthe existing `clinical_json_redacted` policy. It redacts note content, EHR appointment/patient/\nprovider identifiers, note owner/modifier identifiers, and token-shaped response fields before\noutput. Sanitized fixtures exercise the returned structure; no provider clinical example is retained\nin this repository.\n\n- `pm zoom healthcare clinical-notes list [--note-owner-user-id <id>] [--meeting-id <id>]` reads\n  GET `/v2/clinical_notes/notes` (operation `zoom.list_clinical_notes`). The two optional filters\n  are explicitly described by Zoom's operation prose. `from`, `to`, `page_size`, and\n  `next_page_token` appear only in the `200` response schema and are not request flags. Provider\n  reference: https://developers.zoom.us/docs/api/healthcare.md.\n- `pm zoom healthcare clinical-notes get --note-id <id>` reads GET\n  `/v2/clinical_notes/notes/{noteId}` (operation `zoom.get_clinical_note`). Provider reference:\n  https://developers.zoom.us/docs/api/healthcare.md.\n\n### Direct reads (quality-management module)\n\nQuality Management responses can carry agent/consumer names, contact values, account/user\nidentifiers, and token-shaped pagination fields. The five bounded reads use `json_redacted` plus a\nconnector-local sensitive field policy, so those values are removed before CLI output. Fixtures are\nsynthetic and do not retain Zoom response examples.\n\n- `pm zoom quality-management automated-evaluations list` reads GET\n  `/v2/qm/automated_evaluations` (operation\n  `zoom.list_quality_management_automated_evaluations`). The provider artifact declares no request\n  parameters; `page_size` and `next_page_token` are response fields, not flags.\n- `pm zoom quality-management evaluations list` reads GET `/v2/qm/evaluation` (operation\n  `zoom.list_quality_management_evaluations`). The provider artifact declares no request parameters.\n- `pm zoom quality-management evaluations get --evaluation-id <id>` reads GET\n  `/v2/qm/evaluation/{evaluationId}` (operation `zoom.get_quality_management_evaluation`).\n- `pm zoom quality-management interactions list` reads GET `/v2/qm/interactions` (operation\n  `zoom.list_quality_management_interactions`). The provider artifact declares no request\n  parameters; response-only date/pagination fields are not flags.\n- `pm zoom quality-management interactions get --interaction-id <id>` reads GET\n  `/v2/qm/interactions/{interactionId}` (operation `zoom.get_quality_management_interaction`).\n  Provider reference for all five routes: https://developers.zoom.us/docs/api/quality-management.md.\n\n### Direct reads (cobrowse-sdk module)\n\nCobrowse SDK responses can contain join-capable session pins, session/user identifiers, display\nnames, connection IDs, IP addresses, and token-shaped pagination fields. The four bounded reads use\n`json_redacted` plus a connector-local sensitive field policy, so those values are removed before\nCLI output. Fixtures are synthetic and do not retain Zoom response examples.\n\n- `pm zoom cobrowse-sdk live-sessions list [--from <YYYY-MM-DD>] [--to <YYYY-MM-DD>]` reads GET\n  `/v2/cobrowsesdk/live_sessions` (operation `zoom.list_cobrowse_live_sessions`). Zoom explicitly\n  permits the optional monthly date range in the operation prose; the range must fall in the past\n  six months. `page_size` and `next_page_token` are response fields, not flags.\n- `pm zoom cobrowse-sdk past-sessions list [--from <YYYY-MM-DD>] [--to <YYYY-MM-DD>]` reads GET\n  `/v2/cobrowsesdk/past_sessions` (operation `zoom.list_cobrowse_past_sessions`) with the same\n  documented monthly range semantics. Response `from`, `to`, `page_size`, and `next_page_token`\n  do not create additional inputs beyond the two explicitly documented query dates.\n- `pm zoom cobrowse-sdk sessions get --session-id <id>` reads GET\n  `/v2/cobrowsesdk/sessions/{sessionId}` (operation `zoom.get_cobrowse_session`).\n- `pm zoom cobrowse-sdk sessions users list --session-id <id>` reads GET\n  `/v2/cobrowsesdk/sessions/{sessionId}/users` (operation `zoom.list_cobrowse_session_users`).\n  Provider reference for all four routes: https://developers.zoom.us/docs/api/cobrowse-sdk.md.\n\n### Direct reads (SCIM2 module)\n\nThe SCIM2 artifact was re-fetched from\nhttps://developers.zoom.us/docs/api/scim2.md on 2026-08-08T13:33:09Z (171,559 bytes; SHA-256\n`ba86462a888677ea38a8bcc0557e9c4cf5809cd78fc6bc7655f85f79e5b27264`). Its four Group/User reads\nuse the provider's root `https://api.zoom.us` server rather than the ordinary `/v2` base. SCIM\nuser/group identifiers, names, contact and organization data, aliases, memberships, and extension\nobjects are redacted from `json_redacted` output. The artifact does not declare standalone paging\ninputs for these commands, so none is exposed.\n\n- `pm zoom scim2 groups list` reads GET `/scim2/Groups` (operation\n  `zoom.list_scim2_groups`).\n- `pm zoom scim2 groups get --group-id <id>` reads GET `/scim2/Groups/{groupId}` (operation\n  `zoom.get_scim2_group`).\n- `pm zoom scim2 users list` reads GET `/scim2/Users` (operation\n  `zoom.list_scim2_users`).\n- `pm zoom scim2 users get --user-id <id>` reads GET `/scim2/Users/{userId}` (operation\n  `zoom.get_scim2_user`).\n\nProvider reference for all four routes: https://developers.zoom.us/docs/api/scim2.md.\n\n### Direct reads (CRC module)\n\nThe Conference Room Connector artifact was re-fetched from\nhttps://developers.zoom.us/docs/api/crc.md on 2026-08-08T20:10:59Z (115,915 bytes; SHA-256\n`a631ec0cc101a33df9b6483f772e26b334adc7ab8f6d265cbc6f48c863a8e2ba`). Its nine GET operations\nread sensitive account, connector, room, template, or participant values through\n`json_redacted`; provider response values named as identifiers, private keys, credentials, room\ndetails, and token-shaped values do not reach CLI output. The artifact's pagination fields are\nresponse-only, so CRC declares no `page`, `per_page`, `limit`, cursor, or page-size input.\n\n- `pm zoom crc managed-rooms account-setting get` reads GET\n  `/v2/crc/managed_rooms/account_setting` (operation\n  `zoom.get_crc_managed_room_account_setting`).\n- `pm zoom crc api-connectors list`, `... get --connector-id <id>`, and\n  `... private-key get --connector-id <id>` read the provider-defined API Connector collection,\n  one connector, and its private-key response at `/v2/crc/api_connectors`; the private-key route\n  is output-redacted by policy.\n- `pm zoom crc managed-rooms list` and `... get --device-id <id>` read the declared managed-room\n  collection and one room at `/v2/crc/managed_rooms`.\n- `pm zoom crc participant-identifier-code get` reads GET\n  `/v2/crc/participant_identifier_code` (operation\n  `zoom.get_crc_participant_identifier_code`).\n- `pm zoom crc room-templates list` and `... get --template-id <id>` read the declared room\n  template collection and one template at `/v2/crc/room_templates`.\n\n## Write actions & risks\n\nRead behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My\nNotes, healthcare clinical-note, Quality Management, Cobrowse SDK session, SCIM2 user/group,\nVirtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, and CRC account/connector/room/\ntemplate/participant data.\n\n- `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`\n  plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action\n  (`update_clinical_note`). It changes a clinical-note completion status and therefore must use the\n  existing plan → preview → explicit approval → execute path. The note ID is redacted in write\n  errors. Zoom's `204 No Content` success response is recorded as a successful action.\n\n- `pm zoom quality-management interactions create --download-url <url>` plans the typed POST\n  `/v2/qm/interactions` action (`create_quality_management_interaction`). It imports a third-party\n  interaction into Quality Management and must use plan → preview → explicit approval → execute.\n  The command exposes each documented optional scalar request field, including nested\n  `interaction_info` fields; if an interaction-info field is supplied, `--interaction-channel-type`\n  is required by Zoom. Download URLs and interaction-info fields are redacted in generic write\n  errors. Fixture execution proves the documented `201 Created` response succeeds.\n\n- `pm zoom chatbot messages send --account-id <id> --content <json-object> --robot-jid <jid>\n  --to-jid <jid> --user-jid <jid>` plans the typed POST `/v2/im/chat/messages` action\n  (`send_chatbot_message`). `content` accepts exactly one provider-defined JSON object, rather than\n  a raw arbitrary body. Account, message, and JID values are redacted.\n\n- `pm zoom chatbot messages edit --message-id <id> --account-id <id> --content <json-object>\n  --robot-jid <jid>` plans the typed PUT `/v2/im/chat/messages/{message_id}` action\n  (`edit_chatbot_message`). It has the same Chatbot-only client-credentials transport and\n  redaction policy.\n\n- `pm zoom chatbot messages delete --message-id <id>` plans the typed DELETE\n  `/v2/im/chat/messages/{message_id}` action (`delete_chatbot_message`). It requires the normal\n  plan/preview/approval flow plus destructive typed confirmation before execute.\n\n- `pm zoom chatbot link-unfurls create --user-id <id> --trigger-id <id> --content <string>` plans\n  the typed POST `/v2/im/chat/users/{userId}/unfurls/{triggerId}` action\n  (`create_chatbot_link_unfurl`). Zoom's `204 No Content` is recorded as a successful status-only\n  action; no response body is invented.\n\n- `pm zoom scim2 groups create --resource <json-object>` plans the typed POST `/scim2/Groups`\n  action (`create_scim2_group`). `--resource` accepts exactly one documented SCIM Group resource at\n  that fixed endpoint; aliases, display names, memberships, and extension fields are redacted.\n- `pm zoom scim2 groups update --group-id <id> --patch <json-object>` plans the typed PATCH\n  `/scim2/Groups/{groupId}` action (`update_scim2_group`). `--patch` accepts exactly one documented\n  SCIM PatchOp object; the documented `204 No Content` response is status-only.\n- `pm zoom scim2 groups delete --group-id <id>` plans the typed DELETE\n  `/scim2/Groups/{groupId}` action (`delete_scim2_group`). It requires destructive typed\n  confirmation and records the documented `204 No Content` status without inventing a body.\n- `pm zoom scim2 users create --resource <json-object>` and `pm zoom scim2 users update --user-id\n  <id> --resource <json-object>` plan the typed POST `/scim2/Users` and PUT\n  `/scim2/Users/{userId}` actions (`create_scim2_user`, `update_scim2_user`). Each named resource\n  flag accepts one documented extensible SCIM User object only for its fixed endpoint; profile,\n  contact, organization, and extension fields are redacted.\n- `pm zoom scim2 users deactivate --user-id <id> --patch <json-object>` plans the typed PATCH\n  `/scim2/Users/{userId}` action (`deactivate_scim2_user`) with one documented activation-state\n  SCIM PatchOp object.\n- `pm zoom scim2 users delete --user-id <id>` plans the typed DELETE\n  `/scim2/Users/{userId}` action (`delete_scim2_user`). It requires destructive typed confirmation\n  and records the documented `204 No Content` status without inventing a body.\n\n- `pm zoom crc managed-rooms account-setting update --account-settings <json-object>` plans the\n  fixed multipart PATCH `/v2/crc/managed_rooms/account_setting`\n  (`update_crc_managed_room_account_setting`). The named object accepts only the provider's\n  documented account-setting members and the documented `204 No Content` response is status-only.\n\n- `pm zoom crc api-connectors create --api-connector <json-object>`,\n  `... update --connector-id <id> --api-connector <json-object>`, and\n  `... delete --connector-id <id>` plan the provider-defined API Connector POST, PATCH, and DELETE\n  routes. The named object is closed to documented connector fields; deletion requires destructive\n  typed confirmation and its `204` result remains status-only.\n\n- `pm zoom crc api-connectors private-key update --connector-id <id>` plans the fixed private-key\n  regeneration PATCH. It requires typed confirmation even though it is not a DELETE, and its\n  returned private key is always handled through `json_redacted` output rather than emitted.\n\n- `pm zoom crc managed-rooms create --managed-room <json-object>`,\n  `... update --device-id <id> --managed-room <json-object>`, and\n  `... delete --device-id <id>` plan the provider-defined managed-room POST, PATCH, and DELETE\n  routes. The named objects are closed to the provider's fields; deletion requires destructive\n  typed confirmation and all `204` responses are status-only.\n\n- `pm zoom crc room-templates create --room-template <json-object>`,\n  `... update --template-id <id> --room-template <json-object>`, and\n  `... delete --template-id <id>` plan the provider-defined room-template POST, PATCH, and DELETE\n  routes. The named objects remain closed; deletion requires destructive typed confirmation and\n  the documented `204` actions are asserted by status only.\n\nThe provider inventory records 1,032 documented writes. The four Chatbot actions above, seven\nSCIM2 actions, the Healthcare completion-status action, the Quality Management interaction-creation\naction, the module-specific typed actions listed in the generated manual, CRC's eleven actions,\nand the Customer Managed Keys Hybrid archival-key action are currently declared; all remaining\nwrite rows are either blocked on connector-local typed contracts, safety/approval evidence, and\nfixtures, or on the corresponding Zoom account entitlement. Future writes must use the existing\nplan → preview → explicit approval → execute path; destructive operations additionally require the\ntyped confirmation gate.\n\n## Known limits\n\n- Batch default: `read_page_size=100`.\n- Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See\n  issue #3915 for the full module-by-module tracking table.\n- Executable today: 143 documented endpoint rows are declared executable. The generated Zoom\n  manual lists each stream, bounded read, download, typed direct write, and reverse-ETL action.\n- Direct-read commands in this connector take only the request inputs the live provider artifact\n  expressly documents. Cobrowse's `from`/`to` range is exposed because the operation prose declares\n  it as a query input; a response-body field alone (including `page_size` and `next_page_token`) is\n  not sufficient evidence of an accepted request parameter. This is a deliberate module-by-module\n  scope-narrowing, not an oversight.\n- Pending connector-local delivery: 1,699 operations have no shared foundation blocker, but still\n  need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can\n  become commands.\n- Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one\n  Meeting audit trail, and four Phone blocked-list routes) remain blocked until Zoom enables the\n  corresponding product/account capability.\n- Justified exclusions: 54 provider-deprecated operations remain recorded as `deprecated` ledger\n  evidence and are not implemented.\n",
     "icon": {
       "id": "zoom",
       "path": "icons/zoom.svg",
