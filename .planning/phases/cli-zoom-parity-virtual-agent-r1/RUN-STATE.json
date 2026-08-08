@@ -1,0 +1,40 @@
+{
+  "phase": "cli-zoom-parity-virtual-agent-r1",
+  "issue": 3941,
+  "parent_issue": 3915,
+  "status": "planned",
+  "lifecycle": {
+    "mode": "inline-manual-gsd-fallback",
+    "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
+    "sources_resolved": [
+      "discuss-phase",
+      "plan-phase",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ],
+    "sources_resolved_at": "2026-08-08"
+  },
+  "source_artifact": {
+    "url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+    "retrieved_at": "2026-08-08T14:20:14Z",
+    "http_status": 200,
+    "bytes": 60147,
+    "sha256": "5be404cc4cbcf03736914f52ad9e50dc4a17ebfbc104db9e20bf7d31a1fb6436",
+    "openapi": "3.1.1",
+    "server": "https://api.zoom.us/v2",
+    "ledger_delta": 0
+  },
+  "operations": 13,
+  "target": {
+    "covered": 51,
+    "locally_blocked": 1791,
+    "direct_reads": 30,
+    "direct_writes": 16,
+    "unsafe_or_disallowed": 0
+  },
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "review": "pending"
+}
