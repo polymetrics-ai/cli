@@ -1,0 +1,6 @@
+{
+  "status": 201,
+  "body": {
+    "interaction_id": "fixture-created-interaction"
+  }
+}

@@ -4,7 +4,7 @@
   "sub_issue": 3943,
   "connector": "zoom",
   "provider_module": "quality-management",
-  "state": "planned",
+  "state": "red_captured",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -29,5 +29,9 @@
     "direct_reads": 13,
     "writes": 2
   },
-  "next": "add and run the red Quality Management reachability test, then commit and push before production declarations"
+  "red": {
+    "command": "go test -count=1 ./internal/connectors/defs/zoom/...",
+    "result": "failed as expected: 12 -> 18 covered, 1830 -> 1824 locally blocked, 8 -> 13 direct reads, 1 -> 2 writes, and all six Quality Management routes were unknown"
+  },
+  "next": "commit and push this red-only state before production declarations"
 }

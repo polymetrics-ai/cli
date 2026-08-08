@@ -1,0 +1,14 @@
+{
+  "status": 200,
+  "body": {
+    "account_id": "fixture-account",
+    "evaluators_info": [
+      {
+        "display_name": "fixture-evaluator-name",
+        "user_id": "fixture-evaluator-user"
+      }
+    ],
+    "id": "fixture-evaluation",
+    "status": "Complete"
+  }
+}
