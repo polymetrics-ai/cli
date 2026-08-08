@@ -57,3 +57,52 @@ FAIL	polymetrics.ai/cmd/connectorgen
 
 **Red conclusion:** current-main bundle inputs cannot satisfy the source-complete operation ledgers;
 the target-specific tests precisely fail on the intended missing surface/disposition work.
+
+## Foundation gate — captain-authorized shared support
+
+After importing the seven bundle inputs, `go run ./cmd/connectorgen surface-sync
+internal/connectors/defs` failed before generation:
+
+```text
+connectorgen surface-sync: runtime operation endpoint ledger: load jira: load bundle jira:
+api_surface.json: /endpoints/1/covered_by/writes: additional property not allowed
+```
+
+A confirming validation run reported the same issue for Jira and Workday. The source commit adds
+plural `covered_by.writes` support to the engine bundle type, API-surface schema, and validator.
+
+The captain then explicitly authorized this bounded foundation in the extraction because the two
+connectors require multiple named write contracts on a single documented endpoint. The red slice is
+the focused plural-write validator test, followed by implementation only in the four paths named in
+`PLAN.md`; its own labelled commit will precede the connector bundle commit. The all-bundle validator
+must report all 551 checked with zero findings before surface generation resumes.
+
+### Red — focused plural-write validator test
+
+Before the engine type was changed, the focused test command exited 1 because the proposed plural
+field did not exist; this is the expected compile-time red state, not a baseline failure:
+
+```text
+# polymetrics.ai/cmd/connectorgen [polymetrics.ai/cmd/connectorgen.test]
+cmd/connectorgen/validate_surface_test.go:53:40: unknown field Writes in struct literal of type engine.SurfaceCoverage
+cmd/connectorgen/validate_surface_test.go:77:40: unknown field Writes in struct literal of type engine.SurfaceCoverage
+FAIL	polymetrics.ai/cmd/connectorgen [build failed]
+```
+
+### Green — focused plural-write validator test
+
+After adding only plural write-target handling to the engine type, API-surface schema, and validator,
+the focused test command passed:
+
+```text
+ok  	polymetrics.ai/cmd/connectorgen	0.745s
+```
+
+### Green — all-bundle compatibility check
+
+With the seven imported bundle inputs present, the real validator loaded every bundle and found no
+regression in the existing connector corpus:
+
+```text
+connectorgen validate: 551 connector(s) checked, 0 findings
+```

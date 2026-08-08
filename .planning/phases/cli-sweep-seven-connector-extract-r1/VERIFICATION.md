@@ -2,6 +2,10 @@
 
 ## Bundle and generated-surface checks
 
+- [x] Focused plural-write validator tests recorded a red state then passed after the
+  captain-authorized `covered_by.writes` engine/schema/validator foundation was added.
+- [x] The post-foundation all-bundle validator checked all 551 connectors with zero findings,
+  proving no existing connector behavior changed.
 - [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` succeeds.
 - [ ] `go run ./cmd/connectorgen surface-sync --check` succeeds after regeneration.
 - [ ] The source-derived counts match the seven-row table in `PLAN.md`.
@@ -37,4 +41,3 @@
 State verbatim that workday-rest, jira, help-scout, greenhouse, chatwoot, gmail, and lever-hiring
 are implemented but **not certified**, have **never been exercised against their live services**,
 and no credentials were held or used for them.
-

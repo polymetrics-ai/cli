@@ -1,10 +1,22 @@
 {
   "phase": "cli-sweep-seven-connector-extract-r1",
-  "status": "red_observed",
+  "status": "foundation_validated",
   "source_commit": "c28bc75a3",
   "execution_mode": "inline_manual_gsd",
   "red_failure": "focused source acceptance tests exited 1 against current-main bundle inputs; ledger versions and documented operation/disposition counts are absent",
-  "green_evidence": "pending",
+  "green_evidence": "focused plural-write validator tests pass; connectorgen validate checked 551 connectors with 0 findings",
+  "foundation": {
+    "status": "validated",
+    "reason": "Jira and Workday require multiple named write contracts over one documented provider endpoint",
+    "paths": [
+      "internal/connectors/engine/bundle.go",
+      "internal/connectors/engine/schema/api_surface.schema.json",
+      "cmd/connectorgen/validate.go",
+      "cmd/connectorgen/validate_surface_test.go"
+    ],
+    "commit": "pending_separate_foundation_commit",
+    "scope_guard": "No github or zendesk-support tests; retain current-main unrelated engine behavior."
+  },
   "scope": [
     "workday-rest",
     "jira",

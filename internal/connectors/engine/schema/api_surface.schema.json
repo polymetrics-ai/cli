@@ -45,6 +45,10 @@
             "properties": {
               "stream": { "type": "string" },
               "write": { "type": "string" },
+              "writes": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
               "direct_read": { "type": "string" },
               "direct_reads": {
                 "type": "array",
