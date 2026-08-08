@@ -1,0 +1,20 @@
+{
+  "status": 200,
+  "body": {
+    "page_size": 30,
+    "next_page_token": "fixture-page-token",
+    "users": [
+      {
+        "user_connection_id": "fixture-user-connection",
+        "user_id": "fixture-session-user",
+        "user_name": "fixture-session-user-name",
+        "role_type": "agent",
+        "ip_address": "192.0.2.1",
+        "data_center": "US",
+        "join_time": "2026-08-08T09:00:00Z",
+        "leave_time": "2026-08-08T09:05:00Z",
+        "duration": "00:05:00"
+      }
+    ]
+  }
+}

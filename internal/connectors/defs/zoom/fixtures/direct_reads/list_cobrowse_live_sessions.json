@@ -1,0 +1,21 @@
+{
+  "status": 200,
+  "body": {
+    "page_size": 30,
+    "next_page_token": "fixture-page-token",
+    "sessions": [
+      {
+        "session_id": "fixture-live-session",
+        "start_time": "2026-08-08T09:00:00Z",
+        "session_pin": "fixture-session-pin",
+        "users": [
+          {
+            "user_id": "fixture-live-user",
+            "user_name": "fixture-live-user-name",
+            "role_type": "agent"
+          }
+        ]
+      }
+    ]
+  }
+}
