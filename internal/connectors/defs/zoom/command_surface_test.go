@@ -36,16 +36,16 @@ const zoomBundleName = "zoom"
 //
 // Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
 // quality-management reads (5), Cobrowse SDK reads (4), SCIM2 reads (4),
-// Virtual Agent reads (9), Auto Dialer reads (8), and Tasks reads (6). Chatbot,
-// SCIM2, Virtual Agent, Auto Dialer, and Tasks mutations are tracked by
-// wantModuleDirectWriteCommandCount.
-const wantModuleOperationCommandCount = 44
+// Virtual Agent reads (9), Auto Dialer reads (8), Tasks reads (6), and Workforce
+// Management reads (11). Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, and
+// Workforce Management mutations are tracked by wantModuleDirectWriteCommandCount.
+const wantModuleOperationCommandCount = 55
 
 // wantModuleDirectWriteCommandCount is the running total of implemented
 // operations.json rest_write commands. It is distinct from writes.json
 // reverse-ETL actions because direct writes are executable only through the
 // typed plan lifecycle.
-const wantModuleDirectWriteCommandCount = 35
+const wantModuleDirectWriteCommandCount = 42
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -156,11 +156,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 84 {
-		t.Errorf("executable rows = %d, want 84", got)
+	if got := covered; got != 102 {
+		t.Errorf("executable rows = %d, want 102", got)
 	}
-	if got := implementableNow; got != 1758 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1758", got)
+	if got := implementableNow; got != 1740 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1740", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -513,6 +513,65 @@ func TestTasksOperationCommandsAreReachable(t *testing.T) {
 		for _, flag := range found.Flags {
 			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
 				t.Errorf("Tasks command %q invents paging flag --%s", want.path, flag.Name)
+			}
+		}
+	}
+}
+
+// TestWorkforceManagementOperationCommandsAreReachable is the provider-category
+// RED surface contract. It enumerates every documented action in Zoom's
+// Workforce Management artifact through real commandrunner preflight, including
+// its declared CSV imports, so a bundle cannot claim implementation while the
+// executable binary would still report an unknown command.
+func TestWorkforceManagementOperationCommandsAreReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	wants := []struct {
+		path      string
+		operation string
+		intent    string
+		method    string
+		apiPath   string
+		policy    string
+	}{
+		{path: "workforce-management filter-groups list", operation: "zoom.list_workforce_filter_groups", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/filter-groups", policy: "json_redacted"},
+		{path: "workforce-management forecasts list", operation: "zoom.list_workforce_forecasts", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/forecasts", policy: "json_redacted"},
+		{path: "workforce-management forecasts scheduling-groups get", operation: "zoom.get_workforce_forecast_scheduling_group", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}", policy: "json_redacted"},
+		{path: "workforce-management imports historical-agent-status upload", operation: "zoom.upload_workforce_historical_agent_status", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/workforce-management/imports/historical-agent-status", policy: "json_redacted"},
+		{path: "workforce-management imports historical-agent-status delete", operation: "zoom.delete_workforce_historical_agent_status", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/workforce-management/imports/historical-agent-status", policy: "none"},
+		{path: "workforce-management imports historical-queue-metrics upload", operation: "zoom.upload_workforce_historical_queue_metrics", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/workforce-management/imports/historical-queue-metrics", policy: "json_redacted"},
+		{path: "workforce-management imports staffing upload", operation: "zoom.upload_workforce_forecast_staffing", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/workforce-management/imports/staffing", policy: "json_redacted"},
+		{path: "workforce-management imports historical-queue-metrics get", operation: "zoom.get_workforce_historical_queue_metrics_import", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/imports/{importId}/historical-queue-metrics", policy: "json_redacted"},
+		{path: "workforce-management organizational-groups list", operation: "zoom.list_workforce_organizational_groups", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/organizational-groups", policy: "json_redacted"},
+		{path: "workforce-management organizational-groups create", operation: "zoom.create_workforce_organizational_group", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/workforce-management/organizational-groups", policy: "json_redacted"},
+		{path: "workforce-management organizational-groups get", operation: "zoom.get_workforce_organizational_group", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/organizational-groups/{organizationalGroupId}", policy: "json_redacted"},
+		{path: "workforce-management organizational-groups delete", operation: "zoom.delete_workforce_organizational_group", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/workforce-management/organizational-groups/{organizationalGroupId}", policy: "none"},
+		{path: "workforce-management organizational-groups update", operation: "zoom.update_workforce_organizational_group", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/workforce-management/organizational-groups/{organizationalGroupId}", policy: "json_redacted"},
+		{path: "workforce-management reports adherence agents list", operation: "zoom.list_workforce_adherence_agents", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/reports/adherence/agents", policy: "json_redacted"},
+		{path: "workforce-management reports schedules agents list", operation: "zoom.list_workforce_report_schedule_agents", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/reports/schedules/agents", policy: "json_redacted"},
+		{path: "workforce-management schedules agents list", operation: "zoom.list_workforce_schedule_agents", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/schedules/agents", policy: "json_redacted"},
+		{path: "workforce-management scheduling-groups list", operation: "zoom.list_workforce_scheduling_groups", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/scheduling-groups", policy: "json_redacted"},
+		{path: "workforce-management users list", operation: "zoom.list_workforce_users", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/workforce-management/users", policy: "json_redacted"},
+	}
+	for _, want := range wants {
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want declared executable Workforce Management action", want.path, err)
+			continue
+		}
+		var found *connectors.CommandSurfaceCommand
+		for i := range connector.CommandSurface().Commands {
+			if connector.CommandSurface().Commands[i].Path == want.path {
+				found = &connector.CommandSurface().Commands[i]
+				break
+			}
+		}
+		if found == nil || found.Intent != want.intent || found.Availability != "implemented" || found.Operation != want.operation || len(found.APISurface) != 1 || found.APISurface[0].Method != want.method || found.APISurface[0].Path != want.apiPath || found.OutputPolicy != want.policy {
+			t.Errorf("Workforce Management command %q does not retain its declared operation/endpoint/output contract", want.path)
+			continue
+		}
+		for _, flag := range found.Flags {
+			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
+				t.Errorf("Workforce Management command %q invents paging flag --%s", want.path, flag.Name)
 			}
 		}
 	}
