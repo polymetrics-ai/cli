@@ -362,3 +362,13 @@ rewritten evidence.
 their generated prompts, and `go run ./cmd/agentcontractgen check` were run before this
 slice. The canonical parent-worker contract forbids the official role spawning, so
 discussion, `plan-phase --tdd`, execution, verification, and review are recorded inline.
+
+### Completion record
+
+The red checkpoint was committed before production changes; the green declaration
+and tests were committed and pushed separately. The built binary proof stopped at
+100 proxy-observed requests before dispatching its 101st logical request, then the
+free Docker Registry HEAD reported full remaining headroom. Final scoped verification,
+full `internal/cli` regression coverage, and inline `verify-work`/`code-review` pass;
+their commands and outcomes are recorded in `TDD-LEDGER.md`, `VERIFICATION.md`, and
+`REVIEW.md`.

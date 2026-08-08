@@ -533,3 +533,19 @@ rewrote 1,029 unrelated connector outputs, all restored from the known clean bas
 only Docker Hub's `MANUAL.md` and `SKILL.md` remain. `npm run gen:catalog` was run;
 parsed-object comparison confirms both website catalog outputs changed only the
 `dockerhub` object. No golden transcript changed.
+
+### Binary proof — production budget admission (2026-08-08)
+
+After the green commit, rebuilt `pm` ran `dockerhub tags list --limit 101` through
+an isolated loopback HTTP proxy with `base_url=http://registry-1.docker.io/v2` and
+the declared unauthenticated profile. Each response supplied a same-host next URL
+and one valid record. The proxy received 100 requests; the 101st stayed blocked in
+the existing rate-limit admission for five seconds and was then cancelled by the
+test harness. The proxy count stayed exactly 100, proving admission happened before
+transport dispatch.
+
+Docker's free Registry quota HEAD immediately returned HTTP 200 with
+`ratelimit-limit: 100;w=3600` and `ratelimit-remaining: 100;w=3600`; only those
+non-secret headers were retained. Thus the provider still had full observed
+headroom after local enforcement. The evidence records the header/documentation
+window discrepancy and the honest same-PAT limitation in `VERIFICATION.md`.
