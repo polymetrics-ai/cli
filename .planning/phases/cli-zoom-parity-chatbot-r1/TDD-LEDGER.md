@@ -66,6 +66,26 @@ values are synthetic and no value is emitted. This foundation is independent of 
 Zoom Chatbot declaration; it unblocks any connector whose documented OAuth client credentials use
 the standard Basic client-auth style.
 
+## GREEN foundation — closed typed JSON object command input
+
+Commit `68dc984fe` adds `json_object` as a deliberately closed command flag type. It accepts one
+object only, uses a number-preserving decoder, and rejects a scalar, array, malformed input, or a
+second JSON document. The existing generic `json` type remains an explicit runtime rejection.
+
+The commandrunner additionally refuses this type for path/query bindings, while connectorgen
+requires its command declaration to map to an operation body and checks compatibility with the
+linked object-typed body-schema field. The operation executor then validates the assembled closed
+body schema before issuing a request; this is not a generic raw-body escape hatch.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner ./cmd/connectorgen
+ok  polymetrics.ai/internal/connectors/commandrunner
+ok  polymetrics.ai/cmd/connectorgen
+```
+
+The foundation is separate from Zoom authoring and unblocks any declared provider operation whose
+named, schema-owned member is an object rather than a scalar or string array.
+
 ## Planned GREEN contracts
 
 - `client_auth: basic` makes the token request use HTTP Basic for the client ID/secret and keeps

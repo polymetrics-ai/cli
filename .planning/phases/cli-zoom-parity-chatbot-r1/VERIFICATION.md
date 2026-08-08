@@ -6,7 +6,7 @@
 - [x] Required skills and canonical connector/CLI references are recorded in `PLAN.md`.
 - [x] Live provider artifact URL, retrieval date, HTTP result, byte count, SHA-256, and exact four-operation audit are recorded before RED.
 - [x] RED failure is captured before production changes; its test-only commit is the next checkpoint.
-- [ ] Reusable foundations are red/green tested, separately committed, and pushed.
+- [x] Reusable OAuth Basic and closed typed JSON-object foundations are red/green tested, separately committed, and pushed (`c3038e29c`, `68dc984fe`).
 - [ ] Connector declaration and generated output are committed and pushed.
 - [ ] Inline verify-work and code-review evidence are complete.
 

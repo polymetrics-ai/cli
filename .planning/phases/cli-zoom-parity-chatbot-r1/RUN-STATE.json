@@ -48,5 +48,13 @@
       "go test -count=1 -timeout 20m ./internal/connectors/connsdk ./internal/connectors/engine"
     ]
   },
-  "next": "implement and verify the closed typed json_object CLI flag foundation separately; then author the Zoom Chatbot declaration"
+  "typed_json_object_foundation": {
+    "state": "green",
+    "green_commit": "68dc984fe",
+    "scope": "one-object-only JSON parsing for operation body fields, static body-schema type compatibility, and path/query refusal",
+    "verification": [
+      "go test -count=1 -timeout 20m ./internal/connectors/commandrunner ./cmd/connectorgen"
+    ]
+  },
+  "next": "author the four-operation Zoom Chatbot declaration and its isolated token/API fixtures"
 }
