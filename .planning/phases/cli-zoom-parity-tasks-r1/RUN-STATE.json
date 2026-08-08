@@ -1,0 +1,41 @@
+{
+  "phase": "cli-zoom-parity-tasks-r1",
+  "issue": 3939,
+  "parent_issue": 3915,
+  "status": "planned",
+  "lifecycle": {
+    "mode": "inline-manual-gsd-fallback",
+    "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
+    "sources_resolved": [
+      "discuss-phase",
+      "plan-phase",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ],
+    "sources_resolved_at": "2026-08-08"
+  },
+  "source_artifact": {
+    "url": "https://developers.zoom.us/docs/api/tasks.md",
+    "retrieved_at": "2026-08-08T15:22:01Z",
+    "http_status": 200,
+    "bytes": 68605,
+    "sha256": "53920b1c473e4d8ccdad03475d6d14f13b6b0b54ce036127dd644e51850f09be",
+    "openapi": "3.1.1",
+    "server": "https://api.zoom.us/v2",
+    "ledger_delta": 0
+  },
+  "operations": 17,
+  "target": {
+    "covered": 84,
+    "locally_blocked": 1758,
+    "direct_reads": 44,
+    "direct_writes": 35,
+    "unsafe_or_disallowed": 0
+  },
+  "foundation": "required: redirect-safe typed multipart rest_write for the documented fileapi.zoom.us 30x bearer-preserving upload",
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "review": "pending"
+}
