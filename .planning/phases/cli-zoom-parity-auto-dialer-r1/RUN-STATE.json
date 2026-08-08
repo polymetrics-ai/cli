@@ -1,0 +1,40 @@
+{
+  "phase": "cli-zoom-parity-auto-dialer-r1",
+  "issue": 3940,
+  "parent_issue": 3915,
+  "status": "planned",
+  "lifecycle": {
+    "mode": "inline-manual-gsd-fallback",
+    "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
+    "sources_resolved": [
+      "discuss-phase",
+      "plan-phase",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ],
+    "sources_resolved_at": "2026-08-08"
+  },
+  "source_artifact": {
+    "url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+    "retrieved_at": "2026-08-08T14:45:08Z",
+    "http_status": 200,
+    "bytes": 80801,
+    "sha256": "2ca270a6dc2ac5bb72cf1ce7e6684785d5df21285affaf272c46bf8fbf127f61",
+    "openapi": "3.1.1",
+    "server": "https://api.zoom.us/v2",
+    "ledger_delta": 0
+  },
+  "operations": 16,
+  "target": {
+    "covered": 67,
+    "locally_blocked": 1775,
+    "direct_reads": 38,
+    "direct_writes": 24,
+    "unsafe_or_disallowed": 0
+  },
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "review": "pending"
+}
