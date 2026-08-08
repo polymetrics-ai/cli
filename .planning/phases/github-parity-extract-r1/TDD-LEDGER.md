@@ -97,3 +97,56 @@ connectorgen validate: 551 connector(s) checked, 0 findings
 ```
 
 No test was weakened, skipped, or deleted in either cycle. Three tests were added.
+
+---
+
+## Cycle 3 — the shared-code redaction defect (found in review, closed here)
+
+Not a github cycle. Review of this branch found that restoring `secret set` made
+`--encrypted-value` reachable while the `redact_fields` mitigation declared for it was inert.
+Closed in three red/green steps on the captain's ruling.
+
+**Red 3a — the `--json` half.** `RedactReversePlanRecords(plan.Sample, plan.RedactFields)` was a
+no-op because the connector-command plan constructor never populated `RedactFields`, so
+`sample[0].encrypted_value` was emitted verbatim.
+**Green** — `3f78743ad`; `internal/cli/reverse_plan_redaction_test.go` asserts the sample field is
+`"redacted"`, that the sentinel is absent from the emitted JSON, and that a plan declaring no
+redact fields round-trips unredacted.
+
+**Red 3b — the at-rest half.** `ConnectorCommandRecord` still carried the raw value into
+`state.json`, permanently, because reverse plans are append-only. The first fix's test asserted
+only on the `sample` sub-slice, which is exactly how this survived.
+**Green** — `148b763b1`; `internal/app/connector_command_withholding_test.go` reads the **raw
+bytes** of `.polymetrics/state/state.json` and asserts the sentinel is absent after plan, after
+preview and after execute, for both a sealed-secret field and a required bearer-token fixture,
+while non-sensitive fields the plan needs survive.
+
+**Red 3c — the operation-backed path.** The withholding key resolved `writeCommand.Write` against
+`ManifestOf(connector).WriteActions`, but `buildOperationDirectWriteCommand` sets `Write` to an
+operation ID. The namespaces are disjoint in 550 of 551 bundles, so the lookup returned nil and
+withholding silently did nothing. asana was worse: 11 names exist in both namespaces.
+**Green** — `133d7174a`; `internal/app/operation_command_withholding_test.go` proves an
+operation-backed plan withholds its `sensitive_policy.redact_fields`, and
+`TestOperationBackedPlanIgnoresSameNamedWriteAction` proves the asana collision resolves to the
+operation, not the write action — the test that fails if anyone reintroduces a fallback.
+
+Two existing tests changed, both contract adaptations rather than weakenings, and both recorded
+here rather than quietly updated:
+
+- `defs/asana/reverse_etl_execute_test.go` now passes `WithheldFlags: flagsFromRecord(...)` at
+  execute, mirroring the real operator flow under the new re-supply contract. It still asserts the
+  write executes.
+- `defs/zendesk-support/reverse_etl_execute_test.go` passes `nil` for `PreviewReversePlan`'s new
+  parameter. Signature only.
+
+No test was weakened, skipped, or deleted. Cycle 3 added three test files.
+
+---
+
+## Note on the run that produced cycles 2–3
+
+The `no-mistakes` run `01KZEY2NZJ88R819PY5J3XK5JD` completed its review step with 0 findings and
+then **failed at the test step for an external reason** — the agent's monthly spend limit, not a
+code failure. Its five commits were preserved unpublished in the local gate and recovered with
+`no-mistakes axi sync --recover` before pushing. The gates below were therefore re-run locally on
+the recovered head.

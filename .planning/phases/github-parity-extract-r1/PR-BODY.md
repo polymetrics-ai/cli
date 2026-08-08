@@ -144,6 +144,63 @@ endpoint the other 1146 commands model, under none of their controls. **The capt
 
 `TestGitHubHeldCommandsStayBlocked` pins both so neither drifts to `implemented` by accident.
 
+## ⚠️ This PR also contains a shared-code security change
+
+Not a github change. It was found during review of this branch and closed here on the captain's
+ruling, because restoring `secret set` is what made it reachable.
+
+**The defect.** A reverse-ETL plan built from a connector command ignored the resolved write
+action's `redact_fields`. The declared-sensitive value was therefore both emitted in `--json` and
+persisted verbatim to the project state file. `RedactFields` was populated correctly on the
+sibling source-table path 130 lines earlier, so this was a competing owner, not an architectural
+choice.
+
+**Why it could not wait.** Reverse plans are **append-only** — the only writes to
+`a.state.ReversePlans` are two appends — so `ExpiresAt` gates a plan's *usability*, never the
+retention of its bytes. The value stayed on disk until the operator deleted project state.
+Retention was unbounded.
+
+**How wide.** Independently re-counted from the bundles, not taken from the review:
+**170 `implemented` reverse-ETL commands across 14 connectors** have a CLI flag feeding a field
+their own write action declares in `redact_fields` — ashby 87, mailchimp 20, asana 10,
+amazon-sqs 8 (including `message_body` and `receipt_handle`), recurly 8, google-calendar 7,
+freshchat 5, zendesk-support 5, hubplanner 5, youtube-analytics 5, google-search-console 4,
+bahmni 3, github 2, stripe 1.
+
+**What changed**, in three commits:
+
+1. `3f78743ad` — populate `RedactFields` from the resolved write action, so the existing
+   `RedactReversePlanRecords` boundary stops being a no-op. Closes the `--json` half.
+2. `148b763b1` — withhold those fields from the persisted `ConnectorCommandRecord` entirely
+   (absent, not the literal `"redacted"`, which is indistinguishable from an operator who typed
+   it) and re-supply them at approve/execute. The plan hash already covers the complete record,
+   so a missing field, a wrong value and a tampered plan all fail on machinery that already
+   existed. No new binding, no new CLI surface — `runConnectorWriteCommandFromPlan` already
+   receives the parsed flags. Closes the at-rest half.
+3. `133d7174a` — resolve the withholding key **by mode**: operation-backed plans read the
+   operation's `sensitive_policy.redact_fields`, write-action plans read the manifest, with
+   **no fallback between them**. `buildOperationDirectWriteCommand` sets `Write` to an operation
+   ID, and the two namespaces are disjoint in 550 of 551 bundles, so the previous lookup returned
+   nil and withholding silently did nothing on that path. asana is the exception and was worse:
+   11 names (`delete_task`, `delete_project`, `create_tag`, …) exist in both namespaces, so a
+   fallback could apply an unrelated write action's redact list. Mode dispatch makes that
+   unreachable rather than merely unlikely.
+
+That third commit is why the 4 OAuth endpoints are **not** implemented in this PR: they take a
+live bearer token as a required body field and would be the first `implemented` `direct_write`
+command in the repo — the exact path that silently resolved to nil.
+
+**A third declaration site is deliberately left alone.** `CommandSurfaceCommand.RedactFields` is
+declared by 217 commands and documented at `connectors/command_surface.go` as not consulted by
+`commandrunner`. It stays that way and is filed, not wired: two redaction sources feeding one
+path is how this bug class starts.
+
+Tests assert against the **raw persisted bytes** of `state.json`, not an in-memory sub-slice —
+asserting on the sub-slice is exactly how the at-rest half survived the first fix round. Coverage
+includes the sealed-secret case, a required-and-withheld bearer-token fixture, the asana
+same-name collision resolving to the operation, and negative controls (no `redact_fields`
+round-trips unchanged; a wrong re-supplied value fails the hash check instead of dispatching).
+
 ## ⚠️ The sweep branch needs a rebase after this merges
 
 `fm/cli-top50-sweep-resume2-r1` carries these same four github commits. Once this lands, that
@@ -158,6 +215,42 @@ one. The sweep is paused at stripe, so this is cheap now. Flagging it so it is n
 2. **Thin `record_schema`s on generated write actions** — `secret set-2` was `implemented`
    while able only to send an empty body. That is the shape issue #3899 exists to fix; only
    the one blocking this order was fixed. `repo2` and others are worth a sweep.
+3. **`CommandSurfaceCommand.RedactFields`** — a third, deliberately unconsulted redaction
+   declaration site on 217 commands. Filed, not wired. Needs a deliberate decision before
+   anything reads it.
+4. **github's 98 blocked endpoints** — a separate stacked PR, scoped and pre-derived. See below.
+
+## The 98 blocked endpoints are a separate PR, and here is why
+
+The captain ordered complete parity over the 98, excluding only genuine duplicates and genuine
+missing foundations. That work is scoped, its data is derived and verified, and it is **not** in
+this PR: this branch already grew from a github extraction into a shared-code security change
+touching 170 commands across 14 connectors, and the remaining work adds ~29 endpoint
+implementations plus two new runtime output policies. Splitting costs nothing — the OAuth four
+land after the resolver fix they depend on, which is in this PR.
+
+**The foundation question, answered.** `covered_by.writes` (`997d7391b`, in this PR) already
+expresses one endpoint as N write actions **with different bodies** — that phrase is from its own
+commit message, describing `update_issue`/`close_issue`/`reopen_issue`. It needs no extension for
+multi-arm request bodies. `ValidatePromotableRecordSchema` rejects a union root with the literal
+instruction *"declare a separate named write action for each arm"*, and `expandRecordSchemaArms`
+already merges the wrapper base into each arm. This PR ships the existence proof:
+`PATCH /repos/{owner}/{repo}` backs three write actions with `validate` at 0 findings.
+
+But the 12 union-bodied endpoints are not homogeneous, and splitting all of them would be a
+modelling error: 8 are genuine alternatives with disjoint `required` sets (→ 19 actions), 2 are
+`anyOf`-as-*at-least-one* (all six properties sit on the base; splitting would manufacture five
+commands each claiming to be the only way to set one field), and 2 are root-type polymorphism
+(`object | array | string`, where a record is an object contract).
+
+**Two genuine foundation gaps** remain, both on the read side: `validateDirectReadOutputPolicy`
+has no status-only policy for the 9 `204 No Content` boolean checks, and no text policy for
+`text/html`, `text/plain` or `application/octocat-stream` (`/markdown`, `/markdown/raw`, `/zen`,
+`/octocat`). `direct_write` already has `none`, so the gap is specifically reads.
+
+**One genuine exclusion:** `POST /app/installations/{installation_id}/access_tokens` mints a
+credential and is already consumed internally by the `github_app` AuthHook — same class as the
+held `auth token`.
 
 ## Verification
 
