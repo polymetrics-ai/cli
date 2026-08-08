@@ -239,3 +239,23 @@ CLI/docs/website parity for the re-supply contract: `pm help reverse`,
 DESCRIPTION, COMMANDS and SECURITY text (pinned by the regenerated golden
 transcripts); `docs/cli/reverse.md` and `website/content/docs/reverse-etl.mdx`
 plus its generated data carry the same contract.
+
+## Review round (cycle 5) re-verification
+
+Both review findings were legitimate and are fixed. The ancestor-subtree gap was
+the residual of cycle 4's own fix, so it is closed at the same shared boundary
+that owns "rebuild the record fragment from the same flags with the same
+coercion rules" -- `commandrunner.ReconstituteWithheldFields` -- rather than at
+the recurly bundle that exposed it. The docs finding changed no behaviour.
+
+```
+gofmt -l cmd internal                                              clean
+go vet ./internal/cli/ ./internal/connectors/commandrunner/        clean
+go build ./cmd/pm                                                  ok
+go test -run 'Withheld|Reconstitute' ./internal/connectors/commandrunner/   3 pass
+go test -timeout 20m ./internal/connectors/commandrunner/          ok
+go test -run TestGoldenTranscripts ./internal/cli/                 ok (70.267s)
+pm docs generate                                                   docs/cli/reverse.md only
+node website/scripts/gen-docs-data.mjs                             reverse-etl page only
+pm recurly invoices retries create ... --preview                   plan created, subtree withheld
+```

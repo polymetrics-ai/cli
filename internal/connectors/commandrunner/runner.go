@@ -993,6 +993,14 @@ func missingRequiredFlagError(cmd connectors.CommandSurfaceCommand, name string)
 // accepted and coerced by the same rules, so a reconstituted record hashes
 // identically to the record the plan bound. Fields with no supplied value are
 // returned as operator-facing flag names rather than silently dropped.
+//
+// A declared sensitive field is not always a flag target. It can equally be an
+// ancestor of several flag targets -- recurly's create_invoice_retry declares
+// account.billing_infos while its command maps four separate leaves beneath it
+// -- and withholding removes that whole subtree, which is the correct reading of
+// the declaration. Such a field is rebuilt from its descendant flags in the same
+// target order recordOverrides applies them, so the subtree is byte-identical to
+// the one the plan hashed.
 func ReconstituteWithheldFields(connector connectors.Connector, path []string, fields []string, flags map[string][]string) (connectors.Record, []string, error) {
 	if len(fields) == 0 {
 		return connectors.Record{}, nil, nil
@@ -1022,25 +1030,82 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 		if target == "" {
 			continue
 		}
-		flag, ok := byTarget[target]
-		if !ok {
-			missing = append(missing, target)
+		if flag, ok := byTarget[target]; ok {
+			values := flags[flag.Name]
+			if len(values) == 0 {
+				missing = append(missing, "--"+flag.Name)
+				continue
+			}
+			value, err := coerceFlagValue(flag, values)
+			if err != nil {
+				return nil, nil, err
+			}
+			if err := setRecordValue(record, target, value); err != nil {
+				return nil, nil, err
+			}
 			continue
 		}
+		unresolved, err := reconstituteWithheldSubtree(record, byTarget, target, flags)
+		if err != nil {
+			return nil, nil, err
+		}
+		missing = append(missing, unresolved...)
+	}
+	return record, missing, nil
+}
+
+// reconstituteWithheldSubtree rebuilds a withheld field that no single flag maps
+// to, from the flags that map beneath it. Targets are applied in the sorted
+// order recordOverrides uses, because setDottedValue refuses a sparse array
+// index and so depends on that order to build the same shape.
+//
+// An optional descendant with no supplied value is skipped rather than demanded:
+// recordOverrides skipped it too when the plan was built, so demanding it would
+// strand the plan the same way the declared-but-unsupplied case once did. A
+// required descendant is always demanded, because the plan could not have been
+// created without it.
+func reconstituteWithheldSubtree(record connectors.Record, byTarget map[string]connectors.CommandSurfaceFlag, target string, flags map[string][]string) ([]string, error) {
+	descendants := make([]string, 0, len(byTarget))
+	for candidate := range byTarget {
+		if dottedPathPrefix(target, candidate) {
+			descendants = append(descendants, candidate)
+		}
+	}
+	if len(descendants) == 0 {
+		return []string{target}, nil
+	}
+	sort.Slice(descendants, func(i, j int) bool {
+		if descendants[i] == descendants[j] {
+			return byTarget[descendants[i]].Name < byTarget[descendants[j]].Name
+		}
+		return descendants[i] < descendants[j]
+	})
+	missing := make([]string, 0, len(descendants))
+	applied := 0
+	for _, descendant := range descendants {
+		flag := byTarget[descendant]
 		values := flags[flag.Name]
 		if len(values) == 0 {
-			missing = append(missing, "--"+flag.Name)
+			if flag.Required {
+				missing = append(missing, "--"+flag.Name)
+			}
 			continue
 		}
 		value, err := coerceFlagValue(flag, values)
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
-		if err := setRecordValue(record, target, value); err != nil {
-			return nil, nil, err
+		if err := setRecordValue(record, descendant, value); err != nil {
+			return nil, err
+		}
+		applied++
+	}
+	if applied == 0 && len(missing) == 0 {
+		for _, descendant := range descendants {
+			missing = append(missing, "--"+byTarget[descendant].Name)
 		}
 	}
-	return record, missing, nil
+	return missing, nil
 }
 
 func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {

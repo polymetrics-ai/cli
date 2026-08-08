@@ -755,12 +755,18 @@ DESCRIPTION
   from declared redact_fields; it dispatches the values it was given.
   This runner policy does not change source-table output or other execution paths.
 
-  A connector-command plan does not persist the fields the connector declares in
-  redact_fields. It removes them outright rather than storing a placeholder, so
-  they never reach the project state file. Preview and run therefore need those
-  values re-supplied on the same command, using the connector command's own
-  flags: pm reverse preview <plan-id> --<flag> <value>, and the same flags again
-  on pm reverse run. Only fields the plan actually removed are asked for, so a
+  A connector-command plan does not persist the fields declared sensitive by the
+  write action it runs (writes.json redact_fields) or, for a direct_write
+  operation, by that operation (operations.json sensitive_policy.redact_fields).
+  A redact_fields list on the command itself is not consulted, so a command that
+  declares one its write action does not withholds nothing; pm connectors inspect
+  <name> --json shows every declaration, not only the binding one. Withheld keys
+  are removed outright rather than stored as a placeholder, so they never reach
+  the project state file. Preview and run therefore need those values re-supplied
+  on the same command, using the connector command's own flags: pm reverse
+  preview <plan-id> --<flag> <value>, and the same flags again on pm reverse run.
+  Where a declared field covers a subtree that several flags fill, those flags
+  re-supply it. Only fields the plan actually removed are asked for, so a
   declared field you never supplied is never demanded back. A re-supplied value
   that does not match the one the plan was built from fails the plan-hash check
   before anything is dispatched. Nothing is re-persisted at preview or run.
@@ -887,8 +893,11 @@ SECURITY
   tokens are created only after preview; execution revalidates the preview
   digest before dispatch. JSON plan and preview output omit tokens so agents
   cannot silently self-approve external writes. A connector-command plan never
-  persists the fields a connector declares in redact_fields; they are re-supplied
-  per invocation and are not written back at preview or run. DryRunWrite engine
+  persists the fields its write action declares in redact_fields, or its
+  direct_write operation declares in sensitive_policy.redact_fields; they are
+  re-supplied per invocation and are not written back at preview or run. A
+  redact_fields list declared on the command itself is not a withholding
+  guarantee and never has been. DryRunWrite engine
   preview warnings preserve the resolved execution request, including fields
   declared in redact_fields. Engine direct-read, operation-direct-read, and binary-
   download executors preserve bounded HTTP URL/query/body diagnostics before

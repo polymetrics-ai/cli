@@ -213,3 +213,66 @@ entries); `website/content/docs/reverse-etl.mdx` gained a re-supply section and 
 row, with `website/lib/docs.generated.ts` regenerated.
 
 No test was weakened, skipped, or deleted. Cycle 4 added two tests and corrected two stale counts.
+
+---
+
+## Cycle 5 — review round: withheld ancestor subtree, authoritative redact source
+
+**Red 5a — a withheld field that is an ancestor of flag targets had no way back.**
+`ReconstituteWithheldFields` resolved a withheld target only by exact `MapsTo` match.
+`internal/connectors/defs/recurly/writes.json` action `create_invoice_retry` declares
+`redact_fields: ["account.billing_infos", "po_number"]`, while the `implemented` command
+`invoices retries create` maps four flags at `record.account.billing_infos.0.*`. Withholding
+correctly removed the whole `account.billing_infos` subtree, but `byTarget["account.billing_infos"]`
+missed, so preview and run reported "re-supply account.billing_infos" — a path no flag can supply.
+Confirmed by hand against the shipped bundle: this was the only ancestor-shaped instance across all
+551 bundles, and it failed closed (no dispatch, no leak) but the command worked on `main`.
+**Green** — `internal/connectors/commandrunner/withheld_subtree_test.go`
+`TestReconstituteWithheldFieldsRebuildsSubtreeFromDescendantFlags` (fixture, plus a negative
+control that the missing list names flags rather than the bare ancestor) and
+`TestReconstituteWithheldFieldsRebuildsRecurlyBillingInfos` (the shipped recurly bundle, so the fix
+cannot regress behind a drifting fixture). Both assert the rebuilt subtree is byte-identical to the
+subtree `recordOverrides` built at plan time, which is what makes the plan hash still match.
+`reconstituteWithheldSubtree` applies descendant flags in the same sorted target order
+`recordOverrides` uses, because `setDottedValue` rejects a sparse array index and so depends on it.
+
+`TestReconstituteWithheldFieldsSkipsUnsuppliedOptionalDescendant` guards the boundary that keeps
+this fix from reintroducing cycle 4's bug: an **optional** descendant with no supplied value is
+skipped, exactly as `recordOverrides` skipped it at plan time, while a **required** descendant is
+always demanded because the plan could not exist without it.
+
+Direct binary evidence, in a throwaway project with a fixture credential:
+
+```
+pm recurly invoices retries create --credential recurly-local --account-code acct_fixture \
+  --account-billing-infos-0-gateway-code stripe \
+  --account-billing-infos-0-payment-gateway-references-0-reference-type stripe_confirmation_token \
+  --account-billing-infos-0-transactions-0-attempted-collection-date 2026-08-08T00:00:00Z \
+  --account-billing-infos-0-transactions-0-gateway-error-code card_declined \
+  --currency USD --due-at 2026-08-08T00:00:00Z --external-recovery-eligible true \
+  --line-items-0-unit-amount 10 --preview
+-> Created connector command plan rplan_... / resolved request: POST .../invoices/recovery
+
+state.json: redact_fields ["account.billing_infos","po_number"]
+            withheld_fields ["account.billing_infos"]
+            connector_command_record has no billing_infos subtree
+```
+
+`po_number` is declared but was never supplied, so it is correctly absent from `withheld_fields` —
+cycle 4's rule holding under cycle 5's shape.
+
+**Red 5b — the withholding docs named "redact_fields" without naming which declaration site binds.**
+Withholding resolves from a write action's `redact_fields` or a `direct_write` operation's
+`sensitive_policy.redact_fields`. `CommandSurfaceCommand.RedactFields` is the deliberately excluded
+third site (`internal/connectors/command_surface.go`), and 38 implemented/partial write commands
+declare a list their write action does not — `amazon-sqs permission add` declares six redact fields
+against an `add_permission` action that declares none, so nothing is withheld there even though
+`pm connectors inspect` shows the list. The new help and website text therefore read as a guarantee
+for commands that get none.
+**Green** — `reverseHelp` DESCRIPTION and SECURITY now name the two binding sites and state
+explicitly that a command-level list is not a withholding guarantee; the website section gained a
+warning callout and the security-model row the same qualification. Docs only, no behaviour change.
+`docs/cli/reverse.md`, `internal/cli/testdata/golden_transcripts.json` (3 reverse entries) and
+`website/lib/docs.generated.ts` regenerated.
+
+No test was weakened, skipped, or deleted. Cycle 5 added three tests.
