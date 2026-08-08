@@ -937,14 +937,22 @@ func checkCLISurfaceOperationSafety(
 	if op.REST.MaxBytes <= 0 {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare positive rest.max_bytes", i, cmd.Path, cmd.Operation)})
 	}
+	contentType := ""
 	if method == "POST" {
-		if !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare application/json content_type", i, cmd.Path, cmd.Operation)})
+		mediaType, _, err := mime.ParseMediaType(strings.TrimSpace(op.REST.ContentType))
+		if err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST has invalid content_type %q", i, cmd.Path, cmd.Operation, op.REST.ContentType)})
+		} else {
+			contentType = strings.ToLower(mediaType)
 		}
 		if len(op.REST.BodySchema) == 0 {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare body_schema", i, cmd.Path, cmd.Operation)})
-		} else {
+		} else if contentType == "application/json" {
 			findings = append(findings, checkCLISurfaceOperationBodyMappings(b, i, cmd, op)...)
+		} else if contentType == "text/plain" {
+			findings = append(findings, checkCLISurfaceOperationPlainTextBodyMapping(b, i, cmd, op)...)
+		} else {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare application/json or text/plain content_type", i, cmd.Path, cmd.Operation)})
 		}
 	}
 	if !directReadOutputPolicies[cmd.OutputPolicy] {
@@ -961,6 +969,12 @@ func checkCLISurfaceOperationSafety(
 		case strings.HasPrefix(mapsTo, "body."):
 			if method != "POST" {
 				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to body for non-POST operation", i, cmd.Path, flag.Name)})
+			} else if contentType == "text/plain" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps JSON body fields for text/plain operation", i, cmd.Path, flag.Name)})
+			}
+		case mapsTo == "body":
+			if method != "POST" || contentType != "text/plain" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to raw body without a text/plain POST operation", i, cmd.Path, flag.Name)})
 			}
 		default:
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
@@ -1050,6 +1064,34 @@ func supportedDirectWriteContentType(rest *engine.RESTOperationSpec) bool {
 
 func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
 	return checkCLISurfaceOperationBodyMappingsForIntent(b, i, cmd, op, "direct read")
+}
+
+// checkCLISurfaceOperationPlainTextBodyMapping admits the one literal body
+// shape the operation direct-read executor supports. It deliberately does not
+// reuse the dotted JSON mapper: that would make an arbitrary raw request
+// shape look declared even though the engine cannot validate or serialize it.
+func checkCLISurfaceOperationPlainTextBodyMapping(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	var rawMappings []engine.CLIFlag
+	var findings []Finding
+	for _, flag := range cmd.Flags {
+		switch {
+		case strings.TrimSpace(flag.MapsTo) == "body":
+			rawMappings = append(rawMappings, flag)
+		case strings.HasPrefix(strings.TrimSpace(flag.MapsTo), "body."):
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q text/plain body must use one raw body flag, not --%s", i, cmd.Path, op.ID, flag.Name)})
+		}
+	}
+	if len(rawMappings) != 1 {
+		return append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q text/plain body requires exactly one flag mapped to body", i, cmd.Path, op.ID)})
+	}
+	raw := rawMappings[0]
+	if raw.Type != "string" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) raw body flag --%s must have string type", i, cmd.Path, raw.Name)})
+	}
+	if !raw.Required {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) raw body flag --%s must be required", i, cmd.Path, raw.Name)})
+	}
+	return findings
 }
 
 func checkCLISurfaceOperationBodyMappingsForIntent(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec, intent string) []Finding {

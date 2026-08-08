@@ -1743,6 +1743,116 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunOperationDirectReadPassesDeclaredPlainTextBody(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "markdown raw",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "github.render_raw_markdown",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: http.MethodPost, Path: "/markdown/raw"},
+				},
+				OutputPolicy: "text",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "text", Type: "string", Required: true, MapsTo: "body"},
+				},
+			},
+		},
+	}}
+
+	const source = "# hello\n"
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"markdown", "raw"},
+		Flags: map[string][]string{"text": {source}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if connector.operationDirectReadReq.RawBody == nil || *connector.operationDirectReadReq.RawBody != source {
+		t.Fatalf("RawBody = %#v, want literal source", connector.operationDirectReadReq.RawBody)
+	}
+	if len(connector.operationDirectReadReq.Body) != 0 {
+		t.Fatalf("Body = %#v, want no JSON fields for raw input", connector.operationDirectReadReq.Body)
+	}
+}
+
+func TestRunOperationDirectReadRejectsMixedRawAndJSONBodyMappings(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "markdown raw",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "github.render_raw_markdown",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: http.MethodPost, Path: "/markdown/raw"},
+				},
+				OutputPolicy: "text",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "text", Type: "string", Required: true, MapsTo: "body"},
+					{Name: "context", Type: "string", MapsTo: "body.context"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"markdown", "raw"},
+		Flags: map[string][]string{"text": {"# hello"}, "context": {"octo/example"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for rejected operation direct-read command")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("Run error = nil, want mixed body rejection")
+	}
+	if !strings.Contains(err.Error(), "raw body cannot mix with JSON body fields") {
+		t.Fatalf("Run error = %q, want mixed body rejection", err)
+	}
+	if connector.operationDirectReadReq.RawBody != nil {
+		t.Fatalf("OperationDirectRead dispatched with raw body %#v", connector.operationDirectReadReq.RawBody)
+	}
+}
+
+func TestRunOperationDirectReadPlainTextBodyOnlyAdmitsDocumentWhitespace(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "markdown raw",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "github.render_raw_markdown",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: http.MethodPost, Path: "/markdown/raw"},
+				},
+				OutputPolicy: "text",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "text", Type: "string", Required: true, MapsTo: "body"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"markdown", "raw"},
+		Flags: map[string][]string{"text": {"# hello\x00"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for rejected operation direct-read command")
+		return nil
+	})
+	if err == nil || !strings.Contains(err.Error(), "unsupported control character") {
+		t.Fatalf("Run error = %v, want raw control-character rejection", err)
+	}
+	if connector.operationDirectReadReq.RawBody != nil {
+		t.Fatalf("OperationDirectRead dispatched with raw body %#v", connector.operationDirectReadReq.RawBody)
+	}
+}
+
 func TestPreflightOperationDirectReadRejectsNonExecutableOperationMetadata(t *testing.T) {
 	connector := &fakeConnector{
 		operationReadPreflightErr: errors.New("operation direct read requires rest_read or provider_search operation, got \"graphql_query\""),

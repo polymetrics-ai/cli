@@ -2247,6 +2247,16 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if method == "POST" && len(op.REST.BodySchema) == 0 {
 			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
 		}
+		// text/plain is a new, closed operation contract. Validate it at load
+		// time so a bundle cannot declare raw input without its root-string
+		// schema. Keep existing non-text POST metadata on its established
+		// loader path; the operation direct-read preflight performs its stricter
+		// executable-contract validation only when a command names it.
+		if method == "POST" && operationDirectReadContentType(op) == "text/plain" {
+			if err := validateOperationDirectReadTextPlainContract(op); err != nil {
+				return fmt.Errorf("operation %d (%q) rest_read POST: %w", i, op.ID, err)
+			}
+		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
 			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
 		}

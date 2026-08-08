@@ -297,11 +297,16 @@ type DirectReadRequest struct {
 }
 
 type OperationDirectReadRequest struct {
-	Operation    string
-	Config       RuntimeConfig
-	PathParams   map[string]string
-	Query        map[string]string
-	Body         map[string]any
+	Operation  string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+	Body       map[string]any
+	// RawBody is available only to an operation that explicitly declares a
+	// text/plain POST with a root string body schema. It is a pointer so an
+	// absent body is distinct from an intentionally empty one; the operation
+	// schema decides whether either is valid.
+	RawBody      *string
 	MaxBytes     int
 	OutputPolicy string
 	RedactFields []string

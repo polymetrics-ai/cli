@@ -800,7 +800,7 @@ func TestOperationDirectReadSendsDeclaredPlainTextBody(t *testing.T) {
 	defer srv.Close()
 
 	b := statusTextReadBundle(srv.URL, "github.markdown_raw", http.MethodPost, "/markdown/raw", "text", "text/plain", 1024)
-	b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"string","minLength":1,"maxLength":1024}`)
+	b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"string"}`)
 	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
 		Operation: "github.markdown_raw",
 		RawBody:   &source,
@@ -814,6 +814,90 @@ func TestOperationDirectReadSendsDeclaredPlainTextBody(t *testing.T) {
 	}
 	if issued != 1 {
 		t.Fatalf("requests = %d, want 1", issued)
+	}
+}
+
+func TestOperationDirectReadRejectsUndeclaredOrInvalidPlainTextBodiesBeforeNetwork(t *testing.T) {
+	var issued int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued++
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer srv.Close()
+
+	plainBundle := func() Bundle {
+		b := statusTextReadBundle(srv.URL, "github.markdown_raw", http.MethodPost, "/markdown/raw", "text", "text/plain", 4)
+		b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"string"}`)
+		return b
+	}
+	tests := []struct {
+		name   string
+		bundle func() Bundle
+		req    connectors.OperationDirectReadRequest
+		want   string
+	}{
+		{
+			name:   "missing raw body",
+			bundle: plainBundle,
+			req:    connectors.OperationDirectReadRequest{Operation: "github.markdown_raw", MaxBytes: 4},
+			want:   "requires a raw body",
+		},
+		{
+			name:   "mixed raw and JSON fields",
+			bundle: plainBundle,
+			req: func() connectors.OperationDirectReadRequest {
+				raw := "text"
+				return connectors.OperationDirectReadRequest{Operation: "github.markdown_raw", Body: map[string]any{"context": "octo/example"}, RawBody: &raw, MaxBytes: 4}
+			}(),
+			want: "cannot mix a raw body with JSON body fields",
+		},
+		{
+			name:   "body exceeds declared cap",
+			bundle: plainBundle,
+			req: func() connectors.OperationDirectReadRequest {
+				raw := "five!"
+				return connectors.OperationDirectReadRequest{Operation: "github.markdown_raw", RawBody: &raw, MaxBytes: 4}
+			}(),
+			want: "request body too large",
+		},
+		{
+			name: "static JSON body is not silently discarded",
+			bundle: func() Bundle {
+				b := plainBundle()
+				b.Operations[0].REST.Body = map[string]any{"context": "octo/example"}
+				return b
+			},
+			req: func() connectors.OperationDirectReadRequest {
+				raw := "text"
+				return connectors.OperationDirectReadRequest{Operation: "github.markdown_raw", RawBody: &raw, MaxBytes: 4}
+			}(),
+			want: "must not declare rest.body",
+		},
+		{
+			name: "JSON operation cannot opt into raw input",
+			bundle: func() Bundle {
+				b := statusTextReadBundle(srv.URL, "github.markdown", http.MethodPost, "/markdown", "text", "application/json", 4)
+				b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"object"}`)
+				return b
+			},
+			req: func() connectors.OperationDirectReadRequest {
+				raw := "text"
+				return connectors.OperationDirectReadRequest{Operation: "github.markdown", RawBody: &raw, MaxBytes: 4}
+			}(),
+			want: "requires declared text/plain",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			before := issued
+			_, err := OperationDirectRead(context.Background(), tt.bundle(), tt.req, nil)
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("OperationDirectRead error = %v, want %q", err, tt.want)
+			}
+			if issued != before {
+				t.Fatalf("requests = %d, want no request for rejected body", issued)
+			}
+		})
 	}
 }
 
