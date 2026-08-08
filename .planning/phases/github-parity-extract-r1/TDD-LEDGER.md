@@ -1115,3 +1115,48 @@ connectorgen validate: 551 connector(s) checked, 0 findings
 $ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 ```
+
+---
+
+## Cycle 15 — concrete `oneOf` write arms and bounded structured record input
+
+**Red 15a — a declared structured record field could not yet pass the real write path.**
+The new commandrunner contract deliberately leaves `coerceFlagValue`'s generic `json` rejection
+intact. It declares a `json` flag only at `record.payload`, backed by a concrete object schema,
+then invokes the real `Preflight` and `BuildWriteCommand`. Before the narrow declaration-bound
+parser and engine preflight exist, a valid object, malformed JSON, and a top-level array all fail
+at the old generic rejection; a scalar target is also incorrectly preflighted as executable:
+
+```
+$ go test -timeout 20m ./internal/connectors/commandrunner/ -run TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags -count=1
+--- FAIL: TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags
+    valid object becomes typed planned record: flag --payload has unsupported type "json"
+    malformed JSON never produces a plan: want "invalid JSON", got unsupported type "json"
+    array cannot satisfy object field: want "does not match type", got unsupported type "json"
+    Preflight scalar structured-json mapping error = <nil>, want declared object/array rejection
+FAIL
+```
+
+This establishes the bounded foundation required by the documented GitHub arms without admitting a
+generic request-body escape hatch: only declared `record.<field>` object/array inputs may acquire
+JSON parsing, and the action schema must remain the type authority.
+
+**Red 15b — GitHub's documented top-level `oneOf` arms were still classified but absent.**
+`TestGitHubOneOfWriteContracts` names all 19 actions across the eight documented endpoints, checks
+their required fields and `covered_by.writes` linkage, invokes the real runtime preflight, and
+requires destructive acknowledgement only for the four attestation deletion arms. Before the
+generator has concrete arm declarations, all 19 commands are absent (for example):
+
+```
+$ go test -timeout 20m ./cmd/connectorgen/ -run TestGitHubOneOfWriteContracts -count=1
+--- FAIL: TestGitHubOneOfWriteContracts
+    orgs_attestations_delete-by-subject-digests: generated command "orgs attestations delete-by-subject-digests" is missing
+    orgs_campaigns_create-code-scanning: generated command "orgs campaigns create-code-scanning" is missing
+    orgs_projects_fields_create-single-select: generated command "orgs projects fields create-single-select" is missing
+    users_projects_items_create-by-repo-number: generated command "users projects items create-by-repo-number" is missing
+    codespaces_create-from-pull-request: generated command "codespaces create-from-pull-request" is missing
+FAIL
+```
+
+The green step must change the generator source, regenerate GitHub's bundle and shared ledger, and
+keep the shared ledger delta confined to `github`.
