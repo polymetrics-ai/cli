@@ -1,7 +1,7 @@
 {
   "name": "zoom",
   "display_name": "Zoom",
-  "description": "Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads, approval-gated Chatbot, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+  "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, and SCIM2 groups/users through the Zoom REST API; includes sensitive Cobrowse SDK and SCIM2 reads, approval-gated Chatbot, SCIM2, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
   "integration_type": "api",
   "docs_url": "https://developers.zoom.us/docs/api/",
   "release_stage": "ga",
@@ -17,8 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data",
-    "write": "typed Zoom Chatbot message, Link Unfurls, healthcare clinical-note, and Quality Management actions, plus Customer Managed Keys Hybrid archival key decryption with redacted output",
-    "approval": "mutating commands require plan, preview, explicit approval, and execute; Chatbot deletion and Customer Managed Keys Hybrid archival key decryption additionally require typed confirmation; read-only commands require none"
+    "read": "external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, Cobrowse SDK session, and SCIM2 user/group data",
+    "write": "typed Zoom Chatbot message, Link Unfurls, SCIM2 group/user, healthcare clinical-note, and Quality Management actions, plus Customer Managed Keys Hybrid archival key decryption with redacted output",
+    "approval": "mutating commands require plan, preview, explicit approval, and execute; Chatbot and SCIM2 deletion plus Customer Managed Keys Hybrid archival key decryption additionally require typed confirmation; read-only commands require none"
   }
 }

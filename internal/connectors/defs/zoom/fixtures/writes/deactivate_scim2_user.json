@@ -1,0 +1,41 @@
+{
+  "record": {
+    "schemas": [
+      "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+    ],
+    "Operations": [
+      {
+        "op": "replace",
+        "value": {
+          "active": false
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/scim2/Users/fixture-scim-user",
+    "body": {
+      "schemas": [
+        "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+      ],
+      "Operations": [
+        {
+          "op": "replace",
+          "value": {
+            "active": false
+          }
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture-scim-user",
+      "userName": "fixture.user@example.invalid",
+      "active": false,
+      "token": "fixture-scim-response-token"
+    }
+  }
+}

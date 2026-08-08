@@ -2,8 +2,8 @@
 
 Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.
 The current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes,
-Healthcare clinical-note, Quality Management, Cobrowse SDK, and Chatbot routes; every declared
-write action remains approval-gated.
+Healthcare clinical-note, Quality Management, Cobrowse SDK, and SCIM2 Group/User routes; every
+declared write action, including Chatbot and SCIM2 actions, remains approval-gated.
 
 The provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1
 reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build
@@ -13,8 +13,8 @@ three existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list
 `pm zoom webinars list`. Later waves add bounded direct-read/write commands module by module; see
 "Direct reads" below and "Executable today" in Known limits for the exact current set.
 
-High-risk Zoom write actions are implemented for Chatbot, Healthcare, Quality Management, and
-Customer Managed Keys Hybrid. All remaining provider operations stay explicitly disposed in
+High-risk Zoom write actions are implemented for Chatbot, SCIM2, Healthcare, Quality Management,
+and Customer Managed Keys Hybrid. All remaining provider operations stay explicitly disposed in
 `api_surface.json`; the ledger is not a claim that those operations are executable.
 
 Service API documentation: https://developers.zoom.us/docs/api/.
@@ -31,6 +31,9 @@ Connection fields:
   for the declared Chatbot client-credentials exchange. Never logged.
 - `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL
   override for tests or proxies.
+- `scim2_base_url` (optional, string); default `https://api.zoom.us`; format `uri`; Zoom SCIM2 API
+  root override for tests or proxies. It is used only by the declared `/scim2` operations and is
+  paired with their declared Bearer authentication.
 - `chatbot_token_url` (optional, string); default `https://api.zoom.us/oauth/token`; format `uri`;
   Chatbot-only client-credentials token endpoint.
 - `max_pages` (optional, string); default `0`. The field remains in the connection specification,
@@ -41,12 +44,13 @@ Connection fields:
 - `user_id` (optional, string); Zoom user ID or email that scopes the `meetings` and `webinars`
   streams. Set it in credential configuration or override it with `--user-id` for either command.
 
-Secret fields are redacted in logs and write previews: `access_token`, `chatbot_client_id`, and
-`chatbot_client_secret`.
+Secret fields are redacted in logs and write previews: `access_token`, `chatbot_client_id`,
+`chatbot_client_secret`, and `key_connector_jwt`.
 
 Default configuration values: `base_url=https://api.zoom.us/v2`,
-`chatbot_token_url=https://api.zoom.us/oauth/token`, `max_pages=0`, `page_size=100`. `max_pages`
-is materialized as configuration but does not affect Zoom pagination.
+`scim2_base_url=https://api.zoom.us`, `chatbot_token_url=https://api.zoom.us/oauth/token`,
+`max_pages=0`, `page_size=100`. `max_pages` is materialized as configuration but does not affect
+Zoom pagination.
 
 Authentication behavior:
 
@@ -54,8 +58,12 @@ Authentication behavior:
 - Chatbot actions use their own declared client-credentials exchange: the client ID and secret are
   sent in an HTTP Basic authorization header to `chatbot_token_url`, then the returned access token
   is used as the action's Bearer credential. They do not reuse `access_token`.
+- SCIM2 Group and User operations use the declared `scim2_base_url` root and the ordinary
+  `access_token` Bearer secret. They do not inherit an ordinary `/v2` request path or any unrelated
+  operation header.
 
-Requests use the configured `base_url` value after applying defaults.
+Ordinary API requests use the configured `base_url` value after applying defaults; SCIM2 requests
+use their operation-scoped `scim2_base_url` declaration.
 
 Connection checks call GET `/users` with query `page_size`=`1`.
 
@@ -190,10 +198,32 @@ CLI output. Fixtures are synthetic and do not retain Zoom response examples.
   `/v2/cobrowsesdk/sessions/{sessionId}/users` (operation `zoom.list_cobrowse_session_users`).
   Provider reference for all four routes: https://developers.zoom.us/docs/api/cobrowse-sdk.md.
 
+### Direct reads (SCIM2 module)
+
+The SCIM2 artifact was re-fetched from
+https://developers.zoom.us/docs/api/scim2.md on 2026-08-08T13:33:09Z (171,559 bytes; SHA-256
+`ba86462a888677ea38a8bcc0557e9c4cf5809cd78fc6bc7655f85f79e5b27264`). Its four Group/User reads
+use the provider's root `https://api.zoom.us` server rather than the ordinary `/v2` base. SCIM
+user/group identifiers, names, contact and organization data, aliases, memberships, and extension
+objects are redacted from `json_redacted` output. The artifact does not declare standalone paging
+inputs for these commands, so none is exposed.
+
+- `pm zoom scim2 groups list` reads GET `/scim2/Groups` (operation
+  `zoom.list_scim2_groups`).
+- `pm zoom scim2 groups get --group-id <id>` reads GET `/scim2/Groups/{groupId}` (operation
+  `zoom.get_scim2_group`).
+- `pm zoom scim2 users list` reads GET `/scim2/Users` (operation
+  `zoom.list_scim2_users`).
+- `pm zoom scim2 users get --user-id <id>` reads GET `/scim2/Users/{userId}` (operation
+  `zoom.get_scim2_user`).
+
+Provider reference for all four routes: https://developers.zoom.us/docs/api/scim2.md.
+
 ## Write actions & risks
 
 Read behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My
-Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data.
+Notes, healthcare clinical-note, Quality Management, Cobrowse SDK session, and SCIM2 user/group
+data.
 
 - `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`
   plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action
@@ -228,31 +258,52 @@ Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session da
   (`create_chatbot_link_unfurl`). Zoom's `204 No Content` is recorded as a successful status-only
   action; no response body is invented.
 
-The provider inventory records 1,032 documented writes. The four Chatbot actions above, the
-Healthcare completion-status action, the Quality Management interaction-creation action, and the
-Customer Managed Keys Hybrid archival-key action are currently declared; all remaining write rows
-are either blocked on connector-local typed contracts, safety/approval evidence, and fixtures, or
-on the corresponding Zoom account entitlement. Future writes must use the existing plan → preview
-→ explicit approval → execute path; destructive operations additionally require the typed
-confirmation gate.
+- `pm zoom scim2 groups create --resource <json-object>` plans the typed POST `/scim2/Groups`
+  action (`create_scim2_group`). `--resource` accepts exactly one documented SCIM Group resource at
+  that fixed endpoint; aliases, display names, memberships, and extension fields are redacted.
+- `pm zoom scim2 groups update --group-id <id> --patch <json-object>` plans the typed PATCH
+  `/scim2/Groups/{groupId}` action (`update_scim2_group`). `--patch` accepts exactly one documented
+  SCIM PatchOp object; the documented `204 No Content` response is status-only.
+- `pm zoom scim2 groups delete --group-id <id>` plans the typed DELETE
+  `/scim2/Groups/{groupId}` action (`delete_scim2_group`). It requires destructive typed
+  confirmation and records the documented `204 No Content` status without inventing a body.
+- `pm zoom scim2 users create --resource <json-object>` and `pm zoom scim2 users update --user-id
+  <id> --resource <json-object>` plan the typed POST `/scim2/Users` and PUT
+  `/scim2/Users/{userId}` actions (`create_scim2_user`, `update_scim2_user`). Each named resource
+  flag accepts one documented extensible SCIM User object only for its fixed endpoint; profile,
+  contact, organization, and extension fields are redacted.
+- `pm zoom scim2 users deactivate --user-id <id> --patch <json-object>` plans the typed PATCH
+  `/scim2/Users/{userId}` action (`deactivate_scim2_user`) with one documented activation-state
+  SCIM PatchOp object.
+- `pm zoom scim2 users delete --user-id <id>` plans the typed DELETE
+  `/scim2/Users/{userId}` action (`delete_scim2_user`). It requires destructive typed confirmation
+  and records the documented `204 No Content` status without inventing a body.
+
+The provider inventory records 1,032 documented writes. The four Chatbot actions above, seven
+SCIM2 actions, the Healthcare completion-status action, the Quality Management interaction-creation
+action, and the Customer Managed Keys Hybrid archival-key action are currently declared; all
+remaining write rows are either blocked on connector-local typed contracts, safety/approval
+evidence, and fixtures, or on the corresponding Zoom account entitlement. Future writes must use
+the existing plan → preview → explicit approval → execute path; destructive operations additionally
+require the typed confirmation gate.
 
 ## Known limits
 
 - Batch default: `read_page_size=100`.
 - Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See
   issue #3915 for the full module-by-module tracking table.
-- Executable today: 27 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
+- Executable today: 38 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
   bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded
   `my-notes` module direct reads, 2 Healthcare direct reads, 1 Healthcare PATCH action, 5 Quality
   Management direct reads, 1 approval-gated Quality Management POST action, 4 sensitive Cobrowse
-  SDK direct reads, 4 approval-gated Chatbot actions, and 1 redacted Customer Managed Keys Hybrid
-  archival-key action.
+  SDK direct reads, 4 sensitive SCIM2 direct reads, 7 approval-gated SCIM2 actions, 4 approval-gated
+  Chatbot actions, and 1 redacted Customer Managed Keys Hybrid archival-key action.
 - Direct-read commands in this connector take only the request inputs the live provider artifact
   expressly documents. Cobrowse's `from`/`to` range is exposed because the operation prose declares
   it as a query input; a response-body field alone (including `page_size` and `next_page_token`) is
   not sufficient evidence of an accepted request parameter. This is a deliberate module-by-module
   scope-narrowing, not an oversight.
-- Pending connector-local delivery: 1,815 operations have no shared foundation blocker, but still
+- Pending connector-local delivery: 1,804 operations have no shared foundation blocker, but still
   need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can
   become commands.
 - Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one

@@ -1,0 +1,33 @@
+{
+  "record": {
+    "schemas": [
+      "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+    ],
+    "Operations": [
+      {
+        "op": "replace",
+        "path": "displayName",
+        "value": "fixture updated SCIM group"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/scim2/Groups/fixture-scim-group",
+    "body": {
+      "schemas": [
+        "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+      ],
+      "Operations": [
+        {
+          "op": "replace",
+          "path": "displayName",
+          "value": "fixture updated SCIM group"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 204
+  }
+}

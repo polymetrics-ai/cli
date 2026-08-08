@@ -1,0 +1,9 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/scim2/Users/fixture-scim-user"
+  },
+  "response": {
+    "status": 204
+  }
+}

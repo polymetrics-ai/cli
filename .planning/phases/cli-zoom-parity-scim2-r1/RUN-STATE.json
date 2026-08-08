@@ -4,7 +4,7 @@
   "sub_issue": 3942,
   "connector": "zoom",
   "provider_module": "scim2",
-  "state": "literal_root_redaction_foundation_green",
+  "state": "verification_complete_pending_scim2_slice_commit",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -63,5 +63,20 @@
       "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... -run '^TestSCIM2DirectWriteCommandsExecuteWithFixtures$'"
     ]
   },
-  "next": "commit and push the literal-root redaction foundation, then complete SCIM2 connector declaration, docs, binary reachability, and verification"
+  "actual": {
+    "covered_operations": 38,
+    "locally_blocked_operations": 1804,
+    "direct_reads": 21,
+    "direct_writes": 12,
+    "reverse_etl_writes": 2,
+    "unsafe_or_disallowed": 0,
+    "scim2_endpoint_ledger_rows_reconciled": 11
+  },
+  "verification": {
+    "fixture_lifecycle": "all four reads and seven writes passed through the real runner/app lifecycle against loopback fixtures",
+    "binary_reachability": "pm help zoom, bare pm zoom, bare pm zoom scim2, and all eleven SCIM2 command --help paths passed",
+    "generated_docs_and_website": "Zoom manuals and website data regenerated; website generator idempotent on a second run",
+    "scoped_gates": "focused tests, vet, docs/typecheck/lint, and Make CI-equivalent gates passed"
+  },
+  "next": "commit and push the completed SCIM2 connector slice, update/close issue #3942 and parent #3915, then resume provider category #3941 (Virtual Agent)"
 }

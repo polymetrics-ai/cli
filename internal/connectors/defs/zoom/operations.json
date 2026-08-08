@@ -634,6 +634,669 @@
       }
     },
     {
+      "id": "zoom.list_scim2_groups",
+      "kind": "rest_read",
+      "summary": "List SCIM2 groups",
+      "description": "Bounded Zoom SCIM2 read for GET /scim2/Groups. Group identifiers, display names, aliases, and membership values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "displayName",
+          "emailAlias",
+          "id",
+          "members",
+          "value",
+          "display",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/scim2/Groups",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.create_scim2_group",
+      "kind": "rest_write",
+      "summary": "Create a SCIM2 group",
+      "description": "Approval-gated Zoom SCIM2 group creation with a fixed provider endpoint and documented extensible SCIM resource object. Group values are redacted in previews and output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "displayName",
+          "emailAlias",
+          "id",
+          "members",
+          "value",
+          "display",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/scim2/Groups",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "displayName": {
+              "type": "string"
+            },
+            "schemas": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "emailAlias": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_scim2_group",
+      "kind": "rest_read",
+      "summary": "Get a SCIM2 group",
+      "description": "Bounded Zoom SCIM2 read for GET /scim2/Groups/{groupId}. Group identifiers, display names, aliases, and membership values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "displayName",
+          "emailAlias",
+          "id",
+          "members",
+          "value",
+          "display",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/scim2/Groups/{groupId}",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.delete_scim2_group",
+      "kind": "rest_write",
+      "summary": "Delete a SCIM2 group",
+      "description": "Destructive Zoom SCIM2 group deletion. The documented 204 No Content response is recorded as a status-only success and requires typed destructive confirmation.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "id"
+        ]
+      },
+      "rest": {
+        "method": "DELETE",
+        "path": "/scim2/Groups/{groupId}",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.update_scim2_group",
+      "kind": "rest_write",
+      "summary": "Update a SCIM2 group",
+      "description": "Approval-gated Zoom SCIM2 Group PatchOp action with a fixed endpoint and documented extensible patch object. The documented 204 No Content response is recorded as a status-only success.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "mutation_class": "update",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "Operations",
+          "displayName",
+          "emailAlias",
+          "id",
+          "members",
+          "value",
+          "display"
+        ]
+      },
+      "rest": {
+        "method": "PATCH",
+        "path": "/scim2/Groups/{groupId}",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "schemas": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "Operations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "max_bytes": 100000
+      }
+    },
+    {
+      "id": "zoom.list_scim2_users",
+      "kind": "rest_read",
+      "summary": "List SCIM2 users",
+      "description": "Bounded Zoom SCIM2 read for GET /scim2/Users. User, contact, organization, and SCIM extension values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "active",
+          "costCenter",
+          "department",
+          "displayName",
+          "emails",
+          "employeeNumber",
+          "groups",
+          "id",
+          "locale",
+          "manager",
+          "name",
+          "organization",
+          "phoneNumbers",
+          "roles",
+          "title",
+          "userName",
+          "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:User"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/scim2/Users",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.create_scim2_user",
+      "kind": "rest_write",
+      "summary": "Create a SCIM2 user",
+      "description": "Approval-gated Zoom SCIM2 user creation with a fixed provider endpoint and documented extensible SCIM resource object. User and account values are redacted in previews and output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "active",
+          "costCenter",
+          "department",
+          "displayName",
+          "emails",
+          "employeeNumber",
+          "groups",
+          "id",
+          "locale",
+          "manager",
+          "name",
+          "organization",
+          "phoneNumbers",
+          "roles",
+          "title",
+          "userName",
+          "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:User"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/scim2/Users",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "active": {
+              "type": "boolean"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "emails": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "groups": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "locale": {
+              "type": "string"
+            },
+            "name": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "phoneNumbers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "roles": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "schemas": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "title": {
+              "type": "string"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "urn:ietf:params:scim:schemas:extension:zoom:2.0:User": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_scim2_user",
+      "kind": "rest_read",
+      "summary": "Get a SCIM2 user",
+      "description": "Bounded Zoom SCIM2 read for GET /scim2/Users/{userId}. User, contact, organization, and SCIM extension values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "active",
+          "costCenter",
+          "department",
+          "displayName",
+          "emails",
+          "employeeNumber",
+          "groups",
+          "id",
+          "locale",
+          "manager",
+          "name",
+          "organization",
+          "phoneNumbers",
+          "roles",
+          "title",
+          "userName",
+          "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:User"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/scim2/Users/{userId}",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.update_scim2_user",
+      "kind": "rest_write",
+      "summary": "Update a SCIM2 user",
+      "description": "Approval-gated Zoom SCIM2 user replacement with a fixed provider endpoint and documented extensible SCIM resource object. User and account values are redacted in previews and output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "mutation_class": "update",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "active",
+          "costCenter",
+          "department",
+          "displayName",
+          "emails",
+          "employeeNumber",
+          "groups",
+          "id",
+          "locale",
+          "manager",
+          "name",
+          "organization",
+          "phoneNumbers",
+          "roles",
+          "title",
+          "userName",
+          "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+          "urn:ietf:params:scim:schemas:extension:zoom:2.0:User"
+        ]
+      },
+      "rest": {
+        "method": "PUT",
+        "path": "/scim2/Users/{userId}",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "active": {
+              "type": "boolean"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "emails": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "groups": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "locale": {
+              "type": "string"
+            },
+            "name": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "phoneNumbers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "roles": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "schemas": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "title": {
+              "type": "string"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "urn:ietf:params:scim:schemas:extension:zoom:2.0:User": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.delete_scim2_user",
+      "kind": "rest_write",
+      "summary": "Delete a SCIM2 user",
+      "description": "Destructive Zoom SCIM2 user deletion. The documented 204 No Content response is recorded as a status-only success and requires typed destructive confirmation.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "id"
+        ]
+      },
+      "rest": {
+        "method": "DELETE",
+        "path": "/scim2/Users/{userId}",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.deactivate_scim2_user",
+      "kind": "rest_write",
+      "summary": "Deactivate a SCIM2 user",
+      "description": "Approval-gated Zoom SCIM2 user activation-state PatchOp action with a fixed provider endpoint and documented extensible patch object. User and account values are redacted in previews and output.",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "scim2",
+        "scim2:admin"
+      ],
+      "mutation_class": "update",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "Operations",
+          "active",
+          "displayName",
+          "emails",
+          "id",
+          "name",
+          "phoneNumbers",
+          "userName"
+        ]
+      },
+      "rest": {
+        "method": "PATCH",
+        "path": "/scim2/Users/{userId}",
+        "base_url": "{{ config.scim2_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.access_token }}"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "schemas": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "Operations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
       "id": "zoom.decrypt_customer_managed_key_archival",
       "kind": "rest_write",
       "summary": "Decrypt a Customer Managed Keys Hybrid archival data key",

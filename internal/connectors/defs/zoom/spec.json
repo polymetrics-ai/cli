@@ -30,6 +30,12 @@
       "default": "https://api.zoom.us/v2",
       "description": "Ordinary Zoom API base URL override for tests or proxies."
     },
+    "scim2_base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.zoom.us",
+      "description": "Zoom SCIM2 API root override for tests or proxies. Used only by declared /scim2 operations and paired with their declared bearer authentication."
+    },
     "chatbot_token_url": {
       "type": "string",
       "format": "uri",

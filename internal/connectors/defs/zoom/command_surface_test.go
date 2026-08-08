@@ -392,13 +392,17 @@ func verifyDirectWriteOperationCommands(t *testing.T, bundle engine.Bundle, conn
 				if !strings.Contains(op.REST.Path, placeholder) {
 					t.Errorf("direct-write command %q path flag --%s maps_to %q, but %q is absent from %q", command.Path, flag.Name, mapsTo, placeholder, op.REST.Path)
 				}
+			case mapsTo == "body":
+				if flag.Type != "json_object" {
+					t.Errorf("direct-write command %q root body flag --%s type = %q, want json_object", command.Path, flag.Name, flag.Type)
+				}
 			case strings.HasPrefix(mapsTo, "body."), strings.HasPrefix(mapsTo, "query."):
 				// Required and optional provider-defined body/query members are
 				// checked by the operation body schema and connectorgen's exact
 				// mapping validator. Requiring every member here would make a
 				// documented optional field impossible to expose.
 			default:
-				t.Errorf("direct-write command %q flag --%s maps_to %q, want typed path.*, query.*, or body.* binding", command.Path, flag.Name, mapsTo)
+				t.Errorf("direct-write command %q flag --%s maps_to %q, want typed path.*, query.*, body.*, or named root body binding", command.Path, flag.Name, mapsTo)
 			}
 		}
 		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
@@ -1659,6 +1663,396 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 	}
 }
 
+// TestSCIM2DirectReadCommandsExecuteWithFixtures runs every documented SCIM2
+// read through the real command runner. The loopback server proves that the
+// operation-scoped SCIM root/auth transport is used instead of the ordinary
+// Zoom /v2 base, and that response-only SCIM paging fields never become
+// hand-authored CLI flags.
+func TestSCIM2DirectReadCommandsExecuteWithFixtures(t *testing.T) {
+	const accessToken = "fixture-scim2-access-token"
+	type scim2ReadAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		requestPath       string
+		fixture           string
+		status            int
+		response          json.RawMessage
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []scim2ReadAction{
+		{
+			name:              "list groups",
+			path:              []string{"scim2", "groups", "list"},
+			requestPath:       "/scim2/Groups",
+			fixture:           "list_scim2_groups.json",
+			responseSensitive: []string{"fixture-scim-group", "fixture SCIM group", "fixture-group-member", "Fixture group member", "fixture-group-alias", "fixture-scim-response-token"},
+			responseMarkers:   []string{"id", "displayName", "members", "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group", "token"},
+		},
+		{
+			name:              "get group",
+			path:              []string{"scim2", "groups", "get"},
+			flags:             map[string][]string{"group-id": {"fixture-scim-group"}},
+			requestPath:       "/scim2/Groups/fixture-scim-group",
+			fixture:           "get_scim2_group.json",
+			responseSensitive: []string{"fixture-scim-group", "fixture SCIM group", "fixture-group-member", "Fixture group member", "fixture-group-alias", "fixture-scim-response-token"},
+			responseMarkers:   []string{"id", "displayName", "members", "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group", "token"},
+		},
+		{
+			name:              "list users",
+			path:              []string{"scim2", "users", "list"},
+			requestPath:       "/scim2/Users",
+			fixture:           "list_scim2_users.json",
+			responseSensitive: []string{"fixture-scim-user", "fixture.user@example.invalid", "Fixture SCIM user", "fixture-department", "fixture-custom-attribute", "fixture-scim-response-token"},
+			responseMarkers:   []string{"id", "userName", "displayName", "emails", "name", "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User", "urn:ietf:params:scim:schemas:extension:zoom:2.0:User", "token"},
+		},
+		{
+			name:              "get user",
+			path:              []string{"scim2", "users", "get"},
+			flags:             map[string][]string{"user-id": {"fixture-scim-user"}},
+			requestPath:       "/scim2/Users/fixture-scim-user",
+			fixture:           "get_scim2_user.json",
+			responseSensitive: []string{"fixture-scim-user", "fixture.user@example.invalid", "Fixture SCIM user", "fixture-department", "fixture-custom-attribute", "fixture-scim-response-token"},
+			responseMarkers:   []string{"id", "userName", "displayName", "emails", "name", "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User", "urn:ietf:params:scim:schemas:extension:zoom:2.0:User", "token"},
+		},
+	}
+	for i := range actions {
+		actions[i].status, actions[i].response = zoomDirectReadFixture(t, actions[i].fixture)
+	}
+
+	byRequest := make(map[string]*scim2ReadAction, len(actions))
+	for i := range actions {
+		byRequest[http.MethodGet+" "+actions[i].requestPath] = &actions[i]
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("SCIM2 read fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("SCIM2 read fixture did not receive the declared operation bearer")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("SCIM2 read fixture received undeclared query or paging input")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(action.status)
+		_, _ = w.Write(action.response)
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	config := connectors.RuntimeConfig{
+		Config: map[string]string{
+			// Deliberately unrelated: every SCIM2 request must use the declared
+			// operation root rather than the ordinary Zoom API base.
+			"base_url":       "https://ordinary.zoom.invalid/v2",
+			"scim2_base_url": server.URL,
+		},
+		Secrets: map[string]string{"access_token": accessToken},
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   action.path,
+				Flags:  action.flags,
+				Config: config,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for a SCIM2 direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q): %v", strings.Join(action.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != action.status {
+				t.Fatalf("Run(%q) result = %#v, want status %d", strings.Join(action.path, " "), result, action.status)
+			}
+			encoded, err := json.Marshal(result.DirectRead.Body)
+			if err != nil {
+				t.Fatalf("marshal SCIM2 read response: %v", err)
+			}
+			for _, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatal("SCIM2 read response exposed a declared or generic sensitive field")
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), `"`+field+`_redacted":true`) {
+					t.Fatalf("SCIM2 read response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("SCIM2 read fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+// TestSCIM2DirectWriteCommandsExecuteWithFixtures exercises every documented
+// SCIM2 mutation through the shared plan/preview/approval lifecycle. It
+// proves fixed methods, paths, root JSON-object body shaping, the separate
+// SCIM origin/auth declaration, destructive deletion confirmation, response
+// redaction, and 204 status-only semantics without reaching Zoom.
+func TestSCIM2DirectWriteCommandsExecuteWithFixtures(t *testing.T) {
+	const (
+		credentialName = "zoom-scim2-fixture"
+		accessToken    = "fixture-scim2-access-token"
+	)
+	type scim2WriteAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		rootFlag          string
+		fixture           string
+		method            string
+		requestPath       string
+		expectedBody      json.RawMessage
+		status            int
+		response          json.RawMessage
+		destructive       bool
+		inputSensitive    []string
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []scim2WriteAction{
+		{
+			name:              "create group",
+			path:              []string{"scim2", "groups", "create"},
+			rootFlag:          "resource",
+			fixture:           "create_scim2_group.json",
+			inputSensitive:    []string{"fixture SCIM group", "fixture-group-alias"},
+			responseSensitive: []string{"fixture-scim-group", "fixture SCIM group", "fixture-group-alias", "fixture-scim-response-token"},
+			responseMarkers:   []string{"id", "displayName", "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group", "token"},
+		},
+		{
+			name:              "delete group",
+			path:              []string{"scim2", "groups", "delete"},
+			flags:             map[string][]string{"group-id": {"fixture-scim-group"}},
+			fixture:           "delete_scim2_group.json",
+			destructive:       true,
+			responseSensitive: nil,
+		},
+		{
+			name:           "update group",
+			path:           []string{"scim2", "groups", "update"},
+			flags:          map[string][]string{"group-id": {"fixture-scim-group"}},
+			rootFlag:       "patch",
+			fixture:        "update_scim2_group.json",
+			inputSensitive: []string{"fixture updated SCIM group"},
+		},
+		{
+			name:              "create user",
+			path:              []string{"scim2", "users", "create"},
+			rootFlag:          "resource",
+			fixture:           "create_scim2_user.json",
+			inputSensitive:    []string{"fixture.user@example.invalid", "Fixture SCIM user", "fixture-custom-attribute"},
+			responseSensitive: []string{"fixture-scim-user", "fixture.user@example.invalid", "Fixture SCIM user", "fixture-scim-response-token"},
+			responseMarkers:   []string{"id", "userName", "displayName", "emails", "token"},
+		},
+		{
+			name:              "update user",
+			path:              []string{"scim2", "users", "update"},
+			flags:             map[string][]string{"user-id": {"fixture-scim-user"}},
+			rootFlag:          "resource",
+			fixture:           "update_scim2_user.json",
+			inputSensitive:    []string{"fixture.user@example.invalid", "Fixture updated SCIM user"},
+			responseSensitive: []string{"fixture-scim-user", "fixture.user@example.invalid", "Fixture updated SCIM user", "fixture-scim-response-token"},
+			responseMarkers:   []string{"id", "userName", "displayName", "name", "token"},
+		},
+		{
+			name:        "delete user",
+			path:        []string{"scim2", "users", "delete"},
+			flags:       map[string][]string{"user-id": {"fixture-scim-user"}},
+			fixture:     "delete_scim2_user.json",
+			destructive: true,
+		},
+		{
+			name:              "deactivate user",
+			path:              []string{"scim2", "users", "deactivate"},
+			flags:             map[string][]string{"user-id": {"fixture-scim-user"}},
+			rootFlag:          "patch",
+			fixture:           "deactivate_scim2_user.json",
+			responseSensitive: []string{"fixture-scim-user", "fixture.user@example.invalid", "fixture-scim-response-token"},
+			responseMarkers:   []string{"id", "userName", "active", "token"},
+		},
+	}
+	byRequest := make(map[string]*scim2WriteAction, len(actions))
+	for i := range actions {
+		fixture := zoomSCIM2WriteFixture(t, actions[i].fixture)
+		actions[i].method = fixture.Expect.Method
+		actions[i].requestPath = fixture.Expect.Path
+		actions[i].expectedBody = fixture.Expect.Body
+		actions[i].status = fixture.Response.Status
+		actions[i].response = fixture.Response.Body
+		if actions[i].rootFlag != "" {
+			if actions[i].flags == nil {
+				actions[i].flags = map[string][]string{}
+			}
+			var record any
+			if err := json.Unmarshal(fixture.Record, &record); err != nil {
+				t.Fatalf("decode SCIM2 fixture record %s: %v", actions[i].fixture, err)
+			}
+			compactRecord, err := json.Marshal(record)
+			if err != nil {
+				t.Fatalf("compact SCIM2 fixture record %s: %v", actions[i].fixture, err)
+			}
+			actions[i].flags[actions[i].rootFlag] = []string{string(compactRecord)}
+		}
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("SCIM2 write fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("SCIM2 write fixture did not receive the declared operation bearer")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("SCIM2 write fixture received undeclared query or paging input")
+		}
+		if len(action.expectedBody) == 0 {
+			var unexpected any
+			if err := json.NewDecoder(request.Body).Decode(&unexpected); err == nil {
+				t.Fatal("SCIM2 no-body action unexpectedly sent a request body")
+			}
+		} else {
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("SCIM2 body action did not declare JSON content")
+			}
+			var got, want any
+			if err := json.NewDecoder(request.Body).Decode(&got); err != nil {
+				t.Fatalf("decode SCIM2 action body: %v", err)
+			}
+			if err := json.Unmarshal(action.expectedBody, &want); err != nil {
+				t.Fatalf("decode SCIM2 fixture body: %v", err)
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatal("SCIM2 action body did not contain exactly the declared documented object")
+			}
+		}
+		if len(action.response) > 0 {
+			w.Header().Set("Content-Type", "application/json")
+		}
+		w.WriteHeader(action.status)
+		if len(action.response) > 0 {
+			_, _ = w.Write(action.response)
+		}
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s): %v", action.name, err)
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config: map[string]string{
+			"base_url":       "https://ordinary.zoom.invalid/v2",
+			"scim2_base_url": server.URL,
+		},
+		Secrets: map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			beforeRequests := requests
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("SCIM2 plan did not produce a no-network preview and single-use approval")
+			}
+			if action.destructive != (plan.ConfirmationChallenge == string(connectors.ConfirmationKindDestructive)) {
+				t.Fatal("SCIM2 plan did not retain the declared destructive confirmation policy")
+			}
+			encodedPlan, err := json.Marshal(plan.Sample)
+			if err != nil {
+				t.Fatalf("marshal SCIM2 plan sample: %v", err)
+			}
+			for index, raw := range action.inputSensitive {
+				if strings.Contains(string(encodedPlan), raw) {
+					t.Fatalf("SCIM2 plan sample exposed declared sensitive input %d", index)
+				}
+			}
+			if requests != beforeRequests {
+				t.Fatal("SCIM2 plan or preview reached the fixture endpoint")
+			}
+
+			runRequest := app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}
+			if action.destructive {
+				if _, err := application.RunReverseETL(context.Background(), runRequest); err == nil {
+					t.Fatal("SCIM2 DELETE execution bypassed typed destructive confirmation")
+				}
+				if requests != beforeRequests {
+					t.Fatal("unconfirmed SCIM2 DELETE reached the fixture endpoint")
+				}
+				runRequest.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+			}
+			run, err := application.RunReverseETL(context.Background(), runRequest)
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != action.status {
+				t.Fatal("SCIM2 action did not complete with its declared response status")
+			}
+			if len(action.response) == 0 {
+				if run.OperationDirectWrite.Body != nil {
+					t.Fatal("SCIM2 status-only action returned an invented response body")
+				}
+				return
+			}
+			encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+			if err != nil {
+				t.Fatalf("marshal SCIM2 action response: %v", err)
+			}
+			for _, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatal("SCIM2 action response exposed a declared or generic sensitive field")
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), `"`+field+`_redacted":true`) {
+					t.Fatalf("SCIM2 action response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("SCIM2 write fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
 func assertCobrowseSDKResponseRedacted(t *testing.T, body any, raw, fields []string) {
 	t.Helper()
 	encoded, err := json.Marshal(body)
@@ -1739,6 +2133,35 @@ func zoomWriteFixture(t *testing.T, file string) (int, json.RawMessage) {
 		t.Fatalf("writes fixture %s requires response.status", file)
 	}
 	return fixture.Response.Status, fixture.Response.Body
+}
+
+type zoomSCIM2WriteFixtureSpec struct {
+	Record json.RawMessage `json:"record"`
+	Expect struct {
+		Method string          `json:"method"`
+		Path   string          `json:"path"`
+		Body   json.RawMessage `json:"body"`
+	} `json:"expect"`
+	Response struct {
+		Status int             `json:"status"`
+		Body   json.RawMessage `json:"body"`
+	} `json:"response"`
+}
+
+func zoomSCIM2WriteFixture(t *testing.T, file string) zoomSCIM2WriteFixtureSpec {
+	t.Helper()
+	raw, err := os.ReadFile(filepath.Join("fixtures", "writes", file))
+	if err != nil {
+		t.Fatalf("read SCIM2 write fixture %s: %v", file, err)
+	}
+	var fixture zoomSCIM2WriteFixtureSpec
+	if err := json.Unmarshal(raw, &fixture); err != nil {
+		t.Fatalf("decode SCIM2 write fixture %s: %v", file, err)
+	}
+	if fixture.Expect.Method == "" || fixture.Expect.Path == "" || fixture.Response.Status == 0 {
+		t.Fatalf("SCIM2 write fixture %s lacks expected method/path/response status", file)
+	}
+	return fixture
 }
 
 func zoomFixtureResponseBody(t *testing.T, stream, file string) json.RawMessage {

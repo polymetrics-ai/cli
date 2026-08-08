@@ -1,0 +1,43 @@
+{
+  "record": {
+    "userName": "fixture.user@example.invalid",
+    "displayName": "Fixture updated SCIM user",
+    "active": true,
+    "name": {
+      "givenName": "Fixture",
+      "familyName": "Updated"
+    },
+    "schemas": [
+      "urn:ietf:params:scim:schemas:core:2.0:User"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/scim2/Users/fixture-scim-user",
+    "body": {
+      "userName": "fixture.user@example.invalid",
+      "displayName": "Fixture updated SCIM user",
+      "active": true,
+      "name": {
+        "givenName": "Fixture",
+        "familyName": "Updated"
+      },
+      "schemas": [
+        "urn:ietf:params:scim:schemas:core:2.0:User"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture-scim-user",
+      "userName": "fixture.user@example.invalid",
+      "displayName": "Fixture updated SCIM user",
+      "name": {
+        "givenName": "Fixture",
+        "familyName": "Updated"
+      },
+      "token": "fixture-scim-response-token"
+    }
+  }
+}
