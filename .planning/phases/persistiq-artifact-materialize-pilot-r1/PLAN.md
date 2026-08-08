@@ -11,7 +11,17 @@ Fetch the ledger-linked PersistIQ OpenAPI artifact, reconcile all 21 provider
 operations to the repository model, stage a materialized bundle with existing
 `connectorgen batch` tooling, run static/runtime-preflight gates, invoke every
 generated command through the real no-credential `pm` binary, and report exact
-wall-clock timing and counts. Stop after PersistIQ.
+wall-clock timing and counts. Before the generator PR merges, validate the
+same policy against three deliberately different eligible shapes: a
+read-only OpenAPI connector, a write-heavy OpenAPI connector, and a public
+Swagger-2 connector. These are evidence-only staged bundles; do not add them
+to `internal/connectors/defs` or start the eligible-392 generation.
+
+The generalization result is recorded in
+[`generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md`](generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md).
+It records one passing Watchmode validation and two generator refusals
+(DocuSeal top-level webhooks and Float external Swagger path-item references),
+so this evidence does not declare the generator ready.
 
 ## Timed pilot slices
 
@@ -76,6 +86,17 @@ combined gate is then narrowed to the implicated batch for diagnosis.
 - State explicitly: implemented only if static gates pass; not certified and
   never provider-exercised in either case.
 - Report wall-clock times for all five slices and the total.
+
+### Generalization evidence extension
+
+- Apply the eligible-pool exclusions before selecting candidates.
+- Use `watchmode`, `docuseal`, and `float` as the deliberately different
+  shapes; record the Web Scraper partner-gated planner refusal and Ding
+  Connect HTTP 403 substitution in the evidence.
+- Run the same static and real-binary gates for every candidate that emits a
+  bundle. A candidate dropped by artifact inventory is a generator failure,
+  not a success with zero commands.
+- Do not call the generator ready when any selected candidate fails.
 
 ## Captain-ruling rerun policy
 

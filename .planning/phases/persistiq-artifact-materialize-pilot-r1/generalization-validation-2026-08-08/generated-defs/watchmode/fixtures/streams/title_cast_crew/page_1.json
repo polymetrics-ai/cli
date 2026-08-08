@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/v1/title/synthetic-conformance-value/cast-crew/" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "person_id": 7001, "type": "Cast", "full_name": "Fixture Actor One", "role": "Fixture Character", "episode_count": 10, "order": 0 },
+      { "person_id": 7002, "type": "Crew", "full_name": "Fixture Director", "role": "Director", "episode_count": 10, "order": null }
+    ]
+  }
+}

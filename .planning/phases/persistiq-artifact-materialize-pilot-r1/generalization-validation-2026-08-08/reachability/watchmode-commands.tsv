@@ -1,0 +1,46 @@
+path	intent	availability	result	error
+api get autocomplete-search	direct_read	not_implemented	reachable	
+api get changes new-people	direct_read	not_implemented	reachable	
+api get changes new-titles	direct_read	not_implemented	reachable	
+api get changes titles-details-changed	direct_read	not_implemented	reachable	
+api get changes titles-episodes-changed	direct_read	not_implemented	reachable	
+api get changes titles-sources-changed	direct_read	not_implemented	reachable	
+api get genres	direct_read	not_implemented	reachable	
+api get list-titles	direct_read	not_implemented	reachable	
+api get networks	direct_read	not_implemented	reachable	
+api get person person-id	direct_read	not_implemented	reachable	
+api get regions	direct_read	not_implemented	reachable	
+api get releases	direct_read	not_implemented	reachable	
+api get search	direct_read	not_implemented	reachable	
+api get sources	direct_read	not_implemented	reachable	
+api get status	direct_read	not_implemented	reachable	
+api get title title-id cast-crew	direct_read	not_implemented	reachable	
+api get title title-id details	direct_read	not_implemented	reachable	
+api get title title-id episodes	direct_read	not_implemented	reachable	
+api get title title-id episodes episode-id	direct_read	not_implemented	reachable	
+api get title title-id incorrect-data	direct_read	not_implemented	reachable	
+api get title title-id seasons	direct_read	not_implemented	reachable	
+api get title title-id sources	direct_read	not_implemented	reachable	
+api get title-release-dates	direct_read	not_implemented	reachable	
+api get v1 autocomplete-search	direct_read	not_implemented	reachable	
+api get v1 changes new-people	direct_read	not_implemented	reachable	
+api get v1 changes new-titles	direct_read	not_implemented	reachable	
+api get v1 changes titles-details-changed	direct_read	not_implemented	reachable	
+api get v1 changes titles-episodes-changed	direct_read	not_implemented	reachable	
+api get v1 changes titles-sources-changed	direct_read	not_implemented	reachable	
+api get v1 status	direct_read	not_implemented	reachable	
+api get v1 title title-id incorrect-data	direct_read	not_implemented	reachable	
+api get v1 title-release-dates	direct_read	not_implemented	reachable	
+genres list	etl	implemented	reachable	
+networks list	etl	implemented	reachable	
+person details list	etl	implemented	reachable	
+regions list	etl	implemented	reachable	
+releases list	etl	implemented	reachable	
+search list	etl	implemented	reachable	
+sources list	etl	implemented	reachable	
+title cast crew list	etl	implemented	reachable	
+title details list	etl	implemented	reachable	
+title episodes list	etl	implemented	reachable	
+title seasons list	etl	implemented	reachable	
+title sources list	etl	implemented	reachable	
+titles list	etl	implemented	reachable	

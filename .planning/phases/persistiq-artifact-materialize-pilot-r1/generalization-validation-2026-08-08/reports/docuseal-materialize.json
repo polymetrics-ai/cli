@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/docuseal-manifest.json",
+  "candidates": 1,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "docuseal",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: top-level webhooks (formCompletedWebhook, formDeclinedWebhook, formStartedWebhook, formViewedWebhook, submissionArchivedWebhook, submissionCompletedWebhook, submissionCreatedWebhook, submissionExpiredWebhook, templateArchivedWebhook, templateCreatedWebhook, templateUpdatedWebhook) cannot be represented as provider request paths"
+    }
+  ]
+}

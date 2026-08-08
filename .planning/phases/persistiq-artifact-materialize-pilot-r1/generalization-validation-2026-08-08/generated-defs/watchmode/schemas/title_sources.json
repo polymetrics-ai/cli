@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "title_sources",
+  "type": "object",
+  "x-primary-key": ["watchmode_title_id", "source_id", "region", "type"],
+  "required": ["source_id"],
+  "properties": {
+    "source_id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "region": { "type": ["string", "null"] },
+    "web_url": { "type": ["string", "null"] },
+    "format": { "type": ["string", "null"] },
+    "price": { "type": ["number", "null"] },
+    "seasons": { "type": ["integer", "null"] },
+    "episodes": { "type": ["integer", "null"] },
+    "watchmode_title_id": { "type": ["string", "null"], "description": "Stamped by fan_out with the title_ids config entry that produced this record." }
+  }
+}

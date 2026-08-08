@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/api/V1/GetProviderStatus" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        {
+          "ProviderCode": "PROV1",
+          "IsProcessingTransfers": true,
+          "Message": "Operating normally"
+        }
+      ]
+    }
+  }
+}
