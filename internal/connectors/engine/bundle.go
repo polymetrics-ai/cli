@@ -828,10 +828,11 @@ type RESTOperationSpec struct {
 	// sole encoded wire field before the request is sent.
 	Base64Upload *Base64UploadSpec `json:"base64_upload,omitempty"`
 	// Redirect is an opt-in, declaration-owned 307/308 replay policy for one
-	// snapshot-bound multipart or base64-upload rest_write. It exists for
-	// providers such as Zoom Tasks/Clips that document a same-provider upload
-	// redirect requiring bearer authentication at the admitted final host;
-	// ordinary direct writes remain redirect-refusing.
+	// snapshot-bound multipart, bounded base64-upload, or recursively closed
+	// JSON rest_write. It exists for providers such as Zoom Tasks/Clips that
+	// document a same-provider upload-event redirect requiring bearer
+	// authentication at the admitted final host; ordinary direct writes remain
+	// redirect-refusing.
 	Redirect *MutationRedirectSpec `json:"redirect,omitempty"`
 	// RequiredQuery declares query-parameter cardinality for endpoints that
 	// must never be called unfiltered — a listing that returns an entire
@@ -843,10 +844,11 @@ type RESTOperationSpec struct {
 	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
 }
 
-// MutationRedirectSpec is the closed operation declaration for a multipart or
-// bounded base64 mutation whose documented transport requires a same-provider
-// cross-host 307/308 redirect. It deliberately accepts no caller-supplied URL
-// or header: the declaration owns both the host boundary and hop cap.
+// MutationRedirectSpec is the closed operation declaration for a multipart,
+// bounded base64, or recursively closed JSON mutation whose documented
+// transport requires a same-provider cross-host 307/308 redirect. It
+// deliberately accepts no caller-supplied URL or header: the declaration owns
+// both the host boundary and hop cap.
 type MutationRedirectSpec struct {
 	AllowedHostSuffixes []string `json:"allowed_host_suffixes"`
 	MaxHops             int      `json:"max_hops"`
@@ -2326,15 +2328,20 @@ func validateOperationBase64UploadSemantics(i int, op OperationSpec) error {
 
 // validateOperationMutationRedirectSemantics preserves the existing strict
 // direct-write redirect refusal unless a provider has declared every boundary
-// needed for one snapshot-bound multipart or base64-upload replay. The actual
-// target URL is never user input and the runtime only reapplies the declared
-// bearer after admitting the redirect host.
+// needed for one snapshot-bound multipart, base64-upload, or closed JSON-body
+// replay. The actual target URL is never user input and the runtime only
+// reapplies the declared bearer after admitting the redirect host.
 func validateOperationMutationRedirectSemantics(i int, op OperationSpec) error {
 	if op.REST == nil || op.REST.Redirect == nil {
 		return nil
 	}
-	if op.Kind != "rest_write" || (op.REST.Multipart == nil && op.REST.Base64Upload == nil) {
-		return fmt.Errorf("operation %d (%q) rest.redirect is only valid for a multipart or base64_upload rest_write", i, op.ID)
+	if op.Kind != "rest_write" {
+		return fmt.Errorf("operation %d (%q) rest.redirect is only valid for a rest_write", i, op.ID)
+	}
+	if op.REST.Multipart == nil && op.REST.Base64Upload == nil {
+		if err := validateOperationJSONMutationRedirectBody(i, op); err != nil {
+			return err
+		}
 	}
 	if strings.TrimSpace(op.REST.BaseURL) == "" || len(op.REST.Auth) != 1 {
 		return fmt.Errorf("operation %d (%q) rest.redirect requires one fixed operation base_url and bearer auth", i, op.ID)
@@ -2359,6 +2366,85 @@ func validateOperationMutationRedirectSemantics(i int, op OperationSpec) error {
 	}
 	if !policy.AllowsHost(baseURL.Hostname()) {
 		return fmt.Errorf("operation %d (%q) rest.redirect base_url host is not within the declared allowed host suffixes", i, op.ID)
+	}
+	return nil
+}
+
+// validateOperationJSONMutationRedirectBody admits the non-upload redirect
+// shape only when every caller-reachable JSON object is closed. The prepared
+// write digest already binds the values; this closes the schema shape so a
+// declaration cannot turn a provider-specific event request into a generic
+// mutation body with an admitted bearer redirect.
+func validateOperationJSONMutationRedirectBody(i int, op OperationSpec) error {
+	if op.REST == nil {
+		return fmt.Errorf("operation %d (%q) rest.redirect requires a rest declaration", i, op.ID)
+	}
+	mediaType, _, err := mime.ParseMediaType(strings.TrimSpace(op.REST.ContentType))
+	if err != nil || !strings.EqualFold(mediaType, "application/json") {
+		return fmt.Errorf("operation %d (%q) rest.redirect non-upload body requires content_type application/json", i, op.ID)
+	}
+	if len(op.REST.BodySchema) == 0 {
+		return fmt.Errorf("operation %d (%q) rest.redirect non-upload body requires body_schema", i, op.ID)
+	}
+
+	var bodySchema map[string]any
+	if err := json.Unmarshal(op.REST.BodySchema, &bodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) rest.redirect body_schema is not an object: %w", i, op.ID, err)
+	}
+	if !isObjectType(bodySchema) {
+		return fmt.Errorf("operation %d (%q) rest.redirect body_schema must be an object", i, op.ID)
+	}
+	if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) rest.redirect body_schema: %w", i, op.ID, err)
+	}
+	return requireClosedMutationRedirectJSONBodySchema(i, op.ID, bodySchema, "body_schema")
+}
+
+// requireClosedMutationRedirectJSONBodySchema walks all object-bearing JSON
+// Schema branches that a direct-write body can reach. Composition is included
+// explicitly: accepting only the root/properties path would let an open oneOf
+// or anyOf arm reintroduce caller-selected fields.
+func requireClosedMutationRedirectJSONBodySchema(i int, id string, node map[string]any, path string) error {
+	if isObjectType(node) {
+		if closed, ok := node["additionalProperties"].(bool); !ok || closed {
+			return fmt.Errorf("operation %d (%q) rest.redirect %s is an object and must declare additionalProperties: false", i, id, path)
+		}
+	}
+	if items, ok := node["items"].(map[string]any); ok {
+		if err := requireClosedMutationRedirectJSONBodySchema(i, id, items, path+"/items"); err != nil {
+			return err
+		}
+	}
+	if properties, ok := node["properties"].(map[string]any); ok {
+		names := make([]string, 0, len(properties))
+		for name := range properties {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		for _, name := range names {
+			child, ok := properties[name].(map[string]any)
+			if !ok {
+				continue
+			}
+			if err := requireClosedMutationRedirectJSONBodySchema(i, id, child, path+"/"+name); err != nil {
+				return err
+			}
+		}
+	}
+	for _, keyword := range []string{"allOf", "anyOf", "oneOf"} {
+		branches, ok := node[keyword].([]any)
+		if !ok {
+			continue
+		}
+		for index, raw := range branches {
+			branch, ok := raw.(map[string]any)
+			if !ok {
+				return fmt.Errorf("operation %d (%q) rest.redirect %s/%s/%d must be a schema object", i, id, path, keyword, index)
+			}
+			if err := requireClosedMutationRedirectJSONBodySchema(i, id, branch, fmt.Sprintf("%s/%s/%d", path, keyword, index)); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }
