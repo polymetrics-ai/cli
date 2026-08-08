@@ -31,7 +31,7 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 			t.Fatalf("form dir = %q, want 1", got)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"ok":true,"token":"server-token","nested":{"token":"nested-server-token"}}`))
+		_, _ = w.Write([]byte(`{"ok":true,"token":"server-token","plainkey":"fixture-plaintext-key","nested":{"token":"nested-server-token"}}`))
 	}))
 	defer srv.Close()
 
@@ -49,7 +49,7 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 			MutationClass: "destructive",
 			Confirmation:  &ConfirmationSpec{Kind: "destructive"},
 			SensitivePolicy: &SensitivePolicySpec{
-				RedactFields: []string{"nested.token"},
+				RedactFields: []string{"plainkey"},
 			},
 			Batchable: &batchable,
 			REST: &RESTOperationSpec{
@@ -86,8 +86,7 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 			ConfigurationDigest: "fixture-configuration-digest",
 			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
 		},
-		Body:         map[string]any{"id": "t3_abc", "dir": 1},
-		RedactFields: []string{"token"},
+		Body: map[string]any{"id": "t3_abc", "dir": 1},
 	}
 
 	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
@@ -124,15 +123,21 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	if !ok {
 		t.Fatalf("body type = %T, want map", result.Body)
 	}
-	if got := body["token"]; got != "server-token" {
-		t.Fatalf("result token = %#v, want complete server token", got)
+	if _, exposed := body["token"]; exposed {
+		t.Fatal("json_redacted direct-write result exposed a generic token-shaped field")
+	}
+	if body["token_redacted"] != true {
+		t.Fatalf("json_redacted direct-write result lacks generic token redaction marker: %#v", body)
+	}
+	if _, exposed := body["plainkey"]; exposed {
+		t.Fatal("json_redacted direct-write result exposed an operation-declared sensitive field")
+	}
+	if body["plainkey_redacted"] != true {
+		t.Fatalf("json_redacted direct-write result lacks declared-field redaction marker: %#v", body)
 	}
 	nested, ok := body["nested"].(map[string]any)
-	if !ok || nested["token"] != "nested-server-token" {
-		t.Fatalf("result nested body = %#v, want complete nested token", body["nested"])
-	}
-	if _, ok := body["token_redacted"]; ok {
-		t.Fatalf("result body marked token redacted: %#v", body)
+	if !ok || nested["token_redacted"] != true {
+		t.Fatalf("json_redacted direct-write result lacks nested generic redaction marker: %#v", body["nested"])
 	}
 
 	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
@@ -145,10 +150,9 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	}
 }
 
-func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
+func TestOperationDirectWriteLegacyRedactingPolicyNamesKeepResponseBody(t *testing.T) {
 	raw := []byte(`{"ok":true,"token":"server-token","nested":{"value":"visible"}}`)
 	for _, policy := range []string{
-		directWritePolicyJSONRedacted,
 		directWritePolicyWriteResultRedacted,
 		directWritePolicyGongBoundedInputRedacted,
 	} {
@@ -172,6 +176,96 @@ func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
 				t.Fatalf("response was redacted: %#v", decoded)
 			}
 		})
+	}
+}
+
+func TestOperationDirectWriteJSONRedactedErrorsHideDeclaredRequestAndResponseFields(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"key_id":"fixture-key-id","plainkey":"fixture-plaintext-key","token":"server-token"}`))
+	}))
+	defer srv.Close()
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:            "acme.decrypt",
+			Kind:          "rest_write",
+			Summary:       "Decrypt one fixture key",
+			Risk:          "high",
+			Approval:      "plan-preview-approve-execute",
+			OutputPolicy:  "json_redacted",
+			MutationClass: "update",
+			SensitivePolicy: &SensitivePolicySpec{
+				RedactFields: []string{"key_id", "plainkey"},
+			},
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/api/decrypt",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["key_id"],"properties":{"key_id":{"type":"string"}}}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodPost,
+			Path:   "/api/decrypt",
+			Operation: &SurfaceOperation{
+				Model:            "sensitive_reverse_etl",
+				Status:           "blocked",
+				Risk:             "high",
+				BlockedByDefault: true,
+				Reason:           "fixture direct write",
+			},
+		}}},
+	}
+	req := connectors.OperationDirectWriteRequest{Operation: "acme.decrypt", Body: map[string]any{"key_id": "fixture-key-id"}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want provider rejection")
+	}
+	for _, sensitive := range []string{"fixture-key-id", "fixture-plaintext-key", "server-token"} {
+		if strings.Contains(err.Error(), sensitive) {
+			t.Fatal("json_redacted direct-write error exposed sensitive request or response content")
+		}
+	}
+}
+
+func TestSecretSensitiveDirectWriteRequiresTypedConfirmation(t *testing.T) {
+	op := OperationSpec{
+		ID:              "acme.decrypt",
+		Kind:            "rest_write",
+		Summary:         "Decrypt one fixture key",
+		Risk:            "high",
+		Approval:        "plan-preview-confirm-execute",
+		OutputPolicy:    "json_redacted",
+		MutationClass:   "secret",
+		SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{
+			InputMode:    "env_or_stdin",
+			Transform:    "none",
+			ApprovalMode: "typed_confirmation",
+		},
+		REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/api/decrypt", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{"type":"object"}`)},
+	}
+	target := DestructiveTargetForOperation("acme", op)
+	if !target.RequiresApproval() || target.Confirmation != connectors.ConfirmationKindDestructive {
+		t.Fatalf("secret-sensitive direct-write target = %#v, want typed destructive confirmation", target)
+	}
+	bundle := Bundle{Name: "acme", HTTP: HTTPBase{URL: "https://example.invalid"}, Operations: []OperationSpec{op}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/api/decrypt", Operation: &SurfaceOperation{Model: "sensitive_reverse_etl", Status: "blocked", Risk: "high", BlockedByDefault: true, Reason: "fixture direct write"}}}}}
+	metadata, err := OperationDirectWriteMetadata(bundle, op.ID)
+	if err != nil {
+		t.Fatalf("OperationDirectWriteMetadata: %v", err)
+	}
+	if metadata.ConfirmationChallenge != string(connectors.ConfirmationKindDestructive) {
+		t.Fatalf("secret-sensitive direct-write confirmation = %q, want destructive", metadata.ConfirmationChallenge)
 	}
 }
 

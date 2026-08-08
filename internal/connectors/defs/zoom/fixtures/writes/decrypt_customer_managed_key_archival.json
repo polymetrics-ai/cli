@@ -1,0 +1,22 @@
+{
+  "record": {
+    "encrypt_context": "fixture-encrypt-context",
+    "key_id": "fixture-key-id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/kms/cse/archival/datakey/decrypt",
+    "body": {
+      "encrypt_context": "fixture-encrypt-context",
+      "key_id": "fixture-key-id"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "key_id": "fixture-key-id",
+      "plainkey": "fixture-plaintext-key",
+      "token": "fixture-response-token"
+    }
+  }
+}

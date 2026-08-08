@@ -1,0 +1,57 @@
+{
+  "phase": "cli-zoom-parity-customer-managed-keys-hybrid-r1",
+  "parent_issue": 3915,
+  "sub_issue": 3950,
+  "connector": "zoom",
+  "provider_module": "customer-managed-keys-hybrid",
+  "state": "planned",
+  "manual_gsd_fallback": {
+    "reason": "provider-category phase is not registered by the official GSD runtime",
+    "mode": "single-worker inline execution; parent contract forbids role spawning"
+  },
+  "artifact": {
+    "url": "https://developers.zoom.us/docs/api/customer-managed-keys-hybrid.md",
+    "retrieved_at": "2026-08-08T10:54:00Z",
+    "http_status": 200,
+    "bytes": 1890,
+    "operation_count": 1,
+    "ledger_delta": 0,
+    "auth_reference": {
+      "url": "https://developers.zoom.us/docs/api/references/key-connector-archival-auth/",
+      "retrieved_at": "2026-08-08T10:55:19Z",
+      "http_status": 200,
+      "bytes": 24583,
+      "mode": "customer-hosted JWKS-signed bearer JWT; no secret material recorded"
+    }
+  },
+  "baseline": {
+    "covered_operations": 22,
+    "locally_blocked_operations": 1820,
+    "direct_reads": 17,
+    "direct_writes": 0,
+    "reverse_etl_writes": 2
+  },
+  "target": {
+    "covered_operations": 23,
+    "locally_blocked_operations": 1819,
+    "direct_reads": 17,
+    "direct_writes": 1,
+    "reverse_etl_writes": 2
+  },
+  "red": {
+    "commit": "",
+    "command": "",
+    "result": "pending"
+  },
+  "foundation": {
+    "name": "declared direct-write redacted output and sensitive confirmation",
+    "red_commit": "",
+    "green_commit": "",
+    "scope": "response/error/plan redaction and typed confirmation for secret-sensitive rest_write operations"
+  },
+  "green": {
+    "commit": "",
+    "result": "pending"
+  },
+  "next": "complete RED before any production engine or Zoom declarations"
+}

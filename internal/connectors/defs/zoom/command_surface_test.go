@@ -15,6 +15,7 @@ import (
 	"sync"
 	"testing"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
@@ -23,7 +24,7 @@ import (
 const zoomBundleName = "zoom"
 
 // wantModuleOperationCommandCount is the running total of implemented
-// direct_read/direct_write operation commands across all landed modules
+// direct_read operation commands across all landed modules
 // (Wave 2+, one Zoom provider module at a time; see issue #3915 and
 // .planning/phases/cli-zoom-parity-wave2-qss-r1/). Bump this FIRST when
 // starting a new module's red/green cycle -- that bump is what makes
@@ -33,6 +34,12 @@ const zoomBundleName = "zoom"
 // Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
 // quality-management reads (5), Cobrowse SDK reads (4).
 const wantModuleOperationCommandCount = 17
+
+// wantModuleDirectWriteCommandCount is the running total of implemented
+// operations.json rest_write commands. It is distinct from writes.json
+// reverse-ETL actions because direct writes are executable only through the
+// typed plan lifecycle.
+const wantModuleDirectWriteCommandCount = 1
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -143,11 +150,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 22 {
-		t.Errorf("executable rows = %d, want 22", got)
+	if got := covered; got != 23 {
+		t.Errorf("executable rows = %d, want 23", got)
 	}
-	if got := implementableNow; got != 1820 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1820", got)
+	if got := implementableNow; got != 1819 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1819", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -243,7 +250,58 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 	}
 
 	verifyOperationCommands(t, bundle, connector, surface, wantModuleOperationCommandCount)
+	verifyDirectWriteOperationCommands(t, bundle, connector, surface, wantModuleDirectWriteCommandCount)
 	verifyWriteCommands(t, bundle, connector, surface, wantModuleWriteCommandCount)
+}
+
+// verifyDirectWriteOperationCommands is the direct-write counterpart of
+// verifyOperationCommands. It keeps rest_write declarations inside the real
+// commandrunner preflight and plan lifecycle rather than treating a POST as a
+// generic HTTP escape hatch.
+func verifyDirectWriteOperationCommands(t *testing.T, bundle engine.Bundle, connector connectors.Connector, surface *connectors.CommandSurface, wantCount int) {
+	t.Helper()
+	ops := make(map[string]engine.OperationSpec, len(bundle.Operations))
+	for _, op := range bundle.Operations {
+		ops[op.ID] = op
+	}
+
+	got := 0
+	for _, command := range surface.Commands {
+		if command.Intent != "direct_write" {
+			continue
+		}
+		got++
+		if command.Availability != "implemented" {
+			t.Errorf("direct-write command %q availability = %q, want implemented", command.Path, command.Availability)
+			continue
+		}
+		op, ok := ops[command.Operation]
+		if !ok {
+			t.Errorf("direct-write command %q references operation %q, not found in operations.json", command.Path, command.Operation)
+			continue
+		}
+		if op.Kind != "rest_write" || op.REST == nil {
+			t.Errorf("direct-write command %q operation = %#v, want typed rest_write", command.Path, op)
+			continue
+		}
+		if len(command.APISurface) != 1 || command.APISurface[0].Method != op.REST.Method || command.APISurface[0].Path != op.REST.Path {
+			t.Errorf("direct-write command %q api_surface = %+v, want exactly [%s %s] matching operations.json", command.Path, command.APISurface, op.REST.Method, op.REST.Path)
+		}
+		if command.OutputPolicy != op.OutputPolicy || !supportedDirectWriteOutputPolicies[command.OutputPolicy] {
+			t.Errorf("direct-write command %q output_policy = %q, want a supported declared rest_write policy %q", command.Path, command.OutputPolicy, op.OutputPolicy)
+		}
+		for _, flag := range command.Flags {
+			if !strings.HasPrefix(flag.MapsTo, "body.") || !flag.Required {
+				t.Errorf("direct-write command %q flag --%s maps_to %q, want a required typed body.* field", command.Path, flag.Name, flag.MapsTo)
+			}
+		}
+		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want nil", command.Path, err)
+		}
+	}
+	if got != wantCount {
+		t.Errorf("reachable direct_write operation commands = %d, want %d", got, wantCount)
+	}
 }
 
 // verifyOperationCommands generically verifies every reachable operation
@@ -363,6 +421,14 @@ var supportedDirectReadOutputPolicies = map[string]bool{
 	"repository_contents_directory":     true,
 	"json_redacted":                     true,
 	"clinical_json_redacted":            true,
+}
+
+var supportedDirectWriteOutputPolicies = map[string]bool{
+	"none":                        true,
+	"json":                        true,
+	"json_redacted":               true,
+	"write_result_redacted":       true,
+	"gong_bounded_input_redacted": true,
 }
 
 // TestCoveredStreamCommandsExecuteWithFixtures runs each Wave 1 command
@@ -1066,6 +1132,134 @@ func TestCobrowseSDKCommandsExecuteWithFixtures(t *testing.T) {
 				t.Errorf("requests = %d, want 1", requests)
 			}
 		})
+	}
+}
+
+// TestCustomerManagedKeysHybridCommandExecutesWithFixture pins Zoom's one
+// customer-hosted Key Connector archival operation. It runs the real
+// connector-command plan lifecycle against a loopback key connector so the
+// declared customer host, isolated key-connector JWT auth profile, exact POST,
+// no-pagination contract, typed confirmation, and redacted key response are
+// all executable without contacting an operator deployment.
+func TestCustomerManagedKeysHybridCommandExecutesWithFixture(t *testing.T) {
+	const (
+		credentialName = "zoom-cmk-fixture"
+		encryptContext = "fixture-encrypt-context"
+		keyID          = "fixture-key-id"
+		fixtureJWT     = "synthetic-key-connector-jwt"
+	)
+	wantStatus, wantBody := zoomWriteFixture(t, "decrypt_customer_managed_key_archival.json")
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		if request.Method != http.MethodPost {
+			t.Fatal("Customer Managed Keys Hybrid fixture did not receive the declared POST")
+		}
+		if request.URL.Path != "/api/v2/kms/cse/archival/datakey/decrypt" {
+			t.Fatal("Customer Managed Keys Hybrid fixture did not receive the normalized declared path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+fixtureJWT {
+			t.Fatal("Customer Managed Keys Hybrid fixture did not receive the selected key-connector bearer auth")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Customer Managed Keys Hybrid command sent undeclared query or pagination input")
+		}
+		var body map[string]any
+		if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+			t.Fatalf("decode Customer Managed Keys Hybrid request: %v", err)
+		}
+		if len(body) != 2 || body["encrypt_context"] != encryptContext || body["key_id"] != keyID {
+			t.Fatal("Customer Managed Keys Hybrid request did not contain exactly the declared typed body")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(wantStatus)
+		_, _ = w.Write(wantBody)
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
+		Path:  []string{"customer-managed-keys-hybrid", "archival-key", "decrypt"},
+		Flags: map[string][]string{"key-id": {keyID}},
+	}); err == nil || !strings.Contains(err.Error(), "encrypt-context") {
+		t.Fatalf("BuildWriteCommand without encrypt-context = %v, want required typed flag rejection", err)
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config: map[string]string{
+			"base_url":  server.URL + "/api/v2",
+			"auth_type": "key_connector_jwt",
+		},
+		Secrets: map[string]string{"key_connector_jwt": fixtureJWT},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+		Connector:  zoomBundleName,
+		Credential: credentialName,
+		Path:       []string{"customer-managed-keys-hybrid", "archival-key", "decrypt"},
+		Flags: map[string][]string{
+			"encrypt-context": {encryptContext},
+			"key-id":          {keyID},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" || plan.ConfirmationChallenge != string(connectors.ConfirmationKindDestructive) {
+		t.Fatalf("Customer Managed Keys Hybrid plan/preview = %#v/%#v, want typed confirmation evidence", plan, preview)
+	}
+	if len(plan.Sample) != 1 || plan.Sample[0]["encrypt_context"] != "redacted" || plan.Sample[0]["key_id"] != "redacted" {
+		t.Fatalf("Customer Managed Keys Hybrid plan sample = %#v, want redacted sensitive body fields", plan.Sample)
+	}
+	if requests != 0 {
+		t.Fatalf("Customer Managed Keys Hybrid planning reached network; requests = %d, want 0", requests)
+	}
+
+	if _, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}); err == nil {
+		t.Fatal("Customer Managed Keys Hybrid execution bypassed typed confirmation")
+	}
+	if requests != 0 {
+		t.Fatalf("unconfirmed Customer Managed Keys Hybrid operation reached network; requests = %d, want 0", requests)
+	}
+
+	run, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("RunReverseETL: %v", err)
+	}
+	if requests != 1 || run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != wantStatus {
+		t.Fatalf("Customer Managed Keys Hybrid run = %#v; requests = %d, want one completed declared POST", run, requests)
+	}
+	encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+	if err != nil {
+		t.Fatalf("marshal Customer Managed Keys Hybrid result: %v", err)
+	}
+	for _, raw := range []string{keyID, "fixture-plaintext-key", "fixture-response-token"} {
+		if strings.Contains(string(encoded), raw) {
+			t.Fatal("Customer Managed Keys Hybrid result exposed a declared or generic sensitive response field")
+		}
+	}
+	for _, field := range []string{"key_id", "plainkey", "token"} {
+		if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+			t.Fatalf("Customer Managed Keys Hybrid result is missing %s redaction marker", field)
+		}
 	}
 }
 
