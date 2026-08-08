@@ -910,3 +910,43 @@ connectorgen validate: 551 connector(s) checked, 0 findings
 $ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 ```
+
+## Cycle 13 — rebase compatibility and guard verification
+
+**Red 13 — current-main changed the preview API.** After rebasing this lane on
+`origin/main`, the existing GitHub confirmation tests no longer compiled because
+`App.PreviewReversePlan` now requires its `withheldFlags` argument. This was an
+API integration failure, not a change to confirmation behavior:
+
+```
+$ go test -timeout 20m ./internal/app/ -run 'TestGitHubRepo(DeleteRequiresConfirmationAndSingleUseGrant|ArchiveIsApprovalOnlyAndSendsPinnedField|ApprovalOnlyCreatesCarryNoTypedChallenge)' -count=1
+internal/app/reverse_confirmation_test.go:187:50: not enough arguments in call to a.PreviewReversePlan
+    have (context.Context, string)
+    want (context.Context, string, map[string][]string)
+internal/app/reverse_confirmation_test.go:245:44: not enough arguments in call to a.PreviewReversePlan
+    have (context.Context, string)
+    want (context.Context, string, map[string][]string)
+FAIL	polymetrics.ai/internal/app [build failed]
+```
+
+**Green 13 — preserve the original no-withheld-flags behavior.** Both test calls
+now pass `nil`, which is the explicit current-main representation of no withheld
+flags. The owner/repository guard, confirmation contract, rate declaration, and
+bundle checks remained green after the rebase:
+
+```
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+✔ 5 tests passed
+
+$ node scripts/github-live-proof-sweep.mjs --self-test
+github live proof self-test: ok
+
+$ go test -timeout 20m ./internal/app/ -run 'TestGitHubRepo(DeleteRequiresConfirmationAndSingleUseGrant|ArchiveIsApprovalOnlyAndSendsPinnedField|ApprovalOnlyCreatesCarryNoTypedChallenge)' -count=1
+ok	polymetrics.ai/internal/app
+
+$ go test -timeout 20m ./internal/connectors/commandrunner/ -run 'TestGitHub(ApprovalTextMatchesTheEnforcedWriteContract|GeneratedTwinsShareTheirAliasWriteContract|RestoredCommandsAreExecutable|HeldCommandsStayBlocked|NotesDoNotRestateTheTypedConfirmation)|TestEveryImplementedCommandPassesRuntimePreflight' -count=1
+ok	polymetrics.ai/internal/connectors/commandrunner
+
+$ go test -timeout 20m ./internal/connectors/engine/ -run 'TestGitHubDeclaredRateLimits|TestGitHubArchiveDownloadsAllowOnlyCodeloadRedirect|TestPreparedWritePreviewDeclaresConfirmationOnlyWhereTheGateDemandsIt|TestBundleLoadEmbeddedGitHub(Operations|CLISurface)' -count=1
+ok	polymetrics.ai/internal/connectors/engine
+```
