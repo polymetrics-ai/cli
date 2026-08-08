@@ -27,10 +27,25 @@
 
 ## GREEN
 
-- Status: pending staged materialization and gates.
+- Status: not reached; the existing materializer failed closed before it wrote
+  a destination bundle.
 - Test: run the same real-binary sweep against the generated PersistIQ bundle,
   plus validation, surface-sync check, runtime preflight, and batch gate.
-- Captured output: to be filled with verbatim results; no credentials.
+- Captured materializer output (verbatim):
+
+  ```text
+  connectorgen batch materialize: 0 connector(s) materialized, 1 dropped; report .planning/phases/persistiq-artifact-materialize-pilot-r1/materialize-report.json
+  exit status 1
+  ```
+
+  Captured drop (verbatim):
+
+  ```text
+  executable coverage GET /v1/mailboxes is absent from the cited artifact
+  ```
+
+  The generated bundle and its commands therefore do not exist; no Green
+  claim is made and no generated command is counted reachable.
 
 ## Refactor / safety
 
