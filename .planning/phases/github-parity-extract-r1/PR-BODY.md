@@ -106,17 +106,21 @@ approval-only creates, and gaining a typed challenge is as much a drift from tha
 losing one. No declaration was duplicated: the three DELETEs already carried the challenge by
 method, and only the two PATCH actions needed one declared.
 
-**The documented surface says so too.** `repo archive`/`repo unarchive` now carry the same
-`notes` marker every other destructive github command carries, so `pm connectors inspect github
---json`, `MANUAL.md` and `SKILL.md` state the requirement instead of leaving an agent to discover
-it as an unexplained failure at run.
-
-That marker was itself wrong, on all eight commands that already had it. It read `destructive;
+**The documented surface says so too — from one source.** The bundle used to carry a prose
+`notes` marker for this on eight commands, and it was wrong on all eight: it read `destructive;
 requires --allow-destructive + typed confirmation`, and there is no `--allow-destructive` flag —
 `pm github repo delete --allow-destructive` fails with `unknown flag --allow-destructive for
-command "repo delete"`. Copying it onto two more commands would have documented a second trap of
-exactly the kind this fix exists to remove, so all ten now read `destructive; requires typed
-confirmation --confirm destructive`, which is the flag the runtime actually takes.
+command "repo delete"`.
+
+Those notes are now gone entirely, along with the two that were briefly added to
+`repo archive`/`repo unarchive`. A per-command prose marker cannot carry this fact: it is silent
+on every command nobody annotated, so with ten of github's 173 destructive commands marked, the
+silence on the other 163 read as "no confirmation needed". The requirement is stated once instead,
+by the help, derived from the bound write action — see the `--help` section below. All ten notes
+were one byte-identical string whose two facts (the `destructive` classification and the
+`--confirm destructive` requirement) the derived line states in full, verified command by command
+against the built binary before any deletion, so nothing was lost and no patch was retained.
+The 107 github commands whose notes say something genuinely per-command keep them.
 
 Every derived artifact was regenerated from those declarations rather than hand-edited:
 `docs/connectors/github/{MANUAL,SKILL}.md` and `docs/skills/pm-github/SKILL.md` via
@@ -130,23 +134,26 @@ all 551 connectors, plus the catalog's `gorgias` and `warehouse` entries; that i
 pre-existing drift on `main` the earlier regeneration commit isolated, and it is reverted here
 again. Both website catalogs were diffed per connector: the only entry that changes is GitHub.
 
-**`--help` states it for every destructive command, not just the annotated ten.** A `notes` string
-is prose an author writes per command, so it is silent on the 163 github commands nobody
-annotated — and once ten commands carry the marker, its absence on the rest reads as "no
-confirmation needed". `pm <connector> <command> --help` now renders a `CONFIRMATION` section
-resolved by `commandrunner.ConfirmationChallengeForCommand`, the same declarations
-`buildWriteCommand`/`buildOperationDirectWriteCommand` read at plan time, so help and runtime
-cannot disagree — the boundary `writeConnectorDownloadFlags` already sets for download flags:
+**`--help` states it for every destructive command.** `pm <connector> <command> --help` renders a
+`CONFIRMATION` section resolved by `commandrunner.ConfirmationChallengeForCommand`, the same
+declarations `buildWriteCommand`/`buildOperationDirectWriteCommand` read at plan time, so help and
+runtime cannot disagree — the boundary `writeConnectorDownloadFlags` already sets for download
+flags. It covers all 173 of github's destructive commands and every other connector's, and it is
+the only place the fact is stated:
 
 ```
-pm github release delete --help          # no bundle note
+pm github release delete --help
 -> APPROVAL      Reverse ETL writes require plan, preview, approval, execute.
    CONFIRMATION  execution requires the typed confirmation --confirm destructive
 ```
 
-The ten scoped notes are unchanged and no note was added to the other 163. `guide.go` is
-deliberately untouched: marking all 183 actions there would rewrite all 551 committed connector
-manuals, which is both the bulk change that was declined and unrelated-connector churn.
+`TestGitHubNotesDoNotRestateTheTypedConfirmation` sweeps every github command and fails on any
+`notes` that mentions `--confirm`, so the removed copy cannot return; it also asserts the resolver
+still answers, so it cannot pass by the derivation silently breaking.
+
+`guide.go` is deliberately untouched: marking all 183 actions there would rewrite all 551
+committed connector manuals, which is both the bulk change that was declined and
+unrelated-connector churn.
 
 The runtime plan output already carried this signal exhaustively — `pm github release delete`
 prints `Confirmation required: --confirm destructive` with no note in its bundle — so the

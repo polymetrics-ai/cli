@@ -477,3 +477,60 @@ there would mark all 183 actions in every one of the 551 committed connector man
 both the bulk change the captain declined and unrelated-connector churn this branch must not make.
 
 No test was weakened, skipped, or deleted. Cycle 8 added two tests.
+
+## Cycle 9 — review round: one source for the typed confirmation
+
+Cycle 8 made the confirmation derivable at point of use. Ten commands then stated the same fact
+twice on one help page, three lines apart: a derived `CONFIRMATION` section and a hand-authored
+`NOTES` string. The captain's decision: the derived help is the single source; delete the notes,
+but only after proving the derivation carries every fact each note carried.
+
+**The proof, before deleting anything.** All ten notes are one byte-identical string,
+`destructive; requires typed confirmation --confirm destructive`, carrying two facts: the
+classification (`destructive`) and the requirement (`--confirm destructive`). The derived line
+states both — the closed challenge kind it names *is* the classification — and it was confirmed
+present on all ten against the built binary before the removal:
+
+```
+repo delete            | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+repo archive           | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+repo unarchive         | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+cache delete           | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+secret delete          | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+repo delete-2          | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+actions logs delete    | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+branches rename create | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+deployments delete     | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+transfer create        | CONFIRMATION: execution requires the typed confirmation --confirm destructive
+```
+
+No note carried anything the derivation lacks, so nothing had to be extended first and no patch
+was retained. The ten `notes` fields are removed; the 107 github commands whose notes state
+something genuinely per-command keep them, including `issue delete`'s explanation of why it is
+not exposed as a connector write.
+
+**Red 9a — nothing stopped the copy coming back.** The removal is only durable if a future edit
+cannot reintroduce a note that restates the gate. **Green** —
+`TestGitHubNotesDoNotRestateTheTypedConfirmation` sweeps every github command, not just the ten,
+and fails on any `notes` mentioning `--confirm`; it also asserts the resolver still answers for at
+least one command, so the test cannot pass by the derivation silently breaking.
+
+**Red 9b — the help test asserted the notes were present.** Cycle 8's test pinned
+`NOTES` presence for `repo delete` and `repo archive`, which is exactly the duplication being
+removed. **Green** — `TestConnectorCommandHelpStatesTheTypedConfirmation` now asserts the opposite
+for six destructive commands, two of which used to carry a note: the derived section must state
+the requirement and no note may restate it. The negative case is unchanged — `issue create`,
+`repo create`, `secret set` and `issue list` must claim no confirmation.
+
+Derived artifacts regenerated from the declarations: `docs/connectors/github/{MANUAL,SKILL}.md`
+and `docs/skills/pm-github/SKILL.md` each drop the ten `; notes: destructive; requires typed
+confirmation --confirm destructive` suffixes, and `website/data/connectors.generated.json` plus
+`website/lib/connectors.catalog.data.generated.json` drop the ten `notes` values.
+`docs/connectors/catalog/all-connectors.json` is unchanged and correctly so: it carries write
+actions, not `cli_surface` commands, so it never held these strings — its `confirm: destructive`
+on all 183 destructive actions is untouched. Both website catalogs were diffed per connector after
+regeneration: GitHub is the only changed entry. The generators again wanted the pre-existing
+`main` drift across the other 550 connectors, `gorgias` and `warehouse`; reverted as before.
+
+No test was weakened, skipped, or deleted. Cycle 9 added one test and inverted one assertion that
+pinned the duplication itself.
