@@ -8,7 +8,8 @@
   eleven-operation audit are recorded before RED.
 - [x] RED failure captured verbatim before production changes; this test-only checkpoint is staged
   for its required commit/push.
-- [ ] Required reusable foundations red/green tested and separately committed/pushed.
+- [ ] Required reusable foundations red/green tested and separately committed/pushed (direct-read
+  origin/auth is green in this pending foundation checkpoint; named root-object mapping remains).
 - [ ] Connector declaration, generated output, docs, and website catalog committed/pushed.
 - [ ] Inline verify-work and code-review evidence complete.
 

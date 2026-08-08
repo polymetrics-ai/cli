@@ -90,13 +90,18 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 
 	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
 	defer cancel()
-	rt, err := newRuntime(ctx, b, cfg, h)
+	requestBundle := operationDirectReadTransportBundle(b, op)
+	rt, err := newRuntime(ctx, requestBundle, cfg, h)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
-	decoded, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
+	baseURL, err := operationDirectReadBaseURL(b, cfg, op)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL)
+	decoded, pageInfo, resp, err := readDirectPage(ctx, requestBundle, rt, directReadWalk{
 		method:      method,
 		declaredPat: op.REST.Path,
 		requestPath: requestPath,
@@ -118,7 +123,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read pagination: %w", pageErr.err)
 		}
 		if resp == nil {
-			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
+			class, hint := applyErrorMap(requestBundle.HTTP.ErrorMap, err)
 			msg := completeEngineErrorText(err)
 			if hint != "" {
 				msg = msg + ": " + hint
@@ -191,6 +196,11 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 	}
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		return OperationSpec{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
+	}
+	hasOperationBaseURL := strings.TrimSpace(op.REST.BaseURL) != ""
+	hasOperationAuth := len(op.REST.Auth) > 0
+	if hasOperationBaseURL != hasOperationAuth {
+		return OperationSpec{}, fmt.Errorf("operation direct read requires rest.base_url and rest.auth to be declared together")
 	}
 	if method == http.MethodPost && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
 		return OperationSpec{}, fmt.Errorf("operation direct read POST requires application/json content_type")
@@ -507,6 +517,37 @@ func directReadBaseURL(b Bundle, cfg connectors.RuntimeConfig) string {
 		return b.HTTP.URL
 	}
 	return baseURL
+}
+
+// operationDirectReadTransportBundle applies a bounded read's declared
+// origin/auth pair without allowing it to inherit global headers. A declared
+// operation origin is security-sensitive for the same reason as a write:
+// ordinary connector headers can carry credentials with no ownership at the
+// operation's host.
+func operationDirectReadTransportBundle(b Bundle, op OperationSpec) Bundle {
+	if op.REST == nil || strings.TrimSpace(op.REST.BaseURL) == "" {
+		return b
+	}
+	requestBundle := b
+	requestBundle.HTTP.URL = op.REST.BaseURL
+	requestBundle.HTTP.Auth = append([]AuthSpec(nil), op.REST.Auth...)
+	requestBundle.HTTP.Headers = nil
+	return requestBundle
+}
+
+func operationDirectReadBaseURL(b Bundle, cfg connectors.RuntimeConfig, op OperationSpec) (string, error) {
+	template := b.HTTP.URL
+	if op.REST != nil && strings.TrimSpace(op.REST.BaseURL) != "" {
+		template = op.REST.BaseURL
+	}
+	baseURL, err := Interpolate(template, requestVars(cfg, nil, ""))
+	if err != nil {
+		return "", fmt.Errorf("operation direct read resolve base URL: %w", err)
+	}
+	if strings.TrimSpace(baseURL) == "" {
+		return "", fmt.Errorf("operation direct read base URL is required")
+	}
+	return baseURL, nil
 }
 
 func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {

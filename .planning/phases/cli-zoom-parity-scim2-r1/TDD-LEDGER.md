@@ -66,6 +66,31 @@ its declared auth, clear unrelated global headers, and retain the fixed relative
 response cap. It is necessary for SCIM2 because Zoom documents the API server at the host root while
 ordinary Zoom operations use `/v2`; it also unblocks similarly documented distinct-origin reads.
 
+## GREEN foundation — operation-scoped direct-read origin/auth
+
+This foundation is now implemented before any SCIM2 bundle declaration. `rest.base_url` and
+`rest.auth` remain paired declarations; `rest_read` joins `rest_write` as the only operation kind
+that may use them. The direct-read executor selects the operation's origin and auth together,
+clears ordinary connector headers before constructing the requester, and resolves the exact fixed
+path against the declared base. A programmatically constructed bundle receives the same paired
+declaration guard as a loaded one.
+
+The RED test now loads a declared read with an ordinary API server and an independent SCIM2 server.
+It proves the latter receives exactly one GET with its own Bearer auth and receives no inherited
+ordinary secret header; the ordinary server receives no request.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectReadUsesDeclaredOperationOriginAndAuth$'
+ok      polymetrics.ai/internal/connectors/engine
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok      polymetrics.ai/internal/connectors/engine
+```
+
+This standalone foundation unblocks any documented bounded `rest_read` whose provider origin or
+base path differs from its connector's ordinary API. It introduces no generic URL input: both the
+base template and auth remain operation declarations reviewed in the bundle.
+
 ## Planned GREEN foundation — named root JSON-object body
 
 The foundation will permit exact `maps_to: "body"` only for a named `json_object` flag on an
