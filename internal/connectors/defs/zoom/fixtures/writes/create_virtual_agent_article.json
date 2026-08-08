@@ -1,0 +1,34 @@
+{
+  "record": {
+    "content": "fixture Virtual Agent article content",
+    "exclude": false,
+    "title": "Fixture Virtual Agent article",
+    "category": "fixture category",
+    "external_id": "fixture-va-external-id",
+    "language": "en-US",
+    "url": "https://fixture.invalid/virtual-agent/article"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/km/kbs/fixture-va-kb/articles",
+    "body": {
+      "content": "fixture Virtual Agent article content",
+      "exclude": false,
+      "title": "Fixture Virtual Agent article",
+      "category": "fixture category",
+      "external_id": "fixture-va-external-id",
+      "language": "en-US",
+      "url": "https://fixture.invalid/virtual-agent/article"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture-va-article",
+      "kb_id": "fixture-va-kb",
+      "content": "fixture Virtual Agent article content",
+      "title": "Fixture Virtual Agent article",
+      "token": "fixture-va-response-token"
+    }
+  }
+}

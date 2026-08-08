@@ -1,0 +1,15 @@
+{
+  "status": 200,
+  "body": {
+    "sync_id": "fixture-va-sync",
+    "kb_id": "fixture-va-kb",
+    "sync_status": "COMPLETED",
+    "progress_percent": 100,
+    "error_code": null,
+    "error_message": "fixture Virtual Agent sync detail",
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T01:00:00Z",
+    "started_at": "2026-01-01T00:05:00Z",
+    "token": "fixture-va-response-token"
+  }
+}

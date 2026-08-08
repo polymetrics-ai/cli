@@ -23687,170 +23687,92 @@
     {
       "method": "GET",
       "path": "/v2/km/kbs/{kbId}/articles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get articles; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/articles; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent knowledge-bases articles list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/km/kbs/{kbId}/articles",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Create article; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/articles; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "virtual-agent knowledge-bases articles create"
       }
     },
     {
       "method": "GET",
       "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get article; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/articles/{articleId}; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent knowledge-bases articles get"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Update article; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/articles/{articleId}; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "virtual-agent knowledge-bases articles update"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Delete article; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/articles/{articleId}; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "virtual-agent knowledge-bases articles delete"
       }
     },
     {
       "method": "POST",
       "path": "/v2/km/kbs/{kbId}/sync",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Create sync request; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/sync; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "virtual-agent knowledge-bases sync create"
       }
     },
     {
       "method": "GET",
       "path": "/v2/km/kbs/{kbId}/sync/{syncId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get sync; provider_server=https://api.zoom.us/v2; provider_path=/km/kbs/{kbId}/sync/{syncId}; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent knowledge-bases sync get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/engagements",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA engagements; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/engagements; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports engagements list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/engagements/query_details",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA query details; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/engagements/query_details; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports engagements query-details list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/engagements/variables",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA variable details; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/engagements/variables; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports engagements variable-details list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/surveys",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA Surveys; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/surveys; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports surveys list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/virtual_agent/report/transcripts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=Get ZVA transcripts; provider_server=https://api.zoom.us/v2; provider_path=/virtual_agent/report/transcripts; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports transcripts list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/ai_studio/reports/operation_logs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
-        "notes": "classification=implementable_now; provider_module=virtual-agent; operation_title=List AI Management operation logs; provider_server=https://api.zoom.us/v2; provider_path=/ai_studio/reports/operation_logs; artifact=https://developers.zoom.us/docs/api/virtual-agent.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "virtual-agent reports operation-logs list"
       }
     },
     {

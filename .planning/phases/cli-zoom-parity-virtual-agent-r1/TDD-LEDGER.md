@@ -50,6 +50,36 @@ FAIL
 
 This is the committed red state. Connector declaration work begins only after it is pushed.
 
-## GREEN connector — pending
+## GREEN connector
 
-## Verification/review — pending
+The Virtual Agent contract is now declared without a new engine foundation:
+
+- nine `rest_read` actions and four `rest_write` actions bind exactly one published method/path each;
+- article create/update expose all and only the documented typed request fields (`content`, `exclude`,
+  `title`, plus optional `category`, `external_id`, `language`, and `url`);
+- create-sync has no request body; article delete retains destructive typed confirmation and the
+  documented `204 No Content` status-only result;
+- all response-bearing actions use redacted output and declared provider-sensitive fields;
+- `surface-sync` generated `api_surface` / output-policy metadata, then `surface-reconcile` changed
+  exactly the thirteen `provider_module=virtual-agent` rows to executable coverage.
+
+The original RED command is now green after the declarations and reconciliation:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...
+ok      polymetrics.ai/internal/connectors/defs/zoom
+```
+
+Focused fixture lifecycle proof also passes:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... -run '^TestVirtualAgent'
+ok      polymetrics.ai/internal/connectors/defs/zoom
+```
+
+## Verification/review
+
+No reusable foundation was needed: the normal Zoom `/v2` bearer transport, ordinary typed
+path/body mappings, status-only executor, and redacting output policy cover every published
+contract. The manually reviewed diff found no raw transport or body escape hatch, no hand-authored
+paging input, no uncovered artifact endpoint, and no unscoped endpoint-ledger change.

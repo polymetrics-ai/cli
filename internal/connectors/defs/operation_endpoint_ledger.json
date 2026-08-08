@@ -12450,6 +12450,12 @@
     },
     {
       "method": "GET",
+      "path": "/v2/ai_studio/reports/operation_logs",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/v2/aic/users/{userId}/conversation_archive",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -12487,6 +12493,24 @@
     {
       "method": "GET",
       "path": "/v2/cobrowsesdk/sessions/{sessionId}/users",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/km/kbs/{kbId}/articles",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/km/kbs/{kbId}/sync/{syncId}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -12547,6 +12571,36 @@
     {
       "method": "GET",
       "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/engagements",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/engagements/query_details",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/engagements/variables",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/surveys",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/virtual_agent/report/transcripts",
       "kind": "rest_read",
       "max_bytes": 1048576
     }

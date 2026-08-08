@@ -1,0 +1,22 @@
+{
+  "status": 200,
+  "body": {
+    "operation_logs": [
+      {
+        "account_id": "fixture-va-account",
+        "action": "fixture action",
+        "action_filter_key": "fixture action filter",
+        "ai_studio_operation_id": "fixture-va-operation-log",
+        "business_id": "fixture-va-business",
+        "category_filter_key": "fixture category filter",
+        "detail": "fixture operation detail",
+        "operator_id": "fixture-va-operator",
+        "operator_info": "fixture operator info",
+        "resource_id": "fixture-va-resource",
+        "subaction": "fixture subaction"
+      }
+    ],
+    "next_page_token": "fixture-va-page-token",
+    "token": "fixture-va-response-token"
+  }
+}
