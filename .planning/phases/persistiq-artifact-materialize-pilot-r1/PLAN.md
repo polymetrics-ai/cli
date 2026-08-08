@@ -128,10 +128,10 @@ and in the final report.
 
 ## CLI parity checklist
 
-- [ ] `pm persistiq` bare namespace: contextual help and exit 0.
-- [ ] Every generated `pm persistiq <command> --help` reaches the command
+- [x] `pm persistiq` bare namespace: contextual help and exit 0.
+- [x] Every generated `pm persistiq <command> --help` reaches the command
   parser without credentials/network.
-- [ ] `pm help <topic>` and docs/website generation are not applicable unless
+- [x] `pm help <topic>` and docs/website generation are not applicable unless
   the materializer adds a new command surface; record the result explicitly.
-- [ ] `surface-sync --check` is clean and generated flag metadata is derived,
+- [x] `surface-sync --check` is clean and generated flag metadata is derived,
   not hand-authored.

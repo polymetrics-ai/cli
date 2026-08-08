@@ -1,19 +1,19 @@
 # PersistIQ artifact materialization pilot - summary
 
 **Date:** 2026-08-08
-**Status:** failed closed at materialization; pilot complete, no second connector started
+**Status:** passed static gates under captain complete-inventory policy; no second connector started
 
 ## Executive result
 
-The one-connector pilot fetched and independently parsed PersistIQ's public
-OpenAPI document, but the existing batch materializer refused to produce a
-bundle. It found executable legacy coverage for `GET /v1/mailboxes` that is not
-present in the cited 21-operation artifact. The current source bundle also
-contains `GET /v1/activities` and `GET /v1/accounts`, which are absent from the
-artifact. Those legacy streams were not silently deleted or rewritten.
+The captain-policy rerun mapped all 21 documented PersistIQ operations into a
+materialized bundle. It kept all three existing source-surface operations that
+the fetched artifact does not document and marked each with the exact reason
+`present-in-surface-absent-from-artifact`. Three documented operations remain
+visible as `not_implemented` commands with machine-checkable named
+dependencies; none is falsely marked implemented.
 
-This is a failed pilot, not a certification. No PersistIQ credential was read,
-requested, printed, or used; no provider API operation was exercised.
+No credential was read, requested, printed, or used. No provider operation was
+exercised. Certification is withheld.
 
 ## Exact operation map
 
@@ -27,10 +27,10 @@ requested, printed, or used; no provider API operation was exercised.
 | Unclassified | 0 |
 | **Total** | **21** |
 
-The map reconciles with the fetched artifact's 12 GET, 6 POST, 1 PATCH, 1
-PUT, and 1 DELETE operations. `GET /v1/leads/{id}` is the blocked direct-read
-candidate; `POST /v1/leads` and `PUT /v1/webhook_plugin` are direct-write
-candidates; the seven record-shaped mutations are reverse ETL.
+The complete method/path classification is in
+[`operation-mapping.json`](rerun-2026-08-08/operation-mapping.json). The map
+reconciled with the fetched artifact's 12 GET, 6 POST, 1 PATCH, 1 PUT, and 1
+DELETE operations.
 
 ## Artifact evidence
 
@@ -42,60 +42,74 @@ candidates; the seven record-shaped mutations are reverse ETL.
 - SHA-256: `0bf3e1ecbfbf6215360b5bb8f9d4fda816df4e1872470a00b529fb3e8b80946f`
 - Fetched: 1; parsed: 1
 
-The artifact and its metadata are in `ARTIFACT-MANIFEST.json` and
-`artifacts/persistiq.json`.
+The fresh artifact evidence is in
+[`artifact-evidence.txt`](rerun-2026-08-08/artifact-evidence.txt) and
+[`persistiq.json`](rerun-2026-08-08/artifacts/persistiq.json).
+
+## Materialization result
+
+| Measure | Count |
+|---|---:|
+| Artifact operations mapped | 21 |
+| Materialized API-surface rows | 24 |
+| Implemented commands | 21 |
+| Named-dependency commands | 3 |
+| Flagged discrepancies | 3 |
+| Reachable command help paths | 24/24 |
+| Implemented commands reachable | 21/21 |
+| Not-implemented commands visibly blocked before network | 3/3 |
+| Failed connector candidates | 0 |
+
+Named dependencies:
+
+- `GET /v1/leads/{id}` → `engine.direct_read_executor`
+- `POST /v1/leads` → `engine.rest_write_body_envelope`
+- `PUT /v1/webhook_plugin` → `review.webhook_url_mutation`
+
+Exact flagged discrepancies:
+
+- `GET /v1/mailboxes`
+- `GET /v1/activities`
+- `GET /v1/accounts`
+
+## Static and runtime-preflight gates
+
+- `connectorgen validate`: pass, 0 findings.
+- `surface-sync --check`: pass, no drift.
+- `connectorgen batch gate`: pass, 1 included / 0 dropped; 21 implemented
+  commands passed the real runtime preflight.
+- `TestEveryImplementedCommandPassesRuntimePreflight`: pass.
+- Real built `pm` binary: all 24 generated help paths reachable; the three
+  named-dependency commands returned an intentional
+  `availability=not_implemented` block and never reached credentials/network.
+
+The generated bundle and gate reports are under
+[`rerun-2026-08-08`](rerun-2026-08-08/).
 
 ## Timed wall-clock results
 
 | Step | Wall-clock | Evidence |
 |---|---:|---|
-| 1. Identify ledger link | 0.02s | ledger URL lookup |
-| 2. Map 21 operations | 0.04s | five-bucket mapping |
-| 3. Fetch, digest, parse | 2.75s | one bounded fetch + OpenAPI parse |
-| 4. Materialize and static gates | 16.92s | plan 4.87s; materialize 2.43s; validate 1.70s; surface-sync 0.86s; batch gate 0.73s; repository runtime-preflight test 6.33s |
-| 5. Report | 0.01s | local evidence collation |
-| **Total** | **19.74s** | sum of timed slices |
+| 1. Identify ledger link | 0.03s | `timing-step1.txt` |
+| 2. Map 21 operations | 0.03s | `timing-step2.txt` |
+| 3. Fetch, digest, parse | 2.70s | `timing-step3.txt` |
+| 4. Materialize, static gates, binary reachability | 50.07s | materialize/gates 13.60s; bare namespace/build/reachability/block checks 36.47s |
+| 5. Report collation | 0.09s | `timing-step5-report.txt` |
+| **Total** | **52.92s** | sum of timed slices |
 
-## Real counts and gates
-
-| Measure | Result |
-|---|---:|
-| Fetched | 1 |
-| Parsed | 1 |
-| Materialized | 0 |
-| Gated | 0 |
-| Reachable generated commands | 0 |
-| Failed connector candidates | 1 |
-
-Baseline Red was observed against the real binary: `error: unknown command
-"persistiq"`. No generated binary sweep was possible because no destination
-bundle was written. The repository-wide runtime-preflight test passed for the
-existing embedded definitions, but that is not evidence that a generated
-PersistIQ command is reachable.
-
-## Gate disposition
-
-- `connectorgen batch plan`: pass, one PersistIQ candidate / 21 surveyed ops.
-- `connectorgen batch materialize`: **fail closed** at coverage on
-  `GET /v1/mailboxes`.
-- `connectorgen validate`: source-only pass with 0 findings; generated pilot
-  candidate did not exist.
-- `surface-sync --check`: source-only failure, `runtime endpoint ledger
-  drift=true`.
-- `connectorgen batch gate`: source-only failure, legacy v0 provenance refusal.
-- `TestEveryImplementedCommandPassesRuntimePreflight`: repository test pass;
-  not generated PersistIQ evidence.
-- Real `pm` reachability: baseline failed; generated commands 0/0 because
-  materialization failed.
+Materialization no longer runs the repository-wide preflight per candidate.
+The batch design now fetches separately, materializes separately, and gates
+once over the staged result; review-sized batch boundaries remain available
+for commits and targeted diagnosis.
 
 ## Certification statement
 
-Certification is **WITHHELD**. This pilot is implemented only through fetched
-artifact evidence and attempted static tooling; it is **not certified** and was
-**never exercised against the PersistIQ provider**.
+Certification is **WITHHELD**. The connector is implemented according to the
+static evidence above, **not certified**, and was **never exercised against the
+PersistIQ provider**.
 
 ## Handoff / go-no-go input
 
-The captain must decide how to reconcile existing undocumented-but-supported
-legacy streams with the strict artifact coverage requirement before any bulk
-run. This pilot did not choose, delete, or invent that reconciliation.
+PersistIQ is the only connector attempted in this pilot. The eligible 392
+pool remains untouched in this phase evidence; the captain's batch-efficiency
+ruling is recorded for the next authorized phase.

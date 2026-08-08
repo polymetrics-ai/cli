@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v1/users", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        { "id": "user_fixture_1", "name": "Fixture User", "email": "fixtureuser@example.com", "status": "active" }
+      ]
+    }
+  }
+}

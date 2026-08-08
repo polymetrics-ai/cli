@@ -1,54 +1,70 @@
 # PersistIQ artifact materialization pilot - verification
 
-**Status:** failed at materialization coverage; no generated bundle was installed
+**Status:** passed static gates under the captain complete-inventory policy;
+certification withheld
 
 ## Timings
 
 | Step | Result | Wall-clock |
 |---|---|---:|
-| 1. Identify ledger link | pass | 0.02s |
-| 2. Map 21 operations | pass | 0.04s |
-| 3. Fetch, digest, parse | pass | 2.75s |
-| 4. Materialize and static gates | failed closed at coverage | 16.92s |
-| 5. Binary reachability/report | report completed; generated sweep not applicable | 0.01s |
-| Total | failed pilot | 19.74s |
+| 1. Identify ledger link | pass | 0.03s |
+| 2. Map all 21 operations | pass | 0.03s |
+| 3. Fetch, digest, parse OpenAPI 3.0.1 | pass | 2.70s |
+| 4. Materialize + static gates + real binary reachability | pass | 50.07s |
+| 5. Report collation | pass | 0.09s |
+| **Total** | **pilot pass** | **52.92s** |
+
+Step 4 sub-timings: batch plan 3.73s, materialize 1.46s, validate 0.90s,
+surface-sync derivation 1.48s, `surface-sync --check` 0.78s, batch gate 0.71s,
+repository runtime-preflight test 4.54s, binary build 1.68s, 24-command help
+sweep 28.73s, bare namespace 2.37s, and three intentional blocked-command
+checks 3.69s.
 
 ## Static gates
 
 | Gate | Result |
 |---|---|
-| `connectorgen validate` | source-only pass: 0 findings; no generated candidate |
-| `surface-sync --check` | fail: source runtime endpoint ledger drift=true |
-| `TestEveryImplementedCommandPassesRuntimePreflight` | repository test pass; not generated PersistIQ evidence |
-| `connectorgen batch gate` | fail: source legacy v0 provenance refusal |
-| Real `pm` command reachability | baseline fail: `unknown command "persistiq"`; generated sweep 0 |
+| `connectorgen validate` | pass: 0 findings |
+| `surface-sync --check` | pass: no drift |
+| `connectorgen batch gate` | pass: 1 included, 0 dropped; 21 runtime-preflight commands |
+| `TestEveryImplementedCommandPassesRuntimePreflight` | pass |
+| Real `pm` command reachability | pass: 24/24 help paths; 21/21 implemented |
+| Not-implemented execution safety | pass: 3/3 blocked before credentials/network, no unknown commands |
 
 ## Counts
 
 | Measure | Count |
 |---|---:|
-| Ledger operations | 21 |
+| Mapped artifact operations | 21 |
 | Fetched | 1 |
 | Parsed as OpenAPI 3/Swagger 2 | 1 |
-| Materialized | 0 |
-| Gated | 0 |
-| Reachable | 0 |
-| Failed | 1 connector candidate |
+| Materialized candidates | 1 |
+| Gated candidates | 1 |
+| Implemented commands | 21 |
+| Named-dependency commands | 3 |
+| Flagged discrepancies | 3 |
+| Reachable command paths | 24 |
+| Failed candidates | 0 |
+
+## Policy assertions
+
+- Every artifact operation appears in the 24-row generated API surface.
+- `GET /v1/mailboxes`, `GET /v1/activities`, and `GET /v1/accounts` remain
+  present and each carries
+  `discrepancy=present-in-surface-absent-from-artifact`.
+- `GET /v1/leads/{id}`, `POST /v1/leads`, and `PUT /v1/webhook_plugin` are
+  visible as `not_implemented` commands with `named_dependency=<slug>` notes.
+- No command with an unavailable executor is marked `implemented`.
+- Materialization does not run the repository-wide preflight per candidate;
+  the final gate runs once over the staged result.
 
 ## Certification
 
-Certification is withheld. The pilot is never exercised against PersistIQ with
-credentials or provider data.
+Certification is withheld. PersistIQ was never exercised against its provider;
+no credentials or provider data were used.
 
-## Failure evidence
+## Evidence
 
-`connectorgen batch materialize` returned exit 1 and wrote a drop report with:
-
-```text
-executable coverage GET /v1/mailboxes is absent from the cited artifact
-```
-
-The existing source bundle also has two further executable legacy streams absent
-from the fetched artifact (`GET /v1/activities` and `GET /v1/accounts`). The
-materializer stopped at the first coverage mismatch. No source bundle was
-rewritten and no gate was weakened.
+The fresh artifact, exact operation map, generated bundle, timings, reports,
+and binary sweep outputs are under
+`.planning/phases/persistiq-artifact-materialize-pilot-r1/rerun-2026-08-08/`.

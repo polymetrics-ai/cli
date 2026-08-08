@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/rerun-2026-08-08/manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "persistiq",
+      "commands_checked": 21,
+      "declared_operations": 24,
+      "operation_split": {
+        "executable": 21,
+        "provider_blocked": 0,
+        "excluded": 3
+      },
+      "warnings": []
+    }
+  ],
+  "dropped": [],
+  "provenance_refusals": 0,
+  "surveyed_operations": {
+    "total": 21,
+    "read": 12,
+    "write": 9
+  },
+  "declared_operations": 24,
+  "operation_split": {
+    "executable": 21,
+    "provider_blocked": 0,
+    "excluded": 3
+  }
+}
