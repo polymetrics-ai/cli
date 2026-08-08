@@ -1565,15 +1565,21 @@ func TestGen_NativesetWritesEmptyImportListWhenNoNativePackages(t *testing.T) {
 	}
 }
 
-func TestGen_NativesetImportsEveryNativePackageExceptNativeset(t *testing.T) {
+func TestGen_NativesetImportsRuntimePackagesAndExcludesSupportLibraries(t *testing.T) {
 	nativeRoot := t.TempDir()
-	for _, name := range []string{"nativeset", "postgres"} {
+	for _, name := range []string{"nativeset", "postgres", "dbtest", "sqltls"} {
 		if err := os.MkdirAll(filepath.Join(nativeRoot, name), 0o755); err != nil {
 			t.Fatalf("mkdir %s: %v", name, err)
 		}
 	}
 	if err := os.WriteFile(filepath.Join(nativeRoot, "postgres", "connector.go"), []byte("package postgres\n"), 0o644); err != nil {
 		t.Fatalf("write postgres/connector.go: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(nativeRoot, "dbtest", "harness.go"), []byte("package dbtest\n"), 0o644); err != nil {
+		t.Fatalf("write dbtest/harness.go: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(nativeRoot, "sqltls", "sqltls.go"), []byte("package sqltls\n"), 0o644); err != nil {
+		t.Fatalf("write sqltls/sqltls.go: %v", err)
 	}
 
 	if err := genNativeset(nativeRoot); err != nil {
@@ -1586,6 +1592,11 @@ func TestGen_NativesetImportsEveryNativePackageExceptNativeset(t *testing.T) {
 	}
 	if !strings.Contains(string(raw), `_ "polymetrics.ai/internal/connectors/native/postgres"`) {
 		t.Fatalf("nativeset_gen.go missing blank import for postgres: %s", raw)
+	}
+	for _, supportPackage := range []string{"dbtest", "sqltls"} {
+		if strings.Contains(string(raw), "/native/"+supportPackage+`"`) {
+			t.Fatalf("nativeset_gen.go must not import support package %q: %s", supportPackage, raw)
+		}
 	}
 }
 

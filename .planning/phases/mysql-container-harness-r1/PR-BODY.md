@@ -23,6 +23,9 @@ in `.planning/phases/mysql-container-harness-r1/`.
 - Added one shared SQL TLS option shape: `sslmode`, `sslrootcert`, `sslservername`.
   MySQL applies it to normal and replication clients. PostgreSQL now enforces the same shape through
   its pool constructor for Check, Catalog, and Read.
+- Recovered the prior pipeline review fix in generator source: production native wiring excludes
+  the `dbtest` harness and shared `sqltls` library, then regenerates `nativeset_gen.go`. A
+  red/green generator test retains the boundary.
 - Regenerated derived catalog and website artifacts from current source; `connectorgen surface-sync`
   is clean. The docs generator also refreshed a stale current-main warehouse catalog description.
 
@@ -92,6 +95,7 @@ go test -count=1 -timeout 20m \
   ./internal/connectors/engine \
   ./internal/connectors/commandrunner
 go test -count=1 -timeout 20m ./internal/cli
+go test -count=1 -timeout 20m ./cmd/connectorgen
 go vet ./...
 go build ./cmd/pm
 make tidy-check docs-check-no-build smoke-no-build lint agent-contract-check \
@@ -108,7 +112,9 @@ regeneration.
 
 - **Red → Green:** initial harness/binlog tests failed before implementation; focused tests passed
   after implementation. After rebase, PostgreSQL definition validation rejected canonical TLS mode
-  `disabled`; the added definition/pool tests passed after the shared TLS fix.
+  `disabled`; the added definition/pool tests passed after the shared TLS fix. During recovery of
+  the old pipeline custody, generator tests first proved `dbtest`/`sqltls` support libraries were
+  incorrectly wired into production, then passed after source-driven regeneration.
 - **Lifecycle:** resolved and executed inline prompts for `discuss-phase`, `plan-phase --tdd`,
   `execute-phase`, `verify-work`, and `code-review`; `go run ./cmd/agentcontractgen check` passed.
   The delivery contract forbids spawning the unavailable compatible GSD role, so the fallback and

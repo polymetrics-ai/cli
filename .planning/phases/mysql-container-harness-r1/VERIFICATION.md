@@ -12,6 +12,8 @@ correct.
 - [x] `go test -count=1 -timeout 20m ./internal/connectors/native/dbtest ./internal/connectors/native/mysql ./internal/connectors/native/postgres ./internal/connectors/native/sqltls ./internal/connectors/defs ./internal/connectors/engine ./internal/connectors/commandrunner`
 - [x] `go test -count=1 -timeout 20m ./internal/cli` — including the existing golden transcript
       coverage; no blind transcript regeneration was performed.
+- [x] `go test -count=1 -timeout 20m ./cmd/connectorgen` — including
+      `TestGen_NativesetImportsRuntimePackagesAndExcludesSupportLibraries` after regeneration.
 - [x] `go vet ./...`
 - [x] `go build ./cmd/pm`
 - [x] `make tidy-check`, `make docs-check-no-build`, `make smoke-no-build`, `make lint`,
@@ -53,6 +55,10 @@ POLYMETRICS_DATABASE_INTEGRATION=1 \
       and Read. `TestDefinitionAcceptsSharedTransportSecurityVocabulary` and
       `TestPostgresPoolConfigUsesSharedTransportSecurityOptions` pass. No PostgreSQL write-path
       source was edited.
+- [x] Recovered the old pipeline's native-wiring review finding without discarding its custody
+      history: `dbtest` and shared `sqltls` are support libraries, not production connector
+      registrations. The generator's source and test were updated, then `connectorgen gen`
+      regenerated `nativeset_gen.go`; the focused generator test passed.
 
 ### Dependency approval evidence
 

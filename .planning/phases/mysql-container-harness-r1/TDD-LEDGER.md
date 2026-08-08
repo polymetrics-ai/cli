@@ -15,6 +15,7 @@
 | M5 | #3902 direct-read boundary | A database ETL reader is mistaken for a pagewise HTTP direct-read command and omits page context. | `TestReadIsETLNotPagewiseDirectRead` proves MySQL exposes neither `DirectReader` nor `OperationDirectReader`; the SQL `Read` drains its bounded pages to ETL rather than returning an exploratory page. |
 | T1 | TLS is enforced, not declared | A strict TLS mode can quietly downgrade or be ignored by replication. | TLS-less server tests make strict modes refuse; certificate tests prove verification; live checks use the server's own `Ssl_cipher`; the binlog syncer receives the same TLS config. |
 | T2 | SQL option shape does not drift | MySQL and PostgreSQL expose incompatible TLS field names or validation. | `sqltls` centralizes the vocabulary. PostgreSQL's definition accepts the runtime vocabulary and `TestPostgresPoolConfigUsesSharedTransportSecurityOptions` proves CA/server-name application and no strict plaintext fallback. |
+| G1 | Production native wiring contains only connectors | A test harness or shared helper is blank-imported solely because it sits below `native/`. | `TestGen_NativesetImportsRuntimePackagesAndExcludesSupportLibraries` fails for `dbtest`/`sqltls`; `nativeSupportPackages` and regenerated wiring exclude both while retaining real connector packages. |
 
 ## Red / Green execution evidence
 
@@ -42,3 +43,17 @@ PostgreSQL schema rejected `disabled` even though `resolveConfig` accepted it.
 **Green — post-rebase TLS reconciliation:** the same package passed after adding the shared schema
 keys, `poolConfig`, and unified `openPool` usage; MySQL, PostgreSQL, and `sqltls` focused tests then
 passed together.
+
+**Red — pipeline-custody recovery:**
+
+```text
+go test -count=1 -timeout 20m ./cmd/connectorgen \
+  -run '^TestGen_NativesetImportsRuntimePackagesAndExcludesSupportLibraries$'
+```
+
+The generator initially blank-imported the test-only `dbtest` directory; after that was excluded,
+the same red test exposed the shared `sqltls` library. Neither package is a connector registration
+unit.
+
+**Green — pipeline-custody recovery:** `nativeSupportPackages` excludes both support libraries,
+`go run ./cmd/connectorgen gen` regenerated `nativeset_gen.go`, and the focused test passed.

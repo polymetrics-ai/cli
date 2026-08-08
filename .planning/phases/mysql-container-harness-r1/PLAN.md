@@ -44,7 +44,12 @@ bounded parallelism is explicit opt-in only.
 3. **Green boundary proof:** `TestReadIsETLNotPagewiseDirectRead` proves #3902 page context is not
    being silently bypassed: MySQL has no direct-read surface; its ETL reader drains its own complete
    SQL pages and the live test proves more than one query page.
-4. Run generated-surface regeneration, focused tests, CLI tests, vet/build, individual verify gates,
+4. **Red:** pipeline-custody recovery found `connectorgen gen` blank-imported `dbtest` and the
+   shared `sqltls` library into the production native set. **Green:**
+   `TestGen_NativesetImportsRuntimePackagesAndExcludesSupportLibraries` now distinguishes runtime
+   connector packages from support libraries, and the generated native set is regenerated from that
+   source of truth.
+5. Run generated-surface regeneration, focused tests, CLI tests, vet/build, individual verify gates,
    a live Podman proof with host reclaim, and an inline review. Record exact commands/results in
    `VERIFICATION.md` and PR-ready facts in `PR-BODY.md`.
 

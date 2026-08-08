@@ -42,6 +42,9 @@ path.
 - The captain's shared SQL TLS ruling still required a narrow PostgreSQL adjustment. PostgreSQL now
   resolves the same `sslmode` / `sslrootcert` / `sslservername` options and routes Check, Catalog,
   and Read through one pool constructor. This touches no PostgreSQL write path.
+- Recovery of the prior pipeline head found a generated production-native wiring issue. `dbtest`
+  and shared `sqltls` are support libraries under `native/`, not registrations; the generator now
+  excludes them by source policy and regenerates the native set, with red/green test coverage.
 
 ## Inline GSD fallback
 
