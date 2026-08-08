@@ -8,6 +8,21 @@
     "reason": "Pilot is not represented in ROADMAP.md and the available Codex runtime cannot provide the interactive Pi workers.",
     "resolved_commands": ["discuss-phase", "plan-phase --tdd", "execute-phase", "verify-work", "code-review"]
   },
+  "lifecycle": {
+    "discuss_phase": "manual evidence recorded in DISCUSSION-LOG.md",
+    "plan_phase": "manual TDD plan recorded in PLAN.md",
+    "execute_phase": "inline manual execution completed",
+    "verify_work": "manual verification recorded in VERIFICATION.md; pilot failed closed",
+    "code_review": "manual review recorded in CODE-REVIEW.md; no scoped findings",
+    "post_execution_checks": [
+      "go test -timeout 20m ./cmd/connectorgen",
+      "go vet ./cmd/connectorgen",
+      "go build ./cmd/pm",
+      "go run ./cmd/agentcontractgen check",
+      "jq JSON parse checks",
+      "git diff --check"
+    ]
+  },
   "scope": {
     "eligible_pool": 392,
     "pilot_only": true,
