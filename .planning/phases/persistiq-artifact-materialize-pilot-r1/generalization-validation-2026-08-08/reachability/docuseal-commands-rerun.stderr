@@ -1,0 +1,1410 @@
+NAME
+  pm docuseal api webhook submissioncompletedwebhook-post - Documented WEBHOOK submissionCompletedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook submissioncompletedwebhook-post [flags]
+  pm docuseal api webhook submissioncompletedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK submissionCompletedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.submissioncompletedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api get submissions id - Documented GET /submissions/{id} (not implemented)
+
+SYNOPSIS
+  pm docuseal api get submissions id [flags]
+  pm docuseal api get submissions id --help
+
+DESCRIPTION
+  Documented GET /submissions/{id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.get.submissions-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm docuseal api webhook submissioncreatedwebhook-post - Documented WEBHOOK submissionCreatedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook submissioncreatedwebhook-post [flags]
+  pm docuseal api webhook submissioncreatedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK submissionCreatedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.submissioncreatedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api get submissions id documents - Documented GET /submissions/{id}/documents (not implemented)
+
+SYNOPSIS
+  pm docuseal api get submissions id documents [flags]
+  pm docuseal api get submissions id documents --help
+
+DESCRIPTION
+  Documented GET /submissions/{id}/documents (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.get.submissions-id-documents
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm docuseal api webhook submissionexpiredwebhook-post - Documented WEBHOOK submissionExpiredWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook submissionexpiredwebhook-post [flags]
+  pm docuseal api webhook submissionexpiredwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK submissionExpiredWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.submissionexpiredwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api get submitters id - Documented GET /submitters/{id} (not implemented)
+
+SYNOPSIS
+  pm docuseal api get submitters id [flags]
+  pm docuseal api get submitters id --help
+
+DESCRIPTION
+  Documented GET /submitters/{id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.get.submitters-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm docuseal api webhook templatearchivedwebhook-post - Documented WEBHOOK templateArchivedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook templatearchivedwebhook-post [flags]
+  pm docuseal api webhook templatearchivedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK templateArchivedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.templatearchivedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api post submissions docx - Documented POST /submissions/docx (not implemented)
+
+SYNOPSIS
+  pm docuseal api post submissions docx [flags]
+  pm docuseal api post submissions docx --help
+
+DESCRIPTION
+  Documented POST /submissions/docx (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.post.submissions-docx
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook templatecreatedwebhook-post - Documented WEBHOOK templateCreatedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook templatecreatedwebhook-post [flags]
+  pm docuseal api webhook templatecreatedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK templateCreatedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.templatecreatedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api post submissions emails - Documented POST /submissions/emails (not implemented)
+
+SYNOPSIS
+  pm docuseal api post submissions emails [flags]
+  pm docuseal api post submissions emails --help
+
+DESCRIPTION
+  Documented POST /submissions/emails (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.post.submissions-emails
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook templateupdatedwebhook-post - Documented WEBHOOK templateUpdatedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook templateupdatedwebhook-post [flags]
+  pm docuseal api webhook templateupdatedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK templateUpdatedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.templateupdatedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api post submissions html - Documented POST /submissions/html (not implemented)
+
+SYNOPSIS
+  pm docuseal api post submissions html [flags]
+  pm docuseal api post submissions html --help
+
+DESCRIPTION
+  Documented POST /submissions/html (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.post.submissions-html
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal archive submission apply - Plan and execute the archive submission reverse-ETL action
+
+SYNOPSIS
+  pm docuseal archive submission apply [flags]
+  pm docuseal archive submission apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the archive submission reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  archive_submission
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; archives a live DocuSeal submission (soft-delete, still recoverable via the DocuSeal UI); approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id
+NAME
+  pm docuseal api post submissions pdf - Documented POST /submissions/pdf (not implemented)
+
+SYNOPSIS
+  pm docuseal api post submissions pdf [flags]
+  pm docuseal api post submissions pdf --help
+
+DESCRIPTION
+  Documented POST /submissions/pdf (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.post.submissions-pdf
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal archive template apply - Plan and execute the archive template reverse-ETL action
+
+SYNOPSIS
+  pm docuseal archive template apply [flags]
+  pm docuseal archive template apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the archive template reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  archive_template
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; archives a live DocuSeal template (soft-delete, recoverable by unarchiving via update_template); approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id
+NAME
+  pm docuseal api post templates docx - Documented POST /templates/docx (not implemented)
+
+SYNOPSIS
+  pm docuseal api post templates docx [flags]
+  pm docuseal api post templates docx --help
+
+DESCRIPTION
+  Documented POST /templates/docx (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.post.templates-docx
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal clone template apply - Plan and execute the clone template reverse-ETL action
+
+SYNOPSIS
+  pm docuseal clone template apply [flags]
+  pm docuseal clone template apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the clone template reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  clone_template
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; creates a new live DocuSeal template by cloning an existing one; approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id
+NAME
+  pm docuseal api post templates html - Documented POST /templates/html (not implemented)
+
+SYNOPSIS
+  pm docuseal api post templates html [flags]
+  pm docuseal api post templates html --help
+
+DESCRIPTION
+  Documented POST /templates/html (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.post.templates-html
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal create submission apply - Plan and execute the create submission reverse-ETL action
+
+SYNOPSIS
+  pm docuseal create submission apply [flags]
+  pm docuseal create submission apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the create submission reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  not_implemented
+
+WRITE
+  create_submission
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; dispatches a live signature-request email/SMS to every listed submitter unless send_email/send_sms are explicitly set false; approval required
+
+NOTES
+  named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api post templates merge - Documented POST /templates/merge (not implemented)
+
+SYNOPSIS
+  pm docuseal api post templates merge [flags]
+  pm docuseal api post templates merge --help
+
+DESCRIPTION
+  Documented POST /templates/merge (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.post.templates-merge
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal submissions list - Run the submissions ETL stream
+
+SYNOPSIS
+  pm docuseal submissions list [flags]
+  pm docuseal submissions list --json
+
+DESCRIPTION
+  Run the submissions ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  submissions
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api post templates pdf - Documented POST /templates/pdf (not implemented)
+
+SYNOPSIS
+  pm docuseal api post templates pdf [flags]
+  pm docuseal api post templates pdf --help
+
+DESCRIPTION
+  Documented POST /templates/pdf (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.post.templates-pdf
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal submitters list - Run the submitters ETL stream
+
+SYNOPSIS
+  pm docuseal submitters list [flags]
+  pm docuseal submitters list --json
+
+DESCRIPTION
+  Run the submitters ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  submitters
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api put submissions id - Documented PUT /submissions/{id} (not implemented)
+
+SYNOPSIS
+  pm docuseal api put submissions id [flags]
+  pm docuseal api put submissions id --help
+
+DESCRIPTION
+  Documented PUT /submissions/{id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.put.submissions-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal template detail list - Run the template detail ETL stream
+
+SYNOPSIS
+  pm docuseal template detail list [flags]
+  pm docuseal template detail list --json
+
+DESCRIPTION
+  Run the template detail ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  template_detail
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api put templates id documents - Documented PUT /templates/{id}/documents (not implemented)
+
+SYNOPSIS
+  pm docuseal api put templates id documents [flags]
+  pm docuseal api put templates id documents --help
+
+DESCRIPTION
+  Documented PUT /templates/{id}/documents (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.put.templates-id-documents
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal templates list - Run the templates ETL stream
+
+SYNOPSIS
+  pm docuseal templates list [flags]
+  pm docuseal templates list --json
+
+DESCRIPTION
+  Run the templates ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  templates
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook formcompletedwebhook-post - Documented WEBHOOK formCompletedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook formcompletedwebhook-post [flags]
+  pm docuseal api webhook formcompletedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK formCompletedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.formcompletedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal update submitter apply - Plan and execute the update submitter reverse-ETL action
+
+SYNOPSIS
+  pm docuseal update submitter apply [flags]
+  pm docuseal update submitter apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the update submitter reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  update_submitter
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; overwrites a live DocuSeal submitter's pre-filled values/contact info, can re-send signature request notifications, and can force-mark the submitter completed/auto-signed; approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id
+NAME
+  pm docuseal api webhook formdeclinedwebhook-post - Documented WEBHOOK formDeclinedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook formdeclinedwebhook-post [flags]
+  pm docuseal api webhook formdeclinedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK formDeclinedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.formdeclinedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal update template apply - Plan and execute the update template reverse-ETL action
+
+SYNOPSIS
+  pm docuseal update template apply [flags]
+  pm docuseal update template apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the update template reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  update_template
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; renames/moves/relabels a live DocuSeal template and can unarchive it; approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id
+NAME
+  pm docuseal api webhook formstartedwebhook-post - Documented WEBHOOK formStartedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook formstartedwebhook-post [flags]
+  pm docuseal api webhook formstartedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK formStartedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.formstartedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook formviewedwebhook-post - Documented WEBHOOK formViewedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook formviewedwebhook-post [flags]
+  pm docuseal api webhook formviewedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK formViewedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.formviewedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook submissionarchivedwebhook-post - Documented WEBHOOK submissionArchivedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook submissionarchivedwebhook-post [flags]
+  pm docuseal api webhook submissionarchivedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK submissionArchivedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.submissionarchivedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook submissioncompletedwebhook-post - Documented WEBHOOK submissionCompletedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook submissioncompletedwebhook-post [flags]
+  pm docuseal api webhook submissioncompletedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK submissionCompletedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.submissioncompletedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook submissioncreatedwebhook-post - Documented WEBHOOK submissionCreatedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook submissioncreatedwebhook-post [flags]
+  pm docuseal api webhook submissioncreatedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK submissionCreatedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.submissioncreatedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook submissionexpiredwebhook-post - Documented WEBHOOK submissionExpiredWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook submissionexpiredwebhook-post [flags]
+  pm docuseal api webhook submissionexpiredwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK submissionExpiredWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.submissionexpiredwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook templatearchivedwebhook-post - Documented WEBHOOK templateArchivedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook templatearchivedwebhook-post [flags]
+  pm docuseal api webhook templatearchivedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK templateArchivedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.templatearchivedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook templatecreatedwebhook-post - Documented WEBHOOK templateCreatedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook templatecreatedwebhook-post [flags]
+  pm docuseal api webhook templatecreatedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK templateCreatedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.templatecreatedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal api webhook templateupdatedwebhook-post - Documented WEBHOOK templateUpdatedWebhook#POST (not implemented)
+
+SYNOPSIS
+  pm docuseal api webhook templateupdatedwebhook-post [flags]
+  pm docuseal api webhook templateupdatedwebhook-post --help
+
+DESCRIPTION
+  Documented WEBHOOK templateUpdatedWebhook#POST (not implemented)
+
+INTENT
+  docs_only
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  docuseal.webhook.templateupdatedwebhook-post
+
+APPROVAL
+  not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal archive submission apply - Plan and execute the archive submission reverse-ETL action
+
+SYNOPSIS
+  pm docuseal archive submission apply [flags]
+  pm docuseal archive submission apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the archive submission reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  archive_submission
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; archives a live DocuSeal submission (soft-delete, still recoverable via the DocuSeal UI); approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id
+NAME
+  pm docuseal archive template apply - Plan and execute the archive template reverse-ETL action
+
+SYNOPSIS
+  pm docuseal archive template apply [flags]
+  pm docuseal archive template apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the archive template reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  archive_template
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; archives a live DocuSeal template (soft-delete, recoverable by unarchiving via update_template); approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id
+NAME
+  pm docuseal clone template apply - Plan and execute the clone template reverse-ETL action
+
+SYNOPSIS
+  pm docuseal clone template apply [flags]
+  pm docuseal clone template apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the clone template reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  clone_template
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; creates a new live DocuSeal template by cloning an existing one; approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id
+NAME
+  pm docuseal create submission apply - Plan and execute the create submission reverse-ETL action
+
+SYNOPSIS
+  pm docuseal create submission apply [flags]
+  pm docuseal create submission apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the create submission reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  not_implemented
+
+WRITE
+  create_submission
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; dispatches a live signature-request email/SMS to every listed submitter unless send_email/send_sms are explicitly set false; approval required
+
+NOTES
+  named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal submissions list - Run the submissions ETL stream
+
+SYNOPSIS
+  pm docuseal submissions list [flags]
+  pm docuseal submissions list --json
+
+DESCRIPTION
+  Run the submissions ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  submissions
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal submitters list - Run the submitters ETL stream
+
+SYNOPSIS
+  pm docuseal submitters list [flags]
+  pm docuseal submitters list --json
+
+DESCRIPTION
+  Run the submitters ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  submitters
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal template detail list - Run the template detail ETL stream
+
+SYNOPSIS
+  pm docuseal template detail list [flags]
+  pm docuseal template detail list --json
+
+DESCRIPTION
+  Run the template detail ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  template_detail
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal templates list - Run the templates ETL stream
+
+SYNOPSIS
+  pm docuseal templates list [flags]
+  pm docuseal templates list --json
+
+DESCRIPTION
+  Run the templates ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  templates
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm docuseal update submitter apply - Plan and execute the update submitter reverse-ETL action
+
+SYNOPSIS
+  pm docuseal update submitter apply [flags]
+  pm docuseal update submitter apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the update submitter reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  update_submitter
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; overwrites a live DocuSeal submitter's pre-filled values/contact info, can re-send signature request notifications, and can force-mark the submitter completed/auto-signed; approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id
+NAME
+  pm docuseal update template apply - Plan and execute the update template reverse-ETL action
+
+SYNOPSIS
+  pm docuseal update template apply [flags]
+  pm docuseal update template apply --plan <plan-name>
+
+DESCRIPTION
+  Plan and execute the update template reverse-ETL action
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  implemented
+
+WRITE
+  update_template
+
+APPROVAL
+  requires plan, preview, approval, and execute
+
+RISK
+  external mutation; renames/moves/relabels a live DocuSeal template and can unarchive it; approval required
+
+FLAGS
+  --id (integer) required: Required id record field. maps_to=record.id

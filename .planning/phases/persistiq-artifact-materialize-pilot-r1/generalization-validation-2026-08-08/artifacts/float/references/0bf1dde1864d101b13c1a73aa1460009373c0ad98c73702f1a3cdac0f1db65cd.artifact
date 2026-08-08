@@ -1,0 +1,121 @@
+definitions:
+  TimeoffType:
+    type: "object"
+    required:
+    - "timeoff_type_name"
+    properties:
+      timeoff_type_id:
+        type: "integer"
+        example: 1
+        description: "The ID of this time off type"
+        readOnly: true
+      timeoff_type_name:
+        type: "string"
+        example: "Summer Fridays"
+        description: "The name of this time off type. Note that the name \"*\" is reserved"
+      color:
+        type: "string"
+        example: "3190cf"
+        description: "Time off type's color in hexadecimal"
+      active:
+        type: "integer"
+        example: 1
+        description: "Shows if the time off type is `1` = active or `0` = archived "
+      created_by:
+        type: "integer"
+        example: 12345
+        description: "Account ID of the person who created this record"
+        readOnly: true
+    title: "Timeoff Type"
+
+timeoff-types:
+  get:
+    tags:
+    - "Time Off Types"
+    summary: "List of time off types"
+    operationId: "getTimeoffTypes"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/active"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    responses:
+      200:
+        description: "List of time off types that can be assigned to your team"
+        schema:
+          type: "array"
+          title: "Array of time off type"
+          items:
+            $ref: "#/definitions/TimeoffType"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Time Off Types"
+    summary: "Add a new time off type, read-only fields are ignored"
+    operationId: "addTimeoffType"
+    parameters:
+    - in: "body"
+      name: "Timeoff"
+      description: "The time off type to create"
+      required: false
+      schema:
+        $ref: "#/definitions/TimeoffType"
+    responses:
+      201:
+        description: "If the time off type was successfully created, the response\
+          \ returns the full information about that time off type."
+        schema:
+          $ref: "#/definitions/TimeoffType"
+      422:
+        description: "Data validation failure if fields are missing or the time\
+          \ off type already exists.\n"
+
+timeoff-types-id:
+    get:
+      tags:
+      - "Time Off Types"
+      summary: "Retrieve a single time off type"
+      description: "Returns a single time off type."
+      operationId: "getTimeoffType"
+      parameters:
+      - name: "timeoff_type_id"
+        in: "path"
+        description: "The time off type's ID"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "A time off type"
+          schema:
+            $ref: "#/definitions/TimeoffType"
+    patch:
+      tags:
+      - "Time Off Types"
+      summary: "Update a time off type's details, read-only fields are ignored"
+      operationId: "updateTimeoffType"
+      parameters:
+      - name: "timeoff_type_id"
+        in: "path"
+        description: "The time off type's ID"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "On a successful update of a time off type, the response returns\
+            \ the full information about that time off type."
+          schema:
+            $ref: "#/definitions/TimeoffType"
+        422:
+          description: "Data validation failure if fields are missing or the time\
+            \ off type already exists.       \n"

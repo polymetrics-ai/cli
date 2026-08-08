@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "projects",
+  "type": "object",
+  "x-primary-key": ["project_id"],
+  "required": ["project_id"],
+  "properties": {
+    "project_id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "client_id": { "type": ["integer", "null"] },
+    "color": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "budget_type": { "type": ["integer", "null"] },
+    "budget_total": { "type": ["number", "null"] },
+    "default_hourly_rate": { "type": ["number", "null"] },
+    "non_billable": { "type": ["integer", "null"] },
+    "active": { "type": ["integer", "null"] },
+    "project_manager": { "type": ["integer", "null"] },
+    "created": { "type": ["string", "null"] },
+    "modified": { "type": ["string", "null"] }
+  }
+}

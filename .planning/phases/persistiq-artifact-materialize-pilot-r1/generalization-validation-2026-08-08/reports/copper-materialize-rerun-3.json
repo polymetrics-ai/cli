@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/copper-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "copper",
+      "artifact": {
+        "kind": "postman",
+        "url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-08",
+        "sha256": "6ec0df3a8fc0dff4f4dfa56dea2d0aa1e319e6f4cfdfe29d8ab670653a89a8be"
+      },
+      "artifact_operations": 77,
+      "declared_operations": 82,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 40,
+        "excluded": 37
+      },
+      "cli_commands": 82,
+      "implemented_commands": 5,
+      "named_dependency_commands": 77,
+      "flagged_discrepancies": 5,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 77
+    }
+  ],
+  "dropped": []
+}

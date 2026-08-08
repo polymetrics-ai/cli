@@ -645,6 +645,8 @@ type APISurface struct {
 type SurfaceArtifact struct {
 	ID          string `json:"id"`
 	URL         string `json:"url"`
+	Kind        string `json:"kind,omitempty"`
+	Version     string `json:"version,omitempty"`
 	RetrievedAt string `json:"retrieved_at"`
 	SHA256      string `json:"sha256,omitempty"`
 }
@@ -664,8 +666,27 @@ type SurfaceEndpoint struct {
 // ledger. It is evidence metadata only: CoveredBy remains the sole binding to
 // an executable connector surface.
 type SurfaceProvenance struct {
-	Artifact  string `json:"artifact"`
-	SourceURL string `json:"source_url"`
+	Artifact     string                         `json:"artifact"`
+	SourceURL    string                         `json:"source_url"`
+	SourceKind   string                         `json:"source_kind,omitempty"`
+	Version      string                         `json:"version,omitempty"`
+	RetrievedAt  string                         `json:"retrieved_at,omitempty"`
+	SHA256       string                         `json:"sha256,omitempty"`
+	Coordinate   string                         `json:"coordinate,omitempty"`
+	Alternatives []SurfaceProvenanceAlternative `json:"alternatives,omitempty"`
+}
+
+// SurfaceProvenanceAlternative preserves a second authoritative source that
+// states the same normalized operation differently. The primary citation stays
+// on SurfaceProvenance; alternatives keep source disagreement inspectable
+// without duplicating an api_surface row.
+type SurfaceProvenanceAlternative struct {
+	SourceURL   string `json:"source_url"`
+	SourceKind  string `json:"source_kind,omitempty"`
+	Version     string `json:"version,omitempty"`
+	RetrievedAt string `json:"retrieved_at,omitempty"`
+	SHA256      string `json:"sha256,omitempty"`
+	Coordinate  string `json:"coordinate,omitempty"`
 }
 
 // SurfaceCoverage names the executable connector surface that covers an endpoint.

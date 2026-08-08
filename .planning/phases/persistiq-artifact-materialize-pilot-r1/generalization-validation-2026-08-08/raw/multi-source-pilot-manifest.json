@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "multi-source-pilot",
+    "requested_size": 4,
+    "min_operations": 0,
+    "max_operations": 250,
+    "criteria": "four staged multi-source generalization pilots"
+  },
+  "connectors": [
+    {
+      "connector": "watchmode",
+      "operations_total": 23,
+      "operations_read": 23,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://api.watchmode.com/openapi.json",
+        "kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-06"
+      },
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "The metadata-linked Watchmode API Explorer is live and its provider-owned JavaScript loads this exact OpenAPI artifact. The contract identifies Watchmode API v1.1.7 and declares an API-key header as the recommended authentication method, with Bearer and legacy query-key alternatives. Research was limited to public documentation and the provider artifact; no Watchmode account, credential value, title, streaming source, person, region, network, genre, or other media data was accessed.",
+      "counting_note": "The live provider-published OpenAPI artifact contains 23 active HTTP operations across 23 paths. Every operation is GET; there are no deprecated operations or webhook definitions. The result is 23 data actions: 23 reads and 0 writes.",
+      "processed_at": "2026-08-06T23:00:41Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "docuseal",
+      "operations_total": 23,
+      "operations_read": 7,
+      "operations_write": 16,
+      "artifact": {
+        "url": "https://console.docuseal.com/openapi.yml",
+        "kind": "openapi",
+        "version": "DocuSeal API 1.0.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-05"
+      },
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; DocuSeal's provider-published OpenAPI YAML export",
+      "counting_note": "Counted every HTTP operation object in DocuSeal's provider-published OpenAPI artifact: seven GET, ten POST, four PUT, and two DELETE. GET actions are reads. Every non-GET action creates a submission/template, clones/merges a template, uploads/creates a document-derived object, updates, or deletes state, so is a write. The artifact has no inbound webhook event operation.",
+      "processed_at": "2026-08-05T21:24:23Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "float",
+      "operations_total": 95,
+      "operations_read": 44,
+      "operations_write": 51,
+      "artifact": {
+        "url": "https://developer.float.com/swagger-api-v3.yaml",
+        "kind": "swagger",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-06"
+      },
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Float's API Reference loading its provider-published Swagger root and direct referenced path fragments",
+      "counting_note": "Parsed the provider Swagger root and all referenced fragments: 49 path references across 23 provider-published `paths/*.yaml` files produced 95 operation objects—44 GET, 19 POST, 16 DELETE, and 16 PATCH. All non-GET summaries create, update, or delete Float data; no semantic POST read is present.",
+      "processed_at": "2026-08-06T01:35:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "copper",
+      "operations_total": 75,
+      "operations_read": 41,
+      "operations_write": 34,
+      "artifact": {
+        "url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.copper.com/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Copper's provider-published developer landing page directly links this downloadable Postman collection",
+      "counting_note": "Enumerated Copper's provider-published Postman collection. Its 83 example request items collapse to 78 unique method/URL rows after five repeat examples (including lead upsert and two repeated list/search samples). Excluded the external S3 upload request and the provider-to-customer webhook notification example, then collapsed the variable-driven custom-field search sample into the concrete resource /search actions it represents: 75 logical Copper API actions remain. They comprise 29 GET reads and 26 POST, nine PUT, and 11 DELETE actions; 12 POST search, fetch-by-email, and activity-list actions are semantic reads, yielding 41 reads / 34 writes. The named View subscription-by-ID item is retained as one documented operation despite a missing literal slash in its collection URL template.",
+      "processed_at": "2026-08-05T20:43:15Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

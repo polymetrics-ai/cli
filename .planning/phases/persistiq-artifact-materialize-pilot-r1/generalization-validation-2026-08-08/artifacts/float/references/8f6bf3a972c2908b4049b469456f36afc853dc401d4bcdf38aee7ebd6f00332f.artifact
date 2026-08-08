@@ -1,0 +1,163 @@
+definitions:
+  ReportsListPeople:
+    type: "object"
+    properties:
+      people:
+        type: "array"
+        description: "A list of report data per person"
+        items:
+          $ref: "#/definitions/ReportsPeople"
+  ReportsPeople:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Erin Riggins"
+        description: "The name of the person"
+      people_id:
+        type: "integer"
+        example: 12325
+        description: "The person id"
+      department_id:
+        type: "integer"
+        example: 23250
+        description: "The department id that this person belongs to"
+      department:
+        type: "string"
+        example: "Design"
+        description: "The name of the matching department"
+      people_type_id:
+        type: "integer"
+        example: 1
+        description: "Is this person an `1` = Employee (default), `2` = Contractor, `3` = Placeholder, `4`= Role placeholder"
+      wk_day_hrs:
+        type: object
+        description: "(Deprecated) array of working hours per day (Sun-Sat), using the effective from date YYYY-MM-DD as the field name"
+        example: {"1970-01-01": [0,8,8,4,8,8,0]}
+      capacity:
+        type: "number"
+        example: 152
+        description: "Total of all work hours, based on set availability plus any non-work days if scheduled, for this person within the duration (`timeoff` & holidays reduces capacity)"
+      timeoff:
+        type: "number"
+        example: 12
+        description: "Total of time off hours scheduled for this person within the duration"
+      scheduled:
+        type: "number"
+        example: 44
+        description: "Total of allocated hours (`billable + nonBillable`) on the schedule for this person within the duration"
+      billable:
+        type: "number"
+        example: 40
+        description: "Total of billable hours allocated on the schedule for this person within the duration"
+      nonBillable:
+        type: "number"
+        example: 14
+        description: "Total of non-billable hours allocated on the schedule for this person within the duration"
+      overtime:
+        type: "number"
+        example: 2
+        description: "Total of overtime hours allocated on the schedule for this person within the duration"
+      unscheduled:
+        type: "number"
+        example: 40
+        description: "Total of unscheduled hours (`capacity + overtime - scheduled`) for this person within the duration"
+  ReportsListProjects:
+    type: "object"
+    properties:
+      projects:
+        type: "array"
+        description: "A list of report data per project"
+        items:
+          $ref: "#/definitions/ReportsProjects"
+  ReportsProjects:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Website Design"
+        description: "The name of the project"
+      project_id:
+        type: "integer"
+        example: 12325
+        description: "The project id"
+      client_id:
+        type: "integer"
+        example: 23250
+        description: "The client id that this project belongs to"
+      scheduled:
+        type: "number"
+        example: 152
+        description: "Total of allocated hours scheduled on this project within the duration"
+      billable:
+        type: "number"
+        example: 100
+        description: "Total of billable allocated hours scheduled on this project within the duration"
+      nonBillable:
+        type: "number"
+        example: 52
+        description: "Total of non-billable allocated hours scheduled on this project within the duration"
+
+reports-people:
+  get:
+    tags:
+    - "Reports"
+    summary: "Retrieve report data for a list of people"
+    description: "Returns an array of people with aggregated data alongside person-specific attributes.
+
+                  The **start_date** and **end_date** query parameters are required to set the duration of the report, and the response can be filtered per person.  
+
+                  **Note:** Pagination is not available, and request limits are lower for report endpoints."
+    operationId: "getReportPeople"
+    parameters:
+    - name: start_date
+      in: "query"
+      description: "**Required:** Start date of the report duration in the format YYYY-MM-DD."
+      required: true
+      type: "string"
+    - name: end_date
+      in: "query"
+      description: "**Required:** End date of the report duration in the format YYYY-MM-DD."
+      required: true
+      type: "string"
+    - $ref: "../swagger-api-v3.yaml#/parameters/people_id"
+    responses:
+      200:
+        description: "A list of people reports between two dates."
+        schema:
+          $ref: '#/definitions/ReportsListPeople'
+
+      422:
+        description: "Unprocessable entity. Required query parameters are either missing or incomplete."
+
+reports-projects:
+  get:
+    tags:
+    - "Reports"
+    summary: "Retrieve report data for a list of projects"
+    description: "Returns an array of projects with aggregated data alongside project-specific attributes.
+
+                  The **start_date** and **end_date** query parameters are required to set the duration of the report, and the response can be filtered per project.
+
+                  **Note:** Pagination is not available, and request limits are lower for report endpoints."
+    operationId: "getReportProjects"
+    parameters:
+    - name: start_date
+      in: "query"
+      description: "**Required:** Start date of the report duration in the format YYYY-MM-DD."
+      required: true
+      type: "string"
+    - name: end_date
+      in: "query"
+      description: "**Required:** End date of the report duration in the format YYYY-MM-DD."
+      required: true
+      type: "string"
+    - $ref: "../swagger-api-v3.yaml#/parameters/project_id"
+    responses:
+      200:
+        description: "A list of project reports between two dates."
+        schema:
+          $ref: '#/definitions/ReportsListProjects'
+
+      422:
+        description: "Unprocessable entity. Required query parameters are either missing, incomplete or the project_id is not found"

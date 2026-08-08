@@ -55,3 +55,19 @@ documented operations plus those three discrepancy rows, for 24 surface rows.
 
 This review does not certify PersistIQ. The connector is implemented according
 to static evidence, not certified, and never exercised against its provider.
+
+## Multi-source extension review
+
+The extension was reviewed against
+`CAPTAIN-ORDER-multisource-mapping.md`: root artifacts remain authoritative,
+provider references supplement incomplete roots, traversal is bounded and
+connector-scoped, and normalized endpoint provenance preserves source
+alternatives. OpenAPI 3.1 webhooks are visible blocked operations with a named
+receiver dependency; Swagger external path-item references resolve only over
+validated HTTPS/public URLs with cycle, document, and byte bounds.
+
+The final staged generalization evidence is green for Watchmode, DocuSeal, and
+Float, with Copper as a static Postman fallback proof. The three runtime-capable
+pilots reached every generated command path; Copper's reachability is withheld
+because its existing native scaffold has no embedded command surface. No
+production connector bundle changed and no provider request was exercised.

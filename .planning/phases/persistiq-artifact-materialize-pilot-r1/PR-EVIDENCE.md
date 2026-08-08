@@ -1,135 +1,152 @@
 # Generator capability PR evidence
 
 **Date:** 2026-08-08
-**Scope:** generator policy and its PersistIQ pilot only. No eligible-392
-connector surface was fetched, generated, or changed in this branch.
+**Issue:** #3958
+**Scope:** generator policy and staged pilot evidence only. No eligible-392
+connector surface was fetched into production, generated under
+`internal/connectors/defs`, or certified.
 
-## Capability covered
+The multi-source contract applied in this update is recorded in
+`CAPTAIN-ORDER-multisource-mapping.md` and requires authoritative fallbacks,
+bounded official-source traversal, normalized per-operation provenance,
+explicit disagreements, and visible disposition gaps.
+
+## Capability delivered
 
 `connectorgen batch materialize` now:
 
-- maps every operation parsed from an OpenAPI 3.x or Swagger 2.0 artifact into
-  `api_surface.json` and the operation catalog;
-- preserves source-surface endpoints absent from that artifact with the exact
-  `discrepancy=present-in-surface-absent-from-artifact` marker;
+- accepts provider-owned OpenAPI/Swagger, OpenAPI-fragment, Postman, and
+  official-reference inputs;
+- parses every OpenAPI 3.x or Swagger 2.0 path operation, including OpenAPI
+  3.1 top-level webhooks and safe external Swagger path-item references;
+- uses the ledger's optional `provider_reference_url` as an authoritative
+  fallback when the primary artifact cannot parse or is narrower than its
+  measured ledger inventory;
+- traverses official HTML/Markdown reference indexes to linked same-provider
+  machine sources and explicit method/path pages, with 64-document and 64 MiB
+  bounds, HTTPS/public-destination checks, credential-shaped query rejection,
+  connector-scoped SHA-named caching, and resumable reads;
+- normalizes method/path operations and keeps per-operation source URL, source
+  kind, version, retrieval date, SHA-256, coordinate, and alternatives in
+  `api_surface.json` provenance; operation catalog source URLs follow the
+  operation's primary cited source;
+- merges/deduplicates sources canonically while preserving disagreements in
+  `provenance.alternatives`;
+- retains surface operations absent from a narrower artifact with the exact
+  `present-in-surface-absent-from-artifact` discrepancy marker;
 - emits `availability=not_implemented` plus a machine-checkable
-  `named_dependency=<slug>` note where the runtime cannot execute the command;
-- never labels an unavailable command `implemented`; and
-- leaves runtime preflight to the single `batch gate` over the staged result,
-  rather than running a repository-wide sweep during each materialization.
+  `named_dependency=<slug>` for every command the runtime cannot execute;
+  only runtime-preflightable commands are `implemented`; and
+- keeps repository-wide static/runtime/reachability gates in the single final
+  `batch gate` over staged results rather than paying the 551-connector sweep
+  during each materialization.
 
-The parser accepts only OpenAPI 3.x or Swagger 2.0 documents. Unsupported
-versions are rejected as non-artifacts. The strict-version regression test is
-`TestParseBatchOpenAPIArtifactRequiresOpenAPI3OrSwagger2`.
+The implementation does not use an AI or prose guess as parity evidence. HTML
+extraction accepts explicit method/path evidence and provider-linked machine
+sources only; ambiguous text remains an unknown inventory rather than an
+invented endpoint.
 
 ## Red/green evidence
 
-The captain-policy red tests and their green implementation are recorded in
-[`TDD-LEDGER.md`](TDD-LEDGER.md). The focused green run was:
+The prior red-first failures are preserved in
+[`TDD-LEDGER.md`](TDD-LEDGER.md): complete inventory and named dependency
+support failed before the policy implementation; the shape extension then
+failed to compile before webhook and external-reference seams existed. Green
+tests now include:
 
 ```text
-go test -timeout 20m ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner
+go test -timeout 20m ./cmd/connectorgen -count=1
 ok   polymetrics.ai/cmd/connectorgen
-ok   polymetrics.ai/internal/connectors/engine
-ok   polymetrics.ai/internal/connectors/commandrunner
 ```
 
-No existing production connector bundle changed. The path audit is captured in
-[`pr-evidence-2026-08-08/no-production-bundle-changes.txt`](pr-evidence-2026-08-08/no-production-bundle-changes.txt),
-and the existing bundle corpus contains zero `not_implemented` commands before
-this capability is consumed.
+Coverage includes top-level webhooks, local and external path-item refs,
+reference cycles/sibling safety, Markdown and HTML official-source traversal,
+Postman nesting/normalization/deduplication, multi-source provenance
+alternatives, text artifact-cache inputs, exact discrepancies, strict source
+version checks, and runtime named-dependency validation.
 
-## Existing-corpus regression gates
+## Existing 551-bundle regression
 
-These are one-time generator-PR checks over the unchanged embedded corpus:
+No production connector bundle changed. The unchanged embedded corpus remains
+the regression baseline:
 
 | Gate | Result | Evidence |
 |---|---|---|
-| `connectorgen validate internal/connectors/defs --json` | 551 connectors, 0 findings, 0 warnings | [`all-551-validate.json`](pr-evidence-2026-08-08/all-551-validate.json) |
-| `connectorgen surface-sync --check` | 551 scanned, 0 fields filled, 0 corrected | [`all-551-surface-sync.txt`](pr-evidence-2026-08-08/all-551-surface-sync.txt) |
-| `TestEveryImplementedCommandPassesRuntimePreflight` | pass | [`all-551-runtime-preflight.txt`](pr-evidence-2026-08-08/all-551-runtime-preflight.txt) |
-| `go vet ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner` | pass | command exit 0 |
-| `go build ./cmd/pm` | pass | command exit 0 |
-| `go run ./cmd/agentcontractgen check` | pass | canonical contract current |
+| `connectorgen validate internal/connectors/defs --json` | 551 connectors, 0 findings, 0 warnings | [`all-551-validate-rerun.json`](pr-evidence-2026-08-08/all-551-validate-rerun.json) |
+| `connectorgen surface-sync internal/connectors/defs --check` | 551 scanned, no drift | [`all-551-surface-sync-rerun.txt`](pr-evidence-2026-08-08/all-551-surface-sync-rerun.txt) |
+| `TestEveryImplementedCommandPassesRuntimePreflight` | pass | [`all-551-runtime-preflight-rerun.txt`](pr-evidence-2026-08-08/all-551-runtime-preflight-rerun.txt) |
+| Focused generator/engine/runner tests | pass | [`focused-tests-rerun.txt`](pr-evidence-2026-08-08/focused-tests-rerun.txt) |
+| `go vet` and `go build ./cmd/pm` | pass | command evidence in phase verification |
 
-The changed code adds no behavior to existing bundles: the new availability
-and discrepancy fields are absent from all existing connector definitions, and
-the all-551 gates above remain green.
+The new fields are optional and absent from the existing connector bundles;
+the existing corpus has zero `not_implemented` commands before this
+capability is consumed.
 
 ## PersistIQ pilot rerun
 
-The fresh artifact was OpenAPI 3.0.1, 47,796 bytes, SHA-256
-`0bf3e1ecbfbf6215360b5bb8f9d4fda816df4e1872470a00b529fb3e8b80946f`.
+The persisted one-connector pilot remains green under the complete-inventory
+policy:
 
 | Measure | Result |
 |---|---:|
 | Artifact operations mapped | 21 |
 | ETL / direct_read / reverse_etl / direct_write / binary_download / unclassified | 11 / 1 / 7 / 2 / 0 / 0 |
-| Implemented commands | 21 |
-| Named-dependency commands | 3 |
-| Flagged discrepancies | 3 |
-| Reachable real-binary command paths | 24/24 |
-| Implemented commands reachable | 21/21 |
+| Implemented | 21 |
+| Named dependency | 3 |
+| Flagged discrepancy | 3 |
+| Real-binary paths reachable | 24/24 |
 | Failed candidates | 0 |
 
-Wall-clock timings from the rerun:
+The artifact was OpenAPI 3.0.1, 47,796 bytes, SHA-256
+`0bf3e1ecbfbf6215360b5bb8f9d4fda816df4e1872470a00b529fb3e8b80946f`.
+`GET /v1/mailboxes`, `/v1/activities`, and `/v1/accounts` remain visible with
+the exact discrepancy reason. PersistIQ timings and operation-level evidence
+are under [`rerun-2026-08-08/`](rerun-2026-08-08/).
 
-| Step | Time |
-|---|---:|
-| Identify artifact link | 0.03s |
-| Map 21 operations | 0.03s |
-| Fetch, digest, parse | 2.70s |
-| Materialize, static gates, runtime preflight, binary reachability | 50.07s |
-| Report collation | 0.09s |
-| **Total** | **52.92s** |
+## Multi-source generalization pilots
 
-The complete operation map, artifact, generated bundle, gate reports, binary
-reachability results, and timing files are under
-[`rerun-2026-08-08/`](rerun-2026-08-08/). PersistIQ was implemented according
-to static evidence, **not certified**, and **never exercised against the
-provider**; no credentials were used.
+All generated outputs are staged evidence only. The final numbers are:
 
-## Generalization validation before merge
+| Connector | Shape | Mapped | Implemented | Named dependency | Discrepancy | Reachable | Failed |
+|---|---|---:|---:|---:|---:|---:|---:|
+| watchmode | read-only OpenAPI 3.0.3 | 23 | 13 | 32 | 22 | 45/45 | 0 |
+| docuseal | OpenAPI 3.1.0 + 11 webhooks | 34 | 9 | 25 | 0 | 34/34 | 0 |
+| float | Swagger 2.0 + external refs | 102 | 5 | 99 | 2 | 104/104 | 0 |
+| copper | Postman fallback | 77 | 5 | 77 | 5 | not applicable: legacy scaffold | 0 |
 
-At captain direction, three eligible, deliberately different shapes were
-validated as staged evidence only; no generated production connector bundle
-was added:
+Per-bucket counts and every normalized operation/provenance record are in
+[`generalization-validation-2026-08-08/`](generalization-validation-2026-08-08/):
 
-| Connector | Shape | Mapped | Implemented | Named dependency | Discrepancy | Reachable | Result |
-|---|---|---:|---:|---:|---:|---:|---|
-| watchmode | 23-read OpenAPI 3.0.3 | 23 | 13 | 32 | 22 | 45/45 | pass |
-| docuseal | 7-read/16-write OpenAPI 3.1.0 | 0 | 0 | 0 | 0 | 0 | **failed: 11 top-level webhooks rejected as artifact inventory unknown** |
-| float | 44-read/51-write Swagger 2.0 | 0 | 0 | 0 | 0 | 0 | **failed: external path-item reference not exhaustively resolvable** |
+- Watchmode: 0 ETL / 0 reverse ETL / 23 direct read / 0 direct write / 0
+  binary / 0 unclassified.
+- DocuSeal: 4 ETL / 6 reverse ETL / 3 direct read / 10 direct write / 0
+  binary / 11 unclassified webhook operations.
+- Float: 5 ETL / 0 reverse ETL / 42 direct read / 55 direct write / 0 binary /
+  0 unclassified.
+- Copper: 0 ETL / 0 reverse ETL / 29 direct read / 48 direct write / 0
+  binary / 0 unclassified.
 
-Watchmode mapped all 23 artifact operations as `direct_read` (0 ETL, 0
-reverse_etl, 0 direct_write, 0 binary_download, 0 unclassified). Its 22
-source-surface-only rows were retained with
-`present-in-surface-absent-from-artifact`, proving the discrepancy path does
-not refuse the connector. `connectorgen validate` had 0 findings,
-`surface-sync --check` had no drift, batch gate included 1/1 with 13 runtime
-preflightable commands, and the real binary reached all 45 command help
-paths (13 implemented and 32 visible not-implemented commands).
+The combined staged gate included all four, dropped none, checked 32
+implemented commands, and saw 265 declared operation rows. The three required
+real-binary sweeps reached 183/183 command paths with zero failures. Copper's
+static output is useful fallback evidence, but its current native connector
+does not expose the generated command surface, so it is not presented as a
+runtime pass.
 
-Watchmode validation timings were: identify 0.04s; fetch/digest 2.52s; map
-0.02s; batch plan 1.78s; materialize/parse 0.65s; validate 0.67s;
-surface-sync derive/check 0.68s/0.64s; batch gate 0.66s; existing-corpus
-runtime-preflight regression 5.28s; staged binary build 9.71s; bare namespace
-2.48s; 45-command reachability 54.70s; report 0.06s; total 79.89s.
+Final rerun wall-clock slices: materialize Watchmode 6.07s, DocuSeal 1.75s,
+Float 0.94s, Copper 0.99s; combined validate 1.02s, surface-sync derive
+0.89s, surface-sync check 1.05s, batch gate 1.17s; staged binary build
+12.27s; binary reachability Watchmode 105.88s, DocuSeal 79.62s, Float
+251.73s. These are evidence timings, not provider latency or certification.
 
-The complete evidence, artifact hashes, failure reports, mapping, generated
-staged bundle, and reachability TSV are under
-`.planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/`.
-The suggested Web Scraper artifact was fetched but not selected because the
-ledger marks it `partner_gated` and the existing planner correctly refuses
-non-public candidates. Ding Connect returned HTTP 403 twice and was replaced
-by Float for the Swagger-2 attempt.
+## Certification and delivery boundary
 
-**Generalization result: NOT READY.** DocuSeal and Float fail before mapping,
-so the generator capability cannot be called generalized or ready. The
-eligible 392 remain untouched. Certification remains withheld; no provider
-operation was exercised.
+No credentials were read, requested, printed, or stored. No provider operation
+was exercised. **Implemented, not certified, never exercised against the
+provider.** This PR is a generator capability change only; PR #3957 remains
+unmerged, the 392 production generation follows separately, and the
+seven-connector consolidation is explicitly deferred until firstmate confirms
+the generator has landed.
 
-## Deferred work
-
-The eligible 392 run is a separate follow-up after this generator capability
-lands. It is intentionally absent from this PR.
+Required skills and manual GSD fallback evidence remain recorded in the phase
+artifacts. PR body linkage is `Closes #3958`.

@@ -1,0 +1,18 @@
+NAME
+  pm float - Float command surface
+
+SYNOPSIS
+  pm float <command> [flags]
+  pm float <group> --help
+  pm float <group> <command> --help
+
+DESCRIPTION
+  Run Float's declared streams and reverse-ETL actions.
+
+COMMAND GROUPS
+  api - see pm float api --help
+  clients - see pm float clients --help
+  departments - see pm float departments --help
+  people - see pm float people --help
+  projects - see pm float projects --help
+  tasks - see pm float tasks --help

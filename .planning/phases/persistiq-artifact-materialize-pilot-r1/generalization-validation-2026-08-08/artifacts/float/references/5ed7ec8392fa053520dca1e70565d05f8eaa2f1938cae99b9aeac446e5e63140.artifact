@@ -1,0 +1,484 @@
+definitions:
+  TemplateTaskMeta:
+    type: "object"
+    title: "TemplateTaskMeta"
+    properties:
+      task_meta_id:
+        type: "string"
+        example: "2422163824501968"
+        description: "A placeholder ID for this project task within the template. This value does not correspond to a real `task_meta_id` on the [project tasks](/api_reference#Project_Tasks) endpoint — a new `task_meta_id` is issued when a project is created from the template"
+        readOnly: true
+      task_name:
+        type: "string"
+        example: "Group by Tasks: Product Spec Review"
+        description: "The name of the project task, an empty string is valid and is the default on the UI when a project task has not been chosen"
+        minLength: 0
+        maxLength: 200
+      billable:
+        type: "integer"
+        example: 1
+        description: "`1` = Billable, `0` = Non-billable - Billable project tasks may not belong to non-billable projects or phases"
+
+  TemplateMilestone:
+    type: "object"
+    title: "TemplateMilestone"
+    properties:
+      milestone_id:
+        type: "string"
+        example: "7508745152713969"
+        description: "A placeholder ID for this milestone within the template. This value does not correspond to a real `milestone_id` on the [milestones](/api_reference#Milestones) endpoint — a new `milestone_id` is issued when a project is created from the template"
+        readOnly: true
+      name:
+        type: "string"
+        example: "ml1"
+        description: "The name of the milestone"
+        maxLength: 200
+      duration:
+        type: "integer"
+        example: 1
+        description: "The number of days this milestone spans"
+      parent_offset:
+        type: "integer"
+        example: 715
+        description: "The offset in days from the start of the parent (project or phase) to the start of this milestone"
+
+  TemplateExpense:
+    type: "object"
+    title: "TemplateExpense"
+    properties:
+      id:
+        type: "string"
+        example: "4328085988602230"
+        description: "A placeholder ID for this expense within the template. This value does not correspond to a real expense `id` on the [project expenses](/api_reference#Project_Expenses) endpoint — a new `id` is issued when a project is created from the template"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Servers"
+        description: "The name of the expense, must be unique for the project"
+        maxLength: 200
+      cost:
+        type: "string"
+        example: "10000"
+        description: "The cost of the expense as a decimal string"
+      billable:
+        type: "integer"
+        example: 1
+        description: "Whether this expense is billable. Only billable projects can have billable expenses. `1` = Billable, `0` = Non-billable"
+      markup:
+        type: "string"
+        example: "10"
+        description: "The markup percentage as a decimal string. Only billable expenses can be marked up"
+      markup_type:
+        type: "integer"
+        example: 0
+        description: "The type of markup applied. `0` = Percentage, `1` = Fixed amount"
+      quantity:
+        type: "integer"
+        example: 1
+        description: "The quantity of this expense"
+      duration:
+        type: "integer"
+        example: 1
+        description: "The number of days this expense spans"
+      parent_offset:
+        type: "integer"
+        example: 20
+        description: "The offset in days from the start of the parent (project or phase) to the start of this expense"
+
+  TemplateTeamMember:
+    type: "object"
+    title: "TemplateTeamMember"
+    properties:
+      id:
+        type: "integer"
+        example: 17929035
+        description: "The `people_id` of the person assigned to the template. Corresponds to the `people_id` on the [people](/api_reference#People) endpoint (the field is named `id` here, not `people_id`)"
+      role_id:
+        type: "integer"
+        example: 279258
+        description: "The ID of a role used in this template; `null` if the person has no role"
+      hourly_rate:
+        type: "number"
+        format: "float"
+        example: 222
+        description: "The hourly rate for this team member on this template"
+
+  TemplatePhase:
+    type: "object"
+    title: "TemplatePhase"
+    properties:
+      phase_id:
+        type: "string"
+        example: "2539852022962636"
+        description: "A placeholder ID for this phase within the template. This value does not correspond to a real `phase_id` on the [phases](/api_reference#Phases) endpoint — a new `phase_id` is issued when a project is created from the template"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Discovery"
+        description: "The name of the phase"
+        maxLength: 200
+      color:
+        type: "string"
+        example: "bb774c"
+        description: "Phase's color in hexadecimal (defaults to project color)"
+      notes:
+        type: "string"
+        example: ""
+        description: "Notes for this phase"
+      status:
+        type: "integer"
+        example: 0
+        description: "The status of the phase `0` = Draft, `1` = Tentative, `2` = Confirmed, `3` = Completed, `4` = Canceled. Draft phases can belong to a project of any status. Tentative phases must belong to tentative or confirmed projects. Confirmed, completed, and canceled phases must match their project's status"
+      tentative:
+        type: "integer"
+        example: 0
+        description: "(**Deprecated** - see `status`): Is this phase tentative? `1` = Yes, `0` = No"
+      non_billable:
+        type: "integer"
+        example: 0
+        description: "Is this phase billable? `0` = Billable, `1` = Non-billable"
+      duration:
+        type: "integer"
+        example: 754
+        description: "The number of days this phase spans"
+      parent_offset:
+        type: "integer"
+        example: 0
+        description: "The offset in days from the start of the project template to the start of this phase"
+      task_metas:
+        type: "array"
+        items:
+          $ref: "#/definitions/TemplateTaskMeta"
+        description: "Project tasks defined on this phase"
+      milestones:
+        type: "array"
+        items:
+          $ref: "#/definitions/TemplateMilestone"
+        description: "Milestones defined on this phase"
+      team_people:
+        type: "array"
+        items:
+          $ref: "#/definitions/TemplateTeamMember"
+        description: "Team members assigned to this phase"
+
+  ProjectTemplate:
+    type: "object"
+    title: "ProjectTemplate"
+    properties:
+      project_template_id:
+        type: "integer"
+        example: 20659
+        description: "The ID of the project template"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Website rebuild template"
+        description: "The name of the project template"
+        maxLength: 200
+      client_id:
+        type: "integer"
+        example: 18080553
+        description: "The ID of the project's client"
+      color:
+        type: "string"
+        example: "bb774c"
+        description: "Project's color in hexadecimal"
+      notes:
+        type: "string"
+        example: ""
+        description: "Notes for this project template"
+      tags:
+        type: "array"
+        items:
+          type: "string"
+        description: "List of tags"
+        example: []
+      budget_type:
+        type: "integer"
+        example: 3
+        description: "Is there a project budget? `1` = Total hours, `2` = Total fee, `3` = Hourly fee"
+      budget_total:
+        type: "string"
+        example: "100000.0000"
+        description: "The budget amount for Total hours or Total fee project budgets as a decimal string. `null` for Hourly fee, Phase and Task budgets, also see `budget_priority`"
+      budget_priority:
+        type: "integer"
+        example: 0
+        description: "Defines which level the budget will be determined from; `0` = Project, `1` = Phase, `2` = Task. For non-project levels, the total budget can be calculated from the sum of budgets in each Phase or Task"
+      budget_per_phase:
+        type: "integer"
+        example: 0
+        description: "(**Deprecated** - see `budget_priority`): Is the budget set per Phase? `1` = Yes, `0` = No"
+      default_hourly_rate:
+        type: "string"
+        example: "55.50"
+        description: "The default hourly rate for fee-based budgets, the request also accepts a decimal `number`"
+      currency_code:
+        type: "string"
+        example: "USD"
+        description: "The ISO 4217 currency code for this project template. The value must correspond to a `target_currency` in the company's currencies list"
+      rate_card_id:
+        type: "integer"
+        example: 95020
+        description: "The ID of the [rate card](/api_reference#Rate_Cards) applied to this project template. Only supported for fee-based budgets (`budget_type` = `2` or `3`). When set, the rate card's role-based bill rates are applied as the default for projects created from this template. Set to `null` to remove the rate card from the template"
+      non_billable:
+        type: "integer"
+        example: 0
+        description: "Is this project billable? `0` = Billable, `1` = Non-billable"
+      tentative:
+        type: "integer"
+        example: 0
+        description: "(**Deprecated**): Is this template tentative? `1` = Yes, `0` = No"
+      active:
+        type: "integer"
+        example: 1
+        description: "Is this template active or archived? `1` = Active, `0` = Archived"
+      locked_task_list:
+        type: "integer"
+        example: 0
+        description: "Are members locked from adding project tasks (Only Project Managers can add to this list)? 1 = Yes, locked to project editors, 0 = No, anyone can add tasks"
+      creator_id:
+        type: "integer"
+        example: 80851
+        description: "Account ID of the user who created this template"
+        readOnly: true
+      all_pms_schedule:
+        type: "integer"
+        example: 0
+        description: "Do all project managers have scheduling rights? `1` = Yes, `0` = No"
+      duration:
+        type: "integer"
+        example: 792
+        description: "The total number of days this project template spans"
+      created:
+        type: "string"
+        example: "2026-05-26 21:41:50.000"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2026-06-15 01:28:52.000"
+        description: "Date this record was last modified"
+        readOnly: true
+      expenses:
+        type: "array"
+        items:
+          $ref: "#/definitions/TemplateExpense"
+        description: "Expenses defined on the project template"
+      task_metas:
+        type: "array"
+        items:
+          $ref: "#/definitions/TemplateTaskMeta"
+        description: "Project tasks defined at the project level on this template"
+      milestones:
+        type: "array"
+        items:
+          $ref: "#/definitions/TemplateMilestone"
+        description: "Milestones defined at the project level on this template"
+      team_people:
+        type: "array"
+        items:
+          $ref: "#/definitions/TemplateTeamMember"
+        description: "Team members assigned at the project level on this template"
+      phases:
+        type: "array"
+        items:
+          $ref: "#/definitions/TemplatePhase"
+        description: "Phases defined on this template"
+
+  ProjectFromTemplateRequest:
+    type: "object"
+    title: "ProjectFromTemplateRequest"
+    required:
+    - "project_code"
+    - "start_date"
+    properties:
+      name:
+        type: "string"
+        example: "Website Redesign"
+        description: "The name of the project. If omitted, the template name is used"
+        maxLength: 200
+      project_code:
+        type: "string"
+        example: "PRJ-123456"
+        description: "**Required.** A third-party identifier unique across all projects, enforced using case-insensitive comparison. Maximum length is 32 characters. Used to retrieve the created project via `GET /projects?project_code={project_code}` after the asynchronous create completes"
+        maxLength: 32
+      client_id:
+        type: "integer"
+        example: 45672
+        description: "The ID of the project's client. Overrides the template value when provided"
+      color:
+        type: "string"
+        example: "68DDFD"
+        description: "Project's color in hexadecimal. Overrides the template value when provided"
+      notes:
+        type: "string"
+        example: ""
+        description: "Notes for this project. Overrides the template value when provided"
+      tags:
+        type: "array"
+        items:
+          type: "string"
+        example: []
+        description: "List of tags. Overrides the template value when provided"
+      budget_type:
+        type: "integer"
+        example: 3
+        description: "Is there a project budget? `1` = Total hours, `2` = Total fee, `3` = Hourly fee. Overrides the template value when provided"
+      budget_total:
+        type: "number"
+        example: 1000.50
+        description: "The budget amount for Total hours or Total fee project budgets. Displays as `null` for Hourly fee, Phase and Task budgets, also see `budget_priority`. Overrides the template value when provided"
+      budget_priority:
+        type: "integer"
+        example: 0
+        description: "Defines which level the budget will be determined from; `0` = Project, `1` = Phase, `2` = Task. Overrides the template value when provided"
+      default_hourly_rate:
+        type: "string"
+        example: "55.50"
+        description: "The default hourly rate for fee-based budgets, the request also accepts a decimal `number`. Overrides the template value when provided"
+      non_billable:
+        type: "integer"
+        example: 0
+        description: "Is this project billable? `0` = Billable, `1` = Non-billable. Overrides the template value when provided"
+      status:
+        type: "integer"
+        example: 2
+        description: "The status of the project `0` = Draft, `1` = Tentative, `2` = Confirmed, `3` = Completed, `4` = Canceled. If both `status` and `stage_id` are provided, `stage_id` takes precedence. If only `status` is provided, the first available stage for that status will be automatically selected"
+      stage_id:
+        type: "integer"
+        example: 101079
+        description: "The ID of the project stage for this project. This field takes precedence over `status` when both are provided. If omitted, the first available stage related to the project's `status` will be used"
+      locked_task_list:
+        type: "integer"
+        example: 1
+        description: "Are members locked from adding project tasks (Only Project Managers can add to this list)? 1 = Yes, locked to project editors, 0 = No, anyone can add tasks"
+      active:
+        type: "integer"
+        example: 1
+        description: "Is this project active or archived? `1` = Active, `0` = Archived"
+      project_manager:
+        type: "integer"
+        example: 80851
+        description: "Account ID of the assigned project manager"
+      all_pms_schedule:
+        type: "integer"
+        example: 0
+        description: "Do all project managers have scheduling rights? `1` = Yes, `0` = No"
+      start_date:
+        type: "string"
+        format: "date"
+        example: "2026-07-01"
+        description: "**Required.** The start date of the new project. Phases, milestones, expenses, and project tasks are scheduled relative to this date using each item's `parent_offset` and `duration` from the template"
+      end_date:
+        type: "string"
+        format: "date"
+        example: "2026-09-30"
+        description: "The end date of the new project. If omitted, calculated from `start_date` plus the template's `duration`"
+      currency_code:
+        type: "string"
+        example: "USD"
+        description: "The ISO 4217 currency code assigned to this project. The value must correspond to a `target_currency` in the company's currencies list. If provided, `fx_rate` is also required. See `expand=currency` on [projects](/api_reference#Projects)"
+      fx_rate:
+        type: "string"
+        example: "1"
+        description: "The exchange rate applied to this project's currency. Required when `currency_code` is provided. Also accepts a decimal `number`"
+
+parameters:
+  project_template_id:
+    name: "project_template_id"
+    in: "path"
+    description: "The project template's ID"
+    required: true
+    type: "integer"
+
+project-templates:
+  get:
+    tags:
+    - "Templating Projects"
+    summary: "List project templates"
+    description: "Returns the list of project templates configured for the company. Project templates are managed in the Float UI."
+    operationId: "getProjectTemplates"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/sort"
+    - $ref: "../swagger-api-v3.yaml#/parameters/fields"
+    responses:
+      200:
+        description: "The list of project templates"
+        schema:
+          type: "array"
+          title: "Array of project templates"
+          items:
+            $ref: "#/definitions/ProjectTemplate"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+
+project-templates-id:
+  get:
+    tags:
+    - "Templating Projects"
+    summary: "Retrieve a single project template"
+    description: "Returns a single project template by ID. Project templates are managed in the Float UI."
+    operationId: "getProjectTemplate"
+    parameters:
+    - $ref: "#/parameters/project_template_id"
+    responses:
+      200:
+        description: "Details of a single project template"
+        schema:
+          $ref: "#/definitions/ProjectTemplate"
+      404:
+        description: "The project template does not exist"
+
+projects-from-template:
+  post:
+    tags:
+    - "Templating Projects"
+    summary: "Create a project from a template"
+    description: >
+      Creates a new project from a project template. The template's phases, project tasks, milestones, expenses, and team members are copied into the new project, with relative scheduling derived from each item's `duration` and `parent_offset` against the request's `start_date`.
+
+
+      Any project-level field included in the request body overrides the corresponding value in the template. Fields not provided fall back to the template's values. Nested entities (phases, project tasks, milestones, expenses, and team members) always come from the template.
+
+
+      **Asynchronous behavior:** This endpoint returns `200` immediately with an opaque process ID string once the create job has been accepted. The process ID is not directly useful to API clients. To retrieve the created project, poll `GET /projects?project_code={project_code}` using the `project_code` you sent in the request body until the project appears.
+
+
+      **Delayed validation:** Because creation runs asynchronously, the `200` response does not guarantee the project was created. Validation errors encountered by the background job are **not surfaced to API clients** — if the polling lookup never finds the project, the create has silently failed. If you are stuck diagnosing a failure, you can send the same request body to `POST /projects` as a one-off check to surface validation errors directly. Common reasons a create can fail after `200`:
+
+        * `project_code` is not unique across the company's projects, or exceeds 32 characters
+        * `client_id` does not exist
+        * `project_manager` account ID does not exist
+        * `stage_id` does not exist
+        * `currency_code` does not match a `target_currency` configured for the company
+    operationId: "createProjectFromTemplate"
+    parameters:
+    - $ref: "#/parameters/project_template_id"
+    - in: "body"
+      name: "data"
+      description: "Project field overrides applied on top of the template values. `project_code` and `start_date` are required."
+      required: true
+      schema:
+        $ref: "#/definitions/ProjectFromTemplateRequest"
+    responses:
+      200:
+        description: "The create job was accepted. The response body is an opaque process ID string; retrieve the created project by polling `GET /projects?project_code={project_code}`"
+        schema:
+          type: "string"
+          example: "486939683e0f39af"
+      422:
+        description: "Synchronous validation failure. Returned when the project template does not exist (`{\"name\": \"Unprocessable entity\", \"message\": \"Project template not found\", \"code\": 0, \"status\": 422}`), when required fields like `project_code` or `start_date` are missing, or when other field validation fails (e.g. `currency_code` provided without `fx_rate`)"
