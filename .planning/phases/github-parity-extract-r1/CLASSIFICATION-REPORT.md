@@ -36,30 +36,51 @@ All 7 become `intent: reverse_etl`, `availability: implemented`, pointed at the 
 their twin already uses. They inherit the reverse-ETL contract unchanged: **plan, preview,
 approval, execute**. No new gate was invented and no existing gate was relaxed.
 
-| command | write action | method | confirmation now required |
-| --- | --- | --- | --- |
-| `repo create` | `repos_create_for_authenticated_user` | POST | plan → preview → approval token → execute |
-| `repo delete` | `repo` | DELETE | the above **plus** closed typed `--confirm destructive`, and the preview digest recomputed at execution |
-| `repo archive` | `archive_repo` (new) | PATCH | plan → preview → approval token → execute |
-| `repo unarchive` | `unarchive_repo` (new) | PATCH | plan → preview → approval token → execute |
-| `cache delete` | `actions_caches_cache_id` | DELETE | the above **plus** closed typed `--confirm destructive` |
-| `secret set` | `actions_secrets_secret_name3` | PUT | plan → preview → approval token → execute; `encrypted_value` in `redact_fields` |
-| `secret delete` | `actions_secrets_secret_name` | DELETE | the above **plus** closed typed `--confirm destructive` |
+| command | write action | method | mutation class | confirmation now required | source of the challenge |
+| --- | --- | --- | --- | --- | --- |
+| `repo create` | `repos_create_for_authenticated_user` | POST | create | plan → preview → approval token → execute | none — approval-only create |
+| `repo delete` | `repo` | DELETE | delete | the above **plus** closed typed `--confirm destructive`, and the preview digest recomputed at execution | DELETE method **and** declared `confirm: destructive` |
+| `repo archive` | `archive_repo` (new) | PATCH | update | the above **plus** closed typed `--confirm destructive` | declared `confirm: destructive` |
+| `repo unarchive` | `unarchive_repo` (new) | PATCH | update | the above **plus** closed typed `--confirm destructive` | declared `confirm: destructive` |
+| `cache delete` | `actions_caches_cache_id` | DELETE | delete | the above **plus** closed typed `--confirm destructive` | DELETE method |
+| `secret set` | `actions_secrets_secret_name3` | PUT | update | plan → preview → approval token → execute; `encrypted_value` in `redact_fields` | none — approval-only create |
+| `secret delete` | `actions_secrets_secret_name` | DELETE | delete | the above **plus** closed typed `--confirm destructive` | DELETE method |
 
 The typed confirmation on the three DELETEs is not something this change adds and could
 therefore drop. `connectors.ConfirmationForWriteAction` returns `destructive` for any DELETE
 regardless of metadata, and `TestGitHubRestoredCommandsAreExecutable` asserts through that
-same resolver, so a future edit that severs it fails the test.
+same resolver, so a future edit that severs it fails the test. Those three needed no new
+declaration and did not get one.
+
+`repo create` and `secret set` are classified approval-only. The same test asserts they carry
+**no** typed challenge, so drifting one onto them fails just as loudly as dropping one from a
+delete.
 
 ### Two of these needed more than a classification change
 
 **`repo archive` / `repo unarchive`.** Both ride `PATCH /repos/{owner}/{repo}`, the same
-endpoint as the generic `repo update`, and the declarative write path cannot pin a body
-constant. Wiring them both to `repo2` would produce a `repo unarchive` that unarchives only
-when the caller separately remembered to send `archived: false` — a command that reports
-success while doing nothing. They are new write actions pinned in the github hook, exactly as
-`close_issue`/`reopen_issue` already pin `state`. The `covered_by.writes` fix earlier in this
-branch is what allows three write actions to share one endpoint row.
+endpoint as the generic `repo update`, so the body is the only thing separating them. Wiring
+them both to `repo2` would produce a `repo unarchive` that unarchives only when the caller
+separately remembered to send `archived: false` — a command that reports success while doing
+nothing. The `covered_by.writes` fix earlier in this branch is what allows three write actions
+to share one endpoint row.
+
+They were first pinned in the github hook's `ExecuteWrite`, exactly as `close_issue` and
+`reopen_issue` pin `state`. The captain's later order to give them the typed destructive
+confirmation is incompatible with that shape, and the engine says so itself:
+`prepareDeclarativeWrite` refuses to prepare a destructive action whose hook overrides
+execution, because the preview an operator approves would not be the request that runs.
+Declaring `confirm: destructive` on the hook-executed actions would have made both commands
+fail at preview rather than gate at run — a worse outcome than leaving them ungated.
+
+So the pin moved from the request to the record. `engine.WriteRecordHook` is a new optional
+interface that lets a hook fix the body fields an action's own name implies, before the
+declarative body is built. `prepareDeclarativeWrite` and `executeApprovedWrite` both apply it,
+so the approved body is the dispatched body by construction, and the exactness guard is
+satisfied rather than bypassed. `archive_repo`/`unarchive_repo` also declare
+`body_fields: ["archived"]`, so the pinned field remains the only field sent — the tightness
+the hook-executed version had, now with an exact preview. The interface is opt-in; a connector
+that does not implement it sees the records it staged, unchanged.
 
 **`secret set`.** Wiring it surfaced a real defect in the already-`implemented` `secret set-2`:
 the write action's `record_schema` declared only the `secret_name` path parameter, so the

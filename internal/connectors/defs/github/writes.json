@@ -2473,6 +2473,9 @@
       "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "path_fields": [],
       "body_type": "json",
+      "body_fields": [
+        "archived"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -2480,6 +2483,7 @@
         "properties": {}
       },
       "risk": "returns the configured repository to a writable state",
+      "confirm": "destructive",
       "hook": "github"
     },
     {
@@ -2489,6 +2493,9 @@
       "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "path_fields": [],
       "body_type": "json",
+      "body_fields": [
+        "archived"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -2496,6 +2503,7 @@
         "properties": {}
       },
       "risk": "archives the configured repository, making it read-only for every consumer",
+      "confirm": "destructive",
       "hook": "github"
     },
     {

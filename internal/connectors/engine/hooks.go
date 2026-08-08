@@ -64,6 +64,20 @@ type WriteHookClassifier interface {
 	HandlesWriteAction(action WriteAction) bool
 }
 
+// WriteRecordHook pins the body constants an action's own name implies onto the
+// record, before the declarative body is built. handled=false tells the engine
+// the action is untouched.
+//
+// It exists because a WriteHook that overrides execution cannot be destructive:
+// prepareDeclarativeWrite refuses to prepare a destructive hook-executed action,
+// since the preview an operator approves would not be the request that runs.
+// Mapping the record instead keeps the declarative path — preview and execution
+// build the same body from the same record — so an action that only needs a
+// fixed body field can still carry a typed confirmation.
+type WriteRecordHook interface {
+	MapWriteRecord(action WriteAction, rec connectors.Record) (connectors.Record, bool, error)
+}
+
 // CheckHook overrides the connector's Check(). handled=false tells the
 // engine to fall back to the declarative check request.
 type CheckHook interface {

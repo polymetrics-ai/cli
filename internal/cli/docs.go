@@ -759,12 +759,13 @@ DESCRIPTION
   write action it runs (writes.json redact_fields) or, for a direct_write
   operation, by that operation (operations.json sensitive_policy.redact_fields).
   A redact_fields list on the command itself is not consulted, so a command that
-  declares one its write action does not withholds nothing; pm connectors inspect
-  <name> --json shows every declaration, not only the binding one. Withheld keys
-  are removed outright rather than stored as a placeholder, so they never reach
-  the project state file. Preview and run therefore need those values re-supplied
-  on the same command, using the connector command's own flags: pm reverse
-  preview <plan-id> --<flag> <value>, and the same flags again on pm reverse run.
+  declares one its write action does not declare withholds nothing; pm connectors
+  inspect <name> --json shows every declaration, not only the binding one.
+  Withheld keys are removed outright rather than stored as a placeholder, so they
+  never reach the project state file. Preview and run therefore need those values
+  re-supplied on the same command, using the connector command's own flags: pm
+  reverse preview <plan-id> --<flag> <value>, and the same flags again on pm
+  reverse run.
   Where a declared field covers a subtree that several flags fill, those flags
   re-supply it. Only fields the plan actually removed are asked for, so a
   declared field you never supplied is never demanded back. A re-supplied value
