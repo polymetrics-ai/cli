@@ -1,7 +1,10 @@
 package engine
 
 import (
+	"context"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -88,6 +91,73 @@ func TestOperationDirectWriteMetadataRecognizesTypedMultipartRestWrite(t *testin
 	}
 	if len(metadata.PayloadFileFields) != 1 || metadata.PayloadFileFields[0] != "media_file_path" {
 		t.Fatalf("multipart payload file fields = %#v, want the declared source path", metadata.PayloadFileFields)
+	}
+}
+
+// TestOperationDirectWriteMultipartFollowsDeclaredRedirect captures the
+// provider-required exception to ordinary direct-write redirect refusal. The
+// declaration is closed: only the declared localhost suffix may receive the
+// rebuilt snapshot-bound body, and the operation bearer must be re-applied at
+// that approved host. Zoom Tasks adopts the same shape for its fileapi upload.
+func TestOperationDirectWriteMultipartFollowsDeclaredRedirect(t *testing.T) {
+	const accessToken = "fixture-declared-redirect-token"
+	var redirectURL string
+	var initialCalls, redirectedCalls int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("declared multipart redirect did not retain the operation bearer")
+		}
+		switch request.URL.Path {
+		case "/attachments":
+			initialCalls++
+			http.Redirect(w, request, redirectURL, http.StatusTemporaryRedirect)
+		case "/redirected":
+			redirectedCalls++
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "multipart/form-data; boundary=") {
+				t.Fatal("redirected multipart request did not retain its declared body format")
+			}
+			if err := request.ParseMultipartForm(1 << 20); err != nil {
+				t.Fatalf("parse redirected multipart form: %v", err)
+			}
+			if got := request.FormValue("message"); got != "typed multipart fixture" {
+				t.Fatalf("redirected multipart field = %q, want declared value", got)
+			}
+			files := request.MultipartForm.File["attachment"]
+			if len(files) != 1 || files[0].Filename != "media.txt" {
+				t.Fatalf("redirected multipart file = %#v, want the declared snapshot", files)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"ok":true}`))
+		default:
+			t.Fatalf("unexpected declared redirect path %q", request.URL.Path)
+		}
+	}))
+	defer server.Close()
+	redirectURL = strings.Replace(server.URL, "127.0.0.1", "localhost", 1) + "/redirected"
+
+	rest := strings.Replace(validMultipartRestWrite, `"path": "/attachments",`, fmt.Sprintf(`"path": "/attachments", "base_url": %q, "auth": [{"mode": "bearer", "token": "{{ secrets.fixture_token }}"}], "redirect": {"allowed_host_suffixes": ["localhost"], "max_hops": 1},`, server.URL), 1)
+	bundle, err := Load(multipartRestWriteBundleFS(rest, "rest_write"), "acme")
+	if err != nil {
+		t.Fatalf("Load declared multipart redirect contract: %v", err)
+	}
+
+	dir := t.TempDir()
+	payload := []byte("typed multipart payload")
+	path := writeMultipartOperationSource(t, dir, "media.txt", payload)
+	req := multipartOperationRequest(dir, path, payload)
+	req.Config.Secrets = map[string]string{"fixture_token": accessToken}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite declared redirect: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectWrite declared redirect: %v", err)
+	}
+	if result.Status != http.StatusOK || initialCalls != 1 || redirectedCalls != 1 {
+		t.Fatalf("declared redirect result/status/calls = %#v/%d/%d, want one admitted redirect", result, initialCalls, redirectedCalls)
 	}
 }
 

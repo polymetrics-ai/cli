@@ -14,7 +14,53 @@ checkpoint must prove both gaps:
 
 RED output will be recorded verbatim below before production changes.
 
-## RED — pending
+## RED — captured before connector declaration or foundation changes
+
+The test-only RED checkpoint ran against Tasks-unimplemented HEAD. It contains no provider
+credential or token value:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... -run 'TestProviderInventoryLedgerIsComplete|TestCoveredStreamsHaveReachableCommands|TestTasksOperationCommandsAreReachable'
+--- FAIL: TestProviderInventoryLedgerIsComplete (0.04s)
+    command_surface_test.go:157: executable rows = 67, want 84
+    command_surface_test.go:160: operations awaiting Zoom-local contracts = 1775, want 1758
+--- FAIL: TestCoveredStreamsHaveReachableCommands (0.04s)
+    command_surface_test.go:255: reachable direct_read operation commands = 38, want 44
+    command_surface_test.go:256: reachable direct_write operation commands = 24, want 35
+--- FAIL: TestTasksOperationCommandsAreReachable (0.03s)
+    command_surface_test.go:496: Preflight("tasks assignees list") = connector command "tasks assignees list" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks assignees add") = connector command "tasks assignees add" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks assignees remove") = connector command "tasks assignees remove" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks collaborators list") = connector command "tasks collaborators list" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks collaborators add") = connector command "tasks collaborators add" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks collaborators remove") = connector command "tasks collaborators remove" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks comments list") = connector command "tasks comments list" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks comments add") = connector command "tasks comments add" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks comments delete") = connector command "tasks comments delete" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks files upload") = connector command "tasks files upload" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks imports submit") = connector command "tasks imports submit" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks imports get") = connector command "tasks imports get" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks items list") = connector command "tasks items list" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks items create") = connector command "tasks items create" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks items get") = connector command "tasks items get" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks items delete") = connector command "tasks items delete" is blocked: unknown command, want declared executable Tasks action
+    command_surface_test.go:496: Preflight("tasks items update") = connector command "tasks items update" is blocked: unknown command, want declared executable Tasks action
+FAIL
+FAIL    polymetrics.ai/internal/connectors/defs/zoom
+FAIL
+```
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteMultipartFollowsDeclaredRedirect$'
+--- FAIL: TestOperationDirectWriteMultipartFollowsDeclaredRedirect (0.00s)
+    operation_multipart_test.go:141: Load declared multipart redirect contract: load bundle acme: operations.json: /operations/0/rest/redirect: additional property not allowed
+FAIL
+FAIL    polymetrics.ai/internal/connectors/engine
+FAIL
+```
+
+Both commands exited `1`, exactly as expected. This is the committed red state; only the red tests
+and phase evidence changed before it was captured.
 
 ## GREEN foundation — pending
 

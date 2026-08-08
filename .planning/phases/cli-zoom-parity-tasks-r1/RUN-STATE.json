@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-tasks-r1",
   "issue": 3939,
   "parent_issue": 3915,
-  "status": "planned",
+  "status": "red-captured",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -34,7 +34,7 @@
     "unsafe_or_disallowed": 0
   },
   "foundation": "required: redirect-safe typed multipart rest_write for the documented fileapi.zoom.us 30x bearer-preserving upload",
-  "red": "pending",
+  "red": "captured: command surface test failed on 67/1775/38/24 target totals and 17 unknown Tasks paths; declared multipart redirect test failed because rest.redirect is absent",
   "green": "pending",
   "verification": "pending",
   "review": "pending"

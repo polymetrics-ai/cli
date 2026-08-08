@@ -33,15 +33,16 @@ const zoomBundleName = "zoom"
 //
 // Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
 // quality-management reads (5), Cobrowse SDK reads (4), SCIM2 reads (4),
-// Virtual Agent reads (9), and Auto Dialer reads (8). Chatbot, SCIM2, Virtual
-// Agent, and Auto Dialer mutations are tracked by wantModuleDirectWriteCommandCount.
-const wantModuleOperationCommandCount = 38
+// Virtual Agent reads (9), Auto Dialer reads (8), and Tasks reads (6). Chatbot,
+// SCIM2, Virtual Agent, Auto Dialer, and Tasks mutations are tracked by
+// wantModuleDirectWriteCommandCount.
+const wantModuleOperationCommandCount = 44
 
 // wantModuleDirectWriteCommandCount is the running total of implemented
 // operations.json rest_write commands. It is distinct from writes.json
 // reverse-ETL actions because direct writes are executable only through the
 // typed plan lifecycle.
-const wantModuleDirectWriteCommandCount = 24
+const wantModuleDirectWriteCommandCount = 35
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -152,11 +153,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 67 {
-		t.Errorf("executable rows = %d, want 67", got)
+	if got := covered; got != 84 {
+		t.Errorf("executable rows = %d, want 84", got)
 	}
-	if got := implementableNow; got != 1775 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1775", got)
+	if got := implementableNow; got != 1758 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1758", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -451,6 +452,64 @@ func TestAutoDialerOperationCommandsAreReachable(t *testing.T) {
 		for _, flag := range found.Flags {
 			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
 				t.Errorf("Auto Dialer command %q invents paging flag --%s", want.path, flag.Name)
+			}
+		}
+	}
+}
+
+// TestTasksOperationCommandsAreReachable is the provider-category RED surface
+// contract. It enumerates each action in Zoom's published Tasks artifact
+// through the real commandrunner preflight, including the bounded multipart
+// file upload, so a declaration cannot claim implementation while the binary
+// would still report an unknown route.
+func TestTasksOperationCommandsAreReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	wants := []struct {
+		path      string
+		operation string
+		intent    string
+		method    string
+		apiPath   string
+		policy    string
+	}{
+		{path: "tasks assignees list", operation: "zoom.list_task_assignees", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/tasks/items/{taskId}/assignees", policy: "json_redacted"},
+		{path: "tasks assignees add", operation: "zoom.add_task_assignees", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/tasks/items/{taskId}/assignees", policy: "json_redacted"},
+		{path: "tasks assignees remove", operation: "zoom.remove_task_assignee", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/tasks/items/{taskId}/assignees/{userId}", policy: "none"},
+		{path: "tasks collaborators list", operation: "zoom.list_task_collaborators", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/tasks/items/{taskId}/collaborators", policy: "json_redacted"},
+		{path: "tasks collaborators add", operation: "zoom.add_task_collaborators", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/tasks/items/{taskId}/collaborators", policy: "json_redacted"},
+		{path: "tasks collaborators remove", operation: "zoom.remove_task_collaborator", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/tasks/items/{taskId}/collaborators/{userId}", policy: "none"},
+		{path: "tasks comments list", operation: "zoom.list_task_comments", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/tasks/items/{taskId}/comments", policy: "json_redacted"},
+		{path: "tasks comments add", operation: "zoom.add_task_comment", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/tasks/items/{taskId}/comments", policy: "json_redacted"},
+		{path: "tasks comments delete", operation: "zoom.delete_task_comment", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/tasks/items/{taskId}/comments/{commentId}", policy: "none"},
+		{path: "tasks files upload", operation: "zoom.upload_task_file", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/tasks/files", policy: "json_redacted"},
+		{path: "tasks imports submit", operation: "zoom.submit_task_import", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/tasks/imports", policy: "json_redacted"},
+		{path: "tasks imports get", operation: "zoom.get_task_import", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/tasks/imports/{importId}", policy: "json_redacted"},
+		{path: "tasks items list", operation: "zoom.list_tasks", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/tasks/items", policy: "json_redacted"},
+		{path: "tasks items create", operation: "zoom.create_task", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/tasks/items", policy: "json_redacted"},
+		{path: "tasks items get", operation: "zoom.get_task", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/tasks/items/{taskId}", policy: "json_redacted"},
+		{path: "tasks items delete", operation: "zoom.delete_task", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/tasks/items/{taskId}", policy: "none"},
+		{path: "tasks items update", operation: "zoom.update_task", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/tasks/items/{taskId}", policy: "none"},
+	}
+	for _, want := range wants {
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want declared executable Tasks action", want.path, err)
+			continue
+		}
+		var found *connectors.CommandSurfaceCommand
+		for i := range connector.CommandSurface().Commands {
+			if connector.CommandSurface().Commands[i].Path == want.path {
+				found = &connector.CommandSurface().Commands[i]
+				break
+			}
+		}
+		if found == nil || found.Intent != want.intent || found.Availability != "implemented" || found.Operation != want.operation || len(found.APISurface) != 1 || found.APISurface[0].Method != want.method || found.APISurface[0].Path != want.apiPath || found.OutputPolicy != want.policy {
+			t.Errorf("Tasks command %q does not retain its declared operation/endpoint/output contract", want.path)
+			continue
+		}
+		for _, flag := range found.Flags {
+			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
+				t.Errorf("Tasks command %q invents paging flag --%s", want.path, flag.Name)
 			}
 		}
 	}
