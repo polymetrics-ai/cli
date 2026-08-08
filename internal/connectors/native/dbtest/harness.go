@@ -581,10 +581,11 @@ func (h *Harness) resourceAbsent(ctx context.Context, args ...string) (bool, err
 // bounded parallel mode. One registry closes every live harness before the
 // process exits.
 var interruptCleanup = struct {
-	mu      sync.Mutex
-	live    map[*Harness]struct{}
-	signals chan os.Signal
-	idle    chan struct{}
+	mu       sync.Mutex
+	live     map[*Harness]struct{}
+	signals  chan os.Signal
+	idle     chan struct{}
+	draining bool
 }{live: make(map[*Harness]struct{})}
 
 func (h *Harness) installInterruptCleanup() bool {
@@ -595,6 +596,9 @@ func (h *Harness) installInterruptCleanup() bool {
 	}
 	interruptCleanup.mu.Lock()
 	defer interruptCleanup.mu.Unlock()
+	if interruptCleanup.draining {
+		return false
+	}
 	interruptCleanup.live[h] = struct{}{}
 	armInterruptWatchLocked()
 	return true
@@ -623,7 +627,7 @@ func unregisterInterruptCleanup(h *Harness) {
 }
 
 func disarmInterruptWatchLocked() {
-	if len(interruptCleanup.live) != 0 || interruptCleanup.signals == nil {
+	if len(interruptCleanup.live) != 0 || interruptCleanup.signals == nil || interruptCleanup.draining {
 		return
 	}
 	signal.Stop(interruptCleanup.signals)
@@ -638,25 +642,74 @@ func awaitInterrupt(signals chan os.Signal, idle chan struct{}) {
 		return
 	case <-signals:
 	}
-	signal.Stop(signals)
+	live := beginInterruptDrain()
 	cleanupCtx, cancel := context.WithTimeout(context.Background(), 6*time.Minute)
-	// Complete every live harness before the process exits.
-	closeLiveHarnesses(cleanupCtx)
+	done := make(chan struct{})
+	go func() {
+		closeHarnesses(cleanupCtx, live)
+		close(done)
+	}()
+	waitForInterruptCleanup(signals, done)
 	cancel()
+	finishInterruptDrain(signals)
 	os.Exit(130)
+}
+
+func waitForInterruptCleanup(signals <-chan os.Signal, done <-chan struct{}) {
+	for {
+		select {
+		case <-signals:
+		case <-done:
+			return
+		}
+	}
 }
 
 // closeLiveHarnesses tears every registered harness down concurrently and
 // returns only once the last one has finished, so nothing can exit while a
 // sibling's Podman removal is still running.
 func closeLiveHarnesses(ctx context.Context) {
+	closeHarnesses(ctx, snapshotLiveHarnesses())
+}
+
+func beginInterruptDrain() []*Harness {
 	interruptCleanup.mu.Lock()
+	defer interruptCleanup.mu.Unlock()
+	if interruptCleanup.draining {
+		return nil
+	}
+	interruptCleanup.draining = true
+	return liveHarnessesLocked()
+}
+
+func finishInterruptDrain(signals chan os.Signal) {
+	interruptCleanup.mu.Lock()
+	defer interruptCleanup.mu.Unlock()
+	if interruptCleanup.signals != signals {
+		return
+	}
+	signal.Stop(signals)
+	close(interruptCleanup.idle)
+	interruptCleanup.signals = nil
+	interruptCleanup.idle = nil
+	interruptCleanup.draining = false
+}
+
+func snapshotLiveHarnesses() []*Harness {
+	interruptCleanup.mu.Lock()
+	defer interruptCleanup.mu.Unlock()
+	return liveHarnessesLocked()
+}
+
+func liveHarnessesLocked() []*Harness {
 	live := make([]*Harness, 0, len(interruptCleanup.live))
 	for harness := range interruptCleanup.live {
 		live = append(live, harness)
 	}
-	interruptCleanup.mu.Unlock()
+	return live
+}
 
+func closeHarnesses(ctx context.Context, live []*Harness) {
 	var wg sync.WaitGroup
 	for _, harness := range live {
 		wg.Add(1)

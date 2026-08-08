@@ -3,10 +3,12 @@ package dbtest
 import (
 	"context"
 	"errors"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"reflect"
 	"strings"
+	"syscall"
 	"testing"
 	"time"
 )
@@ -561,6 +563,76 @@ func TestInterruptCleanupClosesEveryLiveHarnessBeforeExiting(t *testing.T) {
 		if err := h.Close(context.Background()); err != nil {
 			t.Fatalf("Close(): %v", err)
 		}
+	}
+}
+
+func TestInterruptDrainKeepsWatchingAndRejectsNewStarts(t *testing.T) {
+	firstRunner := &scriptedRunner{}
+	first, err := New(testConfig(firstRunner))
+	if err != nil {
+		t.Fatalf("New(first): %v", err)
+	}
+	if _, err := first.Start(context.Background()); err != nil {
+		t.Fatalf("Start(first): %v", err)
+	}
+
+	secondRunner := &scriptedRunner{}
+	second, err := New(testConfig(secondRunner))
+	if err != nil {
+		t.Fatalf("New(second): %v", err)
+	}
+	interruptCleanup.mu.Lock()
+	signals := interruptCleanup.signals
+	interruptCleanup.mu.Unlock()
+	if signals == nil {
+		t.Fatal("Start(first) did not arm interrupt cleanup")
+	}
+	live := beginInterruptDrain()
+	defer func() {
+		closeHarnesses(context.Background(), live)
+		_ = second.Close(context.Background())
+		finishInterruptDrain(signals)
+	}()
+	if len(live) != 1 || live[0] != first {
+		t.Fatalf("interrupt drain snapshot = %#v, want first harness", live)
+	}
+
+	closeHarnesses(context.Background(), live)
+	interruptCleanup.mu.Lock()
+	stillWatching := interruptCleanup.signals == signals
+	draining := interruptCleanup.draining
+	interruptCleanup.mu.Unlock()
+	if !stillWatching || !draining {
+		t.Fatalf("interrupt cleanup state after teardown: watching=%t draining=%t", stillWatching, draining)
+	}
+	if _, err := second.Start(context.Background()); err == nil {
+		t.Fatal("Start(second) succeeded after interrupt draining began")
+	}
+	if len(secondRunner.commands) != 0 {
+		t.Fatalf("Start(second) issued Podman commands after interrupt draining: %v", secondRunner.commands)
+	}
+}
+
+func TestWaitForInterruptCleanupAbsorbsRepeatedSignals(t *testing.T) {
+	signals := make(chan os.Signal)
+	done := make(chan struct{})
+	returned := make(chan struct{})
+	go func() {
+		waitForInterruptCleanup(signals, done)
+		close(returned)
+	}()
+	signals <- os.Interrupt
+	signals <- syscall.SIGTERM
+	select {
+	case <-returned:
+		t.Fatal("interrupt cleanup stopped before teardown completed")
+	default:
+	}
+	close(done)
+	select {
+	case <-returned:
+	case <-time.After(time.Second):
+		t.Fatal("interrupt cleanup did not finish after teardown")
 	}
 }
 

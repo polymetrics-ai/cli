@@ -166,6 +166,13 @@ func TestSnapshotQueryUsesCompleteDeterministicPageBounds(t *testing.T) {
 			wantArgs:    []any{"4"},
 		},
 		{
+			name:        "empty resumed cursor boundary",
+			cursorField: "sequence",
+			resume:      true,
+			wantQuery:   "SELECT * FROM `analytics`.`events` WHERE `sequence` > ? ORDER BY `sequence` ASC, `id` ASC LIMIT 2",
+			wantArgs:    []any{""},
+		},
+		{
 			name:            "cursor primary key continuation",
 			cursorField:     "sequence",
 			lowerCursor:     "4",

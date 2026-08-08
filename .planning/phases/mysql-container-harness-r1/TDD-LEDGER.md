@@ -248,3 +248,23 @@ go test -count=1 -timeout 5m ./internal/connectors/native/dbtest
 Passed. The harness now accepts only a direct local Unix endpoint, binds its socket and graph-root
 identity before every daemon command, retains every shared source image, and refuses an interrupt
 registration after close.
+
+**Red — review round 8 interrupt drain and checkpoint presence:**
+
+Source inspection found that the signal watcher stopped notification before resource removal, and
+its one-time live-harness snapshot let a queued start proceed after the slot was released. It also
+found that a committed empty checkpoint was indistinguishable from an observed empty cursor, while
+the shared cursor adapter rejected empty and whitespace source values. Focused regression coverage
+will exercise drain admission, handler lifetime, absent-versus-empty checkpoint state, and MySQL's
+strict empty cursor boundary after the complete fix round.
+
+**Green — review round 8:**
+
+```text
+go test -count=1 -timeout 20m ./internal/connectors/native/dbtest ./internal/app ./internal/connectors/native/mysql ./internal/synccontract
+```
+
+Passed. Interrupt cleanup now remains subscribed through teardown, drains later starts before any
+Podman action, and keeps the watcher active until removal completes. Checkpoint envelopes record
+whether a source position was observed, so an acknowledged empty run remains non-resumable while
+an observed empty or whitespace MySQL cursor is preserved as an opaque strict boundary.

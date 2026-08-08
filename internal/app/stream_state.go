@@ -67,21 +67,31 @@ func cloneStreamState(state StreamState) StreamState {
 	return clone
 }
 
-func streamStateCursor(state StreamState) string {
-	if state.Checkpoint == nil {
-		return ""
+func streamStateCursor(state StreamState) (string, bool) {
+	if !streamStateHasSourcePosition(state) {
+		return "", false
 	}
 	// This adapter is only for the pre-contract connector ReadRequest shape.
 	// Native sync executors consume OpaqueToken directly from the envelope.
-	return string(state.Checkpoint.Position.Primary)
+	return string(state.Checkpoint.Position.Primary), true
+}
+
+func streamStateHasSourcePosition(state StreamState) bool {
+	if state.Checkpoint == nil {
+		return false
+	}
+	if state.Checkpoint.PositionObserved != nil {
+		return *state.Checkpoint.PositionObserved
+	}
+	return len(state.Checkpoint.Position.Primary) != 0
 }
 
 func streamReadState(state StreamState, generationID int64) map[string]string {
 	readState := map[string]string{
 		"generation_id": strconv.FormatInt(generationID, 10),
 	}
-	if state.Checkpoint != nil {
-		readState["cursor"] = streamStateCursor(state)
+	if cursor, present := streamStateCursor(state); present {
+		readState["cursor"] = cursor
 	}
 	return readState
 }
@@ -130,7 +140,7 @@ func validateStreamStateResume(state StreamState, expected synccontract.ResumeEx
 	return state.Checkpoint.ValidateResume(expected)
 }
 
-func legacyCheckpointEnvelope(source synccontract.ResumeExpectation, stream StreamConfig, runID, cursor string, observedAt time.Time) synccontract.CheckpointEnvelope {
+func legacyCheckpointEnvelope(source synccontract.ResumeExpectation, stream StreamConfig, runID, cursor string, positionObserved bool, observedAt time.Time) synccontract.CheckpointEnvelope {
 	dedupeIdentity, _ := json.Marshal(stream.PrimaryKey)
 	return synccontract.CheckpointEnvelope{
 		StateVersion:    synccontract.StateVersion,
@@ -141,6 +151,7 @@ func legacyCheckpointEnvelope(source synccontract.ResumeExpectation, stream Stre
 			Primary:    synccontract.OpaqueToken([]byte(cursor)),
 			TieBreaker: synccontract.OpaqueToken([]byte(runID)),
 		},
+		PositionObserved: &positionObserved,
 		Partitions:       []synccontract.PartitionState{},
 		SourceGeneration: source.SourceGeneration,
 		SchemaVersion:    "legacy-app-v1",
@@ -158,8 +169,8 @@ func legacyCheckpointEnvelope(source synccontract.ResumeExpectation, stream Stre
 	}
 }
 
-func committedLegacyStreamState(conn Connection, source synccontract.ResumeExpectation, streamName string, stream StreamConfig, runID, cursor string, generationID int64, recordsLoaded int, observedAt time.Time, acknowledgement synccontract.DownstreamAcknowledgement) (StreamState, error) {
-	candidate := legacyCheckpointEnvelope(source, stream, runID, cursor, observedAt)
+func committedLegacyStreamState(conn Connection, source synccontract.ResumeExpectation, streamName string, stream StreamConfig, runID, cursor string, positionObserved bool, generationID int64, recordsLoaded int, observedAt time.Time, acknowledgement synccontract.DownstreamAcknowledgement) (StreamState, error) {
+	candidate := legacyCheckpointEnvelope(source, stream, runID, cursor, positionObserved, observedAt)
 	var committed synccontract.CheckpointEnvelope
 	if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
 		committed = checkpoint

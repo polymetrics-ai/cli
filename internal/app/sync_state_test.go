@@ -108,18 +108,78 @@ func TestStreamReadStateDistinguishesAbsentAndExplicitEmptyCursor(t *testing.T) 
 		t.Fatalf("initial read state = %#v, want no cursor", initial)
 	}
 
-	empty := streamReadState(StreamState{Checkpoint: &synccontract.CheckpointEnvelope{
-		Position: synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken{}},
+	positionUnobserved := false
+	unobserved := streamReadState(StreamState{Checkpoint: &synccontract.CheckpointEnvelope{
+		PositionObserved: &positionUnobserved,
 	}}, 8)
+	if _, present := unobserved["cursor"]; present {
+		t.Fatalf("unobserved checkpoint read state = %#v, want no cursor", unobserved)
+	}
+
+	positionObserved := true
+	empty := streamReadState(StreamState{Checkpoint: &synccontract.CheckpointEnvelope{
+		Position:         synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken{}},
+		PositionObserved: &positionObserved,
+	}}, 9)
 	if cursor, present := empty["cursor"]; !present || cursor != "" {
 		t.Fatalf("empty checkpoint read state = %#v, want explicit empty cursor", empty)
 	}
 
 	whitespace := streamReadState(StreamState{Checkpoint: &synccontract.CheckpointEnvelope{
-		Position: synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken("  ")},
-	}}, 9)
+		Position:         synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken("  ")},
+		PositionObserved: &positionObserved,
+	}}, 10)
 	if cursor := whitespace["cursor"]; cursor != "  " {
 		t.Fatalf("whitespace checkpoint cursor = %q, want preserved value", cursor)
+	}
+}
+
+func TestIncrementalRunKeepsNoPositionDistinctFromObservedEmptyCursor(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("empty_cursor_state", nil)
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	stateKey := streamStateKey(connection, "records")
+
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("RunETL(empty): %v", err)
+	}
+	first := a.state.StreamStates[stateKey]
+	if first.Checkpoint == nil || first.Checkpoint.PositionObserved == nil || *first.Checkpoint.PositionObserved {
+		t.Fatalf("empty run checkpoint = %#v, want an explicitly unobserved position", first.Checkpoint)
+	}
+	if _, present := source.requests[0].State["cursor"]; present {
+		t.Fatalf("initial source state = %#v, want no cursor", source.requests[0].State)
+	}
+
+	source.records = []connectors.Record{{"id": "empty", "updated_at": ""}}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("RunETL(observed empty cursor): %v", err)
+	}
+	if _, present := source.requests[1].State["cursor"]; present {
+		t.Fatalf("source state after an unobserved checkpoint = %#v, want no cursor", source.requests[1].State)
+	}
+	second := a.state.StreamStates[stateKey]
+	if second.Checkpoint == nil || second.Checkpoint.PositionObserved == nil || !*second.Checkpoint.PositionObserved {
+		t.Fatalf("empty cursor checkpoint = %#v, want an observed position", second.Checkpoint)
+	}
+	if got := string(second.Checkpoint.Position.Primary); got != "" {
+		t.Fatalf("empty cursor checkpoint = %q, want preserved empty value", got)
+	}
+
+	encoded, err := json.Marshal(second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var reloaded StreamState
+	if err := json.Unmarshal(encoded, &reloaded); err != nil {
+		t.Fatal(err)
+	}
+	a.state.StreamStates[stateKey] = reloaded
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("RunETL(resumed empty cursor): %v", err)
+	}
+	if cursor, present := source.requests[2].State["cursor"]; !present || cursor != "" {
+		t.Fatalf("source state after an observed empty cursor = %#v, want explicit empty cursor", source.requests[2].State)
 	}
 }
 

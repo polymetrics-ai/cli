@@ -344,8 +344,22 @@ func TestIncrementalAppendCommitsCursorOnlyAfterSuccess(t *testing.T) {
 		t.Fatal("RunETL(failing incremental) error = nil")
 	}
 	state := a.state.StreamStates[streamStateKey(connection, "records")]
-	if cursor := streamStateCursor(state); cursor != "2026-01-03T00:00:00Z" {
+	if cursor, present := streamStateCursor(state); !present || cursor != "2026-01-03T00:00:00Z" {
 		t.Fatalf("cursor advanced after failed run = %q", cursor)
+	}
+}
+
+func TestRecordCursorPreservesOpaqueEmptyAndWhitespaceValues(t *testing.T) {
+	for _, cursor := range []string{"", "  "} {
+		t.Run("cursor_"+strings.ReplaceAll(cursor, " ", "space"), func(t *testing.T) {
+			got, err := recordCursor(connectors.Record{"updated_at": cursor}, "updated_at")
+			if err != nil || got != cursor {
+				t.Fatalf("recordCursor() = %q, %v, want %q, nil", got, err, cursor)
+			}
+		})
+	}
+	if compareCursor("", "  ") == 0 {
+		t.Fatal("compareCursor() collapsed distinct opaque cursor values")
 	}
 }
 

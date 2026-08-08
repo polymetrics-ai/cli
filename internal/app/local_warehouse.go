@@ -134,8 +134,9 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
 	rawBatch := make([]localRawRecord, 0, batchSize)
-	priorCursor := streamStateCursor(prior)
+	priorCursor, priorCursorObserved := streamStateCursor(prior)
 	nextCursor := priorCursor
+	nextCursorObserved := priorCursorObserved
 	rawSeq := 0
 	observedAt := time.Time{}
 
@@ -158,7 +159,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 
 	readConfig := sourceRuntime
 	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if priorCursor != "" {
+	if priorCursorObserved {
 		readConfig.Config["since"] = priorCursor
 	}
 	err = source.Read(ctx, connectors.ReadRequest{
@@ -174,11 +175,12 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && priorCursor != "" && compareCursor(cursor, priorCursor) < 0 {
+			if mode.Source == SourceSyncIncremental && priorCursorObserved && compareCursor(cursor, priorCursor) < 0 {
 				return nil
 			}
-			if nextCursor == "" || compareCursor(cursor, nextCursor) > 0 {
+			if !nextCursorObserved || compareCursor(cursor, nextCursor) > 0 {
 				nextCursor = cursor
+				nextCursorObserved = true
 			}
 		}
 		deleted := isDeletedRecord(record)
@@ -186,7 +188,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		enriched["_polymetrics_run_id"] = runID
 		enriched["_polymetrics_synced_at"] = now
 		enriched["_polymetrics_deleted"] = deleted
-		if cursor != "" {
+		if stream.CursorField != "" {
 			enriched["_polymetrics_cursor"] = cursor
 		}
 
@@ -273,7 +275,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err != nil {
 		return result, err
 	}
-	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, observedAt, acknowledgement)
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, nextCursorObserved, generationID, result.RecordsLoaded, observedAt, acknowledgement)
 	if err != nil {
 		return result, err
 	}
@@ -324,7 +326,7 @@ func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey stri
 		"state_key":           stateKey,
 		"generation_id":       strconv.FormatInt(state.GenerationID, 10),
 	}
-	if cursor := streamStateCursor(state); cursor != "" {
+	if cursor, present := streamStateCursor(state); present {
 		checkpoint["cursor"] = cursor
 	}
 	return checkpoint

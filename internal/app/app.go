@@ -1102,8 +1102,9 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	result := etlExecutionResult{}
 	batch := make([]connectors.Record, 0, batchSize)
 	firstWrite := true
-	priorCursor := streamStateCursor(prior)
+	priorCursor, priorCursorObserved := streamStateCursor(prior)
 	nextCursor := priorCursor
+	nextCursorObserved := priorCursorObserved
 	observedAt := time.Time{}
 
 	flush := func(force bool) error {
@@ -1149,7 +1150,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 
 	readConfig := sourceRuntime
 	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if priorCursor != "" {
+	if priorCursorObserved {
 		readConfig.Config["since"] = priorCursor
 	}
 	err := source.Read(ctx, connectors.ReadRequest{
@@ -1165,18 +1166,19 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && priorCursor != "" && compareCursor(cursor, priorCursor) < 0 {
+			if mode.Source == SourceSyncIncremental && priorCursorObserved && compareCursor(cursor, priorCursor) < 0 {
 				return nil
 			}
-			if nextCursor == "" || compareCursor(cursor, nextCursor) > 0 {
+			if !nextCursorObserved || compareCursor(cursor, nextCursor) > 0 {
 				nextCursor = cursor
+				nextCursorObserved = true
 			}
 		}
 		r := cloneRecord(record)
 		r["_polymetrics_run_id"] = runID
 		r["_polymetrics_synced_at"] = now
 		r["_polymetrics_deleted"] = isDeletedRecord(record)
-		if cursor != "" {
+		if stream.CursorField != "" {
 			r["_polymetrics_cursor"] = cursor
 		}
 		result.RecordsTransformed++
@@ -1203,7 +1205,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	if acknowledgement.Sink != destination.Name() {
 		return result, fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, destination.Name())
 	}
-	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, observedAt, acknowledgement)
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, nextCursorObserved, generationID, result.RecordsLoaded, observedAt, acknowledgement)
 	if err != nil {
 		return result, err
 	}
