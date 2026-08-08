@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 250,
+    "criteria": "status=done; artifact_kind=openapi|swagger; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope"
+  },
+  "connectors": [
+    {
+      "connector": "float",
+      "operations_total": 95,
+      "operations_read": 44,
+      "operations_write": 51,
+      "artifact": {
+        "url": "https://developer.float.com/swagger-api-v3.yaml",
+        "kind": "swagger",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-06"
+      },
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Float's API Reference loading its provider-published Swagger root and direct referenced path fragments",
+      "counting_note": "Parsed the provider Swagger root and all referenced fragments: 49 path references across 23 provider-published `paths/*.yaml` files produced 95 operation objects—44 GET, 19 POST, 16 DELETE, and 16 PATCH. All non-GET summaries create, update, or delete Float data; no semantic POST read is present.",
+      "processed_at": "2026-08-06T01:35:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

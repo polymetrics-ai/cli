@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "titles",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "title": { "type": ["string", "null"] },
+    "year": { "type": ["integer", "null"] },
+    "imdb_id": { "type": ["string", "null"] },
+    "tmdb_id": { "type": ["integer", "null"] },
+    "tmdb_type": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] }
+  }
+}

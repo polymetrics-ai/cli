@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/api/V1/GetCountries", "query": { "Skip": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        {
+          "CountryIso": "C101",
+          "CountryName": "Fixture Country 101",
+          "InternationalDialingInformation": { "code": "+101" },
+          "RegionCodes": ["R101"]
+        }
+      ]
+    }
+  }
+}

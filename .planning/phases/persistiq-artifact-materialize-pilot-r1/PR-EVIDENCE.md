@@ -89,6 +89,46 @@ reachability results, and timing files are under
 to static evidence, **not certified**, and **never exercised against the
 provider**; no credentials were used.
 
+## Generalization validation before merge
+
+At captain direction, three eligible, deliberately different shapes were
+validated as staged evidence only; no generated production connector bundle
+was added:
+
+| Connector | Shape | Mapped | Implemented | Named dependency | Discrepancy | Reachable | Result |
+|---|---|---:|---:|---:|---:|---:|---|
+| watchmode | 23-read OpenAPI 3.0.3 | 23 | 13 | 32 | 22 | 45/45 | pass |
+| docuseal | 7-read/16-write OpenAPI 3.1.0 | 0 | 0 | 0 | 0 | 0 | **failed: 11 top-level webhooks rejected as artifact inventory unknown** |
+| float | 44-read/51-write Swagger 2.0 | 0 | 0 | 0 | 0 | 0 | **failed: external path-item reference not exhaustively resolvable** |
+
+Watchmode mapped all 23 artifact operations as `direct_read` (0 ETL, 0
+reverse_etl, 0 direct_write, 0 binary_download, 0 unclassified). Its 22
+source-surface-only rows were retained with
+`present-in-surface-absent-from-artifact`, proving the discrepancy path does
+not refuse the connector. `connectorgen validate` had 0 findings,
+`surface-sync --check` had no drift, batch gate included 1/1 with 13 runtime
+preflightable commands, and the real binary reached all 45 command help
+paths (13 implemented and 32 visible not-implemented commands).
+
+Watchmode validation timings were: identify 0.04s; fetch/digest 2.52s; map
+0.02s; batch plan 1.78s; materialize/parse 0.65s; validate 0.67s;
+surface-sync derive/check 0.68s/0.64s; batch gate 0.66s; existing-corpus
+runtime-preflight regression 5.28s; staged binary build 9.71s; bare namespace
+2.48s; 45-command reachability 54.70s; report 0.06s; total 79.89s.
+
+The complete evidence, artifact hashes, failure reports, mapping, generated
+staged bundle, and reachability TSV are under
+`.planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/`.
+The suggested Web Scraper artifact was fetched but not selected because the
+ledger marks it `partner_gated` and the existing planner correctly refuses
+non-public candidates. Ding Connect returned HTTP 403 twice and was replaced
+by Float for the Swagger-2 attempt.
+
+**Generalization result: NOT READY.** DocuSeal and Float fail before mapping,
+so the generator capability cannot be called generalized or ready. The
+eligible 392 remain untouched. Certification remains withheld; no provider
+operation was exercised.
+
 ## Deferred work
 
 The eligible 392 run is a separate follow-up after this generator capability

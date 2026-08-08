@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/sitemap" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        { "id": 7, "name": "Catalog scrape", "url": "https://example.test" },
+        { "id": 8, "name": "Product listing scrape", "url": "https://example.test/products" }
+      ]
+    }
+  }
+}

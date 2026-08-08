@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "title_details",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "title": { "type": ["string", "null"] },
+    "original_title": { "type": ["string", "null"] },
+    "plot_overview": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "runtime_minutes": { "type": ["integer", "null"] },
+    "year": { "type": ["integer", "null"] },
+    "end_year": { "type": ["integer", "null"] },
+    "release_date": { "type": ["string", "null"] },
+    "imdb_id": { "type": ["string", "null"] },
+    "tmdb_id": { "type": ["integer", "null"] },
+    "tmdb_type": { "type": ["string", "null"] },
+    "genre_names": { "type": ["array", "null"] },
+    "user_rating": { "type": ["number", "null"] },
+    "critic_score": { "type": ["number", "null"] },
+    "us_rating": { "type": ["string", "null"] },
+    "poster": { "type": ["string", "null"] },
+    "backdrop": { "type": ["string", "null"] },
+    "watchmode_title_id": { "type": ["string", "null"], "description": "Stamped by fan_out with the title_ids config entry that produced this record." }
+  }
+}

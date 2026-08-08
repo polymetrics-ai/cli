@@ -1,0 +1,30 @@
+{
+  "record": {
+    "SkuCode": "SKU1",
+    "SendValue": 10.0,
+    "AccountNumber": "15550100",
+    "DistributorRef": "fixture-distributor-ref-1",
+    "ValidateOnly": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/V1/SendTransfer",
+    "body": {
+      "SkuCode": "SKU1",
+      "SendValue": 10.0,
+      "AccountNumber": "15550100",
+      "DistributorRef": "fixture-distributor-ref-1",
+      "ValidateOnly": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ResultCode": 0,
+      "TransferRecord": {
+        "SkuCode": "SKU1",
+        "AccountNumber": "15550100"
+      }
+    }
+  }
+}

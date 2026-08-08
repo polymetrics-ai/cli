@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/v1/networks/" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture Network One", "origin_country": "US", "tmdb_id": 213 },
+      { "id": 2, "name": "Fixture Network Two", "origin_country": "US", "tmdb_id": 49 }
+    ]
+  }
+}

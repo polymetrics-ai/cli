@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1000001,
+    "name": "Fixture Template Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/templates/1000001"
+  }
+}

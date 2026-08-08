@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "title_cast_crew",
+  "type": "object",
+  "x-primary-key": ["watchmode_title_id", "person_id", "type", "role"],
+  "required": ["person_id"],
+  "properties": {
+    "person_id": { "type": "integer" },
+    "type": { "type": ["string", "null"] },
+    "full_name": { "type": ["string", "null"] },
+    "role": { "type": ["string", "null"] },
+    "episode_count": { "type": ["integer", "null"] },
+    "order": { "type": ["integer", "null"] },
+    "watchmode_title_id": { "type": ["string", "null"], "description": "Stamped by fan_out with the title_ids config entry that produced this record." }
+  }
+}
