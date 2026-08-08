@@ -50,8 +50,13 @@ wall-clock timing and counts. Stop after PersistIQ.
 - Run `connectorgen validate` (0 findings), `surface-sync --check` (no drift),
   `batch gate`/runtime preflight, the repository's implemented-command test,
   and all applicable package/build gates.
-- If materialization fails, preserve the exact report and do not claim later
-  gates passed. Do not hand-author a replacement generator or weaken a gate.
+- Every artifact operation must be represented. Missing executors are recorded
+  as `not_implemented` with a machine-checkable named dependency and remain
+  visible to validation/help; they are not materialization drops. Preserve the
+  three source-surface-only PersistIQ streams with the exact discrepancy marker
+  `present-in-surface-absent-from-artifact`.
+- Structural parse/provenance failures still fail the pilot. Do not
+  hand-author a replacement generator or weaken a gate.
 
 ### Slice 5 — real binary reachability and report
 
@@ -62,15 +67,25 @@ wall-clock timing and counts. Stop after PersistIQ.
   never provider-exercised in either case.
 - Report wall-clock times for all five slices and the total.
 
+## Captain-ruling rerun policy
+
+The first run recorded a Red caused by the old materializer's executable
+coverage refusal. That Red remains historical evidence. The rerun must add
+tests for complete artifact inventory, named dependencies, and source-surface
+discrepancies before production edits, then record a new Green only after the
+static gates and real binary reachability sweep pass.
+
 ## TDD evidence plan
 
 1. **RED:** Before production bundle edits, run a real PersistIQ command against
    the baseline bundle and capture the observed unknown-command/missing-surface
    failure. The red assertion is that the pilot's generated command set is not
    fully reachable before materialization.
-2. **GREEN:** After the existing batch materializer produces the staged bundle,
-   repeat the same command-reachability sweep and static gates. Record the
-   actual output; no expected pass is declared in advance.
+2. **GREEN:** After the revised batch materializer produces the staged bundle,
+   assert that all 21 artifact operations and all three surface-only
+   discrepancies are represented, then repeat the command-reachability sweep
+   and static gates. Record the actual output; no expected pass is declared in
+   advance.
 3. **REFACTOR:** Keep changes generated/staged to PersistIQ plus this phase's
    evidence. Run formatting/validation checks and inspect the diff for no
    unrelated connector paths.

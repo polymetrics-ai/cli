@@ -226,6 +226,24 @@ func TestValidate_CLISurfaceValidReferencesPassCleanly(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceNotImplementedRequiresNamedDependency(t *testing.T) {
+	missing := strings.Replace(validCLISurfaceJSON(), `"availability": "implemented"`, `"availability": "not_implemented", "notes": "executor is not available"`, 1)
+	report, err := validateDir(cliSurfaceBundleFS(missing))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceNamedDependency)
+
+	declared := strings.Replace(missing, `"notes": "executor is not available"`, `"notes": "named_dependency=engine.example_executor: executor is not available"`, 1)
+	report, err = validateDir(cliSurfaceBundleFS(declared))
+	if err != nil {
+		t.Fatalf("validateDir with named dependency: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("named dependency findings = %+v, want zero", report.Findings)
+	}
+}
+
 func TestValidate_CLISurfaceValidationDeclarationsPassCleanly(t *testing.T) {
 	report, err := validateDir(cliSurfaceBundleFS(validCLISurfaceValidationJSON()))
 	if err != nil {

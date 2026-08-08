@@ -25,10 +25,29 @@
   This is the baseline red: the current binary has no reachable PersistIQ
   command namespace before materialization.
 
+## Captain-ruling policy change
+
+- The old materializer's Red was a fail-closed refusal when the existing
+  `/v1/mailboxes` stream was absent from the fetched artifact.
+- New required Red tests: artifact operations are retained when unsupported,
+  each `not_implemented` command has a machine-checkable named dependency, and
+  source-surface-only operations remain with the exact discrepancy marker.
+- Missing executor/foundation is a visible gap, not a drop. The implemented
+  availability invariant remains enforced by runtime preflight.
+
+### Captain-ruling Red run
+
+- Command: `go test -timeout 20m ./cmd/connectorgen -run
+  'TestBatchMaterializeMapsUnsupportedOperationsAndFlagsSurfaceDiscrepancies|TestValidate_CLISurfaceNotImplementedRequiresNamedDependency'`
+- Observed Red: the materializer returned `0 connector(s) materialized, 1
+  dropped` for the source-only endpoint, and the new availability value was
+  rejected by the CLI schema enum. These are the two intended pre-change
+  failures: complete inventory was still refused and named dependency
+  validation had not yet been wired.
+
 ## GREEN
 
-- Status: not reached; the existing materializer failed closed before it wrote
-  a destination bundle.
+- Status: pending the captain-policy implementation and rerun.
 - Test: run the same real-binary sweep against the generated PersistIQ bundle,
   plus validation, surface-sync check, runtime preflight, and batch gate.
 - Captured materializer output (verbatim):
@@ -44,8 +63,9 @@
   executable coverage GET /v1/mailboxes is absent from the cited artifact
   ```
 
-  The generated bundle and its commands therefore do not exist; no Green
-  claim is made and no generated command is counted reachable.
+  This is historical Red evidence for the superseded policy. The generated
+  bundle and its commands did not exist in that run; no Green claim is made
+  from it and no generated command is counted reachable.
 
 ## Refactor / safety
 
