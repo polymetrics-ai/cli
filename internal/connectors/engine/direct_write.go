@@ -102,6 +102,12 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		requester := *resolvedRequester
 		requester.DisableRetries = true
+		if redirect := prepared.op.REST.Redirect; redirect != nil {
+			requester.DeclaredMutationRedirect = &connsdk.DeclaredMutationRedirect{
+				AllowedHostSuffixes: append([]string(nil), redirect.AllowedHostSuffixes...),
+				MaxHops:             redirect.MaxHops,
+			}
+		}
 
 		var response *connsdk.Response
 		switch prepared.format {
@@ -443,6 +449,11 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		// parts and their limits, rather than only the values present in this
 		// invocation's canonical body.
 		definition["multipart"] = op.REST.Multipart
+	}
+	if op.REST.Redirect != nil {
+		// The admitted host boundary and finite replay cap are preview-bound
+		// declaration data. A redirect target is never supplied by a command.
+		definition["redirect"] = op.REST.Redirect
 	}
 	prepared := PreparedWrite{
 		Target:              target,

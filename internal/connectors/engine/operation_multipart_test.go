@@ -133,9 +133,10 @@ func TestOperationDirectWriteMultipartFollowsDeclaredRedirect(t *testing.T) {
 		}
 	}))
 	defer server.Close()
-	redirectURL = strings.Replace(server.URL, "127.0.0.1", "localhost", 1) + "/redirected"
+	baseURL := strings.Replace(server.URL, "127.0.0.1", "localhost", 1)
+	redirectURL = baseURL + "/redirected"
 
-	rest := strings.Replace(validMultipartRestWrite, `"path": "/attachments",`, fmt.Sprintf(`"path": "/attachments", "base_url": %q, "auth": [{"mode": "bearer", "token": "{{ secrets.fixture_token }}"}], "redirect": {"allowed_host_suffixes": ["localhost"], "max_hops": 1},`, server.URL), 1)
+	rest := strings.Replace(validMultipartRestWrite, `"path": "/attachments",`, fmt.Sprintf(`"path": "/attachments", "base_url": %q, "auth": [{"mode": "bearer", "token": "{{ secrets.fixture_token }}"}], "redirect": {"allowed_host_suffixes": ["localhost"], "max_hops": 1},`, baseURL), 1)
 	bundle, err := Load(multipartRestWriteBundleFS(rest, "rest_write"), "acme")
 	if err != nil {
 		t.Fatalf("Load declared multipart redirect contract: %v", err)
@@ -158,6 +159,164 @@ func TestOperationDirectWriteMultipartFollowsDeclaredRedirect(t *testing.T) {
 	}
 	if result.Status != http.StatusOK || initialCalls != 1 || redirectedCalls != 1 {
 		t.Fatalf("declared redirect result/status/calls = %#v/%d/%d, want one admitted redirect", result, initialCalls, redirectedCalls)
+	}
+}
+
+func TestBundleLoadRejectsUnsafeDeclaredMultipartRedirect(t *testing.T) {
+	const (
+		baseURL = "https://files.example.test/v2"
+		bearer  = `[{"mode": "bearer", "token": "{{ secrets.fixture_token }}"}]`
+		basic   = `[{"mode": "basic", "username": "fixture", "password": "{{ secrets.fixture_token }}"}]`
+		valid   = `{"allowed_host_suffixes": ["example.test"], "max_hops": 1}`
+	)
+	withRedirect := func(replacement string) string {
+		return strings.Replace(validMultipartRestWrite, `"path": "/attachments",`, replacement, 1)
+	}
+	cases := []struct {
+		name string
+		rest string
+		want string
+	}{
+		{
+			name: "requires fixed operation base and auth",
+			rest: withRedirect(`"path": "/attachments", "redirect": {"allowed_host_suffixes": ["example.test"], "max_hops": 1},`),
+			want: "base_url",
+		},
+		{
+			name: "refuses configurable base",
+			rest: withRedirect(`"path": "/attachments", "base_url": "{{ config.upload_base_url }}", "auth": ` + bearer + `, "redirect": ` + valid + `,`),
+			want: "fixed literal",
+		},
+		{
+			name: "requires bearer auth",
+			rest: withRedirect(`"path": "/attachments", "base_url": "` + baseURL + `", "auth": ` + basic + `, "redirect": ` + valid + `,`),
+			want: "bearer",
+		},
+		{
+			name: "rejects wildcard host suffix",
+			rest: withRedirect(`"path": "/attachments", "base_url": "` + baseURL + `", "auth": ` + bearer + `, "redirect": {"allowed_host_suffixes": ["*.example.test"], "max_hops": 1},`),
+			want: "host suffix",
+		},
+		{
+			name: "requires the operation base to be inside the provider boundary",
+			rest: withRedirect(`"path": "/attachments", "base_url": "https://files.unapproved.test/v2", "auth": ` + bearer + `, "redirect": ` + valid + `,`),
+			want: "base_url host",
+		},
+		{
+			name: "rejects an IP address as a provider suffix",
+			rest: withRedirect(`"path": "/attachments", "base_url": "` + baseURL + `", "auth": ` + bearer + `, "redirect": {"allowed_host_suffixes": ["127.0.0.1"], "max_hops": 1},`),
+			want: "host suffix",
+		},
+		{
+			name: "requires finite positive hop cap",
+			rest: withRedirect(`"path": "/attachments", "base_url": "` + baseURL + `", "auth": ` + bearer + `, "redirect": {"allowed_host_suffixes": ["example.test"], "max_hops": 4},`),
+			want: "max_hops",
+		},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := Load(multipartRestWriteBundleFS(tt.rest, "rest_write"), "acme")
+			if err == nil || !strings.Contains(strings.ToLower(err.Error()), strings.ToLower(tt.want)) {
+				t.Fatalf("Load declared redirect error = %v, want %q", err, tt.want)
+			}
+		})
+	}
+}
+
+func TestOperationDirectWriteMultipartRedirectFailsClosed(t *testing.T) {
+	const accessToken = "fixture-redirect-boundary-token"
+	tests := []struct {
+		name           string
+		status         int
+		locationHost   string
+		maxHops        int
+		secondRedirect bool
+		want           string
+	}{
+		{
+			name:         "unapproved host",
+			status:       http.StatusTemporaryRedirect,
+			locationHost: "127.0.0.1",
+			maxHops:      1,
+			want:         "not approved",
+		},
+		{
+			name:         "method changing status",
+			status:       http.StatusFound,
+			locationHost: "localhost",
+			maxHops:      1,
+			want:         "method-preserving",
+		},
+		{
+			name:           "hop cap",
+			status:         http.StatusTemporaryRedirect,
+			locationHost:   "localhost",
+			maxHops:        1,
+			secondRedirect: true,
+			want:           "hop cap",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var redirectURL string
+			var initialCalls, redirectedCalls, finalCalls int
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+				if request.Header.Get("Authorization") != "Bearer "+accessToken {
+					t.Fatal("redirect boundary fixture did not receive the declared bearer")
+				}
+				switch request.URL.Path {
+				case "/attachments":
+					initialCalls++
+					http.Redirect(w, request, redirectURL, tt.status)
+				case "/redirected":
+					redirectedCalls++
+					if !tt.secondRedirect {
+						finalCalls++
+						return
+					}
+					http.Redirect(w, request, redirectURL+"?fixture-signed-redirect-value", http.StatusTemporaryRedirect)
+				default:
+					t.Fatalf("unexpected redirect boundary request path %q", request.URL.Path)
+				}
+			}))
+			defer server.Close()
+			baseURL := strings.Replace(server.URL, "127.0.0.1", "localhost", 1)
+			redirectURL = strings.Replace(baseURL, "localhost", tt.locationHost, 1) + "/redirected"
+
+			rest := strings.Replace(validMultipartRestWrite, `"path": "/attachments",`, fmt.Sprintf(`"path": "/attachments", "base_url": %q, "auth": [{"mode": "bearer", "token": "{{ secrets.fixture_token }}"}], "redirect": {"allowed_host_suffixes": ["localhost"], "max_hops": %d},`, baseURL, tt.maxHops), 1)
+			bundle, err := Load(multipartRestWriteBundleFS(rest, "rest_write"), "acme")
+			if err != nil {
+				t.Fatalf("Load redirect boundary contract: %v", err)
+			}
+
+			dir := t.TempDir()
+			payload := []byte("typed multipart payload")
+			path := writeMultipartOperationSource(t, dir, "media.txt", payload)
+			req := multipartOperationRequest(dir, path, payload)
+			req.Config.Secrets = map[string]string{"fixture_token": accessToken}
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite redirect boundary: %v", err)
+			}
+			req.PreviewDigest = preview.Digest
+			req.Approval = approvedEvidenceForPreview(t, preview)
+			_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+			if err == nil || !strings.Contains(strings.ToLower(err.Error()), strings.ToLower(tt.want)) {
+				t.Fatalf("OperationDirectWrite redirect boundary error = %v, want %q", err, tt.want)
+			}
+			if strings.Contains(err.Error(), "fixture-signed-redirect-value") {
+				t.Fatal("declared redirect error exposed a signed target value")
+			}
+			if initialCalls != 1 || finalCalls != 0 {
+				t.Fatalf("redirect boundary initial/final calls = %d/%d, want 1/0", initialCalls, finalCalls)
+			}
+			if tt.secondRedirect && redirectedCalls != 1 {
+				t.Fatalf("hop-cap fixture redirected calls = %d, want 1", redirectedCalls)
+			}
+			if !tt.secondRedirect && redirectedCalls != 0 {
+				t.Fatalf("rejected redirect target received %d unexpected calls", redirectedCalls)
+			}
+		})
 	}
 }
 

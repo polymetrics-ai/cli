@@ -194,6 +194,19 @@
                     }
                   }
                 }
+              },
+              "redirect": {
+                "type": "object",
+                "required": ["allowed_host_suffixes", "max_hops"],
+                "additionalProperties": false,
+                "properties": {
+                  "allowed_host_suffixes": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "type": "string" }
+                  },
+                  "max_hops": { "type": "integer" }
+                }
               }
             }
           },

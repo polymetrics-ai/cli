@@ -4,7 +4,8 @@
 
 - [ ] Live artifact, operation count, byte count, hash, and ledger comparison recorded before RED.
 - [ ] RED capture committed before all production declaration/foundation changes.
-- [ ] Redirect-safe multipart foundation proves all positive and negative transport boundaries.
+- [x] Redirect-safe multipart foundation proves bearer replay, multipart snapshot rebuild, fixed
+  base/bearer/suffix boundaries, 307/308-only behavior, hop caps, and signed-target redaction.
 - [ ] All 17 command paths pass real commandrunner preflight.
 - [ ] Six direct reads and eleven direct writes run against isolated exact fixtures.
 - [ ] Four DELETEs and task PATCH assert 204 status-only semantics; DELETEs require destructive

@@ -12,6 +12,7 @@ import (
 	"math/rand/v2"
 	"mime"
 	"mime/multipart"
+	"net"
 	"net/http"
 	"net/textproto"
 	"net/url"
@@ -29,6 +30,122 @@ import (
 const maxErrorBody = 8 << 10 // 8 KiB
 const defaultMaxResponseBody = 64 << 20
 const maxRedirects = 10
+const maxDeclaredMutationRedirectHops = 3
+
+// DeclaredMutationRedirect is a declaration-owned exception to the default
+// no-redirect policy for strict mutation requests. It exists only so an
+// operation-level multipart upload can rebuild its already snapshot-bound body
+// at a provider-documented, same-provider host; callers never provide a target
+// URL or authentication header.
+type DeclaredMutationRedirect struct {
+	AllowedHostSuffixes []string
+	MaxHops             int
+}
+
+// Validate rejects a redirect policy that is too broad to safely replay a
+// non-idempotent multipart operation. The engine also validates this at bundle
+// load time; keeping the check here makes direct Requester use fail closed.
+func (p DeclaredMutationRedirect) Validate() error {
+	if p.MaxHops < 1 || p.MaxHops > maxDeclaredMutationRedirectHops {
+		return fmt.Errorf("declared mutation redirect max_hops must be between 1 and %d", maxDeclaredMutationRedirectHops)
+	}
+	if len(p.AllowedHostSuffixes) == 0 {
+		return fmt.Errorf("declared mutation redirect requires at least one allowed host suffix")
+	}
+	seen := make(map[string]struct{}, len(p.AllowedHostSuffixes))
+	for _, raw := range p.AllowedHostSuffixes {
+		suffix := canonicalRedirectHostSuffix(raw)
+		if suffix == "" {
+			return fmt.Errorf("declared mutation redirect has an invalid allowed host suffix")
+		}
+		if _, duplicate := seen[suffix]; duplicate {
+			return fmt.Errorf("declared mutation redirect repeats an allowed host suffix")
+		}
+		seen[suffix] = struct{}{}
+	}
+	return nil
+}
+
+func canonicalRedirectHostSuffix(raw string) string {
+	suffix := strings.TrimSuffix(strings.ToLower(strings.TrimSpace(raw)), ".")
+	if suffix == "" || strings.HasPrefix(suffix, ".") || len(suffix) > 253 || net.ParseIP(suffix) != nil {
+		return ""
+	}
+	for _, label := range strings.Split(suffix, ".") {
+		if len(label) == 0 || len(label) > 63 || label[0] == '-' || label[len(label)-1] == '-' {
+			return ""
+		}
+		for _, char := range label {
+			if (char < 'a' || char > 'z') && (char < '0' || char > '9') && char != '-' {
+				return ""
+			}
+		}
+	}
+	return suffix
+}
+
+// AllowsHost reports whether host is inside the declaration-owned provider
+// boundary. Both the original operation base and every redirect target must
+// pass this check, so bearer authentication never starts outside that boundary.
+func (p DeclaredMutationRedirect) AllowsHost(raw string) bool {
+	host := strings.TrimSuffix(strings.ToLower(strings.TrimSpace(raw)), ".")
+	if host == "" || net.ParseIP(host) != nil {
+		return false
+	}
+	for _, rawSuffix := range p.AllowedHostSuffixes {
+		suffix := canonicalRedirectHostSuffix(rawSuffix)
+		if suffix != "" && (host == suffix || strings.HasSuffix(host, "."+suffix)) {
+			return true
+		}
+	}
+	return false
+}
+
+func (p DeclaredMutationRedirect) admit(current *url.URL, location string, hop int) (*url.URL, error) {
+	if err := p.Validate(); err != nil {
+		return nil, fmt.Errorf("%w: declared mutation redirect policy is invalid", transportpolicy.ErrRedirectRefused)
+	}
+	if current == nil || strings.TrimSpace(current.Scheme) == "" || strings.TrimSpace(current.Host) == "" {
+		return nil, fmt.Errorf("%w: declared mutation redirect source is invalid", transportpolicy.ErrRedirectRefused)
+	}
+	if hop >= p.MaxHops {
+		return nil, fmt.Errorf("%w: declared mutation redirect hop cap reached", transportpolicy.ErrRedirectRefused)
+	}
+	if strings.TrimSpace(location) == "" {
+		return nil, fmt.Errorf("%w: declared mutation redirect has no location", transportpolicy.ErrRedirectRefused)
+	}
+	next, err := current.Parse(location)
+	if err != nil || next == nil || next.User != nil || strings.TrimSpace(next.Scheme) == "" || strings.TrimSpace(next.Host) == "" {
+		return nil, fmt.Errorf("%w: declared mutation redirect target is invalid", transportpolicy.ErrRedirectRefused)
+	}
+	if !strings.EqualFold(next.Scheme, current.Scheme) {
+		return nil, fmt.Errorf("%w: declared mutation redirect changes scheme", transportpolicy.ErrRedirectRefused)
+	}
+	if !strings.EqualFold(next.Scheme, "https") && !strings.EqualFold(next.Scheme, "http") {
+		return nil, fmt.Errorf("%w: declared mutation redirect target is not HTTP", transportpolicy.ErrRedirectRefused)
+	}
+	if p.AllowsHost(next.Hostname()) {
+		next.Fragment = ""
+		return next, nil
+	}
+	return nil, fmt.Errorf("%w: declared mutation redirect target host is not approved", transportpolicy.ErrRedirectRefused)
+}
+
+func isDeclaredMutationRedirectStatus(status int) bool {
+	return status == http.StatusTemporaryRedirect || status == http.StatusPermanentRedirect
+}
+
+func redactedDeclaredRedirectURL(raw string) string {
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		return "declared redirect target"
+	}
+	parsed.RawQuery = ""
+	parsed.ForceQuery = false
+	parsed.Fragment = ""
+	parsed.User = nil
+	return parsed.String()
+}
 
 // Response is a captured HTTP response with its body already read.
 type Response struct {
@@ -145,6 +262,10 @@ type Requester struct {
 	// UserAgent and DefaultHeaders are applied to every request.
 	UserAgent      string
 	DefaultHeaders map[string]string
+	// DeclaredMutationRedirect is set only by the operation executor after its
+	// closed bundle declaration and preview binding pass. It never enables a
+	// caller-controlled redirect target or arbitrary header forwarding.
+	DeclaredMutationRedirect *DeclaredMutationRedirect
 	// Accept overrides the Accept header (defaults to application/json).
 	Accept string
 
@@ -208,10 +329,17 @@ func isSafeReplayableRead(method string) bool {
 	}
 }
 
-func noReplayClient(client *http.Client) *http.Client {
+func noReplayClient(client *http.Client, declaredRedirect bool) *http.Client {
 	clone := *client
-	clone.CheckRedirect = func(*http.Request, []*http.Request) error {
-		return transportpolicy.ErrRedirectRefused
+	if declaredRedirect {
+		// Return the 307/308 response to doWithBody so it can admit the target,
+		// rebuild the snapshot-bound multipart payload, and reapply only declared
+		// bearer auth. net/http must not replay the streamed body by itself.
+		clone.CheckRedirect = func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }
+	} else {
+		clone.CheckRedirect = func(*http.Request, []*http.Request) error {
+			return transportpolicy.ErrRedirectRefused
+		}
 	}
 	transport, ok := client.Transport.(*http.Transport)
 	if client.Transport == nil {
@@ -840,117 +968,159 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	reauthAttempted := false
 	requesterAttempt := 0
 	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
+	declaredRedirect := r.DeclaredMutationRedirect
+	if declaredRedirect != nil {
+		if !strictWrite {
+			return nil, fmt.Errorf("declared mutation redirect requires a strict mutation request")
+		}
+		if err := declaredRedirect.Validate(); err != nil {
+			return nil, err
+		}
+		initial, parseErr := url.Parse(fullURL)
+		if parseErr != nil || !declaredRedirect.AllowsHost(initial.Hostname()) {
+			return nil, fmt.Errorf("%w: declared mutation redirect base host is not approved", transportpolicy.ErrRedirectRefused)
+		}
+	}
 	baseClient := r.clientFor(ctx)
 	if strictWrite {
-		baseClient = noReplayClient(baseClient)
+		baseClient = noReplayClient(baseClient, declaredRedirect != nil)
 	}
 	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt)
+	requestURL := fullURL
+	redirectHops := 0
+attemptLoop:
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
 
-		body, err := bodyFactory()
-		if err != nil {
-			return nil, err
-		}
-		var reader io.Reader
-		var contentType string
-		if body != nil {
-			reader = body.Reader
-			contentType = body.ContentType
-		}
-		req, err := http.NewRequestWithContext(ctx, method, fullURL, reader)
-		if err != nil {
-			cleanupRequestBody(body)
-			return nil, fmt.Errorf("build request: %w", err)
-		}
-		r.applyHeaders(req, body != nil, contentType)
-		if r.Auth != nil {
-			if err := r.Auth.Apply(ctx, req); err != nil {
-				cleanupRequestBody(body)
-				return nil, fmt.Errorf("apply auth: %w", err)
+		for {
+			body, err := bodyFactory()
+			if err != nil {
+				return nil, err
 			}
-		}
-		if r.DisableRetries {
-			disableTransportReplay(req, strictWrite)
-		}
-		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
-			_ = cleanupRequestBody(body)
-			return nil, err
-		}
-
-		resp, err := client.Do(req)
-		if err != nil {
-			bodyErr := cleanupRequestBody(body)
-			lastErr = fmt.Errorf("send request: %w", err)
-			if bodyErr != nil {
-				lastErr = fmt.Errorf("send request: %w", bodyErr)
+			var reader io.Reader
+			var contentType string
+			if body != nil {
+				reader = body.Reader
+				contentType = body.ContentType
 			}
-			if errors.Is(err, transportpolicy.ErrRedirectRefused) {
-				return nil, lastErr
-			}
-			if isRateLimitAdmissionError(err) {
-				return nil, lastErr
-			}
-			if attempt < attempts-1 {
-				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
-					return nil, werr
+			req, err := http.NewRequestWithContext(ctx, method, requestURL, reader)
+			if err != nil {
+				_ = cleanupRequestBody(body)
+				if redirectHops > 0 {
+					return nil, fmt.Errorf("build declared redirect request")
 				}
+				return nil, fmt.Errorf("build request: %w", err)
+			}
+			r.applyHeaders(req, body != nil, contentType)
+			if r.Auth != nil {
+				if err := r.Auth.Apply(ctx, req); err != nil {
+					_ = cleanupRequestBody(body)
+					return nil, fmt.Errorf("apply auth: %w", err)
+				}
+			}
+			if r.DisableRetries {
+				disableTransportReplay(req, strictWrite)
+			}
+			if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
+				_ = cleanupRequestBody(body)
+				return nil, err
+			}
+
+			resp, err := client.Do(req)
+			if err != nil {
+				bodyErr := cleanupRequestBody(body)
+				if redirectHops > 0 {
+					lastErr = fmt.Errorf("send declared redirect request failed")
+				} else {
+					lastErr = fmt.Errorf("send request: %w", err)
+				}
+				if bodyErr != nil {
+					lastErr = fmt.Errorf("send request body: %w", bodyErr)
+				}
+				if errors.Is(err, transportpolicy.ErrRedirectRefused) {
+					return nil, lastErr
+				}
+				if isRateLimitAdmissionError(err) {
+					return nil, lastErr
+				}
+				if attempt < attempts-1 {
+					if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
+						return nil, werr
+					}
+					continue attemptLoop
+				}
+				return nil, lastErr
+			}
+			observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, requesterAttempt)
+			bodyErr := cleanupRequestBody(body)
+			if bodyErr != nil {
+				resp.Body.Close()
+				return nil, fmt.Errorf("send request body: %w", bodyErr)
+			}
+			if declaredRedirect != nil && resp.StatusCode >= http.StatusMultipleChoices && resp.StatusCode < http.StatusBadRequest {
+				resp.Body.Close()
+				if !isDeclaredMutationRedirectStatus(resp.StatusCode) {
+					return nil, fmt.Errorf("%w: declared mutation redirect status is not a method-preserving redirect", transportpolicy.ErrRedirectRefused)
+				}
+				next, redirectErr := declaredRedirect.admit(req.URL, resp.Header.Get("Location"), redirectHops)
+				if redirectErr != nil {
+					return nil, redirectErr
+				}
+				redirectHops++
+				requestURL = next.String()
 				continue
 			}
-			return nil, lastErr
-		}
-		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, requesterAttempt)
-		bodyErr := cleanupRequestBody(body)
-		if bodyErr != nil {
+
+			respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 			resp.Body.Close()
-			return nil, fmt.Errorf("send request body: %w", bodyErr)
-		}
+			errorURL := requestURL
+			if redirectHops > 0 {
+				errorURL = redactedDeclaredRedirectURL(requestURL)
+			}
 
-		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
-		resp.Body.Close()
-
-		// A 401 can mean the credential was invalidated out of band (revoked
-		// grant, password change, scope change) rather than that it was never
-		// valid — something an expiry clock cannot see. An Authenticator that
-		// knows how to renew itself gets exactly one chance to do so.
-		//
-		// Authenticators that do not implement AuthRefresher — every mode that
-		// predates the refresh-token grant — never enter this branch, so their
-		// 401 behaviour is byte-for-byte unchanged.
-		if !r.DisableRetries && resp.StatusCode == http.StatusUnauthorized && !reauthAttempted {
-			if refresher, ok := r.Auth.(AuthRefresher); ok {
-				// Set before the attempt: a refresh that itself errors must not
-				// buy a second one.
-				reauthAttempted = true
-				if err := refresher.RefreshAuth(ctx, req); err == nil {
-					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
-					// The reauth retry does not spend the transient-failure
-					// budget, so a MaxRetries:0 requester still gets its one
-					// post-refresh attempt. Bounded by reauthAttempted, which
-					// is now true, so this can decrement at most once.
-					attempt--
-					continue
+			// A 401 can mean the credential was invalidated out of band (revoked
+			// grant, password change, scope change) rather than that it was never
+			// valid — something an expiry clock cannot see. An Authenticator that
+			// knows how to renew itself gets exactly one chance to do so.
+			//
+			// Authenticators that do not implement AuthRefresher — every mode that
+			// predates the refresh-token grant — never enter this branch, so their
+			// 401 behaviour is byte-for-byte unchanged.
+			if !r.DisableRetries && resp.StatusCode == http.StatusUnauthorized && !reauthAttempted {
+				if refresher, ok := r.Auth.(AuthRefresher); ok {
+					// Set before the attempt: a refresh that itself errors must not
+					// buy a second one.
+					reauthAttempted = true
+					if err := refresher.RefreshAuth(ctx, req); err == nil {
+						lastErr = &HTTPError{Status: resp.StatusCode, URL: errorURL, Body: truncate(respBody)}
+						// The reauth retry does not spend the transient-failure
+						// budget, so a MaxRetries:0 requester still gets its one
+						// post-refresh attempt. Bounded by reauthAttempted, which
+						// is now true, so this can decrement at most once.
+						attempt--
+						continue attemptLoop
+					}
+					// The refresh failed; fall through and report the 401 itself,
+					// which is the more useful of the two errors.
 				}
-				// The refresh failed; fall through and report the 401 itself,
-				// which is the more useful of the two errors.
 			}
-		}
 
-		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
-			lastErr = responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
-			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
-				return nil, werr
+			if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
+				lastErr = responseHTTPError(resp.StatusCode, errorURL, respBody, observation)
+				if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
+					return nil, werr
+				}
+				continue attemptLoop
 			}
-			continue
-		}
 
-		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
-		}
+			if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+				return nil, responseHTTPError(resp.StatusCode, errorURL, respBody, observation)
+			}
 
-		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL}, nil
+			return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: errorURL}, nil
+		}
 	}
 	if lastErr == nil {
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)
