@@ -872,6 +872,76 @@ func TestMaterializeAPISurfacePreservesMultiSourceProvenanceAlternatives(t *test
 	}
 }
 
+func TestMaterializeAPISurfaceDisambiguatesIdenticalReferenceArtifacts(t *testing.T) {
+	bundle := engine.Bundle{Surface: &engine.APISurface{API: "Example API"}}
+	candidate := BatchManifestConnector{Connector: "cli-surface", Artifact: BatchArtifact{
+		Kind:    "openapi",
+		URL:     "https://provider.example/openapi.json",
+		Version: "3.1.0",
+	}}
+	rootHash := strings.Repeat("a", 64)
+	sharedReferenceHash := strings.Repeat("b", 64)
+	firstReferenceURL := "https://provider.example/references/first.json"
+	secondReferenceURL := "https://provider.example/references/second.json"
+	surface, err := materializeAPISurface(
+		bundle,
+		candidate,
+		"2026-08-08",
+		rootHash,
+		[]batchArtifactEndpoint{{
+			Method:           http.MethodGet,
+			Path:             "/widgets",
+			SourceURL:        firstReferenceURL,
+			SourceKind:       "official-reference",
+			SourceVersion:    "3.1.0",
+			SourceRetrieved:  "2026-08-08",
+			SourceSHA256:     sharedReferenceHash,
+			SourceCoordinate: "https://provider.example/references/first.json#/paths/~1widgets/get",
+		}, {
+			Method:           http.MethodPost,
+			Path:             "/widgets",
+			SourceURL:        secondReferenceURL,
+			SourceKind:       "official-reference",
+			SourceVersion:    "3.1.0",
+			SourceRetrieved:  "2026-08-08",
+			SourceSHA256:     sharedReferenceHash,
+			SourceCoordinate: "https://provider.example/references/second.json#/paths/~1widgets/post",
+		}},
+		[]batchArtifactSource{{
+			URL:       candidate.Artifact.URL,
+			Kind:      candidate.Artifact.Kind,
+			Version:   candidate.Artifact.Version,
+			Retrieved: "2026-08-08",
+			SHA256:    rootHash,
+		}, {
+			URL:       firstReferenceURL,
+			Kind:      "official-reference",
+			Version:   "3.1.0",
+			Retrieved: "2026-08-08",
+			SHA256:    sharedReferenceHash,
+		}, {
+			URL:       secondReferenceURL,
+			Kind:      "official-reference",
+			Version:   "3.1.0",
+			Retrieved: "2026-08-08",
+			SHA256:    sharedReferenceHash,
+		}},
+	)
+	if err != nil {
+		t.Fatalf("materialize duplicate-content references: %v", err)
+	}
+	artifactIDs := map[string]string{}
+	for _, artifact := range surface.Artifacts {
+		artifactIDs[artifact.URL] = artifact.ID
+	}
+	if artifactIDs[firstReferenceURL] == "" || artifactIDs[secondReferenceURL] == "" || artifactIDs[firstReferenceURL] == artifactIDs[secondReferenceURL] {
+		t.Fatalf("reference artifact IDs = %+v, want distinct IDs for distinct URLs", artifactIDs)
+	}
+	if provenance := engine.ValidateSurfaceProvenance(&surface); provenance.Status != engine.SurfaceProvenanceComplete || len(provenance.Issues) != 0 {
+		t.Fatalf("surface provenance = %+v, want complete distinct-reference evidence", provenance)
+	}
+}
+
 func TestBatchMaterializeExcludesProtocolMetadataOperations(t *testing.T) {
 	bundle := engine.Bundle{
 		Surface: &engine.APISurface{
@@ -1219,6 +1289,59 @@ func TestParseBatchHTMLReferenceTraversesMarkdownMachineSource(t *testing.T) {
 	}
 }
 
+func TestParseBatchHTMLReferenceResolvesNestedLinksAgainstCurrentPage(t *testing.T) {
+	rootURL := "https://provider.example/docs/index"
+	referenceURL := "https://provider.example/docs/v1/reference"
+	machineURL := "https://provider.example/docs/v1/openapi.json"
+	root := []byte(`<html><body><a href="v1/reference">Reference</a></body></html>`)
+	reference := []byte(`<html><body><a href="openapi.json">OpenAPI export</a></body></html>`)
+	machine := []byte(`{"openapi":"3.1.0","paths":{"/widgets":{"get":{"summary":"List widgets"}}}}`)
+	wrongMachine := []byte(`{"openapi":"3.1.0","paths":{"/wrong":{"get":{"summary":"Wrong document"}}}}`)
+	fetched := []string{}
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: rootURL, Kind: "html_reference", Retrieved: "2026-08-08"}, func(rawURL string) ([]byte, error) {
+		fetched = append(fetched, rawURL)
+		switch rawURL {
+		case referenceURL:
+			return reference, nil
+		case machineURL:
+			return machine, nil
+		case "https://provider.example/docs/openapi.json":
+			return wrongMachine, nil
+		default:
+			t.Fatalf("traversed URL = %q, want nested official reference", rawURL)
+			return nil, nil
+		}
+	})
+	if err != nil {
+		t.Fatalf("parse nested HTML reference: %v", err)
+	}
+	if len(fetched) != 2 || fetched[0] != referenceURL || fetched[1] != machineURL {
+		t.Fatalf("traversed URLs = %+v, want %q then %q", fetched, referenceURL, machineURL)
+	}
+	if len(inventory.Endpoints) != 1 || inventory.Endpoints[0].Path != "/widgets" || inventory.Endpoints[0].SourceURL != machineURL {
+		t.Fatalf("nested reference inventory = %+v, want machine endpoint from current-page-relative link", inventory)
+	}
+}
+
+func TestParseBatchHTMLReferenceStripsLinkedDocumentFragment(t *testing.T) {
+	rootURL := "https://provider.example/reference"
+	machineURL := "https://provider.example/openapi.json"
+	root := []byte(`<html><body><p>GET /widgets</p><a href="/openapi.json#/paths/~1widgets">OpenAPI export</a></body></html>`)
+	machine := []byte(`{"openapi":"3.1.0","paths":{"/widgets":{"post":{"summary":"Create widget"}}}}`)
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: rootURL, Kind: "html_reference", Retrieved: "2026-08-08"}, func(rawURL string) ([]byte, error) {
+		if rawURL != machineURL {
+			t.Fatalf("traversed URL = %q, want fragment-free machine source", rawURL)
+		}
+		return machine, nil
+	})
+	if err != nil {
+		t.Fatalf("parse fragment-linked HTML reference: %v", err)
+	}
+	if len(inventory.Endpoints) != 2 || len(inventory.Sources) != 2 || inventory.Endpoints[1].Method != http.MethodPost || inventory.Endpoints[1].SourceURL != machineURL {
+		t.Fatalf("fragment-linked inventory = %+v, want explicit and linked machine operations", inventory)
+	}
+}
+
 func TestParseBatchHTMLReferenceFailsClosedForSelectedLinkFailures(t *testing.T) {
 	rootURL := "https://provider.example/reference"
 	machineURL := "https://provider.example/openapi.json"
@@ -1325,6 +1448,17 @@ func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 	})
 	if dialed != "8.8.8.8:443" {
 		t.Fatalf("dialed %q, want validated public address", dialed)
+	}
+}
+
+func TestParseBatchReferenceURLRejectsCredentialQueryAliases(t *testing.T) {
+	for _, key := range []string{"api_key", "api-key", "apikey", "access-key", "sig", "signature"} {
+		t.Run(key, func(t *testing.T) {
+			_, err := parseBatchReferenceURL("https://example.test/openapi.json?" + key + "=fixture")
+			if err == nil || !strings.Contains(err.Error(), "credential-shaped") {
+				t.Fatalf("parseBatchReferenceURL(%q) error = %v, want credential-query rejection", key, err)
+			}
+		})
 	}
 }
 

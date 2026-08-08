@@ -884,11 +884,8 @@ func validateBatchArtifactURLObjectWithQuery(parsed *url.URL, allowQuery bool) e
 	}
 	if allowQuery {
 		for key := range parsed.Query() {
-			lower := strings.ToLower(key)
-			for _, marker := range []string{"token", "secret", "password", "credential", "authorization", "api_key", "access_key"} {
-				if strings.Contains(lower, marker) {
-					return errors.New("artifact reference query must not contain credential-shaped parameters")
-				}
+			if batchArtifactCredentialQueryParameter(key) {
+				return errors.New("artifact reference query must not contain credential-shaped parameters")
 			}
 		}
 	}
@@ -900,6 +897,24 @@ func validateBatchArtifactURLObjectWithQuery(parsed *url.URL, allowQuery bool) e
 		return errors.New("artifact request URL destination must be public")
 	}
 	return nil
+}
+
+func batchArtifactCredentialQueryParameter(key string) bool {
+	normalized := strings.Map(func(r rune) rune {
+		if r == '-' || r == '_' || r == '.' || r == ' ' {
+			return -1
+		}
+		return r
+	}, strings.ToLower(key))
+	if normalized == "sig" {
+		return true
+	}
+	for _, marker := range []string{"token", "secret", "password", "credential", "authorization", "apikey", "accesskey", "signature"} {
+		if strings.Contains(normalized, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 func newBatchArtifactHTTPClient(lookup batchArtifactLookupIPAddr) *http.Client {
@@ -1893,32 +1908,30 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 		existingExact[key] = endpoint
 	}
 	artifactIDs := make(map[string]string, len(sources))
+	usedArtifactIDs := make(map[string]bool, len(sources))
 	artifacts := make([]engine.SurfaceArtifact, 0, len(sources))
-	for index, source := range sources {
+	for _, source := range sources {
 		if strings.TrimSpace(source.URL) == "" {
 			continue
 		}
+		if _, exists := artifactIDs[source.URL]; exists {
+			continue
+		}
 		id := fmt.Sprintf("%s-artifact-%s", candidate.Connector, retrievedAt)
-		if index > 0 || source.URL != candidate.Artifact.URL {
-			digest := source.SHA256
-			if digest == "" {
-				digest = fmt.Sprintf("%x", sha256.Sum256([]byte(source.URL)))
-			}
-			id = fmt.Sprintf("%s-artifact-ref-%s", candidate.Connector, digest[:16])
+		if source.URL != candidate.Artifact.URL {
+			id = materializedReferenceArtifactID(candidate.Connector, source)
 		}
-		if prior, exists := artifactIDs[source.URL]; exists {
-			id = prior
-		} else {
-			artifactIDs[source.URL] = id
-			artifacts = append(artifacts, engine.SurfaceArtifact{
-				ID:          id,
-				URL:         source.URL,
-				Kind:        source.Kind,
-				Version:     source.Version,
-				RetrievedAt: firstNonEmpty(source.Retrieved, retrievedAt),
-				SHA256:      source.SHA256,
-			})
-		}
+		id = uniqueMaterializedArtifactID(id, usedArtifactIDs)
+		artifactIDs[source.URL] = id
+		usedArtifactIDs[id] = true
+		artifacts = append(artifacts, engine.SurfaceArtifact{
+			ID:          id,
+			URL:         source.URL,
+			Kind:        source.Kind,
+			Version:     source.Version,
+			RetrievedAt: firstNonEmpty(source.Retrieved, retrievedAt),
+			SHA256:      source.SHA256,
+		})
 	}
 	artifactID := artifactIDs[candidate.Artifact.URL]
 	if artifactID == "" {
@@ -2004,6 +2017,23 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 		return engine.APISurface{}, err
 	}
 	return surface, nil
+}
+
+func materializedReferenceArtifactID(connector string, source batchArtifactSource) string {
+	contentDigest := source.SHA256
+	if len(contentDigest) < 16 {
+		contentDigest = fmt.Sprintf("%x", sha256.Sum256([]byte(source.URL)))
+	}
+	urlDigest := sha256.Sum256([]byte(source.URL))
+	return fmt.Sprintf("%s-artifact-ref-%s-%x", connector, contentDigest[:16], urlDigest[:8])
+}
+
+func uniqueMaterializedArtifactID(base string, used map[string]bool) string {
+	id := base
+	for suffix := 2; used[id]; suffix++ {
+		id = fmt.Sprintf("%s-%d", base, suffix)
+	}
+	return id
 }
 
 func materializedEndpointAlternatives(alternatives []batchArtifactEndpointAlternative) []engine.SurfaceProvenanceAlternative {
