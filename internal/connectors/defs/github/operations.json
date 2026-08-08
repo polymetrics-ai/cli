@@ -6663,7 +6663,10 @@
         "path": "/repos/{owner}/{repo}/tarball/{ref}",
         "max_bytes": 104857600,
         "allow_overwrite": false,
-        "extract_archives": false
+        "extract_archives": false,
+        "allowed_hosts": [
+          "codeload.github.com"
+        ]
       }
     },
     {
@@ -6830,7 +6833,10 @@
         "path": "/repos/{owner}/{repo}/zipball/{ref}",
         "max_bytes": 104857600,
         "allow_overwrite": false,
-        "extract_archives": false
+        "extract_archives": false,
+        "allowed_hosts": [
+          "codeload.github.com"
+        ]
       }
     },
     {

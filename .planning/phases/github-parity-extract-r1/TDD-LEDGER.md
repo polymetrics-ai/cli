@@ -837,3 +837,40 @@ github live proof self-test: ok
 No test was weakened, skipped, or deleted. The runner intentionally records a missing runtime HTTP
 status as a failed live result rather than fabricating success; the full run therefore identifies
 which intent paths need observability repairs before they can be counted as proven.
+
+**Red 12c — GitHub archive downloads rejected their documented codeload redirect.** The binary
+executor already refuses arbitrary cross-host redirects and strips credentials on a narrow
+allowlist; its local redirect tests establish that behavior. The production GitHub `tarball` and
+`zipball` declarations, however, named neither `allow_cross_host` nor the known codeload host, so
+their live `api.github.com` redirect could only fail before streaming bytes. The focused production
+bundle test failed before a declaration change:
+
+```
+$ go test -timeout 20m ./internal/connectors/engine/ -run TestGitHubArchiveDownloadsAllowOnlyCodeloadRedirect -count=1
+--- FAIL: TestGitHubArchiveDownloadsAllowOnlyCodeloadRedirect
+    --- FAIL: .../github.tarball_ref
+        allowed_hosts = [], want [codeload.github.com]
+    --- FAIL: .../github.zipball_ref
+        allowed_hosts = [], want [codeload.github.com]
+FAIL
+```
+
+This is deliberately a host allowlist, not `allow_cross_host: true`: the existing executor tests
+already prove an allowlisted redirect still strips credentials and rejects every other host.
+
+**Green 12c — narrow codeload declaration.** `github.tarball_ref` and `github.zipball_ref` now
+declare only `allowed_hosts: ["codeload.github.com"]`. No transport code changed; the existing
+binary requester's bounded redirect policy remains the sole redirect implementation, and continues
+to strip credentials on the permitted host hop. The production test and the two relevant executor
+policy tests passed:
+
+```
+$ go test -timeout 20m ./internal/connectors/engine/ -run 'TestGitHubArchiveDownloadsAllowOnlyCodeloadRedirect|TestBinaryDownload(RefusesCrossHostRedirectByDefault|AllowedHostsIsEnforced)' -count=1
+ok   polymetrics.ai/internal/connectors/engine  0.804s
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
