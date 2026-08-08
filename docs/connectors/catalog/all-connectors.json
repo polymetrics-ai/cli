@@ -182305,7 +182305,7 @@
   {
     "name": "zoom",
     "display_name": "Zoom",
-    "description": "Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes approval-gated clinical-note status updates.",
+    "description": "Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes approval-gated clinical-note and Quality Management interaction actions.",
     "integration_type": "api",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "release_stage": "ga",
@@ -182397,11 +182397,18 @@
         "method": "PATCH",
         "path": "/clinical_notes/notes/{{ record.note_id }}",
         "risk": "high: mutates a patient's clinical note completion status; requires reverse ETL approval"
+      },
+      {
+        "name": "create_quality_management_interaction",
+        "kind": "create",
+        "method": "POST",
+        "path": "/qm/interactions",
+        "risk": "high: imports a third-party interaction into Zoom Quality Management; requires reverse ETL approval"
       }
     ],
     "risk": {
-      "read": "external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, and healthcare clinical-note data",
-      "write": "typed Zoom reverse ETL mutation of a healthcare clinical-note completion status",
+      "read": "external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, and Quality Management data",
+      "write": "typed Zoom reverse ETL mutation of a healthcare clinical-note completion status or Quality Management interaction creation",
       "approval": "reverse ETL writes require plan, preview, explicit approval, and execute; read-only commands require none"
     },
     "icon": {

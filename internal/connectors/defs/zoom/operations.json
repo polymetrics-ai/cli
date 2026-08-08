@@ -139,6 +139,161 @@
         "path": "/v2/clinical_notes/notes/{noteId}",
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "zoom.list_quality_management_automated_evaluations",
+      "kind": "rest_read",
+      "summary": "List automated evaluations",
+      "description": "Bounded Zoom read for GET /v2/qm/automated_evaluations; returns Quality Management automated evaluations.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/automated_evaluations",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_quality_management_evaluations",
+      "kind": "rest_read",
+      "summary": "List evaluations",
+      "description": "Bounded Zoom read for GET /v2/qm/evaluation; returns manually completed Quality Management evaluations.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/evaluation",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_quality_management_evaluation",
+      "kind": "rest_read",
+      "summary": "View evaluation detail",
+      "description": "Bounded Zoom read for GET /v2/qm/evaluation/{evaluationId}; returns one Quality Management evaluation.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/evaluation/{evaluationId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_quality_management_interactions",
+      "kind": "rest_read",
+      "summary": "List interactions",
+      "description": "Bounded Zoom read for GET /v2/qm/interactions; returns Quality Management interactions.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/interactions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_quality_management_interaction",
+      "kind": "rest_read",
+      "summary": "View interaction detail",
+      "description": "Bounded Zoom read for GET /v2/qm/interactions/{interactionId}; returns one Quality Management interaction.",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "user_id",
+          "agent_id",
+          "agent_email",
+          "creator_id",
+          "evaluator_id",
+          "display_name",
+          "consumer_name",
+          "from",
+          "to",
+          "phone_number",
+          "email"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/qm/interactions/{interactionId}",
+        "max_bytes": 1048576
+      }
     }
   ]
 }

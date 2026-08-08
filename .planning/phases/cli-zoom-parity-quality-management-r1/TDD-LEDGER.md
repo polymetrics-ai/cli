@@ -46,7 +46,66 @@ This red state contains only the command-surface test, synthetic fixtures, and d
 ledger, and connector documentation production files remain untouched. Commit and push it before
 creating any of those declarations.
 
-## GREEN — pending
+## GREEN — declarations and focused runtime proof
 
-Record the focused test, surface/validator, binary, docs, and review evidence after the declarations
-exist and the red test becomes green.
+After the red commit `91b7526a5` was pushed, the five GET declarations, typed POST declaration,
+source-synchronised endpoint coverage, generated Zoom documentation, and synthetic fixtures were
+added. The first conformance pass exposed that the POST fixture did not model the write fixture
+contract's `record`/`expect`/`response` structure. The fixture was corrected to carry the complete
+documented request body and a `201` response; the assertion remains an exact body comparison and
+was not weakened.
+
+```text
+$ go test -count=1 ./internal/connectors/defs/zoom/...
+ok  \tpolymetrics.ai/internal/connectors/defs/zoom\t1.082s
+
+$ go test -count=1 -v -run '^TestConformance/zoom$' ./internal/connectors/conformance
+=== RUN   TestConformance/zoom
+--- PASS: TestConformance/zoom
+PASS
+ok  \tpolymetrics.ai/internal/connectors/conformance\t2.316s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/conformance/...
+ok  \tpolymetrics.ai/internal/connectors/conformance\t18.479s
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/zoom
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen validate
+connectorgen validate: 551 connector(s) checked, 0 findings
+
+$ go vet ./...
+exit 0
+
+$ go build ./cmd/pm
+exit 0
+```
+
+The built binary proved all five direct reads reach Zoom (each safely stopped at provider `401`
+with an environment-only synthetic credential and no `unknown command` result). The POST command
+was exercised only as `--preview --json`: it produced the typed
+`create_quality_management_interaction` plan without a network request.
+
+The first full CLI package pass made the expected root-help drift visible: the newly generated Zoom
+tagline appeared in nine root-help transcripts while the tracked expected fixture still carried the
+old tagline. This is a documentation parity failure, not an unrelated test issue. The repository's
+own golden generator was used to regenerate `internal/cli/testdata/golden_transcripts.json`; it
+changed only those nine root variants. The regular (non-update) golden test and then the full CLI
+package passed:
+
+```text
+$ POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -count=1 -timeout 20m -run '^TestGoldenTranscripts$' ./internal/cli
+ok  \tpolymetrics.ai/internal/cli\t51.443s
+
+$ go test -count=1 -timeout 20m -run '^TestGoldenTranscripts$' ./internal/cli
+ok  \tpolymetrics.ai/internal/cli\t26.419s
+
+$ go test -count=1 -timeout 20m ./internal/cli/...
+ok  \tpolymetrics.ai/internal/cli\t560.881s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner/...
+ok  \tpolymetrics.ai/internal/connectors/commandrunner\t6.977s
+```
