@@ -2255,6 +2255,18 @@ func TestValidateFlagMinimumIsOptIn(t *testing.T) {
 	}
 }
 
+func TestValidateFlagFormatDate(t *testing.T) {
+	flag := connectors.CommandSurfaceFlag{Name: "from", Type: "string", Format: "date"}
+	if err := validateFlagValue(flag, "2026-08-01"); err != nil {
+		t.Fatalf("validateFlagValue valid ISO date = %v, want accepted", err)
+	}
+	for _, value := range []string{"2026-02-30", "2026-08-01T00:00:00Z"} {
+		if err := validateFlagValue(flag, value); err == nil {
+			t.Fatalf("validateFlagValue(%q) = nil, want ISO date rejection", value)
+		}
+	}
+}
+
 func TestStreamOverridesConfigMinimumIsOptIn(t *testing.T) {
 	minimum := 1.0
 	tests := []struct {
