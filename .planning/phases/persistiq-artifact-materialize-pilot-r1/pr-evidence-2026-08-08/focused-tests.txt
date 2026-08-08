@@ -1,0 +1,3 @@
+ok  	polymetrics.ai/cmd/connectorgen	14.733s
+ok  	polymetrics.ai/internal/connectors/engine	5.408s
+ok  	polymetrics.ai/internal/connectors/commandrunner	(cached)
