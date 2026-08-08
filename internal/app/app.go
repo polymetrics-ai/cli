@@ -1102,7 +1102,10 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	result := etlExecutionResult{}
 	batch := make([]connectors.Record, 0, batchSize)
 	firstWrite := true
-	cursorTracker := newStreamCursorTracker(prior, source)
+	cursorTracker, err := newStreamCursorTracker(prior, source, sourceRuntime, stream.CursorField, mode.Source)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
 	observedAt := time.Time{}
 
 	flush := func(force bool) error {
@@ -1146,23 +1149,13 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		return nil
 	}
 
-	readConfig := sourceRuntime
-	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if cursor, present := cursorTracker.legacyLowerBound(); present {
-		readConfig.Config["since"] = cursor
-	}
-	err := source.Read(ctx, connectors.ReadRequest{
-		Stream:      streamName,
-		Config:      readConfig,
-		State:       streamReadState(prior, generationID),
-		CursorState: streamReadCursorState(prior),
-	}, func(record connectors.Record) error {
+	err = source.Read(ctx, cursorTracker.readRequest(streamName, sourceRuntime, prior, generationID, mode.Source), func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
 		if stream.CursorField != "" {
 			var include bool
 			var err error
-			cursor, include, err = cursorTracker.observe(record, stream.CursorField, mode.Source)
+			cursor, _, include, err = cursorTracker.observe(record, stream.CursorField, mode.Source)
 			if err != nil {
 				return err
 			}

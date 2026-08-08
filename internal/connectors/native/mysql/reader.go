@@ -46,6 +46,18 @@ func rawCursorState(state map[string]string) (string, bool) {
 	return value, present
 }
 
+func (c Connector) ValidateCursorField(config connectors.RuntimeConfig, field string) error {
+	field = strings.TrimSpace(field)
+	configured := strings.TrimSpace(config.Config["cursor_field"])
+	if field == "" || configured == "" || field != configured {
+		return errors.New("mysql stream cursor field must match configured cursor_field")
+	}
+	if err := validateIdentifier(field); err != nil {
+		return fmt.Errorf("mysql stream cursor field: %w", err)
+	}
+	return nil
+}
+
 func (c Connector) CursorStateFromRecord(record connectors.Record, field string) (connectors.OpaqueCursorState, error) {
 	field = strings.TrimSpace(field)
 	if field == "" {
@@ -60,6 +72,87 @@ func (c Connector) CursorStateFromRecord(record connectors.Record, field string)
 		return connectors.OpaqueCursorState{}, err
 	}
 	return connectors.OpaqueCursorState{Token: token, Present: true}, nil
+}
+
+func (c Connector) CompareCursorStates(left, right connectors.OpaqueCursorState) (int, error) {
+	leftValue, err := mysqlOpaqueCursorValue(left)
+	if err != nil {
+		return 0, err
+	}
+	rightValue, err := mysqlOpaqueCursorValue(right)
+	if err != nil {
+		return 0, err
+	}
+	switch left := leftValue.(type) {
+	case []byte:
+		right, ok := rightValue.([]byte)
+		if !ok {
+			return 0, errors.New("mysql cursor state types do not match")
+		}
+		return bytes.Compare(left, right), nil
+	case int64:
+		right, ok := rightValue.(int64)
+		if !ok {
+			return 0, errors.New("mysql cursor state types do not match")
+		}
+		switch {
+		case left < right:
+			return -1, nil
+		case left > right:
+			return 1, nil
+		default:
+			return 0, nil
+		}
+	case uint64:
+		right, ok := rightValue.(uint64)
+		if !ok {
+			return 0, errors.New("mysql cursor state types do not match")
+		}
+		switch {
+		case left < right:
+			return -1, nil
+		case left > right:
+			return 1, nil
+		default:
+			return 0, nil
+		}
+	case float64:
+		right, ok := rightValue.(float64)
+		if !ok {
+			return 0, errors.New("mysql cursor state types do not match")
+		}
+		if math.IsNaN(left) || math.IsNaN(right) {
+			return 0, errors.New("mysql floating cursor state is not ordered")
+		}
+		switch {
+		case left < right:
+			return -1, nil
+		case left > right:
+			return 1, nil
+		default:
+			return 0, nil
+		}
+	case bool:
+		right, ok := rightValue.(bool)
+		if !ok {
+			return 0, errors.New("mysql cursor state types do not match")
+		}
+		switch {
+		case !left && right:
+			return -1, nil
+		case left && !right:
+			return 1, nil
+		default:
+			return 0, nil
+		}
+	case string:
+		if _, ok := rightValue.(string); !ok {
+			return 0, errors.New("mysql cursor state types do not match")
+		}
+		return 0, connectors.ErrOpaqueCursorOrderUnavailable
+	default:
+		return 0, fmt.Errorf("mysql cursor state has unsupported type %T", leftValue)
+	}
 }
 
 func encodeMySQLCursorState(value any) ([]byte, error) {
@@ -164,6 +257,17 @@ func decodeMySQLCursorState(state connectors.OpaqueCursorState) (any, bool, erro
 	default:
 		return nil, true, errors.New("mysql cursor state type is unsupported")
 	}
+}
+
+func mysqlOpaqueCursorValue(state connectors.OpaqueCursorState) (any, error) {
+	value, encoded, err := decodeMySQLCursorState(state)
+	if err != nil {
+		return nil, err
+	}
+	if !encoded {
+		return nil, errors.New("mysql cursor state is unrecognized")
+	}
+	return value, nil
 }
 
 // Read runs a bounded snapshot or incremental read. Snapshot pages use a

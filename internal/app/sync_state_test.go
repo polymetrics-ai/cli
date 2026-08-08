@@ -329,6 +329,189 @@ func TestSourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations(t
 	}
 }
 
+func TestSourceOrderedCursorFieldMismatchRefusesBothDestinationPaths(t *testing.T) {
+	ctx := context.Background()
+	source := newBoundOrderedOpaqueCursorSource("bound_opaque_cursor", []connectors.Record{{
+		"id": "first", "updated_at": []byte{0x01},
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	for i := range a.state.Connections {
+		if a.state.Connections[i].Name == connection {
+			a.state.Connections[i].Source.Config = map[string]string{"cursor_field": "sequence"}
+		}
+	}
+
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err == nil || !strings.Contains(err.Error(), "cursor field") {
+		t.Fatalf("RunETL() error = %v, want cursor-field mismatch", err)
+	}
+	if len(source.requests) != 0 {
+		t.Fatalf("warehouse path read requests = %#v, want none", source.requests)
+	}
+
+	conn, ok := a.findConnection(connection)
+	if !ok {
+		t.Fatal("connection missing")
+	}
+	mode, err := ParseStreamSyncMode(conn.Streams["records"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	resolved, credential, runtime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expectation := streamResumeExpectation(resolved, credential, runtime, "records")
+	_, err = a.runConnectorETL(ctx, "mismatch", conn, resolved, runtime, &batchDestination{}, connectors.RuntimeConfig{}, expectation, "records", conn.Streams["records"], mode, 1)
+	if err == nil || !strings.Contains(err.Error(), "cursor field") {
+		t.Fatalf("runConnectorETL() error = %v, want cursor-field mismatch", err)
+	}
+	if len(source.requests) != 0 {
+		t.Fatalf("connector path read requests = %#v, want none", source.requests)
+	}
+}
+
+func TestSourceOrderedFullRefreshStartsWithoutResumeAcrossDestinations(t *testing.T) {
+	for _, destinationKind := range []string{"warehouse", "connector"} {
+		t.Run(destinationKind, func(t *testing.T) {
+			ctx := context.Background()
+			source := newOrderedOpaqueCursorSource("full_refresh_opaque_"+destinationKind, []connectors.Record{{
+				"id": "old", "name": "old", "updated_at": []byte{0xff},
+			}})
+			a, connection := setupSyncModeApp(t, source, "full_refresh_overwrite")
+			stateKey := streamStateKey(connection, "records")
+			destination := &batchDestination{}
+			run := func(runID string) error {
+				if destinationKind == "warehouse" {
+					_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10})
+					return err
+				}
+				conn, ok := a.findConnection(connection)
+				if !ok {
+					return errors.New("connection missing")
+				}
+				mode, err := ParseStreamSyncMode(conn.Streams["records"])
+				if err != nil {
+					return err
+				}
+				resolved, credential, runtime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
+				if err != nil {
+					return err
+				}
+				expectation := streamResumeExpectation(resolved, credential, runtime, "records")
+				result, err := a.runConnectorETL(ctx, runID, conn, resolved, runtime, destination, connectors.RuntimeConfig{}, expectation, "records", conn.Streams["records"], mode, 10)
+				if err != nil {
+					return err
+				}
+				if result.PendingStreamState == nil {
+					return errors.New("connector ETL did not return pending stream state")
+				}
+				a.state.StreamStates[stateKey] = result.PendingStreamState.State
+				return nil
+			}
+
+			if err := run("full_first"); err != nil {
+				t.Fatalf("first ETL run: %v", err)
+			}
+			source.records = []connectors.Record{{"id": "fresh", "name": "fresh", "updated_at": []byte{0x00}}}
+			if err := run("full_second"); err != nil {
+				t.Fatalf("second ETL run: %v", err)
+			}
+			if len(source.requests) != 2 {
+				t.Fatalf("source requests = %d, want 2", len(source.requests))
+			}
+			second := source.requests[1]
+			if second.CursorState.Present {
+				t.Fatalf("full refresh cursor state = %#v, want absent", second.CursorState)
+			}
+			if _, present := second.State["cursor"]; present {
+				t.Fatalf("full refresh state = %#v, want no cursor", second.State)
+			}
+			if _, present := second.Config.Config["since"]; present {
+				t.Fatalf("full refresh config = %#v, want no lower bound", second.Config.Config)
+			}
+			if got := strings.Join(source.emitted, ","); got != "old,fresh" {
+				t.Fatalf("source emitted = %q, want old,fresh", got)
+			}
+			state := a.state.StreamStates[stateKey]
+			if state.Checkpoint == nil || !bytes.Equal(state.Checkpoint.Position.Primary, []byte{0x00}) {
+				t.Fatalf("full refresh checkpoint = %#v, want exact binary 0x00", state.Checkpoint)
+			}
+			if destinationKind == "warehouse" {
+				rows, err := a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
+				if err != nil {
+					t.Fatal(err)
+				}
+				byID := rowsByID(rows)
+				if len(byID) != 1 || byID["fresh"]["name"] != "fresh" {
+					t.Fatalf("full refresh warehouse rows = %#v, want fresh only", rows)
+				}
+			} else if !reflect.DeepEqual(destination.batches, []int{1, 1}) {
+				t.Fatalf("connector batches = %#v, want [1 1]", destination.batches)
+			}
+		})
+	}
+}
+
+func TestSourceOrderedBinaryCursorDedupeRetainsLatestAndResumes(t *testing.T) {
+	ctx := context.Background()
+	source := newOrderedOpaqueCursorSource("dedupe_opaque_cursor", []connectors.Record{
+		{"id": "same", "name": "old", "updated_at": []byte{0x00}},
+		{"id": "same", "name": "latest", "updated_at": []byte{0xff}},
+	})
+	a, connection := setupSyncModeApp(t, source, "incremental_append_deduped")
+	stateKey := streamStateKey(connection, "records")
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatalf("first RunETL(): %v", err)
+	}
+	rows, err := a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
+	if err != nil {
+		t.Fatal(err)
+	}
+	byID := rowsByID(rows)
+	if len(byID) != 1 || byID["same"]["name"] != "latest" {
+		t.Fatalf("first deduped rows = %#v, want latest binary cursor row", rows)
+	}
+	state := a.state.StreamStates[stateKey]
+	if state.Checkpoint == nil || !bytes.Equal(state.Checkpoint.Position.Primary, []byte{0xff}) {
+		t.Fatalf("first checkpoint = %#v, want exact binary 0xff", state.Checkpoint)
+	}
+	encoded, err := json.Marshal(state)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var reloaded StreamState
+	if err := json.Unmarshal(encoded, &reloaded); err != nil {
+		t.Fatal(err)
+	}
+	a.state.StreamStates[stateKey] = reloaded
+
+	source.records = append(source.records, connectors.Record{"id": "later", "name": "later", "updated_at": []byte{0xff, 0x00}})
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatalf("second RunETL(): %v", err)
+	}
+	if len(source.requests) != 2 {
+		t.Fatalf("source requests = %d, want 2", len(source.requests))
+	}
+	if resumed := source.requests[1].CursorState; !resumed.Present || !bytes.Equal(resumed.Token, []byte{0xff}) {
+		t.Fatalf("resumed cursor = %#v, want exact binary 0xff", resumed)
+	}
+	if got := strings.Join(source.emitted, ","); got != "same,same,later" {
+		t.Fatalf("source emitted = %q, want no replay", got)
+	}
+	rows, err = a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
+	if err != nil {
+		t.Fatal(err)
+	}
+	byID = rowsByID(rows)
+	if len(byID) != 2 || byID["same"]["name"] != "latest" || byID["later"]["name"] != "later" {
+		t.Fatalf("second deduped rows = %#v, want latest and later", rows)
+	}
+	state = a.state.StreamStates[stateKey]
+	if state.Checkpoint == nil || !bytes.Equal(state.Checkpoint.Position.Primary, []byte{0xff, 0x00}) {
+		t.Fatalf("final checkpoint = %#v, want exact binary 0xff00", state.Checkpoint)
+	}
+}
+
 func TestRunETLStopsWhenInitialRunStateCannotPersist(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("initial_run_state_failure", []connectors.Record{{

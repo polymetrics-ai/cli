@@ -20,6 +20,7 @@ import (
 )
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
+var ErrOpaqueCursorOrderUnavailable = errors.New("opaque cursor order is unavailable")
 
 var defaultRegistryBuilder = struct {
 	mu sync.RWMutex
@@ -266,6 +267,8 @@ type OpaqueCursorState struct {
 
 type SourceOrderedCursorReader interface {
 	CursorStateFromRecord(Record, string) (OpaqueCursorState, error)
+	ValidateCursorField(RuntimeConfig, string) error
+	CompareCursorStates(OpaqueCursorState, OpaqueCursorState) (int, error)
 }
 
 type ReadRequest struct {

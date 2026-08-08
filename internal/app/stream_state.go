@@ -115,21 +115,28 @@ type streamCursorTracker struct {
 	reportObserved bool
 }
 
-func newStreamCursorTracker(state StreamState, source connectors.Connector) streamCursorTracker {
-	prior, observed := streamStateCursor(state)
-	tracker := streamCursorTracker{
-		prior:         prior,
-		priorObserved: observed,
-		nextLegacy:    prior,
-		nextObserved:  observed,
+func newStreamCursorTracker(state StreamState, source connectors.Connector, config connectors.RuntimeConfig, field string, mode SourceSyncMode) (streamCursorTracker, error) {
+	tracker := streamCursorTracker{}
+	if mode == SourceSyncIncremental {
+		prior, observed := streamStateCursor(state)
+		tracker.prior = prior
+		tracker.priorObserved = observed
+		tracker.nextLegacy = prior
+		tracker.nextObserved = observed
+		if observed {
+			tracker.nextOpaque = append(synccontract.OpaqueToken(nil), state.Checkpoint.Position.Primary...)
+		}
 	}
-	if observed {
-		tracker.nextOpaque = append(synccontract.OpaqueToken(nil), state.Checkpoint.Position.Primary...)
+	if strings.TrimSpace(field) == "" {
+		return tracker, nil
 	}
 	if sourceOrdered, ok := source.(connectors.SourceOrderedCursorReader); ok {
+		if err := sourceOrdered.ValidateCursorField(config, field); err != nil {
+			return streamCursorTracker{}, fmt.Errorf("validate source-ordered cursor field: %w", err)
+		}
 		tracker.sourceOrdered = sourceOrdered
 	}
-	return tracker
+	return tracker, nil
 }
 
 func (t streamCursorTracker) legacyLowerBound() (string, bool) {
@@ -139,33 +146,54 @@ func (t streamCursorTracker) legacyLowerBound() (string, bool) {
 	return t.prior, t.priorObserved
 }
 
-func (t *streamCursorTracker) observe(record connectors.Record, field string, mode SourceSyncMode) (string, bool, error) {
+func (t *streamCursorTracker) observe(record connectors.Record, field string, mode SourceSyncMode) (string, connectors.OpaqueCursorState, bool, error) {
 	cursor, err := recordCursor(record, field)
 	if err != nil {
-		return "", false, err
+		return "", connectors.OpaqueCursorState{}, false, err
 	}
 	if t.sourceOrdered != nil {
 		state, err := t.sourceOrdered.CursorStateFromRecord(record, field)
 		if err != nil {
-			return "", false, err
+			return "", connectors.OpaqueCursorState{}, false, err
 		}
 		if !state.Present {
-			return "", false, fmt.Errorf("source-ordered cursor reader did not provide a cursor state")
+			return "", connectors.OpaqueCursorState{}, false, fmt.Errorf("source-ordered cursor reader did not provide a cursor state")
 		}
 		t.nextOpaque = append(t.nextOpaque[:0], state.Token...)
 		t.nextObserved = true
 		t.report = cursor
 		t.reportObserved = true
-		return cursor, true, nil
+		return cursor, state, true, nil
 	}
 	if mode == SourceSyncIncremental && t.priorObserved && compareCursor(cursor, t.prior) < 0 {
-		return cursor, false, nil
+		return cursor, connectors.OpaqueCursorState{}, false, nil
 	}
 	if !t.nextObserved || compareCursor(cursor, t.nextLegacy) > 0 {
 		t.nextLegacy = cursor
 		t.nextObserved = true
 	}
-	return cursor, true, nil
+	return cursor, connectors.OpaqueCursorState{}, true, nil
+}
+
+func (t streamCursorTracker) readRequest(stream string, config connectors.RuntimeConfig, state StreamState, generationID int64, mode SourceSyncMode) connectors.ReadRequest {
+	readConfig := config
+	readConfig.Config = cloneStringMap(config.Config)
+	request := connectors.ReadRequest{
+		Stream: stream,
+		Config: readConfig,
+		State: map[string]string{
+			"generation_id": strconv.FormatInt(generationID, 10),
+		},
+	}
+	if mode != SourceSyncIncremental {
+		return request
+	}
+	request.State = streamReadState(state, generationID)
+	request.CursorState = streamReadCursorState(state)
+	if cursor, present := t.legacyLowerBound(); present {
+		request.Config.Config["since"] = cursor
+	}
+	return request
 }
 
 func (t streamCursorTracker) checkpoint() (synccontract.OpaqueToken, bool) {

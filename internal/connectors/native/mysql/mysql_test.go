@@ -155,6 +155,46 @@ func TestOpaqueCursorStatePreservesNativeMySQLBoundaryValues(t *testing.T) {
 	}
 }
 
+func TestSourceOrderedCursorFieldMustMatchMySQLConfiguration(t *testing.T) {
+	connector := New()
+	config := testConfig()
+	if err := connector.ValidateCursorField(config, "sequence"); err != nil {
+		t.Fatalf("ValidateCursorField(matching): %v", err)
+	}
+	for _, field := range []string{"", "updated_at"} {
+		if err := connector.ValidateCursorField(config, field); err == nil {
+			t.Fatalf("ValidateCursorField(%q) error = nil", field)
+		}
+	}
+	config.Config["cursor_field"] = ""
+	if err := connector.ValidateCursorField(config, "sequence"); err == nil {
+		t.Fatal("ValidateCursorField(missing configuration) error = nil")
+	}
+}
+
+func TestOpaqueCursorComparisonRetainsNativeBinaryOrder(t *testing.T) {
+	connector := New()
+	first, err := connector.CursorStateFromRecord(connectors.Record{"sequence": []byte{0x00}}, "sequence")
+	if err != nil {
+		t.Fatal(err)
+	}
+	last, err := connector.CursorStateFromRecord(connectors.Record{"sequence": []byte{0xff}}, "sequence")
+	if err != nil {
+		t.Fatal(err)
+	}
+	cmp, err := connector.CompareCursorStates(last, first)
+	if err != nil || cmp <= 0 {
+		t.Fatalf("CompareCursorStates(0xff, 0x00) = (%d, %v), want positive", cmp, err)
+	}
+	text, err := connector.CursorStateFromRecord(connectors.Record{"sequence": "later"}, "sequence")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := connector.CompareCursorStates(text, text); !errors.Is(err, connectors.ErrOpaqueCursorOrderUnavailable) {
+		t.Fatalf("CompareCursorStates(text, text) error = %v, want unavailable order", err)
+	}
+}
+
 func TestResolveConfigRejectsUnsafeInputsWithoutSecretLeakage(t *testing.T) {
 	base := testConfig()
 	cases := []struct {

@@ -66,6 +66,35 @@ func (s *orderedOpaqueCursorSource) CursorStateFromRecord(record connectors.Reco
 	return connectors.OpaqueCursorState{Token: append([]byte(nil), value...), Present: true}, nil
 }
 
+func (s *orderedOpaqueCursorSource) ValidateCursorField(_ connectors.RuntimeConfig, field string) error {
+	if strings.TrimSpace(field) == "" {
+		return errors.New("ordered opaque cursor source requires a cursor field")
+	}
+	return nil
+}
+
+func (s *orderedOpaqueCursorSource) CompareCursorStates(left, right connectors.OpaqueCursorState) (int, error) {
+	if !left.Present || !right.Present {
+		return 0, errors.New("ordered opaque cursor source requires cursor states")
+	}
+	return bytes.Compare(left.Token, right.Token), nil
+}
+
+type boundOrderedOpaqueCursorSource struct {
+	*orderedOpaqueCursorSource
+}
+
+func newBoundOrderedOpaqueCursorSource(name string, records []connectors.Record) *boundOrderedOpaqueCursorSource {
+	return &boundOrderedOpaqueCursorSource{orderedOpaqueCursorSource: newOrderedOpaqueCursorSource(name, records)}
+}
+
+func (s *boundOrderedOpaqueCursorSource) ValidateCursorField(config connectors.RuntimeConfig, field string) error {
+	if configured := strings.TrimSpace(config.Config["cursor_field"]); configured == "" || configured != strings.TrimSpace(field) {
+		return errors.New("bound ordered cursor source field does not match config")
+	}
+	return nil
+}
+
 func newScriptedSyncSource(name string, records []connectors.Record) *scriptedSyncSource {
 	return &scriptedSyncSource{name: name, records: records, failAfter: -1}
 }

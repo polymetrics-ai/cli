@@ -288,3 +288,27 @@ Passed. The shared cursor tracker now commits each source-ordered MySQL boundary
 opaque token and resumes through a typed request state, while the legacy paths retain their prior
 comparison behavior. The regression covers binary-state JSON persistence, no reconstructed lower
 bound, no replay, no skipped later byte-ordered row, and both warehouse and connector destinations.
+
+**Red — review round 10 source-faithful cursor lifecycle:**
+
+Source inspection found that both ETL destinations still constructed `ReadRequest` independently,
+always carried a checkpoint into full-refresh reads, and enabled MySQL's source-ordered tracker
+without proving that its stream cursor matched `Config["cursor_field"]`. The warehouse raw WAL also
+stored only the report cursor and folded it with generic string ordering, so binary cursor values
+could retain an older record even when the opaque resume checkpoint advanced. This review round
+will centralize request construction, reject unbound source-ordered cursor fields before `Read`,
+and persist opaque source cursor tokens through deduplicated materialization before running one
+focused Green command.
+
+**Green — review round 10 source-faithful cursor lifecycle:**
+
+```text
+go test -count=1 -timeout 20m -run 'Test(SourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations|SourceOrderedCursorFieldMismatchRefusesBothDestinationPaths|SourceOrderedFullRefreshStartsWithoutResumeAcrossDestinations|SourceOrderedBinaryCursorDedupeRetainsLatestAndResumes|OpaqueCursorStatePreservesNativeMySQLBoundaryValues|SourceOrderedCursorFieldMustMatchMySQLConfiguration|OpaqueCursorComparisonRetainsNativeBinaryOrder)$' ./internal/app ./internal/connectors/native/mysql
+```
+
+Passed. Both destination paths now use one mode-aware request constructor, source-ordered readers
+reject a stream/config cursor mismatch before reading, and full refreshes never receive a prior
+boundary. The warehouse WAL retains opaque source cursor tokens for deduplication; MySQL compares
+native binary and numeric tokens directly and uses already-proven source emission order where a
+server collation is not portable. The focused regressions cover mismatch refusal, repeated full
+refresh overwrite, binary `0x00` to `0xff` deduplication, and resume without replay.
