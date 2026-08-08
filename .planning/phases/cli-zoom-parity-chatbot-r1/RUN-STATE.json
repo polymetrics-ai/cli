@@ -4,7 +4,7 @@
   "sub_issue": 3944,
   "connector": "zoom",
   "provider_module": "chatbot",
-  "state": "planned",
+  "state": "red_captured",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -36,5 +36,9 @@
     "oauth2 client_credentials HTTP Basic client authentication",
     "closed typed json_object command flag"
   ],
-  "next": "write and run the RED tests before any production bundle or engine declaration"
+  "red": {
+    "command": "go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/connsdk ./internal/connectors/commandrunner ./internal/connectors/defs/zoom/...",
+    "result": "failed as expected: client_auth is schema-unknown, json_object is unsupported, Chatbot counts remain 23/1819/1, and all four commands are unknown"
+  },
+  "next": "commit and push this RED checkpoint; then implement the reusable foundations separately from the Zoom declaration"
 }

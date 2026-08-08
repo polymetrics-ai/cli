@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -151,6 +152,74 @@ func TestSelectAuthOAuth2ClientCredentialsFetchesAndCachesToken(t *testing.T) {
 	applyToRequest(t, auth, req2)
 	if calls != 1 {
 		t.Fatalf("token endpoint called %d times, want 1 (cached token reused)", calls)
+	}
+}
+
+// TestSelectAuthOAuth2ClientCredentialsBasicClientAuth pins the documented
+// client_secret_basic wire shape required by providers such as Zoom Chatbot:
+// client credentials belong in the token request's HTTP Basic header, never
+// in its form body, while the resulting access token authenticates the API
+// request as Bearer. The raw bundle declaration is intentional: it must fail
+// RED until the declarative auth schema and runtime both understand
+// client_auth: basic.
+func TestSelectAuthOAuth2ClientCredentialsBasicClientAuth(t *testing.T) {
+	tokenCalls := 0
+	tokenServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		tokenCalls++
+		clientID, clientSecret, ok := request.BasicAuth()
+		if !ok || clientID != "fixture-client-id" || clientSecret != "fixture-client-secret" {
+			t.Fatal("token request did not use the declared HTTP Basic client authentication")
+		}
+		if err := request.ParseForm(); err != nil {
+			t.Fatalf("parse token form: %v", err)
+		}
+		if request.Form.Get("grant_type") != "client_credentials" {
+			t.Fatal("token request did not send the client_credentials grant")
+		}
+		if request.Form.Get("client_id") != "" || request.Form.Get("client_secret") != "" {
+			t.Fatal("token request duplicated declared client credentials in its form body")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"access_token":"fixture-chatbot-access-token","token_type":"bearer","expires_in":3600}`))
+	}))
+	defer tokenServer.Close()
+
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "auth": [{
+      "mode": "oauth2_client_credentials",
+      "token_url": "{{ config.token_url }}",
+      "client_id": "{{ config.client_id }}",
+      "client_secret": "{{ secrets.client_secret }}",
+      "client_auth": "basic"
+    }]
+  },
+  "streams": [{"name":"widgets","path":"/widgets","records":{"path":"data"},"schema":"schemas/widgets.json"}]
+}`)}
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load bundle with declared basic client auth: %v", err)
+	}
+
+	auth, err := selectAuth(context.Background(), cfgWith(
+		map[string]string{"base_url": "https://api.example.invalid", "token_url": tokenServer.URL, "client_id": "fixture-client-id"},
+		map[string]string{"client_secret": "fixture-client-secret"},
+	), bundle.HTTP.Auth, nil)
+	if err != nil {
+		t.Fatalf("selectAuth: %v", err)
+	}
+	request, err := http.NewRequest(http.MethodPost, "https://api.example.invalid/messages", nil)
+	if err != nil {
+		t.Fatalf("new API request: %v", err)
+	}
+	applyToRequest(t, auth, request)
+	if request.Header.Get("Authorization") != "Bearer fixture-chatbot-access-token" {
+		t.Fatal("basic client authentication did not yield the expected bearer API authorization")
+	}
+	if tokenCalls != 1 {
+		t.Fatalf("token endpoint calls = %d, want 1", tokenCalls)
 	}
 }
 

@@ -1269,6 +1269,26 @@ func TestCoerceFlagValueRejectsGenericJSONFlagType(t *testing.T) {
 	}
 }
 
+// TestCoerceFlagValueAcceptsJSONObject is deliberately narrower than the
+// rejected generic json type above. A provider-declared object member may be
+// supplied as exactly one JSON object, but a raw arbitrary request body must
+// remain impossible to express through the command surface.
+func TestCoerceFlagValueAcceptsJSONObject(t *testing.T) {
+	value, err := coerceFlagValue(connectors.CommandSurfaceFlag{Name: "content", Type: "json_object"}, []string{`{"text":"fixture chatbot content"}`})
+	if err != nil {
+		t.Fatalf("coerce declared json_object: %v", err)
+	}
+	object, ok := value.(map[string]any)
+	if !ok || object["text"] != "fixture chatbot content" {
+		t.Fatal("declared json_object did not produce the typed object value")
+	}
+	for _, raw := range []string{`[]`, `"scalar"`, `{"text":"one"} {"text":"two"}`} {
+		if _, err := coerceFlagValue(connectors.CommandSurfaceFlag{Name: "content", Type: "json_object"}, []string{raw}); err == nil {
+			t.Fatal("json_object accepted a value that is not exactly one object")
+		}
+	}
+}
+
 func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
 	record, err := recordOverrides(connectors.CommandSurfaceCommand{
 		Path:         "diagnoses create",

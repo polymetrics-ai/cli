@@ -32,14 +32,15 @@ const zoomBundleName = "zoom"
 // operations.json/cli_surface.json entries exist.
 //
 // Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
-// quality-management reads (5), Cobrowse SDK reads (4).
+// quality-management reads (5), Cobrowse SDK reads (4). Chatbot contributes
+// only typed mutations, so it is tracked by wantModuleDirectWriteCommandCount.
 const wantModuleOperationCommandCount = 17
 
 // wantModuleDirectWriteCommandCount is the running total of implemented
 // operations.json rest_write commands. It is distinct from writes.json
 // reverse-ETL actions because direct writes are executable only through the
 // typed plan lifecycle.
-const wantModuleDirectWriteCommandCount = 1
+const wantModuleDirectWriteCommandCount = 5
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -150,11 +151,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 23 {
-		t.Errorf("executable rows = %d, want 23", got)
+	if got := covered; got != 27 {
+		t.Errorf("executable rows = %d, want 27", got)
 	}
-	if got := implementableNow; got != 1819 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1819", got)
+	if got := implementableNow; got != 1815 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1815", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -254,6 +255,43 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 	verifyWriteCommands(t, bundle, connector, surface, wantModuleWriteCommandCount)
 }
 
+// TestChatbotDirectWriteCommandsAreReachable is the provider-category RED
+// surface test. It enumerates every documented Chatbot action through the
+// real commandrunner preflight, which prevents a plausible JSON declaration
+// from claiming implementation while the binary would still say unknown
+// command.
+func TestChatbotDirectWriteCommandsAreReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	wants := []struct {
+		path      string
+		operation string
+		method    string
+		apiPath   string
+	}{
+		{path: "chatbot messages send", operation: "zoom.send_chatbot_message", method: http.MethodPost, apiPath: "/v2/im/chat/messages"},
+		{path: "chatbot messages edit", operation: "zoom.edit_chatbot_message", method: http.MethodPut, apiPath: "/v2/im/chat/messages/{message_id}"},
+		{path: "chatbot messages delete", operation: "zoom.delete_chatbot_message", method: http.MethodDelete, apiPath: "/v2/im/chat/messages/{message_id}"},
+		{path: "chatbot link-unfurls create", operation: "zoom.create_chatbot_link_unfurl", method: http.MethodPost, apiPath: "/v2/im/chat/users/{userId}/unfurls/{triggerId}"},
+	}
+	for _, want := range wants {
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want declared executable Chatbot action", want.path, err)
+			continue
+		}
+		var found *connectors.CommandSurfaceCommand
+		for i := range connector.CommandSurface().Commands {
+			if connector.CommandSurface().Commands[i].Path == want.path {
+				found = &connector.CommandSurface().Commands[i]
+				break
+			}
+		}
+		if found == nil || found.Intent != "direct_write" || found.Availability != "implemented" || found.Operation != want.operation || len(found.APISurface) != 1 || found.APISurface[0].Method != want.method || found.APISurface[0].Path != want.apiPath {
+			t.Errorf("Chatbot command %q does not retain its declared operation/endpoint contract", want.path)
+		}
+	}
+}
+
 // verifyDirectWriteOperationCommands is the direct-write counterpart of
 // verifyOperationCommands. It keeps rest_write declarations inside the real
 // commandrunner preflight and plan lifecycle rather than treating a POST as a
@@ -291,8 +329,24 @@ func verifyDirectWriteOperationCommands(t *testing.T, bundle engine.Bundle, conn
 			t.Errorf("direct-write command %q output_policy = %q, want a supported declared rest_write policy %q", command.Path, command.OutputPolicy, op.OutputPolicy)
 		}
 		for _, flag := range command.Flags {
-			if !strings.HasPrefix(flag.MapsTo, "body.") || !flag.Required {
-				t.Errorf("direct-write command %q flag --%s maps_to %q, want a required typed body.* field", command.Path, flag.Name, flag.MapsTo)
+			mapsTo := strings.TrimSpace(flag.MapsTo)
+			switch {
+			case strings.HasPrefix(mapsTo, "path."):
+				if !flag.Required {
+					t.Errorf("direct-write command %q path flag --%s must be required", command.Path, flag.Name)
+					continue
+				}
+				placeholder := "{" + strings.TrimPrefix(mapsTo, "path.") + "}"
+				if !strings.Contains(op.REST.Path, placeholder) {
+					t.Errorf("direct-write command %q path flag --%s maps_to %q, but %q is absent from %q", command.Path, flag.Name, mapsTo, placeholder, op.REST.Path)
+				}
+			case strings.HasPrefix(mapsTo, "body."), strings.HasPrefix(mapsTo, "query."):
+				// Required and optional provider-defined body/query members are
+				// checked by the operation body schema and connectorgen's exact
+				// mapping validator. Requiring every member here would make a
+				// documented optional field impossible to expose.
+			default:
+				t.Errorf("direct-write command %q flag --%s maps_to %q, want typed path.*, query.*, or body.* binding", command.Path, flag.Name, mapsTo)
 			}
 		}
 		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
