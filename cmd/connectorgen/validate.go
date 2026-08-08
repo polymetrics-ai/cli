@@ -389,12 +389,24 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		}
 	}
 
-	check("streams.json", b.HTTP.URL)
+	checkPath := func(file, what, template string) {
+		if template == "" {
+			return
+		}
+		if err := engine.ResolveCheckRequestPath(what, template, specKeys); err != nil {
+			findings = append(findings, Finding{
+				Connector: b.Name, File: file, Rule: ruleInterpolationUnresolved,
+				Message: err.Error(),
+			})
+		}
+	}
+
+	checkPath("streams.json", "base.url", b.HTTP.URL)
 	for _, h := range b.HTTP.Headers {
 		check("streams.json", h)
 	}
 	if b.HTTP.Check != nil {
-		check("streams.json", b.HTTP.Check.Path)
+		checkPath("streams.json", "base.check.path", b.HTTP.Check.Path)
 		// checkquery-ledger.md: base.check.query (RequestSpec.Query) is the
 		// SAME QueryParam dialect as stream.Query, so its templates get the
 		// SAME static validation stream.Query's entries already get below —
@@ -421,7 +433,7 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		}
 	}
 	for _, s := range b.Streams {
-		check("streams.json", s.Path)
+		checkPath("streams.json", fmt.Sprintf("stream %q path", s.Name), s.Path)
 		for _, v := range s.Query {
 			check("streams.json", v.Template)
 		}
@@ -441,7 +453,7 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		// static ResolveCheck coverage (an undeclared spec key here would
 		// otherwise only fail the first time the stream is actually read).
 		if s.FanOut != nil && s.FanOut.IDsFrom.Request != nil {
-			check("streams.json", s.FanOut.IDsFrom.Request.Path)
+			checkPath("streams.json", fmt.Sprintf("stream %q fan_out.ids_from.request.path", s.Name), s.FanOut.IDsFrom.Request.Path)
 		}
 	}
 	for _, w := range b.Writes {

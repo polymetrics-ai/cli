@@ -1,0 +1,41 @@
+{
+  "actions": [
+    {
+      "name": "update_widget",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/widgets/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "delete_widget",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/widgets/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "high",
+      "confirm": "destructive"
+    }
+  ]
+}

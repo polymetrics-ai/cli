@@ -30,9 +30,38 @@
 - [x] `cd website && pnpm run gen:website-data` regenerated website data.
 - [x] Generated website data reflects all seven connector counts; no excluded connector input changed.
 
+## Post-review corrections and re-verification
+
+Inline review found three classes of defect this checklist had marked verified. See TDD-LEDGER.md
+"Red — inline review findings against the imported tree" for the reproduced failures.
+
+- [x] **The verified package set was incomplete, and that is why the defects shipped.**
+  `internal/connectors/conformance` and `internal/connectors/certify` both consume the api_surface
+  coverage rule but were absent from the gate list below, so a `covered_by.writes` migration that
+  reached only one of four consumers passed every gate this phase ran. Both packages are now gated.
+- [x] Plural-only coverage is regression-tested rather than incidentally covered:
+  `certify.TestSurfaceInventoryCountsPluralOnlyWriteCoverage` (classification **and** write counts
+  292/252), `certify.TestSurfaceInventoryPluralOnlyBundlesUseNoSingularWrite`, and
+  `connectorgen.TestBatchMaterializePluralOnlyWriteCoverage` (end-to-end `batch materialize`,
+  including a two-element `writes` array over one endpoint).
+- [x] Twelve help-scout stream paths carried unbound `{name}` placeholders that no gate could see.
+  Paths now interpolate declared config keys, and `engine.ResolveCheckRequestPath` enforces the
+  invariant for both `connectorgen validate` and `conformance`; `writes.json` stays exempt because
+  `path_fields` legitimately binds 165 shipped write paths.
+- [x] help-scout, jira and workday-rest published read-only risk/description/docs text while
+  shipping 65, 292 and 252 write actions. Corrected and regenerated through docs/website generators.
+- [x] Re-run on the post-fix tree: `internal/connectors/engine`, `internal/connectors/conformance`,
+  `internal/connectors/certify` and `cmd/connectorgen` all pass;
+  `connectorgen validate` reports 551 connectors / 0 findings; `surface-sync --check` reports no
+  drift; `TestEveryImplementedCommandPassesRuntimePreflight` passes; `pm docs validate` passes.
+- [ ] The 1,984-command real-binary NAME sweep was **not** re-run after these corrections. No
+  correction adds, removes or renames a command — the changes are stream path templates, spec keys,
+  risk/description text and docs prose — and the seven implemented/documented counts are unchanged.
+
 ## Final local gates
 
 - [x] Focused affected package tests, full `cmd/connectorgen`, `internal/connectors/engine`,
+  `internal/connectors/conformance`, `internal/connectors/certify`,
   `internal/connectors/commandrunner`, and full `internal/cli` tests pass; affected-package `go vet`
   and `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`,
   `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`,

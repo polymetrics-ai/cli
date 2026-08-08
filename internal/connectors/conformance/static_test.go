@@ -305,7 +305,8 @@ func TestCheckSurfaceComplete_POSTDirectReadDoesNotRequireWriteCapability(t *tes
 func TestInvalidCorpus_DirsExist(t *testing.T) {
 	for _, dir := range []string{
 		"bad-spec-schema", "bad-stream-schema", "pk-missing", "cursor-missing",
-		"unresolved-interp", "write-schema-invalid", "surface-incomplete",
+		"unresolved-interp", "stream-path-literal-placeholder",
+		"write-schema-invalid", "surface-incomplete",
 		"docs-missing-heading", "secret-in-fixture", "no-fixtures",
 	} {
 		if _, err := os.Stat("testdata/invalid/" + dir); err != nil {

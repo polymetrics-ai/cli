@@ -1,8 +1,11 @@
 package certify
 
 import (
+	"os"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) {
@@ -39,6 +42,117 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	}
 	if result.Provenance.Status != "legacy_unverified" || result.Provenance.LedgerVersion != 1 {
 		t.Fatalf("Provenance = %+v, want v1 legacy_unverified evidence", result.Provenance)
+	}
+}
+
+// TestSurfaceInventoryCountsPluralOnlyWriteCoverage pins the two shipped
+// bundles whose covered_by rows use ONLY the plural `writes` spelling. github
+// cannot catch a regression here: all 231 of its write rows use the singular
+// `write`, so hasSurfaceCoverage/addSurfaceCoverageCounts pass identically
+// with or without plural support. jira and workday-rest are the real form —
+// 292 and 252 endpoints with a `writes` array and no `write` — so reverting
+// either function turns every one of those rows into "neither covered nor
+// blocked" and fails the stage outright.
+func TestSurfaceInventoryCountsPluralOnlyWriteCoverage(t *testing.T) {
+	tests := []struct {
+		connector       string
+		endpoints       int
+		covered         int
+		blocked         int
+		streams         int
+		writes          int
+		directReads     int
+		blockedModel    string
+		blockedModelHas int
+	}{
+		{
+			connector: "jira", endpoints: 617, covered: 590, blocked: 27,
+			streams: 3, writes: 292, directReads: 295,
+			blockedModel: "sensitive_reverse_etl", blockedModelHas: 25,
+		},
+		{
+			connector: "workday-rest", endpoints: 911, covered: 910, blocked: 1,
+			streams: 3, writes: 252, directReads: 659,
+			blockedModel: "deprecated", blockedModelHas: 1,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.connector, func(t *testing.T) {
+			result, err := surfaceInventoryFor(tc.connector)
+			if err != nil {
+				t.Fatalf("surfaceInventoryFor(%s): %v", tc.connector, err)
+			}
+			// Classification: every plural-only row must land in Covered, not
+			// in the "neither covered nor blocked" fail branch.
+			if result.Result != "pass" {
+				t.Fatalf("Result = %q reason=%q, want pass", result.Result, result.Reason)
+			}
+			if result.Endpoints != tc.endpoints {
+				t.Errorf("Endpoints = %d, want %d", result.Endpoints, tc.endpoints)
+			}
+			if result.Covered != tc.covered {
+				t.Errorf("Covered = %d, want %d", result.Covered, tc.covered)
+			}
+			if result.Blocked != tc.blocked {
+				t.Errorf("Blocked = %d, want %d", result.Blocked, tc.blocked)
+			}
+			// Write COUNT: addSurfaceCoverageCounts must total the plural
+			// arrays, not just report a non-zero presence.
+			if result.CoveredBy["write"] != tc.writes {
+				t.Errorf("CoveredBy[write] = %d, want %d", result.CoveredBy["write"], tc.writes)
+			}
+			if result.CoveredBy["stream"] != tc.streams {
+				t.Errorf("CoveredBy[stream] = %d, want %d", result.CoveredBy["stream"], tc.streams)
+			}
+			if result.CoveredBy["direct_reads"] != tc.directReads {
+				t.Errorf("CoveredBy[direct_reads] = %d, want %d", result.CoveredBy["direct_reads"], tc.directReads)
+			}
+			if result.BlockedByModel[tc.blockedModel] != tc.blockedModelHas {
+				t.Errorf("BlockedByModel[%s] = %d, want %d", tc.blockedModel, result.BlockedByModel[tc.blockedModel], tc.blockedModelHas)
+			}
+		})
+	}
+}
+
+// TestSurfaceInventoryPluralOnlyBundlesUseNoSingularWrite guards the premise
+// of the test above: if a future regeneration rewrote jira/workday-rest to the
+// singular spelling, the pinned counts would still pass while no longer
+// exercising plural support at all.
+func TestSurfaceInventoryPluralOnlyBundlesUseNoSingularWrite(t *testing.T) {
+	for connector, wantPlural := range map[string]int{"jira": 292, "workday-rest": 252} {
+		t.Run(connector, func(t *testing.T) {
+			path, err := findAPISurfacePath(connector)
+			if err != nil {
+				t.Fatalf("findAPISurfacePath(%s): %v", connector, err)
+			}
+			raw, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatalf("read %s api surface: %v", connector, err)
+			}
+			surface, err := engine.ParseAPISurface(raw)
+			if err != nil {
+				t.Fatalf("parse %s api surface: %v", connector, err)
+			}
+			plural, singular := 0, 0
+			for _, ep := range surface.Endpoints {
+				if ep.CoveredBy == nil {
+					continue
+				}
+				if ep.CoveredBy.Write != "" {
+					singular++
+				}
+				if len(ep.CoveredBy.Writes) > 0 {
+					plural++
+				}
+			}
+			if singular != 0 {
+				t.Errorf("%s has %d singular covered_by.write rows, want 0 (plural-only fixture)", connector, singular)
+			}
+			if plural != wantPlural {
+				t.Errorf("%s has %d plural covered_by.writes rows, want %d", connector, plural, wantPlural)
+			}
+		})
 	}
 }
 
