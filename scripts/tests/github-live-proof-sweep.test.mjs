@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { chmod, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { chmod, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import os from "node:os";
@@ -8,6 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
+  assertReadEnvelope,
   enumerateImplementedCommands,
   redactForReport,
   validateProofRecords,
@@ -70,6 +71,54 @@ test("requires a returned-data assertion or a concrete untestable reason", () =>
   );
 });
 
+test("accepts stream and binary live results without inventing an HTTP status", () => {
+  const stream = assertReadEnvelope(
+    {
+      kind: "ConnectorCommandRead",
+      connector: "github",
+      command: "issue list",
+      stream: "issues",
+      count: 2,
+      records: [{ number: 5 }, { number: 6 }],
+    },
+    "issue list",
+  );
+  assert.equal(stream.httpStatus, undefined);
+  assert.deepEqual(stream.assertion, {
+    kind: "stream-records",
+    subject: "issue list",
+    matched: true,
+    count: 2,
+  });
+
+  const binary = assertReadEnvelope(
+    {
+      kind: "ConnectorCommandBinaryDownload",
+      connector: "github",
+      command: "repo archive tarball",
+      record: { file_name: "repo.tar.gz", file_size_bytes: 12 },
+    },
+    "repo archive tarball",
+  );
+  assert.equal(binary.httpStatus, undefined);
+  assert.deepEqual(binary.assertion, {
+    kind: "binary-download-record",
+    subject: "repo archive tarball",
+    matched: true,
+  });
+
+  assert.deepEqual(
+    validateProofRecords(
+      ["issue list", "repo archive tarball"],
+      [
+        { command: "issue list", state: "proven", assertion: stream.assertion },
+        { command: "repo archive tarball", state: "proven", assertion: binary.assertion },
+      ],
+    ),
+    { proven: 2, untestable: 0, failed: 0 },
+  );
+});
+
 test("redacts raw subprocess output before it can become a report record", () => {
   const raw = "request failed with token ghp_fixture_token_should_not_escape";
   const record = redactForReport({
@@ -126,7 +175,7 @@ test("rejects a write case that overrides the dedicated repository owner before 
         casesPath,
         JSON.stringify({
           connector: "github",
-          test_repository: { owner: "dedicated-owner", repo: "dedicated-repo" },
+          test_repository: { owner: "karthik-sivadas", repo: "pm-live-test-direct-read-20260808081515" },
           cases,
         }),
         "utf8",
@@ -139,8 +188,8 @@ test("rejects a write case that overrides the dedicated repository owner before 
           "--pm", fakePM,
           "--root", root,
           "--credential", "github-live-proof",
-          "--test-owner", "dedicated-owner",
-          "--test-repo", "dedicated-repo",
+          "--test-owner", "karthik-sivadas",
+          "--test-repo", "pm-live-test-direct-read-20260808081515",
           "--cases", casesPath,
           "--report", reportPath,
           "--execute-writes",
@@ -152,6 +201,39 @@ test("rejects a write case that overrides the dedicated repository owner before 
       assert.match(`${result.stdout}\n${result.stderr}`, /dedicated repository (owner|repo)/i);
       assert.equal(existsSync(marker), false, "case validation must finish before pm starts");
     }
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test("records every implemented command as terminally untestable for an external live blocker", async () => {
+  const temp = await mkdtemp(path.join(os.tmpdir(), "github-live-proof-blocker-"));
+  try {
+    const runner = path.join(path.dirname(fileURLToPath(import.meta.url)), "../github-live-proof-sweep.mjs");
+    const reportPath = path.join(temp, "report.json");
+    const result = spawnSync(
+      process.execPath,
+      [
+        runner,
+        "--external-blocker",
+        "--pm",
+        process.execPath,
+        "--report",
+        reportPath,
+        "--reason",
+        "approved private GitHub credential and dedicated test repository are unavailable in this isolated worktree",
+      ],
+      { encoding: "utf8" },
+    );
+    assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+    const report = JSON.parse(await readFile(reportPath, "utf8"));
+    const expected = enumerateImplementedCommands(
+      JSON.parse(await readFile(path.join(path.dirname(fileURLToPath(import.meta.url)), "../../internal/connectors/defs/github/cli_surface.json"), "utf8")),
+    );
+    assert.equal(report.status, "external_blocker");
+    assert.deepEqual(report.tally, { proven: 0, untestable: expected.length, failed: 0 });
+    assert.equal(report.records.length, expected.length);
+    assert.equal(report.records.every((record) => record.state === "untestable"), true);
   } finally {
     await rm(temp, { recursive: true, force: true });
   }

@@ -1,12 +1,18 @@
 package engine
 
 import (
+	"context"
 	"net/http"
+	"net/http/httptest"
+	"strconv"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/coordination"
 )
 
 const githubRateLimitSource = "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api"
@@ -136,6 +142,83 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 		t.Fatal("unmatched GitHub auth type acquired a rate-limit policy")
 	}
 }
+
+func TestGitHubRateLimitAdmissionPrecedesProviderAndIsolatesScope(t *testing.T) {
+	var requests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-RateLimit-Limit", "1")
+		w.Header().Set("X-RateLimit-Remaining", "0")
+		w.Header().Set("X-RateLimit-Reset", strconv.FormatInt(githubRateLimitProofNow.Add(time.Minute).Unix(), 10))
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer server.Close()
+
+	bundle, err := Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	bundle.HTTP.URL = server.URL
+	bundle.HTTP.Auth = nil
+	// Keep the provider declaration and replace only the budget window so the
+	// test can deterministically cross a local boundary without waiting an
+	// hour. The runtime path, scope binding, and observation remain GitHub's.
+	policy := bundle.RateLimits.Policies[0]
+	budgets := make([]connsdk.RateLimitBudget, 0, 1)
+	for i := range policy.Budgets {
+		if policy.Budgets[i].Model == connsdk.RateLimitBudgetFixedWindow {
+			limit, window := 1, 60
+			policy.Budgets[i].Limit = &limit
+			policy.Budgets[i].WindowSeconds = &window
+			budgets = append(budgets, policy.Budgets[i])
+		}
+	}
+	policy.Budgets = budgets
+	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{policy}
+
+	clock := &engineRateLimitClock{now: githubRateLimitProofNow}
+	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+	t.Cleanup(restore)
+	firstConfig := githubRateLimitConfig(t, "token", "rate_limit_account", "provider-double-account-a")
+	firstRuntime, err := newRuntime(context.Background(), bundle, firstConfig, nil)
+	if err != nil {
+		t.Fatalf("newRuntime first scope: %v", err)
+	}
+	firstRequester, err := firstRuntime.RequesterFor(http.MethodGet, "/repos/{owner}/{repo}")
+	if err != nil {
+		t.Fatalf("RequesterFor first scope: %v", err)
+	}
+	for attempt := 0; attempt < 2; attempt++ {
+		if _, err := firstRequester.Do(context.Background(), http.MethodGet, "/repos/provider-double-owner/provider-double-repo", nil, nil); err != nil {
+			t.Fatalf("first scope request %d: %v", attempt, err)
+		}
+	}
+	if len(clock.waits) != 1 || clock.waits[0] != time.Minute {
+		t.Fatalf("same-scope waits = %v, want one local one-minute wait", clock.waits)
+	}
+
+	secondConfig := githubRateLimitConfig(t, "token", "rate_limit_account", "provider-double-account-b")
+	secondRuntime, err := newRuntime(context.Background(), bundle, secondConfig, nil)
+	if err != nil {
+		t.Fatalf("newRuntime independent scope: %v", err)
+	}
+	secondRequester, err := secondRuntime.RequesterFor(http.MethodGet, "/repos/{owner}/{repo}")
+	if err != nil {
+		t.Fatalf("RequesterFor independent scope: %v", err)
+	}
+	if _, err := secondRequester.Do(context.Background(), http.MethodGet, "/repos/provider-double-owner/provider-double-repo", nil, nil); err != nil {
+		t.Fatalf("independent scope request: %v", err)
+	}
+	if got, want := requests.Load(), int32(3); got != want {
+		t.Fatalf("provider requests = %d, want %d", got, want)
+	}
+	// Every call returned 200, so the provider never had to reject a request;
+	// the one-minute pause came from local admission after the first response.
+}
+
+var githubRateLimitProofNow = time.Date(2026, 8, 6, 12, 0, 0, 0, time.UTC)
 
 func githubRateLimitConfig(t *testing.T, authType, scopeConfig, scopeValue string) connectors.RuntimeConfig {
 	t.Helper()

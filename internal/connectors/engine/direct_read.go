@@ -884,12 +884,23 @@ func resolveSurfaceEndpointPath(template string, cfg connectors.RuntimeConfig, p
 }
 
 func encodeSurfacePathValue(name, value string) (string, error) {
-	if name == "path" {
+	if name == "path" || name == "ref" {
 		if strings.Contains(value, "\\") {
 			return "", fmt.Errorf("path variable %q must use forward slashes", name)
 		}
-		if err := safety.ValidateRelativePath(value, "path variable "+name); err != nil {
-			return "", err
+		if name == "path" {
+			if err := safety.ValidateRelativePath(value, "path variable "+name); err != nil {
+				return "", err
+			}
+		} else {
+			if strings.TrimSpace(value) == "" {
+				return "", fmt.Errorf("path variable %q is required", name)
+			}
+			for _, part := range strings.Split(value, "/") {
+				if err := safety.ValidateIdentifier(part, "path variable "+name); err != nil {
+					return "", err
+				}
+			}
 		}
 		clean := stdpath.Clean(value)
 		if clean == "." {

@@ -156,6 +156,7 @@ func TestReverseETLToGitHubCreatesPullRequestAfterApproval(t *testing.T) {
 		"--config", "owner=acme",
 		"--config", "repo=widgets",
 		"--config", "auth_type=token",
+		"--config", "rate_limit_account=reverse-cli-test",
 		"--config", "base_url=" + server.URL,
 		"--from-env", "token=PM_GITHUB_TOKEN",
 		"--root", root,

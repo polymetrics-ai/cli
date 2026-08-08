@@ -787,6 +787,250 @@ $ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 ```
 
+## Cycle 17e — final generated-artifact, lint, and provider-boundary repair
+
+**Red 17e — post-repair gates caught stale owned output and an out-of-scope proof file.** The
+current `TestGoldenTranscripts` run rejected GitHub inspect/manual output that still described 555
+write actions after the generated bundle reached 574. `make lint` also found a dead direct-write
+helper and a non-idiomatic output-policy branch. `connectorgen boundary` rejected the exhaustive
+provider-double implementation because its provider-specific Go lived in shared non-test scope.
+
+**Green 17e — regenerate, simplify, and constrain the proof.** The golden fixture was regenerated
+by the owning test command with `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1`; the implementation now
+uses a tagged output-policy switch and removes the unused helper. The provider-double implementation
+and contract test are test-only files, so GitHub-specific proof code remains outside shared
+production Go. Current checks are green:
+
+```
+$ go test -count=1 -timeout 20m ./internal/connectors/conformance/ -run '^TestGitHubExhaustiveProviderDouble$'
+ok  polymetrics.ai/internal/connectors/conformance
+$ make lint
+0 issues.
+$ go run ./cmd/connectorgen boundary . --json
+{"outcome":"clean","findings":0}
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+---
+
+## Cycle 16 completion — exhaustive provider, limiter, and terminal live accounting
+
+**Red 16c — the exhaustive provider-double entry point was absent.** The first conformance
+test failed to compile at `runGitHubExhaustiveProviderDouble`, so a source count could not be
+mistaken for execution evidence. The implementation then exercised every declared stream,
+write action, and operation through the existing engine paths, with controlled provider capture,
+fixture-backed records where available, bounded synthetic records otherwise, and concrete
+untestable rows for the GraphQL mutation, local workflow, and sensitive secret operation.
+
+**Green 16c — deterministic provider-double proof is complete.** The report has 37 streams,
+574 write actions, 377 operations, 988 rows, 985 exercised, 3 explicitly untestable, and 0
+failed. It identifies the 23 streams without a command as `pm etl` generic routes and the 38
+write actions without a command as `pm reverse` generic routes. Captured requests retain only
+method/path/query-key/header-name/body-key and SHA-256 metadata; no body, credential, or token
+value is persisted.
+
+```
+$ go test -timeout 20m ./internal/connectors/conformance/ -run TestGitHubExhaustiveProviderDouble -count=1
+ok   polymetrics.ai/internal/connectors/conformance
+
+$ jq '{streams,write_actions,operations,generic_streams,generic_write_actions,exercised,untestable,failed}' .planning/phases/github-parity-extract-r1/PROVIDER-DOUBLE-PROOF.json
+{
+  "streams": 37, "write_actions": 574, "operations": 377,
+  "generic_streams": 23, "generic_write_actions": 38,
+  "exercised": 985, "untestable": 3, "failed": 0
+}
+```
+
+**Green 16d — the existing GitHub limiter has an executable provider-boundary proof.** The
+GitHub-specific test uses the declared authenticated-user policy with a deterministic one-minute
+fixture window, observes a non-secret reset/remaining signal, records one local wait before the
+second same-scope request, and proves an independent scope does not inherit the wait. All three
+provider-double requests return 200; no provider 429 is used as evidence of local pacing.
+
+```
+$ go test -timeout 20m ./internal/connectors/engine/ -run TestGitHubRateLimitAdmissionPrecedesProviderAndIsolatesScope -count=1
+ok   polymetrics.ai/internal/connectors/engine
+```
+
+**Red 16e — current-head credentialed live acceptance cannot run in this isolated worktree.**
+The live harness requires an approved private test repository and a credential scoped to it before
+it starts `pm`; neither is available here. The harness therefore has an explicit external-blocker
+mode that emits one terminal `untestable` record for every implemented command, never prints or
+stores a credential value, and does not claim provider acceptance.
+
+**Green 16e — terminal live accounting is complete but externally blocked.**
+`LIVE-PROOF-REPORT.json` contains 1,081/1,081 implemented-command records with
+`proven=0`, `untestable=1081`, and `failed=0`; the blocker is the unavailable approved private
+credential/repository. A real credentialed run remains a merge gate, not a green substitute.
+
+```
+$ node scripts/github-live-proof-sweep.mjs --external-blocker --pm /tmp/pm-github-parity-current \
+    --report .planning/phases/github-parity-extract-r1/LIVE-PROOF-REPORT.json \
+    --reason 'approved private GitHub credential and dedicated test repository are unavailable in this isolated worktree'
+github live proof: external blocker; untestable=1081
+```
+
+## Cycle 16 — exhaustive proof inventory and current-head routing evidence
+
+**Red 16a — source-derived proof ledgers did not exist.** The captain-ordered proof contract
+requires one row for every endpoint, operation, command, stream, and write action; a summary count
+cannot reveal an omitted declaration or an invented binding. The new Node test initially failed
+because `scripts/github-parity-proof.mjs` was absent. Its green implementation derives the model
+from all five shipped GitHub definition files and validates the exact 1,224 / 37 / 574 / 377 /
+1,179 source totals, including 23 generic-only streams and 38 generic-only write actions.
+
+**Green 16a — mechanically generated ledgers account for the complete source bundle.**
+`node scripts/github-parity-proof.mjs --write` emits `OPERATION-PROOF-LEDGER.json` and
+`COMMAND-PROOF-LEDGER.json`; the validator rejects omitted rows, unknown bindings, and empty
+source bundles. The attached command evidence is intentionally not inferred from availability:
+it is populated only by the separate built-binary sweep.
+
+```
+$ node --test scripts/tests/github-parity-proof.test.mjs
+6 passed
+$ node scripts/github-parity-proof.mjs --write
+{"endpoints":1224,"coveredEndpoints":1147,"blockedEndpoints":77,"streams":37,"writeActions":574,"operations":377,"commands":1179,"implementedCommands":1081,"partialCommands":37} generic_streams=23 generic_writes=38
+```
+
+**Red 16b — reachability could not be proven by static metadata.** The command proof test first
+had no current-head executor. A fresh `/tmp/pm-github-parity-current` binary and eight isolated
+initialized projects are now swept once per declared command; the classifier accepts only the
+exact rendered `pm github <path>` name and stores no subprocess output. Before attaching that
+report, the generated command ledger correctly showed `binary.state=not_run` rather than
+repeating the stale 1,079/1,086 historical claim.
+
+**Green 16b — the current built binary dispatches every declared GitHub command.** The sweep
+recorded 1,179/1,179 exact command names, with 1,081 implemented, 37 partial, and all other
+declared classifications dispatchable to their declared help surface. The command ledger was
+regenerated with the report's binary hash and has no `not_run` rows.
+
+**Red 16c — deterministic provider-double proof was not executable for the full declaration set.**
+The new conformance test named the required 37-stream / 574-write-action / 377-operation proof,
+but the exhaustive runner was absent:
+
+```
+$ go test -timeout 20m ./internal/connectors/conformance/ -run TestGitHubExhaustiveProviderDouble -count=1
+undefined: runGitHubExhaustiveProviderDouble
+```
+
+The green step must execute every stream against the existing replay engine, every write action
+against a controlled capture server (fixture-backed or a bounded synthetic record), and every
+executable operation through its real engine executor, while recording blocked operation kinds
+with concrete reasons and asserting no request on rejected safety paths.
+
+## Cycle 16 — exhaustive source-derived proof ledgers
+
+**Red 16a — the captain's required terminal proof ledgers did not exist.** The first contract test
+was added before the proof generator. It failed at module resolution rather than silently accepting
+an absent artifact:
+
+```
+$ node --test scripts/tests/github-parity-proof.test.mjs
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module
+.../scripts/github-parity-proof.mjs
+```
+
+The test contract requires the source model to account for every 1,224 endpoint, 37 stream, 574
+write-action, 377 operation, and 1,179 command row; it also rejects an omitted endpoint, unknown
+covered_by target, and missing operation binding. The 23 stream and 38 write-action members with
+no dedicated connector command must carry a generic ETL/reverse-ETL route.
+
+**Green 16a — source-derived accounting is now executable.** `scripts/github-parity-proof.mjs`
+loads the five GitHub source bundles, normalizes provider/config path templates, links streams,
+write actions, operations, GraphQL operation names, aliases, and command API references, then
+validates and writes `OPERATION-PROOF-LEDGER.json` and `COMMAND-PROOF-LEDGER.json`. It computes
+counts from the loaded declarations and never accepts a hand-maintained summary.
+
+```
+$ node --test scripts/tests/github-parity-proof.test.mjs
+ok — 5 tests passed
+$ node scripts/github-parity-proof.mjs --check
+{"endpoints":1224,"coveredEndpoints":1147,"blockedEndpoints":77,"streams":37,"writeActions":574,"operations":377,"commands":1179,"implementedCommands":1081,"partialCommands":37} generic_streams=23 generic_writes=38
+```
+
+No credential, provider request, raw body, or generated source bundle was changed by this cycle.
+
+## Cycle 17 — approved current-head live acceptance and ref-path repair
+
+**Red 17a — stream and binary live envelopes had no HTTP status field.** The live runner initially
+treated those successful CLI envelopes as failures because `ConnectorCommandRead` reports returned
+record counts and `ConnectorCommandBinaryDownload` reports bounded file accounting, but neither
+claims a provider status. Requiring an invented status would make the evidence dishonest.
+
+**Green 17a — returned-data assertions are sufficient for status-less envelope kinds.** The runner
+now proves streams with `count` plus `records` and binary downloads with the bounded `record`
+metadata; direct reads and write operations retain their real 2xx status where the runtime exposes
+one. The report still rejects raw output, response bodies, grants, credentials, and token-shaped
+values.
+
+**Red 17b — the first approved credentialed sweep surfaced 92 terminal failures.** The failures
+were not converted wholesale: sanitized status triage separated provider-state prerequisites and
+credential-scope boundaries from invalid search queries, missing Git-ref path semantics, and the
+write harness's plan-token handling. The case generator was corrected for provider-valid queries,
+empty-repository content, App-only/account-scope resources, and concrete absent feature resources.
+The write runner now obtains non-destructive plan grants from human-readable plan output while
+retaining typed confirmation for destructive DELETE actions and performs approved read-backs.
+
+**Red 17c — GitHub's `git ref view` could not reach `heads/main`.** The provider-valid value
+`heads/main` was rejected as a single identifier, while `main` reached the API as the wrong ref and
+returned no successful result:
+
+```
+pm github git ref view --ref heads/main --json
+error: path variable ref contains invalid character '/'
+```
+
+**Green 17c — slash-bearing generic ref path variables are safely segmented.** The shared engine
+now treats only the provider-neutral `ref` path variable like a path of validated segments,
+preserving URL escaping and traversal rejection; ordinary identifiers retain their old validation.
+The focused engine test proves `/git/ref/heads/main` reaches the fixture endpoint. This is the
+only shared production change in this proof slice and is provider-neutral.
+
+**Green 17d — final current-head credentialed acceptance is exact and zero-failure.** The final
+rebuilt binary ran the complete case file against the captain-approved private repository and
+credential metadata without persisting either secret. The report is tied to the binary and case
+hashes and contains one terminal row for every implemented command:
+
+```
+$ node scripts/github-live-proof-sweep.mjs --pm /tmp/pm-github-parity-final \
+    --root <isolated-live-project> --credential github-live-proof \
+    --cases .planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json \
+    --report .planning/phases/github-parity-extract-r1/LIVE-PROOF-REPORT.json --execute-writes
+github live proof: proven=124 untestable=957 failed=0
+```
+
+Validation confirms 1,081 unique rows, exact source command-set equality, `status=credentialed_live`,
+matching current binary/surface/case hashes, no forbidden report fields, and no credential-shaped
+text. `LIVE-RATE-LIMIT-PROOF.json` records the live `rate-limit get` 200 response, zero observed
+429s across the bounded live workload, preserved headroom, and the existing same-scope admission /
+independent-scope unit proof.
+
+**Red 15c — the required post-rebase CLI gate found stale generated artifacts and an incomplete
+test-only rate-limit scope.** The first full `internal/cli` baseline after the clean rebase fails
+in two places. `TestGoldenTranscripts` correctly rejects the old GitHub inspect/manual snapshots:
+they still describe 555 write actions and omit the newly generated namespaces. Separately,
+`TestReverseETLToGitHubCreatesPullRequestAfterApproval` configures `auth_type=token` but omits the
+declared non-secret `rate_limit_account`, so the active policy correctly refuses to issue the mock
+request rather than inferring a coordination subject from a secret or repository target.
+
+```
+$ go test -timeout 20m ./internal/cli/
+--- FAIL: TestGoldenTranscripts
+    connectors_inspect_github_json: stdout mismatch (-want +got)
+    dynamic_connector_bare_json: stdout mismatch (-want +got)
+--- FAIL: TestReverseETLToGitHubCreatesPullRequestAfterApproval
+    reverse run code = 1 ... rate-limit policy "authenticated-user" requires non-secret config
+    "rate_limit_account" for its declared scope
+FAIL    polymetrics.ai/internal/cli
+```
+
+The green repair must retain the fail-closed policy, add an opaque non-secret account label only to
+the isolated test fixture, and regenerate the affected user-facing artifacts through their owning
+commands. No credential, token-derived value, or synthetic default belongs in this repair.
+
 **Red 12d — a live write case could replace the dedicated repository owner before `pm` started.**
 The proof runner's credential metadata check bound the saved credential to the supplied test
 repository, but case arguments were still accepted unchanged.  The new deterministic test provides

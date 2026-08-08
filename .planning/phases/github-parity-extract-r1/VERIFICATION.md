@@ -454,3 +454,72 @@ $ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 $ go build ./cmd/pm
 ```
+
+## Exhaustive recovery verification — frozen 1,224-operation inventory
+
+The final proof slice derives its inventory from the current GitHub bundle rather than inheriting
+historical sweep counts:
+
+```text
+endpoints=1224 (REST=1220, GraphQL=4)
+covered=1147 blocked=77
+streams=37 write_actions=574 operations=377 commands=1179
+generic_streams=23 generic_write_actions=38
+```
+
+`COMMAND-REACHABILITY.json` records a freshly built current-head binary and exact rendered command
+help for all `1179/1179` commands. It does not store subprocess output. The per-availability
+breakdown is 1081 implemented, 37 partial, 5 unsafe/disallowed, 21 unsupported-local, 8 planned,
+and 27 unsupported-api, all with zero unreachable names.
+
+`PROVIDER-DOUBLE-PROOF.json` records 37 streams, 574 write actions, and 377 operations: 985
+exercised, 3 explicitly untestable (GraphQL mutation, local workflow, sensitive secret operation),
+and 0 failed. The generic-only rows name `pm etl` or `pm reverse` as their route while using the
+same typed engine execution. Request evidence is metadata and hashes only.
+
+`RATE-LIMIT-PROOF.json` is backed by
+`TestGitHubRateLimitAdmissionPrecedesProviderAndIsolatesScope`: same-scope requests incur one
+local one-minute wait before the second transport call, all provider-double responses are 200,
+and an independent non-secret scope does not inherit the wait.
+
+The approved credentialed live runner was completed against the pinned private repository using
+the final rebuilt binary. `LIVE-PROOF-REPORT.json` is `status=credentialed_live`, contains one
+terminal record for every implemented command, and is tied to the current binary and case-file
+hashes: `proven=124`, `untestable=957`, `failed=0`. Validation confirmed exact command-set equality,
+no forbidden report fields, and no credential-shaped text. The 957 UNTESTABLE rows have concrete
+target-state, permission-scope, or safety reasons; no FAILED row is being relabelled.
+
+`LIVE-RATE-LIMIT-PROOF.json` records the proven live `rate-limit get` response, zero observed HTTP
+429s across the bounded credentialed workload, preserved headroom, and the existing deterministic
+same-scope admission / independent-scope unit proof. The approved repository was retained; the
+reversible archive and issue lock/state writes were read back and restored.
+
+The shared operation endpoint ledger, website catalogs, and golden transcript diffs were audited
+after regeneration; their changed connector scope is GitHub only. The generated GitHub write paths
+were normalized to the engine interpolation dialect by the generator, not hand-edited.
+
+## Final current-head repair gates
+
+The first post-repair gate caught stale generated GitHub golden output and lint/boundary issues in
+the newly added proof helper. The golden file was regenerated through its owning Go test command;
+the provider-double implementation was constrained to test-only scope, the unused helper was
+removed, and the output-policy branch was simplified. No test was weakened or skipped.
+
+```
+node --test scripts/tests/github-parity-proof.test.mjs                         6 passed
+node --test scripts/tests/github-live-proof-sweep.test.mjs                     7 passed
+go test -count=1 -timeout 20m ./cmd/connectorgen/                             ok
+go test -count=1 -timeout 20m ./internal/connectors/engine/                   ok
+go test -count=1 -timeout 20m ./internal/connectors/conformance/              ok
+go test -count=1 -timeout 20m ./internal/connectors/commandrunner/            ok
+go test -count=1 -timeout 20m ./internal/connectors/hooks/github/             ok
+go test -count=1 -timeout 20m ./internal/cli/ (golden/reverse/ref focused)     ok
+go vet ./...                                                                  ok
+make lint                                                                     0 issues
+make tidy-check docs-check smoke-no-build                                     ok
+make agent-contract-check connectorgen-validate connectorgen-surface-sync     ok
+make connector-boundary release-workflow-check                                ok
+go run ./cmd/connectorgen boundary . --json                                   clean, 0 findings
+bash scripts/verify-gsd-workflow                                             exit 0
+go build -o /tmp/pm-github-parity-final ./cmd/pm                               ok
+```

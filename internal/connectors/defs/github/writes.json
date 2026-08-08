@@ -2439,7 +2439,7 @@
       "name": "repo",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2455,7 +2455,7 @@
       "name": "repo2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2508,7 +2508,7 @@
       "name": "actions_cache_retention_limit2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/cache/retention-limit",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2523,7 +2523,7 @@
       "name": "actions_cache_storage_limit2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/cache/storage-limit",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2538,7 +2538,7 @@
       "name": "actions_caches",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/caches",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/caches",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2553,7 +2553,7 @@
       "name": "actions_caches_cache_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/caches/{{ record.cache_id }}",
       "path_fields": [
         "cache_id"
       ],
@@ -2576,7 +2576,7 @@
       "name": "actions_jobs_job_id_rerun",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/jobs/{{ record.job_id }}/rerun",
       "path_fields": [
         "job_id"
       ],
@@ -2599,7 +2599,7 @@
       "name": "actions_oidc_customization_sub2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/oidc/customization/sub",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2614,7 +2614,7 @@
       "name": "actions_permissions2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2629,7 +2629,7 @@
       "name": "actions_permissions_access2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/access",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/access",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2644,7 +2644,7 @@
       "name": "actions_permissions_artifact_and_log_retention2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/artifact-and-log-retention",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2659,7 +2659,7 @@
       "name": "actions_permissions_fork_pr_contributor_approval2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/fork-pr-contributor-approval",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2674,7 +2674,7 @@
       "name": "actions_permissions_fork_pr_workflows_private_repos2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/fork-pr-workflows-private-repos",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2689,7 +2689,7 @@
       "name": "actions_permissions_selected_actions2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/selected-actions",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2704,7 +2704,7 @@
       "name": "actions_permissions_workflow2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/workflow",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2719,7 +2719,7 @@
       "name": "actions_runners_generate_jitconfig",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runners/generate-jitconfig",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/generate-jitconfig",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2734,7 +2734,7 @@
       "name": "actions_runners_registration_token",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runners/registration-token",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/registration-token",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2749,7 +2749,7 @@
       "name": "actions_runners_remove_token",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runners/remove-token",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/remove-token",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2764,7 +2764,7 @@
       "name": "actions_runners_runner_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}",
       "path_fields": [
         "runner_id"
       ],
@@ -2787,7 +2787,7 @@
       "name": "actions_runners_runner_id_labels",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels",
       "path_fields": [
         "runner_id"
       ],
@@ -2810,7 +2810,7 @@
       "name": "actions_runners_runner_id_labels3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels",
       "path_fields": [
         "runner_id"
       ],
@@ -2833,7 +2833,7 @@
       "name": "actions_runners_runner_id_labels4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels",
       "path_fields": [
         "runner_id"
       ],
@@ -2856,7 +2856,7 @@
       "name": "actions_runners_runner_id_labels_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}",
       "path_fields": [
         "runner_id",
         "name"
@@ -2884,7 +2884,7 @@
       "name": "actions_runs_run_id_approve",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approve",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/approve",
       "path_fields": [
         "run_id"
       ],
@@ -2907,7 +2907,7 @@
       "name": "actions_runs_run_id_deployment_protection_rule",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/deployment_protection_rule",
       "path_fields": [
         "run_id"
       ],
@@ -2930,7 +2930,7 @@
       "name": "actions_runs_run_id_logs",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/logs",
       "path_fields": [
         "run_id"
       ],
@@ -2954,7 +2954,7 @@
       "name": "actions_runs_run_id_pending_deployments2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/pending_deployments",
       "path_fields": [
         "run_id"
       ],
@@ -2977,7 +2977,7 @@
       "name": "actions_secrets_secret_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -3000,7 +3000,7 @@
       "name": "actions_secrets_secret_name3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -3034,7 +3034,7 @@
       "name": "actions_variables2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/variables",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/variables",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3049,7 +3049,7 @@
       "name": "actions_variables_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/variables/{{ record.name }}",
       "path_fields": [
         "name"
       ],
@@ -3072,7 +3072,7 @@
       "name": "actions_variables_name3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/variables/{{ record.name }}",
       "path_fields": [
         "name"
       ],
@@ -3095,7 +3095,7 @@
       "name": "actions_workflows_workflow_id_disable",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{ record.workflow_id }}/disable",
       "path_fields": [
         "workflow_id"
       ],
@@ -3118,7 +3118,7 @@
       "name": "actions_workflows_workflow_id_enable",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{ record.workflow_id }}/enable",
       "path_fields": [
         "workflow_id"
       ],
@@ -3141,7 +3141,7 @@
       "name": "attestations",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/attestations",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/attestations",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3156,7 +3156,7 @@
       "name": "autolinks",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/autolinks",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/autolinks",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3171,7 +3171,7 @@
       "name": "autolinks_autolink_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/autolinks/{{ record.autolink_id }}",
       "path_fields": [
         "autolink_id"
       ],
@@ -3194,7 +3194,7 @@
       "name": "automated_security_fixes",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/automated-security-fixes",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3209,7 +3209,7 @@
       "name": "automated_security_fixes3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/automated-security-fixes",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3224,7 +3224,7 @@
       "name": "branches_branch_protection",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection",
       "path_fields": [
         "branch"
       ],
@@ -3247,7 +3247,7 @@
       "name": "branches_branch_protection3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection",
       "path_fields": [
         "branch"
       ],
@@ -3270,7 +3270,7 @@
       "name": "branches_branch_protection_enforce_admins",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/enforce_admins",
       "path_fields": [
         "branch"
       ],
@@ -3293,7 +3293,7 @@
       "name": "branches_branch_protection_enforce_admins3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/enforce_admins",
       "path_fields": [
         "branch"
       ],
@@ -3316,7 +3316,7 @@
       "name": "branches_branch_protection_required_pull_request_reviews",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_pull_request_reviews",
       "path_fields": [
         "branch"
       ],
@@ -3339,7 +3339,7 @@
       "name": "branches_branch_protection_required_pull_request_reviews3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_pull_request_reviews",
       "path_fields": [
         "branch"
       ],
@@ -3362,7 +3362,7 @@
       "name": "branches_branch_protection_required_signatures",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_signatures",
       "path_fields": [
         "branch"
       ],
@@ -3385,7 +3385,7 @@
       "name": "branches_branch_protection_required_signatures3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_signatures",
       "path_fields": [
         "branch"
       ],
@@ -3408,7 +3408,7 @@
       "name": "branches_branch_protection_required_status_checks",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks",
       "path_fields": [
         "branch"
       ],
@@ -3431,7 +3431,7 @@
       "name": "branches_branch_protection_required_status_checks3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks",
       "path_fields": [
         "branch"
       ],
@@ -3454,7 +3454,7 @@
       "name": "branches_branch_protection_required_status_checks_contexts",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts",
       "path_fields": [
         "branch"
       ],
@@ -3477,7 +3477,7 @@
       "name": "branches_branch_protection_required_status_checks_contexts3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts",
       "path_fields": [
         "branch"
       ],
@@ -3500,7 +3500,7 @@
       "name": "branches_branch_protection_required_status_checks_contexts4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts",
       "path_fields": [
         "branch"
       ],
@@ -3523,7 +3523,7 @@
       "name": "branches_branch_protection_restrictions",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions",
       "path_fields": [
         "branch"
       ],
@@ -3546,7 +3546,7 @@
       "name": "branches_branch_protection_restrictions_apps",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps",
       "path_fields": [
         "branch"
       ],
@@ -3569,7 +3569,7 @@
       "name": "branches_branch_protection_restrictions_apps3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps",
       "path_fields": [
         "branch"
       ],
@@ -3592,7 +3592,7 @@
       "name": "branches_branch_protection_restrictions_apps4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps",
       "path_fields": [
         "branch"
       ],
@@ -3615,7 +3615,7 @@
       "name": "branches_branch_protection_restrictions_teams",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams",
       "path_fields": [
         "branch"
       ],
@@ -3638,7 +3638,7 @@
       "name": "branches_branch_protection_restrictions_teams3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams",
       "path_fields": [
         "branch"
       ],
@@ -3661,7 +3661,7 @@
       "name": "branches_branch_protection_restrictions_teams4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams",
       "path_fields": [
         "branch"
       ],
@@ -3684,7 +3684,7 @@
       "name": "branches_branch_protection_restrictions_users",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users",
       "path_fields": [
         "branch"
       ],
@@ -3707,7 +3707,7 @@
       "name": "branches_branch_protection_restrictions_users3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users",
       "path_fields": [
         "branch"
       ],
@@ -3730,7 +3730,7 @@
       "name": "branches_branch_protection_restrictions_users4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users",
       "path_fields": [
         "branch"
       ],
@@ -3753,7 +3753,7 @@
       "name": "branches_branch_rename",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/rename",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/rename",
       "path_fields": [
         "branch"
       ],
@@ -3777,7 +3777,7 @@
       "name": "check_runs",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/check-runs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-runs",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3792,7 +3792,7 @@
       "name": "check_runs_check_run_id2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-runs/{{ record.check_run_id }}",
       "path_fields": [
         "check_run_id"
       ],
@@ -3815,7 +3815,7 @@
       "name": "check_runs_check_run_id_rerequest",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-runs/{{ record.check_run_id }}/rerequest",
       "path_fields": [
         "check_run_id"
       ],
@@ -3838,7 +3838,7 @@
       "name": "check_suites",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/check-suites",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-suites",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3853,7 +3853,7 @@
       "name": "check_suites_preferences",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/check-suites/preferences",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-suites/preferences",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3868,7 +3868,7 @@
       "name": "check_suites_check_suite_id_rerequest",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-suites/{{ record.check_suite_id }}/rerequest",
       "path_fields": [
         "check_suite_id"
       ],
@@ -3891,7 +3891,7 @@
       "name": "code_quality_setup2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/code-quality/setup",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-quality/setup",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3906,7 +3906,7 @@
       "name": "code_scanning_alerts_alert_number_autofix2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}/autofix",
       "path_fields": [
         "alert_number"
       ],
@@ -3929,7 +3929,7 @@
       "name": "code_scanning_alerts_alert_number_autofix_commits",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}/autofix/commits",
       "path_fields": [
         "alert_number"
       ],
@@ -3952,7 +3952,7 @@
       "name": "code_scanning_analyses_analysis_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/analyses/{{ record.analysis_id }}",
       "path_fields": [
         "analysis_id"
       ],
@@ -3975,7 +3975,7 @@
       "name": "code_scanning_codeql_databases_language",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/codeql/databases/{{ record.language }}",
       "path_fields": [
         "language"
       ],
@@ -3998,7 +3998,7 @@
       "name": "code_scanning_codeql_variant_analyses",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/codeql/variant-analyses",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4013,7 +4013,7 @@
       "name": "code_scanning_default_setup2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/default-setup",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4028,7 +4028,7 @@
       "name": "code_scanning_sarifs",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/code-scanning/sarifs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/sarifs",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4043,7 +4043,7 @@
       "name": "codespaces2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/codespaces",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/codespaces",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4058,7 +4058,7 @@
       "name": "codespaces_secrets_secret_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/codespaces/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -4082,7 +4082,7 @@
       "name": "codespaces_secrets_secret_name3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/codespaces/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -4106,7 +4106,7 @@
       "name": "comments_comment_id_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}/reactions",
       "path_fields": [
         "comment_id"
       ],
@@ -4129,7 +4129,7 @@
       "name": "comments_comment_id_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "comment_id",
         "reaction_id"
@@ -4157,7 +4157,7 @@
       "name": "dependabot_secrets_secret_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependabot/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -4180,7 +4180,7 @@
       "name": "dependabot_secrets_secret_name3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependabot/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -4203,7 +4203,7 @@
       "name": "dependency_graph_snapshots",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/dependency-graph/snapshots",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependency-graph/snapshots",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4218,7 +4218,7 @@
       "name": "deployments_deployment_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/deployments/{{ record.deployment_id }}",
       "path_fields": [
         "deployment_id"
       ],
@@ -4242,7 +4242,7 @@
       "name": "deployments_deployment_id_statuses2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/deployments/{{ record.deployment_id }}/statuses",
       "path_fields": [
         "deployment_id"
       ],
@@ -4265,7 +4265,7 @@
       "name": "dispatches",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/dispatches",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/dispatches",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4280,7 +4280,7 @@
       "name": "environments_environment_name_deployment_branch_policies2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies",
       "path_fields": [
         "environment_name"
       ],
@@ -4303,7 +4303,7 @@
       "name": "environments_environment_name_deployment_branch_policies_branch_policy_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}",
       "path_fields": [
         "environment_name",
         "branch_policy_id"
@@ -4331,7 +4331,7 @@
       "name": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}",
       "path_fields": [
         "environment_name",
         "branch_policy_id"
@@ -4359,7 +4359,7 @@
       "name": "environments_environment_name_deployment_protection_rules2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment_protection_rules",
       "path_fields": [
         "environment_name"
       ],
@@ -4382,7 +4382,7 @@
       "name": "environments_environment_name_deployment_protection_rules_protection_rule_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment_protection_rules/{{ record.protection_rule_id }}",
       "path_fields": [
         "environment_name",
         "protection_rule_id"
@@ -4410,7 +4410,7 @@
       "name": "environments_environment_name_secrets_secret_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/secrets/{{ record.secret_name }}",
       "path_fields": [
         "environment_name",
         "secret_name"
@@ -4438,7 +4438,7 @@
       "name": "environments_environment_name_secrets_secret_name3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/secrets/{{ record.secret_name }}",
       "path_fields": [
         "environment_name",
         "secret_name"
@@ -4466,7 +4466,7 @@
       "name": "environments_environment_name_variables2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables",
       "path_fields": [
         "environment_name"
       ],
@@ -4489,7 +4489,7 @@
       "name": "environments_environment_name_variables_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables/{{ record.name }}",
       "path_fields": [
         "environment_name",
         "name"
@@ -4517,7 +4517,7 @@
       "name": "environments_environment_name_variables_name3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables/{{ record.name }}",
       "path_fields": [
         "environment_name",
         "name"
@@ -4545,7 +4545,7 @@
       "name": "git_blobs",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/git/blobs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/blobs",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4560,7 +4560,7 @@
       "name": "git_commits",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/git/commits",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/commits",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4575,7 +4575,7 @@
       "name": "git_trees",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/git/trees",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/trees",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4590,7 +4590,7 @@
       "name": "hooks_hook_id_deliveries_delivery_id_attempts",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts",
       "path_fields": [
         "hook_id",
         "delivery_id"
@@ -4618,7 +4618,7 @@
       "name": "hooks_hook_id_pings",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/pings",
       "path_fields": [
         "hook_id"
       ],
@@ -4641,7 +4641,7 @@
       "name": "hooks_hook_id_tests",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/tests",
       "path_fields": [
         "hook_id"
       ],
@@ -4664,7 +4664,7 @@
       "name": "immutable_releases",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/immutable-releases",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4679,7 +4679,7 @@
       "name": "immutable_releases3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/immutable-releases",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4694,7 +4694,7 @@
       "name": "import",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/import",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4709,7 +4709,7 @@
       "name": "import3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/import",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4724,7 +4724,7 @@
       "name": "import4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/import",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4739,7 +4739,7 @@
       "name": "import_authors_author_id",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/import/authors/{author_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import/authors/{{ record.author_id }}",
       "path_fields": [
         "author_id"
       ],
@@ -4762,7 +4762,7 @@
       "name": "import_lfs",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/import/lfs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import/lfs",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4777,7 +4777,7 @@
       "name": "interaction_limits",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/interaction-limits",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4792,7 +4792,7 @@
       "name": "interaction_limits3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/interaction-limits",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4807,7 +4807,7 @@
       "name": "interaction_limits_pulls_bypass_list",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/bypass-list",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4822,7 +4822,7 @@
       "name": "interaction_limits_pulls_bypass_list3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/bypass-list",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4837,7 +4837,7 @@
       "name": "invitations_invitation_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/invitations/{{ record.invitation_id }}",
       "path_fields": [
         "invitation_id"
       ],
@@ -4860,7 +4860,7 @@
       "name": "invitations_invitation_id2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/invitations/{{ record.invitation_id }}",
       "path_fields": [
         "invitation_id"
       ],
@@ -4883,7 +4883,7 @@
       "name": "issues_comments_comment_id_pin",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/pin",
       "path_fields": [
         "comment_id"
       ],
@@ -4906,7 +4906,7 @@
       "name": "issues_comments_comment_id_pin2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/pin",
       "path_fields": [
         "comment_id"
       ],
@@ -4929,7 +4929,7 @@
       "name": "issues_comments_comment_id_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/reactions",
       "path_fields": [
         "comment_id"
       ],
@@ -4952,7 +4952,7 @@
       "name": "issues_comments_comment_id_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "comment_id",
         "reaction_id"
@@ -4980,7 +4980,7 @@
       "name": "issues_issue_number_dependencies_blocked_by2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by",
       "path_fields": [
         "issue_number"
       ],
@@ -5003,7 +5003,7 @@
       "name": "issues_issue_number_dependencies_blocked_by_issue_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by/{{ record.issue_id }}",
       "path_fields": [
         "issue_number",
         "issue_id"
@@ -5031,7 +5031,7 @@
       "name": "issues_issue_number_issue_field_values2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values",
       "path_fields": [
         "issue_number"
       ],
@@ -5054,7 +5054,7 @@
       "name": "issues_issue_number_issue_field_values3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values",
       "path_fields": [
         "issue_number"
       ],
@@ -5077,7 +5077,7 @@
       "name": "issues_issue_number_issue_field_values_issue_field_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values/{{ record.issue_field_id }}",
       "path_fields": [
         "issue_number",
         "issue_field_id"
@@ -5105,7 +5105,7 @@
       "name": "issues_issue_number_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/reactions",
       "path_fields": [
         "issue_number"
       ],
@@ -5128,7 +5128,7 @@
       "name": "issues_issue_number_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "issue_number",
         "reaction_id"
@@ -5156,7 +5156,7 @@
       "name": "issues_issue_number_sub_issue",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issue",
       "path_fields": [
         "issue_number"
       ],
@@ -5179,7 +5179,7 @@
       "name": "issues_issue_number_sub_issues2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issues",
       "path_fields": [
         "issue_number"
       ],
@@ -5202,7 +5202,7 @@
       "name": "issues_issue_number_sub_issues_priority",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issues/priority",
       "path_fields": [
         "issue_number"
       ],
@@ -5225,7 +5225,7 @@
       "name": "merge_upstream",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/merge-upstream",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/merge-upstream",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5240,7 +5240,7 @@
       "name": "notifications2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/notifications",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/notifications",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5255,7 +5255,7 @@
       "name": "pages",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/pages",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5270,7 +5270,7 @@
       "name": "pages3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pages",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5285,7 +5285,7 @@
       "name": "pages4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/pages",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5300,7 +5300,7 @@
       "name": "pages_builds2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pages/builds",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/builds",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5315,7 +5315,7 @@
       "name": "pages_deployments",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pages/deployments",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/deployments",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5330,7 +5330,7 @@
       "name": "pages_deployments_pages_deployment_id_cancel",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/deployments/{{ record.pages_deployment_id }}/cancel",
       "path_fields": [
         "pages_deployment_id"
       ],
@@ -5353,7 +5353,7 @@
       "name": "private_vulnerability_reporting",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5368,7 +5368,7 @@
       "name": "private_vulnerability_reporting3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5383,7 +5383,7 @@
       "name": "properties_values2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/properties/values",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/properties/values",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5398,7 +5398,7 @@
       "name": "pulls_comments_comment_id_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}/reactions",
       "path_fields": [
         "comment_id"
       ],
@@ -5421,7 +5421,7 @@
       "name": "pulls_comments_comment_id_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "comment_id",
         "reaction_id"
@@ -5449,7 +5449,7 @@
       "name": "pulls_pull_number_codespaces",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/codespaces",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/codespaces",
       "path_fields": [
         "pull_number"
       ],
@@ -5472,7 +5472,7 @@
       "name": "pulls_pull_number_requested_reviewers",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/requested_reviewers",
       "path_fields": [
         "pull_number"
       ],
@@ -5495,7 +5495,7 @@
       "name": "releases_generate_notes",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/releases/generate-notes",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/generate-notes",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5510,7 +5510,7 @@
       "name": "releases_release_id_assets2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/assets",
       "path_fields": [
         "release_id"
       ],
@@ -5533,7 +5533,7 @@
       "name": "releases_release_id_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions",
       "path_fields": [
         "release_id"
       ],
@@ -5556,7 +5556,7 @@
       "name": "releases_release_id_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "release_id",
         "reaction_id"
@@ -5584,7 +5584,7 @@
       "name": "secret_scanning_push_protection_bypasses",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/push-protection-bypasses",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5599,7 +5599,7 @@
       "name": "security_advisories",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/security-advisories",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5614,7 +5614,7 @@
       "name": "security_advisories_reports",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/security-advisories/reports",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/reports",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5629,7 +5629,7 @@
       "name": "security_advisories_ghsa_id",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}",
       "path_fields": [
         "ghsa_id"
       ],
@@ -5652,7 +5652,7 @@
       "name": "security_advisories_ghsa_id_cve",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}/cve",
       "path_fields": [
         "ghsa_id"
       ],
@@ -5675,7 +5675,7 @@
       "name": "security_advisories_ghsa_id_forks",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}/forks",
       "path_fields": [
         "ghsa_id"
       ],
@@ -5698,7 +5698,7 @@
       "name": "statuses_sha",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/statuses/{sha}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/statuses/{{ record.sha }}",
       "path_fields": [
         "sha"
       ],
@@ -5721,7 +5721,7 @@
       "name": "subscription",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/subscription",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscription",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5736,7 +5736,7 @@
       "name": "subscription3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/subscription",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscription",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5751,7 +5751,7 @@
       "name": "transfer",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/transfer",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/transfer",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5767,7 +5767,7 @@
       "name": "vulnerability_alerts",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5782,7 +5782,7 @@
       "name": "vulnerability_alerts3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -7341,7 +7341,7 @@
       "name": "enterprise_team_memberships_bulk_add",
       "kind": "create",
       "method": "POST",
-      "path": "/enterprises/{{ record.enterprise }}/teams/{enterprise-team}/memberships/add",
+      "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/add",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -7371,7 +7371,7 @@
       "name": "enterprise_team_memberships_bulk_remove",
       "kind": "create",
       "method": "POST",
-      "path": "/enterprises/{{ record.enterprise }}/teams/{enterprise-team}/memberships/remove",
+      "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/remove",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -7401,7 +7401,7 @@
       "name": "enterprise_team_memberships_add",
       "kind": "update",
       "method": "PUT",
-      "path": "/enterprises/{{ record.enterprise }}/teams/{enterprise-team}/memberships/{{ record.username }}",
+      "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -7429,7 +7429,7 @@
       "name": "enterprise_team_memberships_remove",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/enterprises/{{ record.enterprise }}/teams/{enterprise-team}/memberships/{{ record.username }}",
+      "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -7463,7 +7463,7 @@
       "name": "enterprise_team_organizations_bulk_add",
       "kind": "create",
       "method": "POST",
-      "path": "/enterprises/{{ record.enterprise }}/teams/{enterprise-team}/organizations/add",
+      "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/add",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -7493,7 +7493,7 @@
       "name": "enterprise_team_organizations_bulk_remove",
       "kind": "create",
       "method": "POST",
-      "path": "/enterprises/{{ record.enterprise }}/teams/{enterprise-team}/organizations/remove",
+      "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/remove",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -7523,7 +7523,7 @@
       "name": "enterprise_team_organizations_add",
       "kind": "update",
       "method": "PUT",
-      "path": "/enterprises/{{ record.enterprise }}/teams/{enterprise-team}/organizations/{{ record.org }}",
+      "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -7551,7 +7551,7 @@
       "name": "enterprise_team_organizations_delete",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/enterprises/{{ record.enterprise }}/teams/{enterprise-team}/organizations/{{ record.org }}",
+      "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -19603,7 +19603,7 @@
       "name": "orgs_attestations_delete_request_by_subject_digests",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/attestations/delete-request",
+      "path": "/orgs/{{ record.org }}/attestations/delete-request",
       "path_fields": [
         "org"
       ],
@@ -19632,7 +19632,7 @@
       "name": "orgs_attestations_delete_request_by_attestation_ids",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/attestations/delete-request",
+      "path": "/orgs/{{ record.org }}/attestations/delete-request",
       "path_fields": [
         "org"
       ],
@@ -19661,7 +19661,7 @@
       "name": "orgs_campaigns_create_code_scanning",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/campaigns",
+      "path": "/orgs/{{ record.org }}/campaigns",
       "path_fields": [
         "org"
       ],
@@ -19713,7 +19713,7 @@
       "name": "orgs_campaigns_create_secret_scanning",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/campaigns",
+      "path": "/orgs/{{ record.org }}/campaigns",
       "path_fields": [
         "org"
       ],
@@ -19765,7 +19765,7 @@
       "name": "orgs_projectsv2_fields_create_existing_issue_field",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/projectsV2/{project_number}/fields",
+      "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields",
       "path_fields": [
         "org",
         "project_number"
@@ -19798,7 +19798,7 @@
       "name": "orgs_projectsv2_fields_create_new_field",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/projectsV2/{project_number}/fields",
+      "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields",
       "path_fields": [
         "org",
         "project_number"
@@ -19835,7 +19835,7 @@
       "name": "orgs_projectsv2_fields_create_single_select",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/projectsV2/{project_number}/fields",
+      "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields",
       "path_fields": [
         "org",
         "project_number"
@@ -19876,7 +19876,7 @@
       "name": "orgs_projectsv2_fields_create_iteration",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/projectsV2/{project_number}/fields",
+      "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields",
       "path_fields": [
         "org",
         "project_number"
@@ -19917,7 +19917,7 @@
       "name": "orgs_projectsv2_items_create_by_id",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/projectsV2/{project_number}/items",
+      "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items",
       "path_fields": [
         "org",
         "project_number"
@@ -19963,7 +19963,7 @@
       "name": "orgs_projectsv2_items_create_by_repo_number",
       "kind": "create",
       "method": "POST",
-      "path": "/orgs/{org}/projectsV2/{project_number}/items",
+      "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items",
       "path_fields": [
         "org",
         "project_number"
@@ -20106,7 +20106,7 @@
       "name": "users_attestations_delete_request_by_subject_digests",
       "kind": "create",
       "method": "POST",
-      "path": "/users/{username}/attestations/delete-request",
+      "path": "/users/{{ record.username }}/attestations/delete-request",
       "path_fields": [
         "username"
       ],
@@ -20135,7 +20135,7 @@
       "name": "users_attestations_delete_request_by_attestation_ids",
       "kind": "create",
       "method": "POST",
-      "path": "/users/{username}/attestations/delete-request",
+      "path": "/users/{{ record.username }}/attestations/delete-request",
       "path_fields": [
         "username"
       ],
@@ -20164,7 +20164,7 @@
       "name": "users_projectsv2_fields_create_new_field",
       "kind": "create",
       "method": "POST",
-      "path": "/users/{username}/projectsV2/{project_number}/fields",
+      "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/fields",
       "path_fields": [
         "username",
         "project_number"
@@ -20201,7 +20201,7 @@
       "name": "users_projectsv2_fields_create_single_select",
       "kind": "create",
       "method": "POST",
-      "path": "/users/{username}/projectsV2/{project_number}/fields",
+      "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/fields",
       "path_fields": [
         "username",
         "project_number"
@@ -20242,7 +20242,7 @@
       "name": "users_projectsv2_fields_create_iteration",
       "kind": "create",
       "method": "POST",
-      "path": "/users/{username}/projectsV2/{project_number}/fields",
+      "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/fields",
       "path_fields": [
         "username",
         "project_number"
@@ -20283,7 +20283,7 @@
       "name": "users_projectsv2_items_create_by_id",
       "kind": "create",
       "method": "POST",
-      "path": "/users/{username}/projectsV2/{project_number}/items",
+      "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/items",
       "path_fields": [
         "username",
         "project_number"
@@ -20329,7 +20329,7 @@
       "name": "users_projectsv2_items_create_by_repo_number",
       "kind": "create",
       "method": "POST",
-      "path": "/users/{username}/projectsV2/{project_number}/items",
+      "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/items",
       "path_fields": [
         "username",
         "project_number"
