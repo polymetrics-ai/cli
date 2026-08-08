@@ -96,11 +96,15 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 			if !hasFixedRequestBudget(policy, want.primaryLimit, 3600) {
 				t.Fatalf("policy %q does not declare a %d-request/hour primary budget", want.id, want.primaryLimit)
 			}
+			if !hasSlidingPointBudget(policy, 900, 60, 5) {
+				t.Fatalf("policy %q does not declare the conservative 900-point/minute secondary budget", want.id)
+			}
 
 			cfg := githubRateLimitConfig(t, want.authType, want.scopeConfig, want.scopeValue)
+			resolver := newRateLimitResolver(bundle, cfg)
 			runtime := &Runtime{
 				baseRequester: &connsdk.Requester{},
-				rateLimits:    newRateLimitResolver(bundle, cfg),
+				rateLimits:    resolver,
 			}
 			requester, err := runtime.RequesterFor(http.MethodGet, "/repos/{owner}/{repo}")
 			if err != nil {
@@ -109,7 +113,27 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 			if requester.Admission == nil || requester.Observer == nil {
 				t.Fatalf("policy %q did not attach admission and observation hooks", want.id)
 			}
+			defaultRequester, err := resolver.defaultRequester(&connsdk.Requester{})
+			if err != nil {
+				t.Fatalf("defaultRequester: %v", err)
+			}
+			if defaultRequester.Admission == nil || defaultRequester.Observer == nil {
+				t.Fatalf("policy %q did not attach hooks to the hook runtime requester", want.id)
+			}
 		})
+	}
+
+	unmatched := &Runtime{
+		baseRequester: &connsdk.Requester{},
+		rateLimits: newRateLimitResolver(bundle, githubRateLimitConfig(t,
+			"unmatched", "rate_limit_account", "octocat")),
+	}
+	requester, err := unmatched.RequesterFor(http.MethodGet, "/repos/{owner}/{repo}")
+	if err != nil {
+		t.Fatalf("RequesterFor unmatched auth type: %v", err)
+	}
+	if requester.Admission != nil || requester.Observer != nil {
+		t.Fatal("unmatched GitHub auth type acquired a rate-limit policy")
 	}
 }
 
@@ -147,6 +171,18 @@ func hasFixedRequestBudget(policy connsdk.RateLimitPolicy, limit, seconds int) b
 			continue
 		}
 		if *budget.Limit == limit && *budget.WindowSeconds == seconds {
+			return true
+		}
+	}
+	return false
+}
+
+func hasSlidingPointBudget(policy connsdk.RateLimitPolicy, limit, seconds int, defaultCost float64) bool {
+	for _, budget := range policy.Budgets {
+		if budget.Model != connsdk.RateLimitBudgetSlidingWindow || budget.Unit != connsdk.RateLimitBudgetPoints || budget.Limit == nil || budget.WindowSeconds == nil || budget.Cost == nil || budget.Cost.DefaultCost == nil {
+			continue
+		}
+		if *budget.Limit == limit && *budget.WindowSeconds == seconds && *budget.Cost.DefaultCost == defaultCost {
 			return true
 		}
 	}
