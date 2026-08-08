@@ -1,0 +1,30 @@
+{
+  "record": {
+    "text": "Fixture text",
+    "instructions": "Fixture instructions",
+    "group": "Fixture group",
+    "fields": [
+      {
+        "type": "score-system",
+        "text": "Rating",
+        "required": true
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/feedback_templates",
+    "body": {
+      "text": "Fixture text",
+      "instructions": "Fixture instructions",
+      "group": "Fixture group",
+      "fields": [
+        {
+          "type": "score-system",
+          "text": "Rating",
+          "required": true
+        }
+      ]
+    }
+  }
+}

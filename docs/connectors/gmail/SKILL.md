@@ -223,6 +223,24 @@ Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases
 - update_pop:
   - endpoint: PUT /users/{{ config.user_id }}/settings/pop
   - risk: changes the account-wide POP-access singleton, including what happens to mail after it is fetched via POP
+- insert_smime_info:
+  - endpoint: POST /users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/smimeInfo
+  - required fields: sendAsEmail
+  - risk: high: insert_smime_info
+- delete_smime_info:
+  - endpoint: DELETE /users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/smimeInfo/{{ record.id }}
+  - required fields: sendAsEmail, id
+  - risk: high: delete_smime_info
+- set_default_smime_info:
+  - endpoint: POST /users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/smimeInfo/{{ record.id }}/setDefault
+  - required fields: sendAsEmail, id
+  - risk: high: set_default_smime_info
+- watch_mailbox:
+  - endpoint: POST /users/{{ config.user_id }}/watch
+  - risk: high: watch_mailbox
+- stop_mailbox_watch:
+  - endpoint: POST /users/{{ config.user_id }}/stop
+  - risk: high: stop_mailbox_watch
 
 ## Security
 
@@ -230,6 +248,97 @@ Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases
 - write risk: external Gmail API mutation, including sending real outbound email, permanently deleting messages/threads/drafts, granting mailbox delegation, and changing account-wide forwarding/vacation/IMAP/POP settings
 - approval: reverse ETL plan approval required before writes; several actions (send_message, send_draft, delete_message, delete_thread, delete_draft, create_delegate, update_auto_forwarding) warrant elevated operator scrutiny -- see docs.md Write actions & risks
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Command Surface
+
+- Gmail command surface
+- Usage: pm gmail <command> [flags]
+- Source CLI: Gmail API v1 (Official Google Discovery document, revision 20260803)
+- Global flags:
+  - --credential (string): Credential name to use for the Gmail request.
+  - --json (boolean): Emit machine-readable JSON output.
+  - --max-bytes (integer): Maximum direct-read response bytes.
+- Messages
+  - messages list - List Gmail messages as ETL records. [intent=etl availability=implemented stream=messages]
+  - messages get - Get a message by id. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --id, --page, --page-cursor
+  - messages attachments download - Download a message attachment to a bounded destination. [intent=binary_download availability=implemented operation=gmail.messages.attachment_download]; approval: filesystem writes require an explicit destination policy; risk: bounded binary download; size-capped and written only to an explicit destination; flags: --messageId, --id, --dest-root (required), --file-name, --max-bytes
+  - messages send - sends a real outbound email on behalf of the mailbox owner; irreversible once delivered [intent=reverse_etl availability=implemented write=send_message]; approval: reverse ETL plan -> preview -> approval -> execute; risk: sends a real outbound email on behalf of the mailbox owner; irreversible once delivered; flags: --raw
+  - messages insert - inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation [intent=reverse_etl availability=implemented write=insert_message]; approval: reverse ETL plan -> preview -> approval -> execute; risk: inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation; flags: --raw
+  - messages import - imports a message into the mailbox from an external mail migration source, bypassing spam classification by default [intent=reverse_etl availability=implemented write=import_message]; approval: reverse ETL plan -> preview -> approval -> execute; risk: imports a message into the mailbox from an external mail migration source, bypassing spam classification by default; flags: --raw
+  - messages modify - changes label state on an existing message (e.g. moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner [intent=reverse_etl availability=implemented write=modify_message]; approval: reverse ETL plan -> preview -> approval -> execute; risk: changes label state on an existing message (e.g. moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner; flags: --id
+  - messages trash - moves a message to Trash; auto-purged by Gmail after 30 days [intent=reverse_etl availability=implemented write=trash_message]; approval: reverse ETL plan -> preview -> approval -> execute; risk: moves a message to Trash; auto-purged by Gmail after 30 days; flags: --id
+  - messages untrash - restores a trashed message back to its prior labels [intent=reverse_etl availability=implemented write=untrash_message]; approval: reverse ETL plan -> preview -> approval -> execute; risk: restores a trashed message back to its prior labels; flags: --id
+  - messages delete - permanently deletes a message immediately, bypassing Trash; irreversible [intent=reverse_etl availability=implemented write=delete_message]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: permanently deletes a message immediately, bypassing Trash; irreversible; flags: --id
+- Threads
+  - threads list - List Gmail threads as ETL records. [intent=etl availability=implemented stream=threads]
+  - threads get - Get a thread by id. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --id, --page, --page-cursor
+  - threads modify - changes label state on every message in an existing thread [intent=reverse_etl availability=implemented write=modify_thread]; approval: reverse ETL plan -> preview -> approval -> execute; risk: changes label state on every message in an existing thread; flags: --id
+  - threads trash - moves an entire thread to Trash; auto-purged by Gmail after 30 days [intent=reverse_etl availability=implemented write=trash_thread]; approval: reverse ETL plan -> preview -> approval -> execute; risk: moves an entire thread to Trash; auto-purged by Gmail after 30 days; flags: --id
+  - threads untrash - restores a trashed thread back to its prior labels [intent=reverse_etl availability=implemented write=untrash_thread]; approval: reverse ETL plan -> preview -> approval -> execute; risk: restores a trashed thread back to its prior labels; flags: --id
+  - threads delete - permanently deletes every message in a thread immediately, bypassing Trash; irreversible [intent=reverse_etl availability=implemented write=delete_thread]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: permanently deletes every message in a thread immediately, bypassing Trash; irreversible; flags: --id
+- Drafts
+  - drafts list - List Gmail drafts as ETL records. [intent=etl availability=implemented stream=drafts]
+  - drafts get - Get a draft by id. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --id, --page, --page-cursor
+  - drafts create - creates a new unsent draft, visible to the mailbox owner [intent=reverse_etl availability=partial write=create_draft]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a new unsent draft, visible to the mailbox owner; notes: Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records.
+  - drafts update - replaces the entire content of an existing draft [intent=reverse_etl availability=partial write=update_draft]; approval: reverse ETL plan -> preview -> approval -> execute; risk: replaces the entire content of an existing draft; notes: Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records.; flags: --id
+  - drafts send - sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered [intent=reverse_etl availability=implemented write=send_draft]; approval: reverse ETL plan -> preview -> approval -> execute; risk: sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered; flags: --id
+  - drafts delete - permanently deletes a draft; irreversible [intent=reverse_etl availability=implemented write=delete_draft]; approval: reverse ETL plan -> preview -> approval -> execute; risk: permanently deletes a draft; irreversible; flags: --id
+- Labels
+  - labels list - List Gmail labels as ETL records. [intent=etl availability=implemented stream=labels]
+  - labels get - Get a label by id. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --id, --page, --page-cursor
+  - labels create - creates a new custom label visible in the mailbox owner's label list [intent=reverse_etl availability=implemented write=create_label]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a new custom label visible in the mailbox owner's label list; flags: --name
+  - labels update - replaces the full definition of an existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail even though the request is  [intent=reverse_etl availability=implemented write=update_label]; approval: reverse ETL plan -> preview -> approval -> execute; risk: replaces the full definition of an existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail even though the request is accepted; flags: --id, --name
+  - labels patch - partially updates an existing label's fields, leaving unset fields unchanged [intent=reverse_etl availability=implemented write=patch_label]; approval: reverse ETL plan -> preview -> approval -> execute; risk: partially updates an existing label's fields, leaving unset fields unchanged; flags: --id
+  - labels delete - removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error [intent=reverse_etl availability=implemented write=delete_label]; approval: reverse ETL plan -> preview -> approval -> execute; risk: removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error; flags: --id
+- History
+  - history list - List Gmail history as ETL records. [intent=etl availability=implemented stream=history]
+- Filters
+  - filters list - List Gmail filters as ETL records. [intent=etl availability=implemented stream=filters]
+- Send As
+  - send-as list - List Gmail send as as ETL records. [intent=etl availability=implemented stream=send_as]
+- Delegates
+  - delegates list - List Gmail delegates as ETL records. [intent=etl availability=implemented stream=delegates]
+- Forwarding Addresses
+  - forwarding-addresses list - List Gmail forwarding addresses as ETL records. [intent=etl availability=implemented stream=forwarding_addresses]
+- Profile
+  - profile list - List Gmail profile as ETL records. [intent=etl availability=implemented stream=profile]
+- Settings
+  - settings filters get - Get a filter by id. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --id, --page, --page-cursor
+  - settings send-as get - Get a send-as alias. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --sendAsEmail, --page, --page-cursor
+  - settings delegates get - Get a delegate. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --delegateEmail, --page, --page-cursor
+  - settings forwarding-addresses get - Get a forwarding address. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --forwardingEmail, --page, --page-cursor
+  - settings auto-forwarding get - Get auto-forwarding settings. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --page, --page-cursor
+  - settings vacation get - Get vacation responder settings. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --page, --page-cursor
+  - settings language get - Get display-language settings. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --page, --page-cursor
+  - settings imap get - Get IMAP settings. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --page, --page-cursor
+  - settings pop get - Get POP settings. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --page, --page-cursor
+  - settings send-as smime list - List S/MIME configs for a send-as alias. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --sendAsEmail, --page, --page-cursor
+  - settings send-as smime get - Get an S/MIME config. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --sendAsEmail, --id, --page, --page-cursor
+  - settings filters create - creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally) [intent=reverse_etl availability=partial write=create_filter]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally); notes: Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records.
+  - settings filters delete - removes an existing mail filter; future messages stop being auto-actioned by it [intent=reverse_etl availability=implemented write=delete_filter]; approval: reverse ETL plan -> preview -> approval -> execute; risk: removes an existing mail filter; future messages stop being auto-actioned by it; flags: --id
+  - settings send-as create - adds a new custom From: alias; Google emails a verification link to the new address before it can send mail [intent=reverse_etl availability=implemented write=create_send_as]; approval: reverse ETL plan -> preview -> approval -> execute; risk: adds a new custom From: alias; Google emails a verification link to the new address before it can send mail; flags: --sendAsEmail
+  - settings send-as update - replaces the full send-as alias configuration, including which alias is the account default [intent=reverse_etl availability=implemented write=update_send_as]; approval: reverse ETL plan -> preview -> approval -> execute; risk: replaces the full send-as alias configuration, including which alias is the account default; flags: --sendAsEmail
+  - settings send-as patch - partially updates an existing send-as alias, leaving unset fields unchanged [intent=reverse_etl availability=implemented write=patch_send_as]; approval: reverse ETL plan -> preview -> approval -> execute; risk: partially updates an existing send-as alias, leaving unset fields unchanged; flags: --sendAsEmail
+  - settings send-as delete - removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request) [intent=reverse_etl availability=implemented write=delete_send_as]; approval: reverse ETL plan -> preview -> approval -> execute; risk: removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request); flags: --sendAsEmail
+  - settings send-as verify - re-sends the verification email for a pending custom From: alias [intent=reverse_etl availability=implemented write=verify_send_as]; approval: reverse ETL plan -> preview -> approval -> execute; risk: re-sends the verification email for a pending custom From: alias; flags: --sendAsEmail
+  - settings delegates create - grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change [intent=reverse_etl availability=implemented write=create_delegate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change; flags: --delegateEmail
+  - settings delegates delete - revokes another account's delegated access to this mailbox [intent=reverse_etl availability=implemented write=delete_delegate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: revokes another account's delegated access to this mailbox; flags: --delegateEmail
+  - settings forwarding-addresses create - proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding [intent=reverse_etl availability=implemented write=create_forwarding_address]; approval: reverse ETL plan -> preview -> approval -> execute; risk: proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding; flags: --forwardingEmail
+  - settings forwarding-addresses delete - removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops [intent=reverse_etl availability=implemented write=delete_forwarding_address]; approval: reverse ETL plan -> preview -> approval -> execute; risk: removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops; flags: --forwardingEmail
+  - settings auto-forwarding update - changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address [intent=reverse_etl availability=implemented write=update_auto_forwarding]; approval: reverse ETL plan -> preview -> approval -> execute; risk: changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address; flags: --enabled
+  - settings vacation update - changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message [intent=reverse_etl availability=implemented write=update_vacation]; approval: reverse ETL plan -> preview -> approval -> execute; risk: changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message
+  - settings language update - changes the Gmail web interface display language for the account [intent=reverse_etl availability=implemented write=update_language]; approval: reverse ETL plan -> preview -> approval -> execute; risk: changes the Gmail web interface display language for the account; flags: --displayLanguage
+  - settings imap update - changes the account-wide IMAP-access singleton; disabling breaks any external IMAP client currently connected [intent=reverse_etl availability=implemented write=update_imap]; approval: reverse ETL plan -> preview -> approval -> execute; risk: changes the account-wide IMAP-access singleton; disabling breaks any external IMAP client currently connected
+  - settings pop update - changes the account-wide POP-access singleton, including what happens to mail after it is fetched via POP [intent=reverse_etl availability=implemented write=update_pop]; approval: reverse ETL plan -> preview -> approval -> execute; risk: changes the account-wide POP-access singleton, including what happens to mail after it is fetched via POP
+  - settings send-as smime insert - high: insert_smime_info [intent=reverse_etl availability=implemented write=insert_smime_info]; approval: reverse ETL plan -> preview -> approval -> execute; risk: high: insert_smime_info; flags: --sendAsEmail
+  - settings send-as smime delete - high: delete_smime_info [intent=reverse_etl availability=implemented write=delete_smime_info]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: high: delete_smime_info; flags: --id, --sendAsEmail
+  - settings send-as smime set-default - high: set_default_smime_info [intent=reverse_etl availability=implemented write=set_default_smime_info]; approval: reverse ETL plan -> preview -> approval -> execute; risk: high: set_default_smime_info; flags: --id, --sendAsEmail
+- Watch
+  - watch start - high: watch_mailbox [intent=reverse_etl availability=implemented write=watch_mailbox]; approval: reverse ETL plan -> preview -> approval -> execute; risk: high: watch_mailbox
+  - watch stop - high: stop_mailbox_watch [intent=reverse_etl availability=implemented write=stop_mailbox_watch]; approval: reverse ETL plan -> preview -> approval -> execute; risk: high: stop_mailbox_watch
+- Help topics:
+  - gmail-auth - Gmail uses OAuth2 authorization-code credentials; never pass secrets in command text.
+  - gmail-writes - Gmail mutations are typed reverse-ETL writes: plan -> preview -> approval -> execute.
 
 ## Commands
 

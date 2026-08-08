@@ -77,7 +77,7 @@
 | `chargedesk` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | ChargeDesk | `api` | ga | check, catalog, read, write | 7 | 13 | [Documentation](https://chargedesk.com/api-docs) | bundle definition |
 | `chargify` | [`icons/chargify.svg`](../icons/chargify.svg) | Chargify | `api` | ga | check, catalog, read, write | 10 | 10 | [Documentation](https://developers.maxio.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api) | bundle definition |
 | `chartmogul` | [`icons/chartmogul.svg`](../icons/chartmogul.svg) | ChartMogul | `api` | ga | check, catalog, read, write | 8 | 2 | [Documentation](https://dev.chartmogul.com/reference) | bundle definition |
-| `chatwoot` | [`icons/simple-icons/chatwoot.svg`](../icons/simple-icons/chatwoot.svg) | Chatwoot | `api` | alpha | check, catalog, read, write | 7 | 6 | [Documentation](https://developers.chatwoot.com/api-reference) | bundle definition |
+| `chatwoot` | [`icons/simple-icons/chatwoot.svg`](../icons/simple-icons/chatwoot.svg) | Chatwoot | `api` | alpha | check, catalog, read, write | 7 | 60 | [Documentation](https://developers.chatwoot.com/api-reference) | bundle definition |
 | `chift` | [`icons/chift.svg`](../icons/chift.svg) | Chift | `api` | ga | check, catalog, read, write | 6 | 3 | [Documentation](https://docs.chift.eu/api-reference) | bundle definition |
 | `churnkey` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Churnkey | `api` | ga | check, catalog, read, write | 2 | 3 | [Documentation](https://docs.churnkey.co/api) | bundle definition |
 | `cimis` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | CIMIS | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://cimis.water.ca.gov/WSNReportCriteria.aspx) | bundle definition |
@@ -186,7 +186,7 @@
 | `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 37 | 231 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
 | `gitlab` | [`icons/gitlab.svg`](../icons/gitlab.svg) | GitLab | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.gitlab.com/ee/api/rest/) | bundle definition |
 | `glassfrog` | [`icons/glassfrog.svg`](../icons/glassfrog.svg) | GlassFrog | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY) | bundle definition |
-| `gmail` | [`icons/simple-icons/gmail.svg`](../icons/simple-icons/gmail.svg) | Gmail | `api` | ga | check, catalog, read, write | 10 | 35 | [Documentation](https://developers.google.com/gmail/api/reference/rest) | bundle definition |
+| `gmail` | [`icons/simple-icons/gmail.svg`](../icons/simple-icons/gmail.svg) | Gmail | `api` | ga | check, catalog, read, write | 10 | 40 | [Documentation](https://developers.google.com/gmail/api/reference/rest) | bundle definition |
 | `gnews` | [`icons/gnews.svg`](../icons/gnews.svg) | GNews | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://gnews.io/docs/) | bundle definition |
 | `gocardless` | [`icons/gocardless.svg`](../icons/gocardless.svg) | GoCardless | `api` | ga | check, catalog, read, write | 63 | 76 | [Documentation](https://developer.gocardless.com/api-reference/) | bundle definition |
 | `goldcast` | [`icons/goldcast.svg`](../icons/goldcast.svg) | Goldcast | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.goldcast.io/api-docs) | bundle definition |
@@ -205,7 +205,7 @@
 | `gorgias` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Gorgias | `api` | ga | check, catalog, read, write | 4 | 61 | [Documentation](https://developers.gorgias.com/reference) | bundle definition |
 | `grafana` | [`icons/grafana.svg`](../icons/grafana.svg) | Grafana | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/) | bundle definition |
 | `granola` | [`icons/source-granola.svg`](../icons/source-granola.svg) | Granola | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://docs.granola.ai/introduction) | bundle definition |
-| `greenhouse` | [`icons/greenhouse.svg`](../icons/greenhouse.svg) | Greenhouse | `api` | ga | check, catalog, read, write | 69 | 57 | [Documentation](https://developers.greenhouse.io/harvest.html) | bundle definition |
+| `greenhouse` | [`icons/greenhouse.svg`](../icons/greenhouse.svg) | Greenhouse | `api` | ga | check, catalog, read, write | 69 | 58 | [Documentation](https://developers.greenhouse.io/harvest.html) | bundle definition |
 | `gridly` | [`icons/gridly.svg`](../icons/gridly.svg) | Gridly | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://api.gridly.com/docs) | bundle definition |
 | `guru` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Guru | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.getguru.com/) | bundle definition |
 | `gutendex` | [`icons/source-gutendex.svg`](../icons/source-gutendex.svg) | Gutendex | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://gutendex.com/) | bundle definition |
@@ -213,7 +213,7 @@
 | `harvest` | [`icons/harvest.svg`](../icons/harvest.svg) | Harvest | `api` | ga | check, catalog, read | 15 | 0 | [Documentation](https://help.getharvest.com/api-v2/) | bundle definition |
 | `height` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Height | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.height.app/api) | bundle definition |
 | `hellobaton` | [`icons/hellobaton.svg`](../icons/hellobaton.svg) | Hellobaton | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](manual intervention needed) | bundle definition |
-| `help-scout` | [`icons/simple-icons/helpscout.svg`](../icons/simple-icons/helpscout.svg) | Help Scout | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.helpscout.com/) | bundle definition |
+| `help-scout` | [`icons/simple-icons/helpscout.svg`](../icons/simple-icons/helpscout.svg) | Help Scout | `api` | ga | check, catalog, read, write | 24 | 65 | [Documentation](https://developer.helpscout.com/) | bundle definition |
 | `hibob` | [`icons/hibob.svg`](../icons/hibob.svg) | HiBob | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://apidocs.hibob.com/) | bundle definition |
 | `high-level` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | High Level | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://highlevel.stoplight.io/) | bundle definition |
 | `hoorayhr` | [`icons/hoorayhr.svg`](../icons/hoorayhr.svg) | HoorayHR | `api` | beta | check, catalog, read | 4 | 0 | [Documentation](https://hoorayhr.io) | bundle definition |
@@ -238,7 +238,7 @@
 | `ip2whois` | [`icons/ip2whois.svg`](../icons/ip2whois.svg) | IP2WHOIS | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.ip2whois.com/developers-api) | bundle definition |
 | `iterable` | [`icons/iterable.svg`](../icons/iterable.svg) | Iterable | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://api.iterable.com/api/docs) | bundle definition |
 | `jamf-pro` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Jamf Pro | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.jamf.com/jamf-pro/reference/classic-api) | bundle definition |
-| `jira` | [`icons/jira.svg`](../icons/jira.svg) | Jira | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/) | bundle definition |
+| `jira` | [`icons/jira.svg`](../icons/jira.svg) | Jira | `api` | ga | check, catalog, read, write | 3 | 292 | [Documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/) | bundle definition |
 | `jobnimbus` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | JobNimbus | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://documenter.getpostman.com/view/3919598/S11PpG4x) | bundle definition |
 | `jotform` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Jotform | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://api.jotform.com/docs/) | bundle definition |
 | `judge-me-reviews` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Judge.me Reviews | `api` | ga | check, catalog, read, write | 23 | 13 | [Documentation](https://judge.me/api) | bundle definition |
@@ -258,7 +258,7 @@
 | `leadfeeder` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Leadfeeder | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.leadfeeder.com/api/) | bundle definition |
 | `lemlist` | [`icons/lemlist.svg`](../icons/lemlist.svg) | Lemlist | `api` | ga | check, catalog, read | 20 | 0 | [Documentation](https://developer.lemlist.com/) | bundle definition |
 | `less-annoying-crm` | [`icons/less-annoying-crm.svg`](../icons/less-annoying-crm.svg) | Less Annoying CRM | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://www.lessannoyingcrm.com/help/topic/API) | bundle definition |
-| `lever-hiring` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Lever Hiring | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://hire.lever.co/developer/documentation) | bundle definition |
+| `lever-hiring` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Lever Hiring | `api` | ga | check, catalog, read, write | 25 | 14 | [Documentation](https://hire.lever.co/developer/documentation) | bundle definition |
 | `lightspeed-retail` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Lightspeed Retail | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developers.lightspeedhq.com/retail/introduction/introduction/) | bundle definition |
 | `linear` | [`icons/simple-icons/linear.svg`](../icons/simple-icons/linear.svg) | Linear | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.linear.app/docs) | bundle definition |
 | `linkedin-ads` | [`icons/linkedin.svg`](../icons/linkedin.svg) | LinkedIn Ads | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10) | bundle definition |
@@ -526,7 +526,7 @@
 | `wordpress` | [`icons/simple-icons/wordpress.svg`](../icons/simple-icons/wordpress.svg) | WordPress | `api` | ga | check, catalog, read, write | 10 | 20 | [Documentation](https://developer.wordpress.org/rest-api/) | bundle definition |
 | `workable` | [`icons/workable.svg`](../icons/workable.svg) | Workable | `api` | ga | check, catalog, read, write | 42 | 38 | [Documentation](https://workable.readme.io/reference) | bundle definition |
 | `workday` | [`icons/workday.svg`](../icons/workday.svg) | Workday | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://community.workday.com/sites/default/files/file-hosting/restapi/) | bundle definition |
-| `workday-rest` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Workday REST | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](manual intervention needed) | bundle definition |
+| `workday-rest` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Workday REST | `api` | ga | check, catalog, read, write | 3 | 252 | [Documentation](manual intervention needed) | bundle definition |
 | `workflowmax` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | WorkflowMax | `api` | ga | check, catalog, read, write | 2 | 8 | [Documentation](https://api-docs.workflowmax.com/) | bundle definition |
 | `workramp` | [`icons/workramp.svg`](../icons/workramp.svg) | WorkRamp | `api` | ga | check, catalog, read, write | 5 | 5 | [Documentation](https://developers.workramp.com/) | bundle definition |
 | `wrike` | [`icons/wrike.svg`](../icons/wrike.svg) | Wrike | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.wrike.com/api/v4/) | bundle definition |
