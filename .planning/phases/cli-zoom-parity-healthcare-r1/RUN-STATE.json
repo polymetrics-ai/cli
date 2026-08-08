@@ -4,7 +4,7 @@
   "sub_issue": 3946,
   "connector": "zoom",
   "provider_module": "healthcare",
-  "state": "ready_to_commit",
+  "state": "completed",
   "manual_gsd_fallback": {
     "reason": "gsd-sdk query init.phase-op cli-zoom-parity-healthcare-r1 returned phase_found=false",
     "mode": "single-worker inline execution; role spawning is forbidden by the parent contract"
@@ -35,5 +35,13 @@
     "mode": "inline manual-GSD fallback",
     "result": "passed; REVIEW.md records the scoped review and dispositions"
   },
-  "next": "commit and push the Healthcare green slice, then update #3946 and #3915 with the next category handoff"
+  "commits": {
+    "plan": "78dfd10d6",
+    "red": "5c68143e4",
+    "foundation_plan": "a8f41c255",
+    "foundation_red": "5632ed617",
+    "foundation_green": "19c99cb11",
+    "green": "1d260747c"
+  },
+  "next": "update #3946 and #3915, then begin the next provider-category slice from the parent queue"
 }

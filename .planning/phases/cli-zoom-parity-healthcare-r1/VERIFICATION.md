@@ -8,7 +8,7 @@
 - [x] Live Healthcare artifact re-fetched before test or production work; URL, retrieval time, HTTP status, and byte count recorded.
 - [x] RED state captured before production JSON/doc edits: `go test -count=1 ./internal/connectors/defs/zoom/...` failed with the expected 9→12, 6→8, 0→1, and unknown-command assertions (verbatim output in `TDD-LEDGER.md`).
 - [x] RED state committed and pushed before production JSON/doc edits (`5c68143e4`).
-- [ ] GREEN implementation committed and pushed.
+- [x] GREEN implementation committed and pushed (`1d260747c`).
 - [x] Inline verify-work evidence recorded under the documented manual-GSD fallback.
 - [x] Inline code-review findings/dispositions recorded in `REVIEW.md`.
 
