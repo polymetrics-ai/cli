@@ -1,5 +1,5 @@
 {
-  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads including sensitive Cobrowse SDK sessions, and approval-gated clinical-note and Quality Management interaction actions.",
+  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads including sensitive Cobrowse SDK sessions, approval-gated clinical-note and Quality Management interaction actions, and a redacted Customer Managed Keys Hybrid archival key action.",
   "usage": "pm zoom <group> <command> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
@@ -63,6 +63,13 @@
       "title": "Cobrowse SDK",
       "commands": [
         "cobrowse-sdk"
+      ]
+    },
+    {
+      "id": "customer-managed-keys-hybrid",
+      "title": "Customer Managed Keys Hybrid",
+      "commands": [
+        "customer-managed-keys-hybrid"
       ]
     }
   ],
@@ -821,6 +828,47 @@
         {
           "method": "GET",
           "path": "/v2/cobrowsesdk/sessions/{sessionId}/users"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "customer-managed-keys-hybrid archival-key decrypt",
+      "summary": "Decrypt one Customer Managed Keys Hybrid archival data key.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.decrypt_customer_managed_key_archival",
+      "source_cli_path": "POST /api/v2/kms/cse/archival/datakey/decrypt",
+      "source_url": "https://developers.zoom.us/docs/api/customer-managed-keys-hybrid.md",
+      "flags": [
+        {
+          "name": "encrypt-context",
+          "type": "string",
+          "summary": "Provider-required encryption context.",
+          "maps_to": "body.encrypt_context",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "key-id",
+          "type": "string",
+          "summary": "Provider-required Customer Managed Keys Hybrid key identifier.",
+          "maps_to": "body.key_id",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "encrypt_context",
+        "key_id"
+      ],
+      "risk": "Returns sensitive key material only through a redacted output policy.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, typed confirmation, then execute.",
+      "notes": "Requires an operator-provisioned Customer Managed Keys Hybrid credential with key_connector_base_url ending in /api/v2 and an environment- or stdin-supplied key_connector_jwt. The operation declares its own customer-hosted origin and bearer; it never reuses the ordinary Zoom OAuth bearer.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/kms/cse/archival/datakey/decrypt"
         }
       ],
       "output_policy": "json_redacted"

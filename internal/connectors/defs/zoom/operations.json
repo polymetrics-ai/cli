@@ -394,6 +394,58 @@
         "path": "/v2/cobrowsesdk/sessions/{sessionId}/users",
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "zoom.decrypt_customer_managed_key_archival",
+      "kind": "rest_write",
+      "summary": "Decrypt a Customer Managed Keys Hybrid archival data key",
+      "description": "Approval-gated Customer Managed Keys Hybrid Key Connector archival request. Sensitive key material is returned only through the declared redacted output policy.",
+      "source_url": "https://developers.zoom.us/docs/api/customer-managed-keys-hybrid.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "secret",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "encrypt_context",
+          "key_id",
+          "plainkey"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/kms/cse/archival/datakey/decrypt",
+        "base_url": "{{ config.key_connector_base_url }}",
+        "auth": [
+          {
+            "mode": "bearer",
+            "token": "{{ secrets.key_connector_jwt }}"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "encrypt_context",
+            "key_id"
+          ],
+          "properties": {
+            "encrypt_context": {
+              "type": "string"
+            },
+            "key_id": {
+              "type": "string"
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
     }
   ]
 }
