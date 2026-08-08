@@ -37,7 +37,7 @@
     "unsafe_or_disallowed": 0
   },
   "red": "captured: current 143/1699/70/69 totals fail the 165/1677/82/78 AI Services target; all 22 exact routes are unknown through real commandrunner preflight",
-  "foundation": "planned: closed standard-library WebSocket session executor in separate red/green commits",
+  "foundation": "red captured: bundle loader rejects the proposed closed standard-library WebSocket session declaration; green implementation pending separate commits",
   "green": "pending",
   "verification": "pending",
   "review": "pending"

@@ -79,3 +79,21 @@ server:
 
 The foundation records its individual red/green commits here before AI Services declarations are
 authored.
+
+### Foundation RED — captured 2026-08-08
+
+The closed-contract loader test was added and run before any production schema, runtime, CLI, or
+generator implementation:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestBundleLoadAcceptsClosedWebSocketSessionContract$'
+--- FAIL: TestBundleLoadAcceptsClosedWebSocketSessionContract (0.00s)
+    websocket_session_test.go:50: Load closed WebSocket session operation: load bundle acme: operations.json: /operations/0/websocket: additional property not allowed
+FAIL
+FAIL    polymetrics.ai/internal/connectors/engine    0.744s
+FAIL
+```
+
+This is an intentional missing-foundation failure. The test declaration contains a fixed relative
+path, fixed subprotocol, finite input/output/frame caps, and a closed initial frame schema; it
+contains no endpoint chosen by a caller and no secret value.
