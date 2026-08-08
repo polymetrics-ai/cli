@@ -41,7 +41,33 @@ This red state contains only the command-surface test, synthetic fixtures, and d
 ledger, connector docs, and website data remain untouched. Commit and push it before creating any
 of those declarations.
 
-## GREEN — pending
+## GREEN — completed after the RED commit
 
-Record focused test, conformance, surface/validator, binary, docs/website, and inline review
-evidence after the declarations exist and the red test becomes green.
+Green source commit `62baea597` declares all four provider routes as bounded `rest_read`
+operations. Each is `json_redacted`, has a Cobrowse-local sensitive-field policy, and maps to one
+generated `covered_by.direct_read` endpoint row. The date-only flag foundation was intentionally
+landed first in `e93a0984e`, with its own red (`859a10110`) and green checkpoint; it accepts exact
+ISO `YYYY-MM-DD` values without weakening the existing `date-time` contract.
+
+The original red test is now green, including exact outgoing fixture routes/query fields,
+required session IDs, sensitive response redaction, and absence of response-only page fields:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...
+ok  polymetrics.ai/internal/connectors/defs/zoom  1.262s
+
+$ go test -count=1 -v -run '^TestConformance/zoom$' ./internal/connectors/conformance
+PASS
+
+$ go test -count=1 -timeout 20m ./internal/connectors/conformance/...
+ok  polymetrics.ai/internal/connectors/conformance  16.156s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner/...
+ok  polymetrics.ai/internal/connectors/commandrunner  7.238s
+```
+
+The generated CLI docs, catalog, website data, and root-help golden transcripts were regenerated
+from the declarations. Docs generation exposed unrelated stale output, so it was mechanically
+scoped back to its generated Zoom entries; structural comparisons prove that `zoom` is the only
+changed docs-catalog and website connector record. The normal golden test passed after the approved
+generator refreshed exactly nine root-help variants, and the full CLI package passed in `578.187s`.

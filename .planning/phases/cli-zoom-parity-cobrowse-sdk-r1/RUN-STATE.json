@@ -4,7 +4,7 @@
   "sub_issue": 3945,
   "connector": "zoom",
   "provider_module": "cobrowse-sdk",
-  "state": "red_captured",
+  "state": "completed",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -30,8 +30,23 @@
     "writes": 2
   },
   "red": {
+    "commit": "595862fb2",
     "command": "go test -count=1 ./internal/connectors/defs/zoom/...",
     "result": "failed as expected: 18 -> 22 covered, 1824 -> 1820 locally blocked, 13 -> 17 direct reads, and all four Cobrowse SDK routes were unknown"
   },
-  "next": "commit and push this red-only state before production declarations"
+  "green": {
+    "foundation": "date-only declarative flag support landed separately in e93a0984e after red commit 859a10110",
+    "commit": "62baea597",
+    "focused_zoom": "passed in 1.262s",
+    "zoom_conformance": "passed",
+    "full_conformance": "passed in 16.156s",
+    "commandrunner": "passed in 7.238s",
+    "surface_sync_and_validation": "Zoom and full validation passed with zero findings",
+    "vet_and_build": "passed",
+    "binary_reachability": "all four namespace/help paths passed; isolated synthetic-token GETs reached Zoom provider authentication failure without unknown-command/flag or secret leakage",
+    "docs_and_website": "docs validation passed; generated catalog structural comparisons changed zoom only; website typecheck passed",
+    "goldens_and_cli": "approved golden generator refreshed nine root-help variants; normal golden check and full CLI package passed in 578.187s",
+    "manual_gates": "tidy, lint, smoke, contract, connectorgen, boundary, and release checks passed"
+  },
+  "next": "close #3945, update #3915, and start the next provider-category slice with its own live audit and RED checkpoint"
 }
