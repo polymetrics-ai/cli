@@ -627,6 +627,131 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadSupportsBoundedStatusAndTextResponses(t *testing.T) {
+	t.Run("status only accepts an empty success body", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method != http.MethodGet || r.URL.Path != "/membership" {
+				t.Fatalf("request = %s %s, want GET /membership", r.Method, r.URL.Path)
+			}
+			w.WriteHeader(http.StatusNoContent)
+		}))
+		defer srv.Close()
+
+		result, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.membership", http.MethodGet, "/membership", "none", "", 1024), connectors.OperationDirectReadRequest{
+			Operation: "acme.membership",
+			MaxBytes:  1024,
+		}, nil)
+		if err != nil {
+			t.Fatalf("OperationDirectRead: %v", err)
+		}
+		if result.Status != http.StatusNoContent {
+			t.Fatalf("status = %d, want %d", result.Status, http.StatusNoContent)
+		}
+		if result.Body != nil {
+			t.Fatalf("body = %#v, want nil for a status-only response", result.Body)
+		}
+	})
+
+	t.Run("status only rejects a nonempty success body", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte("unexpected"))
+		}))
+		defer srv.Close()
+
+		_, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.membership", http.MethodGet, "/membership", "none", "", 1024), connectors.OperationDirectReadRequest{
+			Operation: "acme.membership",
+			MaxBytes:  1024,
+		}, nil)
+		if err == nil || !strings.Contains(err.Error(), "status-only response must be empty") {
+			t.Fatalf("OperationDirectRead error = %v, want nonempty status-only response rejection", err)
+		}
+	})
+
+	t.Run("text response is bounded and valid UTF-8", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path != "/zen" {
+				t.Fatalf("path = %q, want /zen", r.URL.Path)
+			}
+			w.Header().Set("Content-Type", "text/plain")
+			_, _ = w.Write([]byte("keep it simple"))
+		}))
+		defer srv.Close()
+
+		result, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.zen", http.MethodGet, "/zen", "text", "", 1024), connectors.OperationDirectReadRequest{
+			Operation: "acme.zen",
+			MaxBytes:  1024,
+		}, nil)
+		if err != nil {
+			t.Fatalf("OperationDirectRead: %v", err)
+		}
+		if got, want := result.Body, any("keep it simple"); got != want {
+			t.Fatalf("body = %#v, want %#v", got, want)
+		}
+	})
+
+	t.Run("text response rejects invalid UTF-8", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte{0xff, 0xfe})
+		}))
+		defer srv.Close()
+
+		_, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.octets", http.MethodGet, "/octets", "text", "", 1024), connectors.OperationDirectReadRequest{
+			Operation: "acme.octets",
+			MaxBytes:  1024,
+		}, nil)
+		if err == nil || !strings.Contains(err.Error(), "valid UTF-8") {
+			t.Fatalf("OperationDirectRead error = %v, want UTF-8 rejection", err)
+		}
+	})
+
+	t.Run("text response retains its declared cap", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte("five!"))
+		}))
+		defer srv.Close()
+
+		_, err := OperationDirectRead(context.Background(), statusTextReadBundle(srv.URL, "acme.short", http.MethodGet, "/short", "text", "", 4), connectors.OperationDirectReadRequest{
+			Operation: "acme.short",
+			MaxBytes:  4,
+		}, nil)
+		if err == nil || !strings.Contains(err.Error(), "response too large") {
+			t.Fatalf("OperationDirectRead error = %v, want response cap rejection", err)
+		}
+	})
+}
+
+func statusTextReadBundle(baseURL, id, method, endpointPath, outputPolicy, contentType string, maxBytes int) Bundle {
+	return Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: baseURL},
+		Operations: []OperationSpec{{
+			ID:           id,
+			Kind:         "rest_read",
+			Summary:      "bounded fixture read",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: outputPolicy,
+			REST: &RESTOperationSpec{
+				Method:      method,
+				Path:        endpointPath,
+				ContentType: contentType,
+				MaxBytes:    maxBytes,
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: method,
+			Path:   endpointPath,
+			Operation: &SurfaceOperation{
+				Model:            "direct_read",
+				Status:           "blocked",
+				Risk:             "low",
+				BlockedByDefault: true,
+				Reason:           "typed operation metadata",
+			},
+		}}},
+	}
+}
+
 func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/v2/calls/call-1" {
