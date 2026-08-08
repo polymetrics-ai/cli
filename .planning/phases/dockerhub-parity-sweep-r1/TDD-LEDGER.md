@@ -257,13 +257,31 @@ FAIL	polymetrics.ai/internal/connectors/defs/dockerhub	0.746s
 FAIL
 ```
 
-### Planned GREEN
+### GREEN — write-path repair
 
-Convert all 26 Docker Hub reverse-ETL action paths to engine-relative paths with
-record templates, add the missing create-repository `namespace` path field, rerun
-the focused test, then re-run the rebuilt binary through plan, preview, approval,
-and live repository creation. This ledger will be updated with GREEN evidence
-before commit.
+All 26 actions now use engine-relative paths and `{{ record.* }}` path templates;
+`create_repository.path_fields` includes `namespace`, so that path value cannot
+leak into its JSON body. The exact corrected dry-run request is:
+
+```text
+POST https://hub.docker.com/v2/namespaces/polymetrics/repositories
+```
+
+Focused GREEN evidence:
+
+```text
+=== RUN   TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated
+--- PASS: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated (0.01s)
+PASS
+ok  	polymetrics.ai/internal/connectors/defs/dockerhub	0.694s
+```
+
+Follow-up static checks passed: `connectorgen validate` for Docker Hub reported 0
+findings and `surface-sync --check` scanned 551 connectors with 0 corrections. The
+first approved live create then exposed the distinct strict-write ALPN defect below;
+after that defect was fixed, the corrected provider request reached Docker Hub and
+returned HTTP 403 rather than a path or transport error. Full live accounting is in
+`VERIFICATION.md`.
 
 ## Live E2E gap — strict write transport (2026-08-08)
 
