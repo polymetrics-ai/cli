@@ -78,7 +78,13 @@ type OAuth2ClientCredentials struct {
 	TokenURL     string
 	ClientID     string
 	ClientSecret string
-	Scopes       []string
+	// ClientAuth controls how the client ID and secret authenticate the token
+	// request. "form" (the empty/default value) sends them as form members;
+	// "basic" sends them only in HTTP Basic while retaining grant_type/scope
+	// and ExtraParams in the form. The latter is required by providers that
+	// document OAuth client_secret_basic rather than client_secret_post.
+	ClientAuth string
+	Scopes     []string
 	// ExtraParams are added to the token request form (e.g. audience).
 	ExtraParams url.Values
 	// Client is used for the token request. Defaults to a 30s client.
@@ -119,10 +125,17 @@ func (a *OAuth2ClientCredentials) accessToken(ctx context.Context) (string, erro
 		return "", errors.New("oauth2: TokenURL is required")
 	}
 
+	clientAuth, err := normalizeOAuth2ClientAuth(a.ClientAuth)
+	if err != nil {
+		return "", err
+	}
+
 	form := url.Values{}
 	form.Set("grant_type", "client_credentials")
-	form.Set("client_id", a.ClientID)
-	form.Set("client_secret", a.ClientSecret)
+	if clientAuth == "form" {
+		form.Set("client_id", a.ClientID)
+		form.Set("client_secret", a.ClientSecret)
+	}
 	if len(a.Scopes) > 0 {
 		form.Set("scope", strings.Join(a.Scopes, " "))
 	}
@@ -138,6 +151,9 @@ func (a *OAuth2ClientCredentials) accessToken(ctx context.Context) (string, erro
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Accept", "application/json")
+	if clientAuth == "basic" {
+		req.SetBasicAuth(a.ClientID, a.ClientSecret)
+	}
 
 	client := a.Client
 	if client == nil {
@@ -171,4 +187,15 @@ func (a *OAuth2ClientCredentials) accessToken(ctx context.Context) (string, erro
 	}
 	a.expires = a.now().Add(ttl)
 	return a.token, nil
+}
+
+func normalizeOAuth2ClientAuth(raw string) (string, error) {
+	switch strings.ToLower(strings.TrimSpace(raw)) {
+	case "", "form":
+		return "form", nil
+	case "basic":
+		return "basic", nil
+	default:
+		return "", fmt.Errorf("oauth2: unsupported client auth style %q", raw)
+	}
 }

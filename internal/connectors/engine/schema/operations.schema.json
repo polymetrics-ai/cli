@@ -113,6 +113,7 @@
                     "token_url": { "type": "string" },
                     "client_id": { "type": "string" },
                     "client_secret": { "type": "string" },
+                    "client_auth": { "type": "string", "enum": ["form", "basic"] },
                     "scopes": { "type": "string" },
                     "extra_params": { "type": "object" },
                     "refresh_token": { "type": "string" },

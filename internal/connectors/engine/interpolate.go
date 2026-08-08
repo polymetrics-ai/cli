@@ -877,6 +877,14 @@ func ResolveCheckRequestPath(what, template string, specKeys map[string]bool) er
 // a follow-up (cmd/connectorgen is outside this task's editable file set);
 // this is the engine-side building block for it.
 func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
+	if spec.ClientAuth != "" && spec.Mode != "oauth2_client_credentials" {
+		return fmt.Errorf("auth spec (mode %q) field %q is only valid for oauth2_client_credentials", spec.Mode, "client_auth")
+	}
+	if spec.Mode == "oauth2_client_credentials" {
+		if _, err := oauth2ClientAuthStyle(spec.ClientAuth); err != nil {
+			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, "client_auth", err)
+		}
+	}
 	fields := []struct {
 		name, tmpl string
 	}{
