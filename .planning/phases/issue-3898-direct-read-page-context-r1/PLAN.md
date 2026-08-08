@@ -111,3 +111,10 @@ result carries the context needed to reach the next one.
 10. Add a red safety regression for Go's quoted HTTP transport error form.
     `RedactErrorText` must remove URL query/fragment secrets without absorbing
     the closing quote delimiter into the URL and percent-encoding it as `%22`.
+11. If the plain live `EOF` remains after that formatter correction, isolate it
+    on the captain-authorized repository with equivalent curl and `gh` POST
+    controls before changing transport behavior. Capture PM's method,
+    Content-Length, body-byte count, and header names only; never emit a
+    credential or header value. Treat a PM-only failure as a PM transport-path
+    defect (including a VPN/proxy interaction specific to that path), not as a
+    GitHub-wide outage.

@@ -52,6 +52,13 @@ node website/scripts/cli-surface.test.mjs 7/7 pass
   the safety regression now prevents that misleading rendering while preserving
   query redaction. The underlying GitHub result was transport `EOF`, not a
   malformed endpoint.
+- The follow-up same-machine controls isolate the EOF to PM's transport path:
+  curl POST (including PM's HTTP/1.1, `Connection: close`, User-Agent, and API
+  version shape) and `gh api` POST each received HTTP 201, while a fresh PM
+  plan → preview → approved run read and declared exactly 44 body bytes then
+  received EOF. Header values and credentials were never captured. The private
+  repository contains only the four intentional curl/`gh` diagnostic issues;
+  no PM write reached it. The live-write completion gate remains blocked.
 - `docs/connectors/**` regeneration carries unrelated pre-existing drift
   (field types). Verifiable by running `pm docs generate` on a clean tree, which
   changes 1028 files with no code changes at all.

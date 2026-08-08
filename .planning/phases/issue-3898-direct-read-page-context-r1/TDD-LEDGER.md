@@ -131,6 +131,48 @@ Therefore this is neither an outbound malformed endpoint nor harness quoting.
 The remaining live outcome is a plain transport `EOF`; it is recorded without
 substituting another client for `pm`.
 
+## PM-only EOF isolation
+
+After the formatter correction, the same-machine controls against the one
+captain-authorized private repository settled the network/body question:
+
+| Caller | Request shape | Result |
+| --- | --- | --- |
+| curl | POST, HTTP/1.1, JSON body (43 bytes) | HTTP 201 |
+| `gh api` | equivalent POST | created issue #2 |
+| curl | POST, HTTP/1.1, `Connection: close`, JSON body (44 bytes) | HTTP 201 |
+| curl | PM's HTTP/1.1, `Connection: close`, User-Agent, API-version, and header-name shape | HTTP 201 |
+| `pm reverse run` | fresh plan → preview → approved one-row `create_issue` | transport EOF; no issue created |
+
+The temporary PM probe emitted metadata only:
+
+```
+method=POST
+target_path=/repos/karthik-sivadas/<private-test-repo>/issues
+content_length=44
+body_bytes_read=44
+header_names=[Accept Authorization Content-Type User-Agent X-Github-Api-Version]
+transport_error=true
+```
+
+So PM's declared Content-Length equals the bytes its Go transport read; the
+classic length/body mismatch hypothesis is disproved. The independently listed
+repository contained exactly the four curl/`gh` diagnostic issues and no PM
+issue, so this is not merely a lost response after a successful mutation.
+
+The differential is now PM's transport path: `writeRequester` makes this
+non-idempotent action no-retry, and `noReplayClient` uses a fresh one-use Go
+HTTP/1.1 connection. Curl succeeded with the same HTTP version and connection
+close semantics, so it is not a generic GitHub outage or a simple
+`Connection: close` incompatibility. A VPN/middlebox interaction specific to
+Go's transport remains possible, but it is a PM-path defect until disproved.
+
+No prior live PM write success is recorded. The original GitHub live report
+performed zero mutations and left all 196 writes untested; the captain's order
+states that this reverse-ETL half "could never be tested before." This is the
+first recorded end-to-end PM write exercise. Six PM `create_issue` runs in the
+dedicated repository have all failed with transport EOF.
+
 ## Red/green commands
 
 ```sh
