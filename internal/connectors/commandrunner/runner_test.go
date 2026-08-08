@@ -1251,6 +1251,77 @@ func TestCoerceFlagValueRejectsGenericJSONFlagType(t *testing.T) {
 	}
 }
 
+// The CLI metadata has long enumerated a `json` flag type, but the runner
+// deliberately refused it rather than let it become an untyped body escape
+// hatch. GitHub's documented oneOf arms need it for named object/array record
+// fields. This contract describes the narrow change: the value is structured,
+// the action schema remains the authority, and a scalar-shaped declaration is
+// rejected before a command can be planned.
+func TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags(t *testing.T) {
+	newConnector := func(flagType, target string) connectors.Connector {
+		return engine.New(engine.Bundle{
+			Name: "widgets",
+			Writes: []engine.WriteAction{{
+				Name:   "create_widget",
+				Kind:   "create",
+				Method: http.MethodPost,
+				Path:   "/widgets",
+				RecordSchema: json.RawMessage(`{
+					"type":"object","additionalProperties":false,"required":["payload"],
+					"properties":{"payload":{"type":"object","additionalProperties":false,"required":["kind"],"properties":{"kind":{"type":"string"}}}}
+				}`),
+			}},
+			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+				Path: "widgets create", Intent: "reverse_etl", Availability: "implemented", Write: "create_widget",
+				Flags: []engine.CLIFlag{{Name: "payload", Type: flagType, MapsTo: target, Required: true}},
+			}}},
+		}, nil)
+	}
+
+	connector := newConnector("json", "record.payload")
+	if err := Preflight(connector, []string{"widgets", "create"}); err != nil {
+		t.Fatalf("Preflight: %v", err)
+	}
+
+	tests := []struct {
+		name    string
+		value   string
+		wantErr string
+	}{
+		{name: "valid object becomes typed planned record", value: `{"kind":"fixture"}`},
+		{name: "malformed JSON never produces a plan", value: `{`, wantErr: "invalid JSON"},
+		{name: "array cannot satisfy object field", value: `[]`, wantErr: "does not match type"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			command, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path: []string{"widgets", "create"}, Flags: map[string][]string{"payload": {tt.value}},
+			})
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("BuildWriteCommand error = %v, want %q", err, tt.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("BuildWriteCommand: %v", err)
+			}
+			payload, ok := command.Record["payload"].(map[string]any)
+			if !ok || payload["kind"] != "fixture" {
+				t.Fatalf("planned payload = %#v, want parsed object", command.Record["payload"])
+			}
+		})
+	}
+
+	// A structured JSON flag must never turn into a generic scalar setter just
+	// because a bundle says `json`: its target schema must explicitly admit an
+	// object or array before preflight makes it reachable.
+	invalid := newConnector("json", "record.payload.kind")
+	if err := Preflight(invalid, []string{"widgets", "create"}); err == nil || !strings.Contains(err.Error(), "structured JSON") {
+		t.Fatalf("Preflight scalar structured-json mapping error = %v, want declared object/array rejection", err)
+	}
+}
+
 func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
 	record, err := recordOverrides(connectors.CommandSurfaceCommand{
 		Path:         "diagnoses create",

@@ -4,9 +4,13 @@ import (
 	"encoding/json"
 	"os"
 	"reflect"
+	"sort"
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/bundleregistry"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -215,6 +219,152 @@ func TestGitHubStatusAndTextOperationContracts(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+// TestGitHubOneOfWriteContracts keeps one documented top-level oneOf arm from
+// being flattened into a permissive command, or silently omitted because
+// several named write actions share one provider endpoint. Every action below
+// is a separate command contract: it names the concrete required fields, must
+// survive the real runtime preflight, and must be linked from the documented
+// endpoint through covered_by.writes.
+func TestGitHubOneOfWriteContracts(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("load embedded github bundle: %v", err)
+	}
+	rawSurface, err := os.ReadFile("../../internal/connectors/defs/github/api_surface.json")
+	if err != nil {
+		t.Fatalf("read github api_surface.json: %v", err)
+	}
+	surface, err := engine.ParseAPISurface(rawSurface)
+	if err != nil {
+		t.Fatalf("parse github api_surface.json: %v", err)
+	}
+
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("github")
+	if !ok {
+		t.Fatal("github connector is not registered")
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		t.Fatal("github connector does not expose a command surface")
+	}
+	commands := map[string]connectors.CommandSurfaceCommand{}
+	for _, command := range provider.CommandSurface().Commands {
+		commands[command.Path] = command
+	}
+	writes := map[string]engine.WriteAction{}
+	for _, action := range bundle.Writes {
+		writes[action.Name] = action
+	}
+
+	type contract struct {
+		command, action, method, path, confirmation string
+		required                                    []string
+	}
+	const destructive = string(connectors.ConfirmationKindDestructive)
+	contracts := []contract{
+		{"orgs attestations delete-by-subject-digests", "orgs_attestations_delete_request_by_subject_digests", "POST", "/orgs/{org}/attestations/delete-request", destructive, []string{"subject_digests"}},
+		{"orgs attestations delete-by-attestation-ids", "orgs_attestations_delete_request_by_attestation_ids", "POST", "/orgs/{org}/attestations/delete-request", destructive, []string{"attestation_ids"}},
+		{"users attestations delete-by-subject-digests", "users_attestations_delete_request_by_subject_digests", "POST", "/users/{username}/attestations/delete-request", destructive, []string{"subject_digests", "username"}},
+		{"users attestations delete-by-attestation-ids", "users_attestations_delete_request_by_attestation_ids", "POST", "/users/{username}/attestations/delete-request", destructive, []string{"attestation_ids", "username"}},
+		{"orgs campaigns create-code-scanning", "orgs_campaigns_create_code_scanning", "POST", "/orgs/{org}/campaigns", "", []string{"code_scanning_alerts", "description", "ends_at", "name", "org"}},
+		{"orgs campaigns create-secret-scanning", "orgs_campaigns_create_secret_scanning", "POST", "/orgs/{org}/campaigns", "", []string{"description", "ends_at", "name", "org", "secret_scanning_alerts"}},
+		{"orgs projects fields create-existing-issue-field", "orgs_projectsv2_fields_create_existing_issue_field", "POST", "/orgs/{org}/projectsV2/{project_number}/fields", "", []string{"issue_field_id", "org", "project_number"}},
+		{"orgs projects fields create-new-field", "orgs_projectsv2_fields_create_new_field", "POST", "/orgs/{org}/projectsV2/{project_number}/fields", "", []string{"data_type", "name", "org", "project_number"}},
+		{"orgs projects fields create-single-select", "orgs_projectsv2_fields_create_single_select", "POST", "/orgs/{org}/projectsV2/{project_number}/fields", "", []string{"data_type", "name", "org", "project_number", "single_select_options"}},
+		{"orgs projects fields create-iteration", "orgs_projectsv2_fields_create_iteration", "POST", "/orgs/{org}/projectsV2/{project_number}/fields", "", []string{"data_type", "iteration_configuration", "name", "org", "project_number"}},
+		{"users projects fields create-new-field", "users_projectsv2_fields_create_new_field", "POST", "/users/{username}/projectsV2/{project_number}/fields", "", []string{"data_type", "name", "project_number", "username"}},
+		{"users projects fields create-single-select", "users_projectsv2_fields_create_single_select", "POST", "/users/{username}/projectsV2/{project_number}/fields", "", []string{"data_type", "name", "project_number", "single_select_options", "username"}},
+		{"users projects fields create-iteration", "users_projectsv2_fields_create_iteration", "POST", "/users/{username}/projectsV2/{project_number}/fields", "", []string{"data_type", "iteration_configuration", "name", "project_number", "username"}},
+		{"orgs projects items create-by-id", "orgs_projectsv2_items_create_by_id", "POST", "/orgs/{org}/projectsV2/{project_number}/items", "", []string{"id", "org", "project_number", "type"}},
+		{"orgs projects items create-by-repo-number", "orgs_projectsv2_items_create_by_repo_number", "POST", "/orgs/{org}/projectsV2/{project_number}/items", "", []string{"number", "org", "owner", "project_number", "repo", "type"}},
+		{"users projects items create-by-id", "users_projectsv2_items_create_by_id", "POST", "/users/{username}/projectsV2/{project_number}/items", "", []string{"id", "project_number", "type", "username"}},
+		{"users projects items create-by-repo-number", "users_projectsv2_items_create_by_repo_number", "POST", "/users/{username}/projectsV2/{project_number}/items", "", []string{"number", "owner", "project_number", "repo", "type", "username"}},
+		{"codespaces create-from-repository", "user_codespaces_create_from_repository", "POST", "/user/codespaces", "", []string{"repository_id"}},
+		{"codespaces create-from-pull-request", "user_codespaces_create_from_pull_request", "POST", "/user/codespaces", "", []string{"pull_request"}},
+	}
+
+	endpointActions := map[string][]string{}
+	for _, want := range contracts {
+		t.Run(strings.ReplaceAll(want.command, " ", "_"), func(t *testing.T) {
+			command, ok := commands[want.command]
+			if !ok {
+				t.Fatalf("generated command %q is missing", want.command)
+			}
+			if command.Intent != "reverse_etl" || command.Availability != "implemented" || command.Write != want.action {
+				t.Fatalf("command = intent=%q availability=%q write=%q, want implemented reverse_etl write=%q", command.Intent, command.Availability, command.Write, want.action)
+			}
+			if got := commandrunner.ConfirmationChallengeForCommand(connector, command); got != want.confirmation {
+				t.Fatalf("confirmation = %q, want %q", got, want.confirmation)
+			}
+			if err := commandrunner.Preflight(connector, strings.Fields(want.command)); err != nil {
+				t.Fatalf("runtime preflight: %v", err)
+			}
+
+			action, ok := writes[want.action]
+			if !ok {
+				t.Fatalf("write action %q is missing", want.action)
+			}
+			if action.Method != want.method || action.Path != want.path {
+				t.Fatalf("write action = %s %s, want %s %s", action.Method, action.Path, want.method, want.path)
+			}
+			if err := engine.ValidatePromotableRecordSchema(action.RecordSchema); err != nil {
+				t.Fatalf("write record_schema must be a concrete arm: %v", err)
+			}
+
+			var schema struct {
+				Required []string `json:"required"`
+			}
+			if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
+				t.Fatalf("unmarshal record_schema: %v", err)
+			}
+			gotRequired := append([]string(nil), schema.Required...)
+			wantRequired := append([]string(nil), want.required...)
+			sort.Strings(gotRequired)
+			sort.Strings(wantRequired)
+			if !reflect.DeepEqual(gotRequired, wantRequired) {
+				t.Fatalf("record_schema required = %#v, want %#v", gotRequired, wantRequired)
+			}
+			for _, field := range wantRequired {
+				var mapped *connectors.CommandSurfaceFlag
+				for i := range command.Flags {
+					if command.Flags[i].MapsTo == "record."+field {
+						mapped = &command.Flags[i]
+						break
+					}
+				}
+				if mapped == nil || !mapped.Required {
+					t.Fatalf("required record field %q has no required command flag: %#v", field, command.Flags)
+				}
+			}
+
+			key := want.method + " " + want.path
+			endpointActions[key] = append(endpointActions[key], want.action)
+		})
+	}
+
+	for _, endpoint := range surface.Endpoints {
+		key := endpoint.Method + " " + endpoint.Path
+		want, ok := endpointActions[key]
+		if !ok {
+			continue
+		}
+		if endpoint.CoveredBy == nil {
+			t.Fatalf("%s is not covered by write actions", key)
+		}
+		got := append([]string(nil), endpoint.CoveredBy.WriteTargets()...)
+		sort.Strings(got)
+		sort.Strings(want)
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("%s covered_by.writes = %#v, want %#v", key, got, want)
+		}
+		delete(endpointActions, key)
+	}
+	if len(endpointActions) != 0 {
+		t.Fatalf("oneOf endpoints absent from api_surface: %#v", endpointActions)
 	}
 }
 
