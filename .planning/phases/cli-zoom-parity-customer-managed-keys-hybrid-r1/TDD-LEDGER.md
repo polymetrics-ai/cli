@@ -75,8 +75,8 @@ $ go test -count=1 -timeout 20m -run 'TestDirectWriteCommand(PlanPreviewApproval
 ok  polymetrics.ai/internal/app  3.241s
 ```
 
-This reusable foundation is committed separately from Zoom JSON authoring. Its commit ID is added
-to `RUN-STATE.json`, this ledger, and the parent issue handoff after the commit is created.
+This reusable foundation is committed separately from Zoom JSON authoring in `0987a58bc` and is
+pushed before the connector declaration begins.
 
 ## GREEN connector — pending
 
