@@ -1,0 +1,41 @@
+{
+  "phase": "persistiq-artifact-materialize-pilot-r1",
+  "program": "cli-mass-artifact-materialize-r1",
+  "connector": "persistiq",
+  "state": "planned",
+  "manual_gsd_fallback": {
+    "used": true,
+    "reason": "Pilot is not represented in ROADMAP.md and the available Codex runtime cannot provide the interactive Pi workers.",
+    "resolved_commands": ["discuss-phase", "plan-phase --tdd", "execute-phase", "verify-work", "code-review"]
+  },
+  "scope": {
+    "eligible_pool": 392,
+    "pilot_only": true,
+    "excluded_connectors_touched": 0,
+    "second_connector_started": false
+  },
+  "artifact": {
+    "url": "https://persistiq.com/api-docs/v1/swagger.json",
+    "kind_from_ledger": "openapi",
+    "bytes": null,
+    "sha256": null,
+    "parsed": null
+  },
+  "operations": {
+    "ledger_total": 21,
+    "mapping": {
+      "etl": 11,
+      "direct_read": 1,
+      "reverse_etl": 7,
+      "direct_write": 2,
+      "binary_download": 0,
+      "unclassified": 0
+    }
+  },
+  "tdd": {
+    "red_confirmed": false,
+    "red_failure": null,
+    "green_confirmed": false
+  },
+  "certification": "withheld; never exercised against provider"
+}
