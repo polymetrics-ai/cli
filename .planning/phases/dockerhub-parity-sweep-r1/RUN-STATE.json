@@ -2,7 +2,7 @@
   "phase": "dockerhub-parity-sweep-r1",
   "program": "cli-connector-parity-programme-pilot",
   "connector": "dockerhub",
-  "state": "implemented",
+  "state": "implemented_live_e2e_blocked_on_account_scope",
   "generated_from": null,
   "artifact": {
     "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
@@ -59,6 +59,18 @@
     "green": true,
     "green_evidence": "go test ./cmd/connectorgen/ (whole package) PASS; go run ./cmd/connectorgen validate internal/connectors/defs (whole repo) -> 551 connectors, 0 findings; go test ./internal/connectors/commandrunner/ -run TestEveryImplementedCommandPassesRuntimePreflight PASS (all 551 connectors); go test ./internal/connectors/engine/... PASS including 5 new HEAD-support tests; go test ./internal/connectors/hooks/dockerhub/... PASS (22 tests); go test ./internal/connectors/conformance/... PASS; go run ./cmd/connectorgen surface-sync --check -> 0 corrections; make connector-boundary -> clean; make lint 0 issues; make tidy-check, agent-contract-check, smoke-no-build, release-workflow-check all pass; gofmt/go vet clean; go build ./... clean; full go test ./internal/cli/... PASS including TestGoldenTranscripts (diff scoped to 9 root-listing subtests' tagline); binary built and exercised: pm connectors inspect dockerhub --json (write:true), bare pm dockerhub, --help on all 54 commands, and a genuine live loopback HTTP round trip proving the new HEAD status-only path end-to-end (server observed a real HEAD request, CLI returned {status_code:200})."
   },
+  "live_e2e": {
+    "attempted_operations": 23,
+    "worked_operations": 4,
+    "failed_operations": 19,
+    "untestable_operations": 31,
+    "binary_help_routes_reachable": "54/54",
+    "private_repository_create": "HTTP 403 after corrected request; no repository created",
+    "image_push_readback": "not possible without a writable repository",
+    "scim_only_credential": "HTTP 401; no classification change",
+    "evidence": ".planning/phases/dockerhub-parity-sweep-r1/VERIFICATION.md",
+    "runtime_fix": "strict write ALPN pinned to http/1.1 after local HTTP/2 regression reproduction"
+  },
   "foundations_built": [
     {
       "name": "dockerhub AuthHook (username+PAT session login exchange, plus dualAuth SCIM second-credential routing)",
@@ -85,5 +97,5 @@
       "unblocks": "any connector with a documented HEAD-only existence-check endpoint (previously none could use one; dockerhub is the first)"
     }
   ],
-  "next_action": "commit (foundation commits separate from connector-authoring commits), push fm/cli-dockerhub-full-parity-r1, open PR referencing parent #3905 and children #3906-#3914, disclose both foundations explicitly in the PR body"
+  "next_action": "captain must supply a Docker Hub PAT/account with private-repository create and required organization/SCIM scopes before the mandatory image-push/readback E2E chain can resume; all completed code/evidence checkpoints are committed and pushed separately"
 }
