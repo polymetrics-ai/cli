@@ -5,7 +5,7 @@
 - [x] Live artifact URL, retrieval timestamp, byte count, digest, operation count, and ledger
   comparison recorded before RED.
 - [x] Prior-worker five-file handoff inspected without copying or deleting the old worktree.
-- [ ] RED capture committed before production declaration or foundation changes.
+- [x] RED capture committed before production declaration or foundation changes.
 - [ ] Closed root-array direct-write foundation is green with object-body regressions.
 - [ ] Declared bearer redirect foundation is green without permitting arbitrary credential forwarding.
 - [ ] Closed operation-level base64 image upload foundation is green with pre-network bounds,
@@ -20,4 +20,7 @@
 
 ## Captured results
 
-Pending implementation.
+The 2026-08-08 RED checkpoint recorded the failing 102/1,740/55/42 inventory totals, all
+twenty-three unknown Clips command paths, root `json_array` rejection, bearer stripping on the
+declared binary redirect fixture, and missing direct-write base64 transformation. The verbatim
+output is retained in `TDD-LEDGER.md`; its fixtures contain only synthetic values.

@@ -1289,6 +1289,26 @@ func TestCoerceFlagValueAcceptsJSONObject(t *testing.T) {
 	}
 }
 
+// TestCoerceFlagValueAcceptsJSONArray captures the closed root-array input
+// needed by Zoom Clips collaborator sharing. It remains deliberately narrower
+// than a generic JSON flag: one complete array is accepted, while objects,
+// scalars, and trailing JSON stay invalid.
+func TestCoerceFlagValueAcceptsJSONArray(t *testing.T) {
+	value, err := coerceFlagValue(connectors.CommandSurfaceFlag{Name: "collaborators", Type: "json_array"}, []string{`[{"email":"fixture@example.test","role":"VIEWER"}]`})
+	if err != nil {
+		t.Fatalf("coerce declared json_array: %v", err)
+	}
+	items, ok := value.([]any)
+	if !ok || len(items) != 1 {
+		t.Fatalf("declared json_array value = %#v, want one typed array item", value)
+	}
+	for _, raw := range []string{`{}`, `"scalar"`, `[{"email":"one"}] [{"email":"two"}]`} {
+		if _, err := coerceFlagValue(connectors.CommandSurfaceFlag{Name: "collaborators", Type: "json_array"}, []string{raw}); err == nil {
+			t.Fatal("json_array accepted a value that is not exactly one array")
+		}
+	}
+}
+
 func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
 	record, err := recordOverrides(connectors.CommandSurfaceCommand{
 		Path:         "diagnoses create",
