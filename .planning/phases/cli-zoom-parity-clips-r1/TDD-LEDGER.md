@@ -123,6 +123,18 @@ The root-array lifecycle test proves a declared `json_array` reaches one POST on
 plan/preview/typed confirmation, stores the real body separately from the legacy record shape,
 and exposes only a redacted plan sample. Object-body lifecycle regression remains green.
 
+### Connectorgen root-array declaration gate — green 2026-08-08
+
+The validator now checks a root body mapping against the declared CLI flag type: a
+`json_object` requires a closed object schema and a `json_array` requires a closed
+array schema. This preserves the existing no-generic-body boundary while admitting
+the documented Clips collaborator array operation.
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run 'TestValidate_CLISurfaceImplementedDirectWrite(NamedRootJSONArrayPasses|RejectsRootArrayBodySchema|.*RootBody)'
+ok  	polymetrics.ai/cmd/connectorgen	0.765s
+```
+
 Remaining foundations: declared bearer redirect; operation-level bounded base64 path upload.
 
 ### Declared bearer binary redirect — green 2026-08-08
