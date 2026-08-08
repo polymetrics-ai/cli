@@ -670,7 +670,20 @@ func securitySection(manifest Manifest) GuideSection {
 	if manifest.Risk.Approval != "" {
 		lines = append(lines, "approval: "+manifest.Risk.Approval)
 	}
-	lines = append(lines, "Never pass secret values in chat, shell arguments, logs, docs, or JSON output.")
+	if manifest.Metadata.Name == "dockerhub" {
+		// Docker Hub's documented auth exchanges deliberately retain compatible
+		// credential flags. Their command surface also offers env/stdin input,
+		// so the generated connector guide must describe the actual exposure
+		// boundary rather than falsely claiming argv input is impossible. The
+		// provider response is likewise runtime output, not a plan sample, and
+		// must remain intact for the caller.
+		lines = append(lines,
+			"For auth credential fields, prefer --from-env or --value-stdin over command-line flags; argv can be observed by other local processes and shell history.",
+			"The approved runtime returns Docker Hub response bodies unchanged, including a newly-created token; handle runtime output as secret material.",
+		)
+	} else {
+		lines = append(lines, "Never pass secret values in chat, shell arguments, logs, docs, or JSON output.")
+	}
 	return GuideSection{Title: "Security", Lines: lines}
 }
 

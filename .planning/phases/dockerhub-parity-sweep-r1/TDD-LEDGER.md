@@ -976,3 +976,105 @@ FAIL	polymetrics.ai/internal/connectors/bundleregistry
 
 Command: `go test -timeout 20m ./internal/connectors/bundleregistry -run
 TestDockerHubGuideExplainsSecretInputAndUnredactedTokenResponses -count=1`.
+
+### GREEN — connector-scoped guidance states the real boundary
+
+The guide renderer has a Docker Hub-only security branch, following the
+existing connector-specific guide pattern. It tells callers to use
+`--from-env` or `--value-stdin` rather than credential argv flags and says
+that runtime provider responses remain unchanged. Docker Hub's authored
+`docs.md`, `writes.json`, and `cli_surface.json` now make the same distinction:
+plan samples redact declared secret *input* fields, while returned provider
+tokens are output that operators must treat as secret material. No other
+connector guide changes as a result.
+
+```text
+go test -timeout 20m ./internal/connectors/bundleregistry -run TestDockerHubGuideExplainsSecretInputAndUnredactedTokenResponses -count=1
+ok  	polymetrics.ai/internal/connectors/bundleregistry
+```
+
+### RED/GREEN — restored pagination slice lint correction
+
+The captain-rebase checkpoint also carried the Docker Hub operation-pagination
+support. The first non-concurrent `make lint` run found a branch-local
+staticcheck failure in its shared helper:
+
+```text
+internal/connectors/engine/direct_read_paginate.go:708:12: ST1023: should omit type any from declaration; it will be inferred from the right-hand side (staticcheck)
+	var value any = decoded
+	          ^
+```
+
+The declaration is now `value := decoded`, preserving its boundary type while
+letting Go infer it. The green lint rerun reported zero issues:
+
+```text
+make lint
+0 issues.
+```
+
+### Correction 5 — Docker Hub admission is connector-specific, not generic required-key enforcement
+
+The historical GREEN narrative under “add-time admission for incomplete
+credentials” says that `engine.Schema.ValidateConfiguration` began enforcing
+JSON Schema `required` keys. That is **not** the delivered behavior and must
+not be read as one. Required-only schema keys deliberately remain outside the
+shared flat-string configuration validator; the current engine tests pin that
+contract.
+
+The delivered add-time safeguard is narrowly scoped in
+`App.validateCredentialConfig`: when `connector == "dockerhub"`, a missing or
+blank `namespace` rejects `credentials add` before the credential can be
+saved. It does not substitute `docker_username`, and it does not change
+admission for other connectors. `TestAddCredentialDockerhubNamespaceAdmissionIsConnectorSpecific`
+proves rejection before persistence, successful namespace-only Docker Hub
+admission, and unchanged non-Docker-Hub admission; the Docker Hub definition
+and engine tests separately prove that required-only schema validation remains
+non-global.
+
+```text
+go test -timeout 20m ./internal/app ./internal/connectors/engine ./internal/connectors/defs/dockerhub -count=1
+ok   polymetrics.ai/internal/app
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/defs/dockerhub
+```
+
+### GREEN — rebased final local validation
+
+The cancelled pre-rebase pipeline result is not carried forward. After the
+checkpoint restore and verified merge base, the repaired head passed its focused
+Docker Hub/app/engine/CLI regressions, package vet/build, Docker Hub validation,
+surface synchronization, implemented-command preflight, docs and website checks.
+The freshly built binary resolved every declared implemented path in nine short
+batches, avoiding the terminal wrapper's detached-long-command behavior:
+
+```text
+Docker Hub help batch 1-6/54: 6 routes reachable
+Docker Hub help batch 7-12/54: 6 routes reachable
+Docker Hub help batch 13-18/54: 6 routes reachable
+Docker Hub help batch 19-24/54: 6 routes reachable
+Docker Hub help batch 25-30/54: 6 routes reachable
+Docker Hub help batch 31-36/54: 6 routes reachable
+Docker Hub help batch 37-42/54: 6 routes reachable
+Docker Hub help batch 43-48/54: 6 routes reachable
+Docker Hub help batch 49-54/54: 6 routes reachable; help topic and bare namespace passed
+```
+
+Key gate evidence:
+
+```text
+go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+go test -timeout 20m ./cmd/connectorgen -run TestDockerhubAPISurfaceOperationLedger -count=1
+ok   polymetrics.ai/cmd/connectorgen
+
+go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1
+ok   polymetrics.ai/internal/connectors/commandrunner
+
+make lint
+0 issues.
+```

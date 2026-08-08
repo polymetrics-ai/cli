@@ -188,6 +188,7 @@
             "type": "array",
             "items": { "type": "string" }
           },
+          "accepts_secret_input": { "type": "boolean" },
           "risk": { "type": "string" },
           "approval": { "type": "string" },
           "notes": { "type": "string" }

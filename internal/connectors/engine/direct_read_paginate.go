@@ -721,7 +721,7 @@ func directReadItemsAt(decoded any, key string) ([]any, bool) {
 		items, ok := decoded.([]any)
 		return items, ok
 	}
-	var value any = decoded
+	value := decoded
 	for _, segment := range strings.Split(key, ".") {
 		obj, ok := value.(map[string]any)
 		if !ok {

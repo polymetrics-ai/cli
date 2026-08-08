@@ -36913,7 +36913,7 @@
         "kind": "create",
         "method": "POST",
         "path": "/access-tokens",
-        "risk": "high: creates a live Docker Hub credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval"
+        "risk": "high: creates a live Docker Hub credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval"
       },
       {
         "name": "update_access_token",
@@ -36935,7 +36935,7 @@
         "kind": "create",
         "method": "POST",
         "path": "/orgs/{{ record.name }}/access-tokens",
-        "risk": "high: creates a live Docker Hub organization credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval"
+        "risk": "high: creates a live Docker Hub organization credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval"
       },
       {
         "name": "update_org_access_token",

@@ -45,15 +45,33 @@ under binding captain decisions and are recorded in TDD-LEDGER.md under
 | `AGENTS.md` HEAD-capability addition | Fixed — reverted; the capability stays documented in the connector's own `docs.md`. |
 | SCIM token gated behind `docker_pat` | Fixed — second `when: "{{ secrets.scim_bearer_token }}"` auth spec plus a SCIM-only `dualAuth` that fails closed on non-SCIM paths. |
 | SCIM prefix routing fails open under a proxy `base_url` | Fixed — prefixes derived from the resolved base path, both the base-relative write form and the unstripped declared direct-read form. |
-| `namespace` required with no add-time enforcement | Fixed — declarative required-key admission at the credential boundary; no silent fallback to `docker_username`. |
+| `namespace` required with no add-time enforcement | Fixed — connector-specific Docker Hub add-time admission rejects a blank namespace before persistence; no silent fallback to `docker_username`, and required-only schema handling remains non-global. |
 | Status-only HEAD check cannot report absence | Fixed — 404 returns `{"status_code": 404}` for HEAD only; 401/403/429/5xx and every non-HEAD direct read unchanged. |
-| Auth commands persist plaintext credentials | Fixed — the three exchanges are withdrawn from the executable surface and marked blocked on a named dependency. |
+| Auth commands persist plaintext credentials | Superseded by Captain override — the three exchanges stay implemented with generated plaintext-retention warnings, redacted plan samples, `--from-env`/`--value-stdin`, and direct-write response return; see the later rebase correction in TDD-LEDGER.md. |
 | TDD ledger claims a dropped `connsdk` ALPN fix | Fixed — historical entries preserved; a correction states the fix was dropped in the rebase and is unreachable against current `main`. |
 | Stale generated connector catalog | Fixed — regenerated to a temp directory and byte-compared; only Docker Hub records updated, the stale `warehouse` description deliberately untouched, no generator or validator broadened. |
 
 ## Verdict (corrective round)
 
-PASS with corrections applied. The PR remains explicitly **not certified**: live
-provider acceptance is account-tier and permission dependent, and the corrected
-bucket split is 11 PROVEN / 0 PROVIDER-PLAN-LIMIT / 31 PROVIDER-PERMISSION /
-9 ENTERPRISE-ONLY over 51 implemented operations, plus 3 NOT-IMPLEMENTED.
+PASS with corrections applied. The PR remains explicitly **not certified**:
+live provider acceptance is account-tier and permission dependent. The captain's
+later auth-command override restores all 54 operations, yielding 14 PROVEN / 0
+PROVIDER-PLAN-LIMIT / 31 PROVIDER-PERMISSION / 9 ENTERPRISE-ONLY over 54
+implemented operations.
+
+## Rebased final-head review (2026-08-09)
+
+Reviewed the restored repair relative to fetched `origin/main`
+`d453fbe256eb22d90ea77dbed634b245bd6e795b`, including the direct-write secret
+input contract, raw provider response return path, Docker Hub-only guide rendering,
+operation pagination, and admission/SCIM/HEAD repairs. The review also corrected a
+historical ledger statement that had claimed generic JSON Schema `required` admission:
+the delivered safeguard is intentionally Docker Hub-specific at credential add time,
+while required-only schema validation remains non-global.
+
+No new source, security, or evidence-integrity findings. The secret-input path
+redacts declared inputs in the persisted plan sample without stripping the provider
+response, the warning is generated in command help and emitted before plan creation,
+and env/stdin input is limited to the declared redacted fields. All 54 command routes
+were rechecked against the rebuilt binary in bounded batches. Verdict: **PASS** for
+this rebased local review; final certification remains explicitly out of scope.

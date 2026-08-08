@@ -162,10 +162,7 @@
         },
         "additionalProperties": false
       },
-      "risk": "high: creates a live Docker Hub credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval",
-      "redact_fields": [
-        "token"
-      ]
+      "risk": "high: creates a live Docker Hub credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval"
     },
     {
       "name": "update_access_token",
@@ -196,9 +193,6 @@
       "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
       "path_fields": [
         "uuid"
-      ],
-      "redact_fields": [
-        "token"
       ]
     },
     {
@@ -271,12 +265,9 @@
         },
         "additionalProperties": false
       },
-      "risk": "high: creates a live Docker Hub organization credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval",
+      "risk": "high: creates a live Docker Hub organization credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval",
       "path_fields": [
         "name"
-      ],
-      "redact_fields": [
-        "token"
       ]
     },
     {
@@ -325,9 +316,6 @@
       "path_fields": [
         "org_name",
         "access_token_id"
-      ],
-      "redact_fields": [
-        "token"
       ]
     },
     {

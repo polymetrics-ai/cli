@@ -235,6 +235,12 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		return WriteCommand{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write command output_policy does not match declared operation"}
 	}
 	record := connectors.Record(body)
+	redactedRecord := cloneRecord(record)
+	redactFields := []string(nil)
+	if cmd.AcceptsSecretInput {
+		redactedRecord = redactCommandRecord(record, cmd.RedactFields)
+		redactFields = append([]string(nil), cmd.RedactFields...)
+	}
 	return WriteCommand{
 		Connector:             connector.Name(),
 		Command:               command,
@@ -247,8 +253,8 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		Approval:              firstNonEmpty(cmd.Approval, metadata.Approval, "direct writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: metadata.ConfirmationChallenge,
 		Record:                cloneRecord(record),
-		RedactedRecord:        redactCommandRecord(record, cmd.RedactFields),
-		RedactFields:          append([]string(nil), cmd.RedactFields...),
+		RedactedRecord:        redactedRecord,
+		RedactFields:          redactFields,
 		PathParams:            cloneStringMap(pathParams),
 		Query:                 cloneStringMap(query),
 		Batchable:             metadata.Batchable,
@@ -1856,7 +1862,9 @@ func cloneRecordValue(value any) any {
 		}
 		return out
 	case []string:
-		return append([]string(nil), typed...)
+		out := make([]string, len(typed))
+		copy(out, typed)
+		return out
 	default:
 		return value
 	}

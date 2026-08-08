@@ -1037,6 +1037,8 @@ func writeConnectorSecretInputFlags(b *strings.Builder, cmd connectors.CommandSu
 	if !commandRetainsSensitiveInputs(cmd) {
 		return
 	}
+	b.WriteString("\nSECURITY\n")
+	b.WriteString("  " + sensitiveCommandInputWarning + "\n")
 	b.WriteString("\nSECRET INPUT FLAGS\n")
 	b.WriteString("  --from-env (field=ENV_VAR) reads a redacted command field from an environment variable.\n")
 	b.WriteString("  --value-stdin (field) reads one redacted command field from standard input.\n")
@@ -1230,7 +1232,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		return err
 	}
 	if commandRetainsSensitiveInputs(cmd) {
-		_, _ = fmt.Fprintln(stderr, "Warning: supplied credential values are retained in plaintext local project state for this command plan.")
+		_, _ = fmt.Fprintln(stderr, sensitiveCommandInputWarning)
 	}
 
 	if err := runConnectorWriteCommand(ctx, a, connectorName, credential, config, path, commandFlags, flags, stdout, jsonOut); err != commandrunner.ErrNotWriteCommand {
@@ -1430,6 +1432,8 @@ func connectorCommandSurfaceCommand(connector connectors.Connector, path []strin
 func commandRetainsSensitiveInputs(cmd connectors.CommandSurfaceCommand) bool {
 	return cmd.Intent == "direct_write" && cmd.AcceptsSecretInput && len(cmd.RedactFields) > 0
 }
+
+const sensitiveCommandInputWarning = "Warning: supplied credential values are written to plaintext local project state and retained for this command plan."
 
 func applySensitiveCommandInputs(commandFlags map[string][]string, flags parsedFlags, cmd connectors.CommandSurfaceCommand) (map[string][]string, error) {
 	if len(flags.values["from-env"]) == 0 && len(flags.values["value-stdin"]) == 0 {

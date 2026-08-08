@@ -118,7 +118,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_access_token",
-      "risk": "high: creates a live Docker Hub credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval",
+      "risk": "high: creates a live Docker Hub credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval",
       "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
       "flags": [
         {
@@ -153,10 +153,7 @@
       "examples": [
         "pm dockerhub access-tokens create --token-label \"ci token\" --scopes \"repo:read\" --json"
       ],
-      "notes": "The provider returns the raw token value once, in the create response only. This command redacts the `token` field from its own output (never printed); retrieve it from Docker Hub's own token-creation UI/flow if the value itself is needed.",
-      "redact_fields": [
-        "token"
-      ]
+      "notes": "The provider can return the raw token value once in the create response. The approved runtime returns that response unchanged; handle its output as secret material."
     },
     {
       "path": "access-tokens delete",
@@ -272,10 +269,7 @@
       "examples": [
         "pm dockerhub access-tokens update --uuid \"<uuid>\" --is-active false --json"
       ],
-      "notes": "The provider echoes the token's metadata (including its raw value) back on update; this command redacts the `token` field from its own output.",
-      "redact_fields": [
-        "token"
-      ]
+      "notes": "The provider can echo token metadata, including a raw value, back on update. The approved runtime returns that response unchanged; handle its output as secret material."
     },
     {
       "path": "audit-logs actions list",
@@ -369,7 +363,7 @@
       "examples": [
         "pm dockerhub auth 2fa-login create --from-env login_2fa_token=DOCKERHUB_LOGIN_2FA_TOKEN --value-stdin code --json"
       ],
-      "notes": "Credential exchange inputs are retained in plaintext local project state for the command plan; use --from-env or --value-stdin for redacted fields. The provider response is returned unchanged by the approved runtime output."
+      "notes": "The provider response is returned unchanged by the approved runtime output."
     },
     {
       "path": "auth login create",
@@ -407,7 +401,7 @@
       "examples": [
         "pm dockerhub auth login create --username \"<username>\" --value-stdin password --json"
       ],
-      "notes": "Credential exchange inputs are retained in plaintext local project state for the command plan; use --from-env or --value-stdin for redacted fields. The provider response is returned unchanged by the approved runtime output."
+      "notes": "The provider response is returned unchanged by the approved runtime output."
     },
     {
       "path": "auth token create",
@@ -443,9 +437,9 @@
         { "method": "POST", "path": "/v2/auth/token" }
       ],
       "examples": [
-        "pm dockerhub auth token create --identifier \"<identifier>\" --from-env secret=DOCKERHUB_SECRET --json"
+        "pm dockerhub auth token create --identifier \"<identifier>\" --from-env secret=PM_DH_SECRET --json"
       ],
-      "notes": "Credential exchange inputs are retained in plaintext local project state for the command plan; use --from-env or --value-stdin for redacted fields. The provider response is returned unchanged by the approved runtime output."
+      "notes": "The provider response is returned unchanged by the approved runtime output."
     },
     {
       "path": "groups create",
@@ -945,7 +939,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_org_access_token",
-      "risk": "high: creates a live Docker Hub organization credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval",
+      "risk": "high: creates a live Docker Hub organization credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval",
       "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
       "flags": [
         {
@@ -986,10 +980,7 @@
       "examples": [
         "pm dockerhub org access-tokens create --name \"myorg\" --label \"ci token\" --json"
       ],
-      "notes": "`resources` (the token's repo/org scope grants) is a required-for-meaningful-use array of objects with no typed scalar leaf, so it is not flag-mapped here; supply it via a reverse-ETL source record instead. The provider returns the raw token value once, in the create response only; this command redacts the `token` field from its own output.",
-      "redact_fields": [
-        "token"
-      ]
+      "notes": "`resources` (the token's repo/org scope grants) is a required-for-meaningful-use array of objects with no typed scalar leaf, so it is not flag-mapped here; supply it via a reverse-ETL source record instead. The provider can return the raw token value once in the create response; the approved runtime returns that response unchanged, so handle its output as secret material."
     },
     {
       "path": "org access-tokens delete",

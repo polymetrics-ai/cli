@@ -7,11 +7,13 @@ repositories, and (with a second, separately-configured SCIM token) SCIM-provisi
 
 Readable streams: `repositories`, `tags`, `repository_detail`, `tag_detail`.
 
-Direct reads, status-only existence checks, and reverse-ETL writes cover 47 of the 50 remaining
-documented Docker Hub operations: repositories, personal/organization access tokens, audit logs,
-groups (teams), invites, organization settings/members, and SCIM. All 54 documented Docker Hub API
-operations are modelled; 51 are implemented and 3 (the credential-for-token authentication
-exchanges) are declared blocked on a named dependency — see "Write actions & risks".
+Direct reads, status-only existence checks, reverse-ETL writes, and approved direct credential
+exchanges cover the 50 remaining documented Docker Hub operations: repositories,
+personal/organization access tokens, audit logs, groups (teams), invites, organization
+settings/members, SCIM, and authentication. Together with the four stream-backed reads, all 54
+documented Docker Hub API operations are modelled and implemented. Implementation is not a claim
+that every operation is certified against every Docker account tier; see the phase verification
+record for live-account coverage and provider-gated operations.
 
 Service API documentation: https://docs.docker.com/docker-hub/api/latest/.
 
@@ -29,9 +31,10 @@ Connection fields:
   underscores, and hyphens only.
 - `docker_pat` (optional, secret string); a Docker Hub Personal Access Token for `docker_username`.
   Omitted, the connector stays exactly as before: read-only, unauthenticated, public repositories
-  and tags only. When set, it authenticates every account-scoped, organization, group/team, invite,
-  access-token, audit-log, repository-write, and authentication command below. Never printed,
-  logged, or echoed by any command.
+  and tags only. When set, it authenticates account-scoped, organization, group/team, invite,
+  access-token, audit-log, and repository-write commands. The three direct authentication
+  exchanges use their supplied credential fields instead and deliberately carry no inherited
+  connector authorization.
 - `scim_bearer_token` (optional, secret string); a Docker Hub Enterprise SCIM API bearer token,
   distinct from `docker_pat`. Docker Hub's OpenAPI document declares SCIM (`/v2/scim/2.0/**`)
   under a separate `bearerSCIMAuth` security scheme from the rest of the API's `bearerAuth`; the
@@ -123,24 +126,25 @@ removal) additionally require typed destructive confirmation.
 - Repositories: `repository create`, `repository immutable-tags update`,
   `repository immutable-tags verify` (direct read), `repository group assign`.
 - Personal access tokens: `access-tokens list`/`get` (direct read), `access-tokens create` (the
-  provider returns the raw token value once, in the create response only; this command redacts the
-  `token` field from its own output), `access-tokens update`, `access-tokens delete` (destructive).
+  provider may return the raw token once in the create response; runtime output remains unchanged
+  and must be handled as secret material), `access-tokens update`, `access-tokens delete`
+  (destructive).
 - Organization access tokens: `org access-tokens list`/`get` (direct read), `org access-tokens
-  create` (redacted, same as personal tokens; `resources`, the token's repo/org scope grants, is a
-  nested array of objects with no typed scalar leaf and is not flag-mapped — supply it via a
-  reverse-ETL source record), `org access-tokens update`, `org access-tokens delete` (destructive).
+  create` (runtime output remains unchanged, including a returned raw token; `resources`, the
+  token's repo/org scope grants, is a nested array of objects with no typed scalar leaf and is not
+  flag-mapped — supply it via a reverse-ETL source record), `org access-tokens update`, `org
+  access-tokens delete` (destructive).
 - Audit logs: `audit-logs list`, `audit-logs actions list` (both direct reads).
-- Authentication (declared, NOT implemented): `auth token create`, `auth login create`, and
-  `auth 2fa-login create` remain in the documented 54-operation surface as `availability: planned`
-  and are not executable. Each one's only input is a live credential and only output is a live
-  token, and the reverse-ETL path they would run on maps command flags into a plan record that is
-  persisted to the project state file in plaintext and echoed in plan output; an action's
-  `redact_fields` names a RESPONSE field and does not redact the request credential, so nothing
-  here would make a password, PAT, or TOTP code safe on the command line or on disk. They are
-  blocked on a named dependency: requires secure secret input (stdin/env/vault-reference),
-  encrypted or ephemeral plan storage, and a secure sink for the returned token. The session-login
-  exchange itself is still performed internally, with no plan record, by the `dockerhub` AuthHook
-  whenever `docker_pat` is configured.
+- Authentication: `auth token create`, `auth login create`, and `auth 2fa-login create` are
+  implemented approved direct writes. Their help and execution paths warn that supplied credential
+  values are retained in plaintext local project state for the command plan. Each command accepts
+  its credential field normally, or via `--from-env` and `--value-stdin`; prefer the latter two
+  because argv can be observed by other local processes and shell history. The operator-visible
+  plan sample redacts `secret`, `password`, `login_2fa_token`, and `code` as appropriate, while
+  the execution record is retained after the warning so the approved request can run. The provider
+  response, including a resulting token, is returned unchanged and must be handled as secret
+  material. The internal `dockerhub` AuthHook continues to perform its separate session-login
+  exchange when `docker_pat` is configured.
 - Groups (teams): `groups list`/`get` (direct read), `groups create`, `groups replace` (PUT, full
   update), `groups update` (PATCH, partial update), `groups delete` (destructive), `groups members
   list` (direct read), `groups members add`, `groups members remove` (destructive).
@@ -155,8 +159,7 @@ removal) additionally require typed destructive confirmation.
   create`, `scim-users update` (PUT full replace; `enabled` is required by this command even though
   the provider defaults a missing value to `false`/deactivated, to prevent accidental
   deactivation-by-omission). The provider documents SCIM's media type as `application/scim+json`
-  (RFC 7644); this bundle's write executor sends `application/json`, the widely-accepted compatible
-  variant — not independently live-verified against Docker Hub's own leniency.
+  (RFC 7644); the declared write sends that media type.
 
 ## Known limits
 
@@ -167,9 +170,10 @@ removal) additionally require typed destructive confirmation.
   pulls per window by Docker username; paid Registry profiles deliberately match no fixed budget.
   Docker's separate Hub API abuse limiter publishes no numeric budget, so no synthetic limiter is
   declared for it. A bare 429 still follows the shared requester's provider `Retry-After` backoff.
-- API coverage: all 54 documented Docker Hub operations are modelled; 51 are implemented (4
-  stream-backed, 47 direct-read/status-check/write) and 3 are blocked — the credential-for-token
-  authentication exchanges, on the named secure-secret-input/secure-token-sink dependency above.
+- API coverage: all 54 documented Docker Hub operations are modelled and implemented (4
+  stream-backed, 47 direct-read/status-check/reverse-write, and 3 approved direct credential
+  exchanges). This is not certification: provider-plan, provider-permission, and Enterprise-only
+  operations remain explicitly recorded in the phase verification evidence.
 - Two independent optional credentials gate different command groups: `docker_pat` (most commands)
   and `scim_bearer_token` (SCIM only) — Docker Hub's own OpenAPI document declares these under
   separate security schemes (`bearerAuth` vs `bearerSCIMAuth`) and this bundle never substitutes

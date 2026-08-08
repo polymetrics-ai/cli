@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
@@ -162,6 +163,77 @@ func TestDynamicConnectorDeepHelpPathsResolveOrReportUsage(t *testing.T) {
 			t.Fatalf("valid group help missing group manual:\n%s", stdout.String())
 		}
 	})
+}
+
+func TestDockerHubAuthHelpGeneratesCredentialRetentionWarning(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"dockerhub", "auth", "login", "create", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(dockerhub auth login create --help) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{
+		"Warning: supplied credential values are written to plaintext local project state and retained for this command plan.",
+		"--from-env (field=ENV_VAR)",
+		"--value-stdin (field)",
+	} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("Docker Hub auth help missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestDockerHubAuthLoginAcceptsEnvironmentCredentialInputAndRedactsPlanOutput(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "dockerhub-auth-local",
+		"--connector", "dockerhub",
+		"--config", "namespace=fixture",
+		"--config", "base_url=https://example.test",
+		"--root", root,
+		"--json",
+	})
+	t.Setenv("PM_TEST_DOCKERHUB_AUTH_PASSWORD", "fixture-password")
+
+	stdout, stderr := runCLI(t, []string{
+		"dockerhub", "auth", "login", "create",
+		"--credential", "dockerhub-auth-local",
+		"--username", "fixture-user",
+		"--from-env", "password=PM_TEST_DOCKERHUB_AUTH_PASSWORD",
+		"--root", root,
+		"--json",
+	})
+	if !strings.Contains(stderr, "Warning: supplied credential values are written to plaintext local project state and retained for this command plan.") {
+		t.Fatalf("auth command warning = %q, want plaintext-retention warning", stderr)
+	}
+	if strings.Contains(stdout+stderr, "fixture-password") {
+		t.Fatalf("auth command output leaked supplied credential: stdout=%s stderr=%s", stdout, stderr)
+	}
+	var envelope struct {
+		Plan struct {
+			ID     string           `json:"id"`
+			Sample []map[string]any `json:"sample"`
+		} `json:"plan"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &envelope); err != nil {
+		t.Fatalf("decode plan JSON: %v\n%s", err, stdout)
+	}
+	if envelope.Plan.ID == "" || len(envelope.Plan.Sample) != 1 || envelope.Plan.Sample[0]["password"] != "redacted" {
+		t.Fatalf("safe plan output = %#v, want a redacted password sample", envelope.Plan)
+	}
+
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	stored, err := a.GetReversePlan(envelope.Plan.ID)
+	if err != nil {
+		t.Fatalf("GetReversePlan: %v", err)
+	}
+	if stored.ConnectorCommandRecord["password"] != "fixture-password" {
+		t.Fatalf("stored execution record = %#v, want retained value after point-of-use warning", stored.ConnectorCommandRecord)
+	}
 }
 
 func TestGongCallsListHelpDocumentsDateFlagsAndLimitOutputCap(t *testing.T) {

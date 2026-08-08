@@ -44,7 +44,10 @@ authentication path at all.
 1. Zero `unsafe_or_disallowed`/`disallowed` rows. Every not-yet-implementable operation carries a
    real `operation.model` plus a `notes: "named_dependency=..."` marker.
 2. The 3 auth-exchange endpoints (`POST /v2/auth/token`, `/v2/users/2fa-login`, `/v2/users/login`):
-   implement as real commands with redacted token output, not internal-only blocks.
+   implement as real commands, not internal-only blocks. **Superseded final captain ruling:** their
+   credential *inputs* are redacted in plan samples and JSON, with generated plaintext-retention
+   warnings plus env/stdin input; provider response bodies (including returned tokens) remain
+   unchanged runtime output.
 3. The 3 HEAD existence-check endpoints: a status-only response is still a real action (same logic
    as a write action that returns 204 No Content) — implement them, asserting on status code, not
    payload.
@@ -120,10 +123,12 @@ Settings, SCIM). Single PR scoped to the parent, closing the parent and all 9 ch
   built `pm` binary for all 54 `--help` invocations, plus a genuine live loopback HTTP round trip
   proving the new HEAD status-only path (`repository check` against a local test server, HEAD
   request observed server-side, `{"status_code": 200}` returned end-to-end).
-- No credential or token-derived value is ever emitted; access-token/SCIM-user create/update
-  commands declare `redact_fields` on both the write action and the CLI command.
-- Regenerating docs rewrites ~1,027 files of pre-existing `main` drift each pass — reverted every
-  non-dockerhub path every time.
+- No real credential or token-derived value is emitted in test artifacts. The runtime deliberately
+  leaves provider response bodies unchanged; Docker Hub auth commands redact only credential input
+  fields in operator-visible plan samples and warn before retaining an execution record locally.
+- Scoped generation is done into a temporary directory. The Docker Hub MANUAL/SKILL and its one
+  catalog object are copied from that generation; the unrelated stale warehouse catalog object is
+  left untouched.
 - Website catalog diffs inspected by object (Python dict comparison), not by line.
 
 ## Live E2E gap closure — reverse-ETL path resolution (2026-08-08)
@@ -289,9 +294,10 @@ No page, `per_page`, or `limit` flags are authored; stream pagination remains de
 **Green result.** The focused real-engine regression test passed after the template repair; it
 also proved an omitted namespace errors locally before HTTP. Docker Hub validation, surface-sync,
 the fleet-wide implemented-command preflight, and connector boundary gate passed. `pm docs
-generate --dir docs/cli` was run from the rebuilt binary; 1,027 unrelated generated-documentation
-changes were restored, while the Docker Hub manual/skill and two parsed-object-verified Docker Hub
-website catalog entries remain. No golden transcript changed.
+generate` was run from the rebuilt binary into a disposable directory. The Docker Hub
+manual/skill byte-match that output; its one parsed catalog object and the two Docker Hub website
+catalog objects are regenerated, while the unrelated stale warehouse catalog object is left
+untouched. No golden transcript changed.
 
 ## Required skills used
 

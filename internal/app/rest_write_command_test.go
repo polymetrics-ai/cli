@@ -288,6 +288,101 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	}
 }
 
+func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *testing.T) {
+	ctx := context.Background()
+	const suppliedPassword = "fixture-password"
+	const returnedToken = "fixture-session-token"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPost || r.URL.Path != "/v2/users/login" {
+			t.Fatalf("request = %s %s, want POST /v2/users/login", r.Method, r.URL.Path)
+		}
+		if got := r.Header.Get("Authorization"); got != "" {
+			t.Fatalf("auth login request Authorization = %q, want no inherited connector auth", got)
+		}
+		var body map[string]string
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode request body: %v", err)
+		}
+		if body["username"] != "fixture-user" || body["password"] != suppliedPassword {
+			t.Fatalf("request body = %#v, want supplied login fields", body)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"token":"` + returnedToken + `"}`))
+	}))
+	t.Cleanup(server.Close)
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-auth-local",
+		Connector: "dockerhub",
+		Config:    map[string]string{"namespace": "fixture", "base_url": server.URL},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  "dockerhub",
+		Credential: "dockerhub-auth-local",
+		Path:       []string{"auth", "login", "create"},
+		Flags: map[string][]string{
+			"username": {"fixture-user"},
+			"password": {suppliedPassword},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+		t.Fatalf("plan/preview = %#v/%#v, want preview-bound approval", plan, preview)
+	}
+	if calls != 0 {
+		t.Fatalf("planning reached the network; calls = %d", calls)
+	}
+	if got := plan.ConnectorCommandRecord["password"]; got != suppliedPassword {
+		t.Fatalf("execution record password = %#v, want retained supplied value", got)
+	}
+	if len(plan.Sample) != 1 || plan.Sample[0]["password"] != "redacted" {
+		t.Fatalf("plan sample = %#v, want redacted password", plan.Sample)
+	}
+	if len(plan.RedactFields) != 1 || plan.RedactFields[0] != "password" {
+		t.Fatalf("plan redact fields = %#v, want password", plan.RedactFields)
+	}
+
+	reopened, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("reopen: %v", err)
+	}
+	stored, err := reopened.GetReversePlan(plan.ID)
+	if err != nil {
+		t.Fatalf("GetReversePlan: %v", err)
+	}
+	if stored.ConnectorCommandRecord["password"] != suppliedPassword || len(stored.Sample) != 1 || stored.Sample[0]["password"] != "redacted" {
+		t.Fatalf("stored plan = %#v, want retained execution record and redacted sample", stored)
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL: %v", err)
+	}
+	if calls != 1 || run.OperationDirectWrite == nil {
+		t.Fatalf("run/calls = %#v/%d, want one direct write", run, calls)
+	}
+	body, ok := run.OperationDirectWrite.Body.(map[string]any)
+	if !ok || body["token"] != returnedToken {
+		t.Fatalf("operation response = %#v, want unredacted provider token", run.OperationDirectWrite.Body)
+	}
+}
+
 func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.T) {
 	ctx := context.Background()
 	for _, tt := range []struct {

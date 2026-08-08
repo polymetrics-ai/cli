@@ -25,9 +25,9 @@
     "ledger_total": 54,
     "delta_vs_ledger": 0,
     "ledger_verdict": "reconciles_exactly",
-    "final_covered": 51,
-    "final_blocked": 3,
-    "final_blocked_reason": "Captain Decision [key=auth-secrets]: the 3 credential-for-token authentication exchanges (POST /v2/auth/token, /v2/users/login, /v2/users/2fa-login) are withdrawn from the executable surface and carry named_dependency=requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token."
+    "final_covered": 54,
+    "final_blocked": 0,
+    "final_auth_command_disposition": "Captain override: POST /v2/auth/token, /v2/users/login, and /v2/users/2fa-login remain implemented. Each has generated plaintext-retention warning text, credential-field plan redaction, stdin/environment input, and a returned provider response."
   },
   "hazards": {
     "blocks_connectorgen_batch": false,
@@ -141,5 +141,22 @@
       "unblocks": "declared typed endpoints whose legal opaque one-segment values include colon, plus, or at-sign; local connector/credential identifiers remain strict"
     }
   ],
+  "rebase_current_main_20260809": {
+    "interrupted_pipeline_head": "200f3bbf647ea4c613bad6bdd2d65d970f84f1d9",
+    "local_head_before_checkpoint_restore": "d218bbb5d2b04bf2bbc2c4391664792bf2be36a8",
+    "preserved_checkpoint_original": "655b34519",
+    "restored_pre_rebase_head": "e4900724d0d65387047554f119a0a30958d035b2",
+    "fetched_origin_main": "d453fbe256eb22d90ea77dbed634b245bd6e795b",
+    "rebased_head": "e4900724d0d65387047554f119a0a30958d035b2",
+    "merge_base_after_rebase": "d453fbe256eb22d90ea77dbed634b245bd6e795b",
+    "cancelled_pipeline_not_reused_as_validation": true
+  },
+  "rebased_local_validation": {
+    "focused_packages": "PASS: app, engine, commandrunner, bundleregistry, dockerhub definitions, dockerhub hook, safety",
+    "cli_regression": "PASS: go test -timeout 20m ./internal/cli -count=1",
+    "binary_help_reachability": "PASS: 54/54 implemented routes plus pm help dockerhub and bare pm dockerhub",
+    "generator_and_preflight": "PASS: dockerhub validate, surface-sync --check, Docker Hub ledger test, fleet runtime preflight",
+    "docs_and_website": "PASS: connector docs validation, docs/tidy/lint/smoke/agent-contract gates, website script tests and typecheck"
+  },
   "next_action": "run the no-mistakes delivery pipeline, respond only to its gates, then open the explicitly not-certified parent PR"
 }

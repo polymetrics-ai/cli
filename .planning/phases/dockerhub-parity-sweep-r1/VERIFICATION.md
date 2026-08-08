@@ -2,20 +2,19 @@
 
 ## Certification status
 
-**Not certified.** Docker Hub models all 54 documented operations; **51 are implemented** and every one of those command routes is reachable in the rebuilt binary, but the live account used for this run does not authorize every Docker Hub API family. This ledger is deliberately an honest current-token accounting, not a claim that every implemented command has been provider-accepted.
+**Not certified.** Docker Hub models and implements all **54** documented operations, and every command route is reachable in the rebuilt binary. The live account used for this run does not authorize every Docker Hub API family, so this ledger is an honest current-token accounting, not a claim that every implemented command has been provider-accepted.
 
-**Corrected after automated review (Captain Decision [key=auth-secrets]).** The three credential-for-token authentication exchanges — `auth token create`, `auth login create`, `auth 2fa-login create` — are **no longer shipped as executable commands**. Each one's only input is a live credential passed as a plain CLI flag mapped to a record field, and the reverse-ETL path it ran on persists that record to the project state file as plaintext and echoes it in plan output; an action's `redact_fields` names a RESPONSE field and never redacts the request credential. They remain in the 54-row surface as `availability: "planned"` with the machine-checkable dependency `named_dependency=requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token`. Their previously recorded HTTP 401 lifecycle observations are preserved below under NOT-IMPLEMENTED as history, and are **not** counted as PROVEN. The bucket split therefore moves from 14/0/31/9 over 54 to **11 PROVEN / 0 PROVIDER-PLAN-LIMIT / 31 PROVIDER-PERMISSION / 9 ENTERPRISE-ONLY over 51 implemented, plus 3 NOT-IMPLEMENTED**; any PR body must state the corrected split.
+**Superseding correction — Captain auth-command override.** The earlier withdrawal recorded below is retained as historical evidence, but it is no longer the delivered state. `auth token create`, `auth login create`, and `auth 2fa-login create` are implemented `direct_write` operations. Their credential fields are declared in `redact_fields` (`secret`, `password`, `login_2fa_token`, `code`); generated command help and the point of use warn that the execution record is retained in plaintext local project state; and `--from-env`/`--value-stdin` avoid argv exposure. The persisted operator-visible plan sample and JSON output redact those fields, while the provider response body remains unmodified on execution. The recorded fake-fixture HTTP 401s followed successful plan → preview → approval lifecycles and prove the routes, so the three auth operations are counted as PROVEN.
 
 Every row below is mutually exclusive and records the outcome from the current write-scoped PAT replay. Superseded pre-upgrade observations are preserved only in git history; they are not mixed into this final ledger.
 
 | Exclusive bucket | Count |
 | --- | ---: |
-| PROVEN | 11 |
+| PROVEN | 14 |
 | PROVIDER-PLAN-LIMIT | 0 |
 | PROVIDER-PERMISSION | 31 |
 | ENTERPRISE-ONLY | 9 |
-| **Total implemented operations** | **51** |
-| NOT-IMPLEMENTED (blocked on a named dependency) | 3 |
+| **Total implemented operations** | **54** |
 | **Total documented operations modelled** | **54** |
 
 No open OUR-DEFECT remains in this slice. The Docker Hub canonical SCIM schema URN and the cross-connector opaque-email path-segment defect were both fixed red-first; their tests and audit are in TDD-LEDGER.md.
@@ -24,12 +23,14 @@ No open OUR-DEFECT remains in this slice. The Docker Hub canonical SCIM schema U
 
 - Rebuilt the branch binary and loaded the captain-upgraded PAT only from an environment variable through --from-env; no credential, approval token, or token-derived value was printed or kept in this record.
 - Used a fresh isolated project root. Every dispatched non-destructive mutation used plan → preview → approval → execute; delete/cancel/remove operations also used the typed destructive confirmation.
-- Current nonzero outcomes record the exact HTTP status only. Docker Hub response bodies and request authentication material were intentionally redacted.
-- The current binary completed 54/54 Docker Hub --help routes with zero failures, plus pm help dockerhub and bare pm dockerhub successfully. Three of those routes now render as declared-but-not-implemented rather than executable.
+- Current nonzero outcomes record the exact HTTP status only. This verification record omits Docker
+  Hub response bodies and request authentication material; the runtime itself returns declared
+  provider response bodies unchanged.
+- The current binary completed 54/54 Docker Hub --help routes with zero failures, plus pm help dockerhub and bare pm dockerhub successfully. All 54 routes are executable at the runtime preflight boundary.
 
 The retained private fixture is polymetrics/pm-e2e-20260808-173040. It was created and proven private during the earlier captain-authorized E2E and is intentionally retained. Its historical creation is **not** used as the current-token result for repository create; that command's one current outcome is the HTTP 403 shown below.
 
-## PROVEN (11)
+## PROVEN (14)
 
 PROVEN includes a provider's deliberate safe-fixture rejection when the command reached Docker Hub through the complete lifecycle and the response clearly proves the route.
 
@@ -46,16 +47,9 @@ PROVEN includes a provider's deliberate safe-fixture rejection when the command 
 | repository immutable-tags update | Plan, preview, approval, and live execution completed successfully. |
 | repository group assign | Plan, preview, approval, and execution reached Docker Hub; deliberate nonexistent group_id=0 received explicit HTTP 400 validation. |
 | invites resend | Plan, preview, approval, and execution reached Docker Hub; deliberate nonexistent id=0 received explicit HTTP 405. |
-
-## NOT-IMPLEMENTED (3)
-
-Withdrawn from the executable surface by Captain Decision [key=auth-secrets]. The live observations are retained as history of what was attempted; they are not a capability claim, and these operations cannot return a token through generic reverse ETL.
-
-| Operation | Retained historical observation | Named dependency |
-| --- | --- | --- |
-| auth token create | Earlier run: plan, preview, and approval succeeded; deliberately fake non-secret exchange material received explicit HTTP 401. Not dispatchable in the delivered head. | requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token. |
-| auth login create | Earlier run: plan, preview, and approval succeeded; deliberately fake non-secret exchange material received explicit HTTP 401. Not dispatchable in the delivered head. | requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token. |
-| auth 2fa-login create | Earlier run: plan, preview, and approval succeeded; deliberately fake non-secret exchange material received explicit HTTP 401. Not dispatchable in the delivered head. | requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token. |
+| auth token create | Plan, preview, approval, and execution reached Docker Hub; deliberately fake non-secret exchange material received explicit HTTP 401. |
+| auth login create | Plan, preview, approval, and execution reached Docker Hub; deliberately fake non-secret exchange material received explicit HTTP 401. |
+| auth 2fa-login create | Plan, preview, approval, and execution reached Docker Hub; deliberately fake non-secret exchange material received explicit HTTP 401. |
 
 ## PROVIDER-PERMISSION (31)
 
@@ -113,13 +107,13 @@ The provider artifact declares the SCIM family under its separate bearerSCIMAuth
 
 ## Operations never dispatched to the live service
 
-Exactly three implemented operations were not dispatched in this reconciliation (the three NOT-IMPLEMENTED authentication exchanges above are a separate, deliberate withdrawal, not a dispatch gap):
+Exactly three implemented operations were not dispatched in this reconciliation:
 
 1. org settings update — its read is current HTTP 403, so the worker cannot derive a safe no-op setting payload; dispatching guessed values could weaken organization restrictions. Named dependency: Docker Hub organization settings read/write permission on polymetrics.
 2. scim-users create — no Enterprise SCIM bearer was available and creating a user is not a safe negative fixture. Named dependency: Docker Hub Enterprise organization SCIM entitlement and a valid scim_bearer_token.
 3. scim-users update — no Enterprise SCIM bearer was available and modifying a user is not a safe negative fixture. Named dependency: Docker Hub Enterprise organization SCIM entitlement and a valid scim_bearer_token.
 
-All other 48 implemented operations were dispatched to Docker Hub during the current-token reconciliation.
+All other 51 implemented operations were dispatched to Docker Hub during the current-token reconciliation.
 
 ## Rate-limit and registry facts retained from the pilot
 
@@ -134,6 +128,24 @@ pm has no OCI/Registry v2 image pull/push operation or Registry bearer-acquisiti
 - The Registry pull service and Hub API are distinct hosts with different limiter semantics, and the documented/observed window mismatch needs an explicit provider follow-up.
 - Shared path validation was originally modeled as local identifier validation. The audit exposed two documented opaque-segment classes, SCIM URNs and email addresses, so path values now have their own narrowly tested validator while command and credential names remain strict.
 
+## Rebased local validation (2026-08-09)
+
+The interrupted no-mistakes run was cancelled and deliberately not reused. Its
+pipeline-owned repair was preserved, restored, and the branch was rebased with
+`origin/main` at `d453fbe256eb22d90ea77dbed634b245bd6e795b` as the verified merge
+base. Focused app, engine, command-runner, bundle-registry, Docker Hub definition,
+hook, and safety suites passed; the full `internal/cli` regression suite was run
+separately with its required 20-minute timeout. `go vet` on changed packages,
+`go build ./cmd/pm`, Docker Hub `connectorgen validate`, `surface-sync --check`,
+the Docker Hub ledger test, and the fleet implemented-command preflight passed.
+
+The rebuilt binary was then exercised in nine bounded batches: all **54/54**
+implemented `pm dockerhub <command> --help` routes succeeded, along with `pm help
+dockerhub` and bare `pm dockerhub`. Docs validation, tidy, lint, docs, smoke,
+agent-contract, generator, website script tests, and website typecheck also passed
+locally. A fresh no-mistakes pipeline is required for this newly committed head;
+the cancelled pre-rebase result remains non-authoritative.
+
 ## GSD/TDD evidence
 
-The required inline lifecycle evidence is recorded in PLAN.md, TDD-LEDGER.md, RUN-STATE.json, and REVIEW.md. The canonical parent-worker contract prohibits role spawning in this worktree, so the lifecycle uses the documented inline/manual fallback. Final focused/package gates, 54/54 rebuilt-binary help reachability, and standard inline review are green. The automated-review corrective slice (SCIM-only auth selection, SCIM proxy routing, status-only HEAD 404 semantics, credential add-time admission, withdrawal of the three authentication exchanges, and the CLAUDE.md/AGENTS.md scope reverts) is recorded in TDD-LEDGER.md under "Corrective slice — automated-review dispositions"; the next gate is the requested no-mistakes delivery pipeline.
+The required inline lifecycle evidence is recorded in PLAN.md, TDD-LEDGER.md, RUN-STATE.json, and REVIEW.md. The canonical parent-worker contract prohibits role spawning in this worktree, so the lifecycle uses the documented inline/manual fallback. Final focused/package gates, 54/54 rebuilt-binary help reachability, and standard inline review are green. The automated-review corrective slice (SCIM-only auth selection, SCIM proxy routing, status-only HEAD 404 semantics, credential add-time admission, the captain-authorized restoration of the three authentication exchanges, and the CLAUDE.md/AGENTS.md scope reverts) is recorded in TDD-LEDGER.md under "Corrective slice — automated-review dispositions"; the next gate is fresh no-mistakes validation of this rebased head.

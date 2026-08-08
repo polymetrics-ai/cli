@@ -419,12 +419,18 @@ func TestOperationDirectWriteProxyBasePathConsumesAPIRootOnce(t *testing.T) {
 		Name: "dockerhub",
 		HTTP: HTTPBase{URL: srv.URL + "/dockerhub/v2", APIRoot: "/v2"},
 		Operations: []OperationSpec{{
-			ID: "dockerhub.create-repository", Kind: "rest_write", Summary: "Create repository", Risk: "low", Approval: "plan-preview-approve-execute", OutputPolicy: "json", MutationClass: "create",
+			ID: "dockerhub.create-repository", Kind: "rest_write", Summary: "Create repository", Risk: "low", Approval: "none", OutputPolicy: "json", MutationClass: "create",
 			REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/namespaces/acme/repositories", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}},"additionalProperties":false}`)},
 		}},
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/namespaces/acme/repositories", Operation: &SurfaceOperation{Model: "write_action"}}}},
 	}
-	if _, err := OperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{Operation: "dockerhub.create-repository", Body: map[string]any{"name": "fixture"}}, nil); err != nil {
+	req := connectors.OperationDirectWriteRequest{Operation: "dockerhub.create-repository", Body: map[string]any{"name": "fixture"}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err != nil {
 		t.Fatalf("OperationDirectWrite: %v", err)
 	}
 }
