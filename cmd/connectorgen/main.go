@@ -16,7 +16,7 @@
 //	                           (api_surface, output_policy, flag maps_to,
 //	                           rest.max_bytes) and the compact runtime
 //	                           direct-read endpoint ledger from bundle sources
-//	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
+//	surface-reconcile [dir] [--check] [--json] [--reason-contains text] [--notes-contains text]
 //	                           derives direct-read api_surface coverage and
 //	                           blocked reasons from runtime preflight
 //	batch plan --ledger <path> --out <path>
@@ -103,7 +103,7 @@ func usage() string {
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
 	connectorgen gen
 	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
-	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
+	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text] [--notes-contains text]  (default dir: internal/connectors/defs)
 	connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
   connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
   connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]

@@ -56,6 +56,7 @@ func runSurfaceReconcile(args []string, stdout, stderr io.Writer) int {
 	check := false
 	asJSON := false
 	reasonContains := ""
+	notesContains := ""
 	dirSet := false
 	for i := 1; i < len(args); i++ {
 		arg := args[i]
@@ -74,6 +75,13 @@ func runSurfaceReconcile(args []string, stdout, stderr io.Writer) int {
 			}
 			i++
 			reasonContains = args[i]
+		case "--notes-contains":
+			if i+1 >= len(args) || strings.TrimSpace(args[i+1]) == "" {
+				logln(stderr, "connectorgen surface-reconcile: --notes-contains requires text")
+				return 2
+			}
+			i++
+			notesContains = args[i]
 		default:
 			if strings.HasPrefix(arg, "-") {
 				logf(stderr, "connectorgen surface-reconcile: unknown flag %q\n", arg)
@@ -97,7 +105,7 @@ func runSurfaceReconcile(args []string, stdout, stderr io.Writer) int {
 	reports := make([]surfaceReconcileReport, 0, len(bundleDirs))
 	total := surfaceReconcileStats{}
 	for _, bundleDir := range bundleDirs {
-		stats, err := reconcileBundle(bundleDir, check, reasonContains)
+		stats, err := reconcileBundle(bundleDir, check, reasonContains, notesContains)
 		if err != nil {
 			logf(stderr, "connectorgen surface-reconcile: %s: %v\n", filepath.Base(bundleDir), err)
 			return 1
@@ -142,11 +150,12 @@ func runSurfaceReconcile(args []string, stdout, stderr io.Writer) int {
 }
 
 func surfaceReconcileUsage() string {
-	return `usage: connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]
+	return `usage: connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text] [--notes-contains text]
 
 Derive direct-read api_surface coverage and blocked reasons from real command
-runtime preflight. In --check mode, report pending reclassifications without
-writing files and exit 1 when a row would change.`
+runtime preflight. The optional reason/notes selectors are conjunctive and
+scope which operation rows are considered. In --check mode, report pending
+reclassifications without writing files and exit 1 when a row would change.`
 }
 
 func surfaceReconcileBundleDirs(dir string) ([]string, error) {
@@ -177,7 +186,7 @@ func surfaceReconcileBundleDirs(dir string) ([]string, error) {
 // against that engine connector, so a generated covered_by value has the same
 // admission proof as the CLI path. In check mode it mutates only the decoded
 // in-memory document and reports the prospective changes.
-func reconcileBundle(dir string, check bool, reasonContains string) (surfaceReconcileStats, error) {
+func reconcileBundle(dir string, check bool, reasonContains, notesContains string) (surfaceReconcileStats, error) {
 	stats := surfaceReconcileStats{}
 	absDir, err := filepath.Abs(dir)
 	if err != nil {
@@ -221,6 +230,9 @@ func reconcileBundle(dir string, check bool, reasonContains string) (surfaceReco
 			continue
 		}
 		if reasonContains != "" && !strings.Contains(stringField(operation, "reason"), reasonContains) {
+			continue
+		}
+		if notesContains != "" && !strings.Contains(stringField(operation, "notes"), notesContains) {
 			continue
 		}
 		stats.Scanned++

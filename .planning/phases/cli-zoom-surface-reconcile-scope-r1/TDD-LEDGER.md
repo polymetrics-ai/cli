@@ -14,7 +14,15 @@ FAIL	polymetrics.ai/cmd/connectorgen	0.741s
 FAIL
 ```
 
-## GREEN — pending
+## GREEN — captured
 
 Add the selector without changing existing `--reason-contains` behavior. Both selectors must be
 conjunctive when present, so callers cannot accidentally broaden a category-scoped reconciliation.
+
+The implementation adds `--notes-contains`, searches the durable `operation.notes` provenance, and
+keeps it conjunctive with `--reason-contains`. Green evidence:
+
+```text
+$ go test -count=1 ./cmd/connectorgen
+ok  	polymetrics.ai/cmd/connectorgen	12.348s
+```
