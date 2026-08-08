@@ -162,3 +162,38 @@ func TestGitHubHeldCommandsStayBlocked(t *testing.T) {
 		}
 	}
 }
+
+// A note that restates the typed confirmation is a second source for a fact the
+// help already derives from the write action, and the two drift: the note was
+// carried by ten of github's 173 destructive commands, which made its absence
+// on the other 163 read as "no confirmation needed". The derived
+// ConfirmationChallengeForCommand is now the only source, so no bundle may
+// reintroduce the copy.
+//
+// The assertion is on every command, not just the ten, because the failure this
+// prevents is a note appearing somewhere new.
+func TestGitHubNotesDoNotRestateTheTypedConfirmation(t *testing.T) {
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("github")
+	if !ok {
+		t.Fatal("github connector is not registered")
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		t.Fatal("github connector exposes no command surface")
+	}
+
+	confirmable := 0
+	for _, cmd := range provider.CommandSurface().Commands {
+		if strings.Contains(strings.ToLower(cmd.Notes), "--confirm") {
+			t.Errorf("github %q restates the typed confirmation in notes (%q); the derived help owns that fact",
+				cmd.Path, cmd.Notes)
+		}
+		if ConfirmationChallengeForCommand(connector, cmd) != "" {
+			confirmable++
+		}
+	}
+	if confirmable == 0 {
+		t.Fatal("no github command resolves a typed confirmation; the resolver the help depends on is not working")
+	}
+}
