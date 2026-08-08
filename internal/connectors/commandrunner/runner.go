@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/safety"
@@ -203,7 +204,7 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 		return WriteCommand{}, err
 	}
-	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
+	pathParams, query, body, _, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return WriteCommand{}, err
 	}
@@ -492,7 +493,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
-	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
+	pathParams, query, body, rawBody, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
@@ -512,6 +513,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		PathParams:   pathParams,
 		Query:        query,
 		Body:         body,
+		RawBody:      rawBody,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
 		Page:         req.Page,
@@ -972,7 +974,7 @@ func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags ma
 		if !ok || len(values) == 0 {
 			return missingRequiredFlagError(cmd, flag.Name)
 		}
-		value, err := coerceFlagValue(flag, values)
+		value, err := coerceCommandFlagValue(cmd, flag, values)
 		if err != nil {
 			return err
 		}
@@ -1256,59 +1258,77 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 	return pathParams, query, nil
 }
 
-func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, error) {
+// operationDirectReadOverrides shapes the explicitly declared request inputs
+// shared by operation-backed reads and writes. A literal body is intentionally
+// narrower than the dotted JSON body mapping: only an operation direct read
+// may name the exact maps_to value "body", and the engine subsequently admits
+// it only for its declared text/plain root-string contract.
+func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, *string, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		allowed[flag.Name] = flag
 	}
 	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, nil, err
 	}
 
 	pathParams := map[string]string{}
 	query := map[string]string{}
 	body := map[string]any{}
+	var rawBody *string
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
 		}
 		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		flag, ok := allowed[name]
 		if !ok {
-			return nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+			return nil, nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
-		value, err := coerceFlagValue(flag, values)
+		value, err := coerceCommandFlagValue(cmd, flag, values)
 		if err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		switch {
 		case strings.HasPrefix(flag.MapsTo, "path."):
 			target := strings.TrimPrefix(flag.MapsTo, "path.")
 			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
-				return nil, nil, nil, err
+				return nil, nil, nil, nil, err
 			}
 			pathParams[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
 			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
-				return nil, nil, nil, err
+				return nil, nil, nil, nil, err
 			}
 			query[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "body."):
 			target := strings.TrimPrefix(flag.MapsTo, "body.")
 			if err := setBodyValue(body, target, value); err != nil {
-				return nil, nil, nil, err
+				return nil, nil, nil, nil, err
 			}
+		case flag.MapsTo == "body":
+			if cmd.Intent != "direct_read" || flag.Type != "string" {
+				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+			}
+			text, ok := value.(string)
+			if !ok {
+				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to body but is not a string", name)}
+			}
+			rawBody = &text
 		default:
-			return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+			return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
 		}
 	}
-	return pathParams, query, body, nil
+	if rawBody != nil && len(body) != 0 {
+		return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "raw body cannot mix with JSON body fields"}
+	}
+	return pathParams, query, body, rawBody, nil
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {
@@ -1510,6 +1530,36 @@ func dottedPathPrefix(parent, child string) bool {
 
 func setRecordValue(record connectors.Record, path string, value any) error {
 	return setBodyValue(map[string]any(record), path, value)
+}
+
+// coerceCommandFlagValue retains the normal command-line control-character
+// guard everywhere except a literal text/plain operation body. Markdown and
+// similar declared text documents need line breaks; they are never used as a
+// URL, header, or JSON field because only the exact body mapping reaches this
+// path. Other control characters remain refused.
+func coerceCommandFlagValue(cmd connectors.CommandSurfaceCommand, flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if cmd.Intent == "direct_read" && flag.MapsTo == "body" {
+		return coerceDeclaredPlainTextBodyFlagValue(flag, values)
+	}
+	return coerceFlagValue(flag, values)
+}
+
+func coerceDeclaredPlainTextBodyFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if flag.Type != "string" {
+		return nil, &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s maps to raw body but is not a string", flag.Name)}
+	}
+	for _, value := range values {
+		for _, r := range value {
+			if unicode.IsControl(r) && r != '\n' && r != '\r' && r != '\t' {
+				return nil, fmt.Errorf("flag value contains unsupported control character for declared text body")
+			}
+		}
+	}
+	value := values[len(values)-1]
+	if err := validateFlagValue(flag, value); err != nil {
+		return nil, err
+	}
+	return value, nil
 }
 
 func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {

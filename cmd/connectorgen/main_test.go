@@ -844,6 +844,90 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 	}
 }
 
+func TestValidate_CLISurfaceOperationDirectReadPlainTextBodyRequiresOneRequiredStringFlag(t *testing.T) {
+	cliSurface := `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "markdown raw",
+				"summary": "Render raw Markdown",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "cli-surface.markdown.raw",
+				"api_surface": [
+					{ "method": "POST", "path": "/markdown/raw" }
+				],
+				"output_policy": "text",
+				"flags": [
+					{ "name": "text", "type": "string", "required": true, "maps_to": "body" }
+				],
+				"examples": ["pm cli-surface markdown raw --text '# heading' --json"]
+			}
+		]
+	}`
+	operations := `{
+		"operations": [
+			{
+				"id": "cli-surface.markdown.raw",
+				"kind": "rest_read",
+				"summary": "Render raw Markdown",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "text",
+				"rest": {
+					"method": "POST",
+					"path": "/markdown/raw",
+					"content_type": "text/plain",
+					"max_bytes": 1024,
+					"body_schema": { "type": "string" }
+				}
+			}
+		]
+	}`
+	apiSurface := `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "POST", "path": "/markdown/raw", "covered_by": { "direct_read": "markdown raw" } }
+		]
+	}`
+
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for declared text/plain raw body, got %+v", report.Findings)
+	}
+
+	invalid := strings.Replace(cliSurface, `"required": true, "maps_to": "body"`, `"maps_to": "body"`, 1)
+	fsys = cliSurfaceBundleFS(invalid)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err = validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir invalid: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+
+	mixed := strings.Replace(cliSurface, `"flags": [`, `"flags": [
+					{ "name": "context", "type": "string", "maps_to": "body.context" },`, 1)
+	fsys = cliSurfaceBundleFS(mixed)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err = validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir mixed: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
 func TestValidate_CLISurfaceOperationRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
 	cliSurface := strings.Replace(validOperationCLISurfaceJSON(), `"output_policy": "json_redacted"`, `"output_policy": "repository_contents_file_metadata"`, 1)
 	operations := strings.Replace(validOperationsJSON(), `"output_policy": "json_redacted"`, `"output_policy": "repository_contents_file_metadata"`, 1)

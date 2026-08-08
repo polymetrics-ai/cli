@@ -418,6 +418,15 @@ func (r *Requester) DoLimited(ctx context.Context, method, path string, query ur
 	return r.do(ctx, method, path, query, payload, "application/json", maxBodyBytes+1)
 }
 
+// DoTextLimited performs a bounded request with one literal text/plain body.
+// It deliberately has no caller-selected media type: operation executors use
+// it only after admitting an explicit text/plain declaration, and it shares
+// DoLimited's request core (including auth, retry, admission, and observation)
+// rather than offering a generic raw HTTP escape hatch.
+func (r *Requester) DoTextLimited(ctx context.Context, method, path string, query url.Values, body string, maxBodyBytes int) (*Response, error) {
+	return r.do(ctx, method, path, query, []byte(body), "text/plain", maxBodyBytes+1)
+}
+
 // DoForm performs an HTTP request with an application/x-www-form-urlencoded body,
 // reusing the same auth, retry, and rate-limit handling as Do. It is the form
 // counterpart used by APIs (e.g. Stripe) whose write endpoints take form bodies.

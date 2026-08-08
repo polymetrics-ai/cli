@@ -1019,3 +1019,35 @@ This is intentional red-before-transport evidence: the previous `Body map[string
 JSON object inputs only, and JSON-marshal would turn a Markdown source string into the wrong wire
 format. The forthcoming contract is restricted to a declared plain-text POST; it is not a generic
 raw-request field.
+
+**Green 14b — literal text input is declaration-bound and stays on the existing requester.**
+`OperationDirectReadRequest.RawBody` is distinct from an absent body, and the engine admits it only
+for a `rest_read` `POST` declaring `text/plain`, no static `rest.body`, and a compiled root-string
+schema. It rejects missing, mixed JSON/raw, oversized, and JSON-operation raw input before a
+request. `Requester.DoTextLimited` has no caller-selected media type and delegates to the same
+request core as JSON reads, preserving auth, retries, limiter admission before the request, and
+limiter observation from the response.
+
+The command surface has exactly one `maps_to: body` string flag for that contract; dotted JSON body
+mappings remain disallowed. Markdown line breaks are accepted only in this literal body position
+(not paths, queries, headers, or JSON fields); other control characters remain rejected. Bundle
+load validates the new text contract while retaining current-main's established metadata-only POST
+schema behavior for unrelated blocked connectors; an implemented command still takes the full
+operation preflight.
+
+```
+$ go test -timeout 20m ./internal/connectors/engine/ -run 'TestOperationDirectRead(SendsDeclaredPlainTextBody|RejectsUndeclaredOrInvalidPlainTextBodiesBeforeNetwork|SupportsBoundedStatusAndTextResponses)' -count=1
+ok	polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/commandrunner/ -run 'TestRun(OperationDirectReadPassesDeclaredPlainTextBody|OperationDirectReadRejectsMixedRawAndJSONBodyMappings|OperationDirectReadPlainTextBodyOnlyAdmitsDocumentWhitespace|ImplementedOperationDirectReadCommand)' -count=1
+ok	polymetrics.ai/internal/connectors/commandrunner
+
+$ go test -timeout 20m ./cmd/connectorgen/ -run 'TestValidate_CLISurfaceOperationDirectRead(PlainTextBodyRequiresOneRequiredStringFlag|RequiresBodyMappings|RequiresRequiredBodyFlags)' -count=1
+ok	polymetrics.ai/cmd/connectorgen
+
+$ go test -timeout 20m ./internal/connectors/engine/ ./internal/connectors/commandrunner/ ./internal/connectors/connsdk/ ./cmd/connectorgen/
+ok	polymetrics.ai/internal/connectors/engine
+ok	polymetrics.ai/internal/connectors/commandrunner
+ok	polymetrics.ai/internal/connectors/connsdk
+ok	polymetrics.ai/cmd/connectorgen
+```

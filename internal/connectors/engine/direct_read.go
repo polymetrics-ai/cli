@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"mime"
 	"net/http"
 	"net/url"
 	stdpath "path"
@@ -92,7 +93,8 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, req.PathParams, cfg); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	body, err := operationReadBody(op, req.Body)
+	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
+	body, err := operationReadBody(op, req.Body, req.RawBody, maxBytes)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -103,18 +105,18 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
 	decoded, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
-		method:       method,
-		declaredPat:  op.REST.Path,
-		requestPath:  requestPath,
-		query:        query,
-		body:         body,
-		outputPolicy: policy,
-		maxBytes:     maxBytes,
-		page:         req.Page,
-		pageCursor:   req.PageCursor,
+		method:          method,
+		declaredPat:     op.REST.Path,
+		requestPath:     requestPath,
+		query:           query,
+		body:            body,
+		bodyContentType: operationDirectReadContentType(op),
+		outputPolicy:    policy,
+		maxBytes:        maxBytes,
+		page:            req.Page,
+		pageCursor:      req.PageCursor,
 	})
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
@@ -202,15 +204,9 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		return OperationSpec{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
 	}
-	if method == http.MethodPost && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
-		return OperationSpec{}, fmt.Errorf("operation direct read POST requires application/json content_type")
-	}
-	if method == http.MethodPost && len(op.REST.BodySchema) == 0 {
-		return OperationSpec{}, fmt.Errorf("operation direct read POST requires body_schema")
-	}
 	if method == http.MethodPost {
-		if _, err := CompileSchema(op.REST.BodySchema); err != nil {
-			return OperationSpec{}, fmt.Errorf("operation direct read body_schema: %w", err)
+		if err := validateOperationDirectReadPOSTContract(op); err != nil {
+			return OperationSpec{}, err
 		}
 	}
 	if op.REST.MaxBytes <= 0 {
@@ -381,9 +377,35 @@ func queryGroupSatisfied(group RequiredQueryGroup, query map[string]string) bool
 	return false
 }
 
-func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) {
+func operationReadBody(op OperationSpec, overrides map[string]any, rawBody *string, maxBytes int) (any, error) {
 	if op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodPost {
+		if rawBody != nil {
+			return nil, fmt.Errorf("operation %q raw body requires a POST operation", op.ID)
+		}
 		return nil, nil
+	}
+	contentType := operationDirectReadContentType(op)
+	if contentType == "text/plain" {
+		if len(overrides) != 0 {
+			return nil, fmt.Errorf("operation %q text/plain request cannot mix a raw body with JSON body fields", op.ID)
+		}
+		if rawBody == nil {
+			return nil, fmt.Errorf("operation %q text/plain request requires a raw body", op.ID)
+		}
+		if len(*rawBody) > maxBytes {
+			return nil, fmt.Errorf("operation %q request body too large: %d bytes exceeds limit %d", op.ID, len(*rawBody), maxBytes)
+		}
+		sch, err := CompileSchema(op.REST.BodySchema)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q: compile body_schema: %w", op.ID, err)
+		}
+		if err := sch.Validate(*rawBody); err != nil {
+			return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
+		}
+		return *rawBody, nil
+	}
+	if rawBody != nil {
+		return nil, fmt.Errorf("operation %q raw body requires declared text/plain content_type", op.ID)
 	}
 	body := cloneAnyMap(op.REST.Body)
 	for key, value := range overrides {
@@ -399,6 +421,81 @@ func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) 
 		}
 	}
 	return body, nil
+}
+
+// validateOperationDirectReadPOSTContract is shared by bundle loading and
+// runtime preflight. Keeping this contract in one function prevents a bundle
+// from validating as implemented while the executor refuses its POST format.
+func validateOperationDirectReadPOSTContract(op OperationSpec) error {
+	if op.REST == nil {
+		return fmt.Errorf("operation direct read POST requires rest declaration")
+	}
+	if len(op.REST.BodySchema) == 0 {
+		return fmt.Errorf("operation direct read POST requires body_schema")
+	}
+	contentType, _, err := mime.ParseMediaType(strings.TrimSpace(op.REST.ContentType))
+	if err != nil {
+		return fmt.Errorf("operation direct read POST has invalid content_type %q: %w", op.REST.ContentType, err)
+	}
+	contentType = strings.ToLower(contentType)
+	switch contentType {
+	case "application/json":
+		if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+			return fmt.Errorf("operation direct read body_schema: %w", err)
+		}
+		return nil
+	case "text/plain":
+		return validateOperationDirectReadTextPlainContract(op)
+	default:
+		return fmt.Errorf("operation direct read POST requires application/json or text/plain content_type")
+	}
+}
+
+// validateOperationDirectReadTextPlainContract is the loader-safe half of
+// the literal-body contract. It is separate from JSON body validation because
+// generated metadata for blocked operations may use schema annotations the
+// executor does not implement; only a named operation command reaches the
+// full validateOperationDirectReadPOSTContract preflight.
+func validateOperationDirectReadTextPlainContract(op OperationSpec) error {
+	if op.REST == nil {
+		return fmt.Errorf("operation direct read POST requires rest declaration")
+	}
+	if op.Kind != "rest_read" {
+		return fmt.Errorf("operation direct read POST text/plain content_type requires rest_read")
+	}
+	if len(op.REST.Body) != 0 {
+		return fmt.Errorf("operation direct read POST text/plain content_type must not declare rest.body")
+	}
+	if !bodySchemaHasRootString(op.REST.BodySchema) {
+		return fmt.Errorf("operation direct read POST text/plain content_type requires a root string body_schema")
+	}
+	if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+		return fmt.Errorf("operation direct read body_schema: %w", err)
+	}
+	return nil
+}
+
+func operationDirectReadContentType(op OperationSpec) string {
+	if op.REST == nil {
+		return ""
+	}
+	contentType, _, err := mime.ParseMediaType(strings.TrimSpace(op.REST.ContentType))
+	if err != nil {
+		return ""
+	}
+	return strings.ToLower(contentType)
+}
+
+func bodySchemaHasRootString(raw json.RawMessage) bool {
+	var body map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &body); err != nil {
+		return false
+	}
+	var typeName string
+	if err := json.Unmarshal(body["type"], &typeName); err != nil {
+		return false
+	}
+	return typeName == "string"
 }
 
 func cloneAnyMap(in map[string]any) map[string]any {
