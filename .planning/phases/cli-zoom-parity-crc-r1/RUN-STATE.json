@@ -35,7 +35,7 @@
     "unsafe_or_disallowed": 0
   },
   "red": "captured: 123/1719/61/58 current totals fail the 143/1699/70/69 CRC target; all 20 CRC routes are unknown through real commandrunner preflight",
-  "foundation": "red captured: surface-sync does not derive conventional kebab-case CLI flags to exact declared camelCase path variables",
+  "foundation": "green: surface-sync now derives conventional kebab-case CLI flags to an exact declared camelCase path variable; CRC declarations remain uncommitted",
   "green": "pending",
   "verification": "pending",
   "review": "pending"
