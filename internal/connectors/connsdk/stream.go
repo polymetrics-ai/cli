@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -23,6 +24,58 @@ type StreamOptions struct {
 	// AllowedHosts permits hops to exactly these hosts (host or host:port).
 	// Credentials are stripped on such a hop regardless.
 	AllowedHosts []string
+	// DeclaredBearerRedirect is the narrow provider-owned exception for a
+	// binary read whose documented same-provider redirect needs the original
+	// bearer authorization. It is never inferred from AllowedHosts: the
+	// declaration owns a suffix boundary and finite hop cap, custom/default
+	// credentials remain stripped, and a non-bearer Authorization is refused.
+	DeclaredBearerRedirect *DeclaredBearerRedirect
+}
+
+// DeclaredBearerRedirect bounds a binary-read redirect that may retain only a
+// bearer credential at a documented provider host. It is separate from the
+// mutation redirect contract: binary reads follow net/http redirects, while a
+// strict mutation must rebuild a snapshot-bound payload at every admitted hop.
+type DeclaredBearerRedirect struct {
+	AllowedHostSuffixes []string
+	MaxHops             int
+}
+
+const maxDeclaredBearerRedirectHops = 3
+
+func (p DeclaredBearerRedirect) Validate() error {
+	if p.MaxHops < 1 || p.MaxHops > maxDeclaredBearerRedirectHops {
+		return fmt.Errorf("declared bearer redirect max_hops must be between 1 and %d", maxDeclaredBearerRedirectHops)
+	}
+	if len(p.AllowedHostSuffixes) == 0 {
+		return fmt.Errorf("declared bearer redirect requires at least one allowed host suffix")
+	}
+	seen := make(map[string]struct{}, len(p.AllowedHostSuffixes))
+	for _, raw := range p.AllowedHostSuffixes {
+		suffix := canonicalRedirectHostSuffix(raw)
+		if suffix == "" {
+			return fmt.Errorf("declared bearer redirect has an invalid allowed host suffix")
+		}
+		if _, duplicate := seen[suffix]; duplicate {
+			return fmt.Errorf("declared bearer redirect repeats an allowed host suffix")
+		}
+		seen[suffix] = struct{}{}
+	}
+	return nil
+}
+
+func (p DeclaredBearerRedirect) AllowsHost(raw string) bool {
+	host := strings.TrimSuffix(strings.ToLower(strings.TrimSpace(raw)), ".")
+	if host == "" || net.ParseIP(host) != nil {
+		return false
+	}
+	for _, rawSuffix := range p.AllowedHostSuffixes {
+		suffix := canonicalRedirectHostSuffix(rawSuffix)
+		if suffix != "" && (host == suffix || strings.HasSuffix(host, "."+suffix)) {
+			return true
+		}
+	}
+	return false
 }
 
 // StreamResponse is a response whose body is still OPEN. The caller owns it
@@ -175,6 +228,21 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 		if sameOrigin {
 			return nil
 		}
+		if policy := opts.DeclaredBearerRedirect; policy != nil {
+			if err := allowDeclaredBearerRedirect(req.URL, base, *policy, len(via)); err != nil {
+				return err
+			}
+			bearer, err := declaredRedirectBearer(via)
+			if err != nil {
+				return err
+			}
+			// Always remove every credential-bearing and default header first;
+			// only the original standard bearer value may be restored after the
+			// target has passed the declaration-owned provider boundary.
+			stripCredentialHeaders(req, *credKeys)
+			req.Header.Set("Authorization", bearer)
+			return nil
+		}
 		if err := allowCrossOrigin(req.URL, base, opts); err != nil {
 			return err
 		}
@@ -183,6 +251,39 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 		return nil
 	}
 	return &clone
+}
+
+func allowDeclaredBearerRedirect(next, base *url.URL, policy DeclaredBearerRedirect, hops int) error {
+	if err := policy.Validate(); err != nil {
+		return fmt.Errorf("declared bearer redirect policy is invalid: %w", err)
+	}
+	if base == nil || base.Host == "" || !policy.AllowsHost(base.Hostname()) {
+		return fmt.Errorf("declared bearer redirect base host is not approved")
+	}
+	if next == nil || next.Host == "" {
+		return fmt.Errorf("declared bearer redirect target has no host")
+	}
+	if next.Scheme != base.Scheme {
+		return fmt.Errorf("declared bearer redirect changes scheme")
+	}
+	if hops > policy.MaxHops {
+		return fmt.Errorf("declared bearer redirect hop cap reached")
+	}
+	if !policy.AllowsHost(next.Hostname()) {
+		return fmt.Errorf("declared bearer redirect target host is not approved")
+	}
+	return nil
+}
+
+func declaredRedirectBearer(via []*http.Request) (string, error) {
+	if len(via) == 0 {
+		return "", fmt.Errorf("declared bearer redirect has no source request")
+	}
+	value := strings.TrimSpace(via[len(via)-1].Header.Get("Authorization"))
+	if !strings.HasPrefix(value, "Bearer ") || strings.TrimSpace(strings.TrimPrefix(value, "Bearer ")) == "" {
+		return "", fmt.Errorf("declared bearer redirect requires bearer authorization")
+	}
+	return value, nil
 }
 
 // allowCrossOrigin fails closed: an unparseable or host-less target, a
@@ -271,6 +372,7 @@ func stripCredentialHeaders(req *http.Request, keys []string) {
 func isRedirectPolicyError(err error) bool {
 	msg := err.Error()
 	return strings.Contains(msg, "cross-host redirect") ||
+		strings.Contains(msg, "declared bearer redirect") ||
 		strings.Contains(msg, "scheme downgrade") ||
 		strings.Contains(msg, "stopped after")
 }

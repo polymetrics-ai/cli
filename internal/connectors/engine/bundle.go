@@ -819,6 +819,15 @@ type MutationRedirectSpec struct {
 	MaxHops             int      `json:"max_hops"`
 }
 
+// BearerRedirectSpec is the declaration-owned redirect boundary for one
+// binary download that has to retain a bearer authorization at a documented
+// same-provider download host. Generic allow_cross_host/allowed_hosts always
+// strip credentials; they cannot be used as a substitute for this contract.
+type BearerRedirectSpec struct {
+	AllowedHostSuffixes []string `json:"allowed_host_suffixes"`
+	MaxHops             int      `json:"max_hops"`
+}
+
 // RequiredQueryGroup is one "at least one of these" constraint. Several groups
 // compose as AND-of-ORs: "at least one of A or B, and at least one of C" is two
 // groups, which is the shape of an endpoint requiring both a subject filter and
@@ -876,6 +885,10 @@ type BinaryOperationSpec struct {
 	// AllowedHosts permits redirects to exactly these hosts. Credentials are
 	// stripped on such a hop regardless.
 	AllowedHosts []string `json:"allowed_hosts,omitempty"`
+	// BearerRedirect is a bounded same-provider redirect policy that retains
+	// only the bearer credential after the target host and hop count have been
+	// admitted. It is mutually exclusive with the generic redirect widener.
+	BearerRedirect *BearerRedirectSpec `json:"bearer_redirect,omitempty"`
 	// ContentTypes records the content types this operation is documented to
 	// return. It is metadata for authors and is deliberately NOT enforced:
 	// providers mislabel binary payloads routinely.
@@ -2238,6 +2251,26 @@ func validateOperationMutationRedirectSemantics(i int, op OperationSpec) error {
 	return nil
 }
 
+func validateOperationBinaryBearerRedirectSemantics(i int, op OperationSpec) error {
+	if op.Binary == nil || op.Binary.BearerRedirect == nil {
+		return nil
+	}
+	if op.Kind != "binary_download" {
+		return fmt.Errorf("operation %d (%q) binary.bearer_redirect is only valid for binary_download operations, got %q", i, op.ID, op.Kind)
+	}
+	if op.Binary.AllowCrossHost || len(op.Binary.AllowedHosts) > 0 {
+		return fmt.Errorf("operation %d (%q) binary.bearer_redirect cannot be combined with allow_cross_host or allowed_hosts", i, op.ID)
+	}
+	policy := connsdk.DeclaredBearerRedirect{
+		AllowedHostSuffixes: append([]string(nil), op.Binary.BearerRedirect.AllowedHostSuffixes...),
+		MaxHops:             op.Binary.BearerRedirect.MaxHops,
+	}
+	if err := policy.Validate(); err != nil {
+		return fmt.Errorf("operation %d (%q) binary.bearer_redirect: %w", i, op.ID, err)
+	}
+	return nil
+}
+
 // requireClosedMultipartBodySchema recursively closes every object reachable
 // from an operation multipart body. Command flags can materialize dotted body
 // paths, so closing only the root would still leave an undeclared nested body
@@ -2331,6 +2364,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		return err
 	}
 	if err := validateOperationMutationRedirectSemantics(i, op); err != nil {
+		return err
+	}
+	if err := validateOperationBinaryBearerRedirectSemantics(i, op); err != nil {
 		return err
 	}
 	if op.REST != nil {

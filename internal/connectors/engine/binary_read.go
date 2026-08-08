@@ -156,10 +156,11 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	resp, err := requester.DoStream(ctx, http.MethodGet, requestPath, query, connsdk.StreamOptions{
-		AllowCrossHost: spec.AllowCrossHost,
-		AllowedHosts:   spec.AllowedHosts,
-	})
+	streamOptions, err := binaryDownloadStreamOptions(b, spec)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	resp, err := requester.DoStream(ctx, http.MethodGet, requestPath, query, streamOptions)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := completeEngineErrorText(err)
@@ -209,6 +210,25 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 			"truncated": false,
 		}, req.RedactFields),
 	}, nil
+}
+
+func binaryDownloadStreamOptions(b Bundle, spec *BinaryOperationSpec) (connsdk.StreamOptions, error) {
+	options := connsdk.StreamOptions{AllowCrossHost: spec.AllowCrossHost, AllowedHosts: append([]string(nil), spec.AllowedHosts...)}
+	if spec.BearerRedirect == nil {
+		return options, nil
+	}
+	// The retained header is deliberately not inferred from a runtime
+	// authenticator. The bundle must prove it selected exactly one ordinary
+	// bearer scheme; a custom/api-key/OAuth declaration cannot accidentally
+	// acquire cross-origin forwarding semantics.
+	if len(b.HTTP.Auth) != 1 || b.HTTP.Auth[0].Mode != "bearer" || strings.TrimSpace(b.HTTP.Auth[0].Token) == "" {
+		return connsdk.StreamOptions{}, fmt.Errorf("binary bearer redirect requires exactly one declared bearer auth")
+	}
+	options.DeclaredBearerRedirect = &connsdk.DeclaredBearerRedirect{
+		AllowedHostSuffixes: append([]string(nil), spec.BearerRedirect.AllowedHostSuffixes...),
+		MaxHops:             spec.BearerRedirect.MaxHops,
+	}
+	return options, nil
 }
 
 // redactBinaryDownloadRecord applies the command's declared redact_fields to

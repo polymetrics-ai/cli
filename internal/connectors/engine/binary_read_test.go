@@ -4,8 +4,10 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"net"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -63,6 +65,20 @@ func downloadReq(dest string) BinaryDownloadRequest {
 		PathParams: map[string]string{"id": "f1"},
 		DestRoot:   dest,
 	}
+}
+
+func localhostBinaryURL(t *testing.T, raw string) string {
+	t.Helper()
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		t.Fatalf("parse test server URL: %v", err)
+	}
+	_, port, err := net.SplitHostPort(parsed.Host)
+	if err != nil {
+		t.Fatalf("split test server host: %v", err)
+	}
+	parsed.Host = net.JoinHostPort("localhost", port)
+	return parsed.String()
 }
 
 // TestBinaryDownloadWritesBoundedFile: happy path — bytes land on disk with
@@ -612,6 +628,45 @@ func TestBinaryDownloadAllowedHostsIsEnforced(t *testing.T) {
 	other := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowedHosts: []string{"somewhere.invalid:443"}})
 	if _, err := OperationBinaryDownload(context.Background(), other, downloadReq(t.TempDir()), nil); err == nil {
 		t.Fatal("a host outside allowed_hosts must stay refused")
+	}
+}
+
+func TestBinaryDownloadDeclaredBearerRedirectRetainsOnlyBearer(t *testing.T) {
+	const token = "fixture-binary-bearer-token"
+	gotAuthorization := ""
+	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotAuthorization = r.Header.Get("Authorization")
+		_, _ = w.Write([]byte("clip-bytes"))
+	}))
+	defer target.Close()
+	targetURL := localhostBinaryURL(t, target.URL)
+	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, targetURL+"/blob", http.StatusFound)
+	}))
+	defer origin.Close()
+
+	b := binaryBundle(origin, &BinaryOperationSpec{BearerRedirect: &BearerRedirectSpec{AllowedHostSuffixes: []string{"localhost"}, MaxHops: 1}})
+	b.HTTP.URL = localhostBinaryURL(t, origin.URL)
+	b.HTTP.Auth = []AuthSpec{{Mode: "bearer", Token: token}}
+	res, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil)
+	if err != nil {
+		t.Fatalf("OperationBinaryDownload declared bearer redirect: %v", err)
+	}
+	if gotAuthorization != "Bearer "+token {
+		t.Fatalf("declared redirect Authorization = %q, want retained bearer", gotAuthorization)
+	}
+	got, err := os.ReadFile(res.Record["file_path"].(string))
+	if err != nil || string(got) != "clip-bytes" {
+		t.Fatalf("declared redirect file = %q / %v, want clip bytes", got, err)
+	}
+}
+
+func TestBinaryDownloadDeclaredBearerRedirectRequiresBearerAuth(t *testing.T) {
+	srv := binaryServer(t, []byte("unused"), nil)
+	b := binaryBundle(srv, &BinaryOperationSpec{BearerRedirect: &BearerRedirectSpec{AllowedHostSuffixes: []string{"localhost"}, MaxHops: 1}})
+	b.HTTP.Auth = []AuthSpec{{Mode: "api_key_header", Header: "X-API-Key", Value: "fixture-key"}}
+	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil); err == nil || !strings.Contains(err.Error(), "exactly one declared bearer auth") {
+		t.Fatalf("binary bearer redirect with custom auth = %v, want bearer-only refusal", err)
 	}
 }
 
