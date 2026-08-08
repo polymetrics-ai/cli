@@ -20,8 +20,15 @@ var batchMarkdownReferenceLink = regexp.MustCompile(`\[[^\]]+\]\(([^)\s]+)\)`)
 // linked by provider-owned pages. It never turns prose such as "get started"
 // into an operation, and traversal is capped and cacheable through fetch.
 func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
+	return parseBatchHTMLReferenceWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
+}
+
+func parseBatchHTMLReferenceWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
 	if source.URL == "" {
 		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference has no source URL")
+	}
+	if budget == nil {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference has no shared traversal budget")
 	}
 	if source.Kind == "" {
 		source.Kind = "html_reference"
@@ -42,7 +49,6 @@ func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batch
 	seen := map[string]bool{rootURL.String(): true}
 	sources := []batchArtifactSource{source}
 	inventory := batchArtifactInventory{}
-	budget := newBatchArtifactReferenceBudget(raw)
 	for len(queue) > 0 {
 		current := queue[0]
 		queue = queue[1:]
@@ -127,14 +133,18 @@ func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batch
 }
 
 func parseBatchReferenceArtifact(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
-	inventory, isMachine, err := parseBatchReferenceMachineArtifact(raw, source, fetch)
+	return parseBatchReferenceArtifactWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
+}
+
+func parseBatchReferenceArtifactWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
+	inventory, isMachine, err := parseBatchReferenceMachineArtifactWithBudget(raw, source, fetch, budget)
 	if err != nil {
 		return batchArtifactInventory{}, err
 	}
 	if isMachine {
 		return inventory, nil
 	}
-	return parseBatchHTMLReference(raw, source, fetch)
+	return parseBatchHTMLReferenceWithBudget(raw, source, fetch, budget)
 }
 
 func parseBatchReferenceMachineArtifact(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, bool, error) {
@@ -232,8 +242,8 @@ func batchHTMLReferenceLinks(raw []byte, base *url.URL) ([]string, error) {
 		resolved := base.ResolveReference(parsed)
 		resolved.Fragment = ""
 		resolved.RawFragment = ""
-		if !strings.EqualFold(strings.TrimSuffix(resolved.Hostname(), "."), strings.TrimSuffix(base.Hostname(), ".")) {
-			return nil
+		if !batchReferenceHostAdmitted(base, resolved) {
+			return batchArtifactInventoryUnknown("official reference contains a selected link outside the trusted provider host")
 		}
 		if err := validateBatchReferenceURLObject(resolved); err != nil {
 			return batchArtifactInventoryUnknown("official reference contains a selected link that failed URL admission")
@@ -271,6 +281,25 @@ func batchHTMLReferenceLinks(raw []byte, base *url.URL) ([]string, error) {
 	}
 	sort.Strings(out)
 	return out, nil
+}
+
+func batchReferenceHostAdmitted(base, candidate *url.URL) bool {
+	if base == nil || candidate == nil {
+		return false
+	}
+	baseHost := strings.TrimSuffix(strings.ToLower(base.Hostname()), ".")
+	candidateHost := strings.TrimSuffix(strings.ToLower(candidate.Hostname()), ".")
+	if baseHost == "" || candidateHost == "" || baseHost != candidateHost {
+		return false
+	}
+	return batchReferencePort(base) == batchReferencePort(candidate)
+}
+
+func batchReferencePort(value *url.URL) string {
+	if port := value.Port(); port != "" {
+		return port
+	}
+	return "443"
 }
 
 func validateBatchReferenceURLObject(parsed *url.URL) error {

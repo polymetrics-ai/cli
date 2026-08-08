@@ -340,41 +340,54 @@ func parseBatchManifestArtifact(opts batchMaterializeOptions, candidate BatchMan
 		SHA256:    fmt.Sprintf("%x", sha256.Sum256(raw)),
 	}
 	fetch := batchArtifactSourceFetcher(opts, candidate)
-	primary, primaryErr := parseBatchArtifactByKind(raw, source, fetch)
+	budget := newBatchArtifactReferenceBudget(raw)
+	primary, primaryErr := parseBatchArtifactByKindWithBudget(raw, source, fetch, budget)
 	if primaryErr == nil {
 		if candidate.ProviderReferenceURL != "" && len(primary.Endpoints) < candidate.OperationsTotal && candidate.ProviderReferenceURL != candidate.Artifact.URL {
-			referenceRaw, err := fetch(candidate.ProviderReferenceURL)
-			if err != nil {
-				return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact yielded %d operation(s), below the ledger's %d; official reference fallback %q could not be fetched: %v", len(primary.Endpoints), candidate.OperationsTotal, candidate.ProviderReferenceURL, err)
-			}
-			referenceSource := source
-			referenceSource.URL = candidate.ProviderReferenceURL
-			referenceSource.Kind = "official-reference"
-			referenceSource.SHA256 = fmt.Sprintf("%x", sha256.Sum256(referenceRaw))
-			fallback, fallbackErr := parseBatchArtifactByKind(referenceRaw, referenceSource, fetch)
+			fallback, fallbackErr := parseBatchManifestReferenceFallback(candidate, source, fetch, budget)
 			if fallbackErr != nil {
-				return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact yielded %d operation(s), below the ledger's %d; official reference fallback %q could not be parsed: %v", len(primary.Endpoints), candidate.OperationsTotal, candidate.ProviderReferenceURL, fallbackErr)
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact yielded %d operation(s), below the ledger's %d; official reference fallback %q failed: %v", len(primary.Endpoints), candidate.OperationsTotal, candidate.ProviderReferenceURL, fallbackErr)
 			}
 			primary = mergeBatchArtifactInventories(primary, fallback)
 		}
-		return primary, nil
+		return requireBatchArtifactInventoryTotal(candidate, primary)
 	}
 	if candidate.ProviderReferenceURL != "" && candidate.ProviderReferenceURL != candidate.Artifact.URL {
-		referenceRaw, err := fetch(candidate.ProviderReferenceURL)
-		if err != nil {
-			return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact parse failed (%v), and official reference fallback %q could not be fetched: %v", primaryErr, candidate.ProviderReferenceURL, err)
-		}
-		referenceSource := source
-		referenceSource.URL = candidate.ProviderReferenceURL
-		referenceSource.Kind = "official-reference"
-		referenceSource.SHA256 = fmt.Sprintf("%x", sha256.Sum256(referenceRaw))
-		fallback, fallbackErr := parseBatchArtifactByKind(referenceRaw, referenceSource, fetch)
+		fallback, fallbackErr := parseBatchManifestReferenceFallback(candidate, source, fetch, budget)
 		if fallbackErr != nil {
-			return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact parse failed (%v), and official reference fallback %q could not be parsed: %v", primaryErr, candidate.ProviderReferenceURL, fallbackErr)
+			return batchArtifactInventory{}, batchArtifactInventoryUnknown("primary artifact parse failed (%v), and official reference fallback %q failed: %v", primaryErr, candidate.ProviderReferenceURL, fallbackErr)
 		}
-		return fallback, nil
+		return requireBatchArtifactInventoryTotal(candidate, fallback)
 	}
 	return batchArtifactInventory{}, primaryErr
+}
+
+func parseBatchManifestReferenceFallback(candidate BatchManifestConnector, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
+	if !budget.hasDocumentCapacity() {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("candidate reference traversal exceeds the %d-document limit", maxBatchArtifactReferenceDocuments)
+	}
+	referenceRaw, err := fetch(candidate.ProviderReferenceURL)
+	if err != nil {
+		return batchArtifactInventory{}, err
+	}
+	if err := budget.addFetched(referenceRaw); err != nil {
+		if err == errBatchArtifactReferenceDocumentLimit {
+			return batchArtifactInventory{}, batchArtifactInventoryUnknown("candidate reference traversal exceeds the %d-document limit", maxBatchArtifactReferenceDocuments)
+		}
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("candidate reference traversal exceeds the bounded %d-byte source budget", maxBatchArtifactReferenceBytes)
+	}
+	referenceSource := source
+	referenceSource.URL = candidate.ProviderReferenceURL
+	referenceSource.Kind = "official-reference"
+	referenceSource.SHA256 = fmt.Sprintf("%x", sha256.Sum256(referenceRaw))
+	return parseBatchArtifactByKindWithBudget(referenceRaw, referenceSource, fetch, budget)
+}
+
+func requireBatchArtifactInventoryTotal(candidate BatchManifestConnector, inventory batchArtifactInventory) (batchArtifactInventory, error) {
+	if len(inventory.Endpoints) < candidate.OperationsTotal {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("artifact inventory yielded %d operation(s), below the ledger's %d", len(inventory.Endpoints), candidate.OperationsTotal)
+	}
+	return inventory, nil
 }
 
 func parseBatchOpenAPIArtifactSource(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
@@ -459,13 +472,17 @@ func normalizeBatchArtifactEndpointAlternatives(endpoint *batchArtifactEndpoint)
 }
 
 func parseBatchArtifactByKind(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
+	return parseBatchArtifactByKindWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
+}
+
+func parseBatchArtifactByKindWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
 	switch strings.ToLower(strings.TrimSpace(source.Kind)) {
 	case "postman":
 		return parseBatchPostmanArtifact(raw, source)
 	case "openapi", "swagger":
-		return parseBatchOpenAPIArtifactSource(raw, source, fetch)
+		return parseBatchOpenAPIArtifactSourceWithBudget(raw, source, fetch, budget)
 	case "openapi_fragments", "html_reference", "official-reference":
-		return parseBatchReferenceArtifact(raw, source, fetch)
+		return parseBatchReferenceArtifactWithBudget(raw, source, fetch, budget)
 	default:
 		return batchArtifactInventory{}, batchArtifactInventoryUnknown("unsupported artifact kind %q", source.Kind)
 	}
@@ -680,17 +697,20 @@ func readBatchMaterializeArtifactCache(dir, connector string) ([]byte, error) {
 	if err := validateBatchConnectorName(connector); err != nil {
 		return nil, err
 	}
-	root, err := filepath.Abs(dir)
+	root, err := batchArtifactCacheRoot(dir)
 	if err != nil {
 		return nil, err
 	}
 	var matches []string
 	for _, extension := range []string{".json", ".yaml", ".yml", ".txt", ".md", ".html", ".htm"} {
 		candidate := filepath.Join(root, connector+extension)
-		info, err := os.Stat(candidate)
+		info, err := os.Lstat(candidate)
 		if err == nil && info.Mode().IsRegular() {
 			matches = append(matches, candidate)
 			continue
+		}
+		if err == nil && info.Mode()&os.ModeSymlink != 0 {
+			return nil, fmt.Errorf("artifact cache file %s must not be a symlink", candidate)
 		}
 		if err != nil && !os.IsNotExist(err) {
 			return nil, err
@@ -706,7 +726,7 @@ func readBatchMaterializeArtifactCache(dir, connector string) ([]byte, error) {
 }
 
 func readBoundedArtifactFile(path string) ([]byte, error) {
-	info, err := os.Stat(path)
+	info, err := os.Lstat(path)
 	if err != nil {
 		return nil, err
 	}
@@ -735,6 +755,10 @@ func batchArtifactSourceFetcher(opts batchMaterializeOptions, candidate BatchMan
 			if err != nil {
 				return nil, err
 			}
+			cachePath, err = batchArtifactReferenceCachePath(opts.artifactDir, candidate.Connector, rawURL)
+			if err != nil {
+				return nil, err
+			}
 			if err := writeBatchFile(cachePath, raw); err != nil {
 				return nil, fmt.Errorf("cache external artifact %q: %w", rawURL, err)
 			}
@@ -748,12 +772,64 @@ func batchArtifactReferenceCachePath(dir, connector, rawURL string) (string, err
 	if err := validateBatchConnectorName(connector); err != nil {
 		return "", err
 	}
-	root, err := filepath.Abs(dir)
+	root, err := batchArtifactCacheRoot(dir)
+	if err != nil {
+		return "", err
+	}
+	references, err := batchArtifactCacheDirectory(root, connector, "references")
 	if err != nil {
 		return "", err
 	}
 	digest := fmt.Sprintf("%x", sha256.Sum256([]byte(rawURL)))
-	return filepath.Join(root, connector, "references", digest+".artifact"), nil
+	return filepath.Join(references, digest+".artifact"), nil
+}
+
+func batchArtifactCacheRoot(dir string) (string, error) {
+	root, err := filepath.Abs(dir)
+	if err != nil {
+		return "", err
+	}
+	info, err := os.Lstat(root)
+	if err != nil {
+		return "", fmt.Errorf("inspect artifact cache root: %w", err)
+	}
+	if !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
+		return "", errors.New("artifact cache root must be a non-symlink directory")
+	}
+	resolved, err := filepath.EvalSymlinks(root)
+	if err != nil {
+		return "", fmt.Errorf("resolve artifact cache root: %w", err)
+	}
+	return filepath.Clean(resolved), nil
+}
+
+func batchArtifactCacheDirectory(root string, components ...string) (string, error) {
+	directory := root
+	for _, component := range components {
+		if component == "" || component != filepath.Base(component) {
+			return "", errors.New("artifact cache directory component is unsafe")
+		}
+		next := filepath.Join(directory, component)
+		rel, err := filepath.Rel(root, next)
+		if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+			return "", errors.New("artifact cache directory escapes its root")
+		}
+		info, err := os.Lstat(next)
+		if errors.Is(err, os.ErrNotExist) {
+			if err := os.Mkdir(next, 0o755); err != nil && !errors.Is(err, os.ErrExist) {
+				return "", err
+			}
+			info, err = os.Lstat(next)
+		}
+		if err != nil {
+			return "", err
+		}
+		if !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
+			return "", fmt.Errorf("artifact cache component %s must be a non-symlink directory", next)
+		}
+		directory = next
+	}
+	return directory, nil
 }
 
 func fetchBatchMaterializeArtifact(rawURL string) ([]byte, error) {
@@ -919,8 +995,8 @@ func validateBatchArtifactURLObjectWithQuery(parsed *url.URL, allowQuery bool) e
 			return errors.New("artifact reference query must be well-formed")
 		}
 		for key := range query {
-			if batchArtifactCredentialQueryParameter(key) {
-				return errors.New("artifact reference query must not contain credential-shaped parameters")
+			if !batchArtifactReferenceQueryParameterAllowed(key) {
+				return errors.New("artifact reference query must use only non-sensitive parameters")
 			}
 		}
 	}
@@ -934,22 +1010,13 @@ func validateBatchArtifactURLObjectWithQuery(parsed *url.URL, allowQuery bool) e
 	return nil
 }
 
-func batchArtifactCredentialQueryParameter(key string) bool {
-	normalized := strings.Map(func(r rune) rune {
-		if r == '-' || r == '_' || r == '.' || r == ' ' {
-			return -1
-		}
-		return r
-	}, strings.ToLower(key))
-	if normalized == "sig" || normalized == "key" {
+func batchArtifactReferenceQueryParameterAllowed(key string) bool {
+	switch strings.ToLower(key) {
+	case "api-version", "format", "lang", "locale", "version":
 		return true
+	default:
+		return false
 	}
-	for _, marker := range []string{"token", "secret", "password", "credential", "authorization", "apikey", "accesskey", "signature"} {
-		if strings.Contains(normalized, marker) {
-			return true
-		}
-	}
-	return false
 }
 
 func newBatchArtifactHTTPClient(lookup batchArtifactLookupIPAddr) *http.Client {
