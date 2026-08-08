@@ -1,7 +1,7 @@
 {
   "phase": "github-parity-extract-r1",
   "branch": "fm/cli-github-parity-extract-r1",
-  "base": "08cc41c87",
+  "base": "d453fbe256eb22d90ea77dbed634b245bd6e795b",
   "source_branch": "origin/fm/cli-top50-sweep-resume2-r1",
   "lifecycle": {
     "discuss-phase": "scripts/gsd prompt discuss-phase github-parity-extract-r1 --auto; fixed scope re-confirmed inline",
@@ -88,7 +88,7 @@
     }
   },
   "fresh_validation_2026_08_08": {
-    "head": "b756c9c63feae44c91a79ab9e11d27e8c7fffd11",
+    "head": "8d276edac80599f483c901301283490f3698de12",
     "reachability": {
       "probed": 1086,
       "unreachable": 0,

@@ -63,6 +63,22 @@ not changed in this lane.
 **Notes:** The paused sweep rebases after this PR lands. Inline GSD execution is the documented
 fallback because this session has no compatible isolated GSD workers and delegation is not authorised.
 
+---
+
+## Remaining documented-operation gaps
+
+| Option | Description | Selected |
+|---|---|---|
+| Treat blocked rows as a final exclusion | Preserve the 98 classified rows without an executable contract. | |
+| Close executable foundations in this lane | Add bounded status/text response and declared request-body support, then regenerate GitHub declarations. | ✓ |
+
+**Choice:** Close executable foundations in this lane.
+**Notes:** The captain's later order governs: no final PR or completion claim while these
+self-fixable GitHub gaps remain. The first slice is deliberately narrow: status-only reads,
+text responses, and GitHub Markdown's declared raw-text POST body. OAuth application endpoints
+will use a separately declared Basic-auth contract or remain fail-closed; the normal GitHub bearer
+credential is not a substitute for the provider's documented authentication requirement.
+
 ## the agent's Discretion
 
 - Select safe, existing harness seams and exact rate budgets based on provider-cited policy and

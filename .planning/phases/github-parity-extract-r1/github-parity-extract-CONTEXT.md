@@ -1,7 +1,7 @@
 # Phase github-parity-extract: r1 — Context
 
 **Gathered:** 2026-08-08  
-**Status:** Ready for replanning
+**Status:** In progress — gap closure
 
 <domain>
 ## Phase Boundary
@@ -74,6 +74,21 @@ does, and keeps destructive-write safety intact.
   compatible isolated worker for this session and delegation is not authorised.
   Run the generated GSD workflow inline, record that fallback in the plan and
   verification artifacts, and preserve red-before-green evidence.
+
+### Remaining documented-operation parity
+
+- **D-14:** Do not describe the extracted surface as complete or open the final
+  GitHub PR while the 98 classified endpoint gaps remain. Close the real
+  status-only/text-response/request-body foundations and their GitHub
+  declarations in this same parent lane; do not create a separate task or PR.
+  Each promotion must remain tied to a documented endpoint, pass the real
+  command preflight, and be included in the eventual full live-proof sweep.
+- **D-15:** A documented OAuth application endpoint that requires HTTP Basic
+  client authentication must never silently reuse the connector's ordinary
+  bearer credential. Its eventual declaration must select an explicitly
+  declared, secret-backed Basic-auth contract and fail before dispatch if that
+  contract is absent. Token-bearing request or response fields remain withheld
+  from plans, reports, and persisted state.
 
 ### the agent's Discretion
 

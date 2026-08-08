@@ -1,6 +1,6 @@
 # Plan Review — GitHub live-operation proof
 
-**Date:** 2026-08-08  
+**Date:** 2026-08-08
 **Mode:** Inline/manual plan-checker fallback
 
 The GSD adapter is healthy, but this session has no compatible isolated planner/checker and is not
@@ -30,3 +30,23 @@ contract inline.
 The plan is ready for inline execution. Any implementation change that expands beyond the
 GitHub-only boundary, creates a second limiter, or weakens write confirmation requires a new
 captain decision rather than a plan adjustment.
+
+---
+
+## Plan 04 review — response/body parity foundation
+
+**Date:** 2026-08-08  
+**Mode:** Inline/manual plan-checker fallback
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Context decisions covered | PASS | `gsd-sdk query check.decision-coverage-plan .planning/phases/github-parity-extract-r1 .planning/phases/github-parity-extract-r1/github-parity-extract-CONTEXT.md` reports 15/15. |
+| TDD order | PASS | Plan 04 requires focused no-content/text/raw-body RED tests before each matching engine or transport change. |
+| Transport scope | PASS | The plan admits only operation-declared `POST text/plain` root-string input; it does not add generic raw HTTP. |
+| Provider-auth safety | PASS | OAuth application endpoints are deliberately not promoted by this response slice; D-15 prohibits falling back to the ordinary bearer credential. |
+| Generated-artifact ownership | PASS | The generator source changes first, then emits GitHub declarations and `surface-sync` verifies them. |
+| Delivery scope | PASS | The work remains within the existing GitHub parent lane and explicitly does not claim final parity while further classified gaps remain. |
+
+**Approval:** Plan 04 is ready for inline TDD execution. The next implementation checkpoint must
+record actual test failures and green results in `TDD-LEDGER.md` before any generated GitHub
+surface is promoted.
