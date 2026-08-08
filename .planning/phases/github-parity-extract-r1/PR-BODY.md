@@ -92,6 +92,14 @@ read as claiming otherwise. `repo create`, `repo archive`, `repo unarchive` and 
 non-destructive; `issue delete` stays blocked, because there is no GraphQL mutation executor to
 reach. Four corrections were attached to that decision and are implemented in cycle 10 below.
 
+`repo archive`/`repo unarchive` did not stay non-destructive on the first pass — cycle 6 declared
+`confirm: destructive` on both, reading "destructive" as a mutation class where the decision uses
+it to name the gate. Cycle 11 removes that declaration, which is the one change in this PR that
+**removes** a gate. What makes it correct is not that the gate was useless but that it was never
+authorized: `pm github repo archive` demanded a typed confirmation no decision granted it, and
+every command carrying the marker without being on the destructive list makes it mean less on the
+ones that are. Both are approval-only writes now, like `repo create` and `secret set`.
+
 ### Restored — 7 commands, on the gate the write path already imposed
 
 All become `intent: reverse_etl`, `availability: implemented`, pointed at the write action
@@ -104,18 +112,18 @@ see cycle 10, which corrected the metadata that claimed otherwise.
 | --- | --- | --- | --- | --- | --- |
 | `repo create` | `repos_create_for_authenticated_user` | POST | create | plan → approval token → execute | none — approval-only create |
 | `repo delete` | `repo` | DELETE | delete | + closed typed `--confirm destructive`, digest recomputed at execution | DELETE method **and** declared `confirm: destructive` |
-| `repo archive` | `archive_repo` *(new)* | PATCH | update | + closed typed `--confirm destructive` | declared `confirm: destructive` |
-| `repo unarchive` | `unarchive_repo` *(new)* | PATCH | update | + closed typed `--confirm destructive` | declared `confirm: destructive` |
+| `repo archive` | `archive_repo` *(new)* | PATCH | update | plan → approval token → execute; body pinned to `archived: true` | none — approval-only update |
+| `repo unarchive` | `unarchive_repo` *(new)* | PATCH | update | plan → approval token → execute; body pinned to `archived: false` | none — approval-only update |
 | `cache delete` | `actions_caches_cache_id` | DELETE | delete | + closed typed `--confirm destructive` | DELETE method |
 | `secret set` | `actions_secrets_secret_name3` | PUT | update | plan → approval token → execute; `encrypted_value` redacted | none — approval-only create |
 | `secret delete` | `actions_secrets_secret_name` | DELETE | delete | + closed typed `--confirm destructive` | DELETE method |
 
 `connectors.ConfirmationForWriteAction` returns `destructive` for **any** DELETE regardless of
 metadata, and the test asserts through that same resolver — so a future edit that severs the
-confirmation fails. It asserts the negative too: `repo create` and `secret set` are the captain's
-approval-only creates, and gaining a typed challenge is as much a drift from that decision as
-losing one. No declaration was duplicated: the three DELETEs already carried the challenge by
-method, and only the two PATCH actions needed one declared.
+confirmation fails. It asserts the negative too: `repo create`, `secret set`, `repo archive` and
+`repo unarchive` are the captain's approval-only writes, and gaining a typed challenge is as much
+a drift from that decision as losing one. No declaration was added or duplicated: the three
+DELETEs carry the challenge by method, and the two PATCH actions carry none.
 
 **The documented surface says so too — from one source.** The bundle used to carry a prose
 `notes` marker for this on eight commands, and it was wrong on all eight: it read `destructive;
@@ -136,8 +144,9 @@ The 107 github commands whose notes say something genuinely per-command keep the
 Every derived artifact was regenerated from those declarations rather than hand-edited:
 `docs/connectors/github/{MANUAL,SKILL}.md` and `docs/skills/pm-github/SKILL.md` via
 `./pm docs generate` / `./pm skills generate`, `docs/connectors/catalog/all-connectors.json`
-(`archive_repo`/`unarchive_repo` gain `confirm: destructive`, taking github from 181 to 183
-declared confirmations), and `website/data/connectors.generated.json` plus
+(github's declared confirmations end where they started, at **181** — cycle 6 took it to 183 by
+declaring `confirm: destructive` on `archive_repo`/`unarchive_repo`, and cycle 11 removed both),
+and `website/data/connectors.generated.json` plus
 `website/lib/connectors.catalog.data.generated.json` via `npm --prefix website run gen:catalog`.
 `body_fields: ["archived"]` now also renders as an `optional fields: archived` line on both
 actions, taking github's manual from 9 such lines to 11. The generators again wanted to rewrite
@@ -149,8 +158,8 @@ again. Both website catalogs were diffed per connector: the only entry that chan
 `CONFIRMATION` section resolved by `commandrunner.ConfirmationChallengeForCommand`, the same
 declarations `buildWriteCommand`/`buildOperationDirectWriteCommand` read at plan time, so help and
 runtime cannot disagree — the boundary `writeConnectorDownloadFlags` already sets for download
-flags. It covers all 173 of github's destructive commands and every other connector's, and it is
-the only place the fact is stated:
+flags. It covers all **174** of github's destructive commands and every other connector's, and it
+is the only place the fact is stated:
 
 ```
 pm github release delete --help
@@ -162,7 +171,7 @@ pm github release delete --help
 `notes` that mentions `--confirm`, so the removed copy cannot return; it also asserts the resolver
 still answers, so it cannot pass by the derivation silently breaking.
 
-`guide.go` is deliberately untouched: marking all 183 actions there would rewrite all 551
+`guide.go` is deliberately untouched: marking all 181 actions there would rewrite all 551
 committed connector manuals, which is both the bulk change that was declined and
 unrelated-connector churn.
 
@@ -177,17 +186,19 @@ endpoint as the generic `repo update`, so the body is the only thing separating 
 command that lies.
 
 They were first pinned in the github hook's `ExecuteWrite`, as `close_issue`/`reopen_issue` are.
-That is incompatible with the typed confirmation the captain ordered: `prepareDeclarativeWrite`
-**refuses** to prepare a destructive action whose hook overrides execution, because the preview an
-operator approves would not be the request that runs. Declaring `confirm: destructive` alone would
-have made both commands unusable rather than gated.
+Cycle 6's `confirm: destructive` made that impossible: `prepareDeclarativeWrite` **refuses** to
+prepare a destructive action whose hook overrides execution, because the preview an operator
+approves would not be the request that runs. So the pin moved from the request to the record — a
+new optional `engine.WriteRecordHook` that fixes the body fields an action's own name implies
+before the declarative body is built, applied by both preview and execution, so the approved body
+**is** the dispatched body by construction.
 
-So the pin moved from the request to the record. A new optional `engine.WriteRecordHook` lets a
-hook fix the body fields an action's own name implies, before the declarative body is built;
-preview and execution both apply it, so the approved body **is** the dispatched body by
-construction. `archive_repo`/`unarchive_repo` declare `body_fields: ["archived"]`, so the pinned
-field is also the only field sent — the same tightness the hook-executed version had, with an
-exact preview it did not. The interface is opt-in, so the other 550 connectors are untouched.
+Cycle 11 removed the `confirm: destructive` that forced that move, and the `WriteRecordHook` stays
+anyway, because the property it bought outlives the reason it was reached for: preview and
+execution build one body from one record, which is what stops a `repo unarchive` from forwarding
+an empty body and reporting success. `archive_repo`/`unarchive_repo` declare
+`body_fields: ["archived"]`, so the pinned field is also the only field sent. The interface is
+opt-in, so the other 550 connectors are untouched.
 
 **`secret set` exposed a live defect.** The already-`implemented` `secret set-2` had a
 `record_schema` of just the path parameter, so it could only ever send an empty PUT and take a
@@ -391,7 +402,7 @@ from the one the runtime imposes.
 | correction | before | after |
 | --- | --- | --- |
 | safe previews claimed a confirmation | `PreviewPreparedWrite` stamped `confirmation: destructive` on every approval target, so `repo create --preview --json` announced a challenge `--confirm` rejects | keyed on `DestructiveTarget.RequiresApproval()`, the same predicate `GateDestructiveExecution` uses |
-| approval metadata claimed every write needs a preview | one blanket sentence on all 525 github `reverse_etl` commands | the 349 safe ones declare `plan, approval, execute; preview is optional` — provably true: the token is issued at plan and the write executes with no preview step. The 176 destructive ones are unchanged, because the sentence is accurate for them |
+| approval metadata claimed every write needs a preview | one blanket sentence on all 525 github `reverse_etl` commands | the safe ones declare `plan, approval, execute; preview is optional` — provably true: the token is issued at plan and the write executes with no preview step. The destructive ones are unchanged, because the sentence is accurate for them. The split was 349/176 at cycle 10 and is **351/174** after cycle 11 reclassified `repo archive`/`repo unarchive` |
 | a marker naming a flag that does not exist could return | `scripts/gen-github-parity.py` still emitted `requires --allow-destructive + typed confirmation` for every `destructive_action` | the generator emits no `notes` marker; the confirmation is derived once and rendered by the help/manual/skill CONFIRMATION field |
 | `repo delete-2` parity was unpinned | both names already resolved the same destructive contract, but nothing asserted it | `TestGitHubGeneratedTwinsShareTheirAliasWriteContract` discovers every write action reachable under two names and requires matching confirmation, availability and approval — **it passed on first run; verified, not fixed** |
 
@@ -402,7 +413,82 @@ failure was precisely diagnostic — `delete_*` checks passed while `create_*`/`
 and no conformance check was relaxed: destructive actions still mint, verify and consume a real
 grant.
 
-**No test was weakened, skipped, or deleted. Six were added across the branch, three in cycle 10.**
+### Review cycle 11 — `repo archive`/`repo unarchive` are approval-only, as classified
+
+Cycle 10 closed every declared-vs-enforced disagreement except the one it raised for decision
+instead of resolving. Cycle 6 declared `confirm: destructive` on `archive_repo`/`unarchive_repo`,
+reading "destructive" as a mutation class; the captain's decision uses it to name the gate and
+lists both commands as non-destructive. This PR previously asserted both readings in the same
+section — the prose said non-destructive, the table said `+ closed typed --confirm destructive` —
+and the enforced behaviour followed the table. The captain resolved it toward non-destructive, so
+cycle 11 deletes the two declarations and the contradiction with them.
+
+| | before cycle 11 | after |
+| --- | --- | --- |
+| `pm github repo archive` plan | `Preview required` + `Confirmation required: --confirm destructive` | approval token issued at plan; preview optional |
+| approved run without `--confirm` | refused | dispatches `PATCH /repos/{owner}/{repo}` `{"archived":true}` |
+| `--preview --json` confirmation kind | `"destructive"` | `""` |
+| github reverse-ETL split | 176 destructive / 349 safe | **174 / 351** |
+
+This is the one change in the branch that removes a gate, and it is worth naming as such. It is
+correct because the gate was never authorized, not because it was harmless: a typed confirmation
+on a command the decision lists as non-destructive dilutes the marker on the 174 commands that
+carry it by right. `repo delete` is untouched — no token at plan, preview required, typed
+`--confirm destructive`, single-use request-bound grant, all still asserted call-count by
+call-count. `issue delete` stays blocked: no GraphQL mutation executor exists.
+
+Six derived artifacts follow the two deleted declarations and change two lines each:
+github's `cli_surface.json`, `MANUAL.md`, both `SKILL.md`s, the docs catalog, both website
+catalogs, and `internal/cli/testdata/golden_transcripts.json` —
+`TestGoldenTranscripts/connectors_inspect_github_json` caught the last of those itself before it
+was regenerated.
+
+Red-first, GitHub-scoped: `TestGitHubRestoredCommandsAreExecutable` flipped both rows to
+non-destructive and failed against the live resolver;
+`TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField` (rewritten from the destructive-path
+test) failed on the plan's `ConfirmationChallenge`; and both commands moved from
+`TestConnectorCommandHelpStatesTheTypedConfirmation` to its converse, with `repo delete-2` taking
+the vacated slot so the destructive twin is covered by name there too. Full red output in
+`TDD-LEDGER.md` cycle 11.
+
+### The phantom-flag fix is GitHub-scoped, and here is what it did not reach
+
+The `--allow-destructive` marker this branch removed named a flag `pm` has never parsed. The fix
+is deliberately narrow: it deletes the github notes and stops `scripts/gen-github-parity.py`
+re-emitting them, and the guard
+(`TestGitHubNotesDoNotRestateTheTypedConfirmation`) sweeps github only. No repo-wide flag test was
+added, because a rule applied across 551 bundles at once cannot be verified command by command
+against the binary the way these were.
+
+A survey of the same defect class elsewhere, for scope rather than for action — **21 commands
+across 5 connectors**, naming **26** distinct command/flag pairs, carry a `notes` string
+referencing a flag that command does not declare and that is not a global flag:
+
+| connector | commands | command/flag pairs | flags named |
+| --- | --- | --- | --- |
+| `ashby` | 12 | 16 | `--actor-ids`, `--approval-status`, `--categories`, `--expand`, `--offer-status`, `--target-ids`, `--target-types` |
+| `youtube-analytics` | 4 | 5 | `--config`, `--dest-root`, `--file-name` |
+| `recurly` | 3 | 3 | `--dest-root` |
+| `gong` | 1 | 1 | `--limit` |
+| `gorgias` | 1 | 1 | `--dest-root` |
+
+**None is changed here**, and they are not equivalent to github's: these declare a flag as
+*blocked pending* a named foundation (`Repeatable array request variants (--status, --expand) are
+blocked pending connector-stream-repeatable-array-foundation`), where github's claimed a flag was
+*required*. Both name something the parser will reject, so both belong in the same class; only the
+severity differs.
+
+**Widening plan — per connector, not repo-wide.** Each of the five is its own issue, taking the
+github shape: read the note against the command's declared flags and the runtime parser, decide
+whether the flag should exist or the note should go, fix the bundle *and* whatever generator emits
+the note, then add a connector-scoped guard test mirroring
+`TestGitHubNotesDoNotRestateTheTypedConfirmation`. Once all five are closed and no generator can
+reintroduce one, the guard is worth promoting to a `defs.FS` sweep in
+`internal/connectors/commandrunner` — as a backstop over a surface already proven clean, which is
+the opposite order from imposing it on 551 unverified bundles.
+
+**No test was weakened, skipped, or deleted. Six were added across the branch, three in cycle 10;
+cycle 11 rewrote three assertions to the classification the decision states.**
 
 GSD evidence: `.planning/phases/github-parity-extract-r1/` — `PLAN.md`, `TDD-LEDGER.md`
 (every red/green cycle with observed output), `VERIFICATION.md`, `SUMMARY.md`,

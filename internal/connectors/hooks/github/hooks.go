@@ -252,10 +252,11 @@ func (h *Hooks) HandlesWriteAction(action engine.WriteAction) bool {
 // rather than as flags: a command named "archive" that only archives when the
 // caller also supplies archived=true is a command that lies.
 //
-// They pin the record rather than the request, unlike closeResource, because
-// both carry a destructive typed confirmation and the engine refuses to prepare
-// a destructive hook-executed action: the preview would not be the request. The
-// action's body_fields allow-list keeps the pinned field the only one sent.
+// They pin the record rather than the request, unlike closeResource, so the
+// declarative path stays intact: preview and execution build one body from one
+// record, which is what makes the digest an operator approves the request that
+// runs. The action's body_fields allow-list keeps the pinned field the only one
+// sent.
 func (h *Hooks) MapWriteRecord(action engine.WriteAction, rec connectors.Record) (connectors.Record, bool, error) {
 	switch action.Name {
 	case "archive_repo":

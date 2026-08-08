@@ -1052,7 +1052,7 @@
       "write": "archive_repo",
       "source_cli_path": "gh repo archive",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -1063,7 +1063,7 @@
       "write": "unarchive_repo",
       "source_cli_path": "gh repo unarchive",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {

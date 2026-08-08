@@ -64608,7 +64608,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64624,7 +64624,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
