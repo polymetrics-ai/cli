@@ -236,6 +236,17 @@ func TestValidate_CLISurfaceValidationDeclarationsPassCleanly(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceDateFlagFormatPassesCleanly(t *testing.T) {
+	json := strings.ReplaceAll(validCLISurfaceValidationJSON(), `"format": "date-time"`, `"format": "date"`)
+	report, err := validateDir(cliSurfaceBundleFS(json))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for date-only CLI validation declarations, got %+v", report.Findings)
+	}
+}
+
 func TestValidate_CLISurfaceRejectsMalformedValidationDeclarations(t *testing.T) {
 	tests := []struct {
 		name string

@@ -53,7 +53,7 @@
           "maps_to": { "type": "string" },
           "format": {
             "type": "string",
-            "enum": ["date-time"]
+            "enum": ["date", "date-time"]
           },
           "allow_empty": { "type": "boolean" },
           "minimum": { "type": "number" },
@@ -125,7 +125,7 @@
                 "maps_to": { "type": "string" },
                 "format": {
                   "type": "string",
-                  "enum": ["date-time"]
+                  "enum": ["date", "date-time"]
                 },
                 "allow_empty": { "type": "boolean" },
                 "minimum": { "type": "number" },

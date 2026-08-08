@@ -1132,7 +1132,7 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		if strings.TrimSpace(flag.MapsTo) != "" {
 			mappedTargets[flag.MapsTo] = flag.Name
 		}
-		if flag.Format != "" && flag.Format != "date-time" {
+		if flag.Format != "" && flag.Format != "date-time" && flag.Format != "date" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s declares unsupported format %q", i, cmd.Path, flag.Name, flag.Format)})
 		}
 		if flag.Format != "" && flag.Type != "string" {

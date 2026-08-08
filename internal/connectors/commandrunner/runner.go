@@ -1061,6 +1061,12 @@ func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error 
 			return fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flag.Name, value)
 		}
 		return nil
+	case "date":
+		parsed, err := time.Parse(time.DateOnly, value)
+		if err != nil || parsed.Format(time.DateOnly) != value {
+			return fmt.Errorf("invalid --%s %q, want ISO-8601 date (YYYY-MM-DD)", flag.Name, value)
+		}
+		return nil
 	default:
 		return &BlockedCommandError{
 			Command: "unknown",
