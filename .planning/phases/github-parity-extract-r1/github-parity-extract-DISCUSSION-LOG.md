@@ -101,3 +101,7 @@ credential is not a substitute for the provider's documented authentication requ
 one-provider-endpoint-to-many-write-contract relationship, so no shared engine extension is needed.
 The four bulk-attestation delete-request contracts remain destructive caller-supplied intent
 acknowledgements; campaign, ProjectsV2, and Codespaces contracts remain approval-only creates.
+
+The body-field audit found an existing but unimplemented `json` CLI flag type. It is used only as
+a parsed, schema-validated value for declared `record.*` object/array fields; accepting it as a
+literal body, path, query, or header would create a generic API escape hatch and is not selected.
