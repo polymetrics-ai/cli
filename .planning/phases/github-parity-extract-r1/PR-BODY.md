@@ -254,6 +254,31 @@ held `auth token`.
 
 ## Verification
 
+### Fresh restart validation (2026-08-08)
+
+This branch was recovered at `b756c9c63feae44c91a79ab9e11d27e8c7fffd11`
+without reset or reconstruction. The fresh validation did not inherit the prior
+run's result: it built a new `pm` binary and invoked all 1,086
+`implemented`/`partial` GitHub paths from an initialized project with no
+credential configured. Result: `connector=github probed=1086 unreachable=0`.
+
+The GSD adapter and canonical contract were re-checked; `discuss-phase`,
+`plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` prompts
+were resolved through `scripts/gsd prompt`. Execution remains an inline/manual
+fallback because this runtime cannot provide the required isolated Pi roles and
+the project contract forbids spawning them. The existing plan and red/green
+ledger are retained, with the new verify evidence in `VERIFICATION.md` section
+7 and `RUN-STATE.json`.
+
+Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
+`golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-design-patterns`, `golang-structs-interfaces`, `golang-graphql`,
+`golang-lint`, `golang-documentation`, `vercel-react-best-practices`, and
+`vercel-composition-patterns`. The routing reference also named
+`frontend-design` and `web-design-guidelines`; neither is installed, so the
+generated website artifacts were checked through the repository's own docs and
+generator gates.
+
 ```
 gofmt -l cmd internal                                          clean
 go vet ./...                                                   clean
