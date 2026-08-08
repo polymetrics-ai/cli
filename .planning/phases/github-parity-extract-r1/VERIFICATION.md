@@ -205,3 +205,37 @@ make connector-boundary, release-workflow-check                    ok
 bash scripts/verify-gsd-workflow                                  exit 0
 go build ./cmd/pm                                                  ok
 ```
+
+## Review round (cycle 4) re-verification
+
+Five review findings were investigated; all five were legitimate and are fixed
+in place. See TDD-LEDGER cycle 4 for the red/green record. Two of them
+(4a withheld re-supply, 4c plural write coverage) were shared-code regressions
+this branch introduced outside GitHub, so the fixes are at the shared boundary
+rather than at the reported line: `withholdRecordFields` now reports what it
+actually removed and `ReversePlan.WithheldFields` persists it, and the certify
+surface inventory reads `SurfaceCoverage.WriteTargets()` like every other
+consumer of `covered_by`.
+
+`internal/connectors/certify/` was absent from the gate list above, which is why
+its two stale GitHub counts were red on this branch without being noticed. It is
+listed below and stays listed.
+
+```
+gofmt -l cmd internal                                              clean
+go vet ./internal/app/ ./internal/cli/ ./internal/connectors/certify/ ./internal/connectors/commandrunner/   clean
+go build ./cmd/pm                                                  ok
+go test -timeout 20m ./internal/app/                               ok (265.262s)
+go test -timeout 20m ./internal/connectors/certify/                ok (12.555s)
+go test -timeout 20m ./internal/connectors/commandrunner/          ok (13.315s)
+go test -timeout 15m -run 'Golden|Reverse|Docs|Manual|Help' ./internal/cli/   ok (174.584s)
+pm docs generate                                                   docs/cli/reverse.md only
+POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -run TestGoldenTranscripts ./internal/cli/   3 reverse entries
+node website/scripts/gen-docs-data.mjs                             reverse-etl page only
+```
+
+CLI/docs/website parity for the re-supply contract: `pm help reverse`,
+`pm reverse` and `pm reverse --json` all render the new USAGE, FLAGS,
+DESCRIPTION, COMMANDS and SECURITY text (pinned by the regenerated golden
+transcripts); `docs/cli/reverse.md` and `website/content/docs/reverse-etl.mdx`
+plus its generated data carry the same contract.

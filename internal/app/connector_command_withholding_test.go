@@ -172,6 +172,56 @@ func TestWrongResuppliedValueFailsHashCheck(t *testing.T) {
 	}
 }
 
+// TestDeclaredButUnsuppliedFieldIsNotOwedBack pins the difference between
+// "withheld" and "never supplied". A declared sensitive field the operator did
+// not pass was never in the record and was never removed, so it must not become
+// a re-supply precondition: the plan hash was computed without it, and no later
+// value could ever satisfy the plan.
+func TestDeclaredButUnsuppliedFieldIsNotOwedBack(t *testing.T) {
+	ctx := context.Background()
+	connector := &withholdingConnector{}
+	a, _ := withholdingApp(t, ctx, connector)
+
+	for _, tc := range []struct {
+		name string
+		path []string
+	}{
+		// The declared field has an optional flag the operator omitted.
+		{name: "optional_flag_omitted", path: []string{"hook", "add"}},
+		// The declared field has no flag on the command at all.
+		{name: "no_flag_maps_to_the_field", path: []string{"hook", "ping"}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+				Name:       "hook",
+				Connector:  "withholding-fixture",
+				Credential: "withholding-local",
+				Path:       tc.path,
+				Flags:      map[string][]string{"hook-name": {"deploy"}},
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand: %v", err)
+			}
+			if len(plan.RedactFields) == 0 {
+				t.Fatalf("plan.RedactFields = %#v, want the declared sensitive field", plan.RedactFields)
+			}
+			if len(plan.WithheldFields) != 0 {
+				t.Fatalf("plan.WithheldFields = %#v, want nothing withheld when nothing was supplied", plan.WithheldFields)
+			}
+			if _, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil); err != nil {
+				t.Fatalf("PreviewConnectorCommandPlan with no re-supply: %v", err)
+			}
+			run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+			if err != nil {
+				t.Fatalf("RunReverseETL with no re-supply: %v", err)
+			}
+			if run.RecordsSucceeded != 1 {
+				t.Fatalf("run = %#v, want a normal dispatch", run)
+			}
+		})
+	}
+}
+
 // TestUndeclaredFieldsRoundTripUnchanged is the negative control that the
 // mechanism only withholds what a write action declares.
 func TestUndeclaredFieldsRoundTripUnchanged(t *testing.T) {
@@ -248,6 +298,18 @@ func (c *withholdingConnector) Manifest() connectors.Manifest {
 				Method: http.MethodPost,
 				Path:   "/labels",
 			},
+			{
+				Name:         "add_hook",
+				Method:       http.MethodPost,
+				Path:         "/hooks",
+				RedactFields: []string{"url"},
+			},
+			{
+				Name:         "ping_hook",
+				Method:       http.MethodPost,
+				Path:         "/hooks/ping",
+				RedactFields: []string{"url"},
+			},
 		},
 	}
 }
@@ -273,6 +335,19 @@ func (c *withholdingConnector) CommandSurface() *connectors.CommandSurface {
 			Path: "label add", Intent: "reverse_etl", Availability: "implemented", Write: "add_label",
 			Flags: []connectors.CommandSurfaceFlag{
 				{Name: "label-name", Type: "string", MapsTo: "record.label_name", Required: true},
+			},
+		},
+		{
+			Path: "hook add", Intent: "reverse_etl", Availability: "implemented", Write: "add_hook",
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "hook-name", Type: "string", MapsTo: "record.hook_name", Required: true},
+				{Name: "url", Type: "string", MapsTo: "record.url"},
+			},
+		},
+		{
+			Path: "hook ping", Intent: "reverse_etl", Availability: "implemented", Write: "ping_hook",
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "hook-name", Type: "string", MapsTo: "record.hook_name", Required: true},
 			},
 		},
 	}}

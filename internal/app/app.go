@@ -1562,6 +1562,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
+	withheldRecord, withheldFields := withholdRecordFields(writeCommand.Record, redactFields)
 	created := time.Now().UTC()
 	expires := created.Add(24 * time.Hour)
 	var planSeal *connectors.WritePlanSeal
@@ -1595,12 +1596,13 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		ConnectorCommandOperation:  writeCommand.Operation,
 		ConnectorCommandPathParams: cloneStringMap(writeCommand.PathParams),
 		ConnectorCommandQuery:      cloneStringMap(writeCommand.Query),
-		ConnectorCommandRecord:     withholdRecordFields(writeCommand.Record, redactFields),
+		ConnectorCommandRecord:     withheldRecord,
 		PayloadIdentity:            payloadIdentity,
 		ConfirmationChallenge:      writeCommand.ConfirmationChallenge,
 		ConfirmationPolicy:         confirmationFromChallenge(writeCommand.ConfirmationChallenge),
 		RecordCount:                1,
 		RedactFields:               redactFields,
+		WithheldFields:             withheldFields,
 		Sample:                     RedactReversePlanRecords([]connectors.Record{cloneRecord(writeCommand.RedactedRecord)}, redactFields),
 		PlanHash:                   planHash,
 		PlanSeal:                   planSeal,
@@ -1639,11 +1641,16 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 // disk using the operator's re-supplied command flags. The resulting record is
 // what every hash, preview and dispatch downstream uses, so a missing field, a
 // wrong value and a tampered plan all fail on the existing plan-hash check.
+//
+// It iterates WithheldFields, the fields the plan actually removed, not the
+// declared redact list: a declared field the operator never supplied is not
+// owed back, and demanding it would strand the plan behind a precondition its
+// own hash cannot satisfy.
 func (a *App) reconstituteConnectorCommandRecord(plan ReversePlan, writer connectors.Connector, withheldFlags map[string][]string) (connectors.Record, error) {
-	pending := make([]string, 0, len(plan.RedactFields))
-	for _, field := range plan.RedactFields {
+	pending := make([]string, 0, len(plan.WithheldFields))
+	for _, field := range plan.WithheldFields {
 		if !recordHasField(plan.ConnectorCommandRecord, field) {
-			pending = append(pending, strings.TrimPrefix(strings.TrimSpace(field), "record."))
+			pending = append(pending, strings.TrimSpace(field))
 		}
 	}
 	if len(pending) == 0 {
