@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/v1/regions/" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "country": "US", "name": "United States", "flag": "https://cdn.watchmode.com/flags/us.png", "data_tier": 1, "plan_enabled": true },
+      { "country": "GB", "name": "United Kingdom", "flag": "https://cdn.watchmode.com/flags/gb.png", "data_tier": 1, "plan_enabled": true }
+    ]
+  }
+}

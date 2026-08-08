@@ -1,0 +1,36 @@
+{
+  "request": { "method": "GET", "path": "/v1/title/synthetic-conformance-value/episodes/" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 6001,
+        "name": "Fixture Episode One",
+        "episode_number": 1,
+        "season_number": 1,
+        "season_id": 5001,
+        "tmdb_id": null,
+        "imdb_id": null,
+        "thumbnail_url": null,
+        "release_date": "2026-01-01",
+        "runtime_minutes": 45,
+        "overview": "A deterministic fixture episode overview.",
+        "sources": []
+      },
+      {
+        "id": 6002,
+        "name": "Fixture Episode Two",
+        "episode_number": 2,
+        "season_number": 1,
+        "season_id": 5001,
+        "tmdb_id": null,
+        "imdb_id": null,
+        "thumbnail_url": null,
+        "release_date": "2026-01-08",
+        "runtime_minutes": 45,
+        "overview": "A second deterministic fixture episode overview.",
+        "sources": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "connector": "watchmode",
+  "artifact_operations": [
+    {
+      "method": "GET",
+      "path": "/autocomplete-search",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/changes/new_people",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/changes/new_titles",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/changes/titles_details_changed",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/changes/titles_episodes_changed",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/changes/titles_sources_changed",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/genres",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/list-titles",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/networks",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/person/{person_id}",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/regions",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/releases",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/sources",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/title-release-dates",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/cast-crew",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/details",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/episodes",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/episodes/{episode_id}",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/incorrect-data",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/seasons",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/sources",
+      "classification": "direct_read",
+      "availability": "not_implemented"
+    }
+  ],
+  "counts": [
+    {
+      "bucket": "direct_read",
+      "count": 23
+    }
+  ]
+}

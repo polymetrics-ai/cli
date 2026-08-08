@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "departments",
+  "type": "object",
+  "x-primary-key": ["department_id"],
+  "required": ["department_id"],
+  "properties": {
+    "department_id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "parent_id": { "type": ["integer", "null"] }
+  }
+}

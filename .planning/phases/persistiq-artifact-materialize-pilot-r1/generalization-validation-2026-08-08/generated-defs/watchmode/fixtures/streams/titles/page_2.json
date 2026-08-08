@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/list-titles/",
+    "query": {
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "titles": [
+        {
+          "id": 251,
+          "title": "Fixture Title 251",
+          "year": 2020,
+          "imdb_id": null,
+          "tmdb_id": null,
+          "tmdb_type": null,
+          "type": "movie"
+        }
+      ],
+      "page": 2,
+      "total_results": 251,
+      "total_pages": 2
+    }
+  }
+}

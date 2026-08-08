@@ -1,0 +1,142 @@
+{
+  "watchmode": [
+    {
+      "method": "GET",
+      "path": "/autocomplete-search",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/changes/new_people",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/changes/new_titles",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/changes/titles_details_changed",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/changes/titles_episodes_changed",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/changes/titles_sources_changed",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/genres",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/list-titles",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/networks",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/person/{person_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/regions",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/releases",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/sources",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/title-release-dates",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/cast-crew",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/details",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/episodes",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/episodes/{episode_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/incorrect-data",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/seasons",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/sources",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    }
+  ]
+}

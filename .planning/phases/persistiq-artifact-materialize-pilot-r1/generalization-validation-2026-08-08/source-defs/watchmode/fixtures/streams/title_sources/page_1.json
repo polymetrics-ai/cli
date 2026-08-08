@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/v1/title/synthetic-conformance-value/sources/" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "source_id": 203,
+        "name": "Netflix",
+        "type": "sub",
+        "region": "US",
+        "ios_url": null,
+        "android_url": null,
+        "web_url": "https://www.netflix.com/title/fixture",
+        "format": "HD",
+        "price": null,
+        "seasons": null,
+        "episodes": null
+      },
+      {
+        "source_id": 26,
+        "name": "Google Play Movies",
+        "type": "rent",
+        "region": "US",
+        "ios_url": null,
+        "android_url": null,
+        "web_url": "https://play.google.com/store/movies/fixture",
+        "format": "HD",
+        "price": 3.99,
+        "seasons": null,
+        "episodes": null
+      }
+    ]
+  }
+}

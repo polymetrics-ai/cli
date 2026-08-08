@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "scraping_jobs_list",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "custom_id": { "type": ["string", "null"] },
+    "sitemap_name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "sitemap_id": { "type": ["integer", "null"] },
+    "test_run": { "type": ["integer", "null"] },
+    "jobs_scheduled": { "type": ["integer", "null"] },
+    "jobs_executed": { "type": ["integer", "null"] },
+    "jobs_failed": { "type": ["integer", "null"] },
+    "jobs_empty": { "type": ["integer", "null"] },
+    "stored_record_count": { "type": ["integer", "null"] },
+    "request_interval": { "type": ["integer", "null"] },
+    "page_load_delay": { "type": ["integer", "null"] },
+    "driver": { "type": ["string", "null"] },
+    "scheduled": { "type": ["integer", "null"] },
+    "time_created": { "type": ["string", "null"] }
+  }
+}

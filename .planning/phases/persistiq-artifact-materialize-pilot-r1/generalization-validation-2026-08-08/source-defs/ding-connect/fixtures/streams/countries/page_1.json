@@ -1,0 +1,1016 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/V1/GetCountries",
+    "query": {
+      "Skip": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        {
+          "CountryIso": "C001",
+          "CountryName": "Fixture Country 1",
+          "InternationalDialingInformation": {
+            "code": "+1"
+          },
+          "RegionCodes": [
+            "R001"
+          ]
+        },
+        {
+          "CountryIso": "C002",
+          "CountryName": "Fixture Country 2",
+          "InternationalDialingInformation": {
+            "code": "+2"
+          },
+          "RegionCodes": [
+            "R002"
+          ]
+        },
+        {
+          "CountryIso": "C003",
+          "CountryName": "Fixture Country 3",
+          "InternationalDialingInformation": {
+            "code": "+3"
+          },
+          "RegionCodes": [
+            "R003"
+          ]
+        },
+        {
+          "CountryIso": "C004",
+          "CountryName": "Fixture Country 4",
+          "InternationalDialingInformation": {
+            "code": "+4"
+          },
+          "RegionCodes": [
+            "R004"
+          ]
+        },
+        {
+          "CountryIso": "C005",
+          "CountryName": "Fixture Country 5",
+          "InternationalDialingInformation": {
+            "code": "+5"
+          },
+          "RegionCodes": [
+            "R005"
+          ]
+        },
+        {
+          "CountryIso": "C006",
+          "CountryName": "Fixture Country 6",
+          "InternationalDialingInformation": {
+            "code": "+6"
+          },
+          "RegionCodes": [
+            "R006"
+          ]
+        },
+        {
+          "CountryIso": "C007",
+          "CountryName": "Fixture Country 7",
+          "InternationalDialingInformation": {
+            "code": "+7"
+          },
+          "RegionCodes": [
+            "R007"
+          ]
+        },
+        {
+          "CountryIso": "C008",
+          "CountryName": "Fixture Country 8",
+          "InternationalDialingInformation": {
+            "code": "+8"
+          },
+          "RegionCodes": [
+            "R008"
+          ]
+        },
+        {
+          "CountryIso": "C009",
+          "CountryName": "Fixture Country 9",
+          "InternationalDialingInformation": {
+            "code": "+9"
+          },
+          "RegionCodes": [
+            "R009"
+          ]
+        },
+        {
+          "CountryIso": "C010",
+          "CountryName": "Fixture Country 10",
+          "InternationalDialingInformation": {
+            "code": "+10"
+          },
+          "RegionCodes": [
+            "R010"
+          ]
+        },
+        {
+          "CountryIso": "C011",
+          "CountryName": "Fixture Country 11",
+          "InternationalDialingInformation": {
+            "code": "+11"
+          },
+          "RegionCodes": [
+            "R011"
+          ]
+        },
+        {
+          "CountryIso": "C012",
+          "CountryName": "Fixture Country 12",
+          "InternationalDialingInformation": {
+            "code": "+12"
+          },
+          "RegionCodes": [
+            "R012"
+          ]
+        },
+        {
+          "CountryIso": "C013",
+          "CountryName": "Fixture Country 13",
+          "InternationalDialingInformation": {
+            "code": "+13"
+          },
+          "RegionCodes": [
+            "R013"
+          ]
+        },
+        {
+          "CountryIso": "C014",
+          "CountryName": "Fixture Country 14",
+          "InternationalDialingInformation": {
+            "code": "+14"
+          },
+          "RegionCodes": [
+            "R014"
+          ]
+        },
+        {
+          "CountryIso": "C015",
+          "CountryName": "Fixture Country 15",
+          "InternationalDialingInformation": {
+            "code": "+15"
+          },
+          "RegionCodes": [
+            "R015"
+          ]
+        },
+        {
+          "CountryIso": "C016",
+          "CountryName": "Fixture Country 16",
+          "InternationalDialingInformation": {
+            "code": "+16"
+          },
+          "RegionCodes": [
+            "R016"
+          ]
+        },
+        {
+          "CountryIso": "C017",
+          "CountryName": "Fixture Country 17",
+          "InternationalDialingInformation": {
+            "code": "+17"
+          },
+          "RegionCodes": [
+            "R017"
+          ]
+        },
+        {
+          "CountryIso": "C018",
+          "CountryName": "Fixture Country 18",
+          "InternationalDialingInformation": {
+            "code": "+18"
+          },
+          "RegionCodes": [
+            "R018"
+          ]
+        },
+        {
+          "CountryIso": "C019",
+          "CountryName": "Fixture Country 19",
+          "InternationalDialingInformation": {
+            "code": "+19"
+          },
+          "RegionCodes": [
+            "R019"
+          ]
+        },
+        {
+          "CountryIso": "C020",
+          "CountryName": "Fixture Country 20",
+          "InternationalDialingInformation": {
+            "code": "+20"
+          },
+          "RegionCodes": [
+            "R020"
+          ]
+        },
+        {
+          "CountryIso": "C021",
+          "CountryName": "Fixture Country 21",
+          "InternationalDialingInformation": {
+            "code": "+21"
+          },
+          "RegionCodes": [
+            "R021"
+          ]
+        },
+        {
+          "CountryIso": "C022",
+          "CountryName": "Fixture Country 22",
+          "InternationalDialingInformation": {
+            "code": "+22"
+          },
+          "RegionCodes": [
+            "R022"
+          ]
+        },
+        {
+          "CountryIso": "C023",
+          "CountryName": "Fixture Country 23",
+          "InternationalDialingInformation": {
+            "code": "+23"
+          },
+          "RegionCodes": [
+            "R023"
+          ]
+        },
+        {
+          "CountryIso": "C024",
+          "CountryName": "Fixture Country 24",
+          "InternationalDialingInformation": {
+            "code": "+24"
+          },
+          "RegionCodes": [
+            "R024"
+          ]
+        },
+        {
+          "CountryIso": "C025",
+          "CountryName": "Fixture Country 25",
+          "InternationalDialingInformation": {
+            "code": "+25"
+          },
+          "RegionCodes": [
+            "R025"
+          ]
+        },
+        {
+          "CountryIso": "C026",
+          "CountryName": "Fixture Country 26",
+          "InternationalDialingInformation": {
+            "code": "+26"
+          },
+          "RegionCodes": [
+            "R026"
+          ]
+        },
+        {
+          "CountryIso": "C027",
+          "CountryName": "Fixture Country 27",
+          "InternationalDialingInformation": {
+            "code": "+27"
+          },
+          "RegionCodes": [
+            "R027"
+          ]
+        },
+        {
+          "CountryIso": "C028",
+          "CountryName": "Fixture Country 28",
+          "InternationalDialingInformation": {
+            "code": "+28"
+          },
+          "RegionCodes": [
+            "R028"
+          ]
+        },
+        {
+          "CountryIso": "C029",
+          "CountryName": "Fixture Country 29",
+          "InternationalDialingInformation": {
+            "code": "+29"
+          },
+          "RegionCodes": [
+            "R029"
+          ]
+        },
+        {
+          "CountryIso": "C030",
+          "CountryName": "Fixture Country 30",
+          "InternationalDialingInformation": {
+            "code": "+30"
+          },
+          "RegionCodes": [
+            "R030"
+          ]
+        },
+        {
+          "CountryIso": "C031",
+          "CountryName": "Fixture Country 31",
+          "InternationalDialingInformation": {
+            "code": "+31"
+          },
+          "RegionCodes": [
+            "R031"
+          ]
+        },
+        {
+          "CountryIso": "C032",
+          "CountryName": "Fixture Country 32",
+          "InternationalDialingInformation": {
+            "code": "+32"
+          },
+          "RegionCodes": [
+            "R032"
+          ]
+        },
+        {
+          "CountryIso": "C033",
+          "CountryName": "Fixture Country 33",
+          "InternationalDialingInformation": {
+            "code": "+33"
+          },
+          "RegionCodes": [
+            "R033"
+          ]
+        },
+        {
+          "CountryIso": "C034",
+          "CountryName": "Fixture Country 34",
+          "InternationalDialingInformation": {
+            "code": "+34"
+          },
+          "RegionCodes": [
+            "R034"
+          ]
+        },
+        {
+          "CountryIso": "C035",
+          "CountryName": "Fixture Country 35",
+          "InternationalDialingInformation": {
+            "code": "+35"
+          },
+          "RegionCodes": [
+            "R035"
+          ]
+        },
+        {
+          "CountryIso": "C036",
+          "CountryName": "Fixture Country 36",
+          "InternationalDialingInformation": {
+            "code": "+36"
+          },
+          "RegionCodes": [
+            "R036"
+          ]
+        },
+        {
+          "CountryIso": "C037",
+          "CountryName": "Fixture Country 37",
+          "InternationalDialingInformation": {
+            "code": "+37"
+          },
+          "RegionCodes": [
+            "R037"
+          ]
+        },
+        {
+          "CountryIso": "C038",
+          "CountryName": "Fixture Country 38",
+          "InternationalDialingInformation": {
+            "code": "+38"
+          },
+          "RegionCodes": [
+            "R038"
+          ]
+        },
+        {
+          "CountryIso": "C039",
+          "CountryName": "Fixture Country 39",
+          "InternationalDialingInformation": {
+            "code": "+39"
+          },
+          "RegionCodes": [
+            "R039"
+          ]
+        },
+        {
+          "CountryIso": "C040",
+          "CountryName": "Fixture Country 40",
+          "InternationalDialingInformation": {
+            "code": "+40"
+          },
+          "RegionCodes": [
+            "R040"
+          ]
+        },
+        {
+          "CountryIso": "C041",
+          "CountryName": "Fixture Country 41",
+          "InternationalDialingInformation": {
+            "code": "+41"
+          },
+          "RegionCodes": [
+            "R041"
+          ]
+        },
+        {
+          "CountryIso": "C042",
+          "CountryName": "Fixture Country 42",
+          "InternationalDialingInformation": {
+            "code": "+42"
+          },
+          "RegionCodes": [
+            "R042"
+          ]
+        },
+        {
+          "CountryIso": "C043",
+          "CountryName": "Fixture Country 43",
+          "InternationalDialingInformation": {
+            "code": "+43"
+          },
+          "RegionCodes": [
+            "R043"
+          ]
+        },
+        {
+          "CountryIso": "C044",
+          "CountryName": "Fixture Country 44",
+          "InternationalDialingInformation": {
+            "code": "+44"
+          },
+          "RegionCodes": [
+            "R044"
+          ]
+        },
+        {
+          "CountryIso": "C045",
+          "CountryName": "Fixture Country 45",
+          "InternationalDialingInformation": {
+            "code": "+45"
+          },
+          "RegionCodes": [
+            "R045"
+          ]
+        },
+        {
+          "CountryIso": "C046",
+          "CountryName": "Fixture Country 46",
+          "InternationalDialingInformation": {
+            "code": "+46"
+          },
+          "RegionCodes": [
+            "R046"
+          ]
+        },
+        {
+          "CountryIso": "C047",
+          "CountryName": "Fixture Country 47",
+          "InternationalDialingInformation": {
+            "code": "+47"
+          },
+          "RegionCodes": [
+            "R047"
+          ]
+        },
+        {
+          "CountryIso": "C048",
+          "CountryName": "Fixture Country 48",
+          "InternationalDialingInformation": {
+            "code": "+48"
+          },
+          "RegionCodes": [
+            "R048"
+          ]
+        },
+        {
+          "CountryIso": "C049",
+          "CountryName": "Fixture Country 49",
+          "InternationalDialingInformation": {
+            "code": "+49"
+          },
+          "RegionCodes": [
+            "R049"
+          ]
+        },
+        {
+          "CountryIso": "C050",
+          "CountryName": "Fixture Country 50",
+          "InternationalDialingInformation": {
+            "code": "+50"
+          },
+          "RegionCodes": [
+            "R050"
+          ]
+        },
+        {
+          "CountryIso": "C051",
+          "CountryName": "Fixture Country 51",
+          "InternationalDialingInformation": {
+            "code": "+51"
+          },
+          "RegionCodes": [
+            "R051"
+          ]
+        },
+        {
+          "CountryIso": "C052",
+          "CountryName": "Fixture Country 52",
+          "InternationalDialingInformation": {
+            "code": "+52"
+          },
+          "RegionCodes": [
+            "R052"
+          ]
+        },
+        {
+          "CountryIso": "C053",
+          "CountryName": "Fixture Country 53",
+          "InternationalDialingInformation": {
+            "code": "+53"
+          },
+          "RegionCodes": [
+            "R053"
+          ]
+        },
+        {
+          "CountryIso": "C054",
+          "CountryName": "Fixture Country 54",
+          "InternationalDialingInformation": {
+            "code": "+54"
+          },
+          "RegionCodes": [
+            "R054"
+          ]
+        },
+        {
+          "CountryIso": "C055",
+          "CountryName": "Fixture Country 55",
+          "InternationalDialingInformation": {
+            "code": "+55"
+          },
+          "RegionCodes": [
+            "R055"
+          ]
+        },
+        {
+          "CountryIso": "C056",
+          "CountryName": "Fixture Country 56",
+          "InternationalDialingInformation": {
+            "code": "+56"
+          },
+          "RegionCodes": [
+            "R056"
+          ]
+        },
+        {
+          "CountryIso": "C057",
+          "CountryName": "Fixture Country 57",
+          "InternationalDialingInformation": {
+            "code": "+57"
+          },
+          "RegionCodes": [
+            "R057"
+          ]
+        },
+        {
+          "CountryIso": "C058",
+          "CountryName": "Fixture Country 58",
+          "InternationalDialingInformation": {
+            "code": "+58"
+          },
+          "RegionCodes": [
+            "R058"
+          ]
+        },
+        {
+          "CountryIso": "C059",
+          "CountryName": "Fixture Country 59",
+          "InternationalDialingInformation": {
+            "code": "+59"
+          },
+          "RegionCodes": [
+            "R059"
+          ]
+        },
+        {
+          "CountryIso": "C060",
+          "CountryName": "Fixture Country 60",
+          "InternationalDialingInformation": {
+            "code": "+60"
+          },
+          "RegionCodes": [
+            "R060"
+          ]
+        },
+        {
+          "CountryIso": "C061",
+          "CountryName": "Fixture Country 61",
+          "InternationalDialingInformation": {
+            "code": "+61"
+          },
+          "RegionCodes": [
+            "R061"
+          ]
+        },
+        {
+          "CountryIso": "C062",
+          "CountryName": "Fixture Country 62",
+          "InternationalDialingInformation": {
+            "code": "+62"
+          },
+          "RegionCodes": [
+            "R062"
+          ]
+        },
+        {
+          "CountryIso": "C063",
+          "CountryName": "Fixture Country 63",
+          "InternationalDialingInformation": {
+            "code": "+63"
+          },
+          "RegionCodes": [
+            "R063"
+          ]
+        },
+        {
+          "CountryIso": "C064",
+          "CountryName": "Fixture Country 64",
+          "InternationalDialingInformation": {
+            "code": "+64"
+          },
+          "RegionCodes": [
+            "R064"
+          ]
+        },
+        {
+          "CountryIso": "C065",
+          "CountryName": "Fixture Country 65",
+          "InternationalDialingInformation": {
+            "code": "+65"
+          },
+          "RegionCodes": [
+            "R065"
+          ]
+        },
+        {
+          "CountryIso": "C066",
+          "CountryName": "Fixture Country 66",
+          "InternationalDialingInformation": {
+            "code": "+66"
+          },
+          "RegionCodes": [
+            "R066"
+          ]
+        },
+        {
+          "CountryIso": "C067",
+          "CountryName": "Fixture Country 67",
+          "InternationalDialingInformation": {
+            "code": "+67"
+          },
+          "RegionCodes": [
+            "R067"
+          ]
+        },
+        {
+          "CountryIso": "C068",
+          "CountryName": "Fixture Country 68",
+          "InternationalDialingInformation": {
+            "code": "+68"
+          },
+          "RegionCodes": [
+            "R068"
+          ]
+        },
+        {
+          "CountryIso": "C069",
+          "CountryName": "Fixture Country 69",
+          "InternationalDialingInformation": {
+            "code": "+69"
+          },
+          "RegionCodes": [
+            "R069"
+          ]
+        },
+        {
+          "CountryIso": "C070",
+          "CountryName": "Fixture Country 70",
+          "InternationalDialingInformation": {
+            "code": "+70"
+          },
+          "RegionCodes": [
+            "R070"
+          ]
+        },
+        {
+          "CountryIso": "C071",
+          "CountryName": "Fixture Country 71",
+          "InternationalDialingInformation": {
+            "code": "+71"
+          },
+          "RegionCodes": [
+            "R071"
+          ]
+        },
+        {
+          "CountryIso": "C072",
+          "CountryName": "Fixture Country 72",
+          "InternationalDialingInformation": {
+            "code": "+72"
+          },
+          "RegionCodes": [
+            "R072"
+          ]
+        },
+        {
+          "CountryIso": "C073",
+          "CountryName": "Fixture Country 73",
+          "InternationalDialingInformation": {
+            "code": "+73"
+          },
+          "RegionCodes": [
+            "R073"
+          ]
+        },
+        {
+          "CountryIso": "C074",
+          "CountryName": "Fixture Country 74",
+          "InternationalDialingInformation": {
+            "code": "+74"
+          },
+          "RegionCodes": [
+            "R074"
+          ]
+        },
+        {
+          "CountryIso": "C075",
+          "CountryName": "Fixture Country 75",
+          "InternationalDialingInformation": {
+            "code": "+75"
+          },
+          "RegionCodes": [
+            "R075"
+          ]
+        },
+        {
+          "CountryIso": "C076",
+          "CountryName": "Fixture Country 76",
+          "InternationalDialingInformation": {
+            "code": "+76"
+          },
+          "RegionCodes": [
+            "R076"
+          ]
+        },
+        {
+          "CountryIso": "C077",
+          "CountryName": "Fixture Country 77",
+          "InternationalDialingInformation": {
+            "code": "+77"
+          },
+          "RegionCodes": [
+            "R077"
+          ]
+        },
+        {
+          "CountryIso": "C078",
+          "CountryName": "Fixture Country 78",
+          "InternationalDialingInformation": {
+            "code": "+78"
+          },
+          "RegionCodes": [
+            "R078"
+          ]
+        },
+        {
+          "CountryIso": "C079",
+          "CountryName": "Fixture Country 79",
+          "InternationalDialingInformation": {
+            "code": "+79"
+          },
+          "RegionCodes": [
+            "R079"
+          ]
+        },
+        {
+          "CountryIso": "C080",
+          "CountryName": "Fixture Country 80",
+          "InternationalDialingInformation": {
+            "code": "+80"
+          },
+          "RegionCodes": [
+            "R080"
+          ]
+        },
+        {
+          "CountryIso": "C081",
+          "CountryName": "Fixture Country 81",
+          "InternationalDialingInformation": {
+            "code": "+81"
+          },
+          "RegionCodes": [
+            "R081"
+          ]
+        },
+        {
+          "CountryIso": "C082",
+          "CountryName": "Fixture Country 82",
+          "InternationalDialingInformation": {
+            "code": "+82"
+          },
+          "RegionCodes": [
+            "R082"
+          ]
+        },
+        {
+          "CountryIso": "C083",
+          "CountryName": "Fixture Country 83",
+          "InternationalDialingInformation": {
+            "code": "+83"
+          },
+          "RegionCodes": [
+            "R083"
+          ]
+        },
+        {
+          "CountryIso": "C084",
+          "CountryName": "Fixture Country 84",
+          "InternationalDialingInformation": {
+            "code": "+84"
+          },
+          "RegionCodes": [
+            "R084"
+          ]
+        },
+        {
+          "CountryIso": "C085",
+          "CountryName": "Fixture Country 85",
+          "InternationalDialingInformation": {
+            "code": "+85"
+          },
+          "RegionCodes": [
+            "R085"
+          ]
+        },
+        {
+          "CountryIso": "C086",
+          "CountryName": "Fixture Country 86",
+          "InternationalDialingInformation": {
+            "code": "+86"
+          },
+          "RegionCodes": [
+            "R086"
+          ]
+        },
+        {
+          "CountryIso": "C087",
+          "CountryName": "Fixture Country 87",
+          "InternationalDialingInformation": {
+            "code": "+87"
+          },
+          "RegionCodes": [
+            "R087"
+          ]
+        },
+        {
+          "CountryIso": "C088",
+          "CountryName": "Fixture Country 88",
+          "InternationalDialingInformation": {
+            "code": "+88"
+          },
+          "RegionCodes": [
+            "R088"
+          ]
+        },
+        {
+          "CountryIso": "C089",
+          "CountryName": "Fixture Country 89",
+          "InternationalDialingInformation": {
+            "code": "+89"
+          },
+          "RegionCodes": [
+            "R089"
+          ]
+        },
+        {
+          "CountryIso": "C090",
+          "CountryName": "Fixture Country 90",
+          "InternationalDialingInformation": {
+            "code": "+90"
+          },
+          "RegionCodes": [
+            "R090"
+          ]
+        },
+        {
+          "CountryIso": "C091",
+          "CountryName": "Fixture Country 91",
+          "InternationalDialingInformation": {
+            "code": "+91"
+          },
+          "RegionCodes": [
+            "R091"
+          ]
+        },
+        {
+          "CountryIso": "C092",
+          "CountryName": "Fixture Country 92",
+          "InternationalDialingInformation": {
+            "code": "+92"
+          },
+          "RegionCodes": [
+            "R092"
+          ]
+        },
+        {
+          "CountryIso": "C093",
+          "CountryName": "Fixture Country 93",
+          "InternationalDialingInformation": {
+            "code": "+93"
+          },
+          "RegionCodes": [
+            "R093"
+          ]
+        },
+        {
+          "CountryIso": "C094",
+          "CountryName": "Fixture Country 94",
+          "InternationalDialingInformation": {
+            "code": "+94"
+          },
+          "RegionCodes": [
+            "R094"
+          ]
+        },
+        {
+          "CountryIso": "C095",
+          "CountryName": "Fixture Country 95",
+          "InternationalDialingInformation": {
+            "code": "+95"
+          },
+          "RegionCodes": [
+            "R095"
+          ]
+        },
+        {
+          "CountryIso": "C096",
+          "CountryName": "Fixture Country 96",
+          "InternationalDialingInformation": {
+            "code": "+96"
+          },
+          "RegionCodes": [
+            "R096"
+          ]
+        },
+        {
+          "CountryIso": "C097",
+          "CountryName": "Fixture Country 97",
+          "InternationalDialingInformation": {
+            "code": "+97"
+          },
+          "RegionCodes": [
+            "R097"
+          ]
+        },
+        {
+          "CountryIso": "C098",
+          "CountryName": "Fixture Country 98",
+          "InternationalDialingInformation": {
+            "code": "+98"
+          },
+          "RegionCodes": [
+            "R098"
+          ]
+        },
+        {
+          "CountryIso": "C099",
+          "CountryName": "Fixture Country 99",
+          "InternationalDialingInformation": {
+            "code": "+99"
+          },
+          "RegionCodes": [
+            "R099"
+          ]
+        },
+        {
+          "CountryIso": "C100",
+          "CountryName": "Fixture Country 100",
+          "InternationalDialingInformation": {
+            "code": "+100"
+          },
+          "RegionCodes": [
+            "R100"
+          ]
+        }
+      ]
+    }
+  }
+}

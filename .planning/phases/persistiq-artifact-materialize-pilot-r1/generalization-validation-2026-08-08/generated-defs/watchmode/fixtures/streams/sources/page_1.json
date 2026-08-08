@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/v1/sources/" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 203, "name": "Netflix", "type": "sub", "region": "US" },
+      { "id": 157, "name": "Hulu", "type": "sub", "region": "US" }
+    ]
+  }
+}

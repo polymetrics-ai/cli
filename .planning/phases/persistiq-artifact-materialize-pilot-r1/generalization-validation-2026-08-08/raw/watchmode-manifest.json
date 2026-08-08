@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 250,
+    "criteria": "status=done; artifact_kind=openapi|swagger; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope"
+  },
+  "connectors": [
+    {
+      "connector": "watchmode",
+      "operations_total": 23,
+      "operations_read": 23,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://api.watchmode.com/openapi.json",
+        "kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-06"
+      },
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "The metadata-linked Watchmode API Explorer is live and its provider-owned JavaScript loads this exact OpenAPI artifact. The contract identifies Watchmode API v1.1.7 and declares an API-key header as the recommended authentication method, with Bearer and legacy query-key alternatives. Research was limited to public documentation and the provider artifact; no Watchmode account, credential value, title, streaming source, person, region, network, genre, or other media data was accessed.",
+      "counting_note": "The live provider-published OpenAPI artifact contains 23 active HTTP operations across 23 paths. Every operation is GET; there are no deprecated operations or webhook definitions. The result is 23 data actions: 23 reads and 0 writes.",
+      "processed_at": "2026-08-06T23:00:41Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

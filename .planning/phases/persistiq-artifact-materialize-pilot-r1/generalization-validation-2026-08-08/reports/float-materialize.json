@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/float-manifest.json",
+  "candidates": 1,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "float",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: external path-item reference \"paths/accounts.yaml#/accounts\" cannot be exhaustively resolved"
+    }
+  ]
+}

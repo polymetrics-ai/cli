@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sitemaps",
+    "query": {
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 101,
+          "name": "Fixture Sitemap 101"
+        }
+      ],
+      "current_page": 2,
+      "last_page": 2,
+      "total": 101,
+      "per_page": 100
+    }
+  }
+}
