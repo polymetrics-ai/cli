@@ -33,3 +33,18 @@ The only incomplete user acceptance item is external: the supplied Docker Hub PA
 returns HTTP 403 for private-repository creation and account/organization reads, and
 the SCIM-only credential returns HTTP 401. See `VERIFICATION.md` for the complete
 redacted command matrix and named dependencies.
+
+## Read/auth evidence follow-up
+
+The follow-up changes evidence only; no source is added to the reviewed production
+scope. The rebuilt binary completed all 28 read operations, all three HEAD checks,
+and all three auth actions against Docker Hub. A fresh `access-tokens list` outcome
+was a specific, nonzero redacted HTTP 403, confirming clear permission failure
+handling.
+
+One newly observed correctness gap is recorded, not changed, because the follow-up
+instruction explicitly required observation without reclassification: the canonical
+colon-bearing SCIM schema URN fails local direct-read path validation before it can
+be dispatched. A safe sentinel path does reach Docker Hub and returns explicit HTTP
+401 with the SCIM-only credential. This does not alter the previous source review
+verdict; it is a follow-up TDD candidate once scope authorizes a code change.
