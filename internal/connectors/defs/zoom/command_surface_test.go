@@ -39,10 +39,12 @@ const zoomBundleName = "zoom"
 // Virtual Agent reads (9), Auto Dialer reads (8), Tasks reads (6), and Workforce
 // Management reads (11). Clips adds six JSON direct reads; its binary download
 // has a separate typed executor and is asserted in TestClipsOperationCommandsAreReachable.
-// CRC adds nine bounded direct reads.
+// CRC adds nine bounded direct reads. AI Services adds twelve REST direct
+// reads; its documented Live Scribe WebSocket has a separate fixed-session
+// executor and is asserted in TestAIServicesOperationCommandsAreReachable.
 // Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, and
 // Clips mutations are tracked by wantModuleDirectWriteCommandCount.
-const wantModuleOperationCommandCount = 70
+const wantModuleOperationCommandCount = 82
 
 // wantModuleDirectWriteCommandCount is the running total of implemented
 // operations.json rest_write commands. It is distinct from writes.json
@@ -51,8 +53,10 @@ const wantModuleOperationCommandCount = 70
 // Clips has fourteen documented write endpoints and sixteen concrete typed
 // commands: transfer and multipart-event oneOf contracts are represented by
 // separate named request arms rather than a generic union body. CRC adds its
-// eleven provider-defined mutations, including seven status-only actions.
-const wantModuleDirectWriteCommandCount = 69
+// eleven provider-defined mutations, including seven status-only actions. AI
+// Services adds six typed JSON mutations and three destructive status-only
+// cancellation actions.
+const wantModuleDirectWriteCommandCount = 78
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -163,11 +167,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 143 {
-		t.Errorf("executable rows = %d, want 143", got)
+	if got := covered; got != 165 {
+		t.Errorf("executable rows = %d, want 165", got)
 	}
-	if got := implementableNow; got != 1699 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1699", got)
+	if got := implementableNow; got != 1677 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1677", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -760,6 +764,85 @@ func TestCRCOperationCommandsAreReachable(t *testing.T) {
 			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
 				t.Errorf("CRC command %q invents paging flag --%s", want.path, flag.Name)
 			}
+		}
+	}
+}
+
+// TestAIServicesOperationCommandsAreReachable is the provider-category RED
+// surface contract. It names all 22 operations from Zoom's own AI Services
+// artifact, including the live 101 WebSocket protocol. A documented WebSocket
+// operation is not an inbound event or a reason to omit the route.
+func TestAIServicesOperationCommandsAreReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	const sourceURL = "https://developers.zoom.us/docs/api/ai-services.md"
+	wants := []struct {
+		path        string
+		operation   string
+		intent      string
+		method      string
+		apiPath     string
+		policy      string
+		destructive bool
+	}{
+		{path: "ai-services scribe jobs list", operation: "zoom.list_ai_services_scribe_jobs", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/scribe/jobs", policy: "json_redacted"},
+		{path: "ai-services scribe jobs submit", operation: "zoom.submit_ai_services_scribe_job", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/aiservices/scribe/jobs", policy: "json_redacted"},
+		{path: "ai-services scribe jobs get", operation: "zoom.get_ai_services_scribe_job", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/scribe/jobs/{jobId}", policy: "json_redacted"},
+		{path: "ai-services scribe jobs cancel", operation: "zoom.cancel_ai_services_scribe_job", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/aiservices/scribe/jobs/{jobId}", policy: "none", destructive: true},
+		{path: "ai-services scribe jobs files list", operation: "zoom.list_ai_services_scribe_job_files", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/scribe/jobs/{jobId}/files", policy: "json_redacted"},
+		{path: "ai-services scribe jobs files get", operation: "zoom.get_ai_services_scribe_job_file", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/scribe/jobs/{jobId}/files/{fileId}", policy: "json_redacted"},
+		{path: "ai-services scribe live", operation: "zoom.live_ai_services_scribe", intent: "websocket_session", method: http.MethodGet, apiPath: "/v2/aiservices/scribe/live", policy: "json_redacted"},
+		{path: "ai-services scribe transcribe", operation: "zoom.scribe_ai_services_transcribe", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/aiservices/scribe/transcribe", policy: "json_redacted"},
+		{path: "ai-services summarizer jobs list", operation: "zoom.list_ai_services_summarizer_jobs", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/summarizer/jobs", policy: "json_redacted"},
+		{path: "ai-services summarizer jobs submit", operation: "zoom.submit_ai_services_summarizer_job", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/aiservices/summarizer/jobs", policy: "json_redacted"},
+		{path: "ai-services summarizer jobs get", operation: "zoom.get_ai_services_summarizer_job", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/summarizer/jobs/{jobId}", policy: "json_redacted"},
+		{path: "ai-services summarizer jobs cancel", operation: "zoom.cancel_ai_services_summarizer_job", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/aiservices/summarizer/jobs/{jobId}", policy: "none", destructive: true},
+		{path: "ai-services summarizer jobs files list", operation: "zoom.list_ai_services_summarizer_job_files", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/summarizer/jobs/{jobId}/files", policy: "json_redacted"},
+		{path: "ai-services summarizer jobs files get", operation: "zoom.get_ai_services_summarizer_job_file", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/summarizer/jobs/{jobId}/files/{fileId}", policy: "json_redacted"},
+		{path: "ai-services summarizer summarize", operation: "zoom.summarize_ai_services", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/aiservices/summarizer/summarize", policy: "json_redacted"},
+		{path: "ai-services translator jobs list", operation: "zoom.list_ai_services_translator_jobs", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/translator/jobs", policy: "json_redacted"},
+		{path: "ai-services translator jobs submit", operation: "zoom.submit_ai_services_translator_job", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/aiservices/translator/jobs", policy: "json_redacted"},
+		{path: "ai-services translator jobs get", operation: "zoom.get_ai_services_translator_job", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/translator/jobs/{jobId}", policy: "json_redacted"},
+		{path: "ai-services translator jobs cancel", operation: "zoom.cancel_ai_services_translator_job", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/aiservices/translator/jobs/{jobId}", policy: "none", destructive: true},
+		{path: "ai-services translator jobs files list", operation: "zoom.list_ai_services_translator_job_files", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/translator/jobs/{jobId}/files", policy: "json_redacted"},
+		{path: "ai-services translator jobs files get", operation: "zoom.get_ai_services_translator_job_file", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/aiservices/translator/jobs/{jobId}/files/{fileId}", policy: "json_redacted"},
+		{path: "ai-services translator translate", operation: "zoom.translate_ai_services", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/aiservices/translator/translate", policy: "json_redacted"},
+	}
+
+	for _, want := range wants {
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want declared executable AI Services action", want.path, err)
+			continue
+		}
+		var command *connectors.CommandSurfaceCommand
+		for i := range connector.CommandSurface().Commands {
+			candidate := &connector.CommandSurface().Commands[i]
+			if candidate.Path == want.path {
+				command = candidate
+				break
+			}
+		}
+		if command == nil || command.Intent != want.intent || command.Availability != "implemented" || command.Operation != want.operation || command.SourceURL != sourceURL || len(command.APISurface) != 1 || command.APISurface[0].Method != want.method || command.APISurface[0].Path != want.apiPath || command.OutputPolicy != want.policy {
+			t.Errorf("AI Services command %q does not retain its declared operation/endpoint/output contract", want.path)
+			continue
+		}
+		for _, flag := range command.Flags {
+			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
+				t.Errorf("AI Services command %q invents paging flag --%s", want.path, flag.Name)
+			}
+		}
+		if !want.destructive {
+			continue
+		}
+		var operation *engine.OperationSpec
+		for i := range bundle.Operations {
+			if bundle.Operations[i].ID == want.operation {
+				operation = &bundle.Operations[i]
+				break
+			}
+		}
+		if operation == nil || operation.Confirmation == nil || operation.Confirmation.Kind != connectors.ConfirmationKindDestructive {
+			t.Errorf("AI Services command %q does not retain typed destructive confirmation", want.path)
 		}
 	}
 }
