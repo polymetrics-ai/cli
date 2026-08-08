@@ -626,6 +626,10 @@ func operationDirectWriteTransportBundle(b Bundle, op OperationSpec) Bundle {
 	requestBundle := b
 	requestBundle.HTTP.URL = op.REST.BaseURL
 	requestBundle.HTTP.Auth = append([]AuthSpec(nil), op.REST.Auth...)
+	// A customer-hosted operation must not inherit any ordinary API headers:
+	// unlike the operation's paired auth declaration, global headers have no
+	// origin-specific ownership and can carry secret-derived credentials.
+	requestBundle.HTTP.Headers = nil
 	return requestBundle
 }
 
