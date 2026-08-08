@@ -704,3 +704,179 @@ The rebuilt binary completed 54/54 implemented Docker Hub command-help routes wi
 `pm help dockerhub`, bare `pm dockerhub`, `pm dockerhub scim-schemas get --help`, and connector
 docs validation also passed. Inline GSD verify-work and standard code-review completed with the
 manual fallback recorded in `VERIFICATION.md` and `REVIEW.md`.
+
+## Corrective slice — automated-review dispositions (2026-08-08)
+
+This slice reworks delivered behaviour in response to automated review. The
+historical RED/GREEN entries above are preserved verbatim as the record of what
+was done at the time; the corrections below state where that record no longer
+describes the delivered head.
+
+### Correction 1 — the strict-write ALPN pin was DROPPED, not delivered
+
+The "Strict-write HTTP/2 regression" RED/GREEN pair above (commits `d72ee21d1`,
+`fefaa7251`) describes a `connsdk.noReplayClient` change that pins TLS
+`NextProtos` to `http/1.1`, and reports
+`TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer` passing.
+
+**Neither is in the delivered head.** Both commits were resolved in favour of
+`main` during the rebase onto current `origin/main` and now carry planning-doc
+changes only. `internal/connectors/connsdk/http.go`'s `noReplayClient` clones
+the transport and sets `DisableKeepAlives`; it never sets `Transport.Protocols`,
+and no test by that name exists in the tree.
+
+Disposition: the fix is **not needed against current `main`**. The defect it
+repaired required `noReplayClient` to force HTTP/1 at the transport layer while
+leaving an `h2` ALPN advertisement in the TLS config; main's `noReplayClient`
+sets no `Transport.Protocols` at all, so the mismatch is unreachable. No
+shared `connsdk` production change ships in this PR. `PLAN.md`'s reference to
+"the shared strict-write ALPN fix and its isolated definition-owned regression
+test" as delivered is corrected by this entry.
+
+### Correction 2 — the old hook tests did not prove independent SCIM routing
+
+The SCIM-only empirical check recorded under "Live read/auth evidence follow-up"
+attributed six SCIM `HTTP 401`s to the provider. That reading was wrong about
+the local cause, and the hook tests that existed then could not have caught it:
+every SCIM fixture configured `docker_pat` **and** `scim_bearer_token`, so none
+of them exercised a SCIM-only connection.
+
+RED (reasoned, from the delivered head): `streams.json` gated the ONLY custom
+auth spec on `when: "{{ secrets.docker_pat }}"`. A connection with just
+`scim_bearer_token` matched no custom spec, fell through to `{ "mode": "none" }`,
+and sent every `/v2/scim/2.0/**` request with no `Authorization` header at all —
+contradicting `docs.md` and `spec.json`, both of which state the SCIM token
+alone authenticates the SCIM commands. A second defect sat behind it: `dualAuth`
+routed on a fixed `/v2/scim/2.0/` prefix, so a proxy `base_url` carrying its own
+path prefix failed **open** and signed SCIM requests with the account session
+JWT — the exact substitution the type's doc comment says cannot happen.
+
+GREEN: `streams.json` declares a second custom auth spec gated on
+`{{ secrets.scim_bearer_token }}` (the `when` grammar has no OR operator, so one
+spec cannot express "either secret"). `Hooks.Authenticator` treats a spec with
+no login fields as a SCIM-only connection and builds a `dualAuth` with a nil
+session, which fails closed naming `docker_pat` on every non-SCIM path rather
+than sending the SCIM token to a `bearerAuth` endpoint. SCIM prefixes are
+derived from the resolved `base_url` path (both the base-relative write form and
+the unstripped declared direct-read form), so proxy routing fails closed instead
+of open, while an anchored match keeps a repository path that merely *contains*
+`/scim/2.0/` on the session JWT.
+
+```text
+go test -timeout 20m ./internal/connectors/hooks/dockerhub -count=1
+ok   polymetrics.ai/internal/connectors/hooks/dockerhub
+```
+
+New fixtures: `TestAuthenticator_SCIMOnlyConnectionAuthenticatesSCIMRequests`,
+`TestAuthenticator_SCIMOnlyConnectionFailsClosedOnNonSCIMPath`,
+`TestAuthenticator_NoCredentialConfiguredIsError`,
+`TestAuthenticator_SCIMRoutingHonorsProxyBaseURLPathPrefix`,
+`TestAuthenticator_ProxyBaseURLNonSCIMPathStillUsesSessionJWT`,
+`TestAuthenticator_RepositoryPathNamedSCIMUsesSessionJWT`.
+
+### Correction 3 — the three auth-exchange commands are NOT shipped
+
+Captain decision [key=auth-secrets]. The entries above record `auth token
+create`, `auth login create`, and `auth 2fa-login create` as implemented with
+"redacted token output". That claim was not safe: each command's only input is a
+live credential supplied as a plain CLI flag mapped to a record field, and the
+reverse-ETL path it runs on persists that record to the project state file as
+plaintext `connector_command_record` and echoes it in plan output. An action's
+`redact_fields` names a RESPONSE field and never redacts the request credential,
+so nothing in the delivered design made a password, PAT, or TOTP code safe in
+argv or on disk.
+
+Disposition: the three write actions are removed from `writes.json`; their
+`cli_surface.json` commands stay in the 54-row surface as
+`availability: "planned"` with no flags, examples, or executable target; and
+their `api_surface.json` rows become blocked `sensitive_reverse_etl` rows whose
+`notes` carry the machine-checkable dependency
+`named_dependency=requires secure secret input (stdin/env/vault-reference),
+encrypted or ephemeral plan storage, and a secure sink for the returned token`.
+`cmd/connectorgen/dockerhub_api_surface_test.go` already asserted that
+`named_dependency=` prefix for every blocked row; its target counts move from
+54 covered / 0 blocked to **51 covered / 3 blocked**. The session-login exchange
+itself is unaffected — the `dockerhub` AuthHook still performs it internally,
+with no plan record, whenever `docker_pat` is configured.
+
+### RED/GREEN — status-only HEAD checks must be able to report absence
+
+Captain decision [key=head-semantics].
+
+RED: `TestOperationDirectReadHEADNonSuccessStatusIsError` pinned a 404 HEAD
+response as a transport error, so `pm dockerhub repository check` could only
+ever return `status_code: 200`. The one question an existence check exists to
+answer — the repository is not there — exited non-zero with an error string and
+no status code.
+
+GREEN: `statusOnlyAbsenceResponse` converts **only** a 404 and **only** for a
+HEAD request into the documented `{"status_code": 404}` result. 401/403 (an auth
+problem, not a fact about the resource), 429/5xx (the provider declining to
+answer), and every non-HEAD direct read keep failing exactly as before. Global
+HTTP behaviour is untouched: a GET 404 is still an error.
+
+```text
+go test -timeout 20m ./internal/connectors/engine -run 'TestOperationDirectReadHEAD|TestOperationDirectReadGETNotFound' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+```
+
+Replacing/added: `TestOperationDirectReadHEADAbsenceReturnsStructuredNotFound`,
+`TestOperationDirectReadHEADNonAbsenceStatusesStayErrors`,
+`TestOperationDirectReadGETNotFoundIsStillError`.
+
+### RED/GREEN — add-time admission for incomplete credentials
+
+Captain decision [key=namespace-compat]. `namespace` stays required and is
+never silently defaulted to `docker_username`; the gap was that the requirement
+was enforced only at read/check time.
+
+RED: `internal/connectors/defs/dockerhub/credential_admission_test.go` —
+`pm credentials add` accepted a Docker Hub credential with no `namespace` (and
+with no config at all), because `engine.Schema.ValidateConfiguration`
+deliberately skipped JSON Schema `required`. The operator learned what was
+missing only later, from a connector-internal template error at read time.
+
+```text
+--- FAIL: TestDockerhubCredentialAdmissionRejectsIncompleteConfig
+    credential_admission_test.go: ValidateConfiguration(map[]) = nil, want an
+    incomplete-credential rejection before the credential can be saved
+```
+
+GREEN: `ValidateConfiguration` now enforces required-key presence for the keys
+this boundary can actually see — declared required, non-secret (a required
+secret lives in the separate secrets map), and carrying no `default` (which the
+engine materializes for the caller). Supplied values are still checked first, so
+a caller who types a rejected value is told what is wrong with what they typed
+rather than being handed a different key's absence. The rule is derived from
+each bundle's own `spec.json`, so it is declarative, not connector-specific
+policy in shared code.
+
+```text
+go test -timeout 20m ./internal/connectors/engine ./internal/connectors/defs/dockerhub ./internal/app -count=1
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/defs/dockerhub
+ok   polymetrics.ai/internal/app
+```
+
+`TestSchemaWithoutConfigurationConstraintsIsNotAdvertised` pinned the previous
+"required is not a configuration constraint" contract; its fixture is narrowed
+to a genuinely constraint-free schema and the new contract gets its own
+coverage in `TestSchemaRequiredConfigurationKeyIsAdvertisedAndEnforced` and
+`TestSchemaRequiredSecretAndDefaultedKeysAreNotConfigurationConstraints`.
+
+### Scope corrections
+
+- `CLAUDE.md` is restored to its prior regular-file content; the change that
+  replaced it with a symlink to `AGENTS.md` is reverted as out of scope for this
+  phase (Captain Decision [key=doc-drift-scope]).
+- The 13-line `AGENTS.md` HEAD-capability addition is reverted for the same
+  reason. The capability itself remains documented where it is owned, in
+  `internal/connectors/defs/dockerhub/docs.md`.
+- Generated docs were regenerated into a temporary directory and byte-compared.
+  Only Docker Hub's records differ: `docs/connectors/README.md`,
+  `docs/connectors/catalog/all-connectors.{json,md}`,
+  `docs/connectors/dockerhub/{MANUAL,SKILL}.md`,
+  `website/data/connectors.generated.json`, and
+  `website/lib/connectors.catalog.data.generated.json`. The pre-existing stale
+  `warehouse` catalog description is deliberately left untouched. No generator
+  or drift validator was added or broadened.

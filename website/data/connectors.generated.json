@@ -44118,21 +44118,6 @@
     ],
     "write_actions": [
       {
-        "name": "create_auth_token",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_user_login",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_2fa_login",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "create_repository",
         "method": "POST",
         "kind": "create"
@@ -44453,6 +44438,20 @@
               "maps_to": "path.uuid",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -44473,7 +44472,22 @@
           "operation": "dockerhub.list_access_tokens",
           "source_cli_path": "",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
           "examples": [
             "pm dockerhub access-tokens list --json"
           ],
@@ -44542,6 +44556,20 @@
               "maps_to": "path.account",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -44571,6 +44599,20 @@
               "maps_to": "path.account",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -44585,106 +44627,49 @@
           "path": "auth 2fa-login create",
           "summary": "Second factor authentication (completes a 2FA-challenged login)",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
-          "write": "create_2fa_login",
+          "write": "",
           "source_cli_path": "",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "flags": [
-            {
-              "name": "login-2fa-token",
-              "type": "string",
-              "summary": "The intermediate 2FA token returned from `auth login create`.",
-              "values": [],
-              "maps_to": "record.login_2fa_token",
-              "required": true
-            },
-            {
-              "name": "code",
-              "type": "string",
-              "summary": "The Time-based One-Time Password (TOTP) of the Docker Hub account.",
-              "values": [],
-              "maps_to": "record.code",
-              "required": true
-            }
-          ],
-          "examples": [
-            "pm dockerhub auth 2fa-login create --login-2fa-token \"<token>\" --code \"123456\" --json"
-          ],
+          "flags": [],
+          "examples": [],
           "output_policy": "",
-          "risk": "high: exchanges a 2FA challenge for a live session JWT; the token is redacted from command output; requires reverse ETL approval",
-          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
-          "notes": "The provider returns a live session JWT in the response. This command redacts the `token` field from its own output; it is never printed or logged."
+          "risk": "",
+          "approval": "",
+          "notes": "Docker Hub's documented second-factor login completion. Not implemented: this command's only inputs are a live intermediate token and a TOTP code and its only output is a live session JWT, and the reverse-ETL path it would run on maps flags to a plan record that is written to the project state file in plaintext and echoed in plan output. Blocked on a named dependency — requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token."
         },
         {
           "path": "auth login create",
           "summary": "Create an authentication token (username+password/PAT session login)",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
-          "write": "create_user_login",
+          "write": "",
           "source_cli_path": "",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "flags": [
-            {
-              "name": "username",
-              "type": "string",
-              "summary": "Docker Hub account username.",
-              "values": [],
-              "maps_to": "record.username",
-              "required": true
-            },
-            {
-              "name": "password",
-              "type": "string",
-              "summary": "Docker Hub account password or Personal Access Token.",
-              "values": [],
-              "maps_to": "record.password",
-              "required": true
-            }
-          ],
-          "examples": [
-            "pm dockerhub auth login create --username \"myusername\" --password \"<pat-or-password>\" --json"
-          ],
+          "flags": [],
+          "examples": [],
           "output_policy": "",
-          "risk": "high: exchanges a credential for a live session JWT; the token is redacted from command output; requires reverse ETL approval",
-          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
-          "notes": "The provider returns a live session JWT in the response (used internally by this connector's own dockerhub AuthHook when docker_pat is configured for every other command). This command redacts the `token` field from its own output; it is never printed or logged. If the account has 2FA enabled, the response is an intermediate token consumed by `auth 2fa-login create`, not a final session token."
+          "risk": "",
+          "approval": "",
+          "notes": "Docker Hub's documented username+password/PAT session login. Not implemented: this command's only input is a live credential and its only output is a live session JWT, and the reverse-ETL path it would run on maps flags to a plan record that is written to the project state file in plaintext and echoed in plan output. Blocked on a named dependency — requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token. The same exchange is already performed internally, without a plan record, by the dockerhub AuthHook when docker_pat is configured."
         },
         {
           "path": "auth token create",
           "summary": "Create access token (identifier+secret to short-lived access token exchange)",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
-          "write": "create_auth_token",
+          "write": "",
           "source_cli_path": "",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "flags": [
-            {
-              "name": "identifier",
-              "type": "string",
-              "summary": "Username (password/PAT auth) or organization name (organization access token auth).",
-              "values": [],
-              "maps_to": "record.identifier",
-              "required": true
-            },
-            {
-              "name": "secret",
-              "type": "string",
-              "summary": "Password, personal access token, or organization access token.",
-              "values": [],
-              "maps_to": "record.secret",
-              "required": true
-            }
-          ],
-          "examples": [
-            "pm dockerhub auth token create --identifier \"myusername\" --secret \"<pat-or-password>\" --json"
-          ],
+          "flags": [],
+          "examples": [],
           "output_policy": "",
-          "risk": "high: exchanges a credential for a live 10-minute access token; the token is redacted from command output; requires reverse ETL approval",
-          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
-          "notes": "The provider returns a live access token (10-minute lifetime) in the response. This command redacts the `access_token` field from its own output; it is never printed or logged."
+          "risk": "",
+          "approval": "",
+          "notes": "Docker Hub's documented identifier+secret to short-lived access token exchange. Not implemented: this command's only input is a live credential and its only output is a live token, and the reverse-ETL path it would run on maps flags to a plan record that is written to the project state file in plaintext and echoed in plan output. Blocked on a named dependency — requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token. The same exchange is already performed internally, without a plan record, by the dockerhub AuthHook when docker_pat is configured."
         },
         {
           "path": "groups create",
@@ -44791,6 +44776,20 @@
               "maps_to": "path.group_name",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -44820,6 +44819,20 @@
               "maps_to": "path.org_name",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -44901,6 +44914,20 @@
               "maps_to": "path.group_name",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -45155,6 +45182,20 @@
               "maps_to": "path.org_name",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -45305,6 +45346,20 @@
               "maps_to": "path.access_token_id",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -45334,6 +45389,20 @@
               "maps_to": "path.name",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -45470,6 +45539,20 @@
               "maps_to": "path.org_name",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -45581,6 +45664,20 @@
               "maps_to": "path.name",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -45688,6 +45785,20 @@
               "maps_to": "path.repository",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -45921,6 +46032,20 @@
               "values": [],
               "maps_to": "body.regex",
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -45968,6 +46093,20 @@
               "maps_to": "path.tag",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -46006,6 +46145,20 @@
               "maps_to": "path.repository",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -46035,6 +46188,20 @@
               "maps_to": "path.name",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -46055,7 +46222,22 @@
           "operation": "dockerhub.list_scim_resource_types",
           "source_cli_path": "",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
           "examples": [
             "pm dockerhub scim-resource-types list --json"
           ],
@@ -46083,6 +46265,20 @@
               "maps_to": "path.id",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -46103,7 +46299,22 @@
           "operation": "dockerhub.list_scim_schemas",
           "source_cli_path": "",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
           "examples": [
             "pm dockerhub scim-schemas list --json"
           ],
@@ -46122,7 +46333,22 @@
           "operation": "dockerhub.get_scim_service_provider_config",
           "source_cli_path": "",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
           "examples": [
             "pm dockerhub scim-service-provider-config get --json"
           ],
@@ -46199,6 +46425,20 @@
               "maps_to": "path.id",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [
@@ -46219,7 +46459,22 @@
           "operation": "dockerhub.list_scim_users",
           "source_cli_path": "",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
           "examples": [
             "pm dockerhub scim-users list --json"
           ],
@@ -46324,7 +46579,7 @@
       ],
       "help_topics": []
     },
-    "docs_md": "# Overview\n\nReads public Docker Hub repositories and image tags for a configured target user or organization via\nthe Docker Hub registry API, and, when an optional Personal Access Token is configured, manages\npersonal and organization access tokens, organizations, groups (teams), invites, audit logs,\nrepositories, and (with a second, separately-configured SCIM token) SCIM-provisioned users.\n\nReadable streams: `repositories`, `tags`, `repository_detail`, `tag_detail`.\n\nDirect reads, status-only existence checks, and reverse-ETL writes cover all 50 remaining\ndocumented Docker Hub operations: repositories, personal/organization access tokens, audit logs,\ngroups (teams), invites, organization settings/members, authentication, and SCIM. All 54\ndocumented Docker Hub API operations are implemented.\n\nService API documentation: https://docs.docker.com/docker-hub/api/latest/.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`; Docker Hub\n  registry API base URL override for tests or self-hosted proxies.\n- `docker_username` (required, string); Docker Hub username used to authenticate `docker_pat`.\n  Lowercase alphanumerics, underscores, and hyphens only.\n- `namespace` (required, string); Docker Hub user or organization namespace whose repositories and\n  tags to read. This is distinct from `docker_username`: a request for another namespace is honored\n  rather than silently replaced by the authentication identity. Lowercase alphanumerics,\n  underscores, and hyphens only.\n- `docker_pat` (optional, secret string); a Docker Hub Personal Access Token for `docker_username`.\n  Omitted, the connector stays exactly as before: read-only, unauthenticated, public repositories\n  and tags only. When set, it authenticates every account-scoped, organization, group/team, invite,\n  access-token, audit-log, repository-write, and authentication command below. Never printed,\n  logged, or echoed by any command.\n- `scim_bearer_token` (optional, secret string); a Docker Hub Enterprise SCIM API bearer token,\n  distinct from `docker_pat`. Docker Hub's OpenAPI document declares SCIM (`/v2/scim/2.0/**`)\n  under a separate `bearerSCIMAuth` security scheme from the rest of the API's `bearerAuth`; the\n  two credentials are never interchangeable. Required only for the `scim-*` commands.\n- `page_size` (optional, integer); default `100`; Page size (1-100) for the initial request of each\n  paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own\n  absolute next URL verbatim.\n- `tier` (optional, string); default `free`; Docker Registry subscription profile for the cited\n  image-pull quota. Set `paid` for Pro, Team, Business, or partner/unlimited Registry access. This\n  does not manufacture a numeric rate limit for the separate Docker Hub API abuse guard.\n- `auth_type` (optional, string); default `unauthenticated`; Docker Registry pull profile for the\n  cited quota. Set `authenticated` only when the request path is backed by a Registry bearer token;\n  the optional Hub API PAT/session exchange remains a distinct authentication mechanism.\n- `registry_client_ip` (optional, string); public IPv4 address or IPv6 /64 used only as the\n  non-secret scope of an unauthenticated Registry pull quota. Required when `base_url` targets\n  `registry-1.docker.io` with `auth_type=unauthenticated`; it is not a credential and is never sent\n  to Docker.\n- `repository` (optional, string); Repository name (without the namespace prefix) the\n  'tags'/'repository_detail'/'tag_detail' streams are scoped to. Required only when reading one of\n  those streams.\n- `tag` (optional, string); Tag name the 'tag_detail' stream reads a single tag record for (e.g.\n  'latest'). Required only when reading the 'tag_detail' stream.\n\nDefault configuration values: `base_url=https://hub.docker.com/v2`, `page_size=100`, `tier=free`,\n`auth_type=unauthenticated`.\n\nAuthentication behavior:\n\n- No `docker_pat` configured: no authentication (unchanged from before this connector supported\n  writes) — only the 4 public-read streams and the 3 status-only existence checks are usable.\n- `docker_pat` configured: every non-SCIM request authenticates via a `dockerhub` AuthHook\n  (`internal/connectors/hooks/dockerhub`) that exchanges `docker_username`/`docker_pat` for a\n  short-lived session bearer JWT through Docker Hub's own `POST /v2/users/login`, caches it until\n  60s before the JWT's own `exp` claim (a conservative 4-minute cache is used if `exp` cannot be\n  parsed), and sends it as `Authorization: Bearer <jwt>` on every subsequent request. The\n  long-lived PAT itself is never sent as a static bearer token and never logged.\n- `scim_bearer_token` configured: every `/v2/scim/2.0/**` request instead sends\n  `Authorization: Bearer <scim_bearer_token>` — the same AuthHook routes by request path\n  (`dualAuth`) and never substitutes one credential for the other. A SCIM command with no\n  `scim_bearer_token` configured fails closed with a named error, even if a session JWT is already\n  cached from a prior non-SCIM command.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/namespaces/{{ config.namespace }}/repositories`.\n\n## Streams notes\n\nDefault pagination: follows a next-page URL from the response body; URL path `next`; next URLs stay\non the configured API host.\n\nPagination by stream: next_url: `repositories`, `tags`; none: `repository_detail`, `tag_detail`.\n\n- `repositories`: GET `/namespaces/{{ config.namespace }}/repositories` - records path\n  `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from\n  the response body; URL path `next`; next URLs stay on the configured API host.\n- `tags`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}/tags`\n  - records path `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a\n  next-page URL from the response body; URL path `next`; next URLs stay on the configured API host.\n- `repository_detail`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}` - single-object response; records at response root.\n- `tag_detail`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}/tags/{{ config.tag }}` - single-object response; records at response root.\n\nDirect-read commands (repositories/tokens/groups/invites/orgs/audit-logs/scim listed below) are\neach a single bounded HTTP request, not a full paginated crawl — Docker Hub's own list endpoints\nreturn a provider-default first page only per command invocation (a repo-wide, currently open\nlimitation tracked separately, not specific to this connector).\n\nThe 3 `*-check` commands (`repository check`, `repository tags check`, `repository tag check`) are\nstatus-only: Docker Hub's `HEAD` existence-check endpoints never return a response body, so these\ncommands return `{\"status_code\": N}` — the HTTP status is the entire signal. This is a new runtime\ncapability (`internal/connectors/engine/direct_read.go`'s HEAD branch); no other connector's\ncommands are affected by it.\n\n## Write actions & risks\n\nRequires `docker_pat` (or, for SCIM, `scim_bearer_token`). Reverse ETL mutations require plan,\npreview, explicit approval, and execute; destructive actions (DELETE and group/org membership\nremoval) additionally require typed destructive confirmation.\n\n- Repositories: `repository create`, `repository immutable-tags update`,\n  `repository immutable-tags verify` (direct read), `repository group assign`.\n- Personal access tokens: `access-tokens list`/`get` (direct read), `access-tokens create` (the\n  provider returns the raw token value once, in the create response only; this command redacts the\n  `token` field from its own output), `access-tokens update`, `access-tokens delete` (destructive).\n- Organization access tokens: `org access-tokens list`/`get` (direct read), `org access-tokens\n  create` (redacted, same as personal tokens; `resources`, the token's repo/org scope grants, is a\n  nested array of objects with no typed scalar leaf and is not flag-mapped — supply it via a\n  reverse-ETL source record), `org access-tokens update`, `org access-tokens delete` (destructive).\n- Audit logs: `audit-logs list`, `audit-logs actions list` (both direct reads).\n- Authentication: `auth token create` (identifier+secret to short-lived access token exchange),\n  `auth login create` (username+password/PAT session login — the same exchange this connector's\n  own AuthHook performs internally when `docker_pat` is configured), `auth 2fa-login create`\n  (completes a 2FA-challenged login). All three redact the returned token from their output.\n- Groups (teams): `groups list`/`get` (direct read), `groups create`, `groups replace` (PUT, full\n  update), `groups update` (PATCH, partial update), `groups delete` (destructive), `groups members\n  list` (direct read), `groups members add`, `groups members remove` (destructive).\n- Invites: `invites bulk-create`, `invites cancel` (destructive), `invites resend`, `invites list`\n  (direct read).\n- Organizations & settings: `org settings get` (direct read), `org settings update` (the provider's\n  `restricted_images` body is a nested object with three required booleans; this command flattens\n  it into three top-level scalar flags one-for-one), `org members list` (direct read), `org members\n  export` (binary CSV download), `org members update`, `org members remove` (destructive).\n- SCIM (requires `scim_bearer_token`): `scim-resource-types list`/`get`, `scim-schemas list`/`get`,\n  `scim-service-provider-config get`, `scim-users list`/`get` (all direct reads), `scim-users\n  create`, `scim-users update` (PUT full replace; `enabled` is required by this command even though\n  the provider defaults a missing value to `false`/deactivated, to prevent accidental\n  deactivation-by-omission). The provider documents SCIM's media type as `application/scim+json`\n  (RFC 7644); this bundle's write executor sends `application/json`, the widely-accepted compatible\n  variant — not independently live-verified against Docker Hub's own leniency.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- The documented pull quota is selector-scoped to `registry-1.docker.io`, not to the Hub API host\n  used by this connector's 54 documented management operations. The bundle declares 100\n  unauthenticated pulls per 21,600-second window by public IP/IPv6-/64 and 200 authenticated free\n  pulls per window by Docker username; paid Registry profiles deliberately match no fixed budget.\n  Docker's separate Hub API abuse limiter publishes no numeric budget, so no synthetic limiter is\n  declared for it. A bare 429 still follows the shared requester's provider `Retry-After` backoff.\n- API coverage: all 54 documented Docker Hub operations are implemented (4 stream-backed, 50\n  direct-read/status-check/write). Zero operations remain blocked.\n- Two independent optional credentials gate different command groups: `docker_pat` (most commands)\n  and `scim_bearer_token` (SCIM only) — Docker Hub's own OpenAPI document declares these under\n  separate security schemes (`bearerAuth` vs `bearerSCIMAuth`) and this bundle never substitutes\n  one for the other.\n- Direct-read commands are single bounded requests, not full paginated crawls (see Streams notes).\n- Other cited artifact endpoints are explicitly classified in `api_surface.json`; no undocumented\n  legacy endpoint is exposed by this bundle.\n",
+    "docs_md": "# Overview\n\nReads public Docker Hub repositories and image tags for a configured target user or organization via\nthe Docker Hub registry API, and, when an optional Personal Access Token is configured, manages\npersonal and organization access tokens, organizations, groups (teams), invites, audit logs,\nrepositories, and (with a second, separately-configured SCIM token) SCIM-provisioned users.\n\nReadable streams: `repositories`, `tags`, `repository_detail`, `tag_detail`.\n\nDirect reads, status-only existence checks, and reverse-ETL writes cover 47 of the 50 remaining\ndocumented Docker Hub operations: repositories, personal/organization access tokens, audit logs,\ngroups (teams), invites, organization settings/members, and SCIM. All 54 documented Docker Hub API\noperations are modelled; 51 are implemented and 3 (the credential-for-token authentication\nexchanges) are declared blocked on a named dependency — see \"Write actions & risks\".\n\nService API documentation: https://docs.docker.com/docker-hub/api/latest/.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`; Docker Hub\n  registry API base URL override for tests or self-hosted proxies.\n- `docker_username` (required, string); Docker Hub username used to authenticate `docker_pat`.\n  Lowercase alphanumerics, underscores, and hyphens only.\n- `namespace` (required, string); Docker Hub user or organization namespace whose repositories and\n  tags to read. This is distinct from `docker_username`: a request for another namespace is honored\n  rather than silently replaced by the authentication identity. Lowercase alphanumerics,\n  underscores, and hyphens only.\n- `docker_pat` (optional, secret string); a Docker Hub Personal Access Token for `docker_username`.\n  Omitted, the connector stays exactly as before: read-only, unauthenticated, public repositories\n  and tags only. When set, it authenticates every account-scoped, organization, group/team, invite,\n  access-token, audit-log, repository-write, and authentication command below. Never printed,\n  logged, or echoed by any command.\n- `scim_bearer_token` (optional, secret string); a Docker Hub Enterprise SCIM API bearer token,\n  distinct from `docker_pat`. Docker Hub's OpenAPI document declares SCIM (`/v2/scim/2.0/**`)\n  under a separate `bearerSCIMAuth` security scheme from the rest of the API's `bearerAuth`; the\n  two credentials are never interchangeable. Required only for the `scim-*` commands.\n- `page_size` (optional, integer); default `100`; Page size (1-100) for the initial request of each\n  paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own\n  absolute next URL verbatim.\n- `tier` (optional, string); default `free`; Docker Registry subscription profile for the cited\n  image-pull quota. Set `paid` for Pro, Team, Business, or partner/unlimited Registry access. This\n  does not manufacture a numeric rate limit for the separate Docker Hub API abuse guard.\n- `auth_type` (optional, string); default `unauthenticated`; Docker Registry pull profile for the\n  cited quota. Set `authenticated` only when the request path is backed by a Registry bearer token;\n  the optional Hub API PAT/session exchange remains a distinct authentication mechanism.\n- `registry_client_ip` (optional, string); public IPv4 address or IPv6 /64 used only as the\n  non-secret scope of an unauthenticated Registry pull quota. Required when `base_url` targets\n  `registry-1.docker.io` with `auth_type=unauthenticated`; it is not a credential and is never sent\n  to Docker.\n- `repository` (optional, string); Repository name (without the namespace prefix) the\n  'tags'/'repository_detail'/'tag_detail' streams are scoped to. Required only when reading one of\n  those streams.\n- `tag` (optional, string); Tag name the 'tag_detail' stream reads a single tag record for (e.g.\n  'latest'). Required only when reading the 'tag_detail' stream.\n\nDefault configuration values: `base_url=https://hub.docker.com/v2`, `page_size=100`, `tier=free`,\n`auth_type=unauthenticated`.\n\nAuthentication behavior:\n\n- No `docker_pat` configured: no authentication (unchanged from before this connector supported\n  writes) — only the 4 public-read streams and the 3 status-only existence checks are usable.\n- `docker_pat` configured: every non-SCIM request authenticates via a `dockerhub` AuthHook\n  (`internal/connectors/hooks/dockerhub`) that exchanges `docker_username`/`docker_pat` for a\n  short-lived session bearer JWT through Docker Hub's own `POST /v2/users/login`, caches it until\n  60s before the JWT's own `exp` claim (a conservative 4-minute cache is used if `exp` cannot be\n  parsed), and sends it as `Authorization: Bearer <jwt>` on every subsequent request. The\n  long-lived PAT itself is never sent as a static bearer token and never logged.\n- `scim_bearer_token` configured: every `/v2/scim/2.0/**` request instead sends\n  `Authorization: Bearer <scim_bearer_token>` — the same AuthHook routes by request path\n  (`dualAuth`) and never substitutes one credential for the other. A SCIM command with no\n  `scim_bearer_token` configured fails closed with a named error, even if a session JWT is already\n  cached from a prior non-SCIM command.\n- The two credentials are independently sufficient. `scim_bearer_token` alone (no `docker_pat`)\n  authenticates every SCIM command, and every non-SCIM command then fails closed naming\n  `docker_pat` rather than being sent unauthenticated. SCIM routing is anchored on the resolved\n  `base_url` path, so a proxy `base_url` carrying its own path prefix still routes SCIM requests to\n  the SCIM credential instead of falling back to the account session JWT.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/namespaces/{{ config.namespace }}/repositories`.\n\n## Streams notes\n\nDefault pagination: follows a next-page URL from the response body; URL path `next`; next URLs stay\non the configured API host.\n\nPagination by stream: next_url: `repositories`, `tags`; none: `repository_detail`, `tag_detail`.\n\n- `repositories`: GET `/namespaces/{{ config.namespace }}/repositories` - records path\n  `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from\n  the response body; URL path `next`; next URLs stay on the configured API host.\n- `tags`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}/tags`\n  - records path `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a\n  next-page URL from the response body; URL path `next`; next URLs stay on the configured API host.\n- `repository_detail`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}` - single-object response; records at response root.\n- `tag_detail`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}/tags/{{ config.tag }}` - single-object response; records at response root.\n\nDirect-read commands (repositories/tokens/groups/invites/orgs/audit-logs/scim listed below) are\neach a single bounded HTTP request, not a full paginated crawl — Docker Hub's own list endpoints\nreturn a provider-default first page only per command invocation (a repo-wide, currently open\nlimitation tracked separately, not specific to this connector).\n\nThe 3 `*-check` commands (`repository check`, `repository tags check`, `repository tag check`) are\nstatus-only: Docker Hub's `HEAD` existence-check endpoints never return a response body, so these\ncommands return `{\"status_code\": N}` — the HTTP status is the entire signal. Both answers the check\nexists to give are results, not errors: `{\"status_code\": 200}` when the resource exists and\n`{\"status_code\": 404}` when it does not. Every other status is still a failure — 401/403 report an\nauth problem rather than a fact about the resource, and 429/5xx are the provider declining to\nanswer. This is a new runtime capability (`internal/connectors/engine/direct_read.go`'s HEAD\nbranch), narrowed to status-only HEAD operations; no other connector's commands and no non-HEAD\ndirect read are affected by it (a GET 404 remains an error).\n\n## Write actions & risks\n\nRequires `docker_pat` (or, for SCIM, `scim_bearer_token`). Reverse ETL mutations require plan,\npreview, explicit approval, and execute; destructive actions (DELETE and group/org membership\nremoval) additionally require typed destructive confirmation.\n\n- Repositories: `repository create`, `repository immutable-tags update`,\n  `repository immutable-tags verify` (direct read), `repository group assign`.\n- Personal access tokens: `access-tokens list`/`get` (direct read), `access-tokens create` (the\n  provider returns the raw token value once, in the create response only; this command redacts the\n  `token` field from its own output), `access-tokens update`, `access-tokens delete` (destructive).\n- Organization access tokens: `org access-tokens list`/`get` (direct read), `org access-tokens\n  create` (redacted, same as personal tokens; `resources`, the token's repo/org scope grants, is a\n  nested array of objects with no typed scalar leaf and is not flag-mapped — supply it via a\n  reverse-ETL source record), `org access-tokens update`, `org access-tokens delete` (destructive).\n- Audit logs: `audit-logs list`, `audit-logs actions list` (both direct reads).\n- Authentication (declared, NOT implemented): `auth token create`, `auth login create`, and\n  `auth 2fa-login create` remain in the documented 54-operation surface as `availability: planned`\n  and are not executable. Each one's only input is a live credential and only output is a live\n  token, and the reverse-ETL path they would run on maps command flags into a plan record that is\n  persisted to the project state file in plaintext and echoed in plan output; an action's\n  `redact_fields` names a RESPONSE field and does not redact the request credential, so nothing\n  here would make a password, PAT, or TOTP code safe on the command line or on disk. They are\n  blocked on a named dependency: requires secure secret input (stdin/env/vault-reference),\n  encrypted or ephemeral plan storage, and a secure sink for the returned token. The session-login\n  exchange itself is still performed internally, with no plan record, by the `dockerhub` AuthHook\n  whenever `docker_pat` is configured.\n- Groups (teams): `groups list`/`get` (direct read), `groups create`, `groups replace` (PUT, full\n  update), `groups update` (PATCH, partial update), `groups delete` (destructive), `groups members\n  list` (direct read), `groups members add`, `groups members remove` (destructive).\n- Invites: `invites bulk-create`, `invites cancel` (destructive), `invites resend`, `invites list`\n  (direct read).\n- Organizations & settings: `org settings get` (direct read), `org settings update` (the provider's\n  `restricted_images` body is a nested object with three required booleans; this command flattens\n  it into three top-level scalar flags one-for-one), `org members list` (direct read), `org members\n  export` (binary CSV download), `org members update`, `org members remove` (destructive).\n- SCIM (requires `scim_bearer_token`): `scim-resource-types list`/`get`, `scim-schemas list`/`get`,\n  `scim-service-provider-config get`, `scim-users list`/`get` (all direct reads), `scim-users\n  create`, `scim-users update` (PUT full replace; `enabled` is required by this command even though\n  the provider defaults a missing value to `false`/deactivated, to prevent accidental\n  deactivation-by-omission). The provider documents SCIM's media type as `application/scim+json`\n  (RFC 7644); this bundle's write executor sends `application/json`, the widely-accepted compatible\n  variant — not independently live-verified against Docker Hub's own leniency.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- The documented pull quota is selector-scoped to `registry-1.docker.io`, not to the Hub API host\n  used by this connector's 54 documented management operations. The bundle declares 100\n  unauthenticated pulls per 21,600-second window by public IP/IPv6-/64 and 200 authenticated free\n  pulls per window by Docker username; paid Registry profiles deliberately match no fixed budget.\n  Docker's separate Hub API abuse limiter publishes no numeric budget, so no synthetic limiter is\n  declared for it. A bare 429 still follows the shared requester's provider `Retry-After` backoff.\n- API coverage: all 54 documented Docker Hub operations are modelled; 51 are implemented (4\n  stream-backed, 47 direct-read/status-check/write) and 3 are blocked — the credential-for-token\n  authentication exchanges, on the named secure-secret-input/secure-token-sink dependency above.\n- Two independent optional credentials gate different command groups: `docker_pat` (most commands)\n  and `scim_bearer_token` (SCIM only) — Docker Hub's own OpenAPI document declares these under\n  separate security schemes (`bearerAuth` vs `bearerSCIMAuth`) and this bundle never substitutes\n  one for the other.\n- Direct-read commands are single bounded requests, not full paginated crawls (see Streams notes).\n- Other cited artifact endpoints are explicitly classified in `api_surface.json`; no undocumented\n  legacy endpoint is exposed by this bundle.\n",
     "icon": {
       "id": "dockerhub",
       "path": "icons/dockerhub.svg",

@@ -226,7 +226,11 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 
 	resp, err := requester.DoLimited(ctx, w.method, reqPath, query, w.body, w.maxBytes)
 	if err != nil {
-		return nil, connectors.DirectReadPage{}, nil, err
+		absent := statusOnlyAbsenceResponse(w.method, err)
+		if absent == nil {
+			return nil, connectors.DirectReadPage{}, nil, err
+		}
+		resp = absent
 	}
 	if len(resp.Body) > w.maxBytes {
 		return nil, connectors.DirectReadPage{}, resp, errDirectReadTooLarge{got: len(resp.Body), limit: w.maxBytes}

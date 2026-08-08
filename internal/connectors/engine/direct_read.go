@@ -422,10 +422,43 @@ func clampOperationDirectReadMaxBytes(requested, operationMax int) int {
 // out of it. It lives beside the fetch rather than in OperationDirectRead
 // because decoding is what readDirectPage owns.
 func decodeDirectReadPageBody(method string, resp *connsdk.Response, maxBytes int) (any, error) {
-	if strings.EqualFold(strings.TrimSpace(method), http.MethodHead) {
+	if isStatusOnlyMethod(method) {
 		return map[string]any{"status_code": resp.Status}, nil
 	}
 	return decodeDirectReadBody(resp.Body, maxBytes)
+}
+
+func isStatusOnlyMethod(method string) bool {
+	return strings.EqualFold(strings.TrimSpace(method), http.MethodHead)
+}
+
+// statusOnlyAbsenceResponse converts the ONE provider answer a status-only
+// existence check exists to ask for — "this resource is not there" — from a
+// transport error into the result the operation documents.
+//
+// A HEAD operation is status-only by construction (operationDirectReadSpec
+// requires output_policy "json_redacted" and decodeDirectReadPageBody returns
+// {"status_code": N} for it), so its whole product is the status code. Routing
+// 404 through the error path made `repository check` able to answer only
+// "yes": absence, the question it is for, exited non-zero with an error string
+// and no status code.
+//
+// The narrowing is deliberate and total. Only HEAD, and only 404: 401/403 are
+// an auth problem rather than an answer about the resource, 429 and 5xx are
+// the provider declining to answer at all, and every non-HEAD direct read
+// keeps treating every non-2xx as the failure it is. Nothing here can widen
+// on its own — a GET returns nil from the first branch regardless of status.
+// It returns nil when err is not that case, so the caller propagates the
+// original error unchanged.
+func statusOnlyAbsenceResponse(method string, err error) *connsdk.Response {
+	if !isStatusOnlyMethod(method) {
+		return nil
+	}
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) || httpErr.Status != http.StatusNotFound {
+		return nil
+	}
+	return &connsdk.Response{Status: httpErr.Status}
 }
 
 func decodeDirectReadBody(raw []byte, maxBytes int) (any, error) {

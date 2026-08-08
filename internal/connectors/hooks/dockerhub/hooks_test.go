@@ -538,3 +538,135 @@ func TestAuthenticator_SCIMPathNeverFallsBackToSessionJWT(t *testing.T) {
 		t.Fatalf("Authorization = %q, want empty (must not fall back to the cached session JWT)", req.Header.Get("Authorization"))
 	}
 }
+
+// --- SCIM-only connections (scim_bearer_token configured, docker_pat absent) --
+//
+// streams.json declares a second custom-auth spec gated on
+// secrets.scim_bearer_token that carries no login fields, because the `when`
+// grammar has no OR operator. These fixtures pin what that spec resolves to.
+
+// scimOnlyCfg is a connection configured with ONLY the SCIM credential: no
+// docker_pat secret at all.
+func scimOnlyCfg() connectors.RuntimeConfig {
+	return connectors.RuntimeConfig{
+		Config:  map[string]string{"docker_username": "fixture-user"},
+		Secrets: map[string]string{"scim_bearer_token": "fixture-scim-token"},
+	}
+}
+
+// scimOnlySpec mirrors streams.json's scim_bearer_token-gated auth spec: a
+// custom spec with no token_url/username/password.
+func scimOnlySpec() engine.AuthSpec {
+	return engine.AuthSpec{Mode: "custom", Hook: "dockerhub"}
+}
+
+func TestAuthenticator_SCIMOnlyConnectionAuthenticatesSCIMRequests(t *testing.T) {
+	h := newClientHooks(nil)
+	auth, err := h.Authenticator(context.Background(), scimOnlyCfg(), scimOnlySpec())
+	if err != nil {
+		t.Fatalf("Authenticator with a SCIM-only connection: %v", err)
+	}
+
+	req := doAuthenticatedRequestToPath(t, auth, "/v2/scim/2.0/Users")
+	if got := req.Header.Get("Authorization"); got != "Bearer fixture-scim-token" {
+		t.Fatalf("SCIM request Authorization = %q, want the SCIM bearer token with no docker_pat configured", got)
+	}
+}
+
+func TestAuthenticator_SCIMOnlyConnectionFailsClosedOnNonSCIMPath(t *testing.T) {
+	h := newClientHooks(nil)
+	auth, err := h.Authenticator(context.Background(), scimOnlyCfg(), scimOnlySpec())
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+
+	req, _ := http.NewRequest(http.MethodGet, "https://example.invalid/v2/access-tokens", nil)
+	err = auth.Apply(context.Background(), req)
+	if err == nil {
+		t.Fatal("Apply() error = nil for a non-SCIM request on a SCIM-only connection, want a closed failure naming docker_pat")
+	}
+	if !strings.Contains(err.Error(), "docker_pat") {
+		t.Fatalf("error = %q, want it to name docker_pat", err.Error())
+	}
+	if req.Header.Get("Authorization") != "" {
+		t.Fatalf("Authorization = %q, want empty (the SCIM token must never sign a bearerAuth endpoint)", req.Header.Get("Authorization"))
+	}
+}
+
+func TestAuthenticator_NoCredentialConfiguredIsError(t *testing.T) {
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"docker_username": "fixture-user"}}
+	h := newClientHooks(nil)
+	if _, err := h.Authenticator(context.Background(), cfg, scimOnlySpec()); err == nil {
+		t.Fatal("Authenticator error = nil with neither docker_pat nor scim_bearer_token configured, want an error")
+	}
+}
+
+// --- SCIM routing under a proxy base_url path prefix ------------------------
+
+func TestAuthenticator_SCIMRoutingHonorsProxyBaseURLPathPrefix(t *testing.T) {
+	cfg := scimOnlyCfg()
+	cfg.Config["base_url"] = "https://proxy.internal/dockerhub/v2"
+
+	h := newClientHooks(nil)
+	auth, err := h.Authenticator(context.Background(), cfg, scimOnlySpec())
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+
+	// A declared operation path of "/v2/scim/2.0/Users" is NOT stripped when
+	// the proxy base path is "/dockerhub/v2", so the wire path carries both.
+	for _, path := range []string{
+		"/dockerhub/v2/v2/scim/2.0/Users",
+		"/dockerhub/v2/scim/2.0/Users",
+	} {
+		req := doAuthenticatedRequestToPath(t, auth, path)
+		if got := req.Header.Get("Authorization"); got != "Bearer fixture-scim-token" {
+			t.Fatalf("proxy SCIM path %q Authorization = %q, want the SCIM bearer token (a fixed /v2/scim/2.0/ prefix test fails OPEN here)", path, got)
+		}
+	}
+}
+
+func TestAuthenticator_ProxyBaseURLNonSCIMPathStillUsesSessionJWT(t *testing.T) {
+	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	srv, client, _ := loginHTTPSServer(t, func(map[string]string) (int, map[string]any) {
+		return http.StatusOK, map[string]any{"token": fakeJWT(t, now, time.Hour)}
+	})
+
+	cfg := scimCfg()
+	cfg.Config["base_url"] = "https://proxy.internal/dockerhub/v2"
+
+	h := newTestHooks(func() time.Time { return now }, client)
+	auth, err := h.Authenticator(context.Background(), cfg, baseSpec(srv.URL))
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+
+	req := doAuthenticatedRequestToPath(t, auth, "/dockerhub/v2/access-tokens")
+	if got := req.Header.Get("Authorization"); got != "Bearer "+fakeJWT(t, now, time.Hour) {
+		t.Fatalf("proxy non-SCIM Authorization = %q, want the session JWT", got)
+	}
+}
+
+func TestAuthenticator_RepositoryPathNamedSCIMUsesSessionJWT(t *testing.T) {
+	// Namespace "scim" + repository "2.0" produces a path CONTAINING
+	// "/scim/2.0/" that is not a SCIM endpoint: routing is anchored on the
+	// base path, so this must keep using the session JWT.
+	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	srv, client, _ := loginHTTPSServer(t, func(map[string]string) (int, map[string]any) {
+		return http.StatusOK, map[string]any{"token": fakeJWT(t, now, time.Hour)}
+	})
+
+	cfg := scimCfg()
+	cfg.Config["base_url"] = "https://hub.docker.com/v2"
+
+	h := newTestHooks(func() time.Time { return now }, client)
+	auth, err := h.Authenticator(context.Background(), cfg, baseSpec(srv.URL))
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+
+	req := doAuthenticatedRequestToPath(t, auth, "/v2/repositories/scim/2.0/tags")
+	if got := req.Header.Get("Authorization"); got != "Bearer "+fakeJWT(t, now, time.Hour) {
+		t.Fatalf("repository path Authorization = %q, want the session JWT (the SCIM token must not leak to a bearerAuth endpoint)", got)
+	}
+}

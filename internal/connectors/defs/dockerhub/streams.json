@@ -4,6 +4,7 @@
     "user_agent": "polymetrics-go-cli",
     "auth": [
       { "mode": "custom", "hook": "dockerhub", "token_url": "{{ config.base_url }}/users/login", "username": "{{ config.docker_username }}", "password": "{{ secrets.docker_pat }}", "when": "{{ secrets.docker_pat }}" },
+      { "mode": "custom", "hook": "dockerhub", "when": "{{ secrets.scim_bearer_token }}" },
       { "mode": "none" }
     ],
     "pagination": {

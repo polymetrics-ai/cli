@@ -661,19 +661,82 @@ func TestOperationDirectReadHEADReturnsStatusOnlyNoBodyDecode(t *testing.T) {
 	}
 }
 
-func TestOperationDirectReadHEADNonSuccessStatusIsError(t *testing.T) {
+// A status-only existence check exists to answer "is this resource there".
+// 404 IS that answer, so it is a structured result, not a transport error —
+// otherwise `repository check` can only ever succeed, and absence exits
+// non-zero with an error string carrying no status code.
+func TestOperationDirectReadHEADAbsenceReturnsStructuredNotFound(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	}))
 	defer srv.Close()
 
-	_, err := OperationDirectRead(context.Background(), headCheckBundle(srv.URL), connectors.OperationDirectReadRequest{
+	result, err := OperationDirectRead(context.Background(), headCheckBundle(srv.URL), connectors.OperationDirectReadRequest{
+		Operation:  "dockerhub.check_repository",
+		PathParams: map[string]string{"namespace": "library", "repository": "does-not-exist"},
+		MaxBytes:   1024,
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead for an absent resource: %v", err)
+	}
+	if result.Status != http.StatusNotFound {
+		t.Fatalf("result.Status = %d, want 404", result.Status)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("result.Body = %#v (%T), want a status-only map", result.Body, result.Body)
+	}
+	if n, ok := body["status_code"].(int); !ok || n != http.StatusNotFound {
+		t.Fatalf("status_code = %#v, want int 404", body["status_code"])
+	}
+}
+
+// Only 404, and only for HEAD. Every other non-2xx is the provider declining
+// to answer (or an auth problem), not a fact about the resource.
+func TestOperationDirectReadHEADNonAbsenceStatusesStayErrors(t *testing.T) {
+	for _, status := range []int{
+		http.StatusUnauthorized,
+		http.StatusForbidden,
+		http.StatusTooManyRequests,
+		http.StatusInternalServerError,
+	} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(status)
+			}))
+			defer srv.Close()
+
+			_, err := OperationDirectRead(context.Background(), headCheckBundle(srv.URL), connectors.OperationDirectReadRequest{
+				Operation:  "dockerhub.check_repository",
+				PathParams: map[string]string{"namespace": "library", "repository": "alpine"},
+				MaxBytes:   1024,
+			}, nil)
+			if err == nil {
+				t.Fatalf("OperationDirectRead error = nil for a %d HEAD response, want an error", status)
+			}
+		})
+	}
+}
+
+// The 404-as-result narrowing must not reach any other direct read: a GET 404
+// is still a failure.
+func TestOperationDirectReadGETNotFoundIsStillError(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	defer srv.Close()
+
+	b := headCheckBundle(srv.URL)
+	b.Operations[0].REST.Method = http.MethodGet
+	b.Surface.Endpoints[0].Method = http.MethodGet
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
 		Operation:  "dockerhub.check_repository",
 		PathParams: map[string]string{"namespace": "library", "repository": "does-not-exist"},
 		MaxBytes:   1024,
 	}, nil)
 	if err == nil {
-		t.Fatal("OperationDirectRead error = nil, want an error for a 404 HEAD response (existence-check semantics match every other direct read: non-2xx is an error, not a false result)")
+		t.Fatal("OperationDirectRead error = nil for a 404 GET response, want an error (only status-only HEAD checks report absence as a result)")
 	}
 }
 

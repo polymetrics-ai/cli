@@ -190,24 +190,31 @@ func TestDockerhubAPISurfaceOperationLedger(t *testing.T) {
 		}
 	}
 
-	// Target disposition counts once the phase is GREEN: all 54 documented
-	// operations are covered_by a stream, direct read, or write action.
-	// Zero blocked rows: the 3 HEAD existence checks are implemented via a
-	// new runtime foundation (a status-only HEAD branch in
+	// Target disposition counts once the phase is GREEN: 51 of the 54
+	// documented operations are covered_by a stream, direct read, or write
+	// action. The 3 HEAD existence checks are implemented via a new runtime
+	// foundation (a status-only HEAD branch in
 	// internal/connectors/engine/direct_read.go, mirrored across every
 	// method-allowlist site — commandrunner/runner.go, engine/bundle.go,
 	// engine/operation_endpoint_ledger.go, cmd/connectorgen/validate.go,
-	// internal/connectors/conformance/static.go); the 3 auth-exchange
-	// commands are implemented with redacted token output; and all 9 SCIM
-	// operations are implemented via the dockerhub AuthHook's dualAuth
-	// second-credential (scim_bearer_token) foundation. Zero rows carry
-	// operation.model "disallowed" or any other blocked disposition.
-	const wantCovered = 54
-	const wantBlocked = 0
+	// internal/connectors/conformance/static.go), and all 9 SCIM operations
+	// are implemented via the dockerhub AuthHook's dualAuth second-credential
+	// (scim_bearer_token) foundation.
+	//
+	// The 3 remaining rows are the credential-for-token auth exchanges
+	// (POST /v2/auth/token, /v2/users/login, /v2/users/2fa-login). They stay
+	// in the 54-row surface as blocked rows carrying a real model
+	// (sensitive_reverse_etl) and the named dependency asserted above: their
+	// only input is a live secret and their only output is a live token, and
+	// the reverse-ETL path they would execute on persists the request record
+	// to the project state file in plaintext. Zero rows carry operation.model
+	// "disallowed".
+	const wantCovered = 51
+	const wantBlocked = 3
 	if covered != wantCovered {
-		t.Errorf("covered = %d, want %d (all 54 documented operations implemented)", covered, wantCovered)
+		t.Errorf("covered = %d, want %d (51 of 54 documented operations implemented)", covered, wantCovered)
 	}
 	if blocked != wantBlocked {
-		t.Errorf("blocked = %d, want %d (every operation is implemented; no named-dependency rows remain)", blocked, wantBlocked)
+		t.Errorf("blocked = %d, want %d (the 3 credential-for-token auth exchanges, each with a named dependency)", blocked, wantBlocked)
 	}
 }

@@ -138,9 +138,12 @@ OpenAPI `{parameter}` placeholders where the write engine requires
 a live-account limitation; no repository was created by the failed attempt.
 
 **Scope:** `internal/connectors/defs/dockerhub/writes.json`, the Docker Hub
-definition-owned regression test, the shared strict-write ALPN fix and its isolated
-`connsdk` regression test, generated artifacts only if their checks report drift,
-and this phase's evidence. The new shared-runtime scope was discovered only after
+definition-owned regression test, generated artifacts only if their checks report
+drift, and this phase's evidence. (The shared strict-write ALPN fix and its
+isolated `connsdk` regression test were planned here but are NOT delivered: the
+rebase onto current `origin/main` resolved both commits in favour of `main`, and
+the defect is unreachable against main's `noReplayClient`, which sets no
+`Transport.Protocols` at all. See TDD-LEDGER.md, "Correction 1".) The new shared-runtime scope was discovered only after
 the corrected request hit Docker Hub's HTTP/2 transport; it is a provider-neutral
 one-shot-write safety fix, not a Docker Hub-specific workaround.
 
