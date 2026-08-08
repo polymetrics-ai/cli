@@ -195,6 +195,31 @@ ok  	polymetrics.ai/cmd/connectorgen
 All fixtures are local and synthetic; no credential, token-derived value, or signed redirect URL
 was emitted.
 
+### JSON multipart-event mutation redirect — additional RED 2026-08-08
+
+The live Clips artifact says the JSON `CreateMultipartUpload` and
+`CompleteMultipartUpload` event calls must follow an HTTP 30x and retain bearer
+authorization at the admitted provider host. The existing transport already
+rebuilds a preview-bound JSON body for a declared mutation redirect, but the
+bundle semantic gate admitted only multipart or base64 upload declarations.
+The focused test failed verbatim before that narrow declaration rule was
+extended:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationJSONWriteAdmitsDeclaredMutationRedirect$'
+--- FAIL: TestOperationJSONWriteAdmitsDeclaredMutationRedirect (0.00s)
+    direct_write_test.go:505: closed JSON operation declared redirect = operation 0 ("zoom.clips.files.multipart_upload_events") rest.redirect is only valid for a multipart or base64_upload rest_write, want admitted provider-owned boundary
+FAIL
+FAIL	polymetrics.ai/internal/connectors/engine	0.759s
+FAIL
+```
+
+The fixture names Zoom's documented operation but uses only a synthetic secret
+template and issues no request. The planned green constraint remains strict:
+fixed literal base URL, exactly one declared bearer auth, finite same-provider
+suffix boundary, 307/308 only, preview-bound closed JSON body, and no
+caller-supplied redirect target or credential header.
+
 ## GREEN connector — pending
 
 Record the real runner fixture lifecycle, source reconciliation, and command reachability here
