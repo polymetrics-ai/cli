@@ -28,6 +28,146 @@ existing_cli_paths = {c["path"] for c in cli_doc["commands"]}
 
 PATH_PARAM_RE = re.compile(r"\{([^}]+)\}")
 
+# These are the only GitHub rows whose documented response/body shapes fall
+# outside the generic JSON GET reader. Keep them explicit: a broad promotion of
+# every blocked direct_read/disallowed row would turn a classifier into a
+# bypass for future foundation gaps. Each generated declaration below is still
+# routed through OperationDirectRead's real preflight and bounded requester.
+def contract_flag(name, kind, maps_to, required=False, values=None):
+    flag = {"name": name, "type": kind, "maps_to": maps_to}
+    if required:
+        flag["required"] = True
+    if values:
+        flag["values"] = values
+    return flag
+
+
+STATUS_READ_MAX_BYTES = 1024
+DEFAULT_TEXT_READ_MAX_BYTES = 1024 * 1024
+GITHUB_RAW_MARKDOWN_MAX_BYTES = 400 * 1024
+
+EXPLICIT_DIRECT_READ_CONTRACTS = {
+    ("GET", "/gists/{gist_id}/star"): {
+        "cli_path": "gists star check",
+        "output_policy": "none",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        "flags": [contract_flag("gist-id", "string", "path.gist_id", required=True)],
+    },
+    ("GET", "/orgs/{org}/blocks/{username}"): {
+        "cli_path": "orgs blocks check",
+        "output_policy": "none",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        "flags": [
+            contract_flag("org", "string", "path.org", required=True),
+            contract_flag("username", "string", "path.username", required=True),
+        ],
+    },
+    ("GET", "/orgs/{org}/members/{username}"): {
+        "cli_path": "orgs members check",
+        "output_policy": "none",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        "flags": [
+            contract_flag("org", "string", "path.org", required=True),
+            contract_flag("username", "string", "path.username", required=True),
+        ],
+    },
+    ("GET", "/orgs/{org}/public_members/{username}"): {
+        "cli_path": "orgs public-members check",
+        "output_policy": "none",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        "flags": [
+            contract_flag("org", "string", "path.org", required=True),
+            contract_flag("username", "string", "path.username", required=True),
+        ],
+    },
+    ("GET", "/teams/{team_id}/members/{username}"): {
+        "cli_path": "teams members check",
+        "output_policy": "none",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        "flags": [
+            contract_flag("team-id", "integer", "path.team_id", required=True),
+            contract_flag("username", "string", "path.username", required=True),
+        ],
+    },
+    ("GET", "/user/blocks/{username}"): {
+        "cli_path": "user blocks check",
+        "output_policy": "none",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        "flags": [contract_flag("username", "string", "path.username", required=True)],
+    },
+    ("GET", "/user/following/{username}"): {
+        "cli_path": "user following check",
+        "output_policy": "none",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        "flags": [contract_flag("username", "string", "path.username", required=True)],
+    },
+    ("GET", "/user/starred/{owner}/{repo}"): {
+        "cli_path": "user starred check",
+        "output_policy": "none",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        # These are the repository being checked, not this connection's
+        # owner/repo. Make them explicit path flags so they override the
+        # connector config rather than silently checking the configured repo.
+        "flags": [
+            contract_flag("owner", "string", "path.owner", required=True),
+            contract_flag("repo", "string", "path.repo", required=True),
+        ],
+    },
+    ("GET", "/users/{username}/following/{target_user}"): {
+        "cli_path": "users following check",
+        "output_policy": "none",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        "flags": [
+            contract_flag("username", "string", "path.username", required=True),
+            contract_flag("target-user", "string", "path.target_user", required=True),
+        ],
+    },
+    ("GET", "/zen"): {
+        "cli_path": "meta zen view",
+        "output_policy": "text",
+        "max_bytes": STATUS_READ_MAX_BYTES,
+        "flags": [],
+    },
+    ("GET", "/octocat"): {
+        "cli_path": "meta octocat view",
+        "output_policy": "text",
+        "max_bytes": 16 * 1024,
+        "flags": [contract_flag("s", "string", "query.s")],
+    },
+    ("POST", "/markdown"): {
+        "cli_path": "markdown render",
+        "output_policy": "text",
+        "max_bytes": DEFAULT_TEXT_READ_MAX_BYTES,
+        "content_type": "application/json",
+        "body_schema": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["text"],
+            "properties": {
+                "text": {"type": "string"},
+                "mode": {"type": "string", "enum": ["markdown", "gfm"]},
+                "context": {"type": "string"},
+            },
+        },
+        "flags": [
+            contract_flag("text", "string", "body.text", required=True),
+            contract_flag("mode", "enum", "body.mode", values=["markdown", "gfm"]),
+            contract_flag("context", "string", "body.context"),
+        ],
+    },
+    ("POST", "/markdown/raw"): {
+        "cli_path": "markdown raw render",
+        "output_policy": "text",
+        # GitHub documents raw Markdown content as at most 400 KiB. This is
+        # both the request and response cap because the declared text executor
+        # uses one bounded operation limit for each side of the request.
+        "max_bytes": GITHUB_RAW_MARKDOWN_MAX_BYTES,
+        "content_type": "text/plain",
+        "body_schema": {"type": "string"},
+        "flags": [contract_flag("text", "string", "body", required=True)],
+    },
+}
+
 def slugify(s):
     return re.sub(r"[^a-z0-9]+", "_", s.lower()).strip("_")
 
@@ -111,16 +251,19 @@ for e in api["endpoints"]:
     if not op:
         continue
     model = op.get("model")
-    if model in ("duplicate", "deprecated", "disallowed"):
+    method = e.get("method", "GET")
+    api_path = e.get("path", "")
+    explicit_read = EXPLICIT_DIRECT_READ_CONTRACTS.get((method, api_path))
+    if model in ("duplicate", "deprecated", "disallowed") and not explicit_read:
         continue
     if e.get("covered_by"):
         continue  # already converted
     e.pop("operation", None)  # covered_by replaces the operation classifier
-    method = e.get("method", "GET")
-    api_path = e.get("path", "")
     params = path_params(api_path)
+    if explicit_read:
+        model = "direct_read"
     # derive names
-    cli_path = derive_cli_path(method, api_path, model)
+    cli_path = explicit_read["cli_path"] if explicit_read else derive_cli_path(method, api_path, model)
     # de-dup cli paths
     base_cli = cli_path
     i = 2
@@ -136,7 +279,7 @@ for e in api["endpoints"]:
     seen_op.add(op_id)
 
     # direct_read coverage must be GET; a non-GET endpoint in a read tier is an upload/generator -> gated admin write
-    if method != "GET" and model in ("direct_read", "binary_read"):
+    if not explicit_read and method != "GET" and model in ("direct_read", "binary_read"):
         model = "admin_reverse_etl"
     is_write = model in ("admin_reverse_etl", "sensitive_reverse_etl", "destructive_action")
     is_binary = model == "binary_read"
@@ -213,14 +356,25 @@ for e in api["endpoints"]:
                          "flags": flags})
         e["covered_by"] = {"direct_reads": [cli_path]}
     else:  # direct_read
+        if explicit_read:
+            rest = {"method": method, "path": api_path, "max_bytes": explicit_read["max_bytes"]}
+            if "content_type" in explicit_read:
+                rest["content_type"] = explicit_read["content_type"]
+            if "body_schema" in explicit_read:
+                rest["body_schema"] = explicit_read["body_schema"]
+            output_policy = explicit_read["output_policy"]
+            flags = explicit_read["flags"]
+        else:
+            rest = {"method": "GET", "path": api_path}
+            output_policy = "json"
+            flags = [{"name": p.replace("_", "-"), "type": "integer" if ("id" in p or "number" in p) else "string",
+                      "summary": f"{p} path parameter"} for p in params if p not in ("owner", "repo")]
         new_ops.append({"id": op_id, "kind": "rest_read", "summary": f"Read {api_path}",
                         "source_url": op.get("source_url", ""), "risk": op.get("risk", "low"),
-                        "approval": "none", "output_policy": "json",
-                        "rest": {"method": "GET", "path": api_path}})
-        flags = [{"name": p.replace("_", "-"), "type": "integer" if ("id" in p or "number" in p) else "string",
-                  "summary": f"{p} path parameter"} for p in params if p not in ("owner", "repo")]
+                        "approval": "none", "output_policy": output_policy, "rest": rest})
         cmd = {"path": cli_path, "summary": f"Read {api_path}", "intent": "direct_read",
-               "availability": "implemented", "operation": op_id, "source_cli_path": "", "flags": flags}
+               "availability": "implemented", "operation": op_id, "source_cli_path": "", "flags": flags,
+               "output_policy": output_policy}
         new_cmds.append(cmd)
         e["covered_by"] = {"direct_reads": [cli_path]}
     covered_added += 1

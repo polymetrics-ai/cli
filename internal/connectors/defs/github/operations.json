@@ -6042,7 +6042,7 @@
             "name": "ref",
             "in": "query",
             "type": "string",
-            "summary": "The name of the commit/branch/tag. Default: the repository’s default branch."
+            "summary": "The name of the commit/branch/tag. Default: the repository\u2019s default branch."
           }
         ]
       }
@@ -6071,7 +6071,7 @@
             "name": "ref",
             "in": "query",
             "type": "string",
-            "summary": "The name of the commit/branch/tag. Default: the repository’s default branch."
+            "summary": "The name of the commit/branch/tag. Default: the repository\u2019s default branch."
           }
         ]
       }
@@ -6934,6 +6934,215 @@
               "type": "string"
             }
           }
+        }
+      }
+    },
+    {
+      "id": "github.gists_gist_id_star",
+      "kind": "rest_read",
+      "summary": "Read /gists/{gist_id}/star",
+      "source_url": "https://docs.github.com/rest/gists/gists#check-if-a-gist-is-starred",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/gists/{gist_id}/star",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.octocat",
+      "kind": "rest_read",
+      "summary": "Read /octocat",
+      "source_url": "https://docs.github.com/rest/meta/meta#get-octocat",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "text",
+      "rest": {
+        "method": "GET",
+        "path": "/octocat",
+        "max_bytes": 16384
+      }
+    },
+    {
+      "id": "github.orgs_org_blocks_username",
+      "kind": "rest_read",
+      "summary": "Read /orgs/{org}/blocks/{username}",
+      "source_url": "https://docs.github.com/rest/orgs/blocking#check-if-a-user-is-blocked-by-an-organization",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{org}/blocks/{username}",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.orgs_org_members_username",
+      "kind": "rest_read",
+      "summary": "Read /orgs/{org}/members/{username}",
+      "source_url": "https://docs.github.com/rest/orgs/members#check-organization-membership-for-a-user",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{org}/members/{username}",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.orgs_org_public_members_username",
+      "kind": "rest_read",
+      "summary": "Read /orgs/{org}/public_members/{username}",
+      "source_url": "https://docs.github.com/rest/orgs/members#check-public-organization-membership-for-a-user",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{org}/public_members/{username}",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.teams_team_id_members_username",
+      "kind": "rest_read",
+      "summary": "Read /teams/{team_id}/members/{username}",
+      "source_url": "https://docs.github.com/rest/teams/members#get-team-member-legacy",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_id}/members/{username}",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.user_blocks_username",
+      "kind": "rest_read",
+      "summary": "Read /user/blocks/{username}",
+      "source_url": "https://docs.github.com/rest/users/blocking#check-if-a-user-is-blocked-by-the-authenticated-user",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/user/blocks/{username}",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.user_following_username",
+      "kind": "rest_read",
+      "summary": "Read /user/following/{username}",
+      "source_url": "https://docs.github.com/rest/users/followers#check-if-a-person-is-followed-by-the-authenticated-user",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/user/following/{username}",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.user_starred_owner_repo",
+      "kind": "rest_read",
+      "summary": "Read /user/starred/{owner}/{repo}",
+      "source_url": "https://docs.github.com/rest/activity/starring#check-if-a-repository-is-starred-by-the-authenticated-user",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/user/starred/{owner}/{repo}",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.users_username_following_target_user",
+      "kind": "rest_read",
+      "summary": "Read /users/{username}/following/{target_user}",
+      "source_url": "https://docs.github.com/rest/users/followers#check-if-a-user-follows-another-user",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{username}/following/{target_user}",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.zen",
+      "kind": "rest_read",
+      "summary": "Read /zen",
+      "source_url": "https://docs.github.com/rest/meta/meta#get-the-zen-of-github",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "text",
+      "rest": {
+        "method": "GET",
+        "path": "/zen",
+        "max_bytes": 1024
+      }
+    },
+    {
+      "id": "github.markdown",
+      "kind": "rest_read",
+      "summary": "Read /markdown",
+      "source_url": "https://docs.github.com/rest/markdown/markdown#render-a-markdown-document",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "text",
+      "rest": {
+        "method": "POST",
+        "path": "/markdown",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "markdown",
+                "gfm"
+              ]
+            },
+            "context": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "github.markdown_raw",
+      "kind": "rest_read",
+      "summary": "Read /markdown/raw",
+      "source_url": "https://docs.github.com/rest/markdown/markdown#render-a-markdown-document-in-raw-mode",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "text",
+      "rest": {
+        "method": "POST",
+        "path": "/markdown/raw",
+        "max_bytes": 409600,
+        "content_type": "text/plain",
+        "body_schema": {
+          "type": "string"
         }
       }
     }

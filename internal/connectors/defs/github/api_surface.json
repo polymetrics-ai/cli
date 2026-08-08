@@ -4765,14 +4765,10 @@
     {
       "method": "GET",
       "path": "/gists/{gist_id}/star",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is 204 No Content: this is a boolean status check, not a JSON body",
-        "source_url": "https://docs.github.com/rest/gists/gists#check-if-a-gist-is-starred",
-        "notes": "Named dependency: engine.decodeDirectReadBody requires a JSON body and commandrunner.supportedDirectReadOutputPolicies declares no status-only policy, so a 204 endpoint cannot be an implemented direct_read"
+      "covered_by": {
+        "direct_reads": [
+          "gists star check"
+        ]
       }
     },
     {
@@ -4904,14 +4900,10 @@
     {
       "method": "GET",
       "path": "/octocat",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is application/octocat-stream, not application/json",
-        "source_url": "https://docs.github.com/rest/meta/meta#get-octocat",
-        "notes": "Named dependency: engine.decodeDirectReadBody json-decodes the response body and commandrunner.supportedDirectReadOutputPolicies declares no text/plain policy"
+      "covered_by": {
+        "direct_reads": [
+          "meta octocat view"
+        ]
       }
     },
     {
@@ -5358,14 +5350,10 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/blocks/{username}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is 204 No Content: this is a boolean status check, not a JSON body",
-        "source_url": "https://docs.github.com/rest/orgs/blocking#check-if-a-user-is-blocked-by-an-organization",
-        "notes": "Named dependency: engine.decodeDirectReadBody requires a JSON body and commandrunner.supportedDirectReadOutputPolicies declares no status-only policy, so a 204 endpoint cannot be an implemented direct_read"
+      "covered_by": {
+        "direct_reads": [
+          "orgs blocks check"
+        ]
       }
     },
     {
@@ -5798,14 +5786,10 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/members/{username}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is 204 No Content: this is a boolean status check, not a JSON body",
-        "source_url": "https://docs.github.com/rest/orgs/members#check-organization-membership-for-a-user",
-        "notes": "Named dependency: engine.decodeDirectReadBody requires a JSON body and commandrunner.supportedDirectReadOutputPolicies declares no status-only policy, so a 204 endpoint cannot be an implemented direct_read"
+      "covered_by": {
+        "direct_reads": [
+          "orgs members check"
+        ]
       }
     },
     {
@@ -6049,14 +6033,10 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/public_members/{username}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is 204 No Content: this is a boolean status check, not a JSON body",
-        "source_url": "https://docs.github.com/rest/orgs/members#check-public-organization-membership-for-a-user",
-        "notes": "Named dependency: engine.decodeDirectReadBody requires a JSON body and commandrunner.supportedDirectReadOutputPolicies declares no status-only policy, so a 204 endpoint cannot be an implemented direct_read"
+      "covered_by": {
+        "direct_reads": [
+          "orgs public-members check"
+        ]
       }
     },
     {
@@ -6363,14 +6343,10 @@
     {
       "method": "GET",
       "path": "/teams/{team_id}/members/{username}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is 204 No Content: this is a boolean status check, not a JSON body",
-        "source_url": "https://docs.github.com/rest/teams/members#get-team-member-legacy",
-        "notes": "Named dependency: engine.decodeDirectReadBody requires a JSON body and commandrunner.supportedDirectReadOutputPolicies declares no status-only policy, so a 204 endpoint cannot be an implemented direct_read"
+      "covered_by": {
+        "direct_reads": [
+          "teams members check"
+        ]
       }
     },
     {
@@ -6418,14 +6394,10 @@
     {
       "method": "GET",
       "path": "/user/blocks/{username}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is 204 No Content: this is a boolean status check, not a JSON body",
-        "source_url": "https://docs.github.com/rest/users/blocking#check-if-a-user-is-blocked-by-the-authenticated-user",
-        "notes": "Named dependency: engine.decodeDirectReadBody requires a JSON body and commandrunner.supportedDirectReadOutputPolicies declares no status-only policy, so a 204 endpoint cannot be an implemented direct_read"
+      "covered_by": {
+        "direct_reads": [
+          "user blocks check"
+        ]
       }
     },
     {
@@ -6515,14 +6487,10 @@
     {
       "method": "GET",
       "path": "/user/following/{username}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is 204 No Content: this is a boolean status check, not a JSON body",
-        "source_url": "https://docs.github.com/rest/users/followers#check-if-a-person-is-followed-by-the-authenticated-user",
-        "notes": "Named dependency: engine.decodeDirectReadBody requires a JSON body and commandrunner.supportedDirectReadOutputPolicies declares no status-only policy, so a 204 endpoint cannot be an implemented direct_read"
+      "covered_by": {
+        "direct_reads": [
+          "user following check"
+        ]
       }
     },
     {
@@ -6724,14 +6692,10 @@
     {
       "method": "GET",
       "path": "/user/starred/{owner}/{repo}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is 204 No Content: this is a boolean status check, not a JSON body",
-        "source_url": "https://docs.github.com/rest/activity/starring#check-if-a-repository-is-starred-by-the-authenticated-user",
-        "notes": "Named dependency: engine.decodeDirectReadBody requires a JSON body and commandrunner.supportedDirectReadOutputPolicies declares no status-only policy, so a 204 endpoint cannot be an implemented direct_read"
+      "covered_by": {
+        "direct_reads": [
+          "user starred check"
+        ]
       }
     },
     {
@@ -6856,14 +6820,10 @@
     {
       "method": "GET",
       "path": "/users/{username}/following/{target_user}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is 204 No Content: this is a boolean status check, not a JSON body",
-        "source_url": "https://docs.github.com/rest/users/followers#check-if-a-user-follows-another-user",
-        "notes": "Named dependency: engine.decodeDirectReadBody requires a JSON body and commandrunner.supportedDirectReadOutputPolicies declares no status-only policy, so a 204 endpoint cannot be an implemented direct_read"
+      "covered_by": {
+        "direct_reads": [
+          "users following check"
+        ]
       }
     },
     {
@@ -7072,14 +7032,10 @@
     {
       "method": "GET",
       "path": "/zen",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is text/plain, not application/json",
-        "source_url": "https://docs.github.com/rest/meta/meta#get-the-zen-of-github",
-        "notes": "Named dependency: engine.decodeDirectReadBody json-decodes the response body and commandrunner.supportedDirectReadOutputPolicies declares no text/plain policy"
+      "covered_by": {
+        "direct_reads": [
+          "meta zen view"
+        ]
       }
     },
     {
@@ -7445,27 +7401,19 @@
     {
       "method": "POST",
       "path": "/markdown",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is text/html, not application/json: this is a markdown renderer, semantically a read",
-        "source_url": "https://docs.github.com/rest/markdown/markdown#render-a-markdown-document",
-        "notes": "Named dependency: engine.decodeDirectReadBody json-decodes every direct-read body and commandrunner.supportedDirectReadOutputPolicies declares no text/html policy"
+      "covered_by": {
+        "direct_reads": [
+          "markdown render"
+        ]
       }
     },
     {
       "method": "POST",
       "path": "/markdown/raw",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented success response is text/html, not application/json: this is a markdown renderer, semantically a read",
-        "source_url": "https://docs.github.com/rest/markdown/markdown#render-a-markdown-document-in-raw-mode",
-        "notes": "Named dependency: engine.decodeDirectReadBody json-decodes every direct-read body and commandrunner.supportedDirectReadOutputPolicies declares no text/html policy"
+      "covered_by": {
+        "direct_reads": [
+          "markdown raw render"
+        ]
       }
     },
     {

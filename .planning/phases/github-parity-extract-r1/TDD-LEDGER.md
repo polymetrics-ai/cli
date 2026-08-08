@@ -1080,3 +1080,38 @@ FAIL
 
 The next green step changes the source generator's narrow table, regenerates only the GitHub bundle
 and shared ledger, and then updates the derived inventory snapshot from 1126/98 to 1139/85.
+
+**Green 14c — the generator emits the 13 exact operation contracts and no broad classifier bypass.**
+`EXPLICIT_DIRECT_READ_CONTRACTS` promotes only the nine status checks, `/zen`, `/octocat`, and the
+two Markdown renderers. The generated commands carry bounded `none` or `text` policies; the JSON
+renderer has a required `text` body field plus the documented `mode`/`context` options, and raw
+Markdown has the sole exact `body` mapping with its 400 KiB limit. The starred-repository check
+uses explicit path `owner`/`repo` flags rather than accidentally reusing the connection's target.
+
+The generator produced 13 GitHub rows, then `surface-sync` regenerated the shared runtime endpoint
+ledger. A before/after structural comparison found exactly those 13 GitHub API rows, operations,
+and CLI paths changed; the shared ledger changed only its `github` key. Inventory now reads
+1139 covered / 85 blocked; no final parity claim follows from that intermediate reduction.
+
+```
+$ python3 scripts/gen-github-parity.py
+generated: 13 endpoints covered
+  new operations: 13 (total 358)
+  new write actions: 0 (total 555)
+  new cli commands: 13 (total 1160)
+
+$ go test -timeout 20m ./cmd/connectorgen/ -run 'TestGitHub(StatusAndTextOperationContracts|APISurfaceOperationLedgerMetrics|DocumentedRESTSurfaceIsComplete)' -count=1
+ok	polymetrics.ai/cmd/connectorgen
+
+$ go test -timeout 20m ./internal/connectors/certify/ -run TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints -count=1
+ok	polymetrics.ai/internal/connectors/certify
+
+$ go test -timeout 20m ./internal/connectors/commandrunner/ -run 'TestEveryImplementedCommandPassesRuntimePreflight|TestGitHubRestoredCommandsAreExecutable' -count=1
+ok	polymetrics.ai/internal/connectors/commandrunner
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```

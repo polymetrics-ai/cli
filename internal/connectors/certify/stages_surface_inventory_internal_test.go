@@ -16,11 +16,11 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.Endpoints != 1224 {
 		t.Fatalf("Endpoints = %d, want 1224", result.Endpoints)
 	}
-	if result.Covered != 1126 {
-		t.Fatalf("Covered = %d, want 1126", result.Covered)
+	if result.Covered != 1139 {
+		t.Fatalf("Covered = %d, want 1139", result.Covered)
 	}
-	if result.Blocked != 98 {
-		t.Fatalf("Blocked = %d, want 98", result.Blocked)
+	if result.Blocked != 85 {
+		t.Fatalf("Blocked = %d, want 85", result.Blocked)
 	}
 	if result.CoveredBy["stream"] != 37 {
 		t.Fatalf("CoveredBy[stream] = %d, want 37", result.CoveredBy["stream"])
@@ -35,8 +35,8 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.CoveredBy["direct_read"] != 368 {
 		t.Fatalf("CoveredBy[direct_read] = %d, want 368", result.CoveredBy["direct_read"])
 	}
-	if result.CoveredBy["direct_reads"] != 173 {
-		t.Fatalf("CoveredBy[direct_reads] = %d, want 173", result.CoveredBy["direct_reads"])
+	if result.CoveredBy["direct_reads"] != 186 {
+		t.Fatalf("CoveredBy[direct_reads] = %d, want 186", result.CoveredBy["direct_reads"])
 	}
 	if result.BlockedByModel["duplicate"] != 67 {
 		t.Fatalf("BlockedByModel[duplicate] = %d, want 67", result.BlockedByModel["duplicate"])

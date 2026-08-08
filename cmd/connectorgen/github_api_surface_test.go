@@ -81,11 +81,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 1224 {
 		t.Fatalf("endpoints = %d, want 1224", len(surface.Endpoints))
 	}
-	if covered != 1126 {
-		t.Fatalf("covered endpoints = %d, want 1126", covered)
+	if covered != 1139 {
+		t.Fatalf("covered endpoints = %d, want 1139", covered)
 	}
-	if operations != 98 {
-		t.Fatalf("operation endpoints = %d, want 98 (duplicate/deprecated, plus the operations no runtime component can execute)", operations)
+	if operations != 85 {
+		t.Fatalf("operation endpoints = %d, want 85 (duplicate/deprecated, plus the operations no runtime component can execute)", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -100,35 +100,29 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE":  179,
-		"GET":     571,
+		"GET":     582,
 		"GRAPHQL": 4,
 		"PATCH":   65,
-		"POST":    175,
+		"POST":    177,
 		"PUT":     132,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 8,
-		"GET":    65,
+		"GET":    54,
 		"PATCH":  5,
-		"POST":   18,
+		"POST":   16,
 		"PUT":    2,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
-		"disallowed": 19,
+		"disallowed": 17,
 		"duplicate":  67,
 		"deprecated": 1,
-		// GETs GitHub documents with no JSON success body: 9 boolean 204 status
-		// checks plus /zen and /octocat, which return text/plain and
-		// application/octocat-stream. engine.decodeDirectReadBody json-decodes
-		// every direct-read body, so these are blocked with that dependency
-		// named rather than shipped as commands that always fail.
-		"direct_read": 11,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"low": 98,
+		"low": 85,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 98,
+		"blocked": 85,
 	})
 }
 
