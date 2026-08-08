@@ -39,9 +39,10 @@ const zoomBundleName = "zoom"
 // Virtual Agent reads (9), Auto Dialer reads (8), Tasks reads (6), and Workforce
 // Management reads (11). Clips adds six JSON direct reads; its binary download
 // has a separate typed executor and is asserted in TestClipsOperationCommandsAreReachable.
+// CRC adds nine bounded direct reads.
 // Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, and
 // Clips mutations are tracked by wantModuleDirectWriteCommandCount.
-const wantModuleOperationCommandCount = 61
+const wantModuleOperationCommandCount = 70
 
 // wantModuleDirectWriteCommandCount is the running total of implemented
 // operations.json rest_write commands. It is distinct from writes.json
@@ -49,8 +50,9 @@ const wantModuleOperationCommandCount = 61
 // typed plan lifecycle.
 // Clips has fourteen documented write endpoints and sixteen concrete typed
 // commands: transfer and multipart-event oneOf contracts are represented by
-// separate named request arms rather than a generic union body.
-const wantModuleDirectWriteCommandCount = 58
+// separate named request arms rather than a generic union body. CRC adds its
+// eleven provider-defined mutations, including seven status-only actions.
+const wantModuleDirectWriteCommandCount = 69
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -161,11 +163,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 123 {
-		t.Errorf("executable rows = %d, want 123", got)
+	if got := covered; got != 143 {
+		t.Errorf("executable rows = %d, want 143", got)
 	}
-	if got := implementableNow; got != 1719 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1719", got)
+	if got := implementableNow; got != 1699 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1699", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -696,6 +698,67 @@ func TestClipsOperationCommandsAreReachable(t *testing.T) {
 			}
 			if schema.Properties["clip_id_list"].MinItems != want.minItems {
 				t.Errorf("Clips operation %q clip_id_list minItems = %d, want %d", want.operation, schema.Properties["clip_id_list"].MinItems, want.minItems)
+			}
+		}
+	}
+}
+
+// TestCRCOperationCommandsAreReachable is the provider-category RED surface
+// contract. It enumerates every CRC operation from Zoom's own artifact through
+// real commandrunner preflight, including the declared private-key redaction
+// and status-only mutation policies.
+func TestCRCOperationCommandsAreReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	wants := []struct {
+		path      string
+		operation string
+		intent    string
+		method    string
+		apiPath   string
+		policy    string
+	}{
+		{path: "crc managed-rooms account-setting get", operation: "zoom.get_crc_managed_room_account_setting", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/crc/managed_rooms/account_setting", policy: "json_redacted"},
+		{path: "crc managed-rooms account-setting update", operation: "zoom.update_crc_managed_room_account_setting", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/crc/managed_rooms/account_setting", policy: "none"},
+		{path: "crc api-connectors list", operation: "zoom.list_crc_api_connectors", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/crc/api_connectors", policy: "json_redacted"},
+		{path: "crc api-connectors create", operation: "zoom.create_crc_api_connector", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/crc/api_connectors", policy: "json_redacted"},
+		{path: "crc api-connectors get", operation: "zoom.get_crc_api_connector", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/crc/api_connectors/{connectorId}", policy: "json_redacted"},
+		{path: "crc api-connectors delete", operation: "zoom.delete_crc_api_connector", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/crc/api_connectors/{connectorId}", policy: "none"},
+		{path: "crc api-connectors update", operation: "zoom.update_crc_api_connector", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/crc/api_connectors/{connectorId}", policy: "none"},
+		{path: "crc api-connectors private-key get", operation: "zoom.get_crc_api_connector_private_key", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/crc/api_connectors/{connectorId}/private_key", policy: "json_redacted"},
+		{path: "crc api-connectors private-key update", operation: "zoom.update_crc_api_connector_private_key", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/crc/api_connectors/{connectorId}/private_key", policy: "json_redacted"},
+		{path: "crc managed-rooms list", operation: "zoom.list_crc_managed_rooms", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/crc/managed_rooms", policy: "json_redacted"},
+		{path: "crc managed-rooms create", operation: "zoom.create_crc_managed_room", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/crc/managed_rooms", policy: "json_redacted"},
+		{path: "crc managed-rooms get", operation: "zoom.get_crc_managed_room", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/crc/managed_rooms/{deviceId}", policy: "json_redacted"},
+		{path: "crc managed-rooms delete", operation: "zoom.delete_crc_managed_room", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/crc/managed_rooms/{deviceId}", policy: "none"},
+		{path: "crc managed-rooms update", operation: "zoom.update_crc_managed_room", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/crc/managed_rooms/{deviceId}", policy: "none"},
+		{path: "crc participant-identifier-code get", operation: "zoom.get_crc_participant_identifier_code", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/crc/participant_identifier_code", policy: "json_redacted"},
+		{path: "crc room-templates list", operation: "zoom.list_crc_room_templates", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/crc/room_templates", policy: "json_redacted"},
+		{path: "crc room-templates create", operation: "zoom.create_crc_room_template", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/crc/room_templates", policy: "json_redacted"},
+		{path: "crc room-templates get", operation: "zoom.get_crc_room_template", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/crc/room_templates/{templateId}", policy: "json_redacted"},
+		{path: "crc room-templates delete", operation: "zoom.delete_crc_room_template", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/crc/room_templates/{templateId}", policy: "none"},
+		{path: "crc room-templates update", operation: "zoom.update_crc_room_template", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/crc/room_templates/{templateId}", policy: "none"},
+	}
+	for _, want := range wants {
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want declared executable CRC action", want.path, err)
+			continue
+		}
+		var found *connectors.CommandSurfaceCommand
+		for i := range connector.CommandSurface().Commands {
+			candidate := &connector.CommandSurface().Commands[i]
+			if candidate.Path == want.path {
+				found = candidate
+				break
+			}
+		}
+		if found == nil || found.Intent != want.intent || found.Availability != "implemented" || found.Operation != want.operation || len(found.APISurface) != 1 || found.APISurface[0].Method != want.method || found.APISurface[0].Path != want.apiPath || found.OutputPolicy != want.policy {
+			t.Errorf("CRC command %q does not retain its declared operation/endpoint/output contract", want.path)
+			continue
+		}
+		for _, flag := range found.Flags {
+			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
+				t.Errorf("CRC command %q invents paging flag --%s", want.path, flag.Name)
 			}
 		}
 	}
