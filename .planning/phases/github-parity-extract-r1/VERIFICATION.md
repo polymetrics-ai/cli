@@ -154,3 +154,54 @@ change, permanently, because reverse plans are append-only.
 | covered endpoints | — | 1126 |
 | operation-blocked endpoints | — | 98 |
 | ledger rows for github | 162 | 164 |
+
+## 7. Fresh restart validation — 2026-08-08
+
+This recovery run started from the remote-backed branch head
+`b756c9c63feae44c91a79ab9e11d27e8c7fffd11`; it did not rebuild, reset, or
+rebase the extracted work. It re-ran the delivery checks rather than inheriting
+the predecessor's green claims.
+
+The repo-local GSD adapter was healthy (`scripts/gsd doctor`) and the canonical
+contract was current (`go run ./cmd/agentcontractgen check`). The following
+official command prompts were resolved: `discuss-phase github-parity-extract-r1
+--auto`, `plan-phase github-parity-extract-r1 --tdd --skip-research`,
+`execute-phase github-parity-extract-r1 --interactive`, `verify-work
+github-parity-extract-r1 --auto`, and `code-review github-parity-extract-r1
+--depth=standard`. Their work was performed inline: this Codex runtime cannot
+provide the Pi-isolated workflow roles and the project contract forbids spawning
+separate GSD roles for this job. The existing PLAN/TDD cycles remain the
+production-change evidence; this section is the fresh verify-work execution.
+
+### Direct binary reachability
+
+Built a new `pm` binary, initialized an empty throwaway project with no
+credential, and invoked every GitHub command whose availability is `implemented`
+or `partial`. The harness treats `unknown command` as the only dispatch failure;
+credential-gated and declared-partial responses are reachable by design. It made
+no provider request.
+
+```
+connector=github probed=1086 unreachable=0
+```
+
+### Fresh local gates
+
+```
+gofmt -l cmd internal                                              clean
+go vet ./...                                                       clean
+go test -count=1 -timeout 20m ./cmd/connectorgen/                 ok (12.097s)
+go test -count=1 -timeout 20m ./internal/connectors/engine/       ok (4.934s)
+go test -count=1 -timeout 20m ./internal/connectors/commandrunner/ ok (13.034s)
+go test -count=1 -timeout 20m ./internal/connectors/hooks/github/ ok (0.875s)
+go test -count=1 -timeout 20m ./internal/connectors/conformance/  ok (21.038s)
+go test -count=1 -timeout 20m ./internal/app/                     ok (266.614s)
+go test -count=1 -timeout 20m ./internal/cli/                     ok (743.205s)
+go run ./cmd/connectorgen validate internal/connectors/defs        551 checked, 0 findings
+go run ./cmd/connectorgen surface-sync --check                     no drift
+make tidy-check, lint, docs-check, smoke-no-build                  ok
+make agent-contract-check, connectorgen-validate, connectorgen-surface-sync  ok
+make connector-boundary, release-workflow-check                    ok
+bash scripts/verify-gsd-workflow                                  exit 0
+go build ./cmd/pm                                                  ok
+```

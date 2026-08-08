@@ -4,15 +4,15 @@
   "base": "08cc41c87",
   "source_branch": "origin/fm/cli-top50-sweep-resume2-r1",
   "lifecycle": {
-    "discuss-phase": "inline; scope fixed by the task brief plus CAPTAIN-ORDER-unblock-commands.md",
-    "plan-phase --tdd": "PLAN.md",
-    "execute-phase": "TDD-LEDGER.md, two red/green cycles",
-    "verify-work": "VERIFICATION.md",
-    "code-review": "pending — runs on PR open"
+    "discuss-phase": "scripts/gsd prompt discuss-phase github-parity-extract-r1 --auto; fixed scope re-confirmed inline",
+    "plan-phase --tdd": "scripts/gsd prompt plan-phase github-parity-extract-r1 --tdd --skip-research; existing PLAN.md retained",
+    "execute-phase": "scripts/gsd prompt execute-phase github-parity-extract-r1 --interactive; TDD-LEDGER.md holds the two red/green cycles",
+    "verify-work": "scripts/gsd prompt verify-work github-parity-extract-r1 --auto; fresh results in VERIFICATION.md section 7",
+    "code-review": "scripts/gsd prompt code-review github-parity-extract-r1 --depth=standard; fresh no-mistakes review/CI pipeline follows the validation evidence checkpoint"
   },
   "fallback": {
     "used": true,
-    "reason": "GSD Pi adapter commands were not invoked; the lifecycle was executed manually with the same artifacts and red/green evidence recorded here, as AGENTS.md permits when the runtime cannot provide compatible isolated agents. The canonical parent-worker contract also forbids spawning extra roles for this job."
+    "reason": "The repo-local GSD prompts were resolved, but this runtime cannot provide compatible Pi-isolated roles and the canonical parent-worker contract forbids spawning extra roles for this job. The lifecycle is therefore executed inline with the same artifacts and red/green evidence, as AGENTS.md permits."
   },
   "extracted_commits": [
     {"sha": "6848cbb2d", "subject": "test(connectors): add red github surface test at the derived 1220 (slice 1/5)"},
@@ -58,6 +58,35 @@
       "secret set": "error: missing --credential",
       "secret delete": "error: missing --credential"
     }
+  },
+  "fresh_validation_2026_08_08": {
+    "head": "b756c9c63feae44c91a79ab9e11d27e8c7fffd11",
+    "reachability": {"probed": 1086, "unreachable": 0, "credential_configured": false},
+    "uncached_test_gates": {
+      "cmd/connectorgen": "ok (12.097s)",
+      "internal/connectors/engine": "ok (4.934s)",
+      "internal/connectors/commandrunner": "ok (13.034s)",
+      "internal/connectors/hooks/github": "ok (0.875s)",
+      "internal/connectors/conformance": "ok (21.038s)",
+      "internal/app": "ok (266.614s)",
+      "internal/cli": "ok (743.205s)"
+    },
+    "other_gates": [
+      "gofmt -l cmd internal",
+      "go vet ./...",
+      "connectorgen validate: 551 checked, 0 findings",
+      "connectorgen surface-sync --check: no drift",
+      "tidy-check", "lint", "docs-check", "smoke-no-build", "agent-contract-check",
+      "connectorgen-validate", "connectorgen-surface-sync", "connector-boundary",
+      "release-workflow-check", "verify-gsd-workflow", "go build ./cmd/pm"
+    ],
+    "skills_loaded": [
+      "golang-how-to", "golang-cli", "golang-testing", "golang-error-handling",
+      "golang-security", "golang-safety", "golang-design-patterns",
+      "golang-structs-interfaces", "golang-graphql", "golang-lint",
+      "golang-documentation", "vercel-react-best-practices", "vercel-composition-patterns"
+    ],
+    "unavailable_required_design_skills": ["frontend-design", "web-design-guidelines"]
   },
   "surface_totals": {
     "commands": 1147,
