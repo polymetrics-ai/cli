@@ -880,3 +880,99 @@ coverage in `TestSchemaRequiredConfigurationKeyIsAdvertisedAndEnforced` and
   `website/lib/connectors.catalog.data.generated.json`. The pre-existing stale
   `warehouse` catalog description is deliberately left untouched. No generator
   or drift validator was added or broadened.
+
+## Rebase and captain-auth correction (2026-08-09)
+
+The prior no-mistakes run was cancelled before the captain-ordered rebase. Its
+native repair worker was stopped, its changing isolated worktree was checked
+for whitespace errors, and its complete tracked delta was preserved as an
+ordinary checkpoint commit before cancellation. No shared daemon was stopped,
+restarted, or modified. The checkpoint was restored on this branch before
+rebasing; the pre-rebase restored head was `e4900724d0d65387047554f119a0a30958d035b2`,
+fetched `origin/main` was `d453fbe256eb22d90ea77dbed634b245bd6e795b`, and the
+rebased head has that fetched main as its merge base. The cancelled pipeline
+result is therefore not used as validation for this head.
+
+### Correction 4 — captain override restores the three auth exchanges
+
+Correction 3 above remains historical evidence of the original security
+finding, but Captain subsequently overruled its delivered disposition. The
+three exchanges now remain implemented in the 54-operation surface with four
+specific safeguards: a generated plaintext-retention warning in help and at
+execution, `redact_fields` for `password`, `secret`, `login_2fa_token`, and
+`code`, `--from-env` and `--value-stdin` inputs, and the typed direct-write
+response body returned unchanged after approved execution.
+
+### RED — restored command metadata did not reach runtime help
+
+The checkpoint added `accepts_secret_input` to Docker Hub's JSON but omitted
+the `engine.CLICommand` → `connectors.CommandSurfaceCommand` mapping. The
+red test was added and run before repairing that mapping:
+
+```text
+--- FAIL: TestDockerHubAuthHelpGeneratesCredentialRetentionWarning (1.20s)
+    cli_test.go:97: Docker Hub auth help missing "Warning: supplied credential values are written to plaintext local project state and retained for this command plan."
+FAIL
+FAIL	polymetrics.ai/internal/cli
+```
+
+Command: `go test -timeout 20m ./internal/cli -run
+TestDockerHubAuthHelpGeneratesCredentialRetentionWarning -count=1`.
+
+### GREEN — safe input, redacted plan sample, and unredacted response
+
+`engine.commandSurface` now preserves `AcceptsSecretInput`; the CLI derives the
+same warning string into both command help and point-of-use stderr, rather than
+relying on a hand-authored Docker Hub note. `commandrunner` creates a genuinely
+redacted plan sample only for declared secret-input commands while preserving
+the complete execution record required by the explicitly warned local plan.
+The copier also preserves an explicitly empty string array rather than changing
+it to JSON `null`. A Docker Hub loopback test proves the login operation sends
+no inherited connector authorization, redacts its password in the stored
+operator-visible sample, retains the execution record after the warning, and
+returns the provider token response unchanged. A CLI test proves environment
+input never appears in JSON/stderr, and a helper-level test proves stdin input
+is newline-trimmed and mapped to the declared secret field.
+
+```text
+go test -timeout 20m ./internal/cli -run 'TestApplySensitiveCommandInputsReadsValueStdin|TestDockerHubAuth' -count=1
+ok   polymetrics.ai/internal/cli
+
+go test -timeout 20m ./internal/app -run TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken -count=1
+ok   polymetrics.ai/internal/app
+
+go test -timeout 20m ./internal/connectors/engine ./internal/connectors/connsdk ./internal/connectors/hooks/dockerhub ./internal/connectors/defs/dockerhub ./internal/connectors/commandrunner ./internal/app
+PASS
+
+go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+The generated documentation was rerun into a disposable directory. The
+generated Docker Hub `MANUAL.md` and `SKILL.md` were copied byte-for-byte from
+that output; parsed-object comparison found the Docker Hub row in both
+`docs/connectors/catalog/all-connectors.json` and `.md` already identical, so
+the unrelated stale warehouse row remains untouched. The website generators
+changed exactly one object (`dockerhub`) in each generated JSON catalog.
+
+### RED — Docker Hub generated security guidance overstated redaction
+
+The Docker Hub manual claimed both that secret values must never be passed as
+shell arguments and that provider-issued tokens were redacted from command
+output. The first statement contradicted the intentionally retained
+credential flags, and the second contradicted the runtime contract that
+provider responses remain unchanged. This Docker Hub-only guide test was added
+and run before changing the guide renderer or documentation sources:
+
+```text
+--- FAIL: TestDockerHubGuideExplainsSecretInputAndUnredactedTokenResponses
+    registry_test.go:181: Docker Hub manual missing "For auth credential fields, prefer --from-env or --value-stdin over command-line flags; argv can be observed by other local processes and shell history."
+FAIL
+FAIL	polymetrics.ai/internal/connectors/bundleregistry
+```
+
+Command: `go test -timeout 20m ./internal/connectors/bundleregistry -run
+TestDockerHubGuideExplainsSecretInputAndUnredactedTokenResponses -count=1`.

@@ -196,3 +196,29 @@ func TestGitHubGuideIncludesCLISurfaceHelp(t *testing.T) {
 		}
 	}
 }
+
+func TestDockerHubGuideExplainsSecretInputAndUnredactedTokenResponses(t *testing.T) {
+	registry := New()
+	connector, ok := registry.Get("dockerhub")
+	if !ok {
+		t.Fatal("dockerhub connector not found")
+	}
+
+	manual := connectors.RenderConnectorManual(connector)
+	for _, want := range []string{
+		"For auth credential fields, prefer --from-env or --value-stdin over command-line flags; argv can be observed by other local processes and shell history.",
+		"The approved runtime returns Docker Hub response bodies unchanged, including a newly-created token; handle runtime output as secret material.",
+	} {
+		if !strings.Contains(manual, want) {
+			t.Fatalf("Docker Hub manual missing %q:\n%s", want, manual)
+		}
+	}
+	for _, unwanted := range []string{
+		"Never pass secret values in chat, shell arguments, logs, docs, or JSON output.",
+		"redacted from command output",
+	} {
+		if strings.Contains(manual, unwanted) {
+			t.Fatalf("Docker Hub manual contains stale security claim %q:\n%s", unwanted, manual)
+		}
+	}
+}
