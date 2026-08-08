@@ -106,46 +106,52 @@ test("rejects a write case that overrides the dedicated repository owner before 
       path.join(path.dirname(fileURLToPath(import.meta.url)), "../../internal/connectors/defs/github/cli_surface.json"),
       "utf8",
     ));
-    const cases = surface.commands
+    const baseCases = surface.commands
       .filter((command) => command.availability === "implemented")
       .map((command) => ({
         command: command.path,
         untestable_reason:
           "requires a deliberately prepared live GitHub resource not created by this isolated test fixture",
       }));
-    const target = cases.find((item) => item.command === "repos create-using-template");
-    target.untestable_reason = undefined;
-    target.args = ["--owner", "outside-the-dedicated-repository"];
-    await writeFile(
-      casesPath,
-      JSON.stringify({
-        connector: "github",
-        test_repository: { owner: "dedicated-owner", repo: "dedicated-repo" },
-        cases,
-      }),
-      "utf8",
-    );
-
     const runner = path.join(path.dirname(fileURLToPath(import.meta.url)), "../github-live-proof-sweep.mjs");
-    const result = spawnSync(
-      process.execPath,
-      [
-        runner,
-        "--pm", fakePM,
-        "--root", root,
-        "--credential", "github-live-proof",
-        "--test-owner", "dedicated-owner",
-        "--test-repo", "dedicated-repo",
-        "--cases", casesPath,
-        "--report", reportPath,
-        "--execute-writes",
-      ],
-      { encoding: "utf8" },
-    );
+    for (const args of [
+      ["--owner", "outside-the-dedicated-repository"],
+      ["--repo=outside-the-dedicated-repository"],
+    ]) {
+      const cases = baseCases.map((item) => ({ ...item }));
+      const target = cases.find((item) => item.command === "repos create-using-template");
+      target.untestable_reason = undefined;
+      target.args = args;
+      await writeFile(
+        casesPath,
+        JSON.stringify({
+          connector: "github",
+          test_repository: { owner: "dedicated-owner", repo: "dedicated-repo" },
+          cases,
+        }),
+        "utf8",
+      );
 
-    assert.notEqual(result.status, 0);
-    assert.match(`${result.stdout}\n${result.stderr}`, /dedicated repository owner/i);
-    assert.equal(existsSync(marker), false, "case validation must finish before pm starts");
+      const result = spawnSync(
+        process.execPath,
+        [
+          runner,
+          "--pm", fakePM,
+          "--root", root,
+          "--credential", "github-live-proof",
+          "--test-owner", "dedicated-owner",
+          "--test-repo", "dedicated-repo",
+          "--cases", casesPath,
+          "--report", reportPath,
+          "--execute-writes",
+        ],
+        { encoding: "utf8" },
+      );
+
+      assert.notEqual(result.status, 0);
+      assert.match(`${result.stdout}\n${result.stderr}`, /dedicated repository (owner|repo)/i);
+      assert.equal(existsSync(marker), false, "case validation must finish before pm starts");
+    }
   } finally {
     await rm(temp, { recursive: true, force: true });
   }

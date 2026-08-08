@@ -313,7 +313,44 @@ function requireStringMap(value, name) {
   return out;
 }
 
-function validateCaseFile(caseFile, expected, owner, repo) {
+function flagValues(args, name) {
+  const flag = `--${name}`;
+  const values = [];
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === flag) {
+      const value = args[index + 1];
+      if (!value || value.startsWith("--")) {
+        throw new Error(`${flag} requires a value in a live proof case`);
+      }
+      values.push(value);
+      index += 1;
+      continue;
+    }
+    if (argument.startsWith(`${flag}=`)) {
+      const value = argument.slice(flag.length + 1);
+      if (!value) {
+        throw new Error(`${flag} requires a value in a live proof case`);
+      }
+      values.push(value);
+    }
+  }
+  return values;
+}
+
+function validateWriteRepositoryTarget(command, args, owner, repo) {
+  for (const [flag, expected] of [["owner", owner], ["repo", repo]]) {
+    for (const actual of flagValues(args, flag)) {
+      if (actual !== expected) {
+        throw new Error(
+          `write case ${JSON.stringify(command)} may not override the dedicated repository ${flag}`,
+        );
+      }
+    }
+  }
+}
+
+function validateCaseFile(caseFile, expected, owner, repo, surfaceCommands) {
   if (!caseFile || caseFile.connector !== CONNECTOR) {
     throw new Error("live proof cases must be explicitly GitHub-only");
   }
@@ -324,6 +361,7 @@ function validateCaseFile(caseFile, expected, owner, repo) {
   if (!Array.isArray(caseFile.cases)) {
     throw new Error("case file must contain a cases array");
   }
+  const context = requireStringMap(caseFile.context || {}, "context");
   const commands = new Map();
   for (const item of caseFile.cases) {
     if (!item || typeof item !== "object" || Array.isArray(item)) {
@@ -349,6 +387,21 @@ function validateCaseFile(caseFile, expected, owner, repo) {
           throw new Error(`case ${JSON.stringify(command)} may not override lifecycle or credential flags`);
         }
       }
+      const surfaceCommand = surfaceCommands.get(command);
+      const isWrite = surfaceCommand?.intent === "reverse_etl" || surfaceCommand?.intent === "direct_write";
+      if (isWrite) {
+        validateWriteRepositoryTarget(
+          command,
+          interpolateArguments(item.args, {
+            ...context,
+            test_owner: owner,
+            test_repo: repo,
+            test_repository: `${owner}/${repo}`,
+          }),
+          owner,
+          repo,
+        );
+      }
     }
     commands.set(command, item);
   }
@@ -357,7 +410,7 @@ function validateCaseFile(caseFile, expected, owner, repo) {
     throw new Error(`case file is incomplete; missing case for ${JSON.stringify(missing)}`);
   }
   return {
-    context: requireStringMap(caseFile.context || {}, "context"),
+    context,
     cases: commands,
   };
 }
@@ -540,7 +593,7 @@ async function executeLive(options) {
   const surface = await loadJSON(SURFACE_PATH);
   const expected = enumerateImplementedCommands(surface);
   const surfaceCommands = new Map(surface.commands.map((command) => [command.path, command]));
-  const cases = validateCaseFile(await loadJSON(casesPath), expected, owner, repo);
+  const cases = validateCaseFile(await loadJSON(casesPath), expected, owner, repo, surfaceCommands);
   await validateCredentialScope(binary, root, credential, owner, repo, REPOSITORY_ROOT);
 
   const records = [];

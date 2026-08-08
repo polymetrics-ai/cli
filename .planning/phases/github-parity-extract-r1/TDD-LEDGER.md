@@ -805,6 +805,24 @@ The fake credential error is the behavioral proof of the gap: the case made it p
 the runner had already started `pm`.  No credential, provider request, or real write is involved in
 the test.
 
+**Green 12d — reject target overrides before credential inspection.** The runner now resolves the
+production command metadata while it validates the case file. For an executable `reverse_etl` or
+`direct_write` case, any `--owner` or `--repo` argument is interpolated first and must equal the
+dedicated repository identity supplied to the runner. The rule accepts both `--flag value` and
+`--flag=value`; reads remain able to use separately approved public data. Validation occurs before
+the credential inspection subprocess, so a rejected case cannot plan, preview, obtain a grant, or
+dispatch a write.
+
+```
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+✔ rejects a write case that overrides the dedicated repository owner before starting pm
+ℹ pass 5
+ℹ fail 0
+
+$ node scripts/github-live-proof-sweep.mjs --self-test
+github live proof self-test: ok
+```
+
 **Red 12b — no committed live-proof accounting runner existed.** The deterministic Node test
 defines the non-negotiable accounting contract before a runner exists: it enumerates only
 `availability: implemented`, rejects an omitted command, rejects fixture coverage as a terminal
