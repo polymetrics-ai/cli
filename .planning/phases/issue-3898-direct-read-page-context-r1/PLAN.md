@@ -124,3 +124,10 @@ result carries the context needed to reach the next one.
     stale-idle write failure to distinguish ordinary Go replay from the strict
     no-replay mutation path. Do not restore `GetBody` for a non-idempotent
     action unless an idempotency contract makes replay safe.
+13. Trace the live GitHub write with `net/http/httptrace` (connect, TLS,
+    headers, request write, first response byte) using phase names and
+    booleans only. Then send the same built `pm` binary through its normal
+    GitHub reverse path to a local non-GitHub fixture; test TLS only through a
+    trusted chain and never bypass certificate verification. Compare proxy
+    variable presence as seen by curl and Go without revealing their values,
+    and inspect VPN state read-only. Keep all no-replay safeguards unchanged.

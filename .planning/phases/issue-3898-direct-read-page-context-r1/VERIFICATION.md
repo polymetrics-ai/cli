@@ -65,6 +65,13 @@ node website/scripts/cli-surface.test.mjs 7/7 pass
   after construction and instead force a fresh connection. Re-enabling replay
   would weaken the non-idempotent mutation safety contract, so no such change
   was made.
+- `httptrace` places the GitHub EOF after `WroteRequest` and before any first
+  response byte; TCP and TLS both completed. The same binary successfully
+  dispatched one normal reverse write to a loopback fixture, while a self-signed
+  local TLS fixture was correctly refused rather than weakening certificate
+  verification. PM and curl inherit no configured HTTP proxy, but the machine
+  does have one connected VPN service. No network change was made; the live
+  GitHub write gate remains blocked.
 - `docs/connectors/**` regeneration carries unrelated pre-existing drift
   (field types). Verifiable by running `pm docs generate` on a clean tree, which
   changes 1028 files with no code changes at all.

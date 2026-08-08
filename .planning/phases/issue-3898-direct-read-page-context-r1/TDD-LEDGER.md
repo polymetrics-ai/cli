@@ -206,6 +206,50 @@ the handler again saw exactly one dispatch. This is a green falsification, not
 a red regression: the proposed failure is absent in the current code, so no
 production change was made or forced.
 
+## HTTP-phase and local-host isolation
+
+An opt-in `net/http/httptrace` probe of a fresh PM GitHub `create_issue` run
+recorded the following ordered phases, with every recorded phase error-free:
+
+```
+ConnectStart
+ConnectDone
+TLSHandshakeStart
+TLSHandshakeDone
+WroteHeaders
+WroteRequest
+EOF
+```
+
+There was no `GotFirstResponseByte`. The failure is therefore post-write and
+pre-response, not DNS, TCP connect, or TLS verification.
+
+The same freshly built `pm` binary completed the normal reverse
+plan → preview → approved run against a local loopback HTTP fixture using the
+GitHub bundle's `base_url` override. The fixture received exactly one
+`POST /repos/local/fixture/issues` with a 44-byte body and returned 201. This
+proves PM can perform a connector write; the live failure is GitHub-path
+specific rather than a general inability to POST.
+
+A local TLS fixture was also attempted. PM correctly rejected its self-signed
+certificate as an unknown authority; no TLS verification bypass or trust-store
+change was made merely to complete a diagnostic. That result is expected and
+does not alter the live trace, where GitHub TLS completed successfully.
+
+Proxy and VPN observations, recorded without values or service names:
+
+- Upper- and lower-case `HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY`, and
+  `NO_PROXY` were all unset for the curl shell.
+- Go's `http.ProxyFromEnvironment` returned no proxy for both GitHub HTTPS and
+  loopback HTTP, matching what PM inherits.
+- `scutil --nc list` reported one connected VPN service (and the host has nine
+  `utun` interfaces). The VPN is active, but it is not represented as an HTTP
+  proxy and the trace does not indicate a TLS failure.
+
+The remaining plausible environmental interaction is a VPN/middlebox or
+GitHub-edge response reset specific to PM/Go's successfully written request.
+No network setting or no-duplicate-write safeguard was changed.
+
 ## Red/green commands
 
 ```sh
