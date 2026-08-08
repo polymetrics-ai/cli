@@ -1503,6 +1503,38 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 	}
 }
 
+// ConfirmationChallengeForCommand reports the typed confirmation a command's
+// bound executor will demand at run, resolved from the same declarations
+// buildWriteCommand and buildOperationDirectWriteCommand read. It takes no
+// record and validates nothing, so help and documentation callers can answer
+// "will this ask me to confirm?" without restating the rule or building a plan.
+//
+// A bundle's cli_surface notes cannot serve that purpose: they are prose an
+// author writes per command, so they are silent on every command nobody
+// annotated, and silence there is indistinguishable from "no confirmation".
+func ConfirmationChallengeForCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) string {
+	switch cmd.Intent {
+	case "reverse_etl":
+		action, ok := findWriteAction(connectors.ManifestOf(connector), cmd.Write)
+		if !ok {
+			return ""
+		}
+		return string(connectors.ConfirmationForWriteAction(action).Kind)
+	case "direct_write":
+		provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+		if !ok || strings.TrimSpace(cmd.Operation) == "" {
+			return ""
+		}
+		metadata, err := provider.OperationDirectWriteMetadata(cmd.Operation)
+		if err != nil {
+			return ""
+		}
+		return metadata.ConfirmationChallenge
+	default:
+		return ""
+	}
+}
+
 func findWriteAction(manifest connectors.Manifest, name string) (connectors.WriteActionSpec, bool) {
 	for _, action := range manifest.WriteActions {
 		if action.Name == name {

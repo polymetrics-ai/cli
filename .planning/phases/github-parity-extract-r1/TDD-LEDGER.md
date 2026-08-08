@@ -413,3 +413,67 @@ catalogs were diffed per connector after regeneration: the only changed entry is
 
 No test was weakened, skipped, or deleted. Cycle 7 is declarations and generated output only; no
 runtime behaviour changed.
+
+## Cycle 8 — review round: the confirmation marker had to stop depending on prose
+
+The captain's question for this round: does a generated user-facing help path already make the
+typed confirmation discoverable at point of use? Two paths were measured against the built binary
+in a throwaway project, using an annotated command and an unannotated one that reaches the same
+gate.
+
+**Runtime plan output — already exhaustive, no change needed.** The plan step prints the
+requirement for every destructive command, annotated or not, because it reads the resolved write
+action rather than the bundle's notes:
+
+```
+pm github repo delete --credential gh-help
+-> Created connector command plan rplan_... for repo delete
+   Preview required before an approval token is issued.
+   Confirmation required: --confirm destructive
+
+pm github release delete --credential gh-help --release-id 42     # no bundle note
+-> Created connector command plan rplan_... for release delete
+   Preview required before an approval token is issued.
+   Confirmation required: --confirm destructive
+
+pm github issue create --credential gh-help --title t             # not destructive
+-> Created connector command plan rplan_...
+   Approval token: f0d38b2a...
+```
+
+So the failure the finding describes — build a plan, then fail at run with an unexplained
+confirmation error — does not occur: the plan itself names the flag.
+
+**Red 8a — `--help` was the path that did not.** `pm github repo delete --help` rendered
+`NOTES: destructive; requires typed confirmation --confirm destructive`, but
+`pm github release delete --help` rendered no confirmation at all, because NOTES is prose an
+author writes per command and only ten of github's 173 destructive commands carry it. After cycle
+7 gave ten commands the marker, its absence on the other 163 actively reads as "no confirmation
+needed" — a reader comparing the two help pages would conclude `release delete` does not need one.
+
+**Green** — the help states the requirement from the bound executor instead of from prose. New
+`commandrunner.ConfirmationChallengeForCommand` resolves it through the same declarations
+`buildWriteCommand` and `buildOperationDirectWriteCommand` read, and
+`renderConnectorCommandDetail` renders a `CONFIRMATION` section from it. This is the boundary
+`writeConnectorDownloadFlags` already establishes for download flags: help and runtime read one
+source, so they cannot disagree. It covers every connector's destructive commands, not just
+github's, and it adds no bundle notes.
+
+```
+pm github release delete --help
+-> APPROVAL      Reverse ETL writes require plan, preview, approval, execute.
+   CONFIRMATION  execution requires the typed confirmation --confirm destructive
+```
+
+`internal/cli/connector_confirmation_help_test.go` pins both directions: `repo delete` (annotated),
+`release delete` and `repo deploy-key delete` (not annotated) must all state it, and the test
+asserts NOTES presence separately so a regression to reading notes fails rather than passes;
+`issue create`, `repo create`, `secret set` and `issue list` must not claim a confirmation they
+never demand.
+
+Per the captain's decision the ten scoped bundle notes are unchanged and no note was added to the
+other 163 commands. `internal/connectors/guide.go` was deliberately left alone: adding the line
+there would mark all 183 actions in every one of the 551 committed connector manuals, which is
+both the bulk change the captain declined and unrelated-connector churn this branch must not make.
+
+No test was weakened, skipped, or deleted. Cycle 8 added two tests.
