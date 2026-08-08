@@ -245,15 +245,25 @@ func payloadIdentitiesForRecords(projectDir string, records []connectors.Record)
 // metadata for multipart source fields. Older non-multipart direct writes keep
 // their established file_path discovery behavior.
 func payloadIdentitiesForConnectorCommand(projectDir string, connector connectors.Connector, operation string, body any) ([]PayloadIdentity, error) {
-	record, objectBody := body.(map[string]any)
+	var (
+		record     connectors.Record
+		objectBody bool
+	)
+	switch typed := body.(type) {
+	case connectors.Record:
+		record = typed
+		objectBody = true
+	case map[string]any:
+		record = connectors.Record(typed)
+		objectBody = true
+	}
 	if !objectBody {
 		if strings.TrimSpace(operation) == "" {
 			return nil, fmt.Errorf("connector command record must be a JSON object")
 		}
-		record = nil
 	}
 	if strings.TrimSpace(operation) == "" {
-		return payloadIdentitiesForRecords(projectDir, []connectors.Record{connectors.Record(record)})
+		return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
 	}
 	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
@@ -270,12 +280,12 @@ func payloadIdentitiesForConnectorCommand(projectDir string, connector connector
 		if !objectBody && len(metadata.PayloadFileFields) > 0 {
 			return nil, fmt.Errorf("connector %q operation %q declares local payload fields but its command body is not a JSON object", connector.Name(), operation)
 		}
-		return payloadIdentitiesForDeclaredFields(projectDir, []connectors.Record{connectors.Record(record)}, metadata.PayloadFileFields)
+		return payloadIdentitiesForDeclaredFields(projectDir, []connectors.Record{record}, metadata.PayloadFileFields)
 	}
 	if !objectBody {
 		return nil, nil
 	}
-	return payloadIdentitiesForRecords(projectDir, []connectors.Record{connectors.Record(record)})
+	return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
 }
 
 func marshalOperationCommandBody(body any) (json.RawMessage, error) {
