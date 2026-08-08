@@ -1,6 +1,6 @@
 # Overview
 
-Reads public Docker Hub repositories and image tags for a configured username or organization via
+Reads public Docker Hub repositories and image tags for a configured target user or organization via
 the Docker Hub registry API, and, when an optional Personal Access Token is configured, manages
 personal and organization access tokens, organizations, groups (teams), invites, audit logs,
 repositories, and (with a second, separately-configured SCIM token) SCIM-provisioned users.
@@ -20,8 +20,12 @@ Connection fields:
 
 - `base_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`; Docker Hub
   registry API base URL override for tests or self-hosted proxies.
-- `docker_username` (required, string); Docker Hub username or organization namespace whose
-  repositories and tags to read. Lowercase alphanumerics, underscores, and hyphens only.
+- `docker_username` (required, string); Docker Hub username used to authenticate `docker_pat`.
+  Lowercase alphanumerics, underscores, and hyphens only.
+- `namespace` (required, string); Docker Hub user or organization namespace whose repositories and
+  tags to read. This is distinct from `docker_username`: a request for another namespace is honored
+  rather than silently replaced by the authentication identity. Lowercase alphanumerics,
+  underscores, and hyphens only.
 - `docker_pat` (optional, secret string); a Docker Hub Personal Access Token for `docker_username`.
   Omitted, the connector stays exactly as before: read-only, unauthenticated, public repositories
   and tags only. When set, it authenticates every account-scoped, organization, group/team, invite,
@@ -60,7 +64,7 @@ Authentication behavior:
 
 Requests use the configured `base_url` value after applying defaults.
 
-Connection checks call GET `/namespaces/{{ config.docker_username }}/repositories`.
+Connection checks call GET `/namespaces/{{ config.namespace }}/repositories`.
 
 ## Streams notes
 
@@ -69,14 +73,14 @@ on the configured API host.
 
 Pagination by stream: next_url: `repositories`, `tags`; none: `repository_detail`, `tag_detail`.
 
-- `repositories`: GET `/namespaces/{{ config.docker_username }}/repositories` - records path
+- `repositories`: GET `/namespaces/{{ config.namespace }}/repositories` - records path
   `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from
   the response body; URL path `next`; next URLs stay on the configured API host.
-- `tags`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}/tags`
+- `tags`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}/tags`
   - records path `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a
   next-page URL from the response body; URL path `next`; next URLs stay on the configured API host.
-- `repository_detail`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}` - single-object response; records at response root.
-- `tag_detail`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}/tags/{{ config.tag }}` - single-object response; records at response root.
+- `repository_detail`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}` - single-object response; records at response root.
+- `tag_detail`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}/tags/{{ config.tag }}` - single-object response; records at response root.
 
 Direct-read commands (repositories/tokens/groups/invites/orgs/audit-logs/scim listed below) are
 each a single bounded HTTP request, not a full paginated crawl — Docker Hub's own list endpoints
