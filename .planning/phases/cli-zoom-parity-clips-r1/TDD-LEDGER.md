@@ -358,10 +358,38 @@ updated to pass `false` for the helper's current declared-redirect argument.
 They exercise the no-declared-redirect branch, so this preserves the original
 non-replay behavior while keeping the compatibility check buildable.
 
-## GREEN connector — pending
+## GREEN connector — completed 2026-08-09
 
-Record the real runner fixture lifecycle, source reconciliation, and command reachability here
-after all 21 endpoint rows are covered.
+All twenty-one current `/clips` artifact rows are now declared and reconciled: six bounded
+redacted REST reads, one bounded binary download, and sixteen typed approval-gated direct-write
+commands for fourteen write endpoints. The transfer and multipart-event discriminators are
+separate concrete command contracts; no generic `oneOf`, raw body, URL, header, or paging input
+was introduced. The category reaches the planned totals: `123` covered endpoint rows, `1,719`
+Zoom-local implementable rows still blocked for future slices, `61` direct reads, `58` direct
+writes, one binary download, and zero `unsafe_or_disallowed` rows.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom
+ok  	polymetrics.ai/internal/connectors/defs/zoom	16.847s
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/zoom
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ go run ./cmd/connectorgen surface-reconcile internal/connectors/defs/zoom --check --notes-contains 'provider_module=clips'
+connectorgen surface-reconcile: 1 connector(s) scanned; covered=0 blocked=0 unchanged=0 refused=0
+
+$ ./pm help zoom && ./pm zoom && ./pm zoom clips && ./pm zoom clips <each-exact-command> --help
+Zoom Clips binary help reachability: 23 commands
+```
+
+`TestClipsStatusOnlyDirectWritesExecuteWithFixtures` executes all six documented Clips `204`
+actions through plan, no-network preview, typed destructive confirmation where required, and
+execution. It asserts HTTP `204` and a nil result body, while its loopback server verifies the
+fixed method/path/body/auth boundary. The fixture values are synthetic and no credential or
+token-derived value is recorded.
 
 ### Clip transfer cardinality correction — RED 2026-08-08
 
@@ -399,6 +427,24 @@ FAIL
 
 The regression fixture contains synthetic content only and no credential or token-derived value.
 
-## Verification/review — pending
+## Verification/review — completed 2026-08-09
 
-Record scoped verification and inline manual review findings here after green.
+The complete app regression suite passed after the root-array compatibility repair, and the
+complete CLI suite passed after regenerating its tracked golden transcript surface. The final
+manual review is recorded in `REVIEW.md`; it found and resolved the legacy record regression and
+the lint-only tagged-switch improvement before this connector slice was committed. No unresolved
+Critical, Warning, or Info finding remains.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/app
+ok  	polymetrics.ai/internal/app	230.640s
+
+$ go test -count=1 -timeout 20m ./internal/cli
+ok  	polymetrics.ai/internal/cli	591.141s
+
+$ make lint
+0 issues.
+
+$ (cd website && pnpm run typecheck)
+$ tsc --noEmit
+```

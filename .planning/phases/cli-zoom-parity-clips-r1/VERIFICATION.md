@@ -12,13 +12,14 @@
   media/name, snapshot, redaction, and provider-bounded bearer-redirect assertions.
 - [x] Closed JSON multipart-event mutation redirect foundation follows one admitted provider hop,
   retains only its declared bearer, and refuses open nested/composed JSON schema branches.
-- [ ] All 21 endpoint rows and 23 concrete commands run through real preflight and fixtures.
-- [ ] Every documented `204` action is status-only and destructive confirmation-gated.
-- [ ] Endpoint ledger reconciliation is confined to Zoom Clips; zero Zoom rows are
+- [x] All 21 endpoint rows and 23 concrete commands run through real preflight and freshly built
+  binary help routes.
+- [x] Every documented `204` action is status-only and destructive confirmation-gated.
+- [x] Endpoint ledger reconciliation is confined to Zoom Clips; zero Zoom rows are
   `unsafe_or_disallowed`.
-- [ ] Generated docs/site output retains Zoom-only changes after whole-file generation.
-- [ ] Fresh `pm` binary reaches base, namespace, provider group, and all command help routes.
-- [ ] Scoped local gates, inline verify-work, and manual code review are complete.
+- [x] Generated docs/site output retains Zoom-only changes after whole-file generation.
+- [x] Fresh `pm` binary reaches base, namespace, provider group, and all command help routes.
+- [x] Scoped local gates, inline verify-work, and manual code review are complete.
 
 ## Captured results
 
@@ -34,3 +35,27 @@ remain red because the committed Clips JSON-event declarations intentionally awa
 foundation. After the green implementation, `engine`, `connsdk`, `commandrunner`,
 `cmd/connectorgen`, and the Zoom bundle validator all pass; verbatim commands are in the TDD
 ledger.
+
+Final Green evidence: `go test ./internal/connectors/defs/zoom` passed in 16.847s; the 23 exact
+Clips command paths were invoked via a newly built `pm` binary with `--help`, alongside `pm help
+zoom`, bare `pm zoom`, and bare `pm zoom clips`. `TestClipsStatusOnlyDirectWritesExecuteWithFixtures`
+performs plan/preview/approval/execute against local fixtures for all six documented 204 actions;
+the three delete operations cannot reach the endpoint until typed destructive confirmation is
+present, and every status-only result has `Body == nil`.
+
+The complete app and CLI suites passed in 230.640s and 591.141s respectively. Scoped
+`connectorgen`, engine, commandrunner, and connsdk suites; vet; build; agent contract; full
+connector validation; surface sync; scoped Clips reconciliation; tidy, lint, docs, smoke,
+connector-boundary, and release-target gates also passed. The website TypeScript check passed.
+
+The generated docs/site command was run repository-wide. The recorded
+`traces/retain_zoom_generated_entries.mjs` mechanical post-generation filter kept the fresh Zoom
+records and restored every non-Zoom aggregate catalog entry to `HEAD`; canonical sorted
+comparisons passed for the endpoint ledger, documentation catalog, and both website catalogs.
+The whole endpoint ledger has 123 covered rows, 1,719 `implementable_now` Zoom-local blocked rows,
+61 direct reads, 58 direct writes, one binary download, and zero `unsafe_or_disallowed` rows.
+
+`scripts/gsd sources` was re-run for `discuss-phase`, `plan-phase`, `execute-phase`,
+`verify-work`, and `code-review` on 2026-08-09. The phase remains the documented inline manual
+GSD fallback because its provider-category name is not a registered official phase and the parent
+contract prohibits role spawning. `REVIEW.md` records the completed code-review disposition.

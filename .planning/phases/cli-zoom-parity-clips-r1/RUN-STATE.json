@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-clips-r1",
   "issue": 3936,
   "parent_issue": 3915,
-  "status": "foundations-green",
+  "status": "verified-ready-to-commit",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -51,6 +51,6 @@
   },
   "red": "captured: current 102/1740/55/42 totals fail the 123/1719/61/58 target; all 23 Clips commands are unknown; json_array is unsupported; a permitted binary redirect strips bearer; operation base64 source path is not transformed.",
   "green": "root-json-array plan lifecycle, declared bearer binary redirect, operation-level bounded base64 path upload, and recursively closed JSON mutation redirect foundations passed",
-  "verification": "captain rebase completed and published; post-rebase engine, connsdk, commandrunner, connectorgen, and Zoom bundle validation pass",
-  "review": "pending"
+  "verification": "all 21 Clips rows reconciled; 23 freshly built binary help routes, Zoom/app/CLI suites, scoped engine/connectorgen gates, full validation/sync, docs validation, website typecheck, and CI-equivalent non-full gates passed; generated aggregate catalogs were mechanically filtered to retain Zoom-only changes",
+  "review": "manual inline code review completed; legacy record compatibility and a lint-only tagged-switch finding were resolved in separate pushed foundation commits; no unresolved findings"
 }

@@ -3444,274 +3444,154 @@
     {
       "method": "GET",
       "path": "/clips",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=List all clips; provider_server=https://api.zoom.us/; provider_path=/clips; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips list"
       }
     },
     {
       "method": "POST",
       "path": "/clips/starred",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Batch star clips; provider_server=https://api.zoom.us/; provider_path=/clips/starred; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips starred set"
       }
     },
     {
       "method": "GET",
       "path": "/clips/{clipId}/collaborators",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Get collaborators of a clip; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/collaborators; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips collaborators list"
       }
     },
     {
       "method": "POST",
       "path": "/clips/{clipId}/collaborators",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Share a clip with new users; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/collaborators; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips collaborators share"
       }
     },
     {
       "method": "DELETE",
       "path": "/clips/{clipId}/collaborators",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Remove the collaborator from a clip; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/collaborators; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips collaborators remove"
       }
     },
     {
       "method": "GET",
       "path": "/clips/{clipId}/comments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=List clip comments; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/comments; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips comments list"
       }
     },
     {
       "method": "DELETE",
       "path": "/clips/{clipId}/comments/{commentId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Delete a comment; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/comments/{commentId}; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips comments delete"
       }
     },
     {
       "method": "GET",
       "path": "/clips/{clipId}/download",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with the existing binary_download execution path, but blocked until a Zoom-local bounded binary operation, destination contract, and fixture evidence are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Download a clip; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/download; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05; provider_evidence=response explicitly declares application/octet-stream"
+      "covered_by": {
+        "direct_read": "clips download"
       }
     },
     {
       "method": "GET",
       "path": "/clips/{clipId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Get a clip; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips get"
       }
     },
     {
       "method": "DELETE",
       "path": "/clips/{clipId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Delete a clip(soft delete); provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/clips/{clipId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Update a clip's basic info; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips update"
       }
     },
     {
       "method": "GET",
       "path": "/clips/{clipId}/chapters",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Get Clip Chapters; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/chapters; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips chapters get"
       }
     },
     {
       "method": "POST",
       "path": "/clips/{clipId}/chapters",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Create Clip Chapters; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/chapters; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips chapters create"
       }
     },
     {
       "method": "POST",
       "path": "/clips/{clipId}/duplicate",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Duplicate Clips; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/duplicate; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips duplicate"
       }
     },
     {
       "method": "PATCH",
       "path": "/clips/{clipId}/share_settings",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Update clips share setting; provider_server=https://api.zoom.us/; provider_path=/clips/{clipId}/share_settings; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips share-settings update"
       }
     },
     {
       "method": "POST",
       "path": "/clips/transfers",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Transfer clips owner; provider_server=https://api.zoom.us/; provider_path=/clips/transfers; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_writes": [
+          "clips transfers full",
+          "clips transfers partial"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/clips/transfers/{taskId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Transfer task status check; provider_server=https://api.zoom.us/; provider_path=/clips/transfers/{taskId}; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "clips transfers get"
       }
     },
     {
       "method": "POST",
       "path": "/clips/files",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with the existing typed multipart writes.json path, but blocked until a Zoom-local bounded file contract, allowed-media/size policy, approval path, and fixtures are declared. The rest_write direct executor is JSON/form only, so it is not this operation path.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Upload clip file; provider_server=https://api.zoom.us/; provider_path=/clips/files; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05; provider_evidence=request body explicitly declares multipart/form-data"
+      "covered_by": {
+        "direct_write": "clips files upload"
       }
     },
     {
       "method": "POST",
       "path": "/clips/files/multipart",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with the existing typed multipart writes.json path, but blocked until a Zoom-local bounded file contract, allowed-media/size policy, approval path, and fixtures are declared. The rest_write direct executor is JSON/form only, so it is not this operation path.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Upload clip multipart files; provider_server=https://api.zoom.us/; provider_path=/clips/files/multipart; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05; provider_evidence=request body explicitly declares multipart/form-data"
+      "covered_by": {
+        "direct_write": "clips files multipart upload"
       }
     },
     {
       "method": "POST",
       "path": "/clips/files/multipart/upload_events",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Initiate and complete the multipart file upload for a clip; provider_server=https://api.zoom.us/; provider_path=/clips/files/multipart/upload_events; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_writes": [
+          "clips files multipart complete",
+          "clips files multipart initiate"
+        ]
       }
     },
     {
       "method": "POST",
       "path": "/clips/files/tmp",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/clips.md",
-        "notes": "classification=implementable_now; provider_module=clips; operation_title=Temporary file upload API for Clips; provider_server=https://api.zoom.us/; provider_path=/clips/files/tmp; artifact=https://developers.zoom.us/docs/api/clips.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "clips files temporary upload"
       }
     },
     {
