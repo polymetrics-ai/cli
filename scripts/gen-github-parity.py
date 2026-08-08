@@ -27,6 +27,46 @@ existing_write_names = {a["name"] for a in writes_doc["actions"]}
 existing_cli_paths = {c["path"] for c in cli_doc["commands"]}
 
 PATH_PARAM_RE = re.compile(r"\{([^}]+)\}")
+ENGINE_PATH_PARAM_RE = re.compile(r"(?<!\{)\{([^{}]+)\}(?!\})")
+
+
+def engine_write_path(api_path):
+    """Translate provider placeholders into the engine's write path dialect."""
+
+    if "{{{{" in api_path or "}}}}" in api_path:
+        return api_path.replace("{{{{", "{{").replace("}}}}", "}}")
+
+    def replace(match):
+        name = match.group(1)
+        namespace = "config" if name in ("owner", "repo") else "record"
+        return "{{ %s.%s }}" % (namespace, name)
+
+    return ENGINE_PATH_PARAM_RE.sub(replace, api_path)
+
+
+operation_paths = {
+    operation["id"]: operation.get("rest", {}).get("path", "")
+    for operation in ops_doc["operations"]
+    if operation.get("rest", {}).get("path")
+}
+surface_write_paths = {}
+for endpoint in api.get("endpoints", []):
+    covered = endpoint.get("covered_by") or {}
+    targets = []
+    if covered.get("write"):
+        targets.append(covered["write"])
+    targets.extend(covered.get("writes", []))
+    for target in targets:
+        surface_write_paths[target] = endpoint["path"]
+for action in writes_doc["actions"]:
+    # Full-surface imports carry the canonical provider path in the matching
+    # rest_write operation. Re-derive the engine path from that source so a
+    # mixed path (some old rows already used {{ }}, some used { }) cannot be
+    # normalized by regex into a malformed nested template.
+    provider_path = surface_write_paths.get(
+        action.get("name"), operation_paths.get(f"github.{action.get('name')}", action.get("path", ""))
+    )
+    action["path"] = engine_write_path(provider_path)
 
 # These are the only GitHub rows whose documented response/body shapes fall
 # outside the generic JSON GET reader. Keep them explicit: a broad promotion of
@@ -493,7 +533,7 @@ def append_explicit_one_of_write_contract(endpoint, operation, contract):
             "name": action_name,
             "kind": "create",
             "method": method,
-            "path": api_path,
+            "path": engine_write_path(api_path),
             "path_fields": path_fields,
             "body_type": "json",
             "record_schema": {
@@ -621,7 +661,7 @@ for e in api["endpoints"]:
             required.append(pf)
         wa = {
             "name": wname, "kind": {"POST": "create", "PATCH": "update", "PUT": "update", "DELETE": "delete"}[method],
-            "method": method, "path": api_path, "path_fields": path_fields, "body_type": "json",
+            "method": method, "path": engine_write_path(api_path), "path_fields": path_fields, "body_type": "json",
             "record_schema": {"$schema": "http://json-schema.org/draft-07/schema#", "type": "object",
                               "required": required, "properties": record_props},
             "risk": op.get("risk", "medium"),

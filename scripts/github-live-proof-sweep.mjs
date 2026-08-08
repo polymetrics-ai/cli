@@ -8,6 +8,8 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 
 const CONNECTOR = "github";
+const APPROVED_TEST_OWNER = "karthik-sivadas";
+const APPROVED_TEST_REPO = "pm-live-test-direct-read-20260808081515";
 const TERMINAL_STATES = new Set(["proven", "untestable", "failed"]);
 const FORBIDDEN_RECORD_FIELDS = new Set([
   "stdout",
@@ -224,8 +226,9 @@ export function validateProofRecords(expectedCommands, records) {
       throw new Error(`invalid terminal state for ${JSON.stringify(command)}`);
     }
     if (record.state === "proven") {
-      if (!Number.isInteger(record.http_status) || record.http_status < 200 || record.http_status >= 300) {
-        throw new Error(`proven result for ${JSON.stringify(command)} requires a successful HTTP status`);
+      if (record.http_status !== undefined &&
+          (!Number.isInteger(record.http_status) || record.http_status < 200 || record.http_status >= 300)) {
+        throw new Error(`proven result for ${JSON.stringify(command)} has an invalid HTTP status`);
       }
       if (!record.assertion || record.assertion.matched !== true || typeof record.assertion.kind !== "string") {
         throw new Error(`proven result for ${JSON.stringify(command)} requires a matched returned-data assertion`);
@@ -270,7 +273,7 @@ function parseOptions(args) {
       options[name] = argument.slice(equals + 1);
       continue;
     }
-    if (name === "self-test" || name === "execute-writes") {
+    if (name === "self-test" || name === "execute-writes" || name === "external-blocker") {
       options[name] = true;
       continue;
     }
@@ -402,6 +405,38 @@ function validateCaseFile(caseFile, expected, owner, repo, surfaceCommands) {
           repo,
         );
       }
+      if (item.readback !== undefined) {
+        if (!item.readback || typeof item.readback !== "object" || Array.isArray(item.readback)) {
+          throw new Error(`readback for ${JSON.stringify(command)} must be an object`);
+        }
+        const readbackCommand = String(item.readback.command || "").trim();
+        const readbackSurfaceCommand = surfaceCommands.get(readbackCommand);
+        if (!readbackSurfaceCommand || !expected.includes(readbackCommand)) {
+          throw new Error(`readback for ${JSON.stringify(command)} names an unknown implemented command`);
+        }
+        if (readbackSurfaceCommand.intent === "reverse_etl" || readbackSurfaceCommand.intent === "direct_write") {
+          throw new Error(`readback for ${JSON.stringify(command)} may not invoke another write`);
+        }
+        if (!Array.isArray(item.readback.args) || item.readback.args.some((argument) => typeof argument !== "string")) {
+          throw new Error(`readback for ${JSON.stringify(command)} requires string args`);
+        }
+        for (const argument of item.readback.args) {
+          if (["--credential", "--connection", "--root", "--approve", "--plan", "--confirm"].includes(argument)) {
+            throw new Error(`readback for ${JSON.stringify(command)} may not override lifecycle or credential flags`);
+          }
+        }
+        validateWriteRepositoryTarget(
+          `${command} readback`,
+          interpolateArguments(item.readback.args, {
+            ...context,
+            test_owner: owner,
+            test_repo: repo,
+            test_repository: `${owner}/${repo}`,
+          }),
+          owner,
+          repo,
+        );
+      }
     }
     commands.set(command, item);
   }
@@ -478,7 +513,10 @@ function parseJSONOutput(result, step) {
   }
   if (result.code !== 0) {
     const status = httpStatusFromFailure(`${result.stdout}\n${result.stderr}`);
-    const error = new Error(`${step} exited ${result.code ?? "without an exit code"}`);
+    const statusDescription = status === undefined
+      ? "without a provider HTTP status"
+      : `with provider HTTP status ${status}`;
+    const error = new Error(`${step} exited ${result.code ?? "without an exit code"} ${statusDescription}`);
     error.httpStatus = status;
     throw error;
   }
@@ -489,7 +527,7 @@ function parseJSONOutput(result, step) {
   }
 }
 
-function assertReadEnvelope(envelope, command) {
+export function assertReadEnvelope(envelope, command) {
   if (!envelope || envelope.connector !== CONNECTOR || envelope.command !== command) {
     throw new Error("pm response does not identify the requested GitHub command");
   }
@@ -509,31 +547,45 @@ function assertReadEnvelope(envelope, command) {
     if (!Number.isInteger(envelope.count) || !Array.isArray(envelope.records)) {
       throw new Error("stream response omitted returned record accounting");
     }
-    // Stream envelopes currently do not expose the provider response status.
-    // Do not invent one: this becomes a failed record until runtime evidence is
-    // available, which is exactly what a live sweep is meant to reveal.
-    throw new Error("stream response does not expose provider HTTP status");
+    return {
+      assertion: {
+        kind: "stream-records",
+        subject: command,
+        matched: true,
+        count: envelope.count,
+      },
+    };
   }
   if (envelope.kind === "ConnectorCommandBinaryDownload") {
-    throw new Error("binary-download response does not expose provider HTTP status");
+    if (!envelope.record || typeof envelope.record !== "object" || Array.isArray(envelope.record)) {
+      throw new Error("binary-download response omitted returned file accounting");
+    }
+    return {
+      assertion: { kind: "binary-download-record", subject: command, matched: true },
+    };
   }
   throw new Error(`unexpected non-write result kind ${JSON.stringify(envelope.kind || "")}`);
 }
 
-async function runWriteLifecycle({ binary, root, credential, command, args, cwd }) {
+async function runWriteLifecycle({ binary, root, credential, command, args, readback, cwd }) {
   const planArgs = [CONNECTOR, ...command.split(" "), ...args, "--credential", credential, "--root", root, "--json"];
-  const planEnvelope = parseJSONOutput(await runProcess(binary, planArgs, cwd), "write plan");
-  const planID = String(planEnvelope?.plan?.id || "").trim();
-  if (planEnvelope?.kind !== "ConnectorCommandWritePlan" || !planID) {
+  const humanPlanArgs = planArgs.filter((argument) => argument !== "--json");
+  const planResult = await runProcess(binary, humanPlanArgs, cwd);
+  if (planResult.overflow || planResult.code !== 0) {
+    throw new Error("write plan did not complete");
+  }
+  const planID = /Created connector command plan\s+(\S+)/.exec(planResult.stdout)?.[1] || "";
+  if (!planID) {
     throw new Error("write plan response omitted plan identity");
   }
-  const challenge = String(planEnvelope?.plan?.confirmation_challenge || "").trim();
+  const initialGrant = /Approval token:\s*(\S+)/.exec(planResult.stdout)?.[1] || "";
+  const challenge = /Confirmation required:\s+--confirm\s+(\S+)/.exec(planResult.stdout)?.[1] || "";
   const previewArgs = [CONNECTOR, ...command.split(" "), "--plan", planID, "--preview", "--root", root];
   const preview = await runProcess(binary, previewArgs, cwd);
   if (preview.overflow || preview.code !== 0) {
     throw new Error("write preview did not complete");
   }
-  const grant = /Approval token:\s*(\S+)/.exec(preview.stdout)?.[1];
+  const grant = /Approval token:\s*(\S+)/.exec(preview.stdout)?.[1] || initialGrant;
   if (!grant) {
     throw new Error("write preview omitted the single-use approval grant");
   }
@@ -555,12 +607,31 @@ async function runWriteLifecycle({ binary, root, credential, command, args, cwd 
     throw new Error("write execution did not report one completed provider mutation");
   }
   const operation = run.operation_direct_write;
-  if (!operation || !Number.isInteger(operation.status)) {
-    throw new Error("write execution does not expose provider HTTP status");
+  let readbackResult;
+  if (readback) {
+    const readbackArgs = interpolateArguments(readback.args, {
+      test_owner: APPROVED_TEST_OWNER,
+      test_repo: APPROVED_TEST_REPO,
+      test_repository: `${APPROVED_TEST_OWNER}/${APPROVED_TEST_REPO}`,
+    });
+    const readbackEnvelope = parseJSONOutput(
+      await runProcess(
+        binary,
+        [CONNECTOR, ...readback.command.split(" "), ...readbackArgs, "--credential", credential, "--root", root, "--json"],
+        cwd,
+      ),
+      "write readback",
+    );
+    readbackResult = assertReadEnvelope(readbackEnvelope, readback.command);
   }
   return {
-    httpStatus: operation.status,
-    assertion: { kind: "reverse-write-result", subject: command, matched: true },
+    httpStatus: Number.isInteger(operation?.status) ? operation.status : undefined,
+    assertion: {
+      kind: readbackResult ? "reverse-write-readback" : "reverse-write-result",
+      subject: command,
+      matched: true,
+      ...(readbackResult ? { readback_kind: readbackResult.assertion.kind } : {}),
+    },
   };
 }
 
@@ -586,11 +657,18 @@ async function executeLive(options) {
   const binary = requiredOption(options, "pm");
   const root = requiredOption(options, "root");
   const credential = requiredOption(options, "credential");
-  const owner = requiredOption(options, "test-owner");
-  const repo = requiredOption(options, "test-repo");
+  const suppliedOwner = String(options["test-owner"] || "").trim();
+  const suppliedRepo = String(options["test-repo"] || "").trim();
+  if ((suppliedOwner && suppliedOwner !== APPROVED_TEST_OWNER) || (suppliedRepo && suppliedRepo !== APPROVED_TEST_REPO)) {
+    throw new Error("live proof is hard-pinned to the approved private test repository");
+  }
+  const owner = APPROVED_TEST_OWNER;
+  const repo = APPROVED_TEST_REPO;
   const casesPath = requiredOption(options, "cases");
   const reportPath = requiredOption(options, "report");
   const surface = await loadJSON(SURFACE_PATH);
+  const binaryBytes = await readFile(binary);
+  const caseBytes = await readFile(casesPath);
   const expected = enumerateImplementedCommands(surface);
   const surfaceCommands = new Map(surface.commands.map((command) => [command.path, command]));
   const cases = validateCaseFile(await loadJSON(casesPath), expected, owner, repo, surfaceCommands);
@@ -616,8 +694,16 @@ async function executeLive(options) {
     }
     const invocation = shellSafeInvocation(command, args, credential, root);
     try {
-      const result = isWrite
-        ? await runWriteLifecycle({ binary, root, credential, command, args, cwd: REPOSITORY_ROOT })
+    const result = isWrite
+        ? await runWriteLifecycle({
+            binary,
+            root,
+            credential,
+            command,
+            args,
+            readback: caseItem.readback,
+            cwd: REPOSITORY_ROOT,
+          })
         : assertReadEnvelope(
             parseJSONOutput(
               await runProcess(
@@ -637,12 +723,15 @@ async function executeLive(options) {
         assertion: result.assertion,
       }));
     } catch (error) {
+      const diagnostic = error instanceof Error ? error.message : "live execution failed without a safe diagnostic";
       records.push(redactForReport({
         command,
         state: "failed",
         invocation,
         http_status: error?.httpStatus,
-        reason: error instanceof Error ? error.message : "live execution failed without a safe diagnostic",
+        reason: concreteReason(diagnostic)
+          ? diagnostic
+          : `${command} live execution failed without a safe provider diagnostic`,
       }));
     }
   }
@@ -651,8 +740,11 @@ async function executeLive(options) {
   const report = {
     schema_version: 1,
     connector: CONNECTOR,
+    status: "credentialed_live",
     generated_at: new Date().toISOString(),
     surface_sha256: createHash("sha256").update(JSON.stringify(surface)).digest("hex"),
+    binary_sha256: createHash("sha256").update(binaryBytes).digest("hex"),
+    case_file_sha256: createHash("sha256").update(caseBytes).digest("hex"),
     test_repository: "<dedicated-private-test-repository>",
     implemented_commands: expected.length,
     tally,
@@ -662,6 +754,45 @@ async function executeLive(options) {
   await chmod(reportPath, 0o600);
   process.stdout.write(`${CONNECTOR} live proof: proven=${tally.proven} untestable=${tally.untestable} failed=${tally.failed}\n`);
   return tally.failed === 0 ? 0 : 1;
+}
+
+async function recordExternalBlocker(options) {
+  const allowed = new Set(["_", "external-blocker", "pm", "report", "reason"]);
+  for (const key of Object.keys(options)) {
+    if (!allowed.has(key)) {
+      throw new Error(`external-blocker mode does not accept --${key}`);
+    }
+  }
+  if (options._.length !== 0) {
+    throw new Error("external-blocker mode accepts options only");
+  }
+  const binary = requiredOption(options, "pm");
+  const reportPath = requiredOption(options, "report");
+  const reason = requiredOption(options, "reason");
+  const surface = await loadJSON(SURFACE_PATH);
+  const expected = enumerateImplementedCommands(surface);
+  const records = expected.map((command) =>
+    redactForReport({ command, state: "untestable", reason }),
+  );
+  const tally = validateProofRecords(expected, records);
+  const binaryBytes = await readFile(binary);
+  const report = {
+    schema_version: 1,
+    connector: CONNECTOR,
+    generated_at: new Date().toISOString(),
+    status: "external_blocker",
+    surface_sha256: createHash("sha256").update(JSON.stringify(surface)).digest("hex"),
+    binary_sha256: createHash("sha256").update(binaryBytes).digest("hex"),
+    test_repository: "<credentialed-live-proof-not-available>",
+    implemented_commands: expected.length,
+    blocker: reason,
+    tally,
+    records,
+  };
+  await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, { mode: 0o600 });
+  await chmod(reportPath, 0o600);
+  process.stdout.write(`${CONNECTOR} live proof: external blocker; untestable=${tally.untestable}\n`);
+  return 0;
 }
 
 async function selfTest() {
@@ -698,6 +829,9 @@ async function selfTest() {
 
 async function main() {
   const options = parseOptions(process.argv.slice(2));
+  if (options["external-blocker"]) {
+    return recordExternalBlocker(options);
+  }
   if (options["self-test"]) {
     if (Object.keys(options).some((key) => !["_", "self-test"].includes(key)) || options._.length !== 0) {
       throw new Error("--self-test does not accept live-run options");

@@ -308,8 +308,9 @@ func TestGitHubOneOfWriteContracts(t *testing.T) {
 			if !ok {
 				t.Fatalf("write action %q is missing", want.action)
 			}
-			if action.Method != want.method || action.Path != want.path {
-				t.Fatalf("write action = %s %s, want %s %s", action.Method, action.Path, want.method, want.path)
+			wantWritePath := githubEngineWritePath(want.path)
+			if action.Method != want.method || action.Path != wantWritePath {
+				t.Fatalf("write action = %s %s, want %s %s", action.Method, action.Path, want.method, wantWritePath)
 			}
 			if err := engine.ValidatePromotableRecordSchema(action.RecordSchema); err != nil {
 				t.Fatalf("write record_schema must be a concrete arm: %v", err)
@@ -402,4 +403,35 @@ func assertStringIntMap(t *testing.T, name string, got, want map[string]int) {
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("%s = %+v, want %+v", name, got, want)
 	}
+}
+
+func githubEngineWritePath(apiPath string) string {
+	var out strings.Builder
+	for index := 0; index < len(apiPath); {
+		start := strings.IndexByte(apiPath[index:], '{')
+		if start < 0 {
+			out.WriteString(apiPath[index:])
+			break
+		}
+		start += index
+		out.WriteString(apiPath[index:start])
+		end := strings.IndexByte(apiPath[start:], '}')
+		if end < 0 {
+			out.WriteString(apiPath[start:])
+			break
+		}
+		end += start
+		name := apiPath[start+1 : end]
+		namespace := "record"
+		if name == "owner" || name == "repo" {
+			namespace = "config"
+		}
+		out.WriteString("{{ ")
+		out.WriteString(namespace)
+		out.WriteByte('.')
+		out.WriteString(name)
+		out.WriteString(" }}")
+		index = end + 1
+	}
+	return out.String()
 }

@@ -12,6 +12,13 @@ files_modified:
   - scripts/gen-github-parity.py
   - cmd/connectorgen/github_api_surface_test.go
   - internal/connectors/certify/stages_surface_inventory_internal_test.go
+  - internal/cli/reverse_cli_test.go
+  - internal/cli/testdata/golden_transcripts.json
+  - docs/connectors/github/MANUAL.md
+  - docs/skills/pm-github/SKILL.md
+  - docs/connectors/catalog/all-connectors.json
+  - website/data/connectors.generated.json
+  - website/lib/connectors.catalog.data.generated.json
   - internal/connectors/defs/github/api_surface.json
   - internal/connectors/defs/github/operations.json
   - internal/connectors/defs/github/writes.json
@@ -177,6 +184,24 @@ is a separately preflightable command contract.
         final combined regeneration with a recorded reason.
     </acceptance_criteria>
   </task>
+  <task type="tdd">
+    <name>Post-rebase GREEN — repair the generated CLI contract and rate-limit fixture</name>
+    <action>
+      The required post-rebase `internal/cli` gate must first fail on the stale GitHub golden
+      transcript and on the token-authenticated reverse-ETL fixture missing its declared,
+      non-secret `rate_limit_account` coordination subject. Add only the fixture's opaque
+      non-secret subject, then regenerate the golden transcript and the source-owned GitHub
+      documentation/catalog artifacts. Do not relax the rate-limit policy or make the runtime
+      infer a subject from a secret or target repository.
+    </action>
+    <acceptance_criteria>
+      - `TestReverseETLToGitHubCreatesPullRequestAfterApproval` reaches the mock provider through
+        the declared token rate-limit policy with its explicit non-secret account subject.
+      - `TestGoldenTranscripts` is green only after regeneration; generated docs/catalog diffs are
+        restricted to GitHub entries.
+      - The repair does not alter the 19 action contracts, classifications, or rate-limit policy.
+    </acceptance_criteria>
+  </task>
 </tasks>
 
 <verification>
@@ -187,6 +212,7 @@ is a separately preflightable command contract.
 - `go run ./cmd/connectorgen validate internal/connectors/defs`
 - `go run ./cmd/connectorgen surface-sync --check`
 - `go vet ./...` and `go build ./cmd/pm`
+- `go test -timeout 20m ./internal/cli/ -run 'Test(GoldenTranscripts|ReverseETLToGitHubCreatesPullRequestAfterApproval)$' -count=1`
 
 </verification>
 
