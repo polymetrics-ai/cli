@@ -1516,7 +1516,11 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if name == "" {
 		name = strings.ReplaceAll(writeCommand.Command, " ", "_")
 	}
-	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, connector, writeCommand.Operation, writeCommand.Record)
+	operationBody := any(writeCommand.Record)
+	if writeCommand.Operation != "" {
+		operationBody = writeCommand.OperationBody
+	}
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, connector, writeCommand.Operation, operationBody)
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
@@ -1532,7 +1536,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 				Config:     runtime,
 				PathParams: writeCommand.PathParams,
 				Query:      writeCommand.Query,
-				Body:       map[string]any(writeCommand.Record),
+				Body:       operationBody,
 			})
 			if err != nil {
 				return ReversePlan{}, nil, err
@@ -1552,10 +1556,17 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	}
 	planHash, err := connectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Write, writeCommand.Record, payloadIdentity)
 	if writeCommand.Operation != "" {
-		planHash, err = operationConnectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Operation, writeCommand.PathParams, writeCommand.Query, writeCommand.Record, payloadIdentity)
+		planHash, err = operationConnectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Operation, writeCommand.PathParams, writeCommand.Query, operationBody, payloadIdentity)
 	}
 	if err != nil {
 		return ReversePlan{}, nil, err
+	}
+	var persistedOperationBody json.RawMessage
+	if writeCommand.Operation != "" {
+		persistedOperationBody, err = marshalOperationCommandBody(operationBody)
+		if err != nil {
+			return ReversePlan{}, nil, err
+		}
 	}
 	confirmation := confirmationFromChallenge(writeCommand.ConfirmationChallenge)
 	created := time.Now().UTC()
@@ -1591,6 +1602,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		ConnectorCommandOperation:  writeCommand.Operation,
 		ConnectorCommandPathParams: cloneStringMap(writeCommand.PathParams),
 		ConnectorCommandQuery:      cloneStringMap(writeCommand.Query),
+		ConnectorCommandBody:       persistedOperationBody,
 		ConnectorCommandRecord:     cloneRecord(writeCommand.Record),
 		PayloadIdentity:            payloadIdentity,
 		ConfirmationChallenge:      writeCommand.ConfirmationChallenge,
@@ -1655,7 +1667,11 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, plan.ConnectorCommandRecord)
+	operationBody, err := operationCommandBodyForPlan(plan)
+	if err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, operationBody)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -1677,7 +1693,7 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 			Config:     runtime,
 			PathParams: plan.ConnectorCommandPathParams,
 			Query:      plan.ConnectorCommandQuery,
-			Body:       map[string]any(plan.ConnectorCommandRecord),
+			Body:       operationBody,
 		})
 		if err != nil {
 			return ReversePlan{}, connectors.WritePreview{}, err
@@ -1712,6 +1728,10 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 
 func connectorCommandHashForPlan(plan ReversePlan, payloadIdentity []PayloadIdentity) (string, error) {
 	if plan.ConnectorCommandOperation != "" {
+		body, err := operationCommandBodyForPlan(plan)
+		if err != nil {
+			return "", err
+		}
 		return operationConnectorCommandPlanHash(
 			plan.Name,
 			plan.DestinationConnector,
@@ -1722,7 +1742,7 @@ func connectorCommandHashForPlan(plan ReversePlan, payloadIdentity []PayloadIden
 			plan.ConnectorCommandOperation,
 			plan.ConnectorCommandPathParams,
 			plan.ConnectorCommandQuery,
-			plan.ConnectorCommandRecord,
+			body,
 			payloadIdentity,
 		)
 	}
@@ -2216,7 +2236,11 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, plan.ConnectorCommandRecord)
+	operationBody, err := operationCommandBodyForPlan(plan)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, operationBody)
 	if err != nil {
 		return ReverseRun{}, err
 	}
@@ -2257,12 +2281,16 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 	if !ok {
 		return ReverseRun{}, fmt.Errorf("connector %q no longer supports direct writes", writer.Name())
 	}
+	operationBody, err := operationCommandBodyForPlan(plan)
+	if err != nil {
+		return ReverseRun{}, err
+	}
 	operationRequest := connectors.OperationDirectWriteRequest{
 		Operation:  plan.ConnectorCommandOperation,
 		Config:     runtime,
 		PathParams: plan.ConnectorCommandPathParams,
 		Query:      plan.ConnectorCommandQuery,
-		Body:       map[string]any(plan.ConnectorCommandRecord),
+		Body:       operationBody,
 	}
 	preview, err := validateOperationDirectWritePreview(ctx, directWriter, plan, operationRequest)
 	if err != nil {

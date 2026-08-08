@@ -57,19 +57,23 @@ type WriteCommand struct {
 	Write     string `json:"write"`
 	// Operation is set only for a typed direct_write command. Write remains
 	// the plan action for backward-compatible reverse_etl command plans.
-	Operation             string                   `json:"operation,omitempty"`
-	MutationClass         string                   `json:"mutation_class"`
-	TargetResource        string                   `json:"target_resource"`
-	ApprovalRequired      bool                     `json:"approval_required"`
-	Risk                  string                   `json:"risk,omitempty"`
-	Approval              string                   `json:"approval,omitempty"`
-	ConfirmationChallenge string                   `json:"confirmation_challenge,omitempty"`
-	Record                connectors.Record        `json:"record,omitempty"`
-	RedactedRecord        connectors.Record        `json:"redacted_record,omitempty"`
-	PathParams            map[string]string        `json:"path_params,omitempty"`
-	Query                 map[string]string        `json:"query,omitempty"`
-	Batchable             bool                     `json:"batchable"`
-	Preview               *connectors.WritePreview `json:"preview,omitempty"`
+	Operation             string `json:"operation,omitempty"`
+	MutationClass         string `json:"mutation_class"`
+	TargetResource        string `json:"target_resource"`
+	ApprovalRequired      bool   `json:"approval_required"`
+	Risk                  string `json:"risk,omitempty"`
+	Approval              string `json:"approval,omitempty"`
+	ConfirmationChallenge string `json:"confirmation_challenge,omitempty"`
+	// OperationBody is the exact closed body for a direct_write command. It is
+	// kept separate from Record because a provider can declare a root JSON
+	// array, while reverse-ETL records are necessarily JSON objects.
+	OperationBody  any                      `json:"-"`
+	Record         connectors.Record        `json:"record,omitempty"`
+	RedactedRecord connectors.Record        `json:"redacted_record,omitempty"`
+	PathParams     map[string]string        `json:"path_params,omitempty"`
+	Query          map[string]string        `json:"query,omitempty"`
+	Batchable      bool                     `json:"batchable"`
+	Preview        *connectors.WritePreview `json:"preview,omitempty"`
 }
 
 var ErrNotWriteCommand = errors.New("connector command is not a reverse ETL write command")
@@ -222,7 +226,10 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	if metadata.OutputPolicy != cmd.OutputPolicy {
 		return WriteCommand{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write command output_policy does not match declared operation"}
 	}
-	record := connectors.Record(body)
+	record, _ := body.(map[string]any)
+	if record == nil {
+		record = connectors.Record{}
+	}
 	return WriteCommand{
 		Connector:             connector.Name(),
 		Command:               command,
@@ -234,8 +241,9 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		Risk:                  firstNonEmpty(cmd.Risk, metadata.Risk),
 		Approval:              firstNonEmpty(cmd.Approval, metadata.Approval, "direct writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: metadata.ConfirmationChallenge,
+		OperationBody:         cloneOperationBody(body),
 		Record:                cloneRecord(record),
-		RedactedRecord:        redactDirectWriteRecord(record, cmd.RedactFields),
+		RedactedRecord:        directWriteBodySample(body, cmd.RedactFields),
 		PathParams:            cloneStringMap(pathParams),
 		Query:                 cloneStringMap(query),
 		Batchable:             metadata.Batchable,
@@ -501,6 +509,10 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query, Body: body}); err != nil {
 		return Result{}, err
 	}
+	objectBody, ok := body.(map[string]any)
+	if !ok {
+		return Result{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct-read operation body must be an object"}
+	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
 		maxBytes = MaxOperationDirectReadBytes
@@ -513,7 +525,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		Config:       req.Config,
 		PathParams:   pathParams,
 		Query:        query,
-		Body:         body,
+		Body:         objectBody,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
 		Page:         req.Page,
@@ -845,7 +857,7 @@ func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg co
 
 type mappedCommandInputs struct {
 	Query map[string]string
-	Body  map[string]any
+	Body  any
 }
 
 func validateCommandInputs(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
@@ -927,7 +939,7 @@ func validationTargetValue(target string, cfg connectors.RuntimeConfig, inputs m
 	}
 }
 
-func nestedBodyValue(body map[string]any, path string) (any, bool) {
+func nestedBodyValue(body any, path string) (any, bool) {
 	if body == nil || strings.TrimSpace(path) == "" {
 		return nil, false
 	}
@@ -1011,7 +1023,7 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 		return err
 	}
 	switch flag.Type {
-	case "", "string", "boolean", "integer", "number", "string_array", "json_object":
+	case "", "string", "boolean", "integer", "number", "string_array", "json_object", "json_array":
 		return validateFlagMinimum(flag, value)
 	case "enum":
 		for _, allowed := range flag.Values {
@@ -1109,8 +1121,8 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 		if !ok {
 			return nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
-		if flag.Type == "json_object" {
-			return nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s json_object values may map only to an operation body", name)}
+		if flag.Type == "json_object" || flag.Type == "json_array" {
+			return nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s JSON values may map only to an operation body", name)}
 		}
 		value := values[len(values)-1]
 		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
@@ -1144,7 +1156,7 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 	return pathParams, query, nil
 }
 
-func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, error) {
+func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, any, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
@@ -1158,7 +1170,7 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 
 	pathParams := map[string]string{}
 	query := map[string]string{}
-	body := map[string]any{}
+	var body any = map[string]any{}
 	rootBodySet := false
 	for name, values := range flags {
 		if len(values) == 0 {
@@ -1177,8 +1189,8 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		}
 		switch {
 		case strings.HasPrefix(flag.MapsTo, "path."):
-			if flag.Type == "json_object" {
-				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s json_object values may map only to an operation body", name)}
+			if flag.Type == "json_object" || flag.Type == "json_array" {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s JSON values may map only to an operation body", name)}
 			}
 			target := strings.TrimPrefix(flag.MapsTo, "path.")
 			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
@@ -1186,8 +1198,8 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 			}
 			pathParams[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "query."):
-			if flag.Type == "json_object" {
-				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s json_object values may map only to an operation body", name)}
+			if flag.Type == "json_object" || flag.Type == "json_array" {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s JSON values may map only to an operation body", name)}
 			}
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
 			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
@@ -1195,32 +1207,44 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 			}
 			query[target] = stringifyCommandValue(value)
 		case flag.MapsTo == "body":
-			// A named root object is intentionally narrower than generic JSON:
-			// only a direct_write command can use it, it must be the declared
-			// json_object type, and it cannot be mixed with dotted body fields.
-			// The linked operation's body schema still validates the complete
-			// object before the plan can issue a request.
+			// A named root JSON value is intentionally narrower than generic JSON:
+			// only a direct_write command can use it; the declared json_object or
+			// json_array type must match the closed operation body_schema; and it
+			// cannot be mixed with dotted body fields.
 			if cmd.Intent != "direct_write" {
 				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s may map to the root operation body only for direct_write commands", name)}
 			}
-			if flag.Type != "json_object" {
-				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s root operation body requires json_object type", name)}
+			if flag.Type != "json_object" && flag.Type != "json_array" {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s root operation body requires json_object or json_array type", name)}
 			}
-			if rootBodySet || len(body) > 0 {
+			if rootBodySet || operationBodyHasFields(body) {
 				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "root operation body cannot be combined with another body mapping"}
 			}
-			object, ok := value.(map[string]any)
-			if !ok {
-				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s root operation body must be one JSON object", name)}
+			switch flag.Type {
+			case "json_object":
+				object, ok := value.(map[string]any)
+				if !ok {
+					return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s root operation body must be one JSON object", name)}
+				}
+				body = object
+			case "json_array":
+				array, ok := value.([]any)
+				if !ok {
+					return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s root operation body must be one JSON array", name)}
+				}
+				body = array
 			}
-			body = object
 			rootBodySet = true
 		case strings.HasPrefix(flag.MapsTo, "body."):
 			if rootBodySet {
 				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "root operation body cannot be combined with another body mapping"}
 			}
+			object, ok := body.(map[string]any)
+			if !ok {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "dotted body mappings require an object operation body"}
+			}
 			target := strings.TrimPrefix(flag.MapsTo, "body.")
-			if err := setBodyValue(body, target, value); err != nil {
+			if err := setBodyValue(object, target, value); err != nil {
 				return nil, nil, nil, err
 			}
 		default:
@@ -1237,6 +1261,17 @@ func setBodyValue(body map[string]any, path string, value any) error {
 	}
 	_, err = setDottedValue(body, parts, value, path)
 	return err
+}
+
+func operationBodyHasFields(body any) bool {
+	switch typed := body.(type) {
+	case map[string]any:
+		return len(typed) > 0
+	case []any:
+		return len(typed) > 0
+	default:
+		return body != nil
+	}
 }
 
 func validateDottedTargetPath(path, field string) ([]string, error) {
@@ -1484,22 +1519,35 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 			return nil, fmt.Errorf("invalid --%s: %d values is below the minimum of %d", flag.Name, len(out), flag.MinItems)
 		}
 		return out, nil
-	case "json_object":
+	case "json_object", "json_array":
+		kind := "object"
+		if flag.Type == "json_array" {
+			kind = "array"
+		}
 		decoder := json.NewDecoder(strings.NewReader(value))
 		decoder.UseNumber()
 		var parsed any
 		if err := decoder.Decode(&parsed); err != nil {
-			return nil, fmt.Errorf("invalid --%s, want one JSON object", flag.Name)
+			return nil, fmt.Errorf("invalid --%s, want one JSON %s", flag.Name, kind)
 		}
-		object, ok := parsed.(map[string]any)
-		if !ok || object == nil {
-			return nil, fmt.Errorf("invalid --%s, want one JSON object", flag.Name)
+		if flag.Type == "json_object" {
+			object, ok := parsed.(map[string]any)
+			if !ok || object == nil {
+				return nil, fmt.Errorf("invalid --%s, want one JSON object", flag.Name)
+			}
+			parsed = object
+		} else {
+			array, ok := parsed.([]any)
+			if !ok || array == nil {
+				return nil, fmt.Errorf("invalid --%s, want one JSON array", flag.Name)
+			}
+			parsed = array
 		}
 		var trailing any
 		if err := decoder.Decode(&trailing); err != io.EOF {
-			return nil, fmt.Errorf("invalid --%s, want one JSON object", flag.Name)
+			return nil, fmt.Errorf("invalid --%s, want one JSON %s", flag.Name, kind)
 		}
-		return object, nil
+		return parsed, nil
 	default:
 		return nil, &BlockedCommandError{
 			Command: "unknown",
@@ -1544,6 +1592,41 @@ func cloneRecord(in connectors.Record) connectors.Record {
 		out[k] = v
 	}
 	return out
+}
+
+func cloneOperationBody(in any) any {
+	switch typed := in.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, value := range typed {
+			out[key] = cloneOperationBody(value)
+		}
+		return out
+	case connectors.Record:
+		out := make(map[string]any, len(typed))
+		for key, value := range typed {
+			out[key] = cloneOperationBody(value)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for index, value := range typed {
+			out[index] = cloneOperationBody(value)
+		}
+		return out
+	default:
+		return in
+	}
+}
+
+func directWriteBodySample(body any, fields []string) connectors.Record {
+	if object, ok := body.(map[string]any); ok {
+		return redactDirectWriteRecord(connectors.Record(object), fields)
+	}
+	// Reverse-plan samples are records. For a root JSON array, do not create a
+	// parallel generic JSON display surface or leak collaborator payloads; the
+	// private, approval-bound operation body is retained separately.
+	return connectors.Record{"body": "redacted"}
 }
 
 // redactDirectWriteRecord keeps the typed execution record private while

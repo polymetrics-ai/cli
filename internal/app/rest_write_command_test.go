@@ -291,6 +291,98 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	}
 }
 
+func TestDirectWriteCommandRootJSONArrayPlanPreviewApprovalAndExecute(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPost || r.URL.Path != "/api/collaborators" {
+			t.Fatalf("request = %s %s, want POST /api/collaborators", r.Method, r.URL.Path)
+		}
+		var body []map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode root array request: %v", err)
+		}
+		if len(body) != 1 || body[0]["email"] != "fixture@example.invalid" {
+			t.Fatalf("request root body = %#v, want one closed collaborator array item", body)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer server.Close()
+
+	bundle := multipartRestWriteDemoBundle()
+	bundle.Operations[0] = engine.OperationSpec{
+		ID:            multipartRestWriteDemoConnector + ".collaborators-share",
+		Kind:          "rest_write",
+		Summary:       "Share a fixture collaborator array.",
+		Risk:          "high",
+		Approval:      "plan-preview-confirm-execute",
+		OutputPolicy:  "json",
+		MutationClass: "destructive",
+		Confirmation:  &engine.ConfirmationSpec{Kind: connectors.ConfirmationKindDestructive},
+		REST: &engine.RESTOperationSpec{
+			Method:      http.MethodPost,
+			Path:        "/api/collaborators",
+			ContentType: "application/json",
+			MaxBytes:    1024,
+			BodySchema: json.RawMessage(`{
+				"type":"array","minItems":1,"maxItems":2,
+				"items":{"type":"object","additionalProperties":false,"required":["email"],"properties":{"email":{"type":"string"}}}
+			}`),
+		},
+	}
+	bundle.Surface.Endpoints[0].Path = "/api/collaborators"
+	bundle.CLISurface.Commands[0] = engine.CLICommand{
+		Path:         "collaborators share",
+		Summary:      "Share fixture collaborators.",
+		Intent:       "direct_write",
+		Availability: "implemented",
+		Operation:    multipartRestWriteDemoConnector + ".collaborators-share",
+		APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/collaborators"}},
+		OutputPolicy: "json",
+		Risk:         "Shares only the declared collaborator array.",
+		Approval:     "Requires plan -> no-network preview -> typed confirmation -> execute.",
+		Flags: []engine.CLIFlag{{
+			Name: "collaborators", Type: "json_array", Summary: "Closed collaborator array.", MapsTo: "body", Required: true,
+		}},
+	}
+	a := setupMultipartRestWriteDemoAppWithBundle(t, ctx, server.URL, bundle)
+
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  multipartRestWriteDemoConnector,
+		Credential: "multipart-restwrite-local",
+		Path:       []string{"collaborators", "share"},
+		Flags:      map[string][]string{"collaborators": {`[{"email":"fixture@example.invalid"}]`}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand root array: %v", err)
+	}
+	if preview == nil || preview.Digest == "" || calls != 0 {
+		t.Fatalf("root-array plan preview/calls = %#v/%d, want bound no-network preview", preview, calls)
+	}
+	var stored []map[string]any
+	if err := json.Unmarshal(plan.ConnectorCommandBody, &stored); err != nil || len(stored) != 1 || stored[0]["email"] != "fixture@example.invalid" {
+		t.Fatalf("stored root body = %s / %#v, want one canonical collaborator array item", plan.ConnectorCommandBody, stored)
+	}
+	if len(plan.Sample) != 1 || plan.Sample[0]["body"] != "redacted" {
+		t.Fatalf("root-array plan sample = %#v, want closed redacted placeholder", plan.Sample)
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("RunReverseETL root array: %v", err)
+	}
+	if calls != 1 || run.Status != "completed" || run.RecordsSucceeded != 1 {
+		t.Fatalf("root-array run/calls = %+v/%d, want one completed request", run, calls)
+	}
+}
+
 func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.T) {
 	ctx := context.Background()
 	for _, tt := range []struct {
