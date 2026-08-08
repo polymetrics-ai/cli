@@ -137,7 +137,7 @@
       "write": "create_issue",
       "source_cli_path": "gh issue create",
       "risk": "Creates a visible issue in the configured repository.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "title",
@@ -188,7 +188,7 @@
       "write": "update_issue",
       "source_cli_path": "gh issue edit",
       "risk": "Mutates title, body, labels, assignees, milestone, or state on an existing issue.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "PATCH",
@@ -269,7 +269,7 @@
       "write": "close_issue",
       "source_cli_path": "gh issue close",
       "risk": "Closes an existing issue.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -303,7 +303,7 @@
       "write": "reopen_issue",
       "source_cli_path": "gh issue reopen",
       "risk": "Reopens a previously closed issue.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -321,7 +321,7 @@
       "write": "comment_issue",
       "source_cli_path": "gh issue comment",
       "risk": "Adds a visible issue comment.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "POST",
@@ -351,7 +351,7 @@
       "write": "lock_issue",
       "source_cli_path": "gh issue lock",
       "risk": "Locks issue conversation for repository users.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "PUT",
@@ -486,7 +486,7 @@
       "write": "create_pull_request",
       "source_cli_path": "gh pr create",
       "risk": "Creates a visible pull request and may request reviewers.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "POST",
@@ -576,7 +576,7 @@
       "write": "update_pull_request",
       "source_cli_path": "gh pr edit",
       "risk": "Mutates an existing pull request.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "PATCH",
@@ -664,7 +664,7 @@
       "write": "close_pull_request",
       "source_cli_path": "gh pr close",
       "risk": "Closes an existing pull request.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "pull-number",
@@ -688,7 +688,7 @@
       "write": "reopen_pull_request",
       "source_cli_path": "gh pr reopen",
       "risk": "Reopens a previously closed pull request.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "pull-number",
@@ -706,7 +706,7 @@
       "write": "comment_issue",
       "source_cli_path": "gh pr comment",
       "risk": "Comments on a pull request (PRs are issues in GitHub's data model).",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "pull-number",
@@ -730,7 +730,7 @@
       "write": "merge_pull_request",
       "source_cli_path": "gh pr merge",
       "risk": "Merges code into the pull request base branch.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "PUT",
@@ -783,7 +783,7 @@
       "write": "create_pull_request_review",
       "source_cli_path": "gh pr review",
       "risk": "Adds a visible pull request review.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "POST",
@@ -862,7 +862,7 @@
       "write": "update_pull_request_branch",
       "source_cli_path": "gh pr update-branch",
       "risk": "Updates a pull request branch from its base branch.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "PUT",
@@ -900,7 +900,7 @@
       "write": "lock_issue",
       "source_cli_path": "gh pr lock",
       "risk": "Locks a pull request's conversation.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "pull-number",
@@ -981,7 +981,7 @@
       "write": "repos_create_for_authenticated_user",
       "source_cli_path": "gh repo create",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "name",
@@ -1074,7 +1074,7 @@
       "write": "create_fork",
       "source_cli_path": "gh repo fork",
       "risk": "Creates a fork of the configured repository.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "POST",
@@ -1247,7 +1247,7 @@
       "write": "create_deploy_key",
       "source_cli_path": "gh repo deploy-key add",
       "risk": "Adds a deploy key to the repository.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "title",
@@ -1346,7 +1346,7 @@
       "write": "create_release",
       "source_cli_path": "gh release create",
       "risk": "Creates a visible release.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "POST",
@@ -1412,7 +1412,7 @@
       "write": "update_release",
       "source_cli_path": "gh release edit",
       "risk": "Mutates an existing release.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "PATCH",
@@ -1580,7 +1580,7 @@
       "write": "dispatch_workflow",
       "source_cli_path": "gh workflow run",
       "risk": "Triggers a GitHub Actions workflow run.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "POST",
@@ -1649,7 +1649,7 @@
       "write": "rerun_workflow_run",
       "source_cli_path": "gh run rerun",
       "risk": "Reruns a GitHub Actions workflow run.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "POST",
@@ -1673,7 +1673,7 @@
       "write": "cancel_workflow_run",
       "source_cli_path": "gh run cancel",
       "risk": "Cancels a GitHub Actions workflow run.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "POST",
@@ -1777,7 +1777,7 @@
       "write": "create_label",
       "source_cli_path": "gh label create",
       "risk": "Creates a repository label.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "POST",
@@ -1813,7 +1813,7 @@
       "write": "update_label",
       "source_cli_path": "gh label edit",
       "risk": "Mutates a repository label.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "api_surface": [
         {
           "method": "PATCH",
@@ -1917,7 +1917,7 @@
       "availability": "implemented",
       "write": "create_repo_ruleset",
       "risk": "Creates repository rules that can affect contribution workflows.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "notes": "Connector-native write action; the current gh ruleset surface documents check, list, and view, but not create.",
       "api_surface": [
         {
@@ -1963,7 +1963,7 @@
       "availability": "implemented",
       "write": "update_repo_ruleset",
       "risk": "Updates repository rules that can affect contribution workflows.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "notes": "Connector-native write action; the current gh ruleset surface documents check, list, and view, but not update.",
       "api_surface": [
         {
@@ -2048,7 +2048,7 @@
       "write": "actions_secrets_secret_name3",
       "source_cli_path": "gh secret set",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "secret-name",
@@ -2535,7 +2535,7 @@
       "write": "repo2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -2590,7 +2590,7 @@
       "write": "actions_cache_retention_limit2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -2617,7 +2617,7 @@
       "write": "actions_cache_storage_limit2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -2819,7 +2819,7 @@
       "write": "actions_jobs_job_id_rerun",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "job-id",
@@ -2853,7 +2853,7 @@
       "write": "actions_oidc_customization_sub2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -2912,7 +2912,7 @@
       "write": "actions_permissions2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -2939,7 +2939,7 @@
       "write": "actions_permissions_access2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -2966,7 +2966,7 @@
       "write": "actions_permissions_artifact_and_log_retention2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -2993,7 +2993,7 @@
       "write": "actions_permissions_fork_pr_contributor_approval2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3020,7 +3020,7 @@
       "write": "actions_permissions_fork_pr_workflows_private_repos2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3047,7 +3047,7 @@
       "write": "actions_permissions_selected_actions2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3074,7 +3074,7 @@
       "write": "actions_permissions_workflow2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3124,7 +3124,7 @@
       "write": "actions_runners_generate_jitconfig",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3135,7 +3135,7 @@
       "write": "actions_runners_registration_token",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3146,7 +3146,7 @@
       "write": "actions_runners_remove_token",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3239,7 +3239,7 @@
       "write": "actions_runners_runner_id_labels3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "runner-id",
@@ -3257,7 +3257,7 @@
       "write": "actions_runners_runner_id_labels4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "runner-id",
@@ -3322,7 +3322,7 @@
       "write": "actions_runs_run_id_approve",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "run-id",
@@ -3455,7 +3455,7 @@
       "write": "actions_runs_run_id_deployment_protection_rule",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "run-id",
@@ -3569,7 +3569,7 @@
       "write": "actions_runs_run_id_pending_deployments2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "run-id",
@@ -3683,7 +3683,7 @@
       "write": "actions_secrets_secret_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "secret-name",
@@ -3729,7 +3729,7 @@
       "write": "actions_variables2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3781,7 +3781,7 @@
       "write": "actions_variables_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "name",
@@ -3799,7 +3799,7 @@
       "write": "actions_workflows_workflow_id_disable",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "workflow-id",
@@ -3817,7 +3817,7 @@
       "write": "actions_workflows_workflow_id_enable",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "workflow-id",
@@ -3881,7 +3881,7 @@
       "write": "attestations",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3921,7 +3921,7 @@
       "write": "autolinks",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -3977,7 +3977,7 @@
       "write": "automated_security_fixes3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -4029,7 +4029,7 @@
       "write": "branches_branch_protection3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4088,7 +4088,7 @@
       "write": "branches_branch_protection_enforce_admins3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4147,7 +4147,7 @@
       "write": "branches_branch_protection_required_pull_request_reviews3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4206,7 +4206,7 @@
       "write": "branches_branch_protection_required_signatures3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4265,7 +4265,7 @@
       "write": "branches_branch_protection_required_status_checks3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4324,7 +4324,7 @@
       "write": "branches_branch_protection_required_status_checks_contexts3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4342,7 +4342,7 @@
       "write": "branches_branch_protection_required_status_checks_contexts4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4442,7 +4442,7 @@
       "write": "branches_branch_protection_restrictions_apps3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4460,7 +4460,7 @@
       "write": "branches_branch_protection_restrictions_apps4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4519,7 +4519,7 @@
       "write": "branches_branch_protection_restrictions_teams3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4537,7 +4537,7 @@
       "write": "branches_branch_protection_restrictions_teams4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4596,7 +4596,7 @@
       "write": "branches_branch_protection_restrictions_users3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4614,7 +4614,7 @@
       "write": "branches_branch_protection_restrictions_users4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "branch",
@@ -4650,7 +4650,7 @@
       "write": "check_runs",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -4684,7 +4684,7 @@
       "write": "check_runs_check_run_id2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "check-run-id",
@@ -4725,7 +4725,7 @@
       "write": "check_runs_check_run_id_rerequest",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "check-run-id",
@@ -4743,7 +4743,7 @@
       "write": "check_suites",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -4754,7 +4754,7 @@
       "write": "check_suites_preferences",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -4838,7 +4838,7 @@
       "write": "check_suites_check_suite_id_rerequest",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "check-suite-id",
@@ -4932,7 +4932,7 @@
       "write": "code_quality_setup2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -4966,7 +4966,7 @@
       "write": "code_scanning_alerts_alert_number_autofix2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "alert-number",
@@ -4984,7 +4984,7 @@
       "write": "code_scanning_alerts_alert_number_autofix_commits",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "alert-number",
@@ -5201,7 +5201,7 @@
       "write": "code_scanning_codeql_variant_analyses",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -5286,7 +5286,7 @@
       "write": "code_scanning_default_setup2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -5297,7 +5297,7 @@
       "write": "code_scanning_sarifs",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -5386,7 +5386,7 @@
       "write": "codespaces2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -5581,7 +5581,7 @@
       "write": "codespaces_secrets_secret_name3",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "secret-name",
@@ -5638,7 +5638,7 @@
       "write": "comments_comment_id_reactions2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "comment-id",
@@ -5990,7 +5990,7 @@
       "write": "dependabot_secrets_secret_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "secret-name",
@@ -6089,7 +6089,7 @@
       "write": "dependency_graph_snapshots",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -6141,7 +6141,7 @@
       "write": "deployments_deployment_id_statuses2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "deployment-id",
@@ -6159,7 +6159,7 @@
       "write": "dispatches",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -6193,7 +6193,7 @@
       "write": "environments_environment_name_deployment_branch_policies2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "environment-name",
@@ -6264,7 +6264,7 @@
       "write": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "environment-name",
@@ -6311,7 +6311,7 @@
       "write": "environments_environment_name_deployment_protection_rules2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "environment-name",
@@ -6504,7 +6504,7 @@
       "write": "environments_environment_name_secrets_secret_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "environment-name",
@@ -6551,7 +6551,7 @@
       "write": "environments_environment_name_variables2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "environment-name",
@@ -6622,7 +6622,7 @@
       "write": "environments_environment_name_variables_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "environment-name",
@@ -6646,7 +6646,7 @@
       "write": "git_blobs",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -6680,7 +6680,7 @@
       "write": "git_commits",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -6737,7 +6737,7 @@
       "write": "git_trees",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -6855,7 +6855,7 @@
       "write": "hooks_hook_id_deliveries_delivery_id_attempts",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "hook-id",
@@ -6879,7 +6879,7 @@
       "write": "hooks_hook_id_pings",
       "source_cli_path": "",
       "risk": "low",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "hook-id",
@@ -6897,7 +6897,7 @@
       "write": "hooks_hook_id_tests",
       "source_cli_path": "",
       "risk": "low",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "hook-id",
@@ -6942,7 +6942,7 @@
       "write": "immutable_releases3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -6980,7 +6980,7 @@
       "write": "import3",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -6991,7 +6991,7 @@
       "write": "import4",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7025,7 +7025,7 @@
       "write": "import_authors_author_id",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "author-id",
@@ -7059,7 +7059,7 @@
       "write": "import_lfs",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7113,7 +7113,7 @@
       "write": "interaction_limits3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7151,7 +7151,7 @@
       "write": "interaction_limits_pulls_bypass_list3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7180,7 +7180,7 @@
       "write": "invitations_invitation_id2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "invitation-id",
@@ -7232,7 +7232,7 @@
       "write": "issues_comments_comment_id_pin2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "comment-id",
@@ -7289,7 +7289,7 @@
       "write": "issues_comments_comment_id_reactions2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "comment-id",
@@ -7383,7 +7383,7 @@
       "write": "issues_issue_number_dependencies_blocked_by2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -7471,7 +7471,7 @@
       "write": "issues_issue_number_issue_field_values2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -7489,7 +7489,7 @@
       "write": "issues_issue_number_issue_field_values3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -7593,7 +7593,7 @@
       "write": "issues_issue_number_reactions2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -7676,7 +7676,7 @@
       "write": "issues_issue_number_sub_issues2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -7694,7 +7694,7 @@
       "write": "issues_issue_number_sub_issues_priority",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -7735,7 +7735,7 @@
       "write": "merge_upstream",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7810,7 +7810,7 @@
       "write": "notifications2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7848,7 +7848,7 @@
       "write": "pages3",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7859,7 +7859,7 @@
       "write": "pages4",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7886,7 +7886,7 @@
       "write": "pages_builds2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7936,7 +7936,7 @@
       "write": "pages_deployments",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -7970,7 +7970,7 @@
       "write": "pages_deployments_pages_deployment_id_cancel",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "pages-deployment-id",
@@ -8031,7 +8031,7 @@
       "write": "private_vulnerability_reporting3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -8058,7 +8058,7 @@
       "write": "properties_values2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -8108,7 +8108,7 @@
       "write": "pulls_comments_comment_id_reactions2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "comment-id",
@@ -8150,7 +8150,7 @@
       "write": "pulls_pull_number_codespaces",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "pull-number",
@@ -8382,7 +8382,7 @@
       "write": "releases_generate_notes",
       "source_cli_path": "",
       "risk": "low",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -8416,7 +8416,7 @@
       "write": "releases_release_id_assets2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "release-id",
@@ -8471,7 +8471,7 @@
       "write": "releases_release_id_reactions2",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "release-id",
@@ -8675,7 +8675,7 @@
       "write": "secret_scanning_push_protection_bypasses",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -8702,7 +8702,7 @@
       "write": "security_advisories",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -8713,7 +8713,7 @@
       "write": "security_advisories_reports",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -8724,7 +8724,7 @@
       "write": "security_advisories_ghsa_id",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "ghsa-id",
@@ -8742,7 +8742,7 @@
       "write": "security_advisories_ghsa_id_cve",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "ghsa-id",
@@ -8760,7 +8760,7 @@
       "write": "security_advisories_ghsa_id_forks",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "ghsa-id",
@@ -8858,7 +8858,7 @@
       "write": "statuses_sha",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "sha",
@@ -8903,7 +8903,7 @@
       "write": "subscription3",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -9076,7 +9076,7 @@
       "write": "vulnerability_alerts3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": []
     },
     {
@@ -18517,7 +18517,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agent-tasks/agent-tasks#start-a-task",
       "risk": "Creates provider-side state: Start a task.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "prompt",
@@ -18573,7 +18573,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/apps/apps#create-a-github-app-from-a-manifest",
       "risk": "Creates provider-side state: Create a GitHub App from a manifest.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "code",
@@ -18599,7 +18599,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/apps/webhooks#update-a-webhook-configuration-for-an-app",
       "risk": "Mutates existing provider-side state: Update a webhook configuration for an app.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "url",
@@ -18642,7 +18642,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/apps/webhooks#redeliver-a-delivery-for-an-app-webhook",
       "risk": "Creates provider-side state: Redeliver a delivery for an app webhook.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "delivery-id",
@@ -18694,7 +18694,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/apps/apps#suspend-an-app-installation",
       "risk": "Mutates existing provider-side state: Suspend an app installation.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "installation-id",
@@ -18746,7 +18746,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/apps/apps#create-a-scoped-access-token",
       "risk": "Creates provider-side state: Create a scoped access token.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "client-id",
@@ -18797,7 +18797,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/credentials/revoke#revoke-a-list-of-credentials",
       "risk": "Creates provider-side state: Revoke a list of credentials.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "credentials",
@@ -18823,7 +18823,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/cache#set-github-actions-cache-retention-limit-for-an-enterprise",
       "risk": "Mutates existing provider-side state: Set GitHub Actions cache retention limit for an enterprise.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -18855,7 +18855,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/cache#set-github-actions-cache-storage-limit-for-an-enterprise",
       "risk": "Mutates existing provider-side state: Set GitHub Actions cache storage limit for an enterprise.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -18887,7 +18887,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/oidc#create-an-oidc-custom-property-inclusion-for-an-enterprise",
       "risk": "Creates provider-side state: Create an OIDC custom property inclusion for an enterprise.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -18953,7 +18953,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#create-a-code-security-configuration-for-an-enterprise",
       "risk": "Creates provider-side state: Create a code security configuration for an enterprise.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19190,7 +19190,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#update-a-custom-code-security-configuration-for-an-enterprise",
       "risk": "Mutates existing provider-side state: Update a custom code security configuration for an enterprise.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19466,7 +19466,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#attach-an-enterprise-configuration-to-repositories",
       "risk": "Creates provider-side state: Attach an enterprise configuration to repositories.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19510,7 +19510,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#set-a-code-security-configuration-as-a-default-for-an-enterprise",
       "risk": "Mutates existing provider-side state: Set a code security configuration as a default for an enterprise.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19555,7 +19555,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-coding-agent-management#set-the-coding-agent-policy-for-an-enterprise",
       "risk": "Mutates existing provider-side state: Set the coding agent policy for an enterprise.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19594,7 +19594,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-coding-agent-management#add-organizations-to-the-enterprise-coding-agent-policy",
       "risk": "Creates provider-side state: Add organizations to the enterprise coding agent policy.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19658,7 +19658,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/repository-access#updates-dependabots-repository-access-list-for-an-enterprise",
       "risk": "Mutates existing provider-side state: Updates Dependabot's repository access list for an enterprise.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19684,7 +19684,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/repository-access#set-the-default-repository-access-level-for-dependabot-in-an-enterprise",
       "risk": "Mutates existing provider-side state: Set the default repository access level for Dependabot in an enterprise.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19721,7 +19721,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-teams#create-an-enterprise-team",
       "risk": "Creates provider-side state: Create an enterprise team.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19797,7 +19797,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-members#bulk-add-team-members",
       "risk": "Creates provider-side state: Bulk add team members.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19830,7 +19830,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-members#bulk-remove-team-members",
       "risk": "Creates provider-side state: Bulk remove team members.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19863,7 +19863,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-members#add-team-member",
       "risk": "Mutates existing provider-side state: Add team member.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19929,7 +19929,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-organizations#add-organization-assignments",
       "risk": "Creates provider-side state: Add organization assignments.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19962,7 +19962,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-organizations#remove-organization-assignments",
       "risk": "Creates provider-side state: Remove organization assignments.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -19995,7 +19995,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-organizations#add-an-organization-assignment",
       "risk": "Mutates existing provider-side state: Add an organization assignment.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -20061,7 +20061,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-teams#update-an-enterprise-team",
       "risk": "Mutates existing provider-side state: Update an enterprise team.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enterprise",
@@ -20176,7 +20176,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/gists/gists#create-a-gist",
       "risk": "Creates provider-side state: Create a gist.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "description",
@@ -20208,7 +20208,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/gists/gists#update-a-gist",
       "risk": "Mutates existing provider-side state: Update a gist.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "gist-id",
@@ -20266,7 +20266,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/gists/comments#create-a-gist-comment",
       "risk": "Creates provider-side state: Create a gist comment.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "gist-id",
@@ -20299,7 +20299,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/gists/comments#update-a-gist-comment",
       "risk": "Mutates existing provider-side state: Update a gist comment.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "gist-id",
@@ -20372,7 +20372,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/gists/gists#fork-a-gist",
       "risk": "Creates provider-side state: Fork a gist.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "gist-id",
@@ -20398,7 +20398,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/gists/gists#star-a-gist",
       "risk": "Mutates existing provider-side state: Star a gist.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "gist-id",
@@ -20468,7 +20468,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/activity/notifications#mark-notifications-as-read",
       "risk": "Mutates existing provider-side state: Mark notifications as read.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "last-read-at",
@@ -20499,7 +20499,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/activity/notifications#mark-a-thread-as-read",
       "risk": "Mutates existing provider-side state: Mark a thread as read.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "thread-id",
@@ -20551,7 +20551,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/activity/notifications#set-a-thread-subscription",
       "risk": "Mutates existing provider-side state: Set a thread subscription.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "thread-id",
@@ -20609,7 +20609,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/cache#set-github-actions-cache-retention-limit-for-an-organization",
       "risk": "Mutates existing provider-side state: Set GitHub Actions cache retention limit for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -20641,7 +20641,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/cache#set-github-actions-cache-storage-limit-for-an-organization",
       "risk": "Mutates existing provider-side state: Set GitHub Actions cache storage limit for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -20673,7 +20673,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/billing/budgets#create-a-budget-for-an-organization",
       "risk": "Creates provider-side state: Create a budget for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -20747,7 +20747,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/billing/budgets#update-a-budget-for-an-organization",
       "risk": "Mutates existing provider-side state: Update a budget for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -20863,7 +20863,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/orgs#update-an-organization",
       "risk": "Mutates existing provider-side state: Update an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21106,7 +21106,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/hosted-runners#create-a-github-hosted-runner-for-an-organization",
       "risk": "Creates provider-side state: Create a GitHub-hosted runner for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21245,7 +21245,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/hosted-runners#update-a-github-hosted-runner-for-an-organization",
       "risk": "Mutates existing provider-side state: Update a GitHub-hosted runner for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21370,7 +21370,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/oidc#create-an-oidc-custom-property-inclusion-for-an-organization",
       "risk": "Creates provider-side state: Create an OIDC custom property inclusion for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21436,7 +21436,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization",
       "risk": "Mutates existing provider-side state: Set the customization template for an OIDC subject claim for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21474,7 +21474,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-github-actions-permissions-for-an-organization",
       "risk": "Mutates existing provider-side state: Set GitHub Actions permissions for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21529,7 +21529,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-artifact-and-log-retention-settings-for-an-organization",
       "risk": "Mutates existing provider-side state: Set artifact and log retention settings for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21562,7 +21562,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-fork-pr-contributor-approval-permissions-for-an-organization",
       "risk": "Mutates existing provider-side state: Set fork PR contributor approval permissions for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21600,7 +21600,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-private-repo-fork-pr-workflow-settings-for-an-organization",
       "risk": "Mutates existing provider-side state: Set private repo fork PR workflow settings for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21651,7 +21651,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-selected-repositories-enabled-for-github-actions-in-an-organization",
       "risk": "Mutates existing provider-side state: Set selected repositories enabled for GitHub Actions in an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21678,7 +21678,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#enable-a-selected-repository-for-github-actions-in-an-organization",
       "risk": "Mutates existing provider-side state: Enable a selected repository for GitHub Actions in an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21744,7 +21744,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-allowed-actions-and-reusable-workflows-for-an-organization",
       "risk": "Mutates existing provider-side state: Set allowed actions and reusable workflows for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21788,7 +21788,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-self-hosted-runners-settings-for-an-organization",
       "risk": "Mutates existing provider-side state: Set self-hosted runners settings for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21826,7 +21826,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-repositories-allowed-to-use-self-hosted-runners-in-an-organization",
       "risk": "Mutates existing provider-side state: Set repositories allowed to use self-hosted runners in an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21853,7 +21853,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#add-a-repository-to-the-list-of-repositories-allowed-to-use-self-hosted-runners-in-an-organization",
       "risk": "Mutates existing provider-side state: Add a repository to the list of repositories allowed to use self-hosted runners in an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21919,7 +21919,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-default-workflow-permissions-for-an-organization",
       "risk": "Mutates existing provider-side state: Set default workflow permissions for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -21961,7 +21961,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runner-groups#create-a-self-hosted-runner-group-for-an-organization",
       "risk": "Creates provider-side state: Create a self-hosted runner group for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22029,7 +22029,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runner-groups#update-a-self-hosted-runner-group-for-an-organization",
       "risk": "Mutates existing provider-side state: Update a self-hosted runner group for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22137,7 +22137,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runner-groups#set-repository-access-for-a-self-hosted-runner-group-in-an-organization",
       "risk": "Mutates existing provider-side state: Set repository access for a self-hosted runner group in an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22171,7 +22171,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runner-groups#add-repository-access-to-a-self-hosted-runner-group-in-an-organization",
       "risk": "Mutates existing provider-side state: Add repository access to a self-hosted runner group in an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22251,7 +22251,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runner-groups#set-self-hosted-runners-in-a-group-for-an-organization",
       "risk": "Mutates existing provider-side state: Set self-hosted runners in a group for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22285,7 +22285,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runner-groups#add-a-self-hosted-runner-to-a-group-for-an-organization",
       "risk": "Mutates existing provider-side state: Add a self-hosted runner to a group for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22365,7 +22365,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runners#create-configuration-for-a-just-in-time-runner-for-an-organization",
       "risk": "Creates provider-side state: Create configuration for a just-in-time runner for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22418,7 +22418,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runners#create-a-registration-token-for-an-organization",
       "risk": "Creates provider-side state: Create a registration token for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22444,7 +22444,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runners#create-a-remove-token-for-an-organization",
       "risk": "Creates provider-side state: Create a remove token for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22503,7 +22503,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runners#add-custom-labels-to-a-self-hosted-runner-for-an-organization",
       "risk": "Creates provider-side state: Add custom labels to a self-hosted runner for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22543,7 +22543,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runners#set-custom-labels-for-a-self-hosted-runner-for-an-organization",
       "risk": "Mutates existing provider-side state: Set custom labels for a self-hosted runner for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22656,7 +22656,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/secrets#create-or-update-an-organization-secret",
       "risk": "Mutates existing provider-side state: Create or update an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22748,7 +22748,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/secrets#set-selected-repositories-for-an-organization-secret",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22782,7 +22782,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/secrets#add-selected-repository-to-an-organization-secret",
       "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22862,7 +22862,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/variables#create-an-organization-variable",
       "risk": "Creates provider-side state: Create an organization variable.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22914,7 +22914,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/variables#update-an-organization-variable",
       "risk": "Mutates existing provider-side state: Update an organization variable.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -22997,7 +22997,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/variables#set-selected-repositories-for-an-organization-variable",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization variable.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23031,7 +23031,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/variables#add-selected-repository-to-an-organization-variable",
       "risk": "Mutates existing provider-side state: Add selected repository to an organization variable.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23111,7 +23111,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agents/secrets#create-or-update-an-organization-secret",
       "risk": "Mutates existing provider-side state: Create or update an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23203,7 +23203,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agents/secrets#set-selected-repositories-for-an-organization-secret",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23237,7 +23237,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agents/secrets#add-selected-repository-to-an-organization-secret",
       "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23317,7 +23317,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agents/variables#create-an-organization-variable",
       "risk": "Creates provider-side state: Create an organization variable.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23369,7 +23369,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agents/variables#update-an-organization-variable",
       "risk": "Mutates existing provider-side state: Update an organization variable.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23452,7 +23452,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agents/variables#set-selected-repositories-for-an-organization-variable",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization variable.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23486,7 +23486,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agents/variables#add-selected-repository-to-an-organization-variable",
       "risk": "Mutates existing provider-side state: Add selected repository to an organization variable.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23566,7 +23566,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/artifact-metadata#create-an-artifact-deployment-record",
       "risk": "Creates provider-side state: Create an artifact deployment record.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23667,7 +23667,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/artifact-metadata#set-cluster-deployment-records",
       "risk": "Creates provider-side state: Set cluster deployment records.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23726,7 +23726,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/artifact-metadata#create-a-cluster-deployment-records-job",
       "risk": "Creates provider-side state: Create a cluster deployment records job.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23773,7 +23773,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/artifact-metadata#create-artifact-metadata-storage-record",
       "risk": "Creates provider-side state: Create artifact metadata storage record.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -23971,7 +23971,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/blocking#block-a-user-from-an-organization",
       "risk": "Mutates existing provider-side state: Block a user from an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -24037,7 +24037,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/campaigns/campaigns#update-a-campaign",
       "risk": "Mutates existing provider-side state: Update a campaign.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -24149,7 +24149,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#create-a-code-security-configuration",
       "risk": "Creates provider-side state: Create a code security configuration.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -24435,7 +24435,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#update-a-code-security-configuration",
       "risk": "Mutates existing provider-side state: Update a code security configuration.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -24733,7 +24733,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#attach-a-configuration-to-repositories",
       "risk": "Creates provider-side state: Attach a configuration to repositories.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -24780,7 +24780,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#set-a-code-security-configuration-as-a-default-for-an-organization",
       "risk": "Mutates existing provider-side state: Set a code security configuration as a default for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -24825,7 +24825,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organizations#manage-access-control-for-organization-codespaces",
       "risk": "Mutates existing provider-side state: Manage access control for organization codespaces (deprecated by GitHub, still documented).",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -24870,7 +24870,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organizations#add-users-to-codespaces-access-for-an-organization",
       "risk": "Creates provider-side state: Add users to Codespaces access for an organization (deprecated by GitHub, still documented).",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -24936,7 +24936,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organization-secrets#create-or-update-an-organization-secret",
       "risk": "Mutates existing provider-side state: Create or update an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25026,7 +25026,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organization-secrets#set-selected-repositories-for-an-organization-secret",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25060,7 +25060,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organization-secrets#add-selected-repository-to-an-organization-secret",
       "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25140,7 +25140,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/copilot-spaces#create-an-organization-copilot-space",
       "risk": "Creates provider-side state: Create an organization Copilot Space.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25197,7 +25197,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/copilot-spaces#set-an-organization-copilot-space",
       "risk": "Mutates existing provider-side state: Set an organization Copilot Space.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25293,7 +25293,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/collaborators#add-a-collaborator-to-an-organization-copilot-space",
       "risk": "Creates provider-side state: Add a collaborator to an organization Copilot Space.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25356,7 +25356,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/collaborators#set-a-collaborator-role-for-an-organization-copilot-space",
       "risk": "Mutates existing provider-side state: Set a collaborator role for an organization Copilot Space.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25463,7 +25463,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#create-a-resource-for-an-organization-copilot-space",
       "risk": "Creates provider-side state: Create a resource for an organization Copilot Space.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25511,7 +25511,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#set-a-resource-for-an-organization-copilot-space",
       "risk": "Mutates existing provider-side state: Set a resource for an organization Copilot Space.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25591,7 +25591,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-user-management#add-teams-to-the-copilot-subscription-for-an-organization",
       "risk": "Creates provider-side state: Add teams to the Copilot subscription for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25657,7 +25657,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-user-management#add-users-to-the-copilot-subscription-for-an-organization",
       "risk": "Creates provider-side state: Add users to the Copilot subscription for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25723,7 +25723,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-coding-agent-management#set-copilot-cloud-agent-permissions-for-an-organization",
       "risk": "Mutates existing provider-side state: Set Copilot cloud agent permissions for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25761,7 +25761,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-coding-agent-management#set-selected-repositories-for-copilot-cloud-agent-in-an-organization",
       "risk": "Mutates existing provider-side state: Set selected repositories for Copilot cloud agent in an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25788,7 +25788,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-coding-agent-management#enable-a-repository-for-copilot-cloud-agent-in-an-organization",
       "risk": "Mutates existing provider-side state: Enable a repository for Copilot cloud agent in an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25854,7 +25854,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-content-exclusion-management#set-copilot-content-exclusion-rules-for-an-organization",
       "risk": "Mutates existing provider-side state: Set Copilot content exclusion rules for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25880,7 +25880,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/repository-access#updates-dependabots-repository-access-list-for-an-organization",
       "risk": "Mutates existing provider-side state: Updates Dependabot's repository access list for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25906,7 +25906,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/repository-access#set-the-default-repository-access-level-for-dependabot",
       "risk": "Mutates existing provider-side state: Set the default repository access level for Dependabot.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -25943,7 +25943,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/secrets#create-or-update-an-organization-secret",
       "risk": "Mutates existing provider-side state: Create or update an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26039,7 +26039,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/secrets#set-selected-repositories-for-an-organization-secret",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26073,7 +26073,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/secrets#add-selected-repository-to-an-organization-secret",
       "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26153,7 +26153,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/webhooks#create-an-organization-webhook",
       "risk": "Creates provider-side state: Create an organization webhook.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26205,7 +26205,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/webhooks#update-an-organization-webhook",
       "risk": "Mutates existing provider-side state: Update an organization webhook.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26289,7 +26289,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/webhooks#update-a-webhook-configuration-for-an-organization",
       "risk": "Mutates existing provider-side state: Update a webhook configuration for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26346,7 +26346,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/webhooks#redeliver-a-delivery-for-an-organization-webhook",
       "risk": "Creates provider-side state: Redeliver a delivery for an organization webhook.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26386,7 +26386,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/webhooks#ping-an-organization-webhook",
       "risk": "Creates provider-side state: Ping an organization webhook.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26419,7 +26419,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/interactions/orgs#set-interaction-restrictions-for-an-organization",
       "risk": "Mutates existing provider-side state: Set interaction restrictions for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26496,7 +26496,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/interactions/orgs#update-pull-request-creation-cap-for-an-org",
       "risk": "Mutates existing provider-side state: Update pull request creation cap for an org.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26535,7 +26535,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/members#create-an-organization-invitation",
       "risk": "Creates provider-side state: Create an organization invitation.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26618,7 +26618,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/issue-fields#create-issue-field-for-an-organization",
       "risk": "Creates provider-side state: Create issue field for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26681,7 +26681,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/issue-fields#update-issue-field-for-an-organization",
       "risk": "Mutates existing provider-side state: Update issue field for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26769,7 +26769,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/issue-types#create-issue-type-for-an-organization",
       "risk": "Creates provider-side state: Create issue type for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -26831,7 +26831,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/issue-types#update-issue-type-for-an-organization",
       "risk": "Mutates existing provider-side state: Update issue type for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27006,7 +27006,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organizations#stop-a-codespace-for-an-organization-user",
       "risk": "Creates provider-side state: Stop a codespace for an organization user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27046,7 +27046,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/members#set-organization-membership-for-a-user",
       "risk": "Mutates existing provider-side state: Set organization membership for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27122,7 +27122,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/migrations/orgs#start-an-organization-migration",
       "risk": "Creates provider-side state: Start an organization migration.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27309,7 +27309,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/organization-roles#assign-an-organization-role-to-a-team",
       "risk": "Mutates existing provider-side state: Assign an organization role to a team.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27422,7 +27422,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/organization-roles#assign-an-organization-role-to-a-user",
       "risk": "Mutates existing provider-side state: Assign an organization role to a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27502,7 +27502,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/outside-collaborators#convert-an-organization-member-to-outside-collaborator",
       "risk": "Mutates existing provider-side state: Convert an organization member to outside collaborator.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27614,7 +27614,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/packages/packages#restore-a-package-for-an-organization",
       "risk": "Creates provider-side state: Restore a package for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27701,7 +27701,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/packages/packages#restore-package-version-for-an-organization",
       "risk": "Creates provider-side state: Restore package version for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27748,7 +27748,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/personal-access-tokens#review-requests-to-access-organization-resources-with-fine-grained-personal-access-tokens",
       "risk": "Creates provider-side state: Review requests to access organization resources with fine-grained personal access tokens.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27791,7 +27791,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/personal-access-tokens#review-a-request-to-access-organization-resources-with-a-fine-grained-personal-access-token",
       "risk": "Creates provider-side state: Review a request to access organization resources with a fine-grained personal access token.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27841,7 +27841,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/personal-access-tokens#update-the-access-to-organization-resources-via-fine-grained-personal-access-tokens",
       "risk": "Creates provider-side state: Update the access to organization resources via fine-grained personal access tokens.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27878,7 +27878,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/personal-access-tokens#update-the-access-a-fine-grained-personal-access-token-has-to-organization-resources",
       "risk": "Creates provider-side state: Update the access a fine-grained personal access token has to organization resources.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -27921,7 +27921,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/private-registries/organization-configurations#create-a-private-registry-for-an-organization",
       "risk": "Creates provider-side state: Create a private registry for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28119,7 +28119,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/private-registries/organization-configurations#update-a-private-registry-for-an-organization",
       "risk": "Mutates existing provider-side state: Update a private registry for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28354,7 +28354,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/drafts#create-draft-item-for-organization-owned-project",
       "risk": "Creates provider-side state: Create draft item for organization owned project.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28400,7 +28400,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#update-project-item-for-organization",
       "risk": "Mutates existing provider-side state: Update project item for organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28481,7 +28481,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/views#create-a-view-for-an-organization-owned-project",
       "risk": "Creates provider-side state: Create a view for an organization-owned project.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28539,7 +28539,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/custom-properties#create-or-update-custom-properties-for-an-organization",
       "risk": "Mutates existing provider-side state: Create or update custom properties for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28566,7 +28566,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/custom-properties#create-or-update-a-custom-property-for-an-organization",
       "risk": "Mutates existing provider-side state: Create or update a custom property for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28686,7 +28686,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/custom-properties#create-or-update-custom-property-values-for-organization-repositories",
       "risk": "Mutates existing provider-side state: Create or update custom property values for organization repositories.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28720,7 +28720,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/members#set-public-organization-membership-for-the-authenticated-user",
       "risk": "Mutates existing provider-side state: Set public organization membership for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28786,7 +28786,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/repos/repos#create-an-organization-repository",
       "risk": "Creates provider-side state: Create an organization repository.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -28979,7 +28979,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/rules#create-an-organization-repository-ruleset",
       "risk": "Creates provider-side state: Create an organization repository ruleset.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29036,7 +29036,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/rules#update-an-organization-repository-ruleset",
       "risk": "Mutates existing provider-side state: Update an organization repository ruleset.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29131,7 +29131,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#bulk-create-organization-custom-patterns",
       "risk": "Creates provider-side state: Bulk create organization custom patterns.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29195,7 +29195,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/push-protection#update-organization-pattern-configurations",
       "risk": "Mutates existing provider-side state: Update organization pattern configurations.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29227,7 +29227,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/security-managers#add-a-security-manager-team",
       "risk": "Mutates existing provider-side state: Add a security manager team (deprecated by GitHub, still documented).",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29293,7 +29293,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/orgs#set-immutable-releases-settings-for-an-organization",
       "risk": "Mutates existing provider-side state: Set immutable releases settings for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29331,7 +29331,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/orgs#set-selected-repositories-for-immutable-releases-enforcement",
       "risk": "Mutates existing provider-side state: Set selected repositories for immutable releases enforcement.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29358,7 +29358,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/orgs#enable-a-selected-repository-for-immutable-releases-in-an-organization",
       "risk": "Mutates existing provider-side state: Enable a selected repository for immutable releases in an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29424,7 +29424,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/network-configurations#create-a-hosted-compute-network-configuration-for-an-organization",
       "risk": "Creates provider-side state: Create a hosted compute network configuration for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29486,7 +29486,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/network-configurations#update-a-hosted-compute-network-configuration-for-an-organization",
       "risk": "Mutates existing provider-side state: Update a hosted compute network configuration for an organization.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29586,7 +29586,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/teams/teams#create-a-team",
       "risk": "Creates provider-side state: Create a team.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29679,7 +29679,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/teams/teams#update-a-team",
       "risk": "Mutates existing provider-side state: Update a team.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29800,7 +29800,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/teams/members#add-or-update-team-membership-for-a-user",
       "risk": "Mutates existing provider-side state: Add or update team membership for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29890,7 +29890,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/teams/teams#add-or-update-team-repository-permissions",
       "risk": "Mutates existing provider-side state: Add or update team repository permissions.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -29962,7 +29962,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/orgs#enable-or-disable-a-security-feature-for-an-organization",
       "risk": "Creates provider-side state: Enable or disable a security feature for an organization (deprecated by GitHub, still documented).",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -30012,7 +30012,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/interactions/repos#update-pull-request-creation-cap-for-a-repository",
       "risk": "Mutates existing provider-side state: Update pull request creation cap for a repository.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "enabled",
@@ -30044,7 +30044,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/issues/issues#approve-an-issue-suggestion",
       "risk": "Creates provider-side state: Approve an issue suggestion.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -30077,7 +30077,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/issues/issues#dismiss-an-issue-suggestion",
       "risk": "Creates provider-side state: Dismiss an issue suggestion.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "issue-number",
@@ -30110,7 +30110,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/pulls/pulls#merge-a-pull-request-asynchronously",
       "risk": "Mutates existing provider-side state: Merge a pull request asynchronously.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "pull-number",
@@ -30176,7 +30176,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#bulk-create-repository-custom-patterns",
       "risk": "Creates provider-side state: Bulk create repository custom patterns.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [],
       "api_surface": [
         {
@@ -30225,7 +30225,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/pulls/stacks#create-a-pull-request-stack",
       "risk": "Creates provider-side state: Create a pull request stack.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [],
       "api_surface": [
         {
@@ -30244,7 +30244,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/pulls/stacks#add-pull-requests-to-a-pull-request-stack",
       "risk": "Creates provider-side state: Add pull requests to a pull request stack.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "stack-number",
@@ -30271,7 +30271,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/pulls/stacks#remove-pull-requests-from-a-pull-request-stack",
       "risk": "Creates provider-side state: Remove pull requests from a pull request stack.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "stack-number",
@@ -30297,7 +30297,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/repos/repos#create-a-repository-using-a-template",
       "risk": "Creates provider-side state: Create a repository using a template.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "template-owner",
@@ -30361,7 +30361,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/teams/teams#update-a-team-legacy",
       "risk": "Mutates existing provider-side state: Update a team (Legacy) (deprecated by GitHub, still documented).",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "team-id",
@@ -30469,7 +30469,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/teams/members#add-team-member-legacy",
       "risk": "Mutates existing provider-side state: Add team member (Legacy) (deprecated by GitHub, still documented).",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "team-id",
@@ -30535,7 +30535,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/teams/members#add-or-update-team-membership-for-a-user-legacy",
       "risk": "Mutates existing provider-side state: Add or update team membership for a user (Legacy) (deprecated by GitHub, still documented).",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "team-id",
@@ -30611,7 +30611,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/teams/teams#add-or-update-team-repository-permissions-legacy",
       "risk": "Mutates existing provider-side state: Add or update team repository permissions (Legacy) (deprecated by GitHub, still documented).",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "team-id",
@@ -30674,7 +30674,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/users/users#update-the-authenticated-user",
       "risk": "Mutates existing provider-side state: Update the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "name",
@@ -30741,7 +30741,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/users/blocking#block-a-user",
       "risk": "Mutates existing provider-side state: Block a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -30793,7 +30793,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/secrets#create-or-update-a-secret-for-the-authenticated-user",
       "risk": "Mutates existing provider-side state: Create or update a secret for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "secret-name",
@@ -30864,7 +30864,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/secrets#set-selected-repositories-for-a-user-secret",
       "risk": "Mutates existing provider-side state: Set selected repositories for a user secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "secret-name",
@@ -30891,7 +30891,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/secrets#add-a-selected-repository-to-a-user-secret",
       "risk": "Mutates existing provider-side state: Add a selected repository to a user secret.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "secret-name",
@@ -30957,7 +30957,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#update-a-codespace-for-the-authenticated-user",
       "risk": "Mutates existing provider-side state: Update a codespace for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "codespace-name",
@@ -31027,7 +31027,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#export-a-codespace-for-the-authenticated-user",
       "risk": "Creates provider-side state: Export a codespace for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "codespace-name",
@@ -31053,7 +31053,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#create-a-repository-from-an-unpublished-codespace",
       "risk": "Creates provider-side state: Create a repository from an unpublished codespace.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "codespace-name",
@@ -31091,7 +31091,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#start-a-codespace-for-the-authenticated-user",
       "risk": "Creates provider-side state: Start a codespace for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "codespace-name",
@@ -31117,7 +31117,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#stop-a-codespace-for-the-authenticated-user",
       "risk": "Creates provider-side state: Stop a codespace for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "codespace-name",
@@ -31143,7 +31143,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/users/emails#set-primary-email-visibility-for-the-authenticated-user",
       "risk": "Mutates existing provider-side state: Set primary email visibility for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "visibility",
@@ -31173,7 +31173,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/users/followers#follow-a-user",
       "risk": "Mutates existing provider-side state: Follow a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -31225,7 +31225,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/users/gpg-keys#create-a-gpg-key-for-the-authenticated-user",
       "risk": "Creates provider-side state: Create a GPG key for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "armored-public-key",
@@ -31283,7 +31283,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/apps/installations#add-a-repository-to-an-app-installation",
       "risk": "Mutates existing provider-side state: Add a repository to an app installation.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "installation-id",
@@ -31349,7 +31349,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/interactions/user#set-interaction-restrictions-for-your-public-repositories",
       "risk": "Mutates existing provider-side state: Set interaction restrictions for your public repositories.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "limit",
@@ -31411,7 +31411,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/users/keys#create-a-public-ssh-key-for-the-authenticated-user",
       "risk": "Creates provider-side state: Create a public SSH key for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "key",
@@ -31469,7 +31469,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/members#update-an-organization-membership-for-the-authenticated-user",
       "risk": "Mutates existing provider-side state: Update an organization membership for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "org",
@@ -31505,7 +31505,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/migrations/users#start-a-user-migration",
       "risk": "Creates provider-side state: Start a user migration.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "repositories",
@@ -31671,7 +31671,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/packages/packages#restore-a-package-for-the-authenticated-user",
       "risk": "Creates provider-side state: Restore a package for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "package-type",
@@ -31744,7 +31744,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/packages/packages#restore-a-package-version-for-the-authenticated-user",
       "risk": "Creates provider-side state: Restore a package version for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "package-type",
@@ -31784,7 +31784,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/repos/repos#create-a-repository-for-the-authenticated-user",
       "risk": "Creates provider-side state: Create a repository for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "name",
@@ -31960,7 +31960,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/collaborators/invitations#accept-a-repository-invitation",
       "risk": "Mutates existing provider-side state: Accept a repository invitation.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "invitation-id",
@@ -32012,7 +32012,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/users/social-accounts#add-social-accounts-for-the-authenticated-user",
       "risk": "Creates provider-side state: Add social accounts for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "account-urls",
@@ -32064,7 +32064,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/users/ssh-signing-keys#create-a-ssh-signing-key-for-the-authenticated-user",
       "risk": "Creates provider-side state: Create a SSH signing key for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "key",
@@ -32122,7 +32122,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/activity/starring#star-a-repository-for-the-authenticated-user",
       "risk": "Mutates existing provider-side state: Star a repository for the authenticated user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [],
       "api_surface": [
         {
@@ -32158,7 +32158,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/drafts#create-draft-item-for-user-owned-project",
       "risk": "Creates provider-side state: Create draft item for user owned project.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "user-id",
@@ -32204,7 +32204,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/views#create-a-view-for-a-user-owned-project",
       "risk": "Creates provider-side state: Create a view for a user-owned project.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "user-id",
@@ -32366,7 +32366,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/copilot-spaces#create-a-copilot-space-for-a-user",
       "risk": "Creates provider-side state: Create a Copilot Space for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -32421,7 +32421,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/copilot-spaces#set-a-copilot-space-for-a-user",
       "risk": "Mutates existing provider-side state: Set a Copilot Space for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -32515,7 +32515,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/collaborators#add-a-collaborator-to-a-copilot-space-for-a-user",
       "risk": "Creates provider-side state: Add a collaborator to a Copilot Space for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -32578,7 +32578,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/collaborators#set-a-collaborator-role-for-a-copilot-space-for-a-user",
       "risk": "Mutates existing provider-side state: Set a collaborator role for a Copilot Space for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -32685,7 +32685,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#create-a-resource-for-a-copilot-space-for-a-user",
       "risk": "Creates provider-side state: Create a resource for a Copilot Space for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -32733,7 +32733,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#set-a-resource-for-a-copilot-space-for-a-user",
       "risk": "Mutates existing provider-side state: Set a resource for a Copilot Space for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -32853,7 +32853,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/packages/packages#restore-a-package-for-a-user",
       "risk": "Creates provider-side state: Restore a package for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -32940,7 +32940,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/packages/packages#restore-package-version-for-a-user",
       "risk": "Creates provider-side state: Restore package version for a user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",
@@ -32987,7 +32987,7 @@
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#update-project-item-for-user",
       "risk": "Mutates existing provider-side state: Update project item for user.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "username",

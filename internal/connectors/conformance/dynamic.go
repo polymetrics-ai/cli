@@ -228,6 +228,14 @@ func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionNam
 		return connectors.WriteRequest{}, fmt.Errorf("marshal conformance fixture plan: %w", err)
 	}
 	planHash := sha256.Sum256(planPayload)
+	// Only a target the engine gate will actually stop carries a confirmation,
+	// and a grant exists solely to satisfy that stop — IssueWriteGrant refuses
+	// to mint one for anything else. A safe action reaches the same dispatch
+	// seam with no evidence, so requesting a grant here would be asking the
+	// authority to authorize a write nothing is holding back.
+	if preview.ApprovalTarget.Confirmation.Kind == "" {
+		return req, nil
+	}
 	token := "conformance-fixture-approval"
 	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
 		PlanID:        "rplan_conformance_fixture",
