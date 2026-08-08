@@ -15,7 +15,40 @@ command-surface test and phase evidence. Against SCIM2-complete HEAD it must fai
 The RED output will be pasted verbatim below before any production JSON, metadata, fixture, or
 generated-file edit.
 
-## RED — pending
+## RED — captured before connector declaration changes
+
+The test-only RED checkpoint was run against the SCIM2-complete bundle before any Virtual Agent
+production declaration, fixture, metadata, or generated-file change. It contains no provider
+credential or token value:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...
+--- FAIL: TestProviderInventoryLedgerIsComplete (0.03s)
+    command_surface_test.go:156: executable rows = 38, want 51
+    command_surface_test.go:159: operations awaiting Zoom-local contracts = 1804, want 1791
+--- FAIL: TestCoveredStreamsHaveReachableCommands (0.03s)
+    command_surface_test.go:254: reachable direct_read operation commands = 21, want 30
+    command_surface_test.go:255: reachable direct_write operation commands = 12, want 16
+--- FAIL: TestVirtualAgentOperationCommandsAreReachable (0.03s)
+    command_surface_test.go:380: Preflight("virtual-agent knowledge-bases articles list") = connector command "virtual-agent knowledge-bases articles list" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent knowledge-bases articles create") = connector command "virtual-agent knowledge-bases articles create" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent knowledge-bases articles get") = connector command "virtual-agent knowledge-bases articles get" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent knowledge-bases articles update") = connector command "virtual-agent knowledge-bases articles update" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent knowledge-bases articles delete") = connector command "virtual-agent knowledge-bases articles delete" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent knowledge-bases sync create") = connector command "virtual-agent knowledge-bases sync create" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent knowledge-bases sync get") = connector command "virtual-agent knowledge-bases sync get" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent reports engagements list") = connector command "virtual-agent reports engagements list" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent reports engagements query-details list") = connector command "virtual-agent reports engagements query-details list" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent reports engagements variable-details list") = connector command "virtual-agent reports engagements variable-details list" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent reports surveys list") = connector command "virtual-agent reports surveys list" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent reports transcripts list") = connector command "virtual-agent reports transcripts list" is blocked: unknown command, want declared executable Virtual Agent action
+    command_surface_test.go:380: Preflight("virtual-agent reports operation-logs list") = connector command "virtual-agent reports operation-logs list" is blocked: unknown command, want declared executable Virtual Agent action
+FAIL
+FAIL    polymetrics.ai/internal/connectors/defs/zoom
+FAIL
+```
+
+This is the committed red state. Connector declaration work begins only after it is pushed.
 
 ## GREEN connector — pending
 

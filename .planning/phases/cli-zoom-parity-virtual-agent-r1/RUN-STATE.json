@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-virtual-agent-r1",
   "issue": 3941,
   "parent_issue": 3915,
-  "status": "planned",
+  "status": "red-captured",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -33,7 +33,7 @@
     "direct_writes": 16,
     "unsafe_or_disallowed": 0
   },
-  "red": "pending",
+  "red": "captured: go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... failed only on the target ledger totals and 13 unknown Virtual Agent command paths before production changes",
   "green": "pending",
   "verification": "pending",
   "review": "pending"
