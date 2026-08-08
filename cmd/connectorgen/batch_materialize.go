@@ -621,9 +621,9 @@ func parseBatchArtifactURL(raw string) (*url.URL, error) {
 	if parsed.User != nil {
 		return nil, errors.New("artifact URL must not include userinfo")
 	}
-	if parsed.RawQuery != "" || parsed.ForceQuery {
-		return nil, errors.New("artifact URL must not include a query")
-	}
+	// Public provider artifacts commonly use query parameters for version
+	// selectors and export formats (for example, Google discovery documents).
+	// Preserve the ledger URL exactly; userinfo and fragments remain forbidden.
 	if parsed.Fragment != "" || strings.Contains(raw, "#") {
 		return nil, errors.New("artifact URL must not include a fragment")
 	}
@@ -652,8 +652,8 @@ func validateBatchArtifactURLObject(parsed *url.URL) error {
 	if parsed.User != nil {
 		return errors.New("artifact request URL must not include userinfo")
 	}
-	if parsed.RawQuery != "" || parsed.ForceQuery || parsed.Fragment != "" {
-		return errors.New("artifact request URL must not include query or fragment components")
+	if parsed.Fragment != "" {
+		return errors.New("artifact request URL must not include a fragment component")
 	}
 	host := strings.TrimSuffix(strings.ToLower(parsed.Hostname()), ".")
 	if host == "" || strings.Contains(host, "%") || host == "localhost" || strings.HasSuffix(host, ".localhost") {
