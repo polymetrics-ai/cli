@@ -45,6 +45,13 @@ node website/scripts/cli-surface.test.mjs 7/7 pass
 
 ## Known, stated plainly
 
+- The GitHub live reverse trace did not send `/issues%22`: the `pm` argv,
+  stored connection/plan state, and resolved target immediately before
+  `client.Do` were quote-free. `%22` was introduced by the former
+  `RedactErrorText` URL regex when it absorbed Go's quoted error delimiter;
+  the safety regression now prevents that misleading rendering while preserving
+  query redaction. The underlying GitHub result was transport `EOF`, not a
+  malformed endpoint.
 - `docs/connectors/**` regeneration carries unrelated pre-existing drift
   (field types). Verifiable by running `pm docs generate` on a clean tree, which
   changes 1028 files with no code changes at all.

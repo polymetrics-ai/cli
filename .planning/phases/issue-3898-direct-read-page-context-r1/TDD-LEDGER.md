@@ -71,7 +71,7 @@ go test -timeout 20m ./internal/app -run '^(TestLimitedReversePlanPreviewsAndRun
 
 ## Live GitHub write-target investigation
 
-The captain-authorized live `create_issue` dispatch returned
+The captain-authorized live `create_issue` dispatch displayed
 `Post "https://api.github.com/.../issues%22: EOF` before a private-repository
 mutation. A local regression was added to assert the full generic reverse
 workflow sends exactly `POST /repos/acme/widgets/issues`. It is GREEN on the
@@ -82,10 +82,54 @@ go test -timeout 20m ./internal/app -run '^TestGitHubCreateIssueReversePlanUsesD
 # ok   polymetrics.ai/internal/app
 ```
 
-This does **not** reproduce the live EOF, so it is recorded as an environment
-or transport-path finding rather than papered over with a parallel client. No
-production code was changed for that observation; a live retry is only safe
-after independently confirming the private repository still has zero issues.
+The user-required trace then settled the apparent malformed target before any
+claim about a live discrepancy:
+
+- The exact `pm` argv contained the expected `reverse run`, plan ID, `--root`,
+  redacted approval argument, and `--json`; no argument had a literal quote.
+- The stored connection and reverse-plan records had no values containing a
+  literal quote in any path/config field inspected (including the GitHub owner
+  and repository fields).
+- Immediately before `client.Do(req)`, the resolved input path and endpoint
+  were exactly `POST /repos/karthik-sivadas/<private-test-repo>/issues`, with
+  no quote in the base URL or target.
+
+Fixture and live execution share `Requester.doWithBody`. They diverge only
+after `internal/connectors/connsdk/http.go` calls `client.Do(req)`: the fixture
+returns its created response, while the live transport supplied Go's standard
+quoted URL error form (`Post "https://.../issues": EOF`). The misleading
+`%22` was introduced afterward by the error renderer, not by the request:
+
+1. `internal/connectors/engine/errors.go:51` sends the error text through
+   `safety.RedactErrorText`.
+2. Before this fix, `internal/safety/safety.go` matched URLs with
+   ``https?://[^\s]+``; that match swallowed Go's closing `"` delimiter.
+3. `redactURL` then called `parsed.String()`, which percent-encoded the
+   swallowed delimiter to `%22`.
+
+The new safety regression first failed with the exact effect, including a
+query-bearing variant so the secret-redaction contract remains covered:
+
+```
+--- FAIL: TestRedactErrorTextPreservesQuotedHTTPTransportURLDelimiter/without_query
+    RedactErrorText() = "send request: Post \"https://api.example.test/v1/items%22: EOF",
+        want "send request: Post \"https://api.example.test/v1/items\": EOF"
+--- FAIL: TestRedactErrorTextPreservesQuotedHTTPTransportURLDelimiter/with_query
+    RedactErrorText() = "send request: Post \"https://api.example.test/v1/items: EOF",
+        want "send request: Post \"https://api.example.test/v1/items\": EOF"
+FAIL
+```
+
+Green after excluding literal `"` from `httpURLPattern`:
+
+```sh
+go test -timeout 20m ./internal/safety -count=1
+# ok   polymetrics.ai/internal/safety
+```
+
+Therefore this is neither an outbound malformed endpoint nor harness quoting.
+The remaining live outcome is a plain transport `EOF`; it is recorded without
+substituting another client for `pm`.
 
 ## Red/green commands
 

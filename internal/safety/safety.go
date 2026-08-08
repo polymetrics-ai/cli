@@ -8,7 +8,10 @@ import (
 	"strings"
 )
 
-var httpURLPattern = regexp.MustCompile(`https?://[^\s]+`)
+// A Go HTTP transport error quotes its URL as `Post "https://...": ...`.
+// Keep that delimiter out of the URL match: url.URL.String would otherwise
+// percent-encode it as %22 and make an error look like a different endpoint.
+var httpURLPattern = regexp.MustCompile(`https?://[^\s"]+`)
 var jsonBodyPattern = regexp.MustCompile(`: \{.*\}$`)
 var secretAssignmentPattern = regexp.MustCompile(`(?i)(api[_-]?key|access[_-]?token|token|secret|password)=([^\s&]+)`)
 
