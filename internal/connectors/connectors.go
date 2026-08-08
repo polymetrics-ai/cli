@@ -259,12 +259,22 @@ func PayloadApprovalKey(recordIndex int, field string) string {
 	return fmt.Sprintf("%d:%s", recordIndex, field)
 }
 
+type OpaqueCursorState struct {
+	Token   []byte
+	Present bool
+}
+
+type SourceOrderedCursorReader interface {
+	CursorStateFromRecord(Record, string) (OpaqueCursorState, error)
+}
+
 type ReadRequest struct {
-	Stream string
-	Config RuntimeConfig
-	State  map[string]string
-	Query  map[string]string
-	Limit  int
+	Stream      string
+	Config      RuntimeConfig
+	State       map[string]string
+	CursorState OpaqueCursorState
+	Query       map[string]string
+	Limit       int
 }
 
 type DirectReadRequest struct {

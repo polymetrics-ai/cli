@@ -268,3 +268,23 @@ Passed. Interrupt cleanup now remains subscribed through teardown, drains later 
 Podman action, and keeps the watcher active until removal completes. Checkpoint envelopes record
 whether a source position was observed, so an acknowledged empty run remains non-resumable while
 an observed empty or whitespace MySQL cursor is preserved as an opaque strict boundary.
+
+**Red — review round 9 source-native cursor checkpoint:**
+
+Source inspection found that both legacy ETL destination paths converted MySQL `[]byte` cursor
+values through JSON/base64 and selected a client-side maximum with Go ordering before committing
+the shared checkpoint. The next MySQL read therefore received a different lower-bound value and
+could replay, skip, or retain stale source rows. This review round defers execution until all
+source, checkpoint, and regression-test changes are in place; the focused Green check will cover
+both destination paths and the MySQL wire-boundary codec together.
+
+**Green — review round 9:**
+
+```text
+go test -count=1 -timeout 20m -run 'Test(SourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations|OpaqueCursorStatePreservesNativeMySQLBoundaryValues)$' ./internal/app ./internal/connectors/native/mysql
+```
+
+Passed. The shared cursor tracker now commits each source-ordered MySQL boundary as an untouched
+opaque token and resumes through a typed request state, while the legacy paths retain their prior
+comparison behavior. The regression covers binary-state JSON persistence, no reconstructed lower
+bound, no replay, no skipped later byte-ordered row, and both warehouse and connector destinations.

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"net"
 	"reflect"
 	"strings"
@@ -106,6 +107,51 @@ func TestRawCursorStatePreservesExplicitValues(t *testing.T) {
 				t.Fatalf("rawCursorState(%#v) = (%q, %t), want (%q, %t)", tc.state, got, present, tc.want, tc.present)
 			}
 		})
+	}
+}
+
+func TestOpaqueCursorStatePreservesNativeMySQLBoundaryValues(t *testing.T) {
+	connector := New()
+	for _, tc := range []struct {
+		name  string
+		value any
+	}{
+		{name: "string", value: "delta"},
+		{name: "binary", value: []byte{0x00, 0xff, 0x01}},
+		{name: "signed", value: int64(-42)},
+		{name: "unsigned", value: uint64(1<<63 + 7)},
+		{name: "floating", value: math.Float64frombits(0x400921fb54442d18)},
+		{name: "boolean", value: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			state, err := connector.CursorStateFromRecord(connectors.Record{"sequence": tc.value}, "sequence")
+			if err != nil {
+				t.Fatalf("CursorStateFromRecord(): %v", err)
+			}
+			got, present, err := readCursorState(connectors.ReadRequest{CursorState: state})
+			if err != nil || !present || !reflect.DeepEqual(got, tc.value) {
+				t.Fatalf("readCursorState() = (%#v, %t, %v), want (%#v, true, nil)", got, present, err, tc.value)
+			}
+			_, args := snapshotQuery("analytics", "events", "sequence", "id", got, nil, true, false, 2)
+			if !reflect.DeepEqual(args, []any{tc.value}) {
+				t.Fatalf("resumed query args = %#v, want %#v", args, []any{tc.value})
+			}
+		})
+	}
+
+	original := []byte{0x00, 0xff}
+	state, err := connector.CursorStateFromRecord(connectors.Record{"sequence": original}, "sequence")
+	if err != nil {
+		t.Fatal(err)
+	}
+	original[0] = 0x7f
+	got, present, err := readCursorState(connectors.ReadRequest{CursorState: state})
+	if err != nil || !present || !reflect.DeepEqual(got, []byte{0x00, 0xff}) {
+		t.Fatalf("copied binary cursor = %#v, %t, %v", got, present, err)
+	}
+
+	if _, _, err := readCursorState(connectors.ReadRequest{CursorState: connectors.OpaqueCursorState{Token: []byte("unknown"), Present: true}}); err == nil {
+		t.Fatal("readCursorState() accepted an unrecognized opaque cursor")
 	}
 }
 

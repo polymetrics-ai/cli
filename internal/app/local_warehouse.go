@@ -134,9 +134,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
 	rawBatch := make([]localRawRecord, 0, batchSize)
-	priorCursor, priorCursorObserved := streamStateCursor(prior)
-	nextCursor := priorCursor
-	nextCursorObserved := priorCursorObserved
+	cursorTracker := newStreamCursorTracker(prior, source)
 	rawSeq := 0
 	observedAt := time.Time{}
 
@@ -159,28 +157,26 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 
 	readConfig := sourceRuntime
 	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if priorCursorObserved {
-		readConfig.Config["since"] = priorCursor
+	if cursor, present := cursorTracker.legacyLowerBound(); present {
+		readConfig.Config["since"] = cursor
 	}
 	err = source.Read(ctx, connectors.ReadRequest{
-		Stream: streamName,
-		Config: readConfig,
-		State:  streamReadState(prior, generationID),
+		Stream:      streamName,
+		Config:      readConfig,
+		State:       streamReadState(prior, generationID),
+		CursorState: streamReadCursorState(prior),
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
 		if stream.CursorField != "" {
+			var include bool
 			var err error
-			cursor, err = recordCursor(record, stream.CursorField)
+			cursor, include, err = cursorTracker.observe(record, stream.CursorField, mode.Source)
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && priorCursorObserved && compareCursor(cursor, priorCursor) < 0 {
+			if !include {
 				return nil
-			}
-			if !nextCursorObserved || compareCursor(cursor, nextCursor) > 0 {
-				nextCursor = cursor
-				nextCursorObserved = true
 			}
 		}
 		deleted := isDeletedRecord(record)
@@ -275,11 +271,13 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err != nil {
 		return result, err
 	}
+	nextCursor, nextCursorObserved := cursorTracker.checkpoint()
 	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, nextCursorObserved, generationID, result.RecordsLoaded, observedAt, acknowledgement)
 	if err != nil {
 		return result, err
 	}
-	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
+	reportedCursor, reportedCursorObserved := cursorTracker.reportedCursor()
+	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, reportedCursor, reportedCursorObserved)
 	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	success = true
 	return result, nil
@@ -313,7 +311,7 @@ func syncLocalWarehouseDirectoryChain(dir string) error {
 	}
 }
 
-func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey string, state StreamState) map[string]string {
+func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey string, state StreamState, cursor string, cursorObserved bool) map[string]string {
 	// This map is a backward-compatible run report, not resumable sync state.
 	// StreamState.Checkpoint is the sole durable resume record.
 	checkpoint := map[string]string{
@@ -326,7 +324,7 @@ func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey stri
 		"state_key":           stateKey,
 		"generation_id":       strconv.FormatInt(state.GenerationID, 10),
 	}
-	if cursor, present := streamStateCursor(state); present {
+	if cursorObserved {
 		checkpoint["cursor"] = cursor
 	}
 	return checkpoint

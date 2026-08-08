@@ -1,9 +1,12 @@
 package mysql
 
 import (
+	"bytes"
 	"context"
+	"encoding/binary"
 	"errors"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 
@@ -14,6 +17,17 @@ import (
 )
 
 const mysqlBinaryCharsetID = 63
+
+const (
+	mysqlCursorStateString byte = iota + 1
+	mysqlCursorStateBytes
+	mysqlCursorStateInt64
+	mysqlCursorStateUint64
+	mysqlCursorStateFloat64
+	mysqlCursorStateBool
+)
+
+var mysqlCursorStatePrefix = []byte{0x00, 'p', 'm', ':', 'm', 'y', 's', 'q', 'l', ':', 'c', 'u', 'r', 's', 'o', 'r', ':', 0x01}
 
 // InitialState returns the stream state without a cursor. The connector writes
 // no state itself; the caller advances it only after downstream work.
@@ -30,6 +44,126 @@ func rawCursorState(state map[string]string) (string, bool) {
 	}
 	value, present := state[connsdk.CursorStateKey]
 	return value, present
+}
+
+func (c Connector) CursorStateFromRecord(record connectors.Record, field string) (connectors.OpaqueCursorState, error) {
+	field = strings.TrimSpace(field)
+	if field == "" {
+		return connectors.OpaqueCursorState{}, errors.New("mysql cursor field is required")
+	}
+	value, ok := record[field]
+	if !ok || value == nil {
+		return connectors.OpaqueCursorState{}, fmt.Errorf("record is missing cursor field %q", field)
+	}
+	token, err := encodeMySQLCursorState(value)
+	if err != nil {
+		return connectors.OpaqueCursorState{}, err
+	}
+	return connectors.OpaqueCursorState{Token: token, Present: true}, nil
+}
+
+func encodeMySQLCursorState(value any) ([]byte, error) {
+	token := append([]byte(nil), mysqlCursorStatePrefix...)
+	appendUint64 := func(kind byte, value uint64) []byte {
+		token = append(token, kind)
+		encoded := make([]byte, 8)
+		binary.BigEndian.PutUint64(encoded, value)
+		return append(token, encoded...)
+	}
+	switch value := value.(type) {
+	case string:
+		return append(append(token, mysqlCursorStateString), value...), nil
+	case []byte:
+		return append(append(token, mysqlCursorStateBytes), value...), nil
+	case int:
+		return appendUint64(mysqlCursorStateInt64, uint64(value)), nil
+	case int8:
+		return appendUint64(mysqlCursorStateInt64, uint64(value)), nil
+	case int16:
+		return appendUint64(mysqlCursorStateInt64, uint64(value)), nil
+	case int32:
+		return appendUint64(mysqlCursorStateInt64, uint64(value)), nil
+	case int64:
+		return appendUint64(mysqlCursorStateInt64, uint64(value)), nil
+	case uint:
+		return appendUint64(mysqlCursorStateUint64, uint64(value)), nil
+	case uint8:
+		return appendUint64(mysqlCursorStateUint64, uint64(value)), nil
+	case uint16:
+		return appendUint64(mysqlCursorStateUint64, uint64(value)), nil
+	case uint32:
+		return appendUint64(mysqlCursorStateUint64, uint64(value)), nil
+	case uint64:
+		return appendUint64(mysqlCursorStateUint64, value), nil
+	case float32:
+		return appendUint64(mysqlCursorStateFloat64, math.Float64bits(float64(value))), nil
+	case float64:
+		return appendUint64(mysqlCursorStateFloat64, math.Float64bits(value)), nil
+	case bool:
+		if value {
+			return append(token, mysqlCursorStateBool, 1), nil
+		}
+		return append(token, mysqlCursorStateBool, 0), nil
+	default:
+		return nil, fmt.Errorf("mysql cursor value has unsupported type %T", value)
+	}
+}
+
+func readCursorState(req connectors.ReadRequest) (any, bool, error) {
+	value, encoded, err := decodeMySQLCursorState(req.CursorState)
+	if err != nil {
+		return nil, false, err
+	}
+	if encoded {
+		return value, true, nil
+	}
+	legacy, present := rawCursorState(req.State)
+	if present {
+		return legacy, true, nil
+	}
+	if req.CursorState.Present {
+		return nil, false, errors.New("mysql cursor state is unrecognized")
+	}
+	return nil, false, nil
+}
+
+func decodeMySQLCursorState(state connectors.OpaqueCursorState) (any, bool, error) {
+	if !state.Present || !bytes.HasPrefix(state.Token, mysqlCursorStatePrefix) {
+		return nil, false, nil
+	}
+	if len(state.Token) == len(mysqlCursorStatePrefix) {
+		return nil, true, errors.New("mysql cursor state is missing its type")
+	}
+	kind := state.Token[len(mysqlCursorStatePrefix)]
+	payload := state.Token[len(mysqlCursorStatePrefix)+1:]
+	switch kind {
+	case mysqlCursorStateString:
+		return string(payload), true, nil
+	case mysqlCursorStateBytes:
+		return append([]byte(nil), payload...), true, nil
+	case mysqlCursorStateInt64:
+		if len(payload) != 8 {
+			return nil, true, errors.New("mysql signed cursor state is malformed")
+		}
+		return int64(binary.BigEndian.Uint64(payload)), true, nil
+	case mysqlCursorStateUint64:
+		if len(payload) != 8 {
+			return nil, true, errors.New("mysql unsigned cursor state is malformed")
+		}
+		return binary.BigEndian.Uint64(payload), true, nil
+	case mysqlCursorStateFloat64:
+		if len(payload) != 8 {
+			return nil, true, errors.New("mysql floating cursor state is malformed")
+		}
+		return math.Float64frombits(binary.BigEndian.Uint64(payload)), true, nil
+	case mysqlCursorStateBool:
+		if len(payload) != 1 || payload[0] > 1 {
+			return nil, true, errors.New("mysql boolean cursor state is malformed")
+		}
+		return payload[0] == 1, true, nil
+	default:
+		return nil, true, errors.New("mysql cursor state type is unsupported")
+	}
 }
 
 // Read runs a bounded snapshot or incremental read. Snapshot pages use a
@@ -88,8 +222,11 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 		}
 	}
 
-	initialCursor, hasCursorState := rawCursorState(req.State)
-	lastCursor := any(initialCursor)
+	initialCursor, hasCursorState, err := readCursorState(req)
+	if err != nil {
+		return err
+	}
+	lastCursor := initialCursor
 	var lastPrimaryKey any
 	resume := cursorField != "" && hasCursorState
 	hasPageBoundary := false

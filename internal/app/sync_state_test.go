@@ -232,6 +232,103 @@ func TestIncrementalRunStoresCommittedStateEnvelopeAfterDownstreamSuccess(t *tes
 	}
 }
 
+func TestSourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations(t *testing.T) {
+	for _, destinationKind := range []string{"warehouse", "connector"} {
+		t.Run(destinationKind, func(t *testing.T) {
+			ctx := context.Background()
+			source := newOrderedOpaqueCursorSource("ordered_opaque_cursor_"+destinationKind, []connectors.Record{
+				{"id": "first", "updated_at": []byte{0x00}},
+				{"id": "second", "updated_at": []byte{0xff}},
+			})
+			a, connection := setupSyncModeApp(t, source, "incremental_append")
+			stateKey := streamStateKey(connection, "records")
+
+			var connectorDestination *batchDestination
+			run := func(runID string) error {
+				if destinationKind == "warehouse" {
+					_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10})
+					return err
+				}
+				conn, ok := a.findConnection(connection)
+				if !ok {
+					return errors.New("connection missing")
+				}
+				mode, err := ParseStreamSyncMode(conn.Streams["records"])
+				if err != nil {
+					return err
+				}
+				resolved, credential, runtime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
+				if err != nil {
+					return err
+				}
+				if connectorDestination == nil {
+					connectorDestination = &batchDestination{}
+				}
+				expectation := streamResumeExpectation(resolved, credential, runtime, "records")
+				result, err := a.runConnectorETL(ctx, runID, conn, resolved, runtime, connectorDestination, connectors.RuntimeConfig{}, expectation, "records", conn.Streams["records"], mode, 10)
+				if err != nil {
+					return err
+				}
+				if result.PendingStreamState == nil {
+					return errors.New("connector ETL did not return pending stream state")
+				}
+				a.state.StreamStates[stateKey] = result.PendingStreamState.State
+				return nil
+			}
+
+			if err := run("opaque_first"); err != nil {
+				t.Fatalf("first ETL run: %v", err)
+			}
+			first := a.state.StreamStates[stateKey]
+			if first.Checkpoint == nil || !bytes.Equal(first.Checkpoint.Position.Primary, []byte{0xff}) {
+				t.Fatalf("first checkpoint cursor = %#v, want exact binary 0xff", first.Checkpoint)
+			}
+			encoded, err := json.Marshal(first)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var reloaded StreamState
+			if err := json.Unmarshal(encoded, &reloaded); err != nil {
+				t.Fatal(err)
+			}
+			a.state.StreamStates[stateKey] = reloaded
+
+			source.records = append(source.records, connectors.Record{"id": "third", "updated_at": []byte{0xff, 0x00}})
+			if err := run("opaque_second"); err != nil {
+				t.Fatalf("second ETL run: %v", err)
+			}
+			if len(source.requests) != 2 {
+				t.Fatalf("source requests = %d, want 2", len(source.requests))
+			}
+			resumed := source.requests[1]
+			if !resumed.CursorState.Present || !bytes.Equal(resumed.CursorState.Token, []byte{0xff}) {
+				t.Fatalf("resumed opaque cursor = %#v, want exact binary 0xff", resumed.CursorState)
+			}
+			if _, present := resumed.Config.Config["since"]; present {
+				t.Fatalf("source-ordered resume config = %#v, want no reconstructed lower bound", resumed.Config.Config)
+			}
+			if got := strings.Join(source.emitted, ","); got != "first,second,third" {
+				t.Fatalf("source emitted = %q, want no replay and no skipped third row", got)
+			}
+			final := a.state.StreamStates[stateKey]
+			if final.Checkpoint == nil || !bytes.Equal(final.Checkpoint.Position.Primary, []byte{0xff, 0x00}) {
+				t.Fatalf("final checkpoint cursor = %#v, want exact binary 0xff00", final.Checkpoint)
+			}
+			if destinationKind == "warehouse" {
+				rows, err := a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if len(rows) != 3 {
+					t.Fatalf("warehouse rows = %d, want 3", len(rows))
+				}
+			} else if !reflect.DeepEqual(connectorDestination.batches, []int{2, 1}) {
+				t.Fatalf("connector batches = %#v, want [2 1]", connectorDestination.batches)
+			}
+		})
+	}
+}
+
 func TestRunETLStopsWhenInitialRunStateCannotPersist(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("initial_run_state_failure", []connectors.Record{{
