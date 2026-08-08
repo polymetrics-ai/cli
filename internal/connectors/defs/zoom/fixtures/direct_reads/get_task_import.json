@@ -1,0 +1,25 @@
+{
+  "status": 200,
+  "body": {
+    "import_id": "fixture-task-import",
+    "source": "slack_lists",
+    "status": "completed",
+    "submitted_at": "2026-08-08T10:00:00Z",
+    "completed_at": "2026-08-08T10:00:03Z",
+    "project_name": "Fixture Task Project",
+    "project_id": "fixture-task-project",
+    "project_link": "https://example.invalid/projects/fixture-task-project",
+    "total_tasks": 2,
+    "processed_tasks": 2,
+    "successful_tasks": 1,
+    "failed_tasks": 1,
+    "failed_task_details": [{
+      "record_id": "fixture-task-source-record",
+      "title": "Fixture failed task title",
+      "error": "fixture task validation detail"
+    }],
+    "unmapped_users": ["fixture-task-source-user"],
+    "warnings": ["fixture task import warning"],
+    "error": "fixture task import error"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "record": {
+    "title": "Fixture Task create title",
+    "description": "Fixture Task create description",
+    "priority": "Medium",
+    "status": "To do",
+    "due_date": "2026-08-09",
+    "is_public": false,
+    "starred": true,
+    "skip_notifications": false,
+    "invite_message": "Fixture Task create invitation",
+    "assignees": [{"email": "fixture.task.create.assignee@example.invalid"}],
+    "collaborators": [{"email": "fixture.task.create.collaborator@example.invalid"}]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/tasks/items",
+    "body": {
+      "title": "Fixture Task create title",
+      "description": "Fixture Task create description",
+      "priority": "Medium",
+      "status": "To do",
+      "due_date": "2026-08-09",
+      "is_public": false,
+      "starred": true,
+      "skip_notifications": false,
+      "invite_message": "Fixture Task create invitation",
+      "assignees": [{"email": "fixture.task.create.assignee@example.invalid"}],
+      "collaborators": [{"email": "fixture.task.create.collaborator@example.invalid"}]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {"task_id": "fixture-task-created", "title": "Fixture Task create title", "description": "Fixture Task create description", "priority": "Medium", "status": "To do", "is_public": false, "starred": true, "assignees": [{"user_id": "fixture-task-create-user", "email": "fixture.task.create.assignee@example.invalid"}], "collaborators": [{"user_id": "fixture-task-create-collaborator", "email": "fixture.task.create.collaborator@example.invalid"}], "friendly_task_id": "FIXTURE-TASK-3", "link": "https://example.invalid/tasks/fixture-task-created"}
+  }
+}

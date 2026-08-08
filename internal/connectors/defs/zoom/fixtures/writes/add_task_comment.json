@@ -1,0 +1,22 @@
+{
+  "record": {
+    "content": [{"order": 0, "text": "Fixture Task comment text", "attributes": {"link": "https://example.invalid/fixture-task-comment"}}],
+    "content_text": "Fixture Task comment text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/tasks/items/fixture-task-comment/comments",
+    "body": {
+      "content": [{"order": 0, "text": "Fixture Task comment text", "attributes": {"link": "https://example.invalid/fixture-task-comment"}}],
+      "content_text": "Fixture Task comment text"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "comment_id": "fixture-task-comment",
+      "content": [{"order": 0, "text": "Fixture Task comment text"}],
+      "content_text": "Fixture Task comment text"
+    }
+  }
+}

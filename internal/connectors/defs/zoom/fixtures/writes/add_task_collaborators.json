@@ -1,0 +1,23 @@
+{
+  "record": {
+    "collaborators": [{"email": "fixture.task.collaborator@example.invalid"}],
+    "invite_message": "Fixture Task collaborator invitation",
+    "skip_notifications": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/tasks/items/fixture-task-collaborators/collaborators",
+    "body": {
+      "collaborators": [{"email": "fixture.task.collaborator@example.invalid"}],
+      "invite_message": "Fixture Task collaborator invitation",
+      "skip_notifications": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "task_id": "fixture-task-collaborators",
+      "collaborators": [{"user_id": "fixture-task-collaborator-user", "display_name": "Fixture Task Collaborator", "email": "fixture.task.collaborator@example.invalid"}]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {"title": "Fixture Task updated title", "description": "Fixture Task updated description", "status": "Done", "starred": false},
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/tasks/items/fixture-task-update",
+    "body": {"title": "Fixture Task updated title", "description": "Fixture Task updated description", "status": "Done", "starred": false}
+  },
+  "response": {"status": 204}
+}

@@ -13127,6 +13127,42 @@
     },
     {
       "method": "GET",
+      "path": "/v2/tasks/imports/{importId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items/{taskId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items/{taskId}/assignees",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items/{taskId}/collaborators",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tasks/items/{taskId}/comments",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
       "kind": "rest_read",
       "max_bytes": 1048576

@@ -383387,7 +383387,7 @@
   {
     "slug": "zoom",
     "name": "Zoom",
-    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, and Auto Dialer call history, reports, call lists, and prospects through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, and Auto Dialer reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, Auto Dialer call history/reports/call lists/prospects, and Tasks assignee/collaborator/comment/import/item data through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, Auto Dialer, and Tasks reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "integration_type": "api",
     "release_stage": "ga",
@@ -383438,7 +383438,7 @@
       }
     ],
     "cli_surface": {
-      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
       "usage": "pm zoom <group> <command> [flags]",
       "source_cli": {
         "name": "Zoom API reference",
@@ -383530,6 +383530,13 @@
           "title": "Auto Dialer",
           "commands": [
             "auto-dialer"
+          ]
+        },
+        {
+          "id": "tasks",
+          "title": "Tasks",
+          "commands": [
+            "tasks"
           ]
         },
         {
@@ -386395,6 +386402,656 @@
           "risk": "",
           "approval": "",
           "notes": "Bounded sensitive Auto Dialer prospect read at a fixed path. The provider artifact declares no request query input."
+        },
+        {
+          "path": "tasks assignees list",
+          "summary": "List assignees of one Zoom Task.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_task_assignees",
+          "source_cli_path": "GET /v2/tasks/items/{taskId}/assignees",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom tasks assignees list --credential zoom-fixture --task-id task --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Task assignee read at a fixed path. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "tasks assignees add",
+          "summary": "Add assignees to one Zoom Task.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.add_task_assignees",
+          "source_cli_path": "POST /v2/tasks/items/{taskId}/assignees",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "request",
+              "type": "json_object",
+              "summary": "Documented Task assignee invitation object.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks assignees add --credential zoom-fixture --task-id task --request '{\"assignees\":[{\"email\":\"person@example.invalid\"}]}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Adds one or more users as assignees to a Zoom Task.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named request flag accepts exactly one documented assignee object for this fixed endpoint; it is not a generic JSON or HTTP write. Assignee and invitation values are redacted."
+        },
+        {
+          "path": "tasks assignees remove",
+          "summary": "Remove an assignee from one Zoom Task.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.remove_task_assignee",
+          "source_cli_path": "DELETE /v2/tasks/items/{taskId}/assignees/{userId}",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "Assignee user identifier to remove.",
+              "values": [],
+              "maps_to": "path.userId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks assignees remove --credential zoom-fixture --task-id task --user-id user --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Removes a user as an assignee from a Zoom Task.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The fixed documented endpoint returns 204 No Content. Success is asserted by status without inventing a response body."
+        },
+        {
+          "path": "tasks collaborators list",
+          "summary": "List collaborators of one Zoom Task.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_task_collaborators",
+          "source_cli_path": "GET /v2/tasks/items/{taskId}/collaborators",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom tasks collaborators list --credential zoom-fixture --task-id task --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Task collaborator read at a fixed path. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "tasks collaborators add",
+          "summary": "Add collaborators to one Zoom Task.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.add_task_collaborators",
+          "source_cli_path": "POST /v2/tasks/items/{taskId}/collaborators",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "request",
+              "type": "json_object",
+              "summary": "Documented Task collaborator invitation object.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks collaborators add --credential zoom-fixture --task-id task --request '{\"collaborators\":[{\"email\":\"person@example.invalid\"}]}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Adds one or more users as collaborators to a Zoom Task.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named request flag accepts exactly one documented collaborator object for this fixed endpoint; it is not a generic JSON or HTTP write. Collaborator and invitation values are redacted."
+        },
+        {
+          "path": "tasks collaborators remove",
+          "summary": "Remove a collaborator from one Zoom Task.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.remove_task_collaborator",
+          "source_cli_path": "DELETE /v2/tasks/items/{taskId}/collaborators/{userId}",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "Collaborator user identifier to remove.",
+              "values": [],
+              "maps_to": "path.userId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks collaborators remove --credential zoom-fixture --task-id task --user-id user --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Removes a user as a collaborator from a Zoom Task.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The fixed documented endpoint returns 204 No Content. Success is asserted by status without inventing a response body."
+        },
+        {
+          "path": "tasks comments list",
+          "summary": "List comments on one Zoom Task.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_task_comments",
+          "source_cli_path": "GET /v2/tasks/items/{taskId}/comments",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom tasks comments list --credential zoom-fixture --task-id task --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Task comment read at a fixed path. The provider artifact declares response-only paging values, so no request query flag is exposed."
+        },
+        {
+          "path": "tasks comments add",
+          "summary": "Add a comment to one Zoom Task.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.add_task_comment",
+          "source_cli_path": "POST /v2/tasks/items/{taskId}/comments",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "comment",
+              "type": "json_object",
+              "summary": "Documented Task comment object.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks comments add --credential zoom-fixture --task-id task --comment '{\"content\":[{\"order\":0,\"text\":\"Review this task\"}],\"content_text\":\"Review this task\"}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Adds a comment with text or mention content to a Zoom Task.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named comment flag accepts exactly one documented content-fragment object for this fixed endpoint; it is not a generic JSON or HTTP write. Comment and mention values are redacted."
+        },
+        {
+          "path": "tasks comments delete",
+          "summary": "Delete a comment from one Zoom Task.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_task_comment",
+          "source_cli_path": "DELETE /v2/tasks/items/{taskId}/comments/{commentId}",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "comment-id",
+              "type": "string",
+              "summary": "Task comment identifier to delete.",
+              "values": [],
+              "maps_to": "path.commentId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks comments delete --credential zoom-fixture --task-id task --comment-id comment --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Irreversibly deletes a comment from a Zoom Task.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The fixed documented endpoint returns 204 No Content. Success is asserted by status without inventing a response body."
+        },
+        {
+          "path": "tasks files upload",
+          "summary": "Upload one documented JSON file for Zoom Tasks.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.upload_task_file",
+          "source_cli_path": "POST /v2/tasks/files",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "file-path",
+              "type": "string",
+              "summary": "Project-contained .json file to upload (maximum 10 MB).",
+              "values": [],
+              "maps_to": "body.file",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks files upload --credential zoom-fixture --file-path imports/tasks.json --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Uploads a bounded JSON file to Zoom Tasks, following one provider-declared Zoom-host redirect with the declared bearer credential.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "This fixed provider upload accepts only a project-contained .json source with a complete JSON document and an application/json multipart header. It permits only the documented one-hop Zoom-host redirect; callers cannot select a URL, redirect host, auth header, or file type."
+        },
+        {
+          "path": "tasks imports submit",
+          "summary": "Submit one Zoom Tasks import job.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.submit_task_import",
+          "source_cli_path": "POST /v2/tasks/imports",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "file-id",
+              "type": "string",
+              "summary": "Previously uploaded Tasks file identifier.",
+              "values": [],
+              "maps_to": "body.file_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "source",
+              "type": "enum",
+              "summary": "Documented source platform.",
+              "values": [
+                "slack_lists"
+              ],
+              "maps_to": "body.source",
+              "required": true
+            },
+            {
+              "name": "status-mapping",
+              "type": "json_object",
+              "summary": "Optional Slack status-to-Tasks status mapping object.",
+              "values": [],
+              "maps_to": "body.status_mapping"
+            },
+            {
+              "name": "user-mapping",
+              "type": "json_object",
+              "summary": "Optional Slack user-to-Zoom email mapping object.",
+              "values": [],
+              "maps_to": "body.user_mapping"
+            }
+          ],
+          "examples": [
+            "pm zoom tasks imports submit --credential zoom-fixture --file-id file --source slack_lists --status-mapping '{\"Not started\":\"To do\"}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Submits a Zoom Tasks import job for the documented Slack Lists source.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named flags bind only the documented file, source, and optional mapping fields for this fixed endpoint; they are not a generic JSON or HTTP write. File and mapping values are redacted."
+        },
+        {
+          "path": "tasks imports get",
+          "summary": "Get one Zoom Tasks import job.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_task_import",
+          "source_cli_path": "GET /v2/tasks/imports/{importId}",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "import-id",
+              "type": "string",
+              "summary": "Tasks import job identifier.",
+              "values": [],
+              "maps_to": "path.importId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom tasks imports get --credential zoom-fixture --import-id import --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Task import-job read at a fixed path. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "tasks items list",
+          "summary": "List Zoom Tasks items.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_tasks",
+          "source_cli_path": "GET /v2/tasks/items",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom tasks items list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Task item read. The provider artifact declares response-only paging values but no request query, filter, sort, token, or date input, so no such flag is exposed."
+        },
+        {
+          "path": "tasks items create",
+          "summary": "Create one Zoom Task.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.create_task",
+          "source_cli_path": "POST /v2/tasks/items",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task",
+              "type": "json_object",
+              "summary": "Documented Zoom Task creation object without file attachments.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks items create --credential zoom-fixture --task '{\"title\":\"Review documentation\",\"priority\":\"Medium\"}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Creates a Zoom Task with typed assignee, collaborator, task-content, and visibility fields.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named task flag accepts exactly one documented closed Task creation object for this fixed endpoint; it is not a generic JSON or HTTP write. Task and participant values are redacted."
+        },
+        {
+          "path": "tasks items get",
+          "summary": "Get one Zoom Task.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_task",
+          "source_cli_path": "GET /v2/tasks/items/{taskId}",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom tasks items get --credential zoom-fixture --task-id task --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Task detail read at a fixed path. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "tasks items delete",
+          "summary": "Delete one Zoom Task.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_task",
+          "source_cli_path": "DELETE /v2/tasks/items/{taskId}",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier to permanently delete.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks items delete --credential zoom-fixture --task-id task --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Irreversibly deletes a Zoom Task and its associated data.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The fixed documented endpoint permanently deletes the Task and returns 204 No Content. Success is asserted by status without inventing a response body."
+        },
+        {
+          "path": "tasks items update",
+          "summary": "Update fields of one Zoom Task.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_task",
+          "source_cli_path": "PATCH /v2/tasks/items/{taskId}",
+          "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Task identifier to update.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "task",
+              "type": "json_object",
+              "summary": "Documented Zoom Task partial-update object.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom tasks items update --credential zoom-fixture --task-id task --task '{\"title\":\"Updated task\"}' --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Changes documented fields of a Zoom Task.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named task flag accepts exactly one documented closed Task partial-update object for this fixed endpoint; it is not a generic JSON or HTTP write. The 204 response is status-only success."
         },
         {
           "path": "customer-managed-keys-hybrid archival-key decrypt",

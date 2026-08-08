@@ -1,0 +1,21 @@
+{
+  "status": 200,
+  "body": {
+    "tasks": [{
+      "task_id": "fixture-task-list-item",
+      "title": "Fixture Task list title",
+      "description": "Fixture Task list description",
+      "priority": "Medium",
+      "status": "To do",
+      "is_public": false,
+      "due_date": "2026-08-09",
+      "assignees": [{"user_id": "fixture-task-list-user", "display_name": "Fixture Task List User", "email": "fixture.task.list@example.invalid"}],
+      "collaborators": [{"user_id": "fixture-task-list-collaborator", "display_name": "Fixture Task List Collaborator", "email": "fixture.task.collaborator@example.invalid"}],
+      "friendly_task_id": "FIXTURE-TASK-1",
+      "link": "https://example.invalid/tasks/fixture-task-list-item"
+    }],
+    "total_records": 1,
+    "next_page_token": "fixture-task-items-page-token",
+    "page_size": 10
+  }
+}

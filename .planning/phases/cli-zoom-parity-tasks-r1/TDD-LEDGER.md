@@ -126,6 +126,94 @@ The JSON-file test proves a valid `.json` source reaches a loopback endpoint wit
 no second request. Constraint tests cover extension-policy syntax, file-only use, JSON header
 compatibility, and bounded-snapshot enforcement.
 
-## GREEN connector — pending
+## GREEN connector — captured
 
-## Verification/review — pending
+All seventeen source operations are now declared through the real command runner: six bounded
+`rest_read` / `direct_read` operations and eleven approval-gated `rest_write` / `direct_write`
+operations. The declaration uses the source's exact methods and paths, contains no derived paging
+flags, and maps all 17 Tasks endpoint rows directly. The four DELETEs and the task PATCH assert
+their documented `204 No Content` status-only response. The update body is deliberately limited to
+the seven live-artifact fields: `description`, `due_date`, `is_public`, `priority`, `starred`,
+`status`, and `title`.
+
+The ordinary connector GREEN run used six isolated direct-read fixtures and eleven isolated
+direct-write fixtures. The upload fixture exercises its declared JSON-only file, initial
+`fileapi.zoom.us` request, admitted `307` redirect to a Zoom-owned HTTPS host, rebuilt multipart
+body, re-applied bearer authentication, and redacted response. Fixture values use `.invalid`
+identifiers and contain no credentials.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...
+ok      polymetrics.ai/internal/connectors/defs/zoom  15.163s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... ./internal/connectors/engine ./internal/connectors/connsdk ./internal/connectors/commandrunner ./cmd/connectorgen
+ok      polymetrics.ai/internal/connectors/defs/zoom          15.163s
+ok      polymetrics.ai/internal/connectors/engine               6.464s
+ok      polymetrics.ai/internal/connectors/connsdk              0.808s
+ok      polymetrics.ai/internal/connectors/commandrunner       10.354s
+ok      polymetrics.ai/cmd/connectorgen                        13.898s
+
+$ go test -count=1 -timeout 20m ./internal/cli
+ok      polymetrics.ai/internal/cli
+```
+
+The compiled binary, not just generated metadata, accepted the provider base, bare namespace, and
+every Tasks help route with exit status `0`:
+
+```text
+$ go build -o .tmp/pm ./cmd/pm
+$ .tmp/pm help zoom
+$ .tmp/pm zoom
+$ .tmp/pm zoom tasks
+$ .tmp/pm zoom tasks assignees list --help
+$ .tmp/pm zoom tasks assignees add --help
+$ .tmp/pm zoom tasks assignees remove --help
+$ .tmp/pm zoom tasks collaborators list --help
+$ .tmp/pm zoom tasks collaborators add --help
+$ .tmp/pm zoom tasks collaborators remove --help
+$ .tmp/pm zoom tasks comments list --help
+$ .tmp/pm zoom tasks comments add --help
+$ .tmp/pm zoom tasks comments delete --help
+$ .tmp/pm zoom tasks files upload --help
+$ .tmp/pm zoom tasks imports submit --help
+$ .tmp/pm zoom tasks imports get --help
+$ .tmp/pm zoom tasks items list --help
+$ .tmp/pm zoom tasks items create --help
+$ .tmp/pm zoom tasks items get --help
+$ .tmp/pm zoom tasks items delete --help
+$ .tmp/pm zoom tasks items update --help
+```
+
+Each command exited `0`; no credential was loaded or printed in this reachability check.
+
+## Verification/review — captured
+
+The generated derived surface was refreshed rather than hand-edited. Reconciliation reported
+`zoom: reconciled covered=17 blocked=0 unchanged=0 refused=0`; the only endpoint-ledger additions
+are six Zoom Tasks direct-read entries. The regenerated documentation and website data were
+checked to retain Zoom-only output; non-Zoom website portions remained byte-identical to HEAD.
+
+```text
+$ go run ./cmd/connectorgen validate
+connectorgen validate: 551 connector(s) checked, 0 finding(s)
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled, 0 finding(s)
+
+$ go run ./cmd/connectorgen surface-reconcile --check --notes-contains provider_module=tasks
+zoom: reconciled covered=17 blocked=0 unchanged=0 refused=0
+
+$ go vet ./internal/connectors/defs/zoom ./internal/connectors/engine ./internal/connectors/connsdk ./internal/connectors/commandrunner ./cmd/connectorgen
+$ make lint
+golangci-lint ...
+0 issues.
+$ make tidy-check && make docs-check && make smoke-no-build && make agent-contract-check
+$ make connectorgen-validate && make connectorgen-surface-sync
+$ make connector-boundary && make release-workflow-check
+$ git diff --check
+```
+
+All commands above exited `0`. Inline manual `verify-work` and `code-review` examined the source
+method/path/body contracts, output redaction/status-only behavior, destructive approval routes,
+multipart redirect boundary, generated-only files, fixture execution, and endpoint scope. No
+actionable finding remained.

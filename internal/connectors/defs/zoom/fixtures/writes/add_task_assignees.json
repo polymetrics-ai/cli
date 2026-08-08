@@ -1,0 +1,23 @@
+{
+  "record": {
+    "assignees": [{"email": "fixture.task.assignee@example.invalid"}],
+    "invite_message": "Fixture Task assignee invitation",
+    "skip_notifications": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/tasks/items/fixture-task-assignees/assignees",
+    "body": {
+      "assignees": [{"email": "fixture.task.assignee@example.invalid"}],
+      "invite_message": "Fixture Task assignee invitation",
+      "skip_notifications": false
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "task_id": "fixture-task-assignees",
+      "assignees": [{"user_id": "fixture-task-assignee-user", "display_name": "Fixture Task Assignee", "email": "fixture.task.assignee@example.invalid"}]
+    }
+  }
+}

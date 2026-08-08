@@ -1,0 +1,5 @@
+{
+  "record": {"file": "imports/fixture-task-import.json"},
+  "expect": {"method": "POST", "path": "/v2/tasks/files"},
+  "response": {"status": 201, "body": {"file_id": "fixture-task-upload-file"}}
+}
