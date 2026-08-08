@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "leads",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"], "format": "date-time", "description": "Not present in the live OpenAPI response schema for lead_type (see docs.md Known limits); legacy's own fixture/test data carries this field, and projection:passthrough means it is emitted verbatim whenever the real wire response includes it." }
+  }
+}

@@ -1,0 +1,576 @@
+{
+  "tagline": "Run PersistIQ's declared streams and reverse-ETL actions.",
+  "usage": "pm persistiq \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "accounts list",
+        "activities list",
+        "api get v1 leads id",
+        "campaign leads list",
+        "campaign replies list",
+        "campaigns list",
+        "dnc domains list",
+        "events list",
+        "lead fields list",
+        "lead statuses list",
+        "leads list",
+        "mailboxes list",
+        "tags list",
+        "users list",
+        "webhook plugin list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add dnc domain apply",
+        "add lead to campaign apply",
+        "api post v1 leads",
+        "api put v1 webhook-plugin",
+        "create campaign apply",
+        "duplicate campaign apply",
+        "remove lead from campaign apply",
+        "reply to campaign message apply",
+        "update lead apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/accounts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "activities list",
+      "summary": "Run the activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activities",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/activities"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "add dnc domain apply",
+      "summary": "Plan and execute the add dnc domain reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_dnc_domain",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm persistiq add dnc domain apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/dnc_domains"
+        }
+      ],
+      "risk": "adds a domain to the account's Do-Not-Contact list; blocks future outreach to that domain account-wide; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "add lead to campaign apply",
+      "summary": "Plan and execute the add lead to campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_lead_to_campaign",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "campaign_id",
+          "type": "string",
+          "summary": "Required campaign id record field.",
+          "maps_to": "record.campaign_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm persistiq add lead to campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/campaigns/{campaign_id}/leads"
+        }
+      ],
+      "risk": "enrolls a lead into a live outbound-email campaign; the lead may start receiving automated outreach immediately depending on campaign schedule/state; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api get v1 leads id",
+      "summary": "Documented GET /v1/leads/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq api get v1 leads id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/leads/{id}"
+        }
+      ],
+      "operation": "persistiq.get.v1-leads-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v1 leads",
+      "summary": "Documented POST /v1/leads (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq api post v1 leads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/leads"
+        }
+      ],
+      "operation": "persistiq.post.v1-leads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put v1 webhook-plugin",
+      "summary": "Documented PUT /v1/webhook_plugin (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq api put v1 webhook-plugin --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/webhook_plugin"
+        }
+      ],
+      "operation": "persistiq.put.v1-webhook-plugin",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "campaign leads list",
+      "summary": "Run the campaign leads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaign_leads",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq campaign leads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/leads"
+        }
+      ]
+    },
+    {
+      "path": "campaign replies list",
+      "summary": "Run the campaign replies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaign_replies",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq campaign replies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/replies"
+        }
+      ]
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns"
+        }
+      ]
+    },
+    {
+      "path": "create campaign apply",
+      "summary": "Plan and execute the create campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_campaign",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "campaign_name",
+          "type": "string",
+          "summary": "Required campaign name record field.",
+          "maps_to": "record.campaign_name",
+          "required": true
+        },
+        {
+          "name": "owner_id",
+          "type": "string",
+          "summary": "Required owner id record field.",
+          "maps_to": "record.owner_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm persistiq create campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/campaigns"
+        }
+      ],
+      "risk": "creates a new outbound-email campaign in the target PersistIQ account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "dnc domains list",
+      "summary": "Run the dnc domains ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dnc_domains",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq dnc domains list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/dnc_domains"
+        }
+      ]
+    },
+    {
+      "path": "duplicate campaign apply",
+      "summary": "Plan and execute the duplicate campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "duplicate_campaign",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "campaign_id",
+          "type": "string",
+          "summary": "Required campaign id record field.",
+          "maps_to": "record.campaign_id",
+          "required": true
+        },
+        {
+          "name": "owner_id",
+          "type": "string",
+          "summary": "Required owner id record field.",
+          "maps_to": "record.owner_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm persistiq duplicate campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/campaigns/duplicate"
+        }
+      ],
+      "risk": "duplicates an existing campaign (including its steps/sequence) into a new campaign in the target account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/events"
+        }
+      ]
+    },
+    {
+      "path": "lead fields list",
+      "summary": "Run the lead fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_fields",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq lead fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/lead_fields"
+        }
+      ]
+    },
+    {
+      "path": "lead statuses list",
+      "summary": "Run the lead statuses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_statuses",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq lead statuses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/lead_statuses"
+        }
+      ]
+    },
+    {
+      "path": "leads list",
+      "summary": "Run the leads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leads",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq leads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/leads"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes list",
+      "summary": "Run the mailboxes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mailboxes",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq mailboxes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/mailboxes"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "remove lead from campaign apply",
+      "summary": "Plan and execute the remove lead from campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_lead_from_campaign",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "campaign_id",
+          "type": "string",
+          "summary": "Required campaign id record field.",
+          "maps_to": "record.campaign_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm persistiq remove lead from campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/campaigns/{campaign_id}/leads/{id}"
+        }
+      ],
+      "risk": "removes a lead from a live outbound-email campaign, stopping any further scheduled automated outreach to it in that sequence; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "reply to campaign message apply",
+      "summary": "Plan and execute the reply to campaign message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "reply_to_campaign_message",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Required body record field.",
+          "maps_to": "record.body",
+          "required": true
+        },
+        {
+          "name": "campaign_id",
+          "type": "string",
+          "summary": "Required campaign id record field.",
+          "maps_to": "record.campaign_id",
+          "required": true
+        },
+        {
+          "name": "inbox_message_id",
+          "type": "string",
+          "summary": "Required inbox message id record field.",
+          "maps_to": "record.inbox_message_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm persistiq reply to campaign message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/campaigns/{campaign_id}/replies"
+        }
+      ],
+      "risk": "sends a real outbound email reply on behalf of the campaign's mailbox owner; irreversible once delivered; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tags"
+        }
+      ]
+    },
+    {
+      "path": "update lead apply",
+      "summary": "Plan and execute the update lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_lead",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm persistiq update lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/leads/{id}"
+        }
+      ],
+      "risk": "external mutation of an existing PersistIQ lead's fields; changing status/status_id/owner_id can move a lead into or out of active outbound-sequence automation depending on the target account's own campaign rules; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users"
+        }
+      ]
+    },
+    {
+      "path": "webhook plugin list",
+      "summary": "Run the webhook plugin ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_plugin",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "examples": [
+        "pm persistiq webhook plugin list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/webhook_plugin"
+        }
+      ]
+    }
+  ]
+}

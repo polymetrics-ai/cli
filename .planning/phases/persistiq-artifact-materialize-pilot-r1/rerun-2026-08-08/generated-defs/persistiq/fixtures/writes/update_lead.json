@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "lead_fixture_1",
+    "status": "active",
+    "owner_id": "user_fixture_1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/leads/lead_fixture_1",
+    "body": {
+      "status": "active",
+      "owner_id": "user_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "errors": null }
+  }
+}

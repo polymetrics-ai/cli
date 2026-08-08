@@ -1,0 +1,18 @@
+{
+  "record": {
+    "campaign_id": "campaign_fixture_1",
+    "owner_id": "user_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/campaigns/duplicate",
+    "body": {
+      "campaign_id": "campaign_fixture_1",
+      "owner_id": "user_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "errors": null, "campaign": { "id": "campaign_fixture_dup" } }
+  }
+}

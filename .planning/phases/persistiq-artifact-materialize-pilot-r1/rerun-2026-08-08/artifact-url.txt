@@ -1,0 +1,1 @@
+https://persistiq.com/api-docs/v1/swagger.json
