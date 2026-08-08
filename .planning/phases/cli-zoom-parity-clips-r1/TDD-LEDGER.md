@@ -229,6 +229,31 @@ fixed literal base URL, exactly one declared bearer auth, finite same-provider
 suffix boundary, 307/308 only, preview-bound closed JSON body, and no
 caller-supplied redirect target or credential header.
 
+### JSON multipart-event closed-body guard — additional RED after rebase 2026-08-08
+
+The rebase checkpoint retained the known JSON-event redirect gap. Before the
+semantic admission changed, a new negative test proved that the narrow
+exception must recursively close every object in the JSON body: an open nested
+`params` object could otherwise become a caller-shaped generic mutation. The
+focused test failed verbatim because the prior rule did not yet distinguish a
+closed JSON event from an open one:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestOperationJSONWriteAdmitsDeclaredMutationRedirect|TestOperationJSONMutationRedirectRequiresClosedBody|TestOperationDirectWriteJSONFollowsDeclaredRedirect)$'
+--- FAIL: TestOperationJSONWriteAdmitsDeclaredMutationRedirect (0.00s)
+    direct_write_test.go:505: closed JSON operation declared redirect = operation 0 ("zoom.clips.files.multipart_upload_events") rest.redirect is only valid for a multipart or base64_upload rest_write, want admitted provider-owned boundary
+--- FAIL: TestOperationJSONMutationRedirectRequiresClosedBody (0.00s)
+    direct_write_test.go:528: open JSON mutation redirect = operation 0 ("zoom.clips.files.multipart_upload_events.open_body") rest.redirect is only valid for a multipart or base64_upload rest_write, want nested closed-body rejection
+--- FAIL: TestOperationDirectWriteJSONFollowsDeclaredRedirect (0.00s)
+    direct_write_test.go:617: PreviewOperationDirectWrite declared JSON redirect: operation 0 ("acme.clips.multipart_upload_events.create") rest.redirect is only valid for a multipart or base64_upload rest_write
+FAIL
+FAIL	polymetrics.ai/internal/connectors/engine	0.777s
+FAIL
+```
+
+The tests use synthetic local endpoints and secret templates only. No request
+was sent in this RED state.
+
 ## GREEN connector — pending
 
 Record the real runner fixture lifecycle, source reconciliation, and command reachability here
