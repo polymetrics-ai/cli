@@ -355,3 +355,61 @@ dropped clause in the `pm help reverse` withholding paragraph was repaired in `i
 
 No test was weakened, skipped, or deleted. The two archive hook tests kept their assertions and
 their reasoning and moved to the seam the pin moved to. Cycle 6 added nine tests.
+
+## Cycle 7 — review round: the documented surface had to say what the runtime now enforces
+
+Cycle 6 put `repo archive`/`repo unarchive` behind the closed typed confirmation but stopped at the
+runtime. The declaration never reached `cli_surface.json`'s `notes`, so `pm connectors inspect
+github --json`, `MANUAL.md` and `SKILL.md` still described both commands as plain reverse-ETL
+writes. An agent reading the documented surface would build a plan and then fail at run with a
+confirmation error the docs never mentioned.
+
+**Red 7a — two destructive commands documented no confirmation.** `repo delete`, `cache delete`,
+`secret delete` and five others carry a `notes` marker; `repo archive`/`repo unarchive` had
+`notes: null`. **Green** — both entries carry the marker, and all three generated manuals now
+render it.
+
+**Red 7b — the marker itself named a flag that does not exist.** The convention string was
+`destructive; requires --allow-destructive + typed confirmation`, present on five commands at base
+and extended to eight by this branch. Verified against the built binary in a throwaway project:
+
+```
+pm github repo delete --credential gh-test
+-> Created connector command plan rplan_... / Preview required before an approval token is issued.
+
+pm github repo delete --credential gh-test --allow-destructive
+-> error: unknown flag --allow-destructive for command "repo delete"
+```
+
+Adding it to two more commands would have documented a second failure of exactly the kind 7a
+exists to remove, so the narrow fix was rejected for the class fix. **Green** — all ten github
+destructive commands read `destructive; requires typed confirmation --confirm destructive`, which
+is the flag `runConnectorWriteCommandFromPlan` parses. No test pinned the old string.
+
+**Red 7c — the derived artifacts were stale against cycle 6's `writes.json`.** The catalog records
+`confirm` per write action and had 181 for github where the bundle implied 183, and
+`body_fields: ["archived"]` makes `writeActionOptionalFields` return `["archived"]`, which
+`guide.go` renders as an `optional fields:` line — the manuals rendered 9 where a regenerated copy
+renders 11. `pm docs validate` checks headings, entry counts and icon metadata, not a byte-diff
+against the renderer, so nothing downstream would have caught it.
+**Green** — regenerated with the generators, not hand-merged:
+
+```
+./pm docs generate --dir docs/cli       -> docs/connectors/github/{MANUAL,SKILL}.md
+                                           docs/connectors/catalog/all-connectors.json
+./pm skills generate --dir docs/skills  -> docs/skills/pm-github/SKILL.md
+npm --prefix website run gen:catalog    -> website/data/connectors.generated.json
+                                           website/lib/connectors.catalog.data.generated.json
+POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli/ -run GoldenTranscript
+```
+
+Catalog confirm count 181 -> 183; manual `optional fields:` lines 9 -> 11. The golden transcripts
+did not move, because `connectors inspect --json` does not carry command `notes`.
+
+The generators again wanted to rewrite all 551 connectors' manuals, four `pm-*` skills, and the
+catalog's `gorgias` and `warehouse` entries. That is the pre-existing drift on `main` that commit
+216feae1e already isolated and left for its own PR, so it is reverted here again. Both website
+catalogs were diffed per connector after regeneration: the only changed entry is GitHub.
+
+No test was weakened, skipped, or deleted. Cycle 7 is declarations and generated output only; no
+runtime behaviour changed.
