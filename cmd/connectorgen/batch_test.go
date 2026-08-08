@@ -891,6 +891,33 @@ paths:
 	}
 }
 
+func TestParseBatchOpenAPIArtifactRequiresOpenAPI3OrSwagger2(t *testing.T) {
+	for _, test := range []struct {
+		name string
+		doc  string
+	}{
+		{name: "openapi2", doc: `openapi: 2.0.0
+paths:
+  /widgets:
+    get: {}`},
+		{name: "swagger3", doc: `swagger: "3.0"
+paths:
+  /widgets:
+    get: {}`},
+		{name: "both", doc: `openapi: 3.0.3
+swagger: "2.0"
+paths:
+  /widgets:
+    get: {}`},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if _, err := parseBatchOpenAPIArtifact([]byte(test.doc)); err == nil || !strings.Contains(err.Error(), "OpenAPI 3.x or Swagger 2.0") {
+				t.Fatalf("parse error = %v, want strict version rejection", err)
+			}
+		})
+	}
+}
+
 func TestParseBatchOpenAPIArtifactResolvesLocalPathItemReferencesAndTrace(t *testing.T) {
 	artifact := []byte(`{
 		"openapi": "3.1.0",
