@@ -40,5 +40,13 @@
     "command": "go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/connsdk ./internal/connectors/commandrunner ./internal/connectors/defs/zoom/...",
     "result": "failed as expected: client_auth is schema-unknown, json_object is unsupported, Chatbot counts remain 23/1819/1, and all four commands are unknown"
   },
-  "next": "commit and push this RED checkpoint; then implement the reusable foundations separately from the Zoom declaration"
+  "oauth_basic_client_auth_foundation": {
+    "state": "green",
+    "green_commit": "c3038e29c",
+    "scope": "oauth2_client_credentials client_auth=form|basic, with Basic protecting the client ID/secret from form duplication",
+    "verification": [
+      "go test -count=1 -timeout 20m ./internal/connectors/connsdk ./internal/connectors/engine"
+    ]
+  },
+  "next": "implement and verify the closed typed json_object CLI flag foundation separately; then author the Zoom Chatbot declaration"
 }
