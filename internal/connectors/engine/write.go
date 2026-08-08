@@ -982,13 +982,15 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 				FieldName: part.Name,
 				// Root and RelPath, not an absolute path: every later Stat and
 				// Open re-checks containment instead of trusting this one.
-				Root:              root,
-				RelPath:           relPath,
-				Path:              relPath,
-				ContentType:       part.ContentType,
-				AllowedMediaTypes: part.AllowedMediaTypes,
-				MaxBytes:          part.MaxBytes,
-				ExpectedSHA256:    expectedSHA256,
+				Root:                  root,
+				RelPath:               relPath,
+				Path:                  relPath,
+				ContentType:           part.ContentType,
+				AllowedMediaTypes:     part.AllowedMediaTypes,
+				ContentValidation:     part.ContentValidation,
+				AllowedFileExtensions: append([]string(nil), part.AllowedFileExtensions...),
+				MaxBytes:              part.MaxBytes,
+				ExpectedSHA256:        expectedSHA256,
 			})
 		default:
 			return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart part %q has unsupported type %q", action.Name, part.Name, part.Type)

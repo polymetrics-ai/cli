@@ -624,8 +624,16 @@ type MultipartPartSpec struct {
 	// assertion checkable. Absent means unconstrained; present and empty is a
 	// load error, so "bounded" and "unbounded" can never be confused.
 	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
-	Required          bool     `json:"required,omitempty"`
-	MaxBytes          int64    `json:"max_bytes,omitempty"`
+	// ContentValidation binds a structured-file check MIME sniffing cannot
+	// prove. "json" validates one complete JSON document from the approved,
+	// bounded snapshot before a request is sent.
+	ContentValidation string `json:"content_validation,omitempty"`
+	// AllowedFileExtensions closes filename-format restrictions such as a
+	// provider's ".json only" contract. The source name must end in a declared
+	// extension; absence leaves the part unconstrained.
+	AllowedFileExtensions []string `json:"allowed_file_extensions,omitempty"`
+	Required              bool     `json:"required,omitempty"`
+	MaxBytes              int64    `json:"max_bytes,omitempty"`
 }
 
 type DeleteSpec struct {
@@ -1606,6 +1614,12 @@ func validateWriteBodies(actions []WriteAction) error {
 				if err := validateMultipartMediaTypes(part); err != nil {
 					return fmt.Errorf("action %d (%q) multipart part %d: %w", i, action.Name, j, err)
 				}
+				if err := validateMultipartContentConstraints(part); err != nil {
+					return fmt.Errorf("action %d (%q) multipart part %d: %w", i, action.Name, j, err)
+				}
+				if strings.TrimSpace(part.ContentValidation) != "" && part.MaxBytes <= 0 && action.Multipart.MaxBytes <= 0 {
+					return fmt.Errorf("action %d (%q) multipart part %d content_validation requires a positive file or aggregate max_bytes", i, action.Name, j)
+				}
 			}
 		}
 	}
@@ -1825,6 +1839,28 @@ func validateMultipartMediaTypes(part MultipartPartSpec) error {
 		}
 	}
 	return fmt.Errorf("content_type %q is not among its own allowed_media_types %s", declared, strings.Join(part.AllowedMediaTypes, ", "))
+}
+
+// validateMultipartContentConstraints keeps structured-file and filename
+// restrictions closed at bundle load time. connsdk repeats the value checks at
+// request time because callers can construct MultipartFile without a bundle.
+func validateMultipartContentConstraints(part MultipartPartSpec) error {
+	if strings.TrimSpace(part.ContentValidation) == "" && part.AllowedFileExtensions == nil {
+		return nil
+	}
+	if part.Type != "file" {
+		return fmt.Errorf("content validation and allowed file extensions are only meaningful on a file part, got type %q", part.Type)
+	}
+	if err := connsdk.ValidateMultipartFileContentPolicy(part.ContentValidation, part.AllowedFileExtensions); err != nil {
+		return err
+	}
+	if strings.EqualFold(strings.TrimSpace(part.ContentValidation), "json") {
+		declared, _, err := mime.ParseMediaType(strings.TrimSpace(part.ContentType))
+		if err != nil || !strings.EqualFold(declared, "application/json") {
+			return fmt.Errorf("content_validation json requires content_type application/json")
+		}
+	}
+	return nil
 }
 
 func validateGraphQLSpec(spec *GraphQLRequestSpec, operationKind string) error {
@@ -2147,6 +2183,9 @@ func validateOperationMultipartSemantics(i int, op OperationSpec) error {
 			}
 		}
 		if err := validateMultipartMediaTypes(part); err != nil {
+			return fmt.Errorf("operation %d (%q) rest.multipart part %d: %w", i, op.ID, partIndex, err)
+		}
+		if err := validateMultipartContentConstraints(part); err != nil {
 			return fmt.Errorf("operation %d (%q) rest.multipart part %d: %w", i, op.ID, partIndex, err)
 		}
 	}

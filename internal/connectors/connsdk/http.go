@@ -209,8 +209,15 @@ type MultipartFile struct {
 	// so the claim made to the provider is one we have verified rather than one
 	// we merely declared.
 	AllowedMediaTypes []string
-	MaxBytes          int64
-	ExpectedSHA256    string
+	// ContentValidation is a declared structured-file validator that applies to
+	// the bounded snapshot before it reaches the wire. "json" proves one full
+	// JSON document, which MIME sniffing intentionally cannot infer.
+	ContentValidation string
+	// AllowedFileExtensions is the declaration-owned source-name boundary for a
+	// provider that admits only specific file formats such as .json.
+	AllowedFileExtensions []string
+	MaxBytes              int64
+	ExpectedSHA256        string
 }
 
 // sourceName is the path used in messages and as the default upload filename.
@@ -239,10 +246,11 @@ func (f MultipartFile) open() (*os.File, error) {
 }
 
 // needsSnapshot reports whether the file must be copied to a bounded temp file
-// before it is sent: either its content is bound to an approved digest, or its
-// media type is bounded and has to be checked against the actual bytes.
+// before it is sent: either its content is bound to an approved digest, its
+// media type is bounded and checked against actual bytes, or a declared
+// structured-file validator must inspect the bounded snapshot.
 func (f MultipartFile) needsSnapshot() bool {
-	return f.ExpectedSHA256 != "" || len(f.AllowedMediaTypes) > 0
+	return f.ExpectedSHA256 != "" || len(f.AllowedMediaTypes) > 0 || strings.TrimSpace(f.ContentValidation) != ""
 }
 
 type requestBody struct {
@@ -624,6 +632,15 @@ func validateMultipartForm(form MultipartForm) error {
 				return fmt.Errorf("multipart file %q allowed media type %q is invalid: %w", file.FieldName, allowed, err)
 			}
 		}
+		if err := ValidateMultipartFileContentPolicy(file.ContentValidation, file.AllowedFileExtensions); err != nil {
+			return fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+		}
+		if strings.TrimSpace(file.ContentValidation) != "" && file.MaxBytes <= 0 && form.MaxBytes <= 0 {
+			return fmt.Errorf("multipart file %q content validation requires a positive file or aggregate max_bytes", file.FieldName)
+		}
+		if err := checkAllowedFileExtension(file); err != nil {
+			return err
+		}
 		info, err := file.stat()
 		if err != nil {
 			return fmt.Errorf("multipart file %q: %w", file.FieldName, err)
@@ -640,6 +657,66 @@ func validateMultipartForm(form MultipartForm) error {
 		}
 	}
 	return nil
+}
+
+// ValidateMultipartFileContentPolicy validates declaration-owned structured
+// file constraints. It is exported because engine bundle loading and direct
+// connsdk callers must apply exactly the same closed policy.
+func ValidateMultipartFileContentPolicy(validation string, extensions []string) error {
+	switch strings.TrimSpace(validation) {
+	case "", "json":
+	default:
+		return fmt.Errorf("content_validation must be json when declared")
+	}
+	if extensions == nil {
+		return nil
+	}
+	if len(extensions) == 0 {
+		return fmt.Errorf("allowed_file_extensions must not be empty; omit it to leave the file name unconstrained")
+	}
+	seen := make(map[string]struct{}, len(extensions))
+	for _, raw := range extensions {
+		extension := canonicalMultipartFileExtension(raw)
+		if extension == "" {
+			return fmt.Errorf("allowed_file_extensions contains an invalid extension")
+		}
+		if _, duplicate := seen[extension]; duplicate {
+			return fmt.Errorf("allowed_file_extensions repeats an extension")
+		}
+		seen[extension] = struct{}{}
+	}
+	return nil
+}
+
+func canonicalMultipartFileExtension(raw string) string {
+	trimmed := strings.TrimSpace(raw)
+	if trimmed != raw {
+		return ""
+	}
+	extension := strings.ToLower(trimmed)
+	if extension == "" || len(extension) > 64 || !strings.HasPrefix(extension, ".") || len(extension) == 1 || strings.HasPrefix(extension, "..") || strings.HasSuffix(extension, ".") || strings.Contains(extension, "..") || strings.ContainsAny(extension, "/\\") {
+		return ""
+	}
+	for _, char := range extension[1:] {
+		if (char < 'a' || char > 'z') && (char < '0' || char > '9') && char != '-' && char != '.' {
+			return ""
+		}
+	}
+	return extension
+}
+
+func checkAllowedFileExtension(file MultipartFile) error {
+	if file.AllowedFileExtensions == nil {
+		return nil
+	}
+	name := strings.ToLower(filepath.Base(file.sourceName()))
+	for _, raw := range file.AllowedFileExtensions {
+		extension := canonicalMultipartFileExtension(raw)
+		if extension != "" && len(name) > len(extension) && strings.HasSuffix(name, extension) {
+			return nil
+		}
+	}
+	return fmt.Errorf("multipart file %q does not use one of the allowed file extensions", file.FieldName)
 }
 
 func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (MultipartForm, func(), error) {
@@ -693,6 +770,10 @@ func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (Mu
 			cleanup()
 			return MultipartForm{}, func() {}, err
 		}
+		if err := validateMultipartFileContent(file, tempPath); err != nil {
+			cleanup()
+			return MultipartForm{}, func() {}, err
+		}
 		if prepared.Files[i].FileName == "" {
 			prepared.Files[i].FileName = filepath.Base(file.sourceName())
 		}
@@ -715,6 +796,31 @@ func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (Mu
 		total += size
 	}
 	return prepared, cleanup, nil
+}
+
+func validateMultipartFileContent(file MultipartFile, snapshotPath string) error {
+	switch strings.TrimSpace(file.ContentValidation) {
+	case "":
+		return nil
+	case "json":
+		input, err := os.Open(snapshotPath)
+		if err != nil {
+			return fmt.Errorf("multipart file %q validate JSON snapshot: %w", file.FieldName, err)
+		}
+		defer input.Close()
+		decoder := json.NewDecoder(input)
+		var document any
+		if err := decoder.Decode(&document); err != nil {
+			return fmt.Errorf("multipart file %q must contain valid JSON", file.FieldName)
+		}
+		var trailing any
+		if err := decoder.Decode(&trailing); err != io.EOF {
+			return fmt.Errorf("multipart file %q must contain valid JSON", file.FieldName)
+		}
+		return nil
+	default:
+		return fmt.Errorf("multipart file %q has unsupported content validation", file.FieldName)
+	}
 }
 
 // checkAllowedMediaType rejects a file whose actual bytes do not sniff as one of
