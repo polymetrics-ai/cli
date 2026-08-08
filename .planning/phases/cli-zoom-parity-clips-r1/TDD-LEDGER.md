@@ -212,6 +212,15 @@ $ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperatio
 FAIL
 FAIL	polymetrics.ai/internal/connectors/engine	0.759s
 FAIL
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestOperationJSONWriteAdmitsDeclaredMutationRedirect|TestOperationDirectWriteJSONFollowsDeclaredRedirect)$'
+--- FAIL: TestOperationJSONWriteAdmitsDeclaredMutationRedirect (0.00s)
+    direct_write_test.go:505: closed JSON operation declared redirect = operation 0 ("zoom.clips.files.multipart_upload_events") rest.redirect is only valid for a multipart or base64_upload rest_write, want admitted provider-owned boundary
+--- FAIL: TestOperationDirectWriteJSONFollowsDeclaredRedirect (0.00s)
+    direct_write_test.go:594: PreviewOperationDirectWrite declared JSON redirect: operation 0 ("acme.clips.multipart_upload_events.create") rest.redirect is only valid for a multipart or base64_upload rest_write
+FAIL
+FAIL	polymetrics.ai/internal/connectors/engine	0.732s
+FAIL
 ```
 
 The fixture names Zoom's documented operation but uses only a synthetic secret

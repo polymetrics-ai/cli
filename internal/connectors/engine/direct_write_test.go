@@ -506,6 +506,104 @@ func TestOperationJSONWriteAdmitsDeclaredMutationRedirect(t *testing.T) {
 	}
 }
 
+// TestOperationDirectWriteJSONFollowsDeclaredRedirect verifies that the
+// declaration-owned JSON event body is reproduced at the one admitted redirect
+// target with the operation's bearer credential retained. It exercises the
+// preview/approval/execute boundary rather than a raw requester escape hatch.
+func TestOperationDirectWriteJSONFollowsDeclaredRedirect(t *testing.T) {
+	const accessToken = "fixture-json-redirect-token"
+
+	var redirectURL string
+	var initialCalls, redirectedCalls int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("declared JSON redirect did not retain the operation bearer")
+		}
+		switch request.URL.Path {
+		case "/clips/files/multipart/upload_events":
+			initialCalls++
+			http.Redirect(w, request, redirectURL, http.StatusTemporaryRedirect)
+		case "/redirected":
+			redirectedCalls++
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("redirected JSON event request did not retain JSON content type")
+			}
+			var body map[string]any
+			if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+				t.Fatalf("decode redirected JSON event request: %v", err)
+			}
+			if got, _ := body["method"].(string); got != "CreateMultipartUpload" {
+				t.Fatalf("redirected JSON event method = %q, want CreateMultipartUpload", got)
+			}
+			params, _ := body["params"].(map[string]any)
+			if got, _ := params["file_name"].(string); got != "fixture.webm" {
+				t.Fatalf("redirected JSON event filename = %q, want fixture.webm", got)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusCreated)
+			_, _ = w.Write([]byte(`{"upload_context":"fixture-upload-context"}`))
+		default:
+			t.Fatalf("unexpected JSON redirect path %q", request.URL.Path)
+		}
+	}))
+	defer server.Close()
+	baseURL := localhostBinaryURL(t, server.URL)
+	redirectURL = baseURL + "/redirected"
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: baseURL},
+		Operations: []OperationSpec{{
+			ID:            "acme.clips.multipart_upload_events.create",
+			Kind:          "rest_write",
+			Summary:       "Initiate one multipart Clip upload",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json_redacted",
+			MutationClass: "create",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/clips/files/multipart/upload_events",
+				BaseURL:     baseURL,
+				Auth:        []AuthSpec{{Mode: "bearer", Token: "{{ secrets.fixture_token }}"}},
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				Body:        map[string]any{"method": "CreateMultipartUpload"},
+				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"required":["method"],"properties":{"method":{"type":"string","enum":["CreateMultipartUpload"]},"params":{"type":"object","additionalProperties":false,"properties":{"file_name":{"type":"string"}}}}}`),
+				Redirect:    &MutationRedirectSpec{AllowedHostSuffixes: []string{"localhost"}, MaxHops: 1},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/clips/files/multipart/upload_events",
+			Operation: &SurfaceOperation{Model: "sensitive_reverse_etl", Status: "blocked", Risk: "high", BlockedByDefault: true, Reason: "operation metadata is bound by the executor"},
+		}}},
+	}
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.clips.multipart_upload_events.create",
+		Config: connectors.RuntimeConfig{
+			Secrets:             map[string]string{"fixture_token": accessToken},
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"params": map[string]any{"file_name": "fixture.webm"}},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite declared JSON redirect: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectWrite declared JSON redirect: %v", err)
+	}
+	if result.Status != http.StatusCreated || initialCalls != 1 || redirectedCalls != 1 {
+		t.Fatalf("JSON redirect result/status/calls = %#v/%d/%d, want one admitted redirect", result, initialCalls, redirectedCalls)
+	}
+}
+
 // TestOperationDirectWriteBase64UploadFollowsDeclaredRedirect proves that the
 // narrowly admitted JSON upload reuses the mutation redirect transport without
 // widening it into a caller-selected redirect or credential policy.
