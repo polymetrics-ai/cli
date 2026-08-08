@@ -100,6 +100,38 @@ The test uses loopback servers and synthetic credentials only. It asserts that t
 server receives zero requests and the operation-scoped server receives exactly the declared bearer
 request. It is committed and pushed before extending the engine/meta-schema.
 
+## GREEN operation-origin/auth foundation
+
+Commit 833a2d9d4 adds a deliberately narrow, paired rest.base_url plus rest.auth override for
+rest_write only:
+
+- The operation loader rejects either field alone and rejects both on non-write operations.
+- Preview binds its request URL to the same declared origin later used by execution.
+- Execution clones only the operation's transport fields before creating the runtime, retaining the
+  existing request shaping, rate-limit selection, approval, no-retry, redirect, and redaction
+  controls.
+- The focused loopback test proves the ordinary API server sees zero requests while the
+  operation-scoped server sees exactly one request with its declared bearer authentication.
+- connectorgen validate statically checks the operation-scoped URL/auth templates against
+  spec.json just as it does the bundle-wide transport fields.
+
+~~~text
+$ go test -count=1 -timeout 20m -run TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth ./internal/connectors/engine
+ok  polymetrics.ai/internal/connectors/engine  0.750s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok  polymetrics.ai/internal/connectors/engine  4.843s
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen
+ok  polymetrics.ai/cmd/connectorgen  10.938s
+
+$ go vet ./internal/connectors/engine ./cmd/connectorgen
+~~~
+
+This foundation is separate from the Zoom declaration and is pushed in 833a2d9d4. It is available
+to any future declarative customer-hosted rest_write that needs a distinct origin and credential;
+no other connector bundle is changed by this foundation commit.
+
 ## GREEN connector — pending
 
 The connector declaration will make the existing RED Zoom surface test green: one exact POST,
