@@ -132,3 +132,92 @@ operation, add a credential field, or alter generated output.
   no-body Link Unfurls asserts a `204` status, and DELETE requires destructive confirmation.
 - Zoom's endpoint ledger changes only its four Chatbot rows. No `unsafe_or_disallowed` row is
   introduced.
+
+## RED/GREEN foundation — true empty bodies for declared status actions
+
+The Chatbot fixture found a general executor defect after its declaration was exercised: a typed
+nil `map[string]any` passed through `Requester.DoLimited` as a non-nil interface and serialized as
+the JSON literal `null`. That violates a documented no-body operation even when the response is
+correctly status-only. Before changing the executor, the existing operation-scoped-origin test was
+strengthened to assert both an empty payload and absent `Content-Type`:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth$'
+--- FAIL: TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth (0.00s)
+    direct_write_test.go:241: no-body direct-write payload = "null", want no payload
+FAIL
+FAIL    polymetrics.ai/internal/connectors/engine
+FAIL
+```
+
+The red assertion was committed and pushed as `b81cefb78`. Commit `acbf7405c` then split the
+direct-write dispatch: JSON operations retain their declared body, while `format=none` passes an
+untyped `nil` to the requester. This preserves the ordinary requester's no-body behavior and does
+not add a generic raw transport.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok      polymetrics.ai/internal/connectors/engine
+```
+
+This is a reusable foundation for every declared POST/PUT/PATCH/DELETE action whose contract has
+no request body; it directly unblocks Zoom Chatbot Link Unfurls and future status-only actions.
+
+## GREEN connector — four declared Chatbot operations
+
+The four provider operations now have `rest_write` contracts, dedicated client-credential fields,
+closed typed body schemas, command paths, generated command metadata, and synthetic fixtures.
+`connectorgen surface-sync` generated every derivable `api_surface`, `output_policy`, path mapping,
+and response-cap field; `surface-reconcile --notes-contains provider_module=chatbot` changed only
+the four Chatbot ledger rows to `covered_by.direct_write`.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...
+ok      polymetrics.ai/internal/connectors/defs/zoom
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/zoom
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ go run ./cmd/connectorgen surface-reconcile --check --notes-contains provider_module=chatbot
+connectorgen surface-reconcile: 551 connector(s) scanned; covered=0 blocked=0 unchanged=0 refused=0
+```
+
+The isolated lifecycle fixture performs one real token exchange and one action request for each
+command against loopback servers. It proves HTTP Basic client authentication with the client ID and
+secret absent from the form, Bearer use at the action endpoint, exact method/path/body, no
+pagination input, plan/preview no-network behavior, DELETE typed confirmation, redaction, and
+Link Unfurls' `204` status-only result. All fixture identifiers are synthetic; no secret or token
+value is emitted.
+
+## RED/GREEN foundation — redact typed path inputs in direct-write errors
+
+Manual review found that `json_redacted` correctly removed declared response/body values but a
+transport error could still preserve a declared path parameter inside its request URL. The existing
+error-redaction test was extended with a typed `message_id` path binding before production code
+changed:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteJSONRedactedErrorsHideDeclaredRequestAndResponseFields$'
+--- FAIL: TestOperationDirectWriteJSONRedactedErrorsHideDeclaredRequestAndResponseFields (0.00s)
+    direct_write_test.go:416: json_redacted direct-write error exposed sensitive request or response content
+FAIL
+FAIL    polymetrics.ai/internal/connectors/engine
+FAIL
+```
+
+The red checkpoint is `c9c89c707`. Commit `070432f40` collects typed path values into the
+already-established direct-write literal-redaction set. `json_redacted` still applies its strict
+JSON error policy; other output policies retain their established complete provider diagnostics
+except for those declared path/body literals. This avoids changing general error semantics merely
+to protect an identifier in a URL.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok      polymetrics.ai/internal/connectors/engine
+```
+
+The foundation protects Chatbot message, user, and trigger path values as well as future typed
+direct-write operations. It does not create a raw HTTP capability or expose credential material.

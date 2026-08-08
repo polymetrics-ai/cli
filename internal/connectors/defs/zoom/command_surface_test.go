@@ -1413,6 +1413,7 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 			fixture:           "delete_chatbot_message.json",
 			flags:             map[string][]string{"message-id": {"fixture-chatbot-message"}},
 			destructive:       true,
+			expectsBody:       true,
 			responseSensitive: []string{"fixture-chatbot-message", "fixture-chatbot-response-token"},
 			responseMarkers:   []string{"message_id", "token"},
 		},

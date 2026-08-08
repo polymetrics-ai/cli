@@ -7,7 +7,7 @@ description: Zoom connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads, approval-gated clinical-note and Quality Management interaction actions, and a redacted Customer Managed Keys Hybrid archival key action.
+Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads, approval-gated Chatbot, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.
 
 ## Icon
 
@@ -29,12 +29,15 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
 ## Configuration
 
 - base_url
+- chatbot_token_url
 - key_connector_base_url
 - max_pages
 - mode
 - page_size
 - user_id
 - access_token (secret)
+- chatbot_client_id (secret)
+- chatbot_client_secret (secret)
 - key_connector_jwt (secret)
 
 ## ETL Streams
@@ -67,13 +70,13 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
 ## Security
 
 - read risk: external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data
-- write risk: typed Zoom reverse ETL mutation of a healthcare clinical-note completion status or Quality Management interaction creation, plus Customer Managed Keys Hybrid archival key decryption with redacted output
-- approval: mutating commands require plan, preview, explicit approval, and execute; Customer Managed Keys Hybrid archival key decryption additionally requires typed confirmation; read-only commands require none
+- write risk: typed Zoom Chatbot message, Link Unfurls, healthcare clinical-note, and Quality Management actions, plus Customer Managed Keys Hybrid archival key decryption with redacted output
+- approval: mutating commands require plan, preview, explicit approval, and execute; Chatbot deletion and Customer Managed Keys Hybrid archival key decryption additionally require typed confirmation; read-only commands require none
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
 
-- Run declared Zoom stream reads, bounded module-specific direct reads including sensitive Cobrowse SDK sessions, approval-gated clinical-note and Quality Management interaction actions, and a redacted Customer Managed Keys Hybrid archival key action.
+- Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.
 - Usage: pm zoom <group> <command> [flags]
 - Source CLI: Zoom API reference (OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05)
 - Global flags:
@@ -112,6 +115,11 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
   - cobrowse-sdk past-sessions list - List past Cobrowse SDK sessions for an optional monthly date range. [intent=direct_read availability=implemented operation=zoom.list_cobrowse_past_sessions]; notes: Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags.; flags: --from, --to
   - cobrowse-sdk sessions get - Get details for one Cobrowse SDK session. [intent=direct_read availability=implemented operation=zoom.get_cobrowse_session]; notes: Bounded sensitive Zoom read with a typed required session-id path parameter; session pins, user/session identifiers, display names, connection IDs, and IP addresses are redacted before output.; flags: --session-id (required)
   - cobrowse-sdk sessions users list - List users from one Cobrowse SDK session. [intent=direct_read availability=implemented operation=zoom.list_cobrowse_session_users]; notes: Bounded sensitive Zoom read with a typed required session-id path parameter; page_size and next_page_token are response-only fields and session/user connection data is redacted before output.; flags: --session-id (required)
+- Chatbot
+  - chatbot messages send - Send one Zoom Chatbot message. [intent=direct_write availability=implemented operation=zoom.send_chatbot_message]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Sends provider-defined Chatbot content and JID/account identifiers through Zoom.; notes: Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. Message and JID values are redacted in plans, errors, and JSON output.; flags: --account-id (required), --content (required), --robot-jid (required), --to-jid (required), --user-jid (required), --is-markdown-support, --reply-to, --visible-to-user
+  - chatbot messages edit - Edit one Zoom Chatbot message. [intent=direct_write availability=implemented operation=zoom.edit_chatbot_message]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Changes provider-defined Chatbot content and carries account/JID identifiers.; notes: Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. Message and JID values are redacted in plans, errors, and JSON output.; flags: --message-id (required), --account-id (required), --content (required), --robot-jid (required), --is-markdown-support, --user-jid
+  - chatbot messages delete - Delete one Zoom Chatbot message. [intent=direct_write availability=implemented operation=zoom.delete_chatbot_message]; approval: Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.; risk: Irreversibly deletes a Zoom Chatbot message.; notes: Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. The message identifier and JSON response are redacted.; flags: --message-id (required)
+  - chatbot link-unfurls create - Create one Zoom Chatbot Link Unfurls action. [intent=direct_write availability=implemented operation=zoom.create_chatbot_link_unfurl]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Posts provider-defined Link Unfurls content for a Chatbot trigger.; notes: Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. Zoom returns 204 No Content, which is recorded as a successful status-only action.; flags: --user-id (required), --trigger-id (required), --content (required)
 - Customer Managed Keys Hybrid
   - customer-managed-keys-hybrid archival-key decrypt - Decrypt one Customer Managed Keys Hybrid archival data key. [intent=direct_write availability=implemented operation=zoom.decrypt_customer_managed_key_archival]; approval: Requires plan, no-network preview, explicit single-use approval, typed confirmation, then execute.; risk: Returns sensitive key material only through a redacted output policy.; notes: Requires an operator-provisioned Customer Managed Keys Hybrid credential with key_connector_base_url ending in /api/v2 and an environment- or stdin-supplied key_connector_jwt. The operation declares its own customer-hosted origin and bearer; it never reuses the ordinary Zoom OAuth bearer.; flags: --encrypt-context (required), --key-id (required)
 - Help topics:

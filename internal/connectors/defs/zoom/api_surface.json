@@ -3512,53 +3512,29 @@
     {
       "method": "POST",
       "path": "/v2/im/chat/messages",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
-        "notes": "classification=implementable_now; provider_module=chatbot; operation_title=Send Chatbot messages; provider_server=https://api.zoom.us/v2; provider_path=/im/chat/messages; artifact=https://developers.zoom.us/docs/api/chatbot.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "chatbot messages send"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/im/chat/messages/{message_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
-        "notes": "classification=implementable_now; provider_module=chatbot; operation_title=Edit a Chatbot message; provider_server=https://api.zoom.us/v2; provider_path=/im/chat/messages/{message_id}; artifact=https://developers.zoom.us/docs/api/chatbot.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "chatbot messages edit"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/im/chat/messages/{message_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
-        "notes": "classification=implementable_now; provider_module=chatbot; operation_title=Delete a Chatbot message; provider_server=https://api.zoom.us/v2; provider_path=/im/chat/messages/{message_id}; artifact=https://developers.zoom.us/docs/api/chatbot.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "chatbot messages delete"
       }
     },
     {
       "method": "POST",
       "path": "/v2/im/chat/users/{userId}/unfurls/{triggerId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
-        "notes": "classification=implementable_now; provider_module=chatbot; operation_title=Link Unfurls; provider_server=https://api.zoom.us/v2; provider_path=/im/chat/users/{userId}/unfurls/{triggerId}; artifact=https://developers.zoom.us/docs/api/chatbot.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "chatbot link-unfurls create"
       }
     },
     {

@@ -2,8 +2,8 @@
 
 Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.
 The current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes,
-Healthcare clinical-note, Quality Management, and Cobrowse SDK routes; both module write actions
-remain approval-gated.
+Healthcare clinical-note, Quality Management, Cobrowse SDK, and Chatbot routes; every declared
+write action remains approval-gated.
 
 The provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1
 reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build
@@ -13,9 +13,9 @@ three existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list
 `pm zoom webinars list`. Later waves add bounded direct-read/write commands module by module; see
 "Direct reads" below and "Executable today" in Known limits for the exact current set.
 
-Two high-risk Zoom write actions are implemented for Healthcare and Quality Management. All
-remaining provider operations stay explicitly disposed in `api_surface.json`; the ledger is not a
-claim that those operations are executable.
+High-risk Zoom write actions are implemented for Chatbot, Healthcare, Quality Management, and
+Customer Managed Keys Hybrid. All remaining provider operations stay explicitly disposed in
+`api_surface.json`; the ledger is not a claim that those operations are executable.
 
 Service API documentation: https://developers.zoom.us/docs/api/.
 
@@ -25,8 +25,14 @@ Connection fields:
 
 - `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token
   (Authorization: Bearer `<access_token>`). Never logged.
+- `chatbot_client_id` (required for Chatbot commands, secret, string); client ID used only for the
+  declared Chatbot client-credentials exchange. Never logged.
+- `chatbot_client_secret` (required for Chatbot commands, secret, string); client secret used only
+  for the declared Chatbot client-credentials exchange. Never logged.
 - `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL
   override for tests or proxies.
+- `chatbot_token_url` (optional, string); default `https://api.zoom.us/oauth/token`; format `uri`;
+  Chatbot-only client-credentials token endpoint.
 - `max_pages` (optional, string); default `0`. The field remains in the connection specification,
   but the current Zoom cursor paginator does not consume it.
 - `mode` (optional, string).
@@ -35,14 +41,19 @@ Connection fields:
 - `user_id` (optional, string); Zoom user ID or email that scopes the `meetings` and `webinars`
   streams. Set it in credential configuration or override it with `--user-id` for either command.
 
-Secret fields are redacted in logs and write previews: `access_token`.
+Secret fields are redacted in logs and write previews: `access_token`, `chatbot_client_id`, and
+`chatbot_client_secret`.
 
-Default configuration values: `base_url=https://api.zoom.us/v2`, `max_pages=0`, `page_size=100`.
-`max_pages` is materialized as configuration but does not affect Zoom pagination.
+Default configuration values: `base_url=https://api.zoom.us/v2`,
+`chatbot_token_url=https://api.zoom.us/oauth/token`, `max_pages=0`, `page_size=100`. `max_pages`
+is materialized as configuration but does not affect Zoom pagination.
 
 Authentication behavior:
 
 - Bearer token authentication using `secrets.access_token`.
+- Chatbot actions use their own declared client-credentials exchange: the client ID and secret are
+  sent in an HTTP Basic authorization header to `chatbot_token_url`, then the returned access token
+  is used as the action's Bearer credential. They do not reuse `access_token`.
 
 Requests use the configured `base_url` value after applying defaults.
 
@@ -198,8 +209,28 @@ Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session da
   is required by Zoom. Download URLs and interaction-info fields are redacted in generic write
   errors. Fixture execution proves the documented `201 Created` response succeeds.
 
-The provider inventory records 1,032 documented writes. Only the Healthcare completion-status and
-Quality Management interaction-creation actions are currently declared; all remaining write rows
+- `pm zoom chatbot messages send --account-id <id> --content <json-object> --robot-jid <jid>
+  --to-jid <jid> --user-jid <jid>` plans the typed POST `/v2/im/chat/messages` action
+  (`send_chatbot_message`). `content` accepts exactly one provider-defined JSON object, rather than
+  a raw arbitrary body. Account, message, and JID values are redacted.
+
+- `pm zoom chatbot messages edit --message-id <id> --account-id <id> --content <json-object>
+  --robot-jid <jid>` plans the typed PUT `/v2/im/chat/messages/{message_id}` action
+  (`edit_chatbot_message`). It has the same Chatbot-only client-credentials transport and
+  redaction policy.
+
+- `pm zoom chatbot messages delete --message-id <id>` plans the typed DELETE
+  `/v2/im/chat/messages/{message_id}` action (`delete_chatbot_message`). It requires the normal
+  plan/preview/approval flow plus destructive typed confirmation before execute.
+
+- `pm zoom chatbot link-unfurls create --user-id <id> --trigger-id <id> --content <string>` plans
+  the typed POST `/v2/im/chat/users/{userId}/unfurls/{triggerId}` action
+  (`create_chatbot_link_unfurl`). Zoom's `204 No Content` is recorded as a successful status-only
+  action; no response body is invented.
+
+The provider inventory records 1,032 documented writes. The four Chatbot actions above, the
+Healthcare completion-status action, the Quality Management interaction-creation action, and the
+Customer Managed Keys Hybrid archival-key action are currently declared; all remaining write rows
 are either blocked on connector-local typed contracts, safety/approval evidence, and fixtures, or
 on the corresponding Zoom account entitlement. Future writes must use the existing plan → preview
 → explicit approval → execute path; destructive operations additionally require the typed
@@ -210,17 +241,18 @@ confirmation gate.
 - Batch default: `read_page_size=100`.
 - Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See
   issue #3915 for the full module-by-module tracking table.
-- Executable today: 22 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
+- Executable today: 27 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
   bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded
   `my-notes` module direct reads, 2 Healthcare direct reads, 1 Healthcare PATCH action, 5 Quality
-  Management direct reads, 1 approval-gated Quality Management POST action, and 4 sensitive
-  Cobrowse SDK direct reads.
+  Management direct reads, 1 approval-gated Quality Management POST action, 4 sensitive Cobrowse
+  SDK direct reads, 4 approval-gated Chatbot actions, and 1 redacted Customer Managed Keys Hybrid
+  archival-key action.
 - Direct-read commands in this connector take only the request inputs the live provider artifact
   expressly documents. Cobrowse's `from`/`to` range is exposed because the operation prose declares
   it as a query input; a response-body field alone (including `page_size` and `next_page_token`) is
   not sufficient evidence of an accepted request parameter. This is a deliberate module-by-module
   scope-narrowing, not an oversight.
-- Pending connector-local delivery: 1,820 operations have no shared foundation blocker, but still
+- Pending connector-local delivery: 1,815 operations have no shared foundation blocker, but still
   need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can
   become commands.
 - Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one
