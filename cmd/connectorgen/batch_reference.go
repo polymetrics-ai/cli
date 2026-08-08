@@ -77,7 +77,11 @@ func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batch
 			inventory = mergeBatchArtifactInventories(inventory, batchArtifactInventory{Endpoints: []batchArtifactEndpoint{endpoint}})
 		}
 
-		for _, link := range batchHTMLReferenceLinks(current.Raw, rootURL) {
+		currentURL, currentURLErr := parseBatchReferenceURL(current.URL)
+		if currentURLErr != nil {
+			return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference page URL %q is unsafe: %v", current.URL, currentURLErr)
+		}
+		for _, link := range batchHTMLReferenceLinks(current.Raw, currentURL) {
 			if seen[link] {
 				continue
 			}
@@ -215,13 +219,14 @@ func batchHTMLReferenceLinks(raw []byte, base *url.URL) []string {
 			return
 		}
 		resolved := base.ResolveReference(parsed)
-		if resolved.Scheme != "https" || resolved.Host == "" || resolved.User != nil || resolved.Fragment != "" {
+		resolved.Fragment = ""
+		resolved.RawFragment = ""
+		if resolved.Scheme != "https" || resolved.Host == "" || resolved.User != nil {
 			return
 		}
 		if !strings.EqualFold(strings.TrimSuffix(resolved.Hostname(), "."), strings.TrimSuffix(base.Hostname(), ".")) {
 			return
 		}
-		resolved.Fragment = ""
 		if validateBatchReferenceURLObject(resolved) == nil {
 			links[resolved.String()] = true
 		}
