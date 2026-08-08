@@ -7,7 +7,7 @@ description: Zoom connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes approval-gated clinical-note status updates.
+Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes approval-gated clinical-note and Quality Management interaction actions.
 
 ## Icon
 
@@ -57,17 +57,21 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
   - endpoint: PATCH /clinical_notes/notes/{{ record.note_id }}
   - required fields: note_id, is_note_completed
   - risk: high: mutates a patient's clinical note completion status; requires reverse ETL approval
+- create_quality_management_interaction:
+  - endpoint: POST /qm/interactions
+  - required fields: download_url
+  - risk: high: imports a third-party interaction into Zoom Quality Management; requires reverse ETL approval
 
 ## Security
 
-- read risk: external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, and healthcare clinical-note data
-- write risk: typed Zoom reverse ETL mutation of a healthcare clinical-note completion status
+- read risk: external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, and Quality Management data
+- write risk: typed Zoom reverse ETL mutation of a healthcare clinical-note completion status or Quality Management interaction creation
 - approval: reverse ETL writes require plan, preview, explicit approval, and execute; read-only commands require none
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
 
-- Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note status updates.
+- Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note and Quality Management interaction actions.
 - Usage: pm zoom <group> <command> [flags]
 - Source CLI: Zoom API reference (OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05)
 - Global flags:
@@ -94,6 +98,13 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
   - healthcare clinical-notes list - List clinical notes, optionally filtered by owner and/or meeting. [intent=direct_read availability=implemented operation=zoom.list_clinical_notes]; notes: Bounded sensitive Zoom read. Only note-owner-user-id and meeting-id are explicit provider request inputs; response-only dates and paging fields are not CLI flags. The clinical_json_redacted policy redacts clinical-note content and identifiers.; flags: --note-owner-user-id, --meeting-id
   - healthcare clinical-notes get - Get a single clinical note by ID. [intent=direct_read availability=implemented operation=zoom.get_clinical_note]; notes: Bounded sensitive Zoom read with a typed required note-id path parameter. The clinical_json_redacted policy redacts clinical-note content and identifiers.; flags: --note-id (required)
   - healthcare clinical-notes update - Plan an update to a clinical note's completion status. [intent=reverse_etl availability=implemented write=update_clinical_note]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: high: changes a patient's clinical note completion status through an approval-gated reverse ETL action; notes: Typed high-risk mutation; preview and explicit approval are required before execute. The clinical note ID is redacted in write errors.; flags: --note-id (required), --is-note-completed (required)
+- Quality Management
+  - quality-management automated-evaluations list - List Quality Management automated evaluations. [intent=direct_read availability=implemented operation=zoom.list_quality_management_automated_evaluations]; notes: Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination fields are not CLI flags; identifiers and personal-contact fields are redacted before output.
+  - quality-management evaluations list - List completed Quality Management evaluations. [intent=direct_read availability=implemented operation=zoom.list_quality_management_evaluations]; notes: Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination fields are not CLI flags; identifiers and personal-contact fields are redacted before output.
+  - quality-management evaluations get - View one Quality Management evaluation. [intent=direct_read availability=implemented operation=zoom.get_quality_management_evaluation]; notes: Bounded sensitive Zoom read with a typed required evaluation-id path parameter; identifiers and personal-contact fields are redacted before output.; flags: --evaluation-id (required)
+  - quality-management interactions list - List Quality Management interactions. [intent=direct_read availability=implemented operation=zoom.list_quality_management_interactions]; notes: Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination/date fields are not CLI flags; identifiers and personal-contact fields are redacted before output.
+  - quality-management interactions get - View one Quality Management interaction. [intent=direct_read availability=implemented operation=zoom.get_quality_management_interaction]; notes: Bounded sensitive Zoom read with a typed required interaction-id path parameter; identifiers and personal-contact fields are redacted before output.; flags: --interaction-id (required)
+  - quality-management interactions create - Plan creation of a Quality Management interaction from a third-party download URL. [intent=reverse_etl availability=implemented write=create_quality_management_interaction]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: high: imports a third-party interaction into Zoom Quality Management through an approval-gated reverse ETL action; notes: Typed high-risk mutation. Download URL and interaction-info fields are redacted in generic write errors; preview and explicit approval are required before execute. If any interaction-info field is supplied, Zoom requires interaction-channel-type.; flags: --download-url (required), --direction, --disposition, --interaction-channel-type, --interaction-agent-email, --interaction-agent-id, --interaction-consumer-name, --interaction-from, --interaction-to, --primary-language, --queue-id, --start-time
 - Help topics:
   - provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads; Wave 2+ adds bounded direct-read/write operations module by module (see #3915).
 

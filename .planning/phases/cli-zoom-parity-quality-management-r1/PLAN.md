@@ -56,8 +56,10 @@ that closed body shape; no raw JSON flag or generic HTTP escape hatch is needed.
 - `surface-sync` owns derivable command metadata and the endpoint ledger. The reusable
   `surface-reconcile --notes-contains provider_module=quality-management` foundation owns only the
   five direct-read coverage rows; the POST row is linked by the typed write declaration.
-- Generated documentation is regenerated once and scoped back to Zoom/catalog deltas only. No
-  website-specific Zoom page exists, so `website/**` is not applicable.
+- Generated documentation is regenerated once and scoped back to Zoom/catalog deltas only. The
+  website has no hand-authored Zoom page, but its generated connector bundle and catalog are
+  required parity surfaces; regenerate them with `npm --prefix website run gen:catalog` and retain
+  only the Zoom-derived output.
 
 ## TDD execution slices
 
@@ -87,7 +89,8 @@ that closed body shape; no raw JSON flag or generic HTTP escape hatch is needed.
   all five safe GET routes with a synthetic token expecting provider `401`, never a live mutation.
   POST is proven by fixture `201` plus plan/preview only.
 - Docs: `pm docs validate --connectors-dir docs/connectors`; scoped docs/catalog/golden diff review;
-  bare namespace help exits successfully and missing required IDs remain usage errors.
+  `npm --prefix website run gen:catalog`; bare namespace help exits successfully and missing
+  required IDs remain usage errors.
 
 ## Canonical references
 

@@ -2,7 +2,8 @@
 
 Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.
 The current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes, and
-Healthcare clinical-note routes; the Healthcare completion-status update remains approval-gated.
+Healthcare clinical-note and Quality Management routes; both module write actions remain
+approval-gated.
 
 The provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1
 reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build
@@ -12,9 +13,9 @@ three existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list
 `pm zoom webinars list`. Later waves add bounded direct-read/write commands module by module; see
 "Direct reads" below and "Executable today" in Known limits for the exact current set.
 
-One high-risk Zoom write action is implemented for the Healthcare module. All remaining provider
-operations stay explicitly disposed in `api_surface.json`; the ledger is not a claim that those
-operations are executable.
+Two high-risk Zoom write actions are implemented for Healthcare and Quality Management. All
+remaining provider operations stay explicitly disposed in `api_surface.json`; the ledger is not a
+claim that those operations are executable.
 
 Service API documentation: https://developers.zoom.us/docs/api/.
 
@@ -135,10 +136,32 @@ in this repository.
   `/v2/clinical_notes/notes/{noteId}` (operation `zoom.get_clinical_note`). Provider reference:
   https://developers.zoom.us/docs/api/healthcare.md.
 
+### Direct reads (quality-management module)
+
+Quality Management responses can carry agent/consumer names, contact values, account/user
+identifiers, and token-shaped pagination fields. The five bounded reads use `json_redacted` plus a
+connector-local sensitive field policy, so those values are removed before CLI output. Fixtures are
+synthetic and do not retain Zoom response examples.
+
+- `pm zoom quality-management automated-evaluations list` reads GET
+  `/v2/qm/automated_evaluations` (operation
+  `zoom.list_quality_management_automated_evaluations`). The provider artifact declares no request
+  parameters; `page_size` and `next_page_token` are response fields, not flags.
+- `pm zoom quality-management evaluations list` reads GET `/v2/qm/evaluation` (operation
+  `zoom.list_quality_management_evaluations`). The provider artifact declares no request parameters.
+- `pm zoom quality-management evaluations get --evaluation-id <id>` reads GET
+  `/v2/qm/evaluation/{evaluationId}` (operation `zoom.get_quality_management_evaluation`).
+- `pm zoom quality-management interactions list` reads GET `/v2/qm/interactions` (operation
+  `zoom.list_quality_management_interactions`). The provider artifact declares no request
+  parameters; response-only date/pagination fields are not flags.
+- `pm zoom quality-management interactions get --interaction-id <id>` reads GET
+  `/v2/qm/interactions/{interactionId}` (operation `zoom.get_quality_management_interaction`).
+  Provider reference for all five routes: https://developers.zoom.us/docs/api/quality-management.md.
+
 ## Write actions & risks
 
 Read behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My
-Notes, and healthcare clinical-note data.
+Notes, healthcare clinical-note, and Quality Management data.
 
 - `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`
   plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action
@@ -146,26 +169,35 @@ Notes, and healthcare clinical-note data.
   existing plan → preview → explicit approval → execute path. The note ID is redacted in write
   errors. Zoom's `204 No Content` success response is recorded as a successful action.
 
-The provider inventory records 1,032 documented writes. Only the Healthcare completion-status
-action is currently declared; all remaining write rows are either blocked on connector-local typed
-contracts, safety/approval evidence, and fixtures, or on the corresponding Zoom account entitlement.
-Future writes must use the existing plan → preview → explicit approval → execute path; destructive
-operations additionally require the typed confirmation gate.
+- `pm zoom quality-management interactions create --download-url <url>` plans the typed POST
+  `/v2/qm/interactions` action (`create_quality_management_interaction`). It imports a third-party
+  interaction into Quality Management and must use plan → preview → explicit approval → execute.
+  The command exposes each documented optional scalar request field, including nested
+  `interaction_info` fields; if an interaction-info field is supplied, `--interaction-channel-type`
+  is required by Zoom. Download URLs and interaction-info fields are redacted in generic write
+  errors. Fixture execution proves the documented `201 Created` response succeeds.
+
+The provider inventory records 1,032 documented writes. Only the Healthcare completion-status and
+Quality Management interaction-creation actions are currently declared; all remaining write rows
+are either blocked on connector-local typed contracts, safety/approval evidence, and fixtures, or
+on the corresponding Zoom account entitlement. Future writes must use the existing plan → preview
+→ explicit approval → execute path; destructive operations additionally require the typed
+confirmation gate.
 
 ## Known limits
 
 - Batch default: `read_page_size=100`.
 - Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See
   issue #3915 for the full module-by-module tracking table.
-- Executable today: 12 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
+- Executable today: 18 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
   bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded
-  `my-notes` module direct reads, 2 Healthcare direct reads, and 1 approval-gated Healthcare PATCH
-  action.
+  `my-notes` module direct reads, 2 Healthcare direct reads, 1 Healthcare PATCH action, 5 Quality
+  Management direct reads, and 1 approval-gated Quality Management POST action.
 - Direct-read commands in this connector take only the request inputs the live provider artifact
   expressly documents. A response-body field of the same name (including Healthcare's `from`, `to`,
   `page_size`, and `next_page_token`) is not sufficient evidence of an accepted request parameter.
   This is a deliberate module-by-module scope-narrowing, not an oversight.
-- Pending connector-local delivery: 1,830 operations have no shared foundation blocker, but still
+- Pending connector-local delivery: 1,824 operations have no shared foundation blocker, but still
   need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can
   become commands.
 - Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one

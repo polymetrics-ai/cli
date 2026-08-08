@@ -312436,14 +312436,14 @@
   {
     "slug": "zoom",
     "name": "Zoom",
-    "description": "Reads Zoom users, meetings, and webinars through the Zoom REST API.",
+    "description": "Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes approval-gated clinical-note and Quality Management interaction actions.",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
@@ -312474,10 +312474,21 @@
         "incremental": false
       }
     ],
-    "write_actions": [],
+    "write_actions": [
+      {
+        "name": "update_clinical_note",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "create_quality_management_interaction",
+        "method": "POST",
+        "kind": "create"
+      }
+    ],
     "cli_surface": {
-      "tagline": "Read the currently stream-backed Zoom users, meetings, and webinars API routes.",
-      "usage": "pm zoom <users|meetings|webinars> list [flags]",
+      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note and Quality Management interaction actions.",
+      "usage": "pm zoom <group> <command> [flags]",
       "source_cli": {
         "name": "Zoom API reference",
         "docs": "https://developers.zoom.us/docs/api/",
@@ -312498,6 +312509,41 @@
           "commands": [
             "meetings",
             "webinars"
+          ]
+        },
+        {
+          "id": "qss",
+          "title": "Quality of Service Summaries",
+          "commands": [
+            "qss"
+          ]
+        },
+        {
+          "id": "ai-companion",
+          "title": "AI Companion",
+          "commands": [
+            "ai-companion"
+          ]
+        },
+        {
+          "id": "my-notes",
+          "title": "My Notes",
+          "commands": [
+            "my-notes"
+          ]
+        },
+        {
+          "id": "healthcare",
+          "title": "Healthcare",
+          "commands": [
+            "healthcare"
+          ]
+        },
+        {
+          "id": "quality-management",
+          "title": "Quality Management",
+          "commands": [
+            "quality-management"
           ]
         }
       ],
@@ -312610,16 +312656,735 @@
           "risk": "",
           "approval": "",
           "notes": ""
+        },
+        {
+          "path": "qss meeting-participants list",
+          "summary": "List a past meeting's participants' Quality of Service summary.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_meeting_participants_qos_summary",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/qss.md",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "Zoom meeting ID or UUID.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom qss meeting-participants list --credential zoom-fixture --meeting-id 123456789 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded Zoom read; fixed method and path with a typed required meeting-id path parameter."
+        },
+        {
+          "path": "qss webinar-participants list",
+          "summary": "List a live or past webinar's participants' Quality of Service summary.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_webinar_participants_qos_summary",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/qss.md",
+          "flags": [
+            {
+              "name": "webinar-id",
+              "type": "string",
+              "summary": "Zoom webinar ID or UUID.",
+              "values": [],
+              "maps_to": "path.webinarId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom qss webinar-participants list --credential zoom-fixture --webinar-id 123456789 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded Zoom read; fixed method and path with a typed required webinar-id path parameter."
+        },
+        {
+          "path": "qss session-users list",
+          "summary": "List a past Video SDK session's users' Quality of Service summary.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_session_users_qos_summary",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/qss.md",
+          "flags": [
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Zoom Video SDK session ID.",
+              "values": [],
+              "maps_to": "path.sessionId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom qss session-users list --credential zoom-fixture --session-id abc123 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded Zoom read; fixed method and path with a typed required session-id path parameter."
+        },
+        {
+          "path": "ai-companion conversation-archive get",
+          "summary": "Get a user's AI Companion conversation archive.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_ai_companion_conversation_archives",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/ai-companion.md",
+          "flags": [
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "Zoom user ID or email.",
+              "values": [],
+              "maps_to": "path.userId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom ai-companion conversation-archive get --credential zoom-fixture --user-id fixture-user --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded Zoom read; fixed method and path with a typed required user-id path parameter. Response download-URL fields are redacted by the json_redacted output policy."
+        },
+        {
+          "path": "my-notes list",
+          "summary": "List the authenticated user's My Notes.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_my_notes",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom my-notes list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded Zoom read; fixed method and path with no request parameters (the live artifact documents none for this operation)."
+        },
+        {
+          "path": "my-notes content get",
+          "summary": "Get a My Notes note's content, and optionally its meeting transcript.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_my_notes_content",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+          "flags": [
+            {
+              "name": "note-id",
+              "type": "string",
+              "summary": "My Notes note ID.",
+              "values": [],
+              "maps_to": "path.noteId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "include",
+              "type": "enum",
+              "summary": "Include the associated meeting transcript in the response.",
+              "values": [
+                "transcript"
+              ],
+              "maps_to": "query.include",
+              "required": false
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom my-notes content get --credential zoom-fixture --note-id note_abc123 --json",
+            "pm zoom my-notes content get --credential zoom-fixture --note-id note_abc123 --include transcript --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded Zoom read; fixed method and path with a typed required note-id path parameter and an optional include=transcript query flag (explicitly documented in provider prose, unlike qss's response-only pagination fields)."
+        },
+        {
+          "path": "healthcare clinical-notes list",
+          "summary": "List clinical notes, optionally filtered by owner and/or meeting.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_clinical_notes",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+          "flags": [
+            {
+              "name": "note-owner-user-id",
+              "type": "string",
+              "summary": "Return only clinical notes owned by this Zoom user.",
+              "values": [],
+              "maps_to": "query.note_owner_user_id",
+              "allow_empty": false,
+              "required": false
+            },
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "Return only clinical notes associated with this meeting.",
+              "values": [],
+              "maps_to": "query.meeting_id",
+              "allow_empty": false,
+              "required": false
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom healthcare clinical-notes list --credential zoom-fixture --json",
+            "pm zoom healthcare clinical-notes list --credential zoom-fixture --meeting-id 123456789 --json"
+          ],
+          "output_policy": "clinical_json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read. Only note-owner-user-id and meeting-id are explicit provider request inputs; response-only dates and paging fields are not CLI flags. The clinical_json_redacted policy redacts clinical-note content and identifiers."
+        },
+        {
+          "path": "healthcare clinical-notes get",
+          "summary": "Get a single clinical note by ID.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_clinical_note",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+          "flags": [
+            {
+              "name": "note-id",
+              "type": "string",
+              "summary": "Clinical note ID.",
+              "values": [],
+              "maps_to": "path.noteId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom healthcare clinical-notes get --credential zoom-fixture --note-id fixture-note --json"
+          ],
+          "output_policy": "clinical_json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read with a typed required note-id path parameter. The clinical_json_redacted policy redacts clinical-note content and identifiers."
+        },
+        {
+          "path": "healthcare clinical-notes update",
+          "summary": "Plan an update to a clinical note's completion status.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_clinical_note",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+          "flags": [
+            {
+              "name": "note-id",
+              "type": "string",
+              "summary": "Clinical note ID.",
+              "values": [],
+              "maps_to": "record.note_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "is-note-completed",
+              "type": "boolean",
+              "summary": "Whether the clinical note is marked completed.",
+              "values": [],
+              "maps_to": "record.is_note_completed",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom healthcare clinical-notes update --note-id fixture-note --is-note-completed true --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "high: changes a patient's clinical note completion status through an approval-gated reverse ETL action",
+          "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+          "notes": "Typed high-risk mutation; preview and explicit approval are required before execute. The clinical note ID is redacted in write errors."
+        },
+        {
+          "path": "quality-management automated-evaluations list",
+          "summary": "List Quality Management automated evaluations.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_quality_management_automated_evaluations",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom quality-management automated-evaluations list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination fields are not CLI flags; identifiers and personal-contact fields are redacted before output."
+        },
+        {
+          "path": "quality-management evaluations list",
+          "summary": "List completed Quality Management evaluations.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_quality_management_evaluations",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom quality-management evaluations list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination fields are not CLI flags; identifiers and personal-contact fields are redacted before output."
+        },
+        {
+          "path": "quality-management evaluations get",
+          "summary": "View one Quality Management evaluation.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_quality_management_evaluation",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+          "flags": [
+            {
+              "name": "evaluation-id",
+              "type": "string",
+              "summary": "Quality Management evaluation ID.",
+              "values": [],
+              "maps_to": "path.evaluationId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom quality-management evaluations get --credential zoom-fixture --evaluation-id fixture-evaluation --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read with a typed required evaluation-id path parameter; identifiers and personal-contact fields are redacted before output."
+        },
+        {
+          "path": "quality-management interactions list",
+          "summary": "List Quality Management interactions.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_quality_management_interactions",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom quality-management interactions list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination/date fields are not CLI flags; identifiers and personal-contact fields are redacted before output."
+        },
+        {
+          "path": "quality-management interactions get",
+          "summary": "View one Quality Management interaction.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_quality_management_interaction",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+          "flags": [
+            {
+              "name": "interaction-id",
+              "type": "string",
+              "summary": "Quality Management interaction ID.",
+              "values": [],
+              "maps_to": "path.interactionId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom quality-management interactions get --credential zoom-fixture --interaction-id fixture-interaction --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read with a typed required interaction-id path parameter; identifiers and personal-contact fields are redacted before output."
+        },
+        {
+          "path": "quality-management interactions create",
+          "summary": "Plan creation of a Quality Management interaction from a third-party download URL.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_quality_management_interaction",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+          "flags": [
+            {
+              "name": "download-url",
+              "type": "string",
+              "summary": "Third-party URL from which Zoom downloads the interaction media.",
+              "values": [],
+              "maps_to": "record.download_url",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "direction",
+              "type": "enum",
+              "summary": "Call direction.",
+              "values": [
+                "inbound",
+                "outbound"
+              ],
+              "maps_to": "record.direction"
+            },
+            {
+              "name": "disposition",
+              "type": "string",
+              "summary": "Disposition name.",
+              "values": [],
+              "maps_to": "record.disposition",
+              "allow_empty": false
+            },
+            {
+              "name": "interaction-channel-type",
+              "type": "enum",
+              "summary": "Interaction channel; required when any interaction-info field is supplied.",
+              "values": [
+                "video",
+                "voice"
+              ],
+              "maps_to": "record.interaction_info.channel_type"
+            },
+            {
+              "name": "interaction-agent-email",
+              "type": "string",
+              "summary": "Agent email address.",
+              "values": [],
+              "maps_to": "record.interaction_info.agent_email",
+              "allow_empty": false
+            },
+            {
+              "name": "interaction-agent-id",
+              "type": "string",
+              "summary": "Agent Zoom user ID.",
+              "values": [],
+              "maps_to": "record.interaction_info.agent_id",
+              "allow_empty": false
+            },
+            {
+              "name": "interaction-consumer-name",
+              "type": "string",
+              "summary": "Consumer name.",
+              "values": [],
+              "maps_to": "record.interaction_info.consumer_name",
+              "allow_empty": false
+            },
+            {
+              "name": "interaction-from",
+              "type": "string",
+              "summary": "Caller phone number in E.164 format.",
+              "values": [],
+              "maps_to": "record.interaction_info.from",
+              "allow_empty": false
+            },
+            {
+              "name": "interaction-to",
+              "type": "string",
+              "summary": "Recipient phone number in E.164 format.",
+              "values": [],
+              "maps_to": "record.interaction_info.to",
+              "allow_empty": false
+            },
+            {
+              "name": "primary-language",
+              "type": "enum",
+              "summary": "Optional primary transcription language.",
+              "values": [
+                "en-GB",
+                "en-US",
+                "ar",
+                "da-DK",
+                "de-DE",
+                "es-ES",
+                "es-MX",
+                "fr-CA",
+                "fr-FR",
+                "it-IT",
+                "ja",
+                "ko-KR",
+                "nl-NL",
+                "pt-BR",
+                "pt-PT",
+                "ru",
+                "zh-CN",
+                "zh-HK"
+              ],
+              "maps_to": "record.primary_language"
+            },
+            {
+              "name": "queue-id",
+              "type": "string",
+              "summary": "Contact Center queue ID.",
+              "values": [],
+              "maps_to": "record.queue_id",
+              "allow_empty": false
+            },
+            {
+              "name": "start-time",
+              "type": "string",
+              "summary": "Interaction start time as RFC3339.",
+              "values": [],
+              "maps_to": "record.start_time",
+              "format": "date-time",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm zoom quality-management interactions create --download-url https://files.example.invalid/interaction.mp3 --interaction-channel-type voice --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "high: imports a third-party interaction into Zoom Quality Management through an approval-gated reverse ETL action",
+          "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+          "notes": "Typed high-risk mutation. Download URL and interaction-info fields are redacted in generic write errors; preview and explicit approval are required before execute. If any interaction-info field is supplied, Zoom requires interaction-channel-type."
         }
       ],
       "help_topics": [
         {
           "name": "provider-inventory",
-          "summary": "The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes only these three existing stream-backed reads."
+          "summary": "The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads; Wave 2+ adds bounded direct-read/write operations module by module (see #3915)."
         }
       ]
     },
-    "docs_md": "# Overview\n\nReads Zoom users, meetings, and webinars through the Zoom REST API.\n\nThe provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1\nreference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build\n`2026-08-03T14-58-19-06-00`. Wave 1 exposes only the three existing stream-backed reads:\n`pm zoom users list`, `pm zoom meetings list`, and `pm zoom webinars list`.\n\nNo Zoom write action is implemented in this slice. The remaining provider operations stay explicitly\ndisposed in `api_surface.json`; the ledger is not a claim that those operations are executable.\n\nService API documentation: https://developers.zoom.us/docs/api/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token\n  (Authorization: Bearer `<access_token>`). Never logged.\n- `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL\n  override for tests or proxies.\n- `max_pages` (optional, string); default `0`. The field remains in the connection specification,\n  but the current Zoom cursor paginator does not consume it.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; records per page (1-300); sent as the `page_size`\n  query parameter.\n- `user_id` (optional, string); Zoom user ID or email that scopes the `meetings` and `webinars`\n  streams. Set it in credential configuration or override it with `--user-id` for either command.\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://api.zoom.us/v2`, `max_pages=0`, `page_size=100`.\n`max_pages` is materialized as configuration but does not affect Zoom pagination.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/users` with query `page_size`=`1`.\n\n## Streams notes\n\nDefault pagination is cursor pagination: send `next_page_token` and take the next token from\n`next_page_token`. The stream command `--limit` bounds emitted records (default 100).\n\n- `users`: `pm zoom users list` reads GET `/v2/users` through stream `users`. Records are at\n  `users`; query `page_size`=`{{ config.page_size }}`; computed output fields are `name` and\n  `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/users.md.\n- `meetings`: `pm zoom meetings list` reads GET `/v2/users/{userId}/meetings` through stream\n  `meetings`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `meetings`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n- `webinars`: `pm zoom webinars list` reads GET `/v2/users/{userId}/webinars` through stream\n  `webinars`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `webinars`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n\n## Write actions & risks\n\nThis Wave 1 connector surface is read-only. Read behavior: external Zoom API read of user,\nmeeting, and webinar data.\n\nThe provider inventory records 1,032 documented writes, but none is a declared Zoom write action.\nThe 997 write operations classified as implementable now remain blocked on connector-local typed\nrequest contracts, safety/approval evidence, and fixtures; that is not a shared runtime blocker.\nThe 12 provider-restricted writes remain unavailable pending the corresponding Zoom account\nentitlement. Future writes must use the existing plan → preview → explicit approval → execute path;\ndestructive operations additionally require the typed confirmation gate.\n\n## Known limits\n\n- Batch default: `read_page_size=100`.\n- Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes).\n- Executable today: 3 stream-backed GET operations (`users`, `meetings`, `webinars`).\n- Pending connector-local delivery: 1,839 operations (842 reads and 997 writes) have no shared\n  foundation blocker, but still need bounded Zoom-specific contracts, schemas, safety evidence, and\n  fixtures before they can become commands.\n- Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one\n  Meeting audit trail, and four Phone blocked-list routes) remain blocked until Zoom enables the\n  corresponding product/account capability.\n- Justified exclusions: 54 provider-deprecated operations remain recorded as `deprecated` ledger\n  evidence and are not implemented.\n",
+    "docs_md": "# Overview\n\nReads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.\nThe current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes, and\nHealthcare clinical-note and Quality Management routes; both module write actions remain\napproval-gated.\n\nThe provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1\nreference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build\n`2026-08-03T14-58-19-06-00`, and is being brought to full documented-operation parity one Zoom\nprovider module at a time (see issue #3915 for the module-by-module tracker). Wave 1 exposes the\nthree existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list`, and\n`pm zoom webinars list`. Later waves add bounded direct-read/write commands module by module; see\n\"Direct reads\" below and \"Executable today\" in Known limits for the exact current set.\n\nTwo high-risk Zoom write actions are implemented for Healthcare and Quality Management. All\nremaining provider operations stay explicitly disposed in `api_surface.json`; the ledger is not a\nclaim that those operations are executable.\n\nService API documentation: https://developers.zoom.us/docs/api/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token\n  (Authorization: Bearer `<access_token>`). Never logged.\n- `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL\n  override for tests or proxies.\n- `max_pages` (optional, string); default `0`. The field remains in the connection specification,\n  but the current Zoom cursor paginator does not consume it.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; records per page (1-300); sent as the `page_size`\n  query parameter.\n- `user_id` (optional, string); Zoom user ID or email that scopes the `meetings` and `webinars`\n  streams. Set it in credential configuration or override it with `--user-id` for either command.\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://api.zoom.us/v2`, `max_pages=0`, `page_size=100`.\n`max_pages` is materialized as configuration but does not affect Zoom pagination.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/users` with query `page_size`=`1`.\n\n## Streams notes\n\nDefault pagination is cursor pagination: send `next_page_token` and take the next token from\n`next_page_token`. The stream command `--limit` bounds emitted records (default 100).\n\n- `users`: `pm zoom users list` reads GET `/v2/users` through stream `users`. Records are at\n  `users`; query `page_size`=`{{ config.page_size }}`; computed output fields are `name` and\n  `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/users.md.\n- `meetings`: `pm zoom meetings list` reads GET `/v2/users/{userId}/meetings` through stream\n  `meetings`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `meetings`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n- `webinars`: `pm zoom webinars list` reads GET `/v2/users/{userId}/webinars` through stream\n  `webinars`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `webinars`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n\n### Direct reads (qss module)\n\nThree bounded, single-request `direct_read` commands read the `qss` (Quality of Service\nSubscription) provider module. Each takes one required typed path-parameter flag and returns the\ndecoded JSON response under the `json_redacted` output policy; unlike the ETL streams above these\nare not paginated by the connector — call again with a different id, there is no `--limit` or\ncursor auto-continuation. Only account/subscriptions with the QSS add-on and a subscribed QSS\nsummary event receive non-empty data; see\n[Zoom's QSS product page](https://explore.zoom.us/en/qss/).\n\n- `pm zoom qss meeting-participants list --meeting-id <id>` reads GET\n  `/v2/metrics/meetings/{meetingId}/participants/qos_summary` (operation\n  `zoom.list_meeting_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss webinar-participants list --webinar-id <id>` reads GET\n  `/v2/metrics/webinars/{webinarId}/participants/qos_summary` (operation\n  `zoom.list_webinar_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss session-users list --session-id <id>` reads GET\n  `/v2/videosdk/sessions/{sessionId}/users/qos_summary` (operation\n  `zoom.list_session_users_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n\nAll three responses carry a `next_page_token` field in Zoom's own schema (used to fetch a further\npage of participants/users, not exposed as a command flag in this slice — see Known limits). The\nshared `json_redacted` output policy redacts any field whose name contains `token`\n(`engine/direct_read.go`'s `shouldRedactJSONField`), so `next_page_token` returns as\n`next_page_token_redacted: true` rather than its wire value even though it is a pagination cursor,\nnot a credential.\n\n### Direct reads (ai-companion module)\n\n- `pm zoom ai-companion conversation-archive get --user-id <id>` reads GET\n  `/v2/aic/users/{userId}/conversation_archive` (operation\n  `zoom.get_ai_companion_conversation_archives`). Provider reference:\n  https://developers.zoom.us/docs/api/ai-companion.md. The response's `aic_history_download_url`\n  and `physical_files[].download_url` fields are redacted by `json_redacted` (both fields' names\n  contain `download`+`url`, matching `shouldRedactJSONField`'s download-URL rule) since they are\n  direct download links to a user's AI conversation history/attachments.\n\n### Direct reads (my-notes module)\n\n- `pm zoom my-notes list` reads GET `/v2/my_notes/notes` (operation `zoom.list_my_notes`). No\n  request parameters; the live artifact documents none. Provider reference:\n  https://developers.zoom.us/docs/api/my-notes.md.\n- `pm zoom my-notes content get --note-id <id> [--include transcript]` reads GET\n  `/v2/my_notes/notes/{noteId}/content` (operation `zoom.get_my_notes_content`). Unlike qss's\n  response-only pagination fields, the `include=transcript` query parameter here is explicitly\n  documented in the provider's operation description prose, so it is exposed as an optional\n  `--include` flag. Provider reference: https://developers.zoom.us/docs/api/my-notes.md.\n\n### Direct reads (healthcare module)\n\nThe Healthcare routes return clinical note content and clinical identifiers, so both commands use\nthe existing `clinical_json_redacted` policy. It redacts note content, EHR appointment/patient/\nprovider identifiers, note owner/modifier identifiers, and token-shaped response fields before\noutput. Sanitized fixtures exercise the returned structure; no provider clinical example is retained\nin this repository.\n\n- `pm zoom healthcare clinical-notes list [--note-owner-user-id <id>] [--meeting-id <id>]` reads\n  GET `/v2/clinical_notes/notes` (operation `zoom.list_clinical_notes`). The two optional filters\n  are explicitly described by Zoom's operation prose. `from`, `to`, `page_size`, and\n  `next_page_token` appear only in the `200` response schema and are not request flags. Provider\n  reference: https://developers.zoom.us/docs/api/healthcare.md.\n- `pm zoom healthcare clinical-notes get --note-id <id>` reads GET\n  `/v2/clinical_notes/notes/{noteId}` (operation `zoom.get_clinical_note`). Provider reference:\n  https://developers.zoom.us/docs/api/healthcare.md.\n\n### Direct reads (quality-management module)\n\nQuality Management responses can carry agent/consumer names, contact values, account/user\nidentifiers, and token-shaped pagination fields. The five bounded reads use `json_redacted` plus a\nconnector-local sensitive field policy, so those values are removed before CLI output. Fixtures are\nsynthetic and do not retain Zoom response examples.\n\n- `pm zoom quality-management automated-evaluations list` reads GET\n  `/v2/qm/automated_evaluations` (operation\n  `zoom.list_quality_management_automated_evaluations`). The provider artifact declares no request\n  parameters; `page_size` and `next_page_token` are response fields, not flags.\n- `pm zoom quality-management evaluations list` reads GET `/v2/qm/evaluation` (operation\n  `zoom.list_quality_management_evaluations`). The provider artifact declares no request parameters.\n- `pm zoom quality-management evaluations get --evaluation-id <id>` reads GET\n  `/v2/qm/evaluation/{evaluationId}` (operation `zoom.get_quality_management_evaluation`).\n- `pm zoom quality-management interactions list` reads GET `/v2/qm/interactions` (operation\n  `zoom.list_quality_management_interactions`). The provider artifact declares no request\n  parameters; response-only date/pagination fields are not flags.\n- `pm zoom quality-management interactions get --interaction-id <id>` reads GET\n  `/v2/qm/interactions/{interactionId}` (operation `zoom.get_quality_management_interaction`).\n  Provider reference for all five routes: https://developers.zoom.us/docs/api/quality-management.md.\n\n## Write actions & risks\n\nRead behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My\nNotes, healthcare clinical-note, and Quality Management data.\n\n- `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`\n  plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action\n  (`update_clinical_note`). It changes a clinical-note completion status and therefore must use the\n  existing plan → preview → explicit approval → execute path. The note ID is redacted in write\n  errors. Zoom's `204 No Content` success response is recorded as a successful action.\n\n- `pm zoom quality-management interactions create --download-url <url>` plans the typed POST\n  `/v2/qm/interactions` action (`create_quality_management_interaction`). It imports a third-party\n  interaction into Quality Management and must use plan → preview → explicit approval → execute.\n  The command exposes each documented optional scalar request field, including nested\n  `interaction_info` fields; if an interaction-info field is supplied, `--interaction-channel-type`\n  is required by Zoom. Download URLs and interaction-info fields are redacted in generic write\n  errors. Fixture execution proves the documented `201 Created` response succeeds.\n\nThe provider inventory records 1,032 documented writes. Only the Healthcare completion-status and\nQuality Management interaction-creation actions are currently declared; all remaining write rows\nare either blocked on connector-local typed contracts, safety/approval evidence, and fixtures, or\non the corresponding Zoom account entitlement. Future writes must use the existing plan → preview\n→ explicit approval → execute path; destructive operations additionally require the typed\nconfirmation gate.\n\n## Known limits\n\n- Batch default: `read_page_size=100`.\n- Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See\n  issue #3915 for the full module-by-module tracking table.\n- Executable today: 18 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3\n  bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded\n  `my-notes` module direct reads, 2 Healthcare direct reads, 1 Healthcare PATCH action, 5 Quality\n  Management direct reads, and 1 approval-gated Quality Management POST action.\n- Direct-read commands in this connector take only the request inputs the live provider artifact\n  expressly documents. A response-body field of the same name (including Healthcare's `from`, `to`,\n  `page_size`, and `next_page_token`) is not sufficient evidence of an accepted request parameter.\n  This is a deliberate module-by-module scope-narrowing, not an oversight.\n- Pending connector-local delivery: 1,824 operations have no shared foundation blocker, but still\n  need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can\n  become commands.\n- Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one\n  Meeting audit trail, and four Phone blocked-list routes) remain blocked until Zoom enables the\n  corresponding product/account capability.\n- Justified exclusions: 54 provider-deprecated operations remain recorded as `deprecated` ledger\n  evidence and are not implemented.\n",
     "icon": {
       "id": "zoom",
       "path": "icons/zoom.svg",

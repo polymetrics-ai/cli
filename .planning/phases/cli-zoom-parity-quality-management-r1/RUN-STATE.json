@@ -4,7 +4,7 @@
   "sub_issue": 3943,
   "connector": "zoom",
   "provider_module": "quality-management",
-  "state": "red_captured",
+  "state": "green_verified",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -30,8 +30,23 @@
     "writes": 2
   },
   "red": {
+    "commit": "91b7526a5",
     "command": "go test -count=1 ./internal/connectors/defs/zoom/...",
     "result": "failed as expected: 12 -> 18 covered, 1830 -> 1824 locally blocked, 8 -> 13 direct reads, 1 -> 2 writes, and all six Quality Management routes were unknown"
   },
-  "next": "commit and push this red-only state before production declarations"
+  "green": {
+    "focused_zoom": "passed",
+    "zoom_conformance": "passed",
+    "surface_sync_check": "passed",
+    "zoom_and_full_validation": "passed",
+    "vet": "passed",
+    "build": "passed",
+    "binary_reachability": "five safe reads reached provider 401; preview-only POST produced typed plan",
+    "commandrunner": "passed",
+    "golden_transcripts": "approved generator refreshed nine root-help variants; normal test passed",
+    "full_cli": "passed in 560.881s",
+    "manual_gates": "tidy, lint, docs, smoke, contract, connectorgen, boundary, and release checks passed",
+    "website_catalog": "npm --prefix website run gen:catalog changed only zoom; website typecheck passed"
+  },
+  "next": "commit and push green slice, record completion commit, then close #3943 and update #3915"
 }

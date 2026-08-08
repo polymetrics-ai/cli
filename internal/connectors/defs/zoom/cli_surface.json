@@ -1,5 +1,5 @@
 {
-  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note status updates.",
+  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note and Quality Management interaction actions.",
   "usage": "pm zoom <group> <command> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
@@ -49,6 +49,13 @@
       "title": "Healthcare",
       "commands": [
         "healthcare"
+      ]
+    },
+    {
+      "id": "quality-management",
+      "title": "Quality Management",
+      "commands": [
+        "quality-management"
       ]
     }
   ],
@@ -429,6 +436,254 @@
       ],
       "examples": [
         "pm zoom healthcare clinical-notes update --note-id fixture-note --is-note-completed true --preview --json"
+      ]
+    },
+    {
+      "path": "quality-management automated-evaluations list",
+      "summary": "List Quality Management automated evaluations.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_quality_management_automated_evaluations",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "notes": "Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination fields are not CLI flags; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management automated-evaluations list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/automated_evaluations"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "quality-management evaluations list",
+      "summary": "List completed Quality Management evaluations.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_quality_management_evaluations",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "notes": "Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination fields are not CLI flags; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management evaluations list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/evaluation"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "quality-management evaluations get",
+      "summary": "View one Quality Management evaluation.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_quality_management_evaluation",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "flags": [
+        {
+          "name": "evaluation-id",
+          "type": "string",
+          "summary": "Quality Management evaluation ID.",
+          "maps_to": "path.evaluationId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required evaluation-id path parameter; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management evaluations get --credential zoom-fixture --evaluation-id fixture-evaluation --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/evaluation/{evaluationId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "quality-management interactions list",
+      "summary": "List Quality Management interactions.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_quality_management_interactions",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "notes": "Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination/date fields are not CLI flags; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management interactions list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/interactions"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "quality-management interactions get",
+      "summary": "View one Quality Management interaction.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_quality_management_interaction",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "flags": [
+        {
+          "name": "interaction-id",
+          "type": "string",
+          "summary": "Quality Management interaction ID.",
+          "maps_to": "path.interactionId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required interaction-id path parameter; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management interactions get --credential zoom-fixture --interaction-id fixture-interaction --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/interactions/{interactionId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "quality-management interactions create",
+      "summary": "Plan creation of a Quality Management interaction from a third-party download URL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_quality_management_interaction",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "risk": "high: imports a third-party interaction into Zoom Quality Management through an approval-gated reverse ETL action",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "flags": [
+        {
+          "name": "download-url",
+          "type": "string",
+          "summary": "Third-party URL from which Zoom downloads the interaction media.",
+          "maps_to": "record.download_url",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "direction",
+          "type": "enum",
+          "values": [
+            "inbound",
+            "outbound"
+          ],
+          "summary": "Call direction.",
+          "maps_to": "record.direction"
+        },
+        {
+          "name": "disposition",
+          "type": "string",
+          "summary": "Disposition name.",
+          "maps_to": "record.disposition",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-channel-type",
+          "type": "enum",
+          "values": [
+            "video",
+            "voice"
+          ],
+          "summary": "Interaction channel; required when any interaction-info field is supplied.",
+          "maps_to": "record.interaction_info.channel_type"
+        },
+        {
+          "name": "interaction-agent-email",
+          "type": "string",
+          "summary": "Agent email address.",
+          "maps_to": "record.interaction_info.agent_email",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-agent-id",
+          "type": "string",
+          "summary": "Agent Zoom user ID.",
+          "maps_to": "record.interaction_info.agent_id",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-consumer-name",
+          "type": "string",
+          "summary": "Consumer name.",
+          "maps_to": "record.interaction_info.consumer_name",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-from",
+          "type": "string",
+          "summary": "Caller phone number in E.164 format.",
+          "maps_to": "record.interaction_info.from",
+          "allow_empty": false
+        },
+        {
+          "name": "interaction-to",
+          "type": "string",
+          "summary": "Recipient phone number in E.164 format.",
+          "maps_to": "record.interaction_info.to",
+          "allow_empty": false
+        },
+        {
+          "name": "primary-language",
+          "type": "enum",
+          "values": [
+            "en-GB",
+            "en-US",
+            "ar",
+            "da-DK",
+            "de-DE",
+            "es-ES",
+            "es-MX",
+            "fr-CA",
+            "fr-FR",
+            "it-IT",
+            "ja",
+            "ko-KR",
+            "nl-NL",
+            "pt-BR",
+            "pt-PT",
+            "ru",
+            "zh-CN",
+            "zh-HK"
+          ],
+          "summary": "Optional primary transcription language.",
+          "maps_to": "record.primary_language"
+        },
+        {
+          "name": "queue-id",
+          "type": "string",
+          "summary": "Contact Center queue ID.",
+          "maps_to": "record.queue_id",
+          "allow_empty": false
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "format": "date-time",
+          "summary": "Interaction start time as RFC3339.",
+          "maps_to": "record.start_time",
+          "allow_empty": false
+        }
+      ],
+      "notes": "Typed high-risk mutation. Download URL and interaction-info fields are redacted in generic write errors; preview and explicit approval are required before execute. If any interaction-info field is supplied, Zoom requires interaction-channel-type.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/qm/interactions"
+        }
+      ],
+      "examples": [
+        "pm zoom quality-management interactions create --download-url https://files.example.invalid/interaction.mp3 --interaction-channel-type voice --preview --json"
       ]
     }
   ],

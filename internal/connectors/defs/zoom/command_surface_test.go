@@ -839,7 +839,23 @@ func TestQualityManagementCommandsExecuteWithFixtures(t *testing.T) {
 	}
 
 	t.Run("create interaction plans before mutation and accepts created", func(t *testing.T) {
-		wantStatus, wantBody := zoomWriteFixture(t, "create_quality_management_interaction.json")
+		wantStatus, wantResponse := zoomWriteFixture(t, "create_quality_management_interaction.json")
+		wantRequestBody := map[string]any{
+			"download_url": "https://files.example.invalid/fixture-interaction.mp3",
+			"direction":    "inbound",
+			"disposition":  "fixture-disposition",
+			"interaction_info": map[string]any{
+				"channel_type":  "voice",
+				"agent_email":   "fixture-agent@example.invalid",
+				"agent_id":      "fixture-agent-id",
+				"consumer_name": "fixture-consumer",
+				"from":          "+15550000001",
+				"to":            "+15550000002",
+			},
+			"primary_language": "en-US",
+			"queue_id":         "fixture-queue",
+			"start_time":       "2026-08-08T09:00:00Z",
+		}
 		requests := 0
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
 			requests++
@@ -853,26 +869,12 @@ func TestQualityManagementCommandsExecuteWithFixtures(t *testing.T) {
 			if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
 				t.Errorf("decode POST body: %v", err)
 			}
-			if got, want := body["download_url"], "https://files.example.invalid/fixture-interaction.mp3"; got != want {
-				t.Errorf("download_url = %#v, want %q", got, want)
-			}
-			if got, want := body["direction"], "inbound"; got != want {
-				t.Errorf("direction = %#v, want %q", got, want)
-			}
-			interaction, ok := body["interaction_info"].(map[string]any)
-			if !ok {
-				t.Errorf("interaction_info = %#v, want typed object", body["interaction_info"])
-			} else {
-				if got, want := interaction["channel_type"], "voice"; got != want {
-					t.Errorf("interaction_info.channel_type = %#v, want %q", got, want)
-				}
-				if got, want := interaction["agent_email"], "fixture-agent@example.invalid"; got != want {
-					t.Errorf("interaction_info.agent_email = %#v, want %q", got, want)
-				}
+			if !reflect.DeepEqual(body, wantRequestBody) {
+				t.Errorf("POST body = %#v, want %#v", body, wantRequestBody)
 			}
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(wantStatus)
-			_, _ = w.Write(wantBody)
+			_, _ = w.Write(wantResponse)
 		}))
 		defer server.Close()
 
@@ -880,11 +882,18 @@ func TestQualityManagementCommandsExecuteWithFixtures(t *testing.T) {
 		connector := engine.New(bundle, engine.HooksFor(bundle.Name))
 		config := connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL + "/v2"}, Secrets: map[string]string{"access_token": "synthetic-test-token"}}
 		flags := map[string][]string{
-			"download-url":             {"https://files.example.invalid/fixture-interaction.mp3"},
-			"direction":                {"inbound"},
-			"interaction-channel-type": {"voice"},
-			"interaction-agent-email":  {"fixture-agent@example.invalid"},
-			"primary-language":         {"en-US"},
+			"download-url":              {"https://files.example.invalid/fixture-interaction.mp3"},
+			"direction":                 {"inbound"},
+			"disposition":               {"fixture-disposition"},
+			"interaction-channel-type":  {"voice"},
+			"interaction-agent-email":   {"fixture-agent@example.invalid"},
+			"interaction-agent-id":      {"fixture-agent-id"},
+			"interaction-consumer-name": {"fixture-consumer"},
+			"interaction-from":          {"+15550000001"},
+			"interaction-to":            {"+15550000002"},
+			"primary-language":          {"en-US"},
+			"queue-id":                  {"fixture-queue"},
+			"start-time":                {"2026-08-08T09:00:00Z"},
 		}
 		planned, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
 			Path:    []string{"quality-management", "interactions", "create"},
@@ -905,11 +914,18 @@ func TestQualityManagementCommandsExecuteWithFixtures(t *testing.T) {
 		result, err := connector.Write(context.Background(), connectors.WriteRequest{Action: "create_quality_management_interaction", Config: config}, []connectors.Record{{
 			"download_url": "https://files.example.invalid/fixture-interaction.mp3",
 			"direction":    "inbound",
+			"disposition":  "fixture-disposition",
 			"interaction_info": map[string]any{
-				"channel_type": "voice",
-				"agent_email":  "fixture-agent@example.invalid",
+				"channel_type":  "voice",
+				"agent_email":   "fixture-agent@example.invalid",
+				"agent_id":      "fixture-agent-id",
+				"consumer_name": "fixture-consumer",
+				"from":          "+15550000001",
+				"to":            "+15550000002",
 			},
 			"primary_language": "en-US",
+			"queue_id":         "fixture-queue",
+			"start_time":       "2026-08-08T09:00:00Z",
 		}})
 		if err != nil {
 			t.Fatalf("Write(create_quality_management_interaction) = %v", err)
@@ -991,16 +1007,18 @@ func zoomWriteFixture(t *testing.T, file string) (int, json.RawMessage) {
 		t.Fatalf("read writes fixture %s: %v", file, err)
 	}
 	var fixture struct {
-		Status int             `json:"status"`
-		Body   json.RawMessage `json:"body"`
+		Response struct {
+			Status int             `json:"status"`
+			Body   json.RawMessage `json:"body"`
+		} `json:"response"`
 	}
 	if err := json.Unmarshal(raw, &fixture); err != nil {
 		t.Fatalf("decode writes fixture %s: %v", file, err)
 	}
-	if fixture.Status == 0 || len(fixture.Body) == 0 {
-		t.Fatalf("writes fixture %s requires status and body", file)
+	if fixture.Response.Status == 0 || len(fixture.Response.Body) == 0 {
+		t.Fatalf("writes fixture %s requires response.status and response.body", file)
 	}
-	return fixture.Status, fixture.Body
+	return fixture.Response.Status, fixture.Response.Body
 }
 
 func zoomFixtureResponseBody(t *testing.T, stream, file string) json.RawMessage {
