@@ -98,6 +98,15 @@ does, and keeps destructive-write safety intact.
   the existing caller-supplied `--confirm destructive` acknowledgement. The
   campaigns, ProjectsV2, and Codespaces arms are approval-only creates.
 
+- **D-17:** Several of those documented arms contain required object or
+  array-of-object fields. The command surface already has a `json` flag type,
+  but commandrunner currently fails closed because it does not parse one. The
+  authorized request-body foundation is narrowly scoped: only a declared
+  `record.*` field whose action schema admits an object or array may receive
+  valid, bounded JSON; it is decoded then validated by the existing closed
+  action schema before a plan exists. This is not a generic request body,
+  path/query/header input, or raw HTTP escape hatch.
+
 ### the agent's Discretion
 
 - Select the smallest existing harness and test seams that prove returned data and

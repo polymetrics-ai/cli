@@ -5,6 +5,10 @@ type: tdd
 wave: 5
 depends_on: ["01", "02", "03", "04"]
 files_modified:
+  - internal/connectors/commandrunner/runner.go
+  - internal/connectors/commandrunner/runner_test.go
+  - cmd/connectorgen/validate.go
+  - cmd/connectorgen/main_test.go
   - scripts/gen-github-parity.py
   - cmd/connectorgen/github_api_surface_test.go
   - internal/connectors/certify/stages_surface_inventory_internal_test.go
@@ -20,7 +24,7 @@ requirements: []
 must_haves:
   truths:
     - "Eight documented GitHub endpoints with disjoint root oneOf request arms are promoted as 19 distinct, bounded named write actions; no executable write action retains a root union."
-    - "Each promoted command maps every required record field to a typed CLI flag, passes commandrunner's real preflight, and the provider endpoint references every action through covered_by.writes."
+    - "Each promoted command maps every required record field to a typed scalar, bounded string-array, or declared structured-JSON CLI flag; structured values are parsed before plan creation and validated by the action's closed record schema."
     - "The two bulk attestation delete-request endpoints are destructive and require caller-supplied --confirm destructive plus the existing plan, preview, approval, expiry, request-binding, and single-use-grant flow. All other actions in this slice remain approval-only creates."
     - "GitHub declarations are regenerated from scripts/gen-github-parity.py; shared ledger and generated catalog deltas remain confined to github."
     - "No OAuth application endpoint, credential-minting endpoint, duplicate disposition, root-polymorphic body, or anyOf-at-least-one body is promoted by this slice."
@@ -54,7 +58,8 @@ documented arm as a separate named reverse-ETL write action rather than flatteni
 union at the command boundary.
 
 Purpose: turn the engine's existing root-union promotion refusal into explicit, executable GitHub
-contracts without adding shared transport or generic-body machinery.
+contracts. The only shared foundation is declared structured JSON for a named `record.*` field:
+it is parsed and schema-validated before planning, not a generic transport or raw HTTP body.
 Output: 19 generated, preflight-tested GitHub write commands and a GitHub-only ledger delta.
 </objective>
 
@@ -77,7 +82,9 @@ is a separately preflightable command contract.
 
 <non_goals>
 
-- Do not add a generic union, generic JSON, raw HTTP, or second rate-limiter facility.
+- Do not add a generic union, generic raw HTTP body, or second rate-limiter facility. A `json`
+  flag is allowed only as a structured value for a declared `record.*` field whose closed schema
+  admits an object or array; it cannot target a path, query, header, or literal request body.
 - Do not promote the OAuth application endpoints: D-15 still requires declared secret-backed
   Basic authentication and token withholding, never fallback to the ordinary bearer credential.
 - Do not promote the two `anyOf` "at least one" custom-pattern updates or the root-polymorphic
@@ -96,7 +103,7 @@ is a separately preflightable command contract.
 | Several actions behind one provider URL lose coverage | Use `covered_by.writes`, never synthetic endpoint paths or a single arbitrary representative action. | Generator test asserts exact action set per endpoint and `connectorgen validate` resolves each name. |
 | A destructive POST is treated as a safe create because method alone is insufficient | Mark bulk attestation deletion actions `confirm: destructive`; generated help derives the real `--confirm destructive` requirement. | Commandrunner test checks both endpoints' actions resolve `ConfirmationKindDestructive`; safe actions resolve no typed challenge. |
 | Generated JSON is hand-curated or unrelated connector data moves | Change only the generator source, run it and `surface-sync`, then structurally compare shared ledger keys. | Generated ownership and confinement script reports only `github`. |
-| CLI flags claim a body the runtime cannot build | Generate typed `record.*` mappings for all required arm fields and validate them against the declared record schema. | New red/green contract test and `TestEveryImplementedCommandPassesRuntimePreflight`. |
+| CLI flags claim a body the runtime cannot build | Generate typed `record.*` mappings for all required arm fields. A structured JSON flag is parsed before it is put in the record, allowed only for a declared object/array schema node, and the complete action record is then validated before a plan exists. | Parser/type-mismatch/no-dispatch tests plus the new contract test and `TestEveryImplementedCommandPassesRuntimePreflight`. |
 
 </threat_model>
 
@@ -110,13 +117,16 @@ is a separately preflightable command contract.
       - internal/connectors/commandrunner/github_write_contract_test.go
     </read_first>
     <action>
-      Add a concrete table-driven GitHub bundle test before changing the generator. It names all
-      19 actions, their endpoint, required fields, CLI mappings, expected confirmation class, and
-      endpoint-level plural coverage. Run it against the current bundle and record the genuine
-      missing-command failure in `TDD-LEDGER.md`.
+      Add two focused tests before implementation: (1) a commandrunner test that proves a declared
+      `json` record flag is currently rejected, and that malformed/type-mismatched structured
+      values cannot reach a write plan; (2) a concrete table-driven GitHub bundle test naming all
+      19 actions, endpoints, required fields, CLI mappings, expected confirmation class, and
+      endpoint-level plural coverage. Run both against the current bundle and record their genuine
+      failures in `TDD-LEDGER.md`.
     </action>
     <acceptance_criteria>
-      - The red run fails because none of the new arm-specific commands/actions are declared.
+      - The red run fails because `json` has no runtime parser and none of the arm-specific
+        commands/actions are declared.
       - The test asserts semantics through the loaded embedded bundle and commandrunner preflight,
         not merely source text or a hand-copied validator rule.
     </acceptance_criteria>
@@ -131,16 +141,20 @@ is a separately preflightable command contract.
       - cmd/connectorgen/validate.go
     </read_first>
     <action>
-      Add an explicit `EXPLICIT_ONE_OF_WRITE_CONTRACTS` source table and narrow generator branch.
-      It emits unique readable command/action/operation names, documented typed root fields, exact
-      required flags, and plural `covered_by.writes`. Mark only the four bulk-attestation deletion
-      actions destructive; all other contracts use the already-enforced approval-only write path.
-      Regenerate the GitHub bundle and run `surface-sync`; do not hand edit generated JSON.
+      First add the narrow `json` flag parser: valid JSON only, bounded, accepted only for a
+      declared `record.*` object/array schema node and still subjected to complete write-schema
+      validation before planning. Then add an explicit `EXPLICIT_ONE_OF_WRITE_CONTRACTS` source
+      table and narrow generator branch. It emits unique readable command/action/operation names,
+      documented typed root fields, exact required flags, and plural `covered_by.writes`. Mark only
+      the four bulk-attestation deletion actions destructive; all other contracts use the
+      already-enforced approval-only write path. Regenerate the GitHub bundle and run
+      `surface-sync`; do not hand edit generated JSON.
     </action>
     <acceptance_criteria>
       - Exactly eight `operation` rows become covered, with 19 newly declared actions.
       - No newly generated record schema has root `oneOf`/`anyOf` or an empty-object-only contract.
-      - Every newly declared command passes real `commandrunner.Preflight`.
+      - Every newly declared command passes real `commandrunner.Preflight`; a valid structured
+        flag can build a plan record while malformed or wrong-shaped input fails before dispatch.
       - The red table becomes green with no changed expectation hiding a missing arm.
     </acceptance_criteria>
   </task>
