@@ -552,6 +552,54 @@ func TestValidate_CLISurfaceImplementedDirectWriteNamedRootJSONObjectPasses(t *t
 	}
 }
 
+// TestValidate_CLISurfaceImplementedDirectWriteNamedRootJSONArrayPasses
+// preserves the same narrow declaration boundary for the one documented case
+// where a provider mutation body is a root JSON array. A named json_array
+// flag is not a generic raw body: it remains tied to one rest_write operation
+// and is checked against that operation's closed array schema.
+func TestValidate_CLISurfaceImplementedDirectWriteNamedRootJSONArrayPasses(t *testing.T) {
+	fsys := directWriteCLISurfaceBundleFS()
+	cli := string(fsys["cli-surface/cli_surface.json"].Data)
+	originalCLI := cli
+	cli = strings.Replace(cli, `
+					{ "name": "id", "type": "string", "maps_to": "path.id" }
+				`, `
+					{ "name": "id", "type": "string", "maps_to": "path.id" },
+					{ "name": "collaborators", "type": "json_array", "maps_to": "body", "required": true }
+				`, 1)
+	if cli == originalCLI {
+		t.Fatal("add named root-array flag to cli surface")
+	}
+	fsys["cli-surface/cli_surface.json"] = &fstest.MapFile{Data: []byte(cli)}
+
+	operations := string(fsys["cli-surface/operations.json"].Data)
+	originalOperations := operations
+	operations = strings.Replace(operations, `"max_bytes": 1024`, `"content_type": "application/json",
+					"body_schema": {
+						"type": "array",
+						"minItems": 1,
+						"items": {
+							"type": "object",
+							"additionalProperties": false,
+							"required": ["email"],
+							"properties": {"email": {"type": "string"}}
+						}
+					},
+					"max_bytes": 1024`, 1)
+	if operations == originalOperations {
+		t.Fatal("add declared root-array body schema to operation")
+	}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for named root-array direct_write cli surface, got %+v", report.Findings)
+	}
+}
+
 func TestValidate_CLISurfaceImplementedMultipartDirectWritePasses(t *testing.T) {
 	fsys := directWriteCLISurfaceBundleFS()
 	cli := string(fsys["cli-surface/cli_surface.json"].Data)
