@@ -1,7 +1,7 @@
 {
   "name": "dockerhub",
   "display_name": "Docker Hub",
-  "description": "Reads public Docker Hub repositories and image tags for a configured username or organization, and, with an optional Personal Access Token, manages access tokens, organizations, groups/teams, invites, audit logs, and repositories via the Docker Hub API.",
+  "description": "Reads public Docker Hub repositories and image tags for a configured target namespace; an optional Personal Access Token authenticates as a separately configured Docker Hub username. It also manages access tokens, organizations, groups/teams, invites, audit logs, and repositories via the Docker Hub API.",
   "integration_type": "api",
   "docs_url": "https://docs.docker.com/docker-hub/api/latest/",
   "release_stage": "ga",

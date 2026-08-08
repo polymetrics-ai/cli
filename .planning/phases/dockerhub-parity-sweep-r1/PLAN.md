@@ -241,9 +241,11 @@ result was a misleading Docker Hub 404, not an operator error.
 authentication hook. Introduce a distinct, required `namespace` configuration property for the
 target Hub namespace and interpolate it in every stream path and the health check. The declarative
 engine supports static schema defaults only; it has no safe cross-key "namespace defaults to
-docker_username" facility. Making `namespace` required is therefore deliberately fail-closed and
-avoids another accepted-then-discarded configuration value. This is connector-local: no shared
-engine or auth-hook behavior changes.
+docker_username" facility. The schema declares `namespace` required and the stream/check template
+fails locally before issuing HTTP when it is absent, avoiding another accepted-then-discarded
+configuration value. The credential store intentionally validates only flat-map constraints, not
+JSON Schema `required`; changing that project-wide behavior is not necessary to repair this
+connector-local route and is outside this slice. No shared engine or auth-hook behavior changes.
 
 **GSD inline fallback.** Before this slice, I ran `scripts/gsd doctor`, resolved `discuss-phase`,
 `plan-phase --gaps --tdd`, `execute-phase --gaps-only`, `verify-work`, and `code-review` with
@@ -280,6 +282,13 @@ existing commands. The required `namespace` property changes generated configura
 so inspect the Docker Hub manual/skill output and website catalog generator result. Recheck
 `pm dockerhub`, the affected command help, `pm help dockerhub`, and docs/website generator scope.
 No page, `per_page`, or `limit` flags are authored; stream pagination remains declaration-derived.
+
+**Green result.** The focused real-engine regression test passed after the template repair; it
+also proved an omitted namespace errors locally before HTTP. Docker Hub validation, surface-sync,
+the fleet-wide implemented-command preflight, and connector boundary gate passed. `pm docs
+generate --dir docs/cli` was run from the rebuilt binary; 1,027 unrelated generated-documentation
+changes were restored, while the Docker Hub manual/skill and two parsed-object-verified Docker Hub
+website catalog entries remain. No golden transcript changed.
 
 ## Required skills used
 

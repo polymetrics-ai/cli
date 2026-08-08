@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector dockerhub [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads public Docker Hub repositories and image tags for a configured username or organization, and, with an optional Personal Access Token, manages access tokens, organizations, groups/teams, invites, audit logs, and repositories via the Docker Hub API.
+  Reads public Docker Hub repositories and image tags for a configured target namespace; an optional Personal Access Token authenticates as a separately configured Docker Hub username. It also manages access tokens, organizations, groups/teams, invites, audit logs, and repositories via the Docker Hub API.
 
 ICON
   id: dockerhub
@@ -29,6 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   docker_username
+  namespace
   page_size
   repository
   tag
@@ -56,107 +57,107 @@ SYNC MODES
 
 REVERSE ETL ACTIONS
   create_auth_token:
-    endpoint: POST /v2/auth/token
+    endpoint: POST /auth/token
     required fields: identifier, secret
     risk: high: exchanges a credential for a live 10-minute access token; the token is redacted from command output; requires reverse ETL approval
   create_user_login:
-    endpoint: POST /v2/users/login
+    endpoint: POST /users/login
     required fields: username, password
     risk: high: exchanges a credential for a live session JWT; the token is redacted from command output; requires reverse ETL approval
   create_2fa_login:
-    endpoint: POST /v2/users/2fa-login
+    endpoint: POST /users/2fa-login
     required fields: login_2fa_token, code
     risk: high: exchanges a 2FA challenge for a live session JWT; the token is redacted from command output; requires reverse ETL approval
   create_repository:
-    endpoint: POST /v2/namespaces/{namespace}/repositories
-    required fields: name, namespace
+    endpoint: POST /namespaces/{{ record.namespace }}/repositories
+    required fields: namespace, name
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   update_repository_immutable_tags:
-    endpoint: PATCH /v2/namespaces/{namespace}/repositories/{repository}/immutabletags
+    endpoint: PATCH /namespaces/{{ record.namespace }}/repositories/{{ record.repository }}/immutabletags
     required fields: namespace, repository, immutable_tags, immutable_tags_rules
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   assign_repository_group:
-    endpoint: POST /v2/repositories/{namespace}/{repository}/groups
+    endpoint: POST /repositories/{{ record.namespace }}/{{ record.repository }}/groups
     required fields: namespace, repository, group_id, permission
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   create_access_token:
-    endpoint: POST /v2/access-tokens
+    endpoint: POST /access-tokens
     required fields: token_label, scopes
     risk: high: creates a live Docker Hub credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval
   update_access_token:
-    endpoint: PATCH /v2/access-tokens/{uuid}
+    endpoint: PATCH /access-tokens/{{ record.uuid }}
     required fields: uuid
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   delete_access_token:
-    endpoint: DELETE /v2/access-tokens/{uuid}
+    endpoint: DELETE /access-tokens/{{ record.uuid }}
     required fields: uuid
     risk: high: revokes a live Docker Hub credential; requires reverse ETL approval and destructive confirmation
   create_org_access_token:
-    endpoint: POST /v2/orgs/{name}/access-tokens
+    endpoint: POST /orgs/{{ record.name }}/access-tokens
     required fields: name, label
     risk: high: creates a live Docker Hub organization credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval
   update_org_access_token:
-    endpoint: PATCH /v2/orgs/{org_name}/access-tokens/{access_token_id}
+    endpoint: PATCH /orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}
     required fields: org_name, access_token_id
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   delete_org_access_token:
-    endpoint: DELETE /v2/orgs/{org_name}/access-tokens/{access_token_id}
+    endpoint: DELETE /orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}
     required fields: org_name, access_token_id
     risk: high: revokes a live Docker Hub organization credential; requires reverse ETL approval and destructive confirmation
   create_group:
-    endpoint: POST /v2/orgs/{org_name}/groups
+    endpoint: POST /orgs/{{ record.org_name }}/groups
     required fields: org_name, name
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   replace_group:
-    endpoint: PUT /v2/orgs/{org_name}/groups/{group_name}
+    endpoint: PUT /orgs/{{ record.org_name }}/groups/{{ record.group_name }}
     required fields: org_name, group_name, name
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   update_group:
-    endpoint: PATCH /v2/orgs/{org_name}/groups/{group_name}
+    endpoint: PATCH /orgs/{{ record.org_name }}/groups/{{ record.group_name }}
     required fields: org_name, group_name
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   delete_group:
-    endpoint: DELETE /v2/orgs/{org_name}/groups/{group_name}
+    endpoint: DELETE /orgs/{{ record.org_name }}/groups/{{ record.group_name }}
     required fields: org_name, group_name
     risk: high: removes an organization group and its access grants; requires reverse ETL approval and destructive confirmation
   add_group_member:
-    endpoint: POST /v2/orgs/{org_name}/groups/{group_name}/members
+    endpoint: POST /orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members
     required fields: org_name, group_name, member
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   remove_group_member:
-    endpoint: DELETE /v2/orgs/{org_name}/groups/{group_name}/members/{username}
+    endpoint: DELETE /orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members/{{ record.username }}
     required fields: org_name, group_name, username
     risk: high: removes a user's access via this group; requires reverse ETL approval and destructive confirmation
   bulk_create_invites:
-    endpoint: POST /v2/invites/bulk
+    endpoint: POST /invites/bulk
     required fields: org, invitees
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   cancel_invite:
-    endpoint: DELETE /v2/invites/{id}
+    endpoint: DELETE /invites/{{ record.id }}
     required fields: id
     risk: medium: cancels a pending organization invite; requires reverse ETL approval and destructive confirmation
   resend_invite:
-    endpoint: PATCH /v2/invites/{id}/resend
+    endpoint: PATCH /invites/{{ record.id }}/resend
     required fields: id
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   update_org_settings:
-    endpoint: PUT /v2/orgs/{name}/settings
+    endpoint: PUT /orgs/{{ record.name }}/settings
     required fields: name, restricted_images_enabled, restricted_images_allow_official, restricted_images_allow_verified_publishers
     risk: medium: mutates Docker Hub account/organization state; requires reverse ETL approval
   update_org_member:
-    endpoint: PUT /v2/orgs/{org_name}/members/{username}
+    endpoint: PUT /orgs/{{ record.org_name }}/members/{{ record.username }}
     required fields: org_name, username, role
     risk: high: changes a member's organization role/permissions; requires reverse ETL approval
   remove_org_member:
-    endpoint: DELETE /v2/orgs/{org_name}/members/{username}
+    endpoint: DELETE /orgs/{{ record.org_name }}/members/{{ record.username }}
     required fields: org_name, username
     risk: high: removes a user's organization membership; requires reverse ETL approval and destructive confirmation
   create_scim_user:
-    endpoint: POST /v2/scim/2.0/Users
+    endpoint: POST /scim/2.0/Users
     required fields: schemas, userName
     risk: high: provisions a new SCIM-managed identity; requires reverse ETL approval
   update_scim_user:
-    endpoint: PUT /v2/scim/2.0/Users/{id}
+    endpoint: PUT /scim/2.0/Users/{{ record.id }}
     required fields: id, schemas, enabled
     risk: high: replaces a SCIM-managed identity's profile and can deactivate it; requires reverse ETL approval
 
