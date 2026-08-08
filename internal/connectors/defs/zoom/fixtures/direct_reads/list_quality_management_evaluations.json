@@ -1,0 +1,18 @@
+{
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "account_id": "fixture-account",
+        "creator_id": "fixture-creator",
+        "creator_info": {
+          "display_name": "fixture-creator-name",
+          "user_id": "fixture-creator-user"
+        },
+        "id": "fixture-evaluation",
+        "status": "Complete"
+      }
+    ],
+    "next_page_token": "fixture-page-token"
+  }
+}

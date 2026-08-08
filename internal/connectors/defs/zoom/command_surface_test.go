@@ -30,16 +30,18 @@ const zoomBundleName = "zoom"
 // TestCoveredStreamsHaveReachableCommands fail red before the module's
 // operations.json/cli_surface.json entries exist.
 //
-// Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2).
-const wantModuleOperationCommandCount = 8
+// Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
+// quality-management reads (5).
+const wantModuleOperationCommandCount = 13
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
 // module so the command runner proves the typed action is promotable before a
 // production bundle change can turn its ledger row into covered_by.write.
 //
-// Landed modules: healthcare (1, update_clinical_note).
-const wantModuleWriteCommandCount = 1
+// Landed modules: healthcare (1, update_clinical_note), quality-management
+// (1, create_quality_management_interaction).
+const wantModuleWriteCommandCount = 2
 
 func loadZoomBundle(t *testing.T) engine.Bundle {
 	t.Helper()
@@ -141,11 +143,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 12 {
-		t.Errorf("executable rows = %d, want 12", got)
+	if got := covered; got != 18 {
+		t.Errorf("executable rows = %d, want 18", got)
 	}
-	if got := implementableNow; got != 1830 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1830", got)
+	if got := implementableNow; got != 1824 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1824", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -728,6 +730,218 @@ func TestHealthcareClinicalNoteCommandsExecuteWithFixtures(t *testing.T) {
 	})
 }
 
+// TestQualityManagementCommandsExecuteWithFixtures pins the live provider's
+// five GET routes to fixed paths with no invented response-pagination inputs,
+// then proves the one typed POST request builds the entire closed nested body
+// and accepts Zoom's documented 201 success status.
+func TestQualityManagementCommandsExecuteWithFixtures(t *testing.T) {
+	readTests := []struct {
+		name        string
+		path        []string
+		flags       map[string][]string
+		requestPath string
+		fixture     string
+		raw         []string
+		fields      []string
+	}{
+		{
+			name:        "list automated evaluations",
+			path:        []string{"quality-management", "automated-evaluations", "list"},
+			requestPath: "/v2/qm/automated_evaluations",
+			fixture:     "list_quality_management_automated_evaluations.json",
+			raw:         []string{"fixture-account", "fixture-agent-name", "fixture-agent-user", "fixture-page-token"},
+			fields:      []string{"account_id", "display_name", "user_id", "next_page_token"},
+		},
+		{
+			name:        "list evaluations",
+			path:        []string{"quality-management", "evaluations", "list"},
+			requestPath: "/v2/qm/evaluation",
+			fixture:     "list_quality_management_evaluations.json",
+			raw:         []string{"fixture-account", "fixture-creator", "fixture-creator-name", "fixture-creator-user", "fixture-page-token"},
+			fields:      []string{"account_id", "creator_id", "display_name", "user_id", "next_page_token"},
+		},
+		{
+			name:        "get evaluation",
+			path:        []string{"quality-management", "evaluations", "get"},
+			flags:       map[string][]string{"evaluation-id": {"fixture-evaluation"}},
+			requestPath: "/v2/qm/evaluation/fixture-evaluation",
+			fixture:     "get_quality_management_evaluation.json",
+			raw:         []string{"fixture-account", "fixture-evaluator-name", "fixture-evaluator-user"},
+			fields:      []string{"account_id", "display_name", "user_id"},
+		},
+		{
+			name:        "list interactions",
+			path:        []string{"quality-management", "interactions", "list"},
+			requestPath: "/v2/qm/interactions",
+			fixture:     "list_quality_management_interactions.json",
+			raw:         []string{"fixture-account", "fixture-agent@example.invalid", "fixture-consumer", "+15550000001", "+15550000002", "fixture-page-token"},
+			fields:      []string{"account_id", "agent_email", "consumer_name", "from", "to", "next_page_token"},
+		},
+		{
+			name:        "get interaction",
+			path:        []string{"quality-management", "interactions", "get"},
+			flags:       map[string][]string{"interaction-id": {"fixture-interaction"}},
+			requestPath: "/v2/qm/interactions/fixture-interaction",
+			fixture:     "get_quality_management_interaction.json",
+			raw:         []string{"fixture-account", "fixture-agent@example.invalid", "fixture-consumer", "+15550000001", "+15550000002"},
+			fields:      []string{"account_id", "agent_email", "consumer_name", "from", "to"},
+		},
+	}
+
+	for _, test := range readTests {
+		t.Run(test.name, func(t *testing.T) {
+			wantStatus, wantBody := zoomDirectReadFixture(t, test.fixture)
+			requests := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+				requests++
+				if request.Method != http.MethodGet {
+					t.Errorf("method = %s, want GET", request.Method)
+				}
+				if request.URL.Path != test.requestPath {
+					http.NotFound(w, request)
+					return
+				}
+				for _, responseOnly := range []string{"from", "to", "page_size", "next_page_token", "limit"} {
+					if got := request.URL.Query().Get(responseOnly); got != "" {
+						t.Errorf("response-only field %s was sent as query %q", responseOnly, got)
+					}
+				}
+				if got := request.URL.Query().Encode(); got != "" {
+					t.Errorf("Quality Management GET query = %q, want no undocumented parameters", got)
+				}
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(wantStatus)
+				_, _ = w.Write(wantBody)
+			}))
+			defer server.Close()
+
+			bundle := loadZoomBundle(t)
+			connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   test.path,
+				Flags:  test.flags,
+				Config: connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL + "/v2"}, Secrets: map[string]string{"access_token": "synthetic-test-token"}},
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for a direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q) = %v", strings.Join(test.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != wantStatus {
+				t.Fatalf("Run(%q) direct read = %#v, want status %d", strings.Join(test.path, " "), result.DirectRead, wantStatus)
+			}
+			assertQualityManagementResponseRedacted(t, result.DirectRead.Body, test.raw, test.fields)
+			if requests != 1 {
+				t.Errorf("requests = %d, want 1", requests)
+			}
+		})
+	}
+
+	t.Run("create interaction plans before mutation and accepts created", func(t *testing.T) {
+		wantStatus, wantBody := zoomWriteFixture(t, "create_quality_management_interaction.json")
+		requests := 0
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+			requests++
+			if request.Method != http.MethodPost {
+				t.Errorf("method = %s, want POST", request.Method)
+			}
+			if request.URL.Path != "/v2/qm/interactions" {
+				t.Errorf("path = %s, want Quality Management interaction path", request.URL.Path)
+			}
+			var body map[string]any
+			if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+				t.Errorf("decode POST body: %v", err)
+			}
+			if got, want := body["download_url"], "https://files.example.invalid/fixture-interaction.mp3"; got != want {
+				t.Errorf("download_url = %#v, want %q", got, want)
+			}
+			if got, want := body["direction"], "inbound"; got != want {
+				t.Errorf("direction = %#v, want %q", got, want)
+			}
+			interaction, ok := body["interaction_info"].(map[string]any)
+			if !ok {
+				t.Errorf("interaction_info = %#v, want typed object", body["interaction_info"])
+			} else {
+				if got, want := interaction["channel_type"], "voice"; got != want {
+					t.Errorf("interaction_info.channel_type = %#v, want %q", got, want)
+				}
+				if got, want := interaction["agent_email"], "fixture-agent@example.invalid"; got != want {
+					t.Errorf("interaction_info.agent_email = %#v, want %q", got, want)
+				}
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(wantStatus)
+			_, _ = w.Write(wantBody)
+		}))
+		defer server.Close()
+
+		bundle := loadZoomBundle(t)
+		connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+		config := connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL + "/v2"}, Secrets: map[string]string{"access_token": "synthetic-test-token"}}
+		flags := map[string][]string{
+			"download-url":             {"https://files.example.invalid/fixture-interaction.mp3"},
+			"direction":                {"inbound"},
+			"interaction-channel-type": {"voice"},
+			"interaction-agent-email":  {"fixture-agent@example.invalid"},
+			"primary-language":         {"en-US"},
+		}
+		planned, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
+			Path:    []string{"quality-management", "interactions", "create"},
+			Flags:   flags,
+			Config:  config,
+			Preview: true,
+		})
+		if err != nil {
+			t.Fatalf("BuildWriteCommand = %v", err)
+		}
+		if planned.Write != "create_quality_management_interaction" || planned.Preview == nil {
+			t.Fatalf("planned Quality Management write = %#v, want typed action with preview", planned)
+		}
+		if requests != 0 {
+			t.Fatalf("preview reached network; requests = %d, want 0", requests)
+		}
+
+		result, err := connector.Write(context.Background(), connectors.WriteRequest{Action: "create_quality_management_interaction", Config: config}, []connectors.Record{{
+			"download_url": "https://files.example.invalid/fixture-interaction.mp3",
+			"direction":    "inbound",
+			"interaction_info": map[string]any{
+				"channel_type": "voice",
+				"agent_email":  "fixture-agent@example.invalid",
+			},
+			"primary_language": "en-US",
+		}})
+		if err != nil {
+			t.Fatalf("Write(create_quality_management_interaction) = %v", err)
+		}
+		if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+			t.Fatalf("Write result = %#v, want one successful 201 action", result)
+		}
+		if requests != 1 {
+			t.Fatalf("POST requests = %d, want 1", requests)
+		}
+	})
+}
+
+func assertQualityManagementResponseRedacted(t *testing.T, body any, raw, fields []string) {
+	t.Helper()
+	encoded, err := json.Marshal(body)
+	if err != nil {
+		t.Fatalf("marshal Quality Management response: %v", err)
+	}
+	got := string(encoded)
+	for _, value := range raw {
+		if strings.Contains(got, value) {
+			t.Errorf("Quality Management response exposed %q: %s", value, got)
+		}
+	}
+	for _, field := range fields {
+		if !strings.Contains(got, "\""+field+"_redacted\":true") {
+			t.Errorf("Quality Management response is missing %s_redacted marker: %s", field, got)
+		}
+	}
+}
+
 func assertClinicalResponseRedacted(t *testing.T, body any, expectPageToken bool) {
 	t.Helper()
 	encoded, err := json.Marshal(body)
@@ -766,6 +980,25 @@ func zoomDirectReadFixture(t *testing.T, file string) (int, json.RawMessage) {
 	}
 	if len(fixture.Body) == 0 {
 		t.Fatalf("direct_reads fixture %s has no body", file)
+	}
+	return fixture.Status, fixture.Body
+}
+
+func zoomWriteFixture(t *testing.T, file string) (int, json.RawMessage) {
+	t.Helper()
+	raw, err := os.ReadFile(filepath.Join("fixtures", "writes", file))
+	if err != nil {
+		t.Fatalf("read writes fixture %s: %v", file, err)
+	}
+	var fixture struct {
+		Status int             `json:"status"`
+		Body   json.RawMessage `json:"body"`
+	}
+	if err := json.Unmarshal(raw, &fixture); err != nil {
+		t.Fatalf("decode writes fixture %s: %v", file, err)
+	}
+	if fixture.Status == 0 || len(fixture.Body) == 0 {
+		t.Fatalf("writes fixture %s requires status and body", file)
 	}
 	return fixture.Status, fixture.Body
 }
