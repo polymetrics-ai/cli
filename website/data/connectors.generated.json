@@ -383387,7 +383387,7 @@
   {
     "slug": "zoom",
     "name": "Zoom",
-    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, Auto Dialer call history/reports/call lists/prospects, Tasks assignee/collaborator/comment/import/item data, and Workforce Management filter/forecast/import/organizational-group/report/schedule/user data through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, Auto Dialer, Tasks, and Workforce Management reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, Auto Dialer call history/reports/call lists/prospects, Tasks assignee/collaborator/comment/import/item data, Workforce Management filter/forecast/import/organizational-group/report/schedule/user data, and Clips metadata/collaborator/comment/chapter/transfer data with bounded Clip download through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, and Clips reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "integration_type": "api",
     "release_stage": "ga",
@@ -383438,7 +383438,7 @@
       }
     ],
     "cli_surface": {
-      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads and Clip downloads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
       "usage": "pm zoom <group> <command> [flags]",
       "source_cli": {
         "name": "Zoom API reference",
@@ -383544,6 +383544,13 @@
           "title": "Workforce Management",
           "commands": [
             "workforce-management"
+          ]
+        },
+        {
+          "id": "clips",
+          "title": "Clips",
+          "commands": [
+            "clips"
           ]
         },
         {
@@ -387737,6 +387744,915 @@
           "risk": "",
           "approval": "",
           "notes": "Bounded sensitive Workforce Management user read. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "clips list",
+          "summary": "List all Zoom Clips.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_clips",
+          "source_cli_path": "GET /clips",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "Optional Zoom user ID, email, or me selector documented for Clip listing.",
+              "values": [],
+              "maps_to": "query.user_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom clips list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Clips list read. The provider artifact documents optional user_id but exposes paging values only in the response, so no request paging flag is exposed."
+        },
+        {
+          "path": "clips starred set",
+          "summary": "Batch star or unstar up to ten Zoom Clips.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.set_clips_starred",
+          "source_cli_path": "POST /clips/starred",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-ids",
+              "type": "string_array",
+              "summary": "One through ten documented Clip IDs to star or unstar.",
+              "values": [],
+              "maps_to": "body.clip_ids",
+              "required": true
+            },
+            {
+              "name": "starred",
+              "type": "boolean",
+              "summary": "Whether to star (true) or unstar (false) the declared Clip IDs.",
+              "values": [],
+              "maps_to": "body.starred",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips starred set --credential zoom-fixture --clip-ids clip-a --starred=true --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Changes the starred state of up to ten declared Zoom Clips in one all-or-nothing request.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named flags bind only the provider's closed Clip IDs and starred fields; blank IDs, batches above ten, arbitrary request bodies, URLs, and headers are not exposed. The documented 204 response is status-only success."
+        },
+        {
+          "path": "clips collaborators list",
+          "summary": "List collaborators of one Zoom Clip.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_clip_collaborators",
+          "source_cli_path": "GET /clips/{clipId}/collaborators",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom clips collaborators list --credential zoom-fixture --clip-id clip --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Clip collaborator read. The provider artifact exposes paging values only in the response, so no request paging flag is exposed."
+        },
+        {
+          "path": "clips collaborators share",
+          "summary": "Share one Zoom Clip with documented collaborators.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.share_clip_collaborators",
+          "source_cli_path": "POST /clips/{clipId}/collaborators",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "collaborators",
+              "type": "json_array",
+              "summary": "Documented closed array of Clip collaborator objects.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips collaborators share --credential zoom-fixture --clip-id clip --collaborators '[{\"email\":\"person@example.invalid\",\"role\":\"VIEWER\"}]' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Shares a Zoom Clip with the declared users or Team Chat channels.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named collaborators flag accepts exactly one provider-closed JSON array for this fixed endpoint. It is not a generic raw JSON or HTTP write; recipient fields are redacted."
+        },
+        {
+          "path": "clips collaborators remove",
+          "summary": "Remove the documented collaborator state from one Zoom Clip.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.remove_clip_collaborator",
+          "source_cli_path": "DELETE /clips/{clipId}/collaborators",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips collaborators remove --credential zoom-fixture --clip-id clip --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Removes collaborator state from a Zoom Clip through the provider's fixed endpoint.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "Zoom documents this fixed clip-only DELETE endpoint without a collaborator selector; no undocumented user ID or body is invented. Its 204 response is asserted by status only."
+        },
+        {
+          "path": "clips comments list",
+          "summary": "List comments on one Zoom Clip.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_clip_comments",
+          "source_cli_path": "GET /clips/{clipId}/comments",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom clips comments list --credential zoom-fixture --clip-id clip --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Clip comment read. The provider artifact exposes paging values only in the response, so no request paging flag is exposed."
+        },
+        {
+          "path": "clips comments delete",
+          "summary": "Delete one Zoom Clip comment.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_clip_comment",
+          "source_cli_path": "DELETE /clips/{clipId}/comments/{commentId}",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "comment-id",
+              "type": "string",
+              "summary": "Zoom Clip comment identifier to delete.",
+              "values": [],
+              "maps_to": "path.commentId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips comments delete --credential zoom-fixture --clip-id clip --comment-id comment --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Irreversibly deletes a comment from a Zoom Clip.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The fixed provider endpoint returns 204 No Content. Success is asserted by status without inventing a response body."
+        },
+        {
+          "path": "clips download",
+          "summary": "Download one Zoom Clip to an explicit local destination.",
+          "intent": "binary_download",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.download_clip",
+          "source_cli_path": "GET /clips/{clipId}/download",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier to download.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom clips download --credential zoom-fixture --clip-id clip --dest-root downloads --file-name clip.mp4 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Runtime download flags require --dest-root; --file-name is optional. The executor bounds the response to 100 MiB, refuses traversal and overwrite, and follows only the declared one-hop Zoom-host bearer redirect while emitting redacted file metadata and a SHA-256 receipt."
+        },
+        {
+          "path": "clips get",
+          "summary": "Get one Zoom Clip's metadata and sharing state.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_clip",
+          "source_cli_path": "GET /clips/{clipId}",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom clips get --credential zoom-fixture --clip-id clip --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Clip metadata read at the provider's fixed path."
+        },
+        {
+          "path": "clips delete",
+          "summary": "Soft delete one Zoom Clip.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_clip",
+          "source_cli_path": "DELETE /clips/{clipId}",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier to soft delete.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips delete --credential zoom-fixture --clip-id clip --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Soft deletes a Zoom Clip through its documented fixed endpoint.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The fixed provider endpoint returns 204 No Content. Success is asserted by status without inventing a response body."
+        },
+        {
+          "path": "clips update",
+          "summary": "Update documented fields of one Zoom Clip.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_clip",
+          "source_cli_path": "PATCH /clips/{clipId}",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier to update.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "clip",
+              "type": "json_object",
+              "summary": "Closed Clip update object with documented title, description, tags, or temporary thumbnail fields.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips update --credential zoom-fixture --clip-id clip --clip '{\"title\":\"Updated clip\"}' --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Changes documented metadata or the temporary thumbnail reference of a Zoom Clip.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named clip flag accepts exactly one provider-closed partial-update object for this fixed endpoint; it is not a generic JSON or HTTP write. Its 204 response is status-only success."
+        },
+        {
+          "path": "clips chapters get",
+          "summary": "Get the complete chapter list for one Zoom Clip.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_clip_chapters",
+          "source_cli_path": "GET /clips/{clipId}/chapters",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom clips chapters get --credential zoom-fixture --clip-id clip --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Clip chapter read at the provider's fixed path."
+        },
+        {
+          "path": "clips chapters create",
+          "summary": "Create or replace the complete chapter list for one Zoom Clip.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.create_clip_chapters",
+          "source_cli_path": "POST /clips/{clipId}/chapters",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "chapter-request",
+              "type": "json_object",
+              "summary": "Provider-closed complete Clip chapters request with 2 through 50 documented chapter objects.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips chapters create --credential zoom-fixture --clip-id clip --chapter-request '{\"chapters\":[{\"start_time\":\"00:00:00.000\",\"title\":\"Introduction\"},{\"start_time\":\"00:01:00.000\",\"title\":\"Details\"}]}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Replaces the complete chapter list of a Zoom Clip; the provider does not append chapters.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named chapter-request flag accepts exactly the provider's closed full-list object. It retains the source's cardinality and chapter schema bounds and does not expose a generic JSON or HTTP write."
+        },
+        {
+          "path": "clips duplicate",
+          "summary": "Duplicate one Zoom Clip.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.duplicate_clip",
+          "source_cli_path": "POST /clips/{clipId}/duplicate",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier to duplicate.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "summary": "Optional documented title for the duplicated Clip.",
+              "values": [],
+              "maps_to": "body.title",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm zoom clips duplicate --credential zoom-fixture --clip-id clip --title duplicate --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Creates a duplicate of a Zoom Clip owned by the caller.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The optional named title field is the only documented request member; no generic body, URL, or header input is exposed."
+        },
+        {
+          "path": "clips share-settings update",
+          "summary": "Update the sharing scope of one Zoom Clip.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_clip_share_settings",
+          "source_cli_path": "PATCH /clips/{clipId}/share_settings",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "clip-id",
+              "type": "string",
+              "summary": "Zoom Clip identifier.",
+              "values": [],
+              "maps_to": "path.clipId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "share-scope",
+              "type": "enum",
+              "summary": "Documented Clip sharing scope.",
+              "values": [
+                "ANYONE",
+                "SAME_ORGANIZATON",
+                "INVITED_MEMBERS_ONLY",
+                "PRIVATE"
+              ],
+              "maps_to": "body.share_scope",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips share-settings update --credential zoom-fixture --clip-id clip --share-scope PRIVATE --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Changes who can view a Zoom Clip.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named enum preserves the provider's documented spelling, including SAME_ORGANIZATON. The 204 response is status-only success."
+        },
+        {
+          "path": "clips transfers partial",
+          "summary": "Transfer selected Zoom Clips to another owner.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.transfer_clips_partial",
+          "source_cli_path": "POST /clips/transfers",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "source-owner-user-id",
+              "type": "string",
+              "summary": "Current owner user ID for the selected Clips.",
+              "values": [],
+              "maps_to": "body.source_owner_user_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "target-owner-user-id",
+              "type": "string",
+              "summary": "Active target owner user ID.",
+              "values": [],
+              "maps_to": "body.target_owner_user_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "clip-id-list",
+              "type": "string_array",
+              "summary": "Selected Clip IDs to transfer, limited by the provider to fifty.",
+              "values": [],
+              "maps_to": "body.clip_id_list",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips transfers partial --credential zoom-fixture --source-owner-user-id source --target-owner-user-id target --clip-id-list clip --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Transfers ownership of the declared Zoom Clips to another active user.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The operation owns a fixed PARTIAL_TRANSFER discriminator. The named fields bind only the documented closed partial-transfer shape; they do not permit a generic transfer request."
+        },
+        {
+          "path": "clips transfers full",
+          "summary": "Transfer all eligible Zoom Clips to another owner.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.transfer_clips_full",
+          "source_cli_path": "POST /clips/transfers",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "source-owner-user-id",
+              "type": "string",
+              "summary": "Optional source owner user ID for a full transfer.",
+              "values": [],
+              "maps_to": "body.source_owner_user_id",
+              "allow_empty": false
+            },
+            {
+              "name": "target-owner-user-id",
+              "type": "string",
+              "summary": "Active target owner user ID.",
+              "values": [],
+              "maps_to": "body.target_owner_user_id",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips transfers full --credential zoom-fixture --target-owner-user-id target --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Transfers all eligible Zoom Clips to another active user.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The operation owns a fixed FULL_TRANSFER discriminator. The optional source owner is preserved exactly as documented for full transfers; no generic transfer request is exposed."
+        },
+        {
+          "path": "clips transfers get",
+          "summary": "Get one Zoom Clip ownership-transfer task.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_clip_transfer",
+          "source_cli_path": "GET /clips/transfers/{taskId}",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "task-id",
+              "type": "string",
+              "summary": "Zoom Clip transfer task identifier.",
+              "values": [],
+              "maps_to": "path.taskId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom clips transfers get --credential zoom-fixture --task-id task --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive asynchronous Clip transfer-task read at the provider's fixed path."
+        },
+        {
+          "path": "clips files upload",
+          "summary": "Upload one Zoom Clip video file.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.upload_clip_file",
+          "source_cli_path": "POST /clips/files",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "file-path",
+              "type": "string",
+              "summary": "Project-contained .mp4 or .webm Clip file, up to 2 GB.",
+              "values": [],
+              "maps_to": "body.file",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "disable-auto-generate-tags",
+              "type": "boolean",
+              "summary": "Whether to disable automatic tag generation.",
+              "values": [],
+              "maps_to": "body.disable_auto_generate_tags"
+            },
+            {
+              "name": "disable-auto-generate-transcript",
+              "type": "boolean",
+              "summary": "Whether to disable automatic transcript generation.",
+              "values": [],
+              "maps_to": "body.disable_auto_generate_transcript"
+            }
+          ],
+          "examples": [
+            "pm zoom clips files upload --credential zoom-fixture --file-path clips/video.mp4 --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Uploads a bounded Clip video to Zoom through the provider-declared file host and one Zoom-host bearer redirect.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "This fixed upload accepts only a project-contained .mp4 or .webm source, bounded to the documented 2 GB limit. Callers cannot choose the URL, redirect host, credential header, MIME policy, or multipart field names."
+        },
+        {
+          "path": "clips files multipart upload",
+          "summary": "Upload one part of a Zoom Clip multipart video.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.upload_clip_multipart_part",
+          "source_cli_path": "POST /clips/files/multipart",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "file-path",
+              "type": "string",
+              "summary": "Project-contained .mp4 or .webm multipart part, up to 100 MB.",
+              "values": [],
+              "maps_to": "body.file",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "part-number",
+              "type": "integer",
+              "summary": "Documented multipart part number from 1 through 100.",
+              "values": [],
+              "maps_to": "body.part_number",
+              "minimum": 1,
+              "required": true
+            },
+            {
+              "name": "upload-context",
+              "type": "string",
+              "summary": "Provider-issued multipart upload context.",
+              "values": [],
+              "maps_to": "body.upload_context",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "disable-auto-generate-tags",
+              "type": "boolean",
+              "summary": "Whether to disable automatic tag generation.",
+              "values": [],
+              "maps_to": "body.disable_auto_generate_tags"
+            },
+            {
+              "name": "disable-auto-generate-transcript",
+              "type": "boolean",
+              "summary": "Whether to disable automatic transcript generation.",
+              "values": [],
+              "maps_to": "body.disable_auto_generate_transcript"
+            }
+          ],
+          "examples": [
+            "pm zoom clips files multipart upload --credential zoom-fixture --file-path clips/part-1.mp4 --part-number 1 --upload-context context --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Uploads one bounded Clip multipart video part to Zoom through the provider-declared host and redirect boundary.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "This fixed upload accepts only a project-contained .mp4 or .webm part no larger than 100 MB. The source's 5 MB lower bound excludes the final part and has no final-part request member, so the declaration preserves the exact enforceable upper bound without inventing a flag."
+        },
+        {
+          "path": "clips files multipart initiate",
+          "summary": "Initiate a Zoom Clip multipart upload.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.initiate_clip_multipart_upload",
+          "source_cli_path": "POST /clips/files/multipart/upload_events",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "Optional documented Clip file name for the multipart upload.",
+              "values": [],
+              "maps_to": "body.params.file_name",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm zoom clips files multipart initiate --credential zoom-fixture --file-name clip.mp4 --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Initiates a Zoom Clip multipart upload and returns a redacted provider upload context.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The operation owns the fixed CreateMultipartUpload discriminator and follows only the declared one-hop Zoom-host bearer redirect. The named file-name is the only optional provider parameter; no generic oneOf body is exposed."
+        },
+        {
+          "path": "clips files multipart complete",
+          "summary": "Complete a Zoom Clip multipart upload.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.complete_clip_multipart_upload",
+          "source_cli_path": "POST /clips/files/multipart/upload_events",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "upload-context",
+              "type": "string",
+              "summary": "Documented multipart upload context.",
+              "values": [],
+              "maps_to": "body.params.upload_context",
+              "allow_empty": false
+            },
+            {
+              "name": "part-number-etags",
+              "type": "json_array",
+              "summary": "Documented closed array of multipart part-number and ETag objects.",
+              "values": [],
+              "maps_to": "body.params.part_number_etags"
+            }
+          ],
+          "examples": [
+            "pm zoom clips files multipart complete --credential zoom-fixture --upload-context context --part-number-etags '[{\"part_number\":1,\"etag\":\"etag\"}]' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Completes a Zoom Clip multipart upload and returns a redacted Clip identifier.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The operation owns the fixed CompleteMultipartUpload discriminator and follows only the declared one-hop Zoom-host bearer redirect. Its named parameters preserve the concrete closed oneOf arm rather than accepting a generic request body."
+        },
+        {
+          "path": "clips files temporary upload",
+          "summary": "Upload one temporary Zoom Clip image file.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.upload_clip_temporary_file",
+          "source_cli_path": "POST /clips/files/tmp",
+          "source_url": "https://developers.zoom.us/docs/api/clips.md",
+          "flags": [
+            {
+              "name": "file-path",
+              "type": "string",
+              "summary": "Project-contained PNG, JPEG, JPG, or GIF image smaller than 2 MB.",
+              "values": [],
+              "maps_to": "body.file_path",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom clips files temporary upload --credential zoom-fixture --file-path clips/thumbnail.png --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Uploads a bounded temporary Clip image through the provider-declared file host and one Zoom-host bearer redirect.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The local source path is preview-bound and never sent to Zoom. The closed operation canonicalizes only the declared PNG/JPEG/GIF/JPG file into its provider-required base64 field at execution; callers cannot select a URL, redirect host, credential header, or arbitrary body."
         },
         {
           "path": "customer-managed-keys-hybrid archival-key decrypt",

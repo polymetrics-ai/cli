@@ -701,6 +701,194 @@ func TestClipsOperationCommandsAreReachable(t *testing.T) {
 	}
 }
 
+// TestClipsStatusOnlyDirectWritesExecuteWithFixtures exercises every documented
+// Clips 204 mutation through the real plan, preview, typed confirmation, and
+// execution lifecycle. A no-content provider response must remain a completed
+// action with its declared status, never become a fake body or a read route.
+func TestClipsStatusOnlyDirectWritesExecuteWithFixtures(t *testing.T) {
+	const (
+		credentialName = "zoom-clips-status-fixture"
+		accessToken    = "fixture-clips-status-access-token"
+	)
+	type clipsStatusAction struct {
+		name         string
+		path         []string
+		flags        map[string][]string
+		method       string
+		requestPath  string
+		expectedBody json.RawMessage
+		destructive  bool
+	}
+	actions := []clipsStatusAction{
+		{
+			name:         "set starred",
+			path:         []string{"clips", "starred", "set"},
+			flags:        map[string][]string{"clip-ids": {"fixture-clip"}, "starred": {"true"}},
+			method:       http.MethodPost,
+			requestPath:  "/v2/clips/starred",
+			expectedBody: json.RawMessage(`{"clip_ids":["fixture-clip"],"starred":true}`),
+		},
+		{
+			name:        "remove collaborator",
+			path:        []string{"clips", "collaborators", "remove"},
+			flags:       map[string][]string{"clip-id": {"fixture-clip"}},
+			method:      http.MethodDelete,
+			requestPath: "/v2/clips/fixture-clip/collaborators",
+			destructive: true,
+		},
+		{
+			name:        "delete comment",
+			path:        []string{"clips", "comments", "delete"},
+			flags:       map[string][]string{"clip-id": {"fixture-clip"}, "comment-id": {"fixture-comment"}},
+			method:      http.MethodDelete,
+			requestPath: "/v2/clips/fixture-clip/comments/fixture-comment",
+			destructive: true,
+		},
+		{
+			name:        "delete clip",
+			path:        []string{"clips", "delete"},
+			flags:       map[string][]string{"clip-id": {"fixture-clip"}},
+			method:      http.MethodDelete,
+			requestPath: "/v2/clips/fixture-clip",
+			destructive: true,
+		},
+		{
+			name:         "update clip",
+			path:         []string{"clips", "update"},
+			flags:        map[string][]string{"clip-id": {"fixture-clip"}, "clip": {`{"title":"Fixture Clip title"}`}},
+			method:       http.MethodPatch,
+			requestPath:  "/v2/clips/fixture-clip",
+			expectedBody: json.RawMessage(`{"title":"Fixture Clip title"}`),
+		},
+		{
+			name:         "update share settings",
+			path:         []string{"clips", "share-settings", "update"},
+			flags:        map[string][]string{"clip-id": {"fixture-clip"}, "share-scope": {"PRIVATE"}},
+			method:       http.MethodPatch,
+			requestPath:  "/v2/clips/fixture-clip/share_settings",
+			expectedBody: json.RawMessage(`{"share_scope":"PRIVATE"}`),
+		},
+	}
+	byRequest := make(map[string]*clipsStatusAction, len(actions))
+	for i := range actions {
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Clips status fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Clips status fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Clips status fixture received undeclared query input")
+		}
+		if len(action.expectedBody) == 0 {
+			body, err := io.ReadAll(request.Body)
+			if err != nil {
+				t.Fatalf("read Clips status-only request body: %v", err)
+			}
+			if len(body) != 0 {
+				t.Fatal("Clips status-only action sent an undeclared request body")
+			}
+		} else {
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("Clips status action body did not declare JSON content")
+			}
+			var got, want any
+			if err := json.NewDecoder(request.Body).Decode(&got); err != nil {
+				t.Fatalf("decode Clips status action body: %v", err)
+			}
+			if err := json.Unmarshal(action.expectedBody, &want); err != nil {
+				t.Fatalf("decode expected Clips status action body: %v", err)
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatal("Clips status action body did not contain exactly the declared fields")
+			}
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s): %v", action.name, err)
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config:    map[string]string{"base_url": server.URL + "/v2"},
+		Secrets:   map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			beforeRequests := requests
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("Clips status action plan did not produce a no-network preview and single-use approval")
+			}
+			if action.destructive != (plan.ConfirmationChallenge == string(connectors.ConfirmationKindDestructive)) {
+				t.Fatal("Clips status action did not retain its declared destructive confirmation policy")
+			}
+			if requests != beforeRequests {
+				t.Fatal("Clips status action plan or preview reached the fixture endpoint")
+			}
+
+			runRequest := app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}
+			if action.destructive {
+				if _, err := application.RunReverseETL(context.Background(), runRequest); err == nil {
+					t.Fatal("Clips destructive status action bypassed typed destructive confirmation")
+				}
+				if requests != beforeRequests {
+					t.Fatal("unconfirmed Clips destructive status action reached the fixture endpoint")
+				}
+				runRequest.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+			}
+			run, err := application.RunReverseETL(context.Background(), runRequest)
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != http.StatusNoContent {
+				t.Fatalf("Clips status action run = %#v, want completed HTTP %d", run, http.StatusNoContent)
+			}
+			if run.OperationDirectWrite.Body != nil {
+				t.Fatal("Clips status-only action returned an invented response body")
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Clips status fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
 // TestAutoDialerDirectReadCommandsExecuteWithFixtures runs every published Auto
 // Dialer GET through the real command runner. It proves the ordinary Zoom
 // bearer, each exact fixed endpoint, no undeclared query or paging input, and

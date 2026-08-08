@@ -2883,7 +2883,7 @@
       "output_policy": "json_redacted",
       "auth_scopes": ["clips:read", "clips:read:admin"],
       "sensitive_policy": {"redact_fields": ["clip_id", "created_date", "description", "modified_date", "next_page_token", "owner_id", "passcode", "share_link", "share_link_settings", "thumbnail_link", "title"]},
-      "rest": {"method": "GET", "path": "/v2/clips", "max_bytes": 1048576}
+      "rest": {"method": "GET", "path": "/clips", "max_bytes": 1048576}
     },
     {
       "id": "zoom.set_clips_starred",
@@ -2898,7 +2898,7 @@
       "mutation_class": "update",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "clip_ids", "starred"]},
-      "rest": {"method": "POST", "path": "/v2/clips/starred", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "required": ["clip_ids", "starred"], "properties": {"clip_ids": {"type": "array", "minItems": 1, "maxItems": 10, "items": {"type": "string"}}, "starred": {"type": "boolean"}}}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/starred", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "required": ["clip_ids", "starred"], "properties": {"clip_ids": {"type": "array", "minItems": 1, "maxItems": 10, "items": {"type": "string"}}, "starred": {"type": "boolean"}}}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.list_clip_collaborators",
@@ -2911,7 +2911,7 @@
       "output_policy": "json_redacted",
       "auth_scopes": ["clips:read", "clips:read:admin"],
       "sensitive_policy": {"redact_fields": ["avatar", "channel_id", "clip_id", "display_name", "email", "next_page_token", "user_id"]},
-      "rest": {"method": "GET", "path": "/v2/clips/{clipId}/collaborators", "max_bytes": 1048576}
+      "rest": {"method": "GET", "path": "/clips/{clipId}/collaborators", "max_bytes": 1048576}
     },
     {
       "id": "zoom.share_clip_collaborators",
@@ -2926,7 +2926,7 @@
       "mutation_class": "create",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["avatar", "channel_id", "clip_id", "display_name", "email", "user_id"]},
-      "rest": {"method": "POST", "path": "/v2/clips/{clipId}/collaborators", "content_type": "application/json", "body_schema": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "properties": {"channel_id": {"type": "string"}, "email": {"type": "string"}, "role": {"type": "string", "enum": ["VIEWER"]}, "user_id": {"type": "string"}}}}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/{clipId}/collaborators", "content_type": "application/json", "body_schema": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "properties": {"channel_id": {"type": "string"}, "email": {"type": "string"}, "role": {"type": "string", "enum": ["VIEWER"]}, "user_id": {"type": "string"}}}}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.remove_clip_collaborator",
@@ -2943,7 +2943,7 @@
       "confirmation": {"kind": "destructive"},
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "user_id"]},
-      "rest": {"method": "DELETE", "path": "/v2/clips/{clipId}/collaborators", "max_bytes": 1048576}
+      "rest": {"method": "DELETE", "path": "/clips/{clipId}/collaborators", "max_bytes": 1048576}
     },
     {
       "id": "zoom.list_clip_comments",
@@ -2956,7 +2956,7 @@
       "output_policy": "json_redacted",
       "auth_scopes": ["clips:read", "clips:read:admin"],
       "sensitive_policy": {"redact_fields": ["avatar", "clip_id", "comment_id", "content", "display_name", "email", "mentions", "next_page_token", "parent_node_id"]},
-      "rest": {"method": "GET", "path": "/v2/clips/{clipId}/comments", "max_bytes": 1048576}
+      "rest": {"method": "GET", "path": "/clips/{clipId}/comments", "max_bytes": 1048576}
     },
     {
       "id": "zoom.delete_clip_comment",
@@ -2973,7 +2973,7 @@
       "confirmation": {"kind": "destructive"},
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "comment_id"]},
-      "rest": {"method": "DELETE", "path": "/v2/clips/{clipId}/comments/{commentId}", "max_bytes": 1048576}
+      "rest": {"method": "DELETE", "path": "/clips/{clipId}/comments/{commentId}", "max_bytes": 1048576}
     },
     {
       "id": "zoom.download_clip",
@@ -2986,7 +2986,7 @@
       "output_policy": "binary_file_bounded",
       "auth_scopes": ["clips:read:download_clip", "clips:read:download_clip:admin"],
       "sensitive_policy": {"redact_fields": ["clip_id", "file_name", "file_path", "file_sha256", "source_ref"]},
-      "binary": {"method": "GET", "path": "/v2/clips/{clipId}/download", "max_bytes": 104857600, "allow_overwrite": false, "bearer_redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "content_types": ["application/octet-stream"]}
+      "binary": {"method": "GET", "path": "/clips/{clipId}/download", "max_bytes": 104857600, "allow_overwrite": false, "bearer_redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "content_types": ["application/octet-stream"]}
     },
     {
       "id": "zoom.get_clip",
@@ -2999,7 +2999,7 @@
       "output_policy": "json_redacted",
       "auth_scopes": ["clips:read", "clips:read:admin"],
       "sensitive_policy": {"redact_fields": ["clip_id", "created_date", "description", "modified_date", "owner_id", "passcode", "share_link", "share_link_settings", "thumbnail_link", "title"]},
-      "rest": {"method": "GET", "path": "/v2/clips/{clipId}", "max_bytes": 1048576}
+      "rest": {"method": "GET", "path": "/clips/{clipId}", "max_bytes": 1048576}
     },
     {
       "id": "zoom.delete_clip",
@@ -3016,7 +3016,7 @@
       "confirmation": {"kind": "destructive"},
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id"]},
-      "rest": {"method": "DELETE", "path": "/v2/clips/{clipId}", "max_bytes": 1048576}
+      "rest": {"method": "DELETE", "path": "/clips/{clipId}", "max_bytes": 1048576}
     },
     {
       "id": "zoom.update_clip",
@@ -3031,7 +3031,7 @@
       "mutation_class": "update",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "description", "tags", "thumbnail_file_id", "title"]},
-      "rest": {"method": "PATCH", "path": "/v2/clips/{clipId}", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "minProperties": 1, "properties": {"description": {"type": "string"}, "tags": {"type": "array", "maxItems": 10, "items": {"type": "string"}}, "thumbnail_file_id": {"type": "string"}, "title": {"type": "string"}}}, "max_bytes": 1048576}
+      "rest": {"method": "PATCH", "path": "/clips/{clipId}", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "minProperties": 1, "properties": {"description": {"type": "string"}, "tags": {"type": "array", "maxItems": 10, "items": {"type": "string"}}, "thumbnail_file_id": {"type": "string"}, "title": {"type": "string"}}}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.get_clip_chapters",
@@ -3044,7 +3044,7 @@
       "output_policy": "json_redacted",
       "auth_scopes": ["clips:read:chapters", "clips:read:chapters:admin"],
       "sensitive_policy": {"redact_fields": ["chapters", "clip_id", "start_time", "summary", "title"]},
-      "rest": {"method": "GET", "path": "/v2/clips/{clipId}/chapters", "max_bytes": 1048576}
+      "rest": {"method": "GET", "path": "/clips/{clipId}/chapters", "max_bytes": 1048576}
     },
     {
       "id": "zoom.create_clip_chapters",
@@ -3059,7 +3059,7 @@
       "mutation_class": "update",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["chapters", "clip_id", "start_time", "summary", "title"]},
-      "rest": {"method": "POST", "path": "/v2/clips/{clipId}/chapters", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "required": ["chapters"], "properties": {"chapters": {"type": "array", "minItems": 2, "maxItems": 50, "items": {"type": "object", "additionalProperties": false, "required": ["start_time", "title"], "properties": {"start_time": {"type": "string", "pattern": "^[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}$"}, "summary": {"type": "string"}, "title": {"type": "string", "pattern": "."}}}}}}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/{clipId}/chapters", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "required": ["chapters"], "properties": {"chapters": {"type": "array", "minItems": 2, "maxItems": 50, "items": {"type": "object", "additionalProperties": false, "required": ["start_time", "title"], "properties": {"start_time": {"type": "string", "pattern": "^[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}$"}, "summary": {"type": "string"}, "title": {"type": "string", "pattern": "."}}}}}}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.duplicate_clip",
@@ -3074,7 +3074,7 @@
       "mutation_class": "create",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "new_clip_id", "title"]},
-      "rest": {"method": "POST", "path": "/v2/clips/{clipId}/duplicate", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "properties": {"title": {"type": "string"}}}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/{clipId}/duplicate", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "properties": {"title": {"type": "string"}}}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.update_clip_share_settings",
@@ -3089,7 +3089,7 @@
       "mutation_class": "admin",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "share_scope"]},
-      "rest": {"method": "PATCH", "path": "/v2/clips/{clipId}/share_settings", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "required": ["share_scope"], "properties": {"share_scope": {"type": "string", "enum": ["ANYONE", "SAME_ORGANIZATON", "INVITED_MEMBERS_ONLY", "PRIVATE"]}}}, "max_bytes": 1048576}
+      "rest": {"method": "PATCH", "path": "/clips/{clipId}/share_settings", "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "required": ["share_scope"], "properties": {"share_scope": {"type": "string", "enum": ["ANYONE", "SAME_ORGANIZATON", "INVITED_MEMBERS_ONLY", "PRIVATE"]}}}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.transfer_clips_partial",
@@ -3106,7 +3106,7 @@
       "confirmation": {"kind": "destructive"},
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "clip_id_list", "source_owner_user_id", "target_owner_user_id", "task_id", "transfer_type"]},
-      "rest": {"method": "POST", "path": "/v2/clips/transfers", "content_type": "application/json", "body": {"transfer_type": "PARTIAL_TRANSFER"}, "body_schema": {"type": "object", "additionalProperties": false, "required": ["clip_id_list", "source_owner_user_id", "target_owner_user_id", "transfer_type"], "properties": {"clip_id_list": {"type": "array", "maxItems": 50, "items": {"type": "string"}}, "source_owner_user_id": {"type": "string"}, "target_owner_user_id": {"type": "string"}, "transfer_type": {"type": "string", "enum": ["PARTIAL_TRANSFER"]}}}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/transfers", "content_type": "application/json", "body": {"transfer_type": "PARTIAL_TRANSFER"}, "body_schema": {"type": "object", "additionalProperties": false, "required": ["clip_id_list", "source_owner_user_id", "target_owner_user_id", "transfer_type"], "properties": {"clip_id_list": {"type": "array", "minItems": 1, "maxItems": 50, "items": {"type": "string"}}, "source_owner_user_id": {"type": "string"}, "target_owner_user_id": {"type": "string"}, "transfer_type": {"type": "string", "enum": ["PARTIAL_TRANSFER"]}}}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.transfer_clips_full",
@@ -3123,7 +3123,7 @@
       "confirmation": {"kind": "destructive"},
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["source_owner_user_id", "target_owner_user_id", "task_id", "transfer_type"]},
-      "rest": {"method": "POST", "path": "/v2/clips/transfers", "content_type": "application/json", "body": {"transfer_type": "FULL_TRANSFER"}, "body_schema": {"type": "object", "additionalProperties": false, "required": ["target_owner_user_id", "transfer_type"], "properties": {"source_owner_user_id": {"type": "string"}, "target_owner_user_id": {"type": "string"}, "transfer_type": {"type": "string", "enum": ["FULL_TRANSFER"]}}}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/transfers", "content_type": "application/json", "body": {"transfer_type": "FULL_TRANSFER"}, "body_schema": {"type": "object", "additionalProperties": false, "required": ["target_owner_user_id", "transfer_type"], "properties": {"source_owner_user_id": {"type": "string"}, "target_owner_user_id": {"type": "string"}, "transfer_type": {"type": "string", "enum": ["FULL_TRANSFER"]}}}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.get_clip_transfer",
@@ -3136,7 +3136,7 @@
       "output_policy": "json_redacted",
       "auth_scopes": ["clips:read:transfer_task_status:admin"],
       "sensitive_policy": {"redact_fields": ["clip_id_list", "source_owner_user_id", "target_owner_user_id", "task_id", "transfer_type"]},
-      "rest": {"method": "GET", "path": "/v2/clips/transfers/{taskId}", "max_bytes": 1048576}
+      "rest": {"method": "GET", "path": "/clips/transfers/{taskId}", "max_bytes": 1048576}
     },
     {
       "id": "zoom.upload_clip_file",
@@ -3151,7 +3151,7 @@
       "mutation_class": "create",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "disable_auto_generate_tags", "disable_auto_generate_transcript", "file"]},
-      "rest": {"method": "POST", "path": "/v2/clips/files", "base_url": "https://fileapi.zoom.us", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "multipart/form-data", "body_schema": {"type": "object", "additionalProperties": false, "required": ["file"], "properties": {"disable_auto_generate_tags": {"type": "boolean"}, "disable_auto_generate_transcript": {"type": "boolean"}, "file": {"type": "string"}}}, "multipart": {"max_bytes": 2147483648, "parts": [{"name": "file", "type": "file", "field": "file", "required": true, "max_bytes": 2147483648, "allowed_file_extensions": [".mp4", ".webm"]}, {"name": "disable_auto_generate_tags", "type": "field", "field": "disable_auto_generate_tags"}, {"name": "disable_auto_generate_transcript", "type": "field", "field": "disable_auto_generate_transcript"}]}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/files", "base_url": "https://fileapi.zoom.us/v2", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "multipart/form-data", "body_schema": {"type": "object", "additionalProperties": false, "required": ["file"], "properties": {"disable_auto_generate_tags": {"type": "boolean"}, "disable_auto_generate_transcript": {"type": "boolean"}, "file": {"type": "string"}}}, "multipart": {"max_bytes": 2147483648, "parts": [{"name": "file", "type": "file", "field": "file", "required": true, "max_bytes": 2147483648, "allowed_file_extensions": [".mp4", ".webm"]}, {"name": "disable_auto_generate_tags", "type": "field", "field": "disable_auto_generate_tags"}, {"name": "disable_auto_generate_transcript", "type": "field", "field": "disable_auto_generate_transcript"}]}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.upload_clip_multipart_part",
@@ -3166,7 +3166,7 @@
       "mutation_class": "create",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["disable_auto_generate_tags", "disable_auto_generate_transcript", "etag", "file", "part_number", "part_number_etag", "upload_context"]},
-      "rest": {"method": "POST", "path": "/v2/clips/files/multipart", "base_url": "https://fileapi.zoom.us", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "multipart/form-data", "body_schema": {"type": "object", "additionalProperties": false, "required": ["file", "part_number", "upload_context"], "properties": {"disable_auto_generate_tags": {"type": "boolean"}, "disable_auto_generate_transcript": {"type": "boolean"}, "file": {"type": "string"}, "part_number": {"type": "integer", "minimum": 1, "maximum": 100}, "upload_context": {"type": "string"}}}, "multipart": {"max_bytes": 104857600, "parts": [{"name": "file", "type": "file", "field": "file", "required": true, "max_bytes": 104857600, "allowed_file_extensions": [".mp4", ".webm"]}, {"name": "part_number", "type": "field", "field": "part_number", "required": true}, {"name": "upload_context", "type": "field", "field": "upload_context", "required": true}, {"name": "disable_auto_generate_tags", "type": "field", "field": "disable_auto_generate_tags"}, {"name": "disable_auto_generate_transcript", "type": "field", "field": "disable_auto_generate_transcript"}]}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/files/multipart", "base_url": "https://fileapi.zoom.us/v2", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "multipart/form-data", "body_schema": {"type": "object", "additionalProperties": false, "required": ["file", "part_number", "upload_context"], "properties": {"disable_auto_generate_tags": {"type": "boolean"}, "disable_auto_generate_transcript": {"type": "boolean"}, "file": {"type": "string"}, "part_number": {"type": "integer", "minimum": 1, "maximum": 100}, "upload_context": {"type": "string"}}}, "multipart": {"max_bytes": 104857600, "parts": [{"name": "file", "type": "file", "field": "file", "required": true, "max_bytes": 104857600, "allowed_file_extensions": [".mp4", ".webm"]}, {"name": "part_number", "type": "field", "field": "part_number", "required": true}, {"name": "upload_context", "type": "field", "field": "upload_context", "required": true}, {"name": "disable_auto_generate_tags", "type": "field", "field": "disable_auto_generate_tags"}, {"name": "disable_auto_generate_transcript", "type": "field", "field": "disable_auto_generate_transcript"}]}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.initiate_clip_multipart_upload",
@@ -3181,7 +3181,7 @@
       "mutation_class": "create",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "file_name", "method", "upload_context"]},
-      "rest": {"method": "POST", "path": "/v2/clips/files/multipart/upload_events", "base_url": "https://fileapi.zoom.us", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "application/json", "body": {"method": "CreateMultipartUpload"}, "body_schema": {"type": "object", "additionalProperties": false, "required": ["method"], "properties": {"method": {"type": "string", "enum": ["CreateMultipartUpload"]}, "params": {"type": "object", "additionalProperties": false, "properties": {"file_name": {"type": "string"}}}}}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/files/multipart/upload_events", "base_url": "https://fileapi.zoom.us/v2", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "application/json", "body": {"method": "CreateMultipartUpload"}, "body_schema": {"type": "object", "additionalProperties": false, "required": ["method"], "properties": {"method": {"type": "string", "enum": ["CreateMultipartUpload"]}, "params": {"type": "object", "additionalProperties": false, "properties": {"file_name": {"type": "string"}}}}}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.complete_clip_multipart_upload",
@@ -3196,7 +3196,7 @@
       "mutation_class": "create",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["clip_id", "etag", "method", "part_number", "part_number_etags", "upload_context"]},
-      "rest": {"method": "POST", "path": "/v2/clips/files/multipart/upload_events", "base_url": "https://fileapi.zoom.us", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "application/json", "body": {"method": "CompleteMultipartUpload"}, "body_schema": {"type": "object", "additionalProperties": false, "required": ["method"], "properties": {"method": {"type": "string", "enum": ["CompleteMultipartUpload"]}, "params": {"type": "object", "additionalProperties": false, "properties": {"part_number_etags": {"type": "array", "items": {"type": "object", "additionalProperties": false, "properties": {"etag": {"type": "string"}, "part_number": {"type": "integer"}}}}, "upload_context": {"type": "string"}}}}}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/files/multipart/upload_events", "base_url": "https://fileapi.zoom.us/v2", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "application/json", "body": {"method": "CompleteMultipartUpload"}, "body_schema": {"type": "object", "additionalProperties": false, "required": ["method"], "properties": {"method": {"type": "string", "enum": ["CompleteMultipartUpload"]}, "params": {"type": "object", "additionalProperties": false, "properties": {"part_number_etags": {"type": "array", "items": {"type": "object", "additionalProperties": false, "properties": {"etag": {"type": "string"}, "part_number": {"type": "integer"}}}}, "upload_context": {"type": "string"}}}}}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
     },
     {
       "id": "zoom.upload_clip_temporary_file",
@@ -3211,7 +3211,7 @@
       "mutation_class": "create",
       "batchable": false,
       "sensitive_policy": {"redact_fields": ["file", "file_id", "file_path"]},
-      "rest": {"method": "POST", "path": "/v2/clips/files/tmp", "base_url": "https://fileapi.zoom.us", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "required": ["file_path"], "properties": {"file_path": {"type": "string"}}}, "base64_upload": {"source": "path", "source_field": "file_path", "content_field": "file", "max_decoded_bytes": 2097151, "allowed_media_types": ["image/png", "image/jpeg", "image/gif"], "allowed_file_extensions": [".png", ".jpeg", ".gif", ".jpg"]}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
+      "rest": {"method": "POST", "path": "/clips/files/tmp", "base_url": "https://fileapi.zoom.us/v2", "auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}], "content_type": "application/json", "body_schema": {"type": "object", "additionalProperties": false, "required": ["file_path"], "properties": {"file_path": {"type": "string"}}}, "base64_upload": {"source": "path", "source_field": "file_path", "content_field": "file", "max_decoded_bytes": 2097151, "allowed_media_types": ["image/png", "image/jpeg", "image/gif"], "allowed_file_extensions": [".png", ".jpeg", ".gif", ".jpg"]}, "redirect": {"allowed_host_suffixes": ["zoom.us"], "max_hops": 1}, "max_bytes": 1048576}
     }
   ]
 }

@@ -182305,7 +182305,7 @@
   {
     "name": "zoom",
     "display_name": "Zoom",
-    "description": "Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads and approval-gated clinical-note and Quality Management interaction actions.",
+    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, Auto Dialer call history/reports/call lists/prospects, Tasks assignee/collaborator/comment/import/item data, Workforce Management filter/forecast/import/organizational-group/report/schedule/user data, and Clips metadata/collaborator/comment/chapter/transfer data with bounded Clip download through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, and Clips reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
     "integration_type": "api",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "release_stage": "ga",
@@ -182320,20 +182320,51 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Zoom Connection Specification",
       "type": "object",
-      "required": [
-        "access_token"
-      ],
+      "required": [],
       "properties": {
         "access_token": {
           "type": "string",
           "x-secret": true,
-          "description": "Zoom OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+          "description": "Zoom OAuth access token for the ordinary Zoom API, sent as a Bearer token. Never logged."
+        },
+        "chatbot_client_id": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Zoom Chatbot client ID used only by the declared Chatbot client-credentials token exchange. Never logged."
+        },
+        "chatbot_client_secret": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Zoom Chatbot client secret used only by the declared Chatbot client-credentials token exchange. Never logged."
+        },
+        "key_connector_jwt": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Customer Managed Keys Hybrid archival JWT, signed by the operator's JWKS and sent only to the declared Key Connector operation origin. Supply through environment or stdin; never logged."
         },
         "base_url": {
           "type": "string",
           "format": "uri",
           "default": "https://api.zoom.us/v2",
-          "description": "Zoom API base URL override for tests or proxies."
+          "description": "Ordinary Zoom API base URL override for tests or proxies."
+        },
+        "scim2_base_url": {
+          "type": "string",
+          "format": "uri",
+          "default": "https://api.zoom.us",
+          "description": "Zoom SCIM2 API root override for tests or proxies. Used only by declared /scim2 operations and paired with their declared bearer authentication."
+        },
+        "chatbot_token_url": {
+          "type": "string",
+          "format": "uri",
+          "default": "https://api.zoom.us/oauth/token",
+          "description": "Zoom Chatbot client-credentials token endpoint. Used only by declared Chatbot operations; the client ID and secret are sent with HTTP Basic authentication."
+        },
+        "key_connector_base_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://[^/?#]+/api/v2/?$",
+          "description": "Customer Managed Keys Hybrid Key Connector base URL, including the required /api/v2 suffix. Used only by the archival key-decryption operation and must point to the operator-provisioned customer-hosted Key Connector."
         },
         "user_id": {
           "type": "string",
@@ -182407,9 +182438,9 @@
       }
     ],
     "risk": {
-      "read": "external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data",
-      "write": "typed Zoom reverse ETL mutation of a healthcare clinical-note completion status or Quality Management interaction creation",
-      "approval": "reverse ETL writes require plan, preview, explicit approval, and execute; read-only commands require none"
+      "read": "external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, Cobrowse SDK session, SCIM2 user/group, Virtual Agent knowledge-base/report, Auto Dialer call-history/report/call-list/prospect, Tasks assignee/collaborator/comment/import/item, Workforce Management filter/forecast/import/organizational-group/report/schedule/user, and Clips metadata/collaborator/comment/chapter/transfer data plus bounded Clip file download",
+      "write": "typed Zoom Chatbot message, Link Unfurls, SCIM2 group/user, Virtual Agent article/sync, Auto Dialer call-list/prospect, Tasks assignee/collaborator/comment/file/import/item, Workforce Management status/CSV/organizational-group actions, Clips star/collaborator/comment/chapter/share/ownership/file actions, healthcare clinical-note, and Quality Management actions, plus Customer Managed Keys Hybrid archival key decryption with redacted output",
+      "approval": "mutating commands require plan, preview, explicit approval, and execute; Chatbot, SCIM2, Virtual Agent article, Auto Dialer call-list/prospect, Tasks assignee/collaborator/comment/item deletion, Workforce Management historical-status/organizational-group deletion, and Clips collaborator/comment/clip deletion plus ownership transfer, and Customer Managed Keys Hybrid archival key decryption additionally require typed confirmation; read-only commands require none"
     },
     "icon": {
       "id": "zoom",
