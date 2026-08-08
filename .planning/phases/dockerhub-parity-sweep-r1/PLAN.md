@@ -372,3 +372,75 @@ free Docker Registry HEAD reported full remaining headroom. Final scoped verific
 full `internal/cli` regression coverage, and inline `verify-work`/`code-review` pass;
 their commands and outcomes are recorded in `TDD-LEDGER.md`, `VERIFICATION.md`, and
 `REVIEW.md`.
+
+## Captain evidence-reconciliation and SCIM schema-ID corrective slice (2026-08-08)
+
+**Status: executing; PR/no-mistakes held.** The captain rejected the prior live matrix because
+it retained superseded pre-upgrade observations alongside post-upgrade successes. Its historical
+rows remain provenance only; the replacement final ledger will carry exactly one mutually
+exclusive outcome for every documented operation and will never mix a stale result with a current
+one.
+
+### Binding decisions
+
+1. Re-run every stale result with the current write-scoped credential: `repository detail list`,
+   `tags list`, `tag detail list`, `repository immutable-tags verify`, and `repository create`.
+   Re-test every non-Enterprise operation after that reconciliation. A surviving nonzero result
+   must be classified only as `PROVIDER-PLAN-LIMIT`, `PROVIDER-PERMISSION`,
+   `ENTERPRISE-ONLY`, or `OUR-DEFECT`; any `OUR-DEFECT` is repaired in this slice.
+2. The three authentication exchange commands are **proven request paths**, not failed
+   operations: their plan/preview/approval lifecycle succeeded and the only rejected material was
+   deliberately fake, non-secret input. Their proof is recorded separately from provider
+   limitations so no fake credential rejection inflates the failure count.
+3. `GET /v2/scim/2.0/Schemas/{id}` must accept Docker's documented canonical SCIM schema URN
+   `urn:ietf:params:scim:schemas:core:2.0:User`. A colon is legal in a URI path segment and the
+   old identifier-only guard made the command permanently unreachable for its real documented
+   input. This is an **OUR-DEFECT**, not an Enterprise or credential limitation.
+4. The repair is a narrow shared safety foundation used by direct reads: retain rejection of empty
+   values, path separators, traversal, controls, dangerous Unicode, query/fragment delimiters,
+   and percent-encoding ambiguity; allow RFC-safe colon-bearing path-segment identifiers before
+   `url.PathEscape`. Audit every direct-read caller/connector for expected behavior rather than
+   broadening validation without evidence. This addition remains in the Docker Hub parent scope
+   because it is required to make its documented SCIM command executable; the shared foundation
+   and cross-connector audit are disclosed in the PR and SCIM sub-issue evidence.
+5. The final report categories are exclusive and exhaustive: `PROVEN`,
+   `PROVIDER-PLAN-LIMIT`, `PROVIDER-PERMISSION`, and `ENTERPRISE-ONLY`. Every non-proven category
+   names the exact provider dependency; no generic “blocked” state remains. Docker developer or
+   open-source programme access is unassumed and is not substituted for account evidence.
+
+### TDD and execution plan
+
+1. **Red before production:** add a Docker Hub definition-owned regression test that loads the
+   real embedded bundle, disables only its network auth for an isolated `httptest` server, invokes
+   `dockerhub.get_scim_schema` with the canonical URN, and requires one request at
+   `/v2/scim/2.0/Schemas/urn:ietf:params:scim:schemas:core:2.0:User`. The unmodified engine must
+   fail locally with `path variable id contains invalid character ':'` and make zero requests.
+   Capture the failure verbatim and commit/push that red state before a production edit.
+2. **Green:** add a dedicated safe URI-path-segment validator (not a global relaxation of command
+   names or generic identifiers), use it for direct-read endpoint substitutions, preserve
+   `url.PathEscape`, and add engine/safety regression coverage for canonical SCIM URNs and hostile
+   separator/traversal/query/fragment/control inputs. Re-run the Docker Hub red test to prove the
+   actual request reaches the local server with the required path.
+3. **Cross-connector audit:** enumerate every `rest_read` endpoint with a path variable, run the
+   affected engine and full implemented-command preflight sweep, and inspect the set of existing
+   path-variable samples. Any legitimate colon-bearing documented value discovered is covered by
+   the shared validator; any connector-specific incompatibility becomes an explicit corrective
+   sub-slice, not a silent behavior change.
+4. **Current-token live matrix:** build the real `pm` binary, load the captain-authorized PAT only
+   through an environment variable and `--from-env`, never print it, and re-exercise all
+   non-Enterprise Docker Hub operations with plan → preview → approval → execute for every
+   mutation. Record only operation, final category, HTTP/status outcome, and a provider dependency
+   when applicable. Preserve the deliberately retained private repository; do not delete it.
+5. **Verification:** targeted test/red-to-green evidence; Docker Hub bundle validation;
+   `surface-sync --check`; full implemented-command preflight; changed-package tests, vet/build,
+   help/docs parity checks; then `verify-work` and `code-review` inline. The prior rate-limit proof
+   remains unchanged but the final PR body will use the reconciled operation matrix.
+
+**GSD inline/manual fallback.** On 2026-08-08 this worker re-ran `scripts/gsd doctor`, resolved
+`discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review` via
+`scripts/gsd sources`, and read the generated `discuss-phase --assumptions`,
+`plan-phase --gaps --tdd`, and `execute-phase --no-cross-ai` prompts. The canonical parent-worker
+contract prohibits role spawning, so the lifecycle is executed inline. Skills reloaded through the
+required routing file: `golang-how-to`, `golang-cli`, `golang-testing`,
+`golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`,
+`golang-structs-interfaces`, and `golang-documentation`.
