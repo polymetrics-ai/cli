@@ -103,6 +103,23 @@ body.
    confirmation, and Link Unfurls `204` success. Review the foundation and Zoom changes, then
    record issue handoff.
 
+## Execution deviation — required no-body foundation
+
+The initial Chatbot lifecycle GREEN run exposed a pre-existing executor gap: an empty typed map
+passed through an interface to the JSON requester becomes the literal `null`, so a declared
+no-body action would not actually send an empty request. This was not a scope expansion or
+deferral: Link Unfurls documents `204 No Content`, and the delivery contract requires all
+status-only actions to be real actions. The work therefore added a separate RED test commit
+(`b81cefb78`) and a separate engine GREEN commit (`acbf7405c`) before completing the connector
+declaration. The foundation applies to every typed no-body `rest_write` and is documented in the
+TDD ledger and summary.
+
+Review then found that a declared sensitive path value can appear in an HTTP error URL even when
+the operation uses `json_redacted`. The same red-first rule produced a separate test checkpoint
+(`c9c89c707`) and generic path-error redaction fix (`070432f40`). It redacts typed path values in
+terminal-facing direct-write transport diagnostics while preserving complete non-sensitive provider
+diagnostics. This is required for Chatbot message/JID paths and future declared writes alike.
+
 ## Target accounting
 
 | Measure | Before | After |

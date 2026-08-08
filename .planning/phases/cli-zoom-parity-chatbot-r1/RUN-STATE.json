@@ -4,7 +4,7 @@
   "sub_issue": 3944,
   "connector": "zoom",
   "provider_module": "chatbot",
-  "state": "fixture_red_captured",
+  "state": "reviewed_green",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -56,9 +56,38 @@
       "go test -count=1 -timeout 20m ./internal/connectors/commandrunner ./cmd/connectorgen"
     ]
   },
+  "empty_rest_write_body_foundation": {
+    "state": "green",
+    "red_commit": "b81cefb78",
+    "green_commit": "acbf7405c",
+    "scope": "declared rest_write actions with no request body pass untyped nil to the requester rather than JSON null",
+    "unblocks": "status-only POST/PUT/PATCH/DELETE actions, including Zoom Chatbot Link Unfurls",
+    "verification": [
+      "go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth$'",
+      "go test -count=1 -timeout 20m ./internal/connectors/engine"
+    ]
+  },
+  "direct_write_path_error_redaction_foundation": {
+    "state": "green",
+    "red_commit": "c9c89c707",
+    "green_commit": "070432f40",
+    "scope": "typed direct-write path values are redacted from terminal-facing transport errors without weakening non-sensitive provider diagnostics",
+    "unblocks": "sensitive path-bound direct writes, including Zoom Chatbot message, user, and trigger identifiers",
+    "verification": [
+      "go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteJSONRedactedErrorsHideDeclaredRequestAndResponseFields$'",
+      "go test -count=1 -timeout 20m ./internal/connectors/engine"
+    ]
+  },
   "fixture_red": {
     "command": "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...",
     "result": "failed as expected: target counts remain 23/1819/1, all four Chatbot paths are unknown, and the end-to-end fixture cannot build the send command"
   },
-  "next": "author the four-operation Zoom Chatbot declaration and regenerate its derived surface"
+  "green": {
+    "declaration": "four Chatbot direct_write commands and operation-scoped Basic client-credentials transport",
+    "surface_sync": "four api_surface/output_policy/path-mapping/max-byte fields generated",
+    "reconcile": "only four provider_module=chatbot endpoint rows changed to covered_by.direct_write",
+    "binary_help": "fresh ./pm passed base, group, and all four command help routes",
+    "fixture": "all four isolated plan/preview/approval/execute lifecycle checks passed"
+  },
+  "next": "update #3944 and #3915 after the slice commit/push, then begin the next provider-owned category"
 }

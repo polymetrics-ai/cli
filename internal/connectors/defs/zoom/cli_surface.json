@@ -1,5 +1,5 @@
 {
-  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads including sensitive Cobrowse SDK sessions, approval-gated clinical-note and Quality Management interaction actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
   "usage": "pm zoom <group> <command> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
@@ -63,6 +63,13 @@
       "title": "Cobrowse SDK",
       "commands": [
         "cobrowse-sdk"
+      ]
+    },
+    {
+      "id": "chatbot",
+      "title": "Chatbot",
+      "commands": [
+        "chatbot"
       ]
     },
     {
@@ -831,6 +838,261 @@
         }
       ],
       "output_policy": "json_redacted"
+    },
+    {
+      "path": "chatbot messages send",
+      "summary": "Send one Zoom Chatbot message.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.send_chatbot_message",
+      "source_cli_path": "POST /v2/im/chat/messages",
+      "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
+      "flags": [
+        {
+          "name": "account-id",
+          "type": "string",
+          "summary": "Zoom account identifier required by the Chatbot API.",
+          "maps_to": "body.account_id",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "content",
+          "type": "json_object",
+          "summary": "Provider-defined Chatbot message content as one JSON object.",
+          "maps_to": "body.content",
+          "required": true
+        },
+        {
+          "name": "robot-jid",
+          "type": "string",
+          "summary": "Chatbot robot JID.",
+          "maps_to": "body.robot_jid",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "to-jid",
+          "type": "string",
+          "summary": "Recipient JID.",
+          "maps_to": "body.to_jid",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "user-jid",
+          "type": "string",
+          "summary": "Sender user JID.",
+          "maps_to": "body.user_jid",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "is-markdown-support",
+          "type": "boolean",
+          "summary": "Whether the message content supports Markdown.",
+          "maps_to": "body.is_markdown_support"
+        },
+        {
+          "name": "reply-to",
+          "type": "string",
+          "summary": "Optional reply target JID.",
+          "maps_to": "body.reply_to",
+          "allow_empty": false
+        },
+        {
+          "name": "visible-to-user",
+          "type": "string",
+          "summary": "Optional Zoom visibility value for the Chatbot message.",
+          "maps_to": "body.visible_to_user",
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "account_id",
+        "content",
+        "robot_jid",
+        "to_jid",
+        "user_jid",
+        "reply_to",
+        "visible_to_user"
+      ],
+      "risk": "Sends provider-defined Chatbot content and JID/account identifiers through Zoom.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. Message and JID values are redacted in plans, errors, and JSON output.",
+      "examples": [
+        "pm zoom chatbot messages send --credential zoom-chatbot --account-id acct --content '{\"body\":[{\"type\":\"section\",\"text\":\"hello\"}]}' --robot-jid robot --to-jid recipient --user-jid sender --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/im/chat/messages"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "chatbot messages edit",
+      "summary": "Edit one Zoom Chatbot message.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.edit_chatbot_message",
+      "source_cli_path": "PUT /v2/im/chat/messages/{message_id}",
+      "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
+      "flags": [
+        {
+          "name": "message-id",
+          "type": "string",
+          "summary": "Chatbot message identifier to edit.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.message_id"
+        },
+        {
+          "name": "account-id",
+          "type": "string",
+          "summary": "Zoom account identifier required by the Chatbot API.",
+          "maps_to": "body.account_id",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "content",
+          "type": "json_object",
+          "summary": "Provider-defined replacement Chatbot message content as one JSON object.",
+          "maps_to": "body.content",
+          "required": true
+        },
+        {
+          "name": "robot-jid",
+          "type": "string",
+          "summary": "Chatbot robot JID.",
+          "maps_to": "body.robot_jid",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "is-markdown-support",
+          "type": "boolean",
+          "summary": "Whether the replacement content supports Markdown.",
+          "maps_to": "body.is_markdown_support"
+        },
+        {
+          "name": "user-jid",
+          "type": "string",
+          "summary": "Optional sender user JID.",
+          "maps_to": "body.user_jid",
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "account_id",
+        "content",
+        "message_id",
+        "robot_jid",
+        "user_jid"
+      ],
+      "risk": "Changes provider-defined Chatbot content and carries account/JID identifiers.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. Message and JID values are redacted in plans, errors, and JSON output.",
+      "examples": [
+        "pm zoom chatbot messages edit --credential zoom-chatbot --message-id message --account-id acct --content '{\"body\":[{\"type\":\"section\",\"text\":\"updated\"}]}' --robot-jid robot --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/im/chat/messages/{message_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "chatbot messages delete",
+      "summary": "Delete one Zoom Chatbot message.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.delete_chatbot_message",
+      "source_cli_path": "DELETE /v2/im/chat/messages/{message_id}",
+      "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
+      "flags": [
+        {
+          "name": "message-id",
+          "type": "string",
+          "summary": "Chatbot message identifier to delete.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.message_id"
+        }
+      ],
+      "redact_fields": [
+        "message_id"
+      ],
+      "risk": "Irreversibly deletes a Zoom Chatbot message.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+      "notes": "Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. The message identifier and JSON response are redacted.",
+      "examples": [
+        "pm zoom chatbot messages delete --credential zoom-chatbot --message-id message --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/im/chat/messages/{message_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "chatbot link-unfurls create",
+      "summary": "Create one Zoom Chatbot Link Unfurls action.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.create_chatbot_link_unfurl",
+      "source_cli_path": "POST /v2/im/chat/users/{userId}/unfurls/{triggerId}",
+      "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Chatbot user identifier from the unfurl trigger.",
+          "maps_to": "path.userId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "trigger-id",
+          "type": "string",
+          "summary": "Chatbot unfurl trigger identifier.",
+          "maps_to": "path.triggerId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Provider-defined Link Unfurls content string.",
+          "maps_to": "body.content",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "content",
+        "trigger_id",
+        "user_id"
+      ],
+      "risk": "Posts provider-defined Link Unfurls content for a Chatbot trigger.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. Zoom returns 204 No Content, which is recorded as a successful status-only action.",
+      "examples": [
+        "pm zoom chatbot link-unfurls create --credential zoom-chatbot --user-id user --trigger-id trigger --content '{\"type\":\"message\",\"text\":\"hello\"}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/im/chat/users/{userId}/unfurls/{triggerId}"
+        }
+      ],
+      "output_policy": "none"
     },
     {
       "path": "customer-managed-keys-hybrid archival-key decrypt",

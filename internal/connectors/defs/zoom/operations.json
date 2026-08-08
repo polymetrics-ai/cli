@@ -396,6 +396,244 @@
       }
     },
     {
+      "id": "zoom.send_chatbot_message",
+      "kind": "rest_write",
+      "summary": "Send Chatbot messages",
+      "description": "Approval-gated Zoom Chatbot message delivery through the documented client-credentials transport. Message, account, and JID data are redacted from previews, errors, and JSON output.",
+      "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "imchat:bot"
+      ],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "content",
+          "message_id",
+          "reply_to",
+          "robot_jid",
+          "to_jid",
+          "user_jid",
+          "visible_to_user"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/im/chat/messages",
+        "base_url": "{{ config.base_url }}",
+        "auth": [
+          {
+            "mode": "oauth2_client_credentials",
+            "token_url": "{{ config.chatbot_token_url }}",
+            "client_id": "{{ secrets.chatbot_client_id }}",
+            "client_secret": "{{ secrets.chatbot_client_secret }}",
+            "client_auth": "basic"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "account_id",
+            "content",
+            "robot_jid",
+            "to_jid",
+            "user_jid"
+          ],
+          "properties": {
+            "account_id": {
+              "type": "string"
+            },
+            "content": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "robot_jid": {
+              "type": "string"
+            },
+            "to_jid": {
+              "type": "string"
+            },
+            "user_jid": {
+              "type": "string"
+            },
+            "is_markdown_support": {
+              "type": "boolean"
+            },
+            "reply_to": {
+              "type": "string"
+            },
+            "visible_to_user": {
+              "type": "string"
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.edit_chatbot_message",
+      "kind": "rest_write",
+      "summary": "Edit a Chatbot message",
+      "description": "Approval-gated Zoom Chatbot message update through the documented client-credentials transport. Message, account, and JID data are redacted from previews, errors, and JSON output.",
+      "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "imchat:bot"
+      ],
+      "mutation_class": "update",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id",
+          "content",
+          "message_id",
+          "robot_jid",
+          "to_jid",
+          "user_jid"
+        ]
+      },
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/im/chat/messages/{message_id}",
+        "base_url": "{{ config.base_url }}",
+        "auth": [
+          {
+            "mode": "oauth2_client_credentials",
+            "token_url": "{{ config.chatbot_token_url }}",
+            "client_id": "{{ secrets.chatbot_client_id }}",
+            "client_secret": "{{ secrets.chatbot_client_secret }}",
+            "client_auth": "basic"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "account_id",
+            "content",
+            "robot_jid"
+          ],
+          "properties": {
+            "account_id": {
+              "type": "string"
+            },
+            "content": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "robot_jid": {
+              "type": "string"
+            },
+            "is_markdown_support": {
+              "type": "boolean"
+            },
+            "user_jid": {
+              "type": "string"
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.delete_chatbot_message",
+      "kind": "rest_write",
+      "summary": "Delete a Chatbot message",
+      "description": "Destructive Zoom Chatbot message deletion through the documented client-credentials transport. The message identifier and response are redacted, and execution requires destructive typed confirmation.",
+      "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "imchat:bot"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "message_id"
+        ]
+      },
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/im/chat/messages/{message_id}",
+        "base_url": "{{ config.base_url }}",
+        "auth": [
+          {
+            "mode": "oauth2_client_credentials",
+            "token_url": "{{ config.chatbot_token_url }}",
+            "client_id": "{{ secrets.chatbot_client_id }}",
+            "client_secret": "{{ secrets.chatbot_client_secret }}",
+            "client_auth": "basic"
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.create_chatbot_link_unfurl",
+      "kind": "rest_write",
+      "summary": "Link Chatbot unfurls",
+      "description": "Approval-gated Zoom Chatbot Link Unfurls action through the documented client-credentials transport. Its declared 204 response is verified by status without inventing a response body.",
+      "source_url": "https://developers.zoom.us/docs/api/chatbot.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": [
+        "imchat:bot"
+      ],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "content",
+          "trigger_id",
+          "user_id"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/im/chat/users/{userId}/unfurls/{triggerId}",
+        "base_url": "{{ config.base_url }}",
+        "auth": [
+          {
+            "mode": "oauth2_client_credentials",
+            "token_url": "{{ config.chatbot_token_url }}",
+            "client_id": "{{ secrets.chatbot_client_id }}",
+            "client_secret": "{{ secrets.chatbot_client_secret }}",
+            "client_auth": "basic"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "content"
+          ],
+          "properties": {
+            "content": {
+              "type": "string"
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
       "id": "zoom.decrypt_customer_managed_key_archival",
       "kind": "rest_write",
       "summary": "Decrypt a Customer Managed Keys Hybrid archival data key",
