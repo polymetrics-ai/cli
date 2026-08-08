@@ -1019,12 +1019,7 @@ func reconstituteWithheldSubtree(record connectors.Record, byTarget map[string]c
 	if len(descendants) == 0 {
 		return []string{target}, nil
 	}
-	sort.Slice(descendants, func(i, j int) bool {
-		if descendants[i] == descendants[j] {
-			return byTarget[descendants[i]].Name < byTarget[descendants[j]].Name
-		}
-		return descendants[i] < descendants[j]
-	})
+	sort.Strings(descendants)
 	missing := make([]string, 0, len(descendants))
 	applied := 0
 	for _, descendant := range descendants {

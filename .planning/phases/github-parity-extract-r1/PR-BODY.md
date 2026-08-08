@@ -89,25 +89,40 @@ All become `intent: reverse_etl`, `availability: implemented`, pointed at the wr
 their twin already uses, inheriting **plan → preview → approval → execute** unchanged. No gate
 was invented; none was relaxed.
 
-| command | write action | method | confirmation now required |
-| --- | --- | --- | --- |
-| `repo create` | `repos_create_for_authenticated_user` | POST | plan → preview → approval token → execute |
-| `repo delete` | `repo` | DELETE | + closed typed `--confirm destructive`, digest recomputed at execution |
-| `repo archive` | `archive_repo` *(new)* | PATCH | plan → preview → approval token → execute |
-| `repo unarchive` | `unarchive_repo` *(new)* | PATCH | plan → preview → approval token → execute |
-| `cache delete` | `actions_caches_cache_id` | DELETE | + closed typed `--confirm destructive` |
-| `secret set` | `actions_secrets_secret_name3` | PUT | plan → preview → approval token → execute; `encrypted_value` redacted |
-| `secret delete` | `actions_secrets_secret_name` | DELETE | + closed typed `--confirm destructive` |
+| command | write action | method | mutation class | confirmation now required | source of the challenge |
+| --- | --- | --- | --- | --- | --- |
+| `repo create` | `repos_create_for_authenticated_user` | POST | create | plan → preview → approval token → execute | none — approval-only create |
+| `repo delete` | `repo` | DELETE | delete | + closed typed `--confirm destructive`, digest recomputed at execution | DELETE method **and** declared `confirm: destructive` |
+| `repo archive` | `archive_repo` *(new)* | PATCH | update | + closed typed `--confirm destructive` | declared `confirm: destructive` |
+| `repo unarchive` | `unarchive_repo` *(new)* | PATCH | update | + closed typed `--confirm destructive` | declared `confirm: destructive` |
+| `cache delete` | `actions_caches_cache_id` | DELETE | delete | + closed typed `--confirm destructive` | DELETE method |
+| `secret set` | `actions_secrets_secret_name3` | PUT | update | plan → preview → approval token → execute; `encrypted_value` redacted | none — approval-only create |
+| `secret delete` | `actions_secrets_secret_name` | DELETE | delete | + closed typed `--confirm destructive` | DELETE method |
 
 `connectors.ConfirmationForWriteAction` returns `destructive` for **any** DELETE regardless of
-metadata, and the new test asserts through that same resolver — so a future edit that severs
-the confirmation fails.
+metadata, and the test asserts through that same resolver — so a future edit that severs the
+confirmation fails. It asserts the negative too: `repo create` and `secret set` are the captain's
+approval-only creates, and gaining a typed challenge is as much a drift from that decision as
+losing one. No declaration was duplicated: the three DELETEs already carried the challenge by
+method, and only the two PATCH actions needed one declared.
 
 **Two needed more than a classification change.** `repo archive`/`repo unarchive` ride the same
-endpoint as the generic `repo update`, and the declarative path cannot pin a body constant — a
+endpoint as the generic `repo update`, so the body is the only thing separating them — an
 "archive" command that only archives when the caller separately remembers `archived: true` is a
-command that lies. They are pinned in the github hook exactly as `close_issue`/`reopen_issue`
-already pin `state` (~5 lines of Go).
+command that lies.
+
+They were first pinned in the github hook's `ExecuteWrite`, as `close_issue`/`reopen_issue` are.
+That is incompatible with the typed confirmation the captain ordered: `prepareDeclarativeWrite`
+**refuses** to prepare a destructive action whose hook overrides execution, because the preview an
+operator approves would not be the request that runs. Declaring `confirm: destructive` alone would
+have made both commands unusable rather than gated.
+
+So the pin moved from the request to the record. A new optional `engine.WriteRecordHook` lets a
+hook fix the body fields an action's own name implies, before the declarative body is built;
+preview and execution both apply it, so the approved body **is** the dispatched body by
+construction. `archive_repo`/`unarchive_repo` declare `body_fields: ["archived"]`, so the pinned
+field is also the only field sent — the same tightness the hook-executed version had, with an
+exact preview it did not. The interface is opt-in, so the other 550 connectors are untouched.
 
 **`secret set` exposed a live defect.** The already-`implemented` `secret set-2` had a
 `record_schema` of just the path parameter, so it could only ever send an empty PUT and take a
