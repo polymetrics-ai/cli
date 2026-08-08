@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-workforce-management-r1",
   "issue": 3938,
   "parent_issue": 3915,
-  "status": "csv-foundation-green",
+  "status": "verified-green",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -33,9 +33,9 @@
     "direct_writes": 42,
     "unsafe_or_disallowed": 0
   },
-  "foundation": "required: declaration-owned bounded CSV multipart content validation plus .csv source-name constraints; staffing is source-capped at 1 MB and historical queue metrics receives a 10 MB local safety cap because the artifact declares none",
+  "foundation": "complete: declaration-owned bounded CSV multipart content validation plus .csv source-name constraints, and Draft-07 finite numeric minimum/maximum validation; staffing is source-capped at 1 MB and historical queue metrics receives a 10 MB local safety cap because the artifact declares none",
   "red": "captured: command surface test failed on 84/1758/44/35 target totals and 18 unknown Workforce Management paths; declared CSV multipart test failed because content_validation permits only json",
-  "green": "CSV foundation captured: declared .csv extension plus bounded grammar validation accepts valid text/csv and rejects malformed or wrong-extension sources before dispatch while preserving JSON validation",
-  "verification": "pending",
-  "review": "pending"
+  "green": "complete: CSV and numeric-bound foundations plus all 18 declarative commands/fixtures are green; source 1–4 staffing duration range rejects 4.01 pre-network, and both documented 204 deletes are status-only destructive actions",
+  "verification": "complete: isolated fixture lifecycle, fresh binary base/group/all-command help, scoped tests/vet/lint/docs/smoke/contract/surface/boundary/release gates, generated-output scope, and Zoom-local ledger check passed",
+  "review": "complete: inline manual code-review found no remaining issue in closed schemas, CSV caps/headers, numeric bounds, redaction, confirmation, paging, generated scope, or ledger locality"
 }

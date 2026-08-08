@@ -1,0 +1,22 @@
+{
+  "status": 200,
+  "body": {
+    "agents": [
+      {
+        "user_id": "fixture-wfm-schedule-user",
+        "user_email": "fixture.wfm.schedule@example.invalid",
+        "display_name": "Fixture Workforce Management schedule agent",
+        "employee_id": "fixture-wfm-employee",
+        "activities": [
+          {
+            "schedule_activity_id": "fixture-wfm-schedule-activity",
+            "activity_name": "Fixture Workforce Management schedule activity",
+            "start_time": "2026-01-01T00:00:00Z",
+            "end_time": "2026-01-01T01:00:00Z"
+          }
+        ]
+      }
+    ],
+    "next_page_token": "fixture-wfm-schedule-page"
+  }
+}

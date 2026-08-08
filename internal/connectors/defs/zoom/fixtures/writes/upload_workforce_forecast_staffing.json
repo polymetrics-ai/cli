@@ -1,0 +1,33 @@
+{
+  "record": {
+    "file": "imports/fixture-wfm-staffing.csv",
+    "forecast_duration_weeks": 2,
+    "forecast_name": "Fixture Workforce Management staffing forecast",
+    "forecast_start_date": "2026-01-01",
+    "has_interval_offsets": false,
+    "timezone": "UTC"
+  },
+  "source_csv": "agent_id,required_staffing\nfixture-wfm-agent,7\n",
+  "expect": {
+    "method": "POST",
+    "path": "/v2/workforce-management/imports/staffing",
+    "fields": {
+      "forecast_duration_weeks": "2",
+      "forecast_name": "Fixture Workforce Management staffing forecast",
+      "forecast_start_date": "2026-01-01",
+      "has_interval_offsets": "false",
+      "timezone": "UTC"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "forecasts": [
+        {
+          "forecast_id": "fixture-wfm-staffing-forecast",
+          "forecast_name": "Fixture Workforce Management staffing forecast"
+        }
+      ]
+    }
+  }
+}

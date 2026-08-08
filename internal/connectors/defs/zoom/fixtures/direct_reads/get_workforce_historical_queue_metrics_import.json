@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "body": {
+    "import_id": "fixture-wfm-queue-import",
+    "file_name": "fixture-wfm-queue.csv",
+    "imported_by": "fixture-wfm-user",
+    "create_time": "2026-01-01T00:00:00Z",
+    "timezone": "UTC",
+    "row_processed": 2,
+    "total_rows": 2
+  }
+}

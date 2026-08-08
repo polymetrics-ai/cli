@@ -24139,235 +24139,127 @@
     {
       "method": "GET",
       "path": "/v2/workforce-management/filter-groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List filter groups; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/filter-groups; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management filter-groups list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/forecasts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List forecasts; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/forecasts; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management forecasts list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Get a forecast for a scheduling group; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management forecasts scheduling-groups get"
       }
     },
     {
       "method": "POST",
       "path": "/v2/workforce-management/imports/historical-agent-status",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Upload historical agent status; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/imports/historical-agent-status; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "workforce-management imports historical-agent-status upload"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/workforce-management/imports/historical-agent-status",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Delete historical agent status; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/imports/historical-agent-status; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "workforce-management imports historical-agent-status delete"
       }
     },
     {
       "method": "POST",
       "path": "/v2/workforce-management/imports/historical-queue-metrics",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with the existing typed multipart writes.json path, but blocked until a Zoom-local bounded file contract, allowed-media/size policy, approval path, and fixtures are declared. The rest_write direct executor is JSON/form only, so it is not this operation path.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Upload historical queue metrics; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/imports/historical-queue-metrics; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05; provider_evidence=request body explicitly declares multipart/form-data"
+      "covered_by": {
+        "direct_write": "workforce-management imports historical-queue-metrics upload"
       }
     },
     {
       "method": "POST",
       "path": "/v2/workforce-management/imports/staffing",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with the existing typed multipart writes.json path, but blocked until a Zoom-local bounded file contract, allowed-media/size policy, approval path, and fixtures are declared. The rest_write direct executor is JSON/form only, so it is not this operation path.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Upload forecast staffing; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/imports/staffing; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05; provider_evidence=request body explicitly declares multipart/form-data"
+      "covered_by": {
+        "direct_write": "workforce-management imports staffing upload"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/imports/{importId}/historical-queue-metrics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Get historical queue metrics import metadata; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/imports/{importId}/historical-queue-metrics; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management imports historical-queue-metrics get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/organizational-groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Get multiple organizational groups; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/organizational-groups; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management organizational-groups list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/workforce-management/organizational-groups",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Create an organizational group; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/organizational-groups; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "workforce-management organizational-groups create"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/organizational-groups/{organizationalGroupId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Get a single organizational group; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/organizational-groups/{organizationalGroupId}; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management organizational-groups get"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/workforce-management/organizational-groups/{organizationalGroupId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Delete organizational group; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/organizational-groups/{organizationalGroupId}; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "workforce-management organizational-groups delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/workforce-management/organizational-groups/{organizationalGroupId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=Update an organizational group; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/organizational-groups/{organizationalGroupId}; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "workforce-management organizational-groups update"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/reports/adherence/agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List agents' adherence data; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/reports/adherence/agents; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management reports adherence agents list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/reports/schedules/agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List all schedule agents; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/reports/schedules/agents; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management reports schedules agents list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/schedules/agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List all schedule agents; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/schedules/agents; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management schedules agents list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/scheduling-groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List scheduling groups; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/scheduling-groups; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management scheduling-groups list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workforce-management/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
-        "notes": "classification=implementable_now; provider_module=workforce-management; operation_title=List users; provider_server=https://api.zoom.us/v2; provider_path=/workforce-management/users; artifact=https://developers.zoom.us/docs/api/workforce-management.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "workforce-management users list"
       }
     }
   ]

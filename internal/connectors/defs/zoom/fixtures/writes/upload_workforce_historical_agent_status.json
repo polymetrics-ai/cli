@@ -1,0 +1,37 @@
+{
+  "record": {
+    "statuses": [
+      {
+        "change_time": "2026-01-01T00:00:00Z",
+        "previous_status_code": "offline",
+        "previous_status_name": "Offline",
+        "status_code": "available",
+        "status_name": "Available",
+        "user_id": "fixture-wfm-status-user"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/workforce-management/imports/historical-agent-status",
+    "body": {
+      "statuses": [
+        {
+          "change_time": "2026-01-01T00:00:00Z",
+          "previous_status_code": "offline",
+          "previous_status_name": "Offline",
+          "status_code": "available",
+          "status_name": "Available",
+          "user_id": "fixture-wfm-status-user"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "imported_rows": 1,
+      "created_statuses": 1
+    }
+  }
+}

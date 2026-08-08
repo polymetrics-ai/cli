@@ -1,0 +1,10 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/workforce-management/organizational-groups/fixture-wfm-org-group"
+  },
+  "response": {
+    "status": 204
+  }
+}
