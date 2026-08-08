@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -773,6 +774,46 @@ func statusTextReadBundle(baseURL, id, method, endpointPath, outputPolicy, conte
 				Reason:           "typed operation metadata",
 			},
 		}}},
+	}
+}
+
+func TestOperationDirectReadSendsDeclaredPlainTextBody(t *testing.T) {
+	source := "# rendered from a declared plain-text body"
+	var issued int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		issued++
+		if r.Method != http.MethodPost || r.URL.Path != "/markdown/raw" {
+			t.Fatalf("request = %s %s, want POST /markdown/raw", r.Method, r.URL.Path)
+		}
+		if got, want := r.Header.Get("Content-Type"), "text/plain"; got != want {
+			t.Fatalf("Content-Type = %q, want %q", got, want)
+		}
+		raw, err := io.ReadAll(r.Body)
+		if err != nil {
+			t.Fatalf("read request body: %v", err)
+		}
+		if got := string(raw); got != source {
+			t.Fatalf("request body = %q, want literal source %q", got, source)
+		}
+		_, _ = w.Write([]byte("<h1>rendered</h1>"))
+	}))
+	defer srv.Close()
+
+	b := statusTextReadBundle(srv.URL, "github.markdown_raw", http.MethodPost, "/markdown/raw", "text", "text/plain", 1024)
+	b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"string","minLength":1,"maxLength":1024}`)
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "github.markdown_raw",
+		RawBody:   &source,
+		MaxBytes:  1024,
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if got, want := result.Body, any("<h1>rendered</h1>"); got != want {
+		t.Fatalf("body = %#v, want %#v", got, want)
+	}
+	if issued != 1 {
+		t.Fatalf("requests = %d, want 1", issued)
 	}
 }
 

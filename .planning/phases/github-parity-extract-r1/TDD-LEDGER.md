@@ -1002,3 +1002,20 @@ ok	polymetrics.ai/internal/connectors/commandrunner
 $ go test -timeout 20m ./cmd/connectorgen/ -run 'TestValidate_CLISurface' -count=1
 ok	polymetrics.ai/cmd/connectorgen
 ```
+
+**Red 14b — the typed operation request could not represent GitHub Markdown raw's documented
+body.** A local `POST /markdown/raw` fixture asserts literal source bytes and `Content-Type:
+text/plain`; its operation declares a root string schema and a text response. Before adding a
+raw-body field to the closed operation request contract, the test does not compile:
+
+```
+$ go test -timeout 20m ./internal/connectors/engine/ -run TestOperationDirectReadSendsDeclaredPlainTextBody -count=1
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+internal/connectors/engine/direct_read_test.go:806:3: unknown field RawBody in struct literal of type connectors.OperationDirectReadRequest
+FAIL	polymetrics.ai/internal/connectors/engine [build failed]
+```
+
+This is intentional red-before-transport evidence: the previous `Body map[string]any` can model
+JSON object inputs only, and JSON-marshal would turn a Markdown source string into the wrong wire
+format. The forthcoming contract is restricted to a declared plain-text POST; it is not a generic
+raw-request field.
