@@ -404,6 +404,10 @@ one.
    broadening validation without evidence. This addition remains in the Docker Hub parent scope
    because it is required to make its documented SCIM command executable; the shared foundation
    and cross-connector audit are disclosed in the PR and SCIM sub-issue evidence.
+   The audit subsequently found HubSpot's documented `emailAddress` endpoint values, including
+   legal `+` and `@`, were still blocked by the colon-only first repair; the same TDD slice now
+   extends the segment alphabet only to the proven opaque-email characters and retains every
+   separator/injection rejection.
 5. The final report categories are exclusive and exhaustive: `PROVEN`,
    `PROVIDER-PLAN-LIMIT`, `PROVIDER-PERMISSION`, and `ENTERPRISE-ONLY`. Every non-proven category
    names the exact provider dependency; no generic “blocked” state remains. Docker developer or
@@ -424,9 +428,9 @@ one.
    actual request reaches the local server with the required path.
 3. **Cross-connector audit:** enumerate every `rest_read` endpoint with a path variable, run the
    affected engine and full implemented-command preflight sweep, and inspect the set of existing
-   path-variable samples. Any legitimate colon-bearing documented value discovered is covered by
-   the shared validator; any connector-specific incompatibility becomes an explicit corrective
-   sub-slice, not a silent behavior change.
+   path-variable samples. The audit found Docker Hub's SCIM URN and HubSpot's `emailAddress`
+   values; both receive red-first shared-validator coverage. Any further connector-specific
+   incompatibility becomes an explicit corrective sub-slice, not a silent behavior change.
 4. **Current-token live matrix:** build the real `pm` binary, load the captain-authorized PAT only
    through an environment variable and `--from-env`, never print it, and re-exercise all
    non-Enterprise Docker Hub operations with plan → preview → approval → execute for every
