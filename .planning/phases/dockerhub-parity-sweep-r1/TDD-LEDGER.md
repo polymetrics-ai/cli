@@ -147,3 +147,158 @@ Full gate transcript:
   regeneration pass) — kept only `docs/connectors/dockerhub/{MANUAL.md,SKILL.md}`.
 
 See `RUN-STATE.json`'s `tdd.green`/`tdd.green_evidence` fields for the compact form.
+
+## Live E2E gap — reverse-ETL paths (2026-08-08)
+
+### Reproduction before production edits
+
+Using the real built `pm` binary, a captain-authorized credential in an ignored
+local project root, and the required connector-command plan → preview flow:
+
+```text
+pm dockerhub repository create --credential dockerhub-live --root <isolated-root> \
+  --name <unique-test-repository> --namespace polymetrics --is-private=true
+pm dockerhub repository create --root <isolated-root> --plan <plan-id> --preview
+
+- resolved request: POST https://hub.docker.com/v2/v2/namespaces/{namespace}/repositories
+```
+
+No approval was used and no external repository mutation was dispatched. The preview
+proves both defects mechanically: duplicate `/v2` base/path composition and a raw
+OpenAPI placeholder escaping the engine's `{{ record.* }}` interpolator.
+
+### RED — `internal/connectors/defs/dockerhub/write_paths_test.go`
+
+Added the regression test before altering `writes.json` and ran:
+
+```text
+go test ./internal/connectors/defs/dockerhub -run TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated -count=1
+```
+
+Verbatim failure:
+
+```text
+--- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated (0.01s)
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/create_auth_token (0.00s)
+        write_paths_test.go:28: path = "/v2/auth/token", want engine-relative path without the base URL's /v2 prefix
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/create_user_login (0.00s)
+        write_paths_test.go:28: path = "/v2/users/login", want engine-relative path without the base URL's /v2 prefix
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/create_2fa_login (0.00s)
+        write_paths_test.go:28: path = "/v2/users/2fa-login", want engine-relative path without the base URL's /v2 prefix
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/create_repository (0.00s)
+        write_paths_test.go:28: path = "/v2/namespaces/{namespace}/repositories", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/namespaces/{namespace}/repositories" retains raw OpenAPI parameter "{namespace}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/update_repository_immutable_tags (0.00s)
+        write_paths_test.go:28: path = "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags" retains raw OpenAPI parameter "{namespace}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/assign_repository_group (0.00s)
+        write_paths_test.go:28: path = "/v2/repositories/{namespace}/{repository}/groups", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/repositories/{namespace}/{repository}/groups" retains raw OpenAPI parameter "{namespace}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/create_access_token (0.00s)
+        write_paths_test.go:28: path = "/v2/access-tokens", want engine-relative path without the base URL's /v2 prefix
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/update_access_token (0.00s)
+        write_paths_test.go:28: path = "/v2/access-tokens/{uuid}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/access-tokens/{uuid}" retains raw OpenAPI parameter "{uuid}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/delete_access_token (0.00s)
+        write_paths_test.go:28: path = "/v2/access-tokens/{uuid}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/access-tokens/{uuid}" retains raw OpenAPI parameter "{uuid}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/create_org_access_token (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{name}/access-tokens", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{name}/access-tokens" retains raw OpenAPI parameter "{name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/update_org_access_token (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/access-tokens/{access_token_id}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/access-tokens/{access_token_id}" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/delete_org_access_token (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/access-tokens/{access_token_id}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/access-tokens/{access_token_id}" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/create_group (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/groups", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/groups" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/replace_group (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/groups/{group_name}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/groups/{group_name}" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/update_group (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/groups/{group_name}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/groups/{group_name}" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/delete_group (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/groups/{group_name}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/groups/{group_name}" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/add_group_member (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/groups/{group_name}/members", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/groups/{group_name}/members" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/remove_group_member (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/groups/{group_name}/members/{username}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/groups/{group_name}/members/{username}" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/bulk_create_invites (0.00s)
+        write_paths_test.go:28: path = "/v2/invites/bulk", want engine-relative path without the base URL's /v2 prefix
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/cancel_invite (0.00s)
+        write_paths_test.go:28: path = "/v2/invites/{id}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/invites/{id}" retains raw OpenAPI parameter "{id}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/resend_invite (0.00s)
+        write_paths_test.go:28: path = "/v2/invites/{id}/resend", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/invites/{id}/resend" retains raw OpenAPI parameter "{id}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/update_org_settings (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{name}/settings", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{name}/settings" retains raw OpenAPI parameter "{name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/update_org_member (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/members/{username}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/members/{username}" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/remove_org_member (0.00s)
+        write_paths_test.go:28: path = "/v2/orgs/{org_name}/members/{username}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/orgs/{org_name}/members/{username}" retains raw OpenAPI parameter "{org_name}", want a {{ record.* }} template
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/create_scim_user (0.00s)
+        write_paths_test.go:28: path = "/v2/scim/2.0/Users", want engine-relative path without the base URL's /v2 prefix
+    --- FAIL: TestDockerhubReverseETLWritePathsAreEngineRelativeAndInterpolated/update_scim_user (0.00s)
+        write_paths_test.go:28: path = "/v2/scim/2.0/Users/{id}", want engine-relative path without the base URL's /v2 prefix
+        write_paths_test.go:31: path = "/v2/scim/2.0/Users/{id}" retains raw OpenAPI parameter "{id}", want a {{ record.* }} template
+    write_paths_test.go:62: create_repository preview warnings = "create_repository executes a live mutation only after approval; dry run performs no external call\\nresolved request: POST https://hub.docker.com/v2/v2/namespaces/{namespace}/repositories", want resolved request "POST https://hub.docker.com/v2/namespaces/polymetrics/fixture-repository"
+FAIL
+FAIL	polymetrics.ai/internal/connectors/defs/dockerhub	0.746s
+FAIL
+```
+
+### Planned GREEN
+
+Convert all 26 Docker Hub reverse-ETL action paths to engine-relative paths with
+record templates, add the missing create-repository `namespace` path field, rerun
+the focused test, then re-run the rebuilt binary through plan, preview, approval,
+and live repository creation. This ledger will be updated with GREEN evidence
+before commit.
+
+## Live E2E gap — strict write transport (2026-08-08)
+
+After the path correction, the captain-authorized `repository create` plan and
+preview resolved the expected Docker Hub URL, but the one approved execution failed
+before a provider response. The error bytes were HTTP/2 SETTINGS frames received by
+an HTTP/1 parser. The persisted plan had no destination `base_url` override and no
+record string ending in a quote, so this was isolated as a runtime transport defect,
+not a malformed live request. No repository was reported created.
+
+### RED — `internal/connectors/connsdk/http_test.go`
+
+Added `TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer`: an isolated TLS
+server advertises HTTP/2, while a `DisableRetries` POST must remain one-shot and use
+HTTP/1.1. This exactly models Docker Hub's provider transport shape without another
+external mutation. Ran:
+
+```text
+go test ./internal/connectors/connsdk -run TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer -count=1 -v
+```
+
+Verbatim failure:
+
+```text
+=== RUN   TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer
+2026/08/08 16:18:20 http2: server: error reading preface from client 127.0.0.1:62140: bogus greeting "POST /mutate HTTP/1.1\r\nH"
+    http_test.go:641: Do: send request: Post "https://127.0.0.1:62139/mutate": net/http: HTTP/1.x transport connection broken: malformed HTTP response "\x00\x00\x1e\x04\x00\x00\x00\x00\x00\x00\x05\x00\x10\x00\x00\x00\x03\x00\x00\x00\xfa\x00\x06\x00\x10\x01@\x00\x01\x00\x00\x10\x00\x00\x04\x00\x10\x00\x00"
+--- FAIL: TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer (0.00s)
+FAIL
+FAIL	polymetrics.ai/internal/connectors/connsdk	0.429s
+FAIL
+```
+
+The root cause is `noReplayClient`: it sets `Transport.Protocols` to HTTP/1 but
+retains a caller's TLS `NextProtos` advertisement of `h2`. A TLS server therefore
+negotiates HTTP/2 and receives a raw HTTP/1 request. The production fix must clone
+the TLS config and pin its ALPN list to `http/1.1`, preserving every other TLS
+setting and the no-replay safeguards.
