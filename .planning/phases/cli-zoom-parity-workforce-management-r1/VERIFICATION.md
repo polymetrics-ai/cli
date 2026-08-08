@@ -4,7 +4,7 @@
 
 - [x] Live artifact, operation count, byte count, hash, and ledger comparison recorded before RED.
 - [x] RED capture committed before all production declaration/foundation changes.
-- [ ] CSV foundation proves valid CSV reaches the provider while malformed or non-`.csv` sources
+- [x] CSV foundation proves valid CSV reaches the provider while malformed or non-`.csv` sources
   are rejected before network dispatch; existing JSON validation remains green.
 - [ ] All 18 command paths pass real commandrunner preflight.
 - [ ] Eleven direct reads and seven direct writes run against isolated exact fixtures.

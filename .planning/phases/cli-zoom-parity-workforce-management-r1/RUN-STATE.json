@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-workforce-management-r1",
   "issue": 3938,
   "parent_issue": 3915,
-  "status": "red-captured",
+  "status": "csv-foundation-green",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -35,7 +35,7 @@
   },
   "foundation": "required: declaration-owned bounded CSV multipart content validation plus .csv source-name constraints; staffing is source-capped at 1 MB and historical queue metrics receives a 10 MB local safety cap because the artifact declares none",
   "red": "captured: command surface test failed on 84/1758/44/35 target totals and 18 unknown Workforce Management paths; declared CSV multipart test failed because content_validation permits only json",
-  "green": "pending",
+  "green": "CSV foundation captured: declared .csv extension plus bounded grammar validation accepts valid text/csv and rejects malformed or wrong-extension sources before dispatch while preserving JSON validation",
   "verification": "pending",
   "review": "pending"
 }

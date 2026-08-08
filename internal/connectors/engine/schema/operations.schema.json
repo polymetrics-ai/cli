@@ -188,7 +188,7 @@
                           "minItems": 1,
                           "items": { "type": "string" }
                         },
-                        "content_validation": { "type": "string", "enum": ["json"] },
+                        "content_validation": { "type": "string", "enum": ["json", "csv"] },
                         "allowed_file_extensions": {
                           "type": "array",
                           "minItems": 1,

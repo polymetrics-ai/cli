@@ -74,6 +74,17 @@ func TestValidateMultipartContentConstraints(t *testing.T) {
 			},
 		},
 		{
+			name: "declared CSV file is accepted",
+			part: MultipartPartSpec{
+				Name:                  "file",
+				Type:                  "file",
+				Field:                 "file_path",
+				ContentType:           "text/csv",
+				ContentValidation:     "csv",
+				AllowedFileExtensions: []string{".csv"},
+			},
+		},
+		{
 			name:    "validation is file-only",
 			part:    MultipartPartSpec{Name: "metadata", Type: "field", Field: "metadata", ContentValidation: "json"},
 			wantErr: "only meaningful on a file part",
@@ -82,6 +93,11 @@ func TestValidateMultipartContentConstraints(t *testing.T) {
 			name:    "JSON validation requires an application JSON part header",
 			part:    MultipartPartSpec{Name: "file", Type: "file", Field: "file_path", ContentType: "text/plain", ContentValidation: "json"},
 			wantErr: "requires content_type application/json",
+		},
+		{
+			name:    "CSV validation requires a text CSV part header",
+			part:    MultipartPartSpec{Name: "file", Type: "file", Field: "file_path", ContentType: "text/plain", ContentValidation: "csv"},
+			wantErr: "requires content_type text/csv",
 		},
 		{
 			name:    "extension lists cannot be empty",

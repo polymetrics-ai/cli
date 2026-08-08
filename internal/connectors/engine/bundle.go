@@ -625,8 +625,9 @@ type MultipartPartSpec struct {
 	// load error, so "bounded" and "unbounded" can never be confused.
 	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
 	// ContentValidation binds a structured-file check MIME sniffing cannot
-	// prove. "json" validates one complete JSON document from the approved,
-	// bounded snapshot before a request is sent.
+	// prove. "json" validates one complete JSON document and "csv" validates a
+	// syntactically complete CSV stream from the approved, bounded snapshot
+	// before a request is sent.
 	ContentValidation string `json:"content_validation,omitempty"`
 	// AllowedFileExtensions closes filename-format restrictions such as a
 	// provider's ".json only" contract. The source name must end in a declared
@@ -1854,10 +1855,16 @@ func validateMultipartContentConstraints(part MultipartPartSpec) error {
 	if err := connsdk.ValidateMultipartFileContentPolicy(part.ContentValidation, part.AllowedFileExtensions); err != nil {
 		return err
 	}
-	if strings.EqualFold(strings.TrimSpace(part.ContentValidation), "json") {
+	switch strings.ToLower(strings.TrimSpace(part.ContentValidation)) {
+	case "json":
 		declared, _, err := mime.ParseMediaType(strings.TrimSpace(part.ContentType))
 		if err != nil || !strings.EqualFold(declared, "application/json") {
 			return fmt.Errorf("content_validation json requires content_type application/json")
+		}
+	case "csv":
+		declared, _, err := mime.ParseMediaType(strings.TrimSpace(part.ContentType))
+		if err != nil || !strings.EqualFold(declared, "text/csv") {
+			return fmt.Errorf("content_validation csv requires content_type text/csv")
 		}
 	}
 	return nil

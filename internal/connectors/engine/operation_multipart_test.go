@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -190,8 +191,78 @@ func TestOperationDirectWriteMultipartAcceptsDeclaredCSVFile(t *testing.T) {
 				"allowed_file_extensions": [".csv"]`,
 		1,
 	)
-	if _, err := Load(multipartRestWriteBundleFS(rest, "rest_write"), "acme"); err != nil {
+	bundle, err := Load(multipartRestWriteBundleFS(rest, "rest_write"), "acme")
+	if err != nil {
 		t.Fatalf("Load declared CSV multipart contract: %v", err)
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		if err := request.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("ParseMultipartForm: %v", err)
+		}
+		files := request.MultipartForm.File["attachment"]
+		if len(files) != 1 || files[0].Filename != "valid.csv" {
+			t.Fatalf("multipart CSV file = %#v, want valid.csv", files)
+		}
+		if !strings.HasPrefix(files[0].Header.Get("Content-Type"), "text/csv") {
+			t.Fatalf("multipart CSV content type = %q, want text/csv", files[0].Header.Get("Content-Type"))
+		}
+		file, err := files[0].Open()
+		if err != nil {
+			t.Fatalf("open multipart CSV file: %v", err)
+		}
+		defer func() { _ = file.Close() }()
+		if raw, err := io.ReadAll(file); err != nil || string(raw) != "queue_id,metric\\nfixture,1\\n" {
+			t.Fatalf("multipart CSV body = %q, %v; want approved source", raw, err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		_, _ = w.Write([]byte(`{"file_id":"fixture-csv-file"}`))
+	}))
+	defer server.Close()
+	bundle.HTTP = HTTPBase{URL: server.URL}
+
+	dir := t.TempDir()
+	validPayload := []byte("queue_id,metric\\nfixture,1\\n")
+	validPath := writeMultipartOperationSource(t, dir, "valid.csv", validPayload)
+	valid := multipartOperationRequest(dir, validPath, validPayload)
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, valid, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite valid CSV: %v", err)
+	}
+	valid.PreviewDigest = preview.Digest
+	valid.Approval = approvedEvidenceForPreview(t, preview)
+	if result, err := OperationDirectWrite(context.Background(), bundle, valid, nil); err != nil || result.Status != http.StatusCreated {
+		t.Fatalf("OperationDirectWrite valid CSV = %#v, %v; want 201", result, err)
+	}
+
+	for _, invalid := range []struct {
+		name    string
+		file    string
+		payload []byte
+		want    string
+	}{
+		{name: "rejects a non-csv extension", file: "valid.txt", payload: validPayload, want: "allowed file extensions"},
+		{name: "rejects malformed CSV", file: "invalid.csv", payload: []byte("queue_id,metric\\nfixture,\\\"unterminated"), want: "valid CSV"},
+	} {
+		t.Run(invalid.name, func(t *testing.T) {
+			path := writeMultipartOperationSource(t, dir, invalid.file, invalid.payload)
+			req := multipartOperationRequest(dir, path, invalid.payload)
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite %s: %v", invalid.name, err)
+			}
+			req.PreviewDigest = preview.Digest
+			req.Approval = approvedEvidenceForPreview(t, preview)
+			if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), invalid.want) {
+				t.Fatalf("OperationDirectWrite %s error = %v, want %q", invalid.name, err, invalid.want)
+			}
+		})
+	}
+	if requests != 1 {
+		t.Fatalf("CSV multipart fixture requests = %d, want only valid upload", requests)
 	}
 }
 
