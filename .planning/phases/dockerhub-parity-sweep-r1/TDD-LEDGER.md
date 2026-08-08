@@ -640,3 +640,28 @@ This red checkpoint is committed before broadening the validator. The green cont
 the additional RFC 3986-safe opaque-segment characters required by documented values while
 preserving rejection of raw separators, traversal, controls, query/fragment delimiters, and
 pre-escaped percent sequences.
+
+### GREEN — documented email segment reaches the engine safely
+
+`ValidateURLPathSegment` now accepts `+` and `@` in addition to the prior documented colon. The
+segment remains deliberately narrow: it does not accept raw slash/backslash, percent, query or
+fragment delimiters, whitespace, controls, dangerous Unicode, or traversal. The new engine-level
+test sends `person+coverage@example.test` through `DirectRead` and observes the complete opaque
+segment at the local server, so the proof covers both the shared validator and the actual request
+construction route used by declarative operations.
+
+Focused GREEN evidence:
+
+```text
+go test -timeout 20m ./internal/safety ./internal/connectors/engine ./internal/connectors/defs/dockerhub -run 'TestValidateURLPathSegment|TestDirectReadAcceptsOpaqueEmailPathSegment|TestDockerhubSCIMSchemaGetAcceptsCanonicalURNPathParameter' -count=1 -v
+ok   polymetrics.ai/internal/safety
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/defs/dockerhub
+```
+
+Audit result: `encodeSurfacePathValue` is the only provider-value caller of the former strict
+identifier validator. Its shared route covers 2,823 typed REST templates (1,303 reads and 1,520
+writes) across 24 JSON bundles. Docker Hub contains the only typed direct-operation SCIM/URN
+placeholders; HubSpot declares three `emailAddress` placeholders. Other `ValidateIdentifier`
+callers validate local connector, credential, command, flag, or configuration names, not provider
+path values, and intentionally retain the stricter alphabet.
