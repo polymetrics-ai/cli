@@ -33058,6 +33058,347 @@
           "path": "/users/{username}/projectsV2/{project_number}/items/{item_id}"
         }
       ]
+    },
+    {
+      "path": "gists star check",
+      "summary": "Read /gists/{gist_id}/star",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.gists_gist_id_star",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "gist-id",
+          "type": "string",
+          "maps_to": "path.gist_id",
+          "required": true
+        }
+      ],
+      "output_policy": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gists/{gist_id}/star"
+        }
+      ]
+    },
+    {
+      "path": "meta octocat view",
+      "summary": "Read /octocat",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.octocat",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "s",
+          "type": "string",
+          "maps_to": "query.s"
+        }
+      ],
+      "output_policy": "text",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/octocat"
+        }
+      ]
+    },
+    {
+      "path": "orgs blocks check",
+      "summary": "Read /orgs/{org}/blocks/{username}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.orgs_org_blocks_username",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "path.org",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "path.username",
+          "required": true
+        }
+      ],
+      "output_policy": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orgs/{org}/blocks/{username}"
+        }
+      ]
+    },
+    {
+      "path": "orgs members check",
+      "summary": "Read /orgs/{org}/members/{username}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.orgs_org_members_username",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "path.org",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "path.username",
+          "required": true
+        }
+      ],
+      "output_policy": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orgs/{org}/members/{username}"
+        }
+      ]
+    },
+    {
+      "path": "orgs public-members check",
+      "summary": "Read /orgs/{org}/public_members/{username}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.orgs_org_public_members_username",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "path.org",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "path.username",
+          "required": true
+        }
+      ],
+      "output_policy": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orgs/{org}/public_members/{username}"
+        }
+      ]
+    },
+    {
+      "path": "teams members check",
+      "summary": "Read /teams/{team_id}/members/{username}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.teams_team_id_members_username",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "integer",
+          "maps_to": "path.team_id",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "path.username",
+          "required": true
+        }
+      ],
+      "output_policy": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{team_id}/members/{username}"
+        }
+      ]
+    },
+    {
+      "path": "user blocks check",
+      "summary": "Read /user/blocks/{username}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.user_blocks_username",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "path.username",
+          "required": true
+        }
+      ],
+      "output_policy": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/blocks/{username}"
+        }
+      ]
+    },
+    {
+      "path": "user following check",
+      "summary": "Read /user/following/{username}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.user_following_username",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "path.username",
+          "required": true
+        }
+      ],
+      "output_policy": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/following/{username}"
+        }
+      ]
+    },
+    {
+      "path": "user starred check",
+      "summary": "Read /user/starred/{owner}/{repo}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.user_starred_owner_repo",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "owner",
+          "type": "string",
+          "maps_to": "path.owner",
+          "required": true
+        },
+        {
+          "name": "repo",
+          "type": "string",
+          "maps_to": "path.repo",
+          "required": true
+        }
+      ],
+      "output_policy": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/starred/{owner}/{repo}"
+        }
+      ]
+    },
+    {
+      "path": "users following check",
+      "summary": "Read /users/{username}/following/{target_user}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.users_username_following_target_user",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "path.username",
+          "required": true
+        },
+        {
+          "name": "target-user",
+          "type": "string",
+          "maps_to": "path.target_user",
+          "required": true
+        }
+      ],
+      "output_policy": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{username}/following/{target_user}"
+        }
+      ]
+    },
+    {
+      "path": "meta zen view",
+      "summary": "Read /zen",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.zen",
+      "source_cli_path": "",
+      "flags": [],
+      "output_policy": "text",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/zen"
+        }
+      ]
+    },
+    {
+      "path": "markdown render",
+      "summary": "Read /markdown",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.markdown",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "text",
+          "type": "string",
+          "maps_to": "body.text",
+          "required": true
+        },
+        {
+          "name": "mode",
+          "type": "enum",
+          "maps_to": "body.mode",
+          "values": [
+            "markdown",
+            "gfm"
+          ]
+        },
+        {
+          "name": "context",
+          "type": "string",
+          "maps_to": "body.context"
+        }
+      ],
+      "output_policy": "text",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/markdown"
+        }
+      ]
+    },
+    {
+      "path": "markdown raw render",
+      "summary": "Read /markdown/raw",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.markdown_raw",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "text",
+          "type": "string",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "output_policy": "text",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/markdown/raw"
+        }
+      ]
     }
   ],
   "help_topics": [
