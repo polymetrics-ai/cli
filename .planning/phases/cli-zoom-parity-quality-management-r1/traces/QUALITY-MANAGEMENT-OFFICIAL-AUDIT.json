@@ -1,0 +1,18 @@
+{
+  "url": "https://developers.zoom.us/docs/api/quality-management.md",
+  "retrieved_at": "2026-08-08T09:12:11Z",
+  "http_status": 200,
+  "bytes": 40987,
+  "openapi_version": "3.1.1",
+  "api_version": "2",
+  "server": "https://api.zoom.us/v2",
+  "operations": [
+    {"method": "GET", "path": "/qm/automated_evaluations", "title": "List automated evaluations"},
+    {"method": "GET", "path": "/qm/evaluation", "title": "List evaluations"},
+    {"method": "GET", "path": "/qm/evaluation/{evaluationId}", "title": "View evaluation detail"},
+    {"method": "GET", "path": "/qm/interactions", "title": "List interactions"},
+    {"method": "POST", "path": "/qm/interactions", "title": "Add an interaction"},
+    {"method": "GET", "path": "/qm/interactions/{interactionId}", "title": "View interaction detail"}
+  ],
+  "ledger_delta": 0
+}

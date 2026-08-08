@@ -1,0 +1,33 @@
+{
+  "phase": "cli-zoom-parity-quality-management-r1",
+  "parent_issue": 3915,
+  "sub_issue": 3943,
+  "connector": "zoom",
+  "provider_module": "quality-management",
+  "state": "planned",
+  "manual_gsd_fallback": {
+    "reason": "provider-category phase is not registered by the official GSD runtime",
+    "mode": "single-worker inline execution; parent contract forbids role spawning"
+  },
+  "artifact": {
+    "url": "https://developers.zoom.us/docs/api/quality-management.md",
+    "retrieved_at": "2026-08-08T09:12:11Z",
+    "http_status": 200,
+    "bytes": 40987,
+    "operation_count": 6,
+    "ledger_delta": 0
+  },
+  "baseline": {
+    "covered_operations": 12,
+    "locally_blocked_operations": 1830,
+    "direct_reads": 8,
+    "writes": 1
+  },
+  "target": {
+    "covered_operations": 18,
+    "locally_blocked_operations": 1824,
+    "direct_reads": 13,
+    "writes": 2
+  },
+  "next": "add and run the red Quality Management reachability test, then commit and push before production declarations"
+}
