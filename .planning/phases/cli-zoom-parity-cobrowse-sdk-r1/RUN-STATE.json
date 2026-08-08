@@ -1,0 +1,33 @@
+{
+  "phase": "cli-zoom-parity-cobrowse-sdk-r1",
+  "parent_issue": 3915,
+  "sub_issue": 3945,
+  "connector": "zoom",
+  "provider_module": "cobrowse-sdk",
+  "state": "planned",
+  "manual_gsd_fallback": {
+    "reason": "provider-category phase is not registered by the official GSD runtime",
+    "mode": "single-worker inline execution; parent contract forbids role spawning"
+  },
+  "artifact": {
+    "url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+    "retrieved_at": "2026-08-08T10:10:47Z",
+    "http_status": 200,
+    "bytes": 11697,
+    "operation_count": 4,
+    "ledger_delta": 0
+  },
+  "baseline": {
+    "covered_operations": 18,
+    "locally_blocked_operations": 1824,
+    "direct_reads": 13,
+    "writes": 2
+  },
+  "target": {
+    "covered_operations": 22,
+    "locally_blocked_operations": 1820,
+    "direct_reads": 17,
+    "writes": 2
+  },
+  "next": "commit and push plan checkpoint, then write and capture red-only test/fixtures"
+}
