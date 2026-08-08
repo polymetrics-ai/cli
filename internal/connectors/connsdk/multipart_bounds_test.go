@@ -56,6 +56,17 @@ func TestMultipartJSONContentValidationRequiresBoundedSnapshot(t *testing.T) {
 	}
 }
 
+func TestMultipartCSVContentValidationRequiresBoundedSnapshot(t *testing.T) {
+	err := validateMultipartForm(MultipartForm{Files: []MultipartFile{{
+		FieldName:         "payload",
+		Path:              "payload.csv",
+		ContentValidation: "csv",
+	}}})
+	if err == nil || !strings.Contains(err.Error(), "requires a positive file or aggregate max_bytes") {
+		t.Fatalf("validateMultipartForm CSV content validation error = %v, want a bounded snapshot rejection", err)
+	}
+}
+
 // TestRequesterDoMultipartRefusesEscapingSymlinkSwappedAfterValidation pins the
 // TOCTOU fix. Before os.Root confinement this uploaded the outside file: the
 // path was validated once, then re-opened by path at send time, so swapping it

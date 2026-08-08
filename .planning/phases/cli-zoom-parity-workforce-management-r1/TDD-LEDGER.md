@@ -63,7 +63,28 @@ FAIL
 Both commands exited `1`, exactly as expected. This is the committed red state; only tests and
 phase evidence changed before it was captured.
 
-## GREEN CSV foundation — pending
+## GREEN CSV foundation — captured before Workforce Management connector authoring
+
+The separate foundation adds only the declaration-owned `content_validation: "csv"` policy plus
+the existing closed file-extension list. It parses the bounded approved snapshot with the standard
+CSV grammar before any wire send, preserves the declared `text/csv` part header, and leaves
+provider-specific column semantics in the provider's own operation schema. A malformed CSV or a
+non-`.csv` source fails locally; no caller can choose a parser, MIME policy, header, or upload
+target. Existing JSON validation remains unchanged.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/connsdk ./internal/connectors/commandrunner ./cmd/connectorgen
+ok      polymetrics.ai/internal/connectors/engine           5.368s
+ok      polymetrics.ai/internal/connectors/connsdk          0.941s
+ok      polymetrics.ai/internal/connectors/commandrunner    8.961s
+ok      polymetrics.ai/cmd/connectorgen                    13.084s
+```
+
+The `TestOperationDirectWriteMultipartAcceptsDeclaredCSVFile` loopback test proves that a valid
+`.csv` snapshot reaches the endpoint once with a `text/csv` part, while a malformed CSV and a
+wrong extension fail before a second request. Constraint tests cover file-only use, canonical
+extension lists, `text/csv` header compatibility, positive max-byte requirements, and the
+unchanged JSON path.
 
 ## GREEN connector — pending
 

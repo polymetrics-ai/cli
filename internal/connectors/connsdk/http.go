@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
+	"encoding/csv"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -661,12 +662,14 @@ func validateMultipartForm(form MultipartForm) error {
 
 // ValidateMultipartFileContentPolicy validates declaration-owned structured
 // file constraints. It is exported because engine bundle loading and direct
-// connsdk callers must apply exactly the same closed policy.
+// connsdk callers must apply exactly the same closed policy. JSON and CSV are
+// deliberately the only structured formats: the caller never selects a parser
+// or a content policy.
 func ValidateMultipartFileContentPolicy(validation string, extensions []string) error {
 	switch strings.TrimSpace(validation) {
-	case "", "json":
+	case "", "json", "csv":
 	default:
-		return fmt.Errorf("content_validation must be json when declared")
+		return fmt.Errorf("content_validation must be json or csv when declared")
 	}
 	if extensions == nil {
 		return nil
@@ -818,6 +821,26 @@ func validateMultipartFileContent(file MultipartFile, snapshotPath string) error
 			return fmt.Errorf("multipart file %q must contain valid JSON", file.FieldName)
 		}
 		return nil
+	case "csv":
+		input, err := os.Open(snapshotPath)
+		if err != nil {
+			return fmt.Errorf("multipart file %q validate CSV snapshot: %w", file.FieldName, err)
+		}
+		defer func() { _ = input.Close() }()
+		reader := csv.NewReader(input)
+		// RFC 4180 allows applications to choose their record shape. The
+		// provider's own import formats decide column semantics, so this
+		// generic, declaration-owned validator checks CSV grammar without
+		// inventing an extra cross-provider same-column-count restriction.
+		reader.FieldsPerRecord = -1
+		for {
+			if _, err := reader.Read(); err != nil {
+				if err == io.EOF {
+					return nil
+				}
+				return fmt.Errorf("multipart file %q must contain valid CSV", file.FieldName)
+			}
+		}
 	default:
 		return fmt.Errorf("multipart file %q has unsupported content validation", file.FieldName)
 	}
