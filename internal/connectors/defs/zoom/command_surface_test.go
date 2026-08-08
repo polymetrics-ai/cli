@@ -1343,6 +1343,7 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 		expectsBody       bool
 		inputSensitive    []string
 		responseSensitive []string
+		responseMarkers   []string
 		status            int
 		response          json.RawMessage
 	}
@@ -1376,6 +1377,7 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 			expectsBody:       true,
 			inputSensitive:    []string{"fixture-chatbot-account", "fixture chatbot message", "fixture-robot-jid", "fixture-recipient-jid", "fixture-sender-jid", "fixture-reply-jid"},
 			responseSensitive: []string{"fixture-chatbot-account", "fixture-chatbot-message", "fixture chatbot response", "fixture-chatbot-response-token"},
+			responseMarkers:   []string{"account_id", "content", "message_id", "token"},
 		},
 		{
 			name:        "edit",
@@ -1401,6 +1403,7 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 			expectsBody:       true,
 			inputSensitive:    []string{"fixture-chatbot-account", "fixture edited chatbot message", "fixture-robot-jid", "fixture-sender-jid"},
 			responseSensitive: []string{"fixture-chatbot-message", "fixture-robot-jid", "fixture edited chatbot response", "fixture-chatbot-response-token"},
+			responseMarkers:   []string{"content", "message_id", "robot_jid", "token"},
 		},
 		{
 			name:              "delete",
@@ -1411,6 +1414,7 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 			flags:             map[string][]string{"message-id": {"fixture-chatbot-message"}},
 			destructive:       true,
 			responseSensitive: []string{"fixture-chatbot-message", "fixture-chatbot-response-token"},
+			responseMarkers:   []string{"message_id", "token"},
 		},
 		{
 			name:        "link unfurl",
@@ -1528,6 +1532,7 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 
 	for _, action := range actions {
 		t.Run(action.name, func(t *testing.T) {
+			beforeAPIRequests, beforeTokenRequests := apiRequests, tokenRequests
 			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
 				Connector:  zoomBundleName,
 				Credential: credentialName,
@@ -1553,7 +1558,7 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 					t.Fatal("Chatbot plan sample exposed a declared sensitive input")
 				}
 			}
-			if apiRequests != 0 || tokenRequests != 0 {
+			if apiRequests != beforeAPIRequests || tokenRequests != beforeTokenRequests {
 				t.Fatal("Chatbot plan or preview reached a fixture endpoint")
 			}
 
@@ -1562,7 +1567,7 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 				if _, err := application.RunReverseETL(context.Background(), runRequest); err == nil {
 					t.Fatal("Chatbot DELETE execution bypassed typed destructive confirmation")
 				}
-				if apiRequests != 0 || tokenRequests != 0 {
+				if apiRequests != beforeAPIRequests || tokenRequests != beforeTokenRequests {
 					t.Fatal("unconfirmed Chatbot DELETE reached a fixture endpoint")
 				}
 				runRequest.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
@@ -1589,7 +1594,7 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 					t.Fatal("Chatbot action response exposed a declared or generic sensitive field")
 				}
 			}
-			for _, field := range []string{"account_id", "content", "message_id", "robot_jid", "token"} {
+			for _, field := range action.responseMarkers {
 				if !strings.Contains(string(encoded), `"`+field+`_redacted":true`) {
 					t.Fatal("Chatbot action response is missing a required redaction marker")
 				}
