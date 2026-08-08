@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -147,6 +148,110 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	}
 	if calls != 1 {
 		t.Fatalf("replayed approval reached the network; calls = %d, want 1", calls)
+	}
+}
+
+// TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth proves a
+// secret-sensitive operation can bind its customer-hosted origin and bearer
+// credential together, without reusing the connector's ordinary API bearer
+// token. The operation declaration is deliberately loaded from JSON so the
+// meta-schema and runtime must accept the same narrow contract.
+func TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth(t *testing.T) {
+	var ordinaryAPICalls, keyConnectorCalls int
+	ordinaryAPI := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ordinaryAPICalls++
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer ordinaryAPI.Close()
+
+	keyConnectorJWT := "fixture-key-connector-jwt"
+	keyConnector := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		keyConnectorCalls++
+		if r.Method != http.MethodPost || r.URL.Path != "/kms/archival/decrypt" {
+			t.Fatalf("key connector request = %s %s, want POST /kms/archival/decrypt", r.Method, r.URL.Path)
+		}
+		if r.Header.Get("Authorization") != "Bearer "+keyConnectorJWT {
+			t.Fatal("key connector request did not receive the operation-declared bearer credential")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer keyConnector.Close()
+
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/spec.json"].Data = []byte(`{
+		"$schema": "http://json-schema.org/draft-07/schema#",
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string"},
+			"key_connector_base_url": {"type": "string"},
+			"access_token": {"type": "string", "x-secret": true},
+			"key_connector_jwt": {"type": "string", "x-secret": true}
+		}
+	}`)
+	fsys["acme/streams.json"].Data = []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}],
+			"pagination": {"type": "none"}
+		},
+		"streams": []
+	}`)
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [{
+			"id": "acme.decrypt",
+			"kind": "rest_write",
+			"summary": "Decrypt one archival key",
+			"risk": "high",
+			"approval": "plan-preview-confirm-execute",
+			"output_policy": "json_redacted",
+			"mutation_class": "create",
+			"rest": {
+				"method": "POST",
+				"path": "/kms/archival/decrypt",
+				"base_url": "{{ config.key_connector_base_url }}",
+				"auth": [{"mode": "bearer", "token": "{{ secrets.key_connector_jwt }}"}],
+				"max_bytes": 1024,
+				"body_schema": {"type": "object", "additionalProperties": false}
+			}
+		}]
+	}`)}
+	delete(fsys, "acme/api_surface.json")
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load declared per-operation origin/auth bundle: %v", err)
+	}
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.decrypt",
+		Config: connectors.RuntimeConfig{
+			Config: map[string]string{
+				"base_url":               ordinaryAPI.URL,
+				"key_connector_base_url": keyConnector.URL,
+			},
+			Secrets: map[string]string{
+				"access_token":      "fixture-ordinary-access-token",
+				"key_connector_jwt": keyConnectorJWT,
+			},
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
+	}
+	if ordinaryAPICalls != 0 {
+		t.Fatalf("ordinary API received %d request(s), want no OAuth bearer sent to the key-connector route", ordinaryAPICalls)
+	}
+	if keyConnectorCalls != 1 {
+		t.Fatalf("key connector requests = %d, want 1", keyConnectorCalls)
 	}
 }
 
