@@ -1,0 +1,40 @@
+{
+  "phase": "cli-zoom-parity-chatbot-r1",
+  "parent_issue": 3915,
+  "sub_issue": 3944,
+  "connector": "zoom",
+  "provider_module": "chatbot",
+  "state": "planned",
+  "manual_gsd_fallback": {
+    "reason": "provider-category phase is not registered by the official GSD runtime",
+    "mode": "single-worker inline execution; parent contract forbids role spawning"
+  },
+  "artifact": {
+    "url": "https://developers.zoom.us/docs/api/chatbot.md",
+    "retrieved_at": "2026-08-08T12:36:23Z",
+    "http_status": 200,
+    "bytes": 14740,
+    "sha256": "1faa9f8a419c91703ea9dec1a0ee70e027c446c3c6bf41d395e0923c19b750b6",
+    "operation_count": 4,
+    "ledger_delta": 0
+  },
+  "baseline": {
+    "covered_operations": 23,
+    "locally_blocked_operations": 1819,
+    "direct_reads": 17,
+    "direct_writes": 1,
+    "reverse_etl_writes": 2
+  },
+  "target": {
+    "covered_operations": 27,
+    "locally_blocked_operations": 1815,
+    "direct_reads": 17,
+    "direct_writes": 5,
+    "reverse_etl_writes": 2
+  },
+  "foundations": [
+    "oauth2 client_credentials HTTP Basic client authentication",
+    "closed typed json_object command flag"
+  ],
+  "next": "write and run the RED tests before any production bundle or engine declaration"
+}
