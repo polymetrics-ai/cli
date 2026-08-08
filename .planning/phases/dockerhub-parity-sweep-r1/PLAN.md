@@ -396,7 +396,8 @@ one.
    `urn:ietf:params:scim:schemas:core:2.0:User`. A colon is legal in a URI path segment and the
    old identifier-only guard made the command permanently unreachable for its real documented
    input. This is an **OUR-DEFECT**, not an Enterprise or credential limitation.
-4. The repair is a narrow shared safety foundation used by direct reads: retain rejection of empty
+4. The repair is a narrow shared safety foundation used by typed operation endpoint substitutions:
+   retain rejection of empty
    values, path separators, traversal, controls, dangerous Unicode, query/fragment delimiters,
    and percent-encoding ambiguity; allow RFC-safe colon-bearing path-segment identifiers before
    `url.PathEscape`. Audit every direct-read caller/connector for expected behavior rather than
@@ -417,7 +418,7 @@ one.
    fail locally with `path variable id contains invalid character ':'` and make zero requests.
    Capture the failure verbatim and commit/push that red state before a production edit.
 2. **Green:** add a dedicated safe URI-path-segment validator (not a global relaxation of command
-   names or generic identifiers), use it for direct-read endpoint substitutions, preserve
+   names or generic identifiers), use it for typed operation endpoint substitutions, preserve
    `url.PathEscape`, and add engine/safety regression coverage for canonical SCIM URNs and hostile
    separator/traversal/query/fragment/control inputs. Re-run the Docker Hub red test to prove the
    actual request reaches the local server with the required path.

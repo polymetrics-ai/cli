@@ -46,6 +46,40 @@ func TestValidateIdentifierAcceptsExpectedNames(t *testing.T) {
 	}
 }
 
+func TestValidateURLPathSegment(t *testing.T) {
+	valid := []string{
+		"fixture-item",
+		"urn:ietf:params:scim:schemas:core:2.0:User",
+	}
+	for _, in := range valid {
+		t.Run("accept_"+in, func(t *testing.T) {
+			if err := safety.ValidateURLPathSegment(in, "test"); err != nil {
+				t.Fatalf("ValidateURLPathSegment(%q) error = %v", in, err)
+			}
+		})
+	}
+
+	invalid := []string{
+		"",
+		"../secret",
+		"one/two",
+		"one\\two",
+		"item?query=value",
+		"item#fragment",
+		"item%2fchild",
+		"item value",
+		"bad\x1b[31m",
+		"\u202Espoof",
+	}
+	for _, in := range invalid {
+		t.Run("reject_"+in, func(t *testing.T) {
+			if err := safety.ValidateURLPathSegment(in, "test"); err == nil {
+				t.Fatalf("ValidateURLPathSegment(%q) succeeded, want error", in)
+			}
+		})
+	}
+}
+
 func TestRedactErrorTextRemovesHTTPURLQueryAndBodySecrets(t *testing.T) {
 	input := `http 401 for https://api.example.test/v1/items?api_key=secret-token&cursor=abc: {"error":"secret-token denied","access_token":"abc"}`
 	got := safety.RedactErrorText(input)
