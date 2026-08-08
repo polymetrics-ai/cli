@@ -1392,6 +1392,27 @@ func TestRateLimitObservationParsesStandardBudgetHeaders(t *testing.T) {
 	}
 }
 
+func TestRateLimitObservationParsesDockerWindowedBudgetHeaders(t *testing.T) {
+	now := time.Date(2026, time.August, 8, 12, 0, 0, 0, time.UTC)
+	header := make(http.Header)
+	header.Set("ratelimit-limit", "200;w=21600")
+	header.Set("ratelimit-remaining", "199;w=21600")
+
+	observation, ok := rateLimitObservation(http.StatusOK, header, 1, now, "")
+	if !ok {
+		t.Fatal("rateLimitObservation: Docker's windowed headers must be observed")
+	}
+	if !observation.HasLimit || observation.Limit != 200 {
+		t.Fatalf("limit observation = %+v, want limit=200", observation)
+	}
+	if !observation.HasRemaining || observation.Remaining != 199 {
+		t.Fatalf("remaining observation = %+v, want remaining=199", observation)
+	}
+	if observation.HasReset {
+		t.Fatalf("window parameter invented a reset timestamp: %+v", observation)
+	}
+}
+
 func TestRateLimitObservationParsesDeclaredActualCost(t *testing.T) {
 	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
 	header := make(http.Header)
