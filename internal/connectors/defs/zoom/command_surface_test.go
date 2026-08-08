@@ -31,8 +31,8 @@ const zoomBundleName = "zoom"
 // operations.json/cli_surface.json entries exist.
 //
 // Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
-// quality-management reads (5).
-const wantModuleOperationCommandCount = 13
+// quality-management reads (5), Cobrowse SDK reads (4).
+const wantModuleOperationCommandCount = 17
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -143,11 +143,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 18 {
-		t.Errorf("executable rows = %d, want 18", got)
+	if got := covered; got != 22 {
+		t.Errorf("executable rows = %d, want 22", got)
 	}
-	if got := implementableNow; got != 1824 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1824", got)
+	if got := implementableNow; got != 1820 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1820", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -954,6 +954,136 @@ func assertQualityManagementResponseRedacted(t *testing.T, body any, raw, fields
 	for _, field := range fields {
 		if !strings.Contains(got, "\""+field+"_redacted\":true") {
 			t.Errorf("Quality Management response is missing %s_redacted marker: %s", field, got)
+		}
+	}
+}
+
+// TestCobrowseSDKCommandsExecuteWithFixtures fixes the provider's four Cobrowse
+// SDK GET paths, explicitly tests only the two prose-declared report dates,
+// and proves session pins, IDs, names, connection IDs, IP addresses, and
+// response pagination tokens are redacted before output.
+func TestCobrowseSDKCommandsExecuteWithFixtures(t *testing.T) {
+	readTests := []struct {
+		name        string
+		path        []string
+		flags       map[string][]string
+		requestPath string
+		query       map[string]string
+		fixture     string
+		raw         []string
+		fields      []string
+	}{
+		{
+			name:        "list live sessions",
+			path:        []string{"cobrowse-sdk", "live-sessions", "list"},
+			flags:       map[string][]string{"from": {"2026-08-01"}, "to": {"2026-08-08"}},
+			requestPath: "/v2/cobrowsesdk/live_sessions",
+			query:       map[string]string{"from": "2026-08-01", "to": "2026-08-08"},
+			fixture:     "list_cobrowse_live_sessions.json",
+			raw:         []string{"fixture-live-session", "fixture-session-pin", "fixture-live-user", "fixture-live-user-name", "fixture-page-token"},
+			fields:      []string{"session_id", "session_pin", "user_id", "user_name", "next_page_token"},
+		},
+		{
+			name:        "list past sessions",
+			path:        []string{"cobrowse-sdk", "past-sessions", "list"},
+			flags:       map[string][]string{"from": {"2026-08-01"}, "to": {"2026-08-08"}},
+			requestPath: "/v2/cobrowsesdk/past_sessions",
+			query:       map[string]string{"from": "2026-08-01", "to": "2026-08-08"},
+			fixture:     "list_cobrowse_past_sessions.json",
+			raw:         []string{"fixture-past-session", "fixture-session-pin", "fixture-past-user", "fixture-past-user-name", "fixture-page-token"},
+			fields:      []string{"session_id", "session_pin", "user_id", "user_name", "next_page_token"},
+		},
+		{
+			name:        "get session",
+			path:        []string{"cobrowse-sdk", "sessions", "get"},
+			flags:       map[string][]string{"session-id": {"fixture-session"}},
+			requestPath: "/v2/cobrowsesdk/sessions/fixture-session",
+			fixture:     "get_cobrowse_session.json",
+			raw:         []string{"fixture-session", "fixture-session-pin"},
+			fields:      []string{"session_id", "session_pin"},
+		},
+		{
+			name:        "list session users",
+			path:        []string{"cobrowse-sdk", "sessions", "users", "list"},
+			flags:       map[string][]string{"session-id": {"fixture-session"}},
+			requestPath: "/v2/cobrowsesdk/sessions/fixture-session/users",
+			fixture:     "list_cobrowse_session_users.json",
+			raw:         []string{"fixture-user-connection", "fixture-session-user", "fixture-session-user-name", "192.0.2.1", "fixture-page-token"},
+			fields:      []string{"user_connection_id", "user_id", "user_name", "ip_address", "next_page_token"},
+		},
+	}
+
+	for _, test := range readTests {
+		t.Run(test.name, func(t *testing.T) {
+			wantStatus, wantBody := zoomDirectReadFixture(t, test.fixture)
+			requests := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+				requests++
+				if request.Method != http.MethodGet {
+					t.Errorf("method = %s, want GET", request.Method)
+				}
+				if request.URL.Path != test.requestPath {
+					http.NotFound(w, request)
+					return
+				}
+				for key, want := range test.query {
+					if got := request.URL.Query().Get(key); got != want {
+						t.Errorf("query %s = %q, want %q", key, got, want)
+					}
+				}
+				if got, want := len(request.URL.Query()), len(test.query); got != want {
+					t.Errorf("query field count = %d, want %d (%v)", got, want, test.query)
+				}
+				for _, responseOnly := range []string{"page", "per_page", "limit", "page_size", "next_page_token"} {
+					if got := request.URL.Query().Get(responseOnly); got != "" {
+						t.Errorf("response-only field %s was sent as query %q", responseOnly, got)
+					}
+				}
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(wantStatus)
+				_, _ = w.Write(wantBody)
+			}))
+			defer server.Close()
+
+			bundle := loadZoomBundle(t)
+			connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   test.path,
+				Flags:  test.flags,
+				Config: connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL + "/v2"}, Secrets: map[string]string{"access_token": "synthetic-test-token"}},
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for a direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q) = %v", strings.Join(test.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != wantStatus {
+				t.Fatalf("Run(%q) direct read = %#v, want status %d", strings.Join(test.path, " "), result.DirectRead, wantStatus)
+			}
+			assertCobrowseSDKResponseRedacted(t, result.DirectRead.Body, test.raw, test.fields)
+			if requests != 1 {
+				t.Errorf("requests = %d, want 1", requests)
+			}
+		})
+	}
+}
+
+func assertCobrowseSDKResponseRedacted(t *testing.T, body any, raw, fields []string) {
+	t.Helper()
+	encoded, err := json.Marshal(body)
+	if err != nil {
+		t.Fatalf("marshal Cobrowse SDK response: %v", err)
+	}
+	got := string(encoded)
+	for _, value := range raw {
+		if strings.Contains(got, value) {
+			t.Errorf("Cobrowse SDK response exposed %q: %s", value, got)
+		}
+	}
+	for _, field := range fields {
+		if !strings.Contains(got, "\""+field+"_redacted\":true") {
+			t.Errorf("Cobrowse SDK response is missing %s_redacted marker: %s", field, got)
 		}
 	}
 }

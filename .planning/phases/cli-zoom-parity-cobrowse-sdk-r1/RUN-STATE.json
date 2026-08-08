@@ -4,7 +4,7 @@
   "sub_issue": 3945,
   "connector": "zoom",
   "provider_module": "cobrowse-sdk",
-  "state": "planned",
+  "state": "red_captured",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -29,5 +29,9 @@
     "direct_reads": 17,
     "writes": 2
   },
-  "next": "commit and push plan checkpoint, then write and capture red-only test/fixtures"
+  "red": {
+    "command": "go test -count=1 ./internal/connectors/defs/zoom/...",
+    "result": "failed as expected: 18 -> 22 covered, 1824 -> 1820 locally blocked, 13 -> 17 direct reads, and all four Cobrowse SDK routes were unknown"
+  },
+  "next": "commit and push this red-only state before production declarations"
 }
