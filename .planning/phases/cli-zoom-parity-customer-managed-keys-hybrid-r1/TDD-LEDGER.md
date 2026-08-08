@@ -184,9 +184,94 @@ ok  polymetrics.ai/internal/connectors/conformance  20.228s
 ok  polymetrics.ai/internal/connectors/certify  13.560s
 ```
 
-## GREEN connector — pending
+## GREEN connector — completed
 
-The connector declaration will make the existing RED Zoom surface test green: one exact POST,
-one endpoint-ledger row, an approval-gated typed command, required body flags, operation-scoped
-customer-hosted JWT selection, and redacted response/error outputs. Generated docs/catalog changes
-will be regenerated and mechanically scoped to Zoom.
+Commit `cec675503` declares the sole Customer Managed Keys Hybrid operation and reconciles its one
+existing blocked ledger row to `covered_by.direct_write`:
+
+- `zoom.decrypt_customer_managed_key_archival` is a single non-batchable `rest_write` POST with
+  exactly `encrypt_context` and `key_id` in its closed JSON body schema. It uses `json_redacted`,
+  `mutation_class=secret`, and the established plan → preview → approval → typed-confirmation
+  lifecycle.
+- The command is `customer-managed-keys-hybrid archival-key decrypt`, with exactly the two
+  required declared body flags and no page, per-page, limit, cursor, or other invented input.
+- Its paired operation transport derives the host from `key_connector_base_url` and bearer from
+  `key_connector_jwt`; the normal Zoom OAuth credential is not selected for that origin.
+- The Zoom fixture is entirely synthetic and asserts exact POST/path/body/auth plus redaction of
+  the returned key ID, plaintext key, and generic token-shaped field.
+
+The declaration and generated surface are green:
+
+```text
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/zoom
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...
+ok  polymetrics.ai/internal/connectors/defs/zoom
+```
+
+Generated Zoom documentation and the Zoom-only website catalog projection are in separately
+pushed commit `f86e6a480`. The shared docs indexes were restored whole because their generator
+output also contained unrelated Gorgias stale-doc changes; no generated file was hand-merged.
+
+## RED/GREEN review hardening — inherited header isolation
+
+Manual code review found that a paired operation origin/auth override still inherited bundle-wide
+HTTP headers. A header such as `Authorization` or an API-key header can carry an ordinary API
+credential, so sending it to a customer-hosted origin would violate the transport boundary.
+
+The focused RED test was committed and pushed before its production fix in `5c9518918`:
+
+```text
+$ go test -count=1 -timeout 20m -run TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth ./internal/connectors/engine
+--- FAIL: TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth (0.00s)
+    direct_write_test.go:233: key connector request inherited an ordinary API secret header
+FAIL
+FAIL    polymetrics.ai/internal/connectors/engine
+```
+
+Commit `dfa221bcd` clears inherited bundle headers whenever a `rest_write` selects its paired
+operation-scoped origin/auth transport. The exact focused test and full engine package are green:
+
+```text
+$ go test -count=1 -timeout 20m -run TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth ./internal/connectors/engine
+ok  polymetrics.ai/internal/connectors/engine
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok  polymetrics.ai/internal/connectors/engine
+```
+
+## Final GREEN verification
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen ./internal/connectors/defs/zoom/... ./internal/connectors/commandrunner ./internal/connectors/conformance ./internal/connectors/certify
+ok  polymetrics.ai/cmd/connectorgen
+ok  polymetrics.ai/internal/connectors/defs/zoom
+ok  polymetrics.ai/internal/connectors/commandrunner
+ok  polymetrics.ai/internal/connectors/conformance
+ok  polymetrics.ai/internal/connectors/certify
+
+$ go test -count=1 -timeout 20m ./internal/app
+ok  polymetrics.ai/internal/app
+
+$ go test -count=1 -timeout 20m ./internal/cli
+ok  polymetrics.ai/internal/cli
+
+$ go vet ./...
+exit 0
+
+$ make lint
+0 issues.
+
+$ go run ./cmd/connectorgen surface-reconcile --check --notes-contains provider_module=customer-managed-keys-hybrid
+connectorgen surface-reconcile: 551 connector(s) scanned; covered=0 blocked=0 unchanged=0 refused=0
+```
+
+The final built binary passed `pm help zoom`, bare `pm zoom`, bare Customer Managed Keys Hybrid,
+and the exact command help route. It then performed plan, no-network preview, approval, typed
+confirmation, and one declared POST against an isolated loopback Key Connector. The script asserted
+the returned synthetic key material and generic token field were redacted before output; no
+synthetic credential or approval token was emitted.

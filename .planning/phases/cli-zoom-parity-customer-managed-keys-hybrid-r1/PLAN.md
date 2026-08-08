@@ -62,13 +62,16 @@ ledger-exact `/api/v2/...` path while the existing base-URL normalizer sends the
 - Add separately stored `key_connector_jwt` and `key_connector_base_url` credential fields.
   The Key Connector base URL is explicitly provisioned and must end in `/api/v2`. The one
   operation declares its own paired `rest.base_url` and `rest.auth`, so it cannot inherit or
-  send the normal Zoom OAuth bearer to that customer-hosted origin; ordinary Zoom streams retain
-  their existing base URL and bearer declaration.
+  send the normal Zoom OAuth bearer to that customer-hosted origin. Its transport also clears
+  inherited bundle headers, because a global secret-derived header has no customer-hosted origin
+  ownership. Ordinary Zoom streams retain their existing base URL, headers, and bearer declaration.
 - Expose only `--encrypt-context` and `--key-id`, both required typed JSON body inputs. Do not
   hand-author `page`, `per_page`, `limit`, cursor, or other undocumented flags.
 - `surface-sync` owns derivable command metadata and the endpoint-ledger projection. Regenerate
-  docs and website catalog, then mechanically retain only Zoom/catalog deltas; never hand-merge
-  generated files.
+  docs and the website catalog, then retain only scoped generator output. The docs generator's
+  aggregate indexes also carried unrelated Gorgias stale-doc drift, so those whole generated files
+  are restored rather than hand-merged; the Zoom manual/skill and Zoom-only website catalog entries
+  remain generated output.
 
 ## TDD execution slices
 
