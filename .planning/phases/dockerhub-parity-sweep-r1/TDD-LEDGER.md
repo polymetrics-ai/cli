@@ -148,6 +148,27 @@ Full gate transcript:
 
 See `RUN-STATE.json`'s `tdd.green`/`tdd.green_evidence` fields for the compact form.
 
+## Planned RED — namespace override regression (2026-08-08)
+
+Live evidence showed `--config namespace=library` was accepted but did not affect any Docker Hub
+ETL route: each stream and the health check read `config.docker_username`. The red test will use
+the real declarative engine, not a duplicated template rule:
+
+```text
+TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths
+  config docker_username=auth-identity, namespace=target-namespace
+  engine.Read repositories      => /namespaces/target-namespace/repositories
+  engine.Read tags              => /namespaces/target-namespace/repositories/fixture-repository/tags
+  engine.Read repository_detail => /namespaces/target-namespace/repositories/fixture-repository
+  engine.Read tag_detail        => /namespaces/target-namespace/repositories/fixture-repository/tags/fixture-tag
+  engine.Check                  => /namespaces/target-namespace/repositories
+```
+
+The committed pre-fix bundle still substitutes `auth-identity`; therefore the focused test must
+fail before `spec.json` or `streams.json` is edited. Its failure and command transcript will be
+recorded below verbatim, then the test will become the green regression guard after `namespace`
+is declared required and all five templates interpolate it.
+
 ## Live E2E gap — reverse-ETL paths (2026-08-08)
 
 ### Reproduction before production edits
