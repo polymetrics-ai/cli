@@ -665,3 +665,42 @@ writes) across 14 bundles (out of 25 bundles that carry `operations.json`). Dock
 placeholders; HubSpot declares three `emailAddress` placeholders. Other `ValidateIdentifier`
 callers validate local connector, credential, command, flag, or configuration names, not provider
 path values, and intentionally retain the stricter alphabet.
+
+## Final GREEN verification — reconciled pilot (2026-08-08)
+
+The final current-token ledger check matched all 54 implemented CLI surface commands exactly once:
+14 `PROVEN`, 0 `PROVIDER-PLAN-LIMIT`, 31 `PROVIDER-PERMISSION`, and 9
+`ENTERPRISE-ONLY`. The three never-dispatched writes carry literal `Named dependency:` reasons in
+`VERIFICATION.md`; no row is silently called failed or certified.
+
+Final automated evidence:
+
+```text
+go test -timeout 20m ./internal/safety ./internal/connectors/engine ./internal/connectors/defs/dockerhub
+ok   polymetrics.ai/internal/safety
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/defs/dockerhub
+
+go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1
+PASS
+
+go test -race -timeout 20m ./internal/safety ./internal/connectors/engine -run 'TestValidateURLPathSegment|TestDirectReadAcceptsOpaqueEmailPathSegment|TestDirectRead' -count=1
+PASS
+
+go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+make agent-contract-check tidy-check lint docs-check smoke-no-build release-workflow-check
+PASS
+
+go vet ./... && go build ./cmd/pm && go test -timeout 20m ./internal/cli/...
+PASS
+```
+
+The rebuilt binary completed 54/54 implemented Docker Hub command-help routes with zero failures;
+`pm help dockerhub`, bare `pm dockerhub`, `pm dockerhub scim-schemas get --help`, and connector
+docs validation also passed. Inline GSD verify-work and standard code-review completed with the
+manual fallback recorded in `VERIFICATION.md` and `REVIEW.md`.
