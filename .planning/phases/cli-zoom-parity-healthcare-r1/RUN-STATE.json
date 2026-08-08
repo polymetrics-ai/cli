@@ -4,7 +4,7 @@
   "sub_issue": 3946,
   "connector": "zoom",
   "provider_module": "healthcare",
-  "state": "planned",
+  "state": "red_captured",
   "manual_gsd_fallback": {
     "reason": "gsd-sdk query init.phase-op cli-zoom-parity-healthcare-r1 returned phase_found=false",
     "mode": "single-worker inline execution; role spawning is forbidden by the parent contract"
@@ -17,5 +17,9 @@
     "ledger_delta": 0,
     "operations": 3
   },
-  "next": "write and run the red Zoom Healthcare surface test before any production bundle edit"
+  "red": {
+    "command": "go test -count=1 ./internal/connectors/defs/zoom/...",
+    "result": "failed as expected before Healthcare production declarations existed"
+  },
+  "next": "commit and push the red test checkpoint, then author the Healthcare bundle declarations"
 }

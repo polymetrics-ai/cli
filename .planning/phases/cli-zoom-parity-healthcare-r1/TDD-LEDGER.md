@@ -7,7 +7,7 @@
 - The only live request planned is a synthetic-token read reachability check after build. PATCH is
   exercised only against an in-process HTTP fixture through the existing reverse-ETL approval path.
 
-## RED — pending
+## RED — captured before production bundle edits
 
 1. Raise the inventory/reachability expectations from the current completed baseline:
    - covered rows: `9 → 12`
@@ -22,7 +22,30 @@
 
 ### Red evidence
 
-Pending — no production bundle file has been edited.
+Command run on the unmodified production bundle:
+
+```text
+--- FAIL: TestProviderInventoryLedgerIsComplete (0.05s)
+    command_surface_test.go:145: executable rows = 9, want 12
+    command_surface_test.go:148: operations awaiting Zoom-local contracts = 1833, want 1830
+--- FAIL: TestCoveredStreamsHaveReachableCommands (0.03s)
+    command_surface_test.go:243: reachable direct_read operation commands = 6, want 8
+    command_surface_test.go:244: reachable reverse_etl write commands = 0, want 1
+--- FAIL: TestHealthcareClinicalNoteCommandsExecuteWithFixtures (0.10s)
+    --- FAIL: TestHealthcareClinicalNoteCommandsExecuteWithFixtures/list (0.03s)
+        command_surface_test.go:661: Run("healthcare clinical-notes list") = connector command "healthcare clinical-notes list" is blocked: unknown command
+    --- FAIL: TestHealthcareClinicalNoteCommandsExecuteWithFixtures/get (0.03s)
+        command_surface_test.go:661: Run("healthcare clinical-notes get") = connector command "healthcare clinical-notes get" is blocked: unknown command
+    --- FAIL: TestHealthcareClinicalNoteCommandsExecuteWithFixtures/update_plans_before_mutation_and_accepts_no_content (0.03s)
+        command_surface_test.go:707: BuildWriteCommand = connector command "healthcare clinical-notes update" is blocked: unknown command
+FAIL
+FAIL    polymetrics.ai/internal/connectors/defs/zoom    0.818s
+FAIL
+```
+
+This red state contains only the test, synthetic Zoom-local fixtures, and delivery evidence. No
+`operations.json`, `writes.json`, `cli_surface.json`, `api_surface.json`, metadata, generated
+ledger, or connector documentation production file has changed.
 
 ## GREEN — pending
 

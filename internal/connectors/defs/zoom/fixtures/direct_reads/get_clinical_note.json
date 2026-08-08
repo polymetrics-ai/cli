@@ -1,0 +1,15 @@
+{
+  "status": 200,
+  "body": {
+    "note_id": "fixture-note",
+    "note_content": "fixture-clinical-content",
+    "note_owner_user_id": "fixture-owner",
+    "note_last_modified_user_id": "fixture-editor",
+    "is_note_completed": false,
+    "ehr_context": {
+      "appointment_id": "fixture-appointment",
+      "patient_id": "fixture-patient",
+      "provider_id": "fixture-provider"
+    }
+  }
+}
