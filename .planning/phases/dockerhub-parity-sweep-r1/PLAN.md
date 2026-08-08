@@ -299,3 +299,66 @@ Loaded via `.agents/agentic-delivery/references/required-skills-routing.md`:
 used: `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, and
 `gsd-code-review`; the canonical single-worker rule required the recorded inline
 fallback rather than role spawning.
+
+## Captain rate-limit gap — plan (2026-08-08)
+
+**Discussion and decision.** The captain's provider facts distinguish two mechanisms:
+the documented Registry pull quota (unauthenticated 100, authenticated free 200,
+fixed 21,600-second documentation window, paid unlimited) and a separate, unnumbered
+Hub API abuse limiter that returns bare HTTP 429. The 54 documented Docker Hub
+management operations use `hub.docker.com`; the pull quota is explicitly for
+`registry-1.docker.io`. It would be false to attach the pull quota to `hub.docker.com`
+just because both products carry the Docker name.
+
+The existing requester/registry foundation already admits every engine send and observes
+every response; this slice must **not** build another limiter. Its one missing expression
+for Docker's documented asymmetry is an exact host selector. Add that narrow selector
+dimension, then declare Registry-only pull policies. The Hub API abuse limiter has no
+published numeric budget, so it remains intentionally unbudgeted; the existing generic
+Requester 429 path honors a provider `Retry-After` rather than inventing a threshold.
+
+**Planned declared policies.** Both cite Docker's official pull-limit documentation and
+use a non-secret scope only: unauthenticated Registry pulls are keyed by a user-supplied
+public IP/IPv6-/64 config property, while authenticated personal-free pulls use the
+non-secret `docker_username` account identity. `selector.hosts` is exactly
+`registry-1.docker.io`; `selector.auth_types` separates unauthenticated and authenticated
+traffic; `selector.tiers` limits the 200 policy to `free`. Paid tiers deliberately match
+no fixed budget because Docker documents them as unlimited. No Hub API operation matches
+either policy.
+
+**Live note, retained rather than normalized away.** The captain-supplied documented
+window is 21,600 seconds. A free authenticated-less HEAD probe observed
+`ratelimit-limit: 100;w=3600` and `ratelimit-remaining: 100;w=3600` on 2026-08-08.
+The declaration remains conservatively documented at 21,600 seconds (which cannot
+overshoot Docker); the response parser will retain the leading numeric budget from the
+semicolon-form headers without pretending the inline window is a reset timestamp. The
+contradiction is a provider/documentation friction point for the pilot, not silently
+rewritten evidence.
+
+### TDD gap slice
+
+1. **Red:** add a Docker Hub declaration test and a requester test for Docker's
+   `ratelimit-limit: 200;w=21600` / `ratelimit-remaining: 199;w=21600` syntax. Run both
+   before adding a production declaration or changing runtime parsing; capture the
+   missing-declaration and non-parsed-header failures verbatim.
+2. **Green:** add the exact-host selector to the existing declared-policy resolver and
+   its schema/overlap validation, parse the standard leading numeric rate-limit value
+   before semicolon parameters, add `dockerhub/rate_limits.json`, embed the first
+   production declaration, and add non-secret profile/scope config documentation.
+3. **Proof:** inject a short fixed-window budget in the Docker Hub bundle test and run
+   the real built `pm` through a local HTTP proxy whose requested authority is
+   `registry-1.docker.io`; prove the proxy receives exactly the configured number of
+   pages and no final over-budget send. Then use Docker's free authenticated Registry
+   HEAD probe without printing its transient bearer, and record the provider's remaining
+   quota. This proves local admission stops before a Registry pull quota is consumed.
+4. **Verification:** focused connsdk/engine/Docker Hub tests, definition validation,
+   fleet preflight, surface-sync, connector boundary, rebuilt-binary help/docs checks,
+   and inline verify-work/code-review. Required skills remain `golang-how-to`,
+   `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`,
+   `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and
+   `golang-documentation`.
+
+**GSD inline fallback.** `scripts/gsd doctor`, all five `scripts/gsd sources` lookups,
+their generated prompts, and `go run ./cmd/agentcontractgen check` were run before this
+slice. The canonical parent-worker contract forbids the official role spawning, so
+discussion, `plan-phase --tdd`, execution, verification, and review are recorded inline.

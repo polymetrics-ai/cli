@@ -445,3 +445,48 @@ credentials, approval tokens, response bodies, or token-derived values.
 - **403 behavior:** a fresh `access-tokens list` request exited nonzero with the
   specific redacted error `http 403 for https://hub.docker.com/v2/access-tokens`.
   Permission failures are therefore observable/rejecting, not silent.
+
+## Planned RED — Docker Registry rate-limit declaration (2026-08-08)
+
+The captain's order is a behavior change, so it begins with two failing tests before
+any production declaration or rate-limit runtime edit:
+
+1. `internal/connectors/defs/dockerhub/rate_limits_test.go` loads the Docker Hub
+   bundle declaration and requires the two registry-only pull policies, 100/200 request
+   fixed windows, the documented 21,600-second window, exact `registry-1.docker.io`
+   selection, non-secret scopes, and no invented Hub abuse budget.
+2. `internal/connectors/connsdk/rate_limit_requester_test.go` requires the requester
+   to parse Docker's standard parameterized `ratelimit-limit` and
+   `ratelimit-remaining` forms (`200;w=21600`, `199;w=21600`) into typed numeric
+   observations, without treating the inline window as a reset time.
+
+The host selector is planned because the generic selector can currently distinguish
+endpoint, tier, and auth type but not `registry-1.docker.io` from `hub.docker.com`.
+Without it, applying a registry pull budget to any of the 54 Hub management operations
+would be a false claim. The green slice must prove the explicit host gate and that
+unbudgeted Hub abuse responses still use the existing `Retry-After` path.
+
+### Verbatim RED failure
+
+No production file had changed when the following commands ran:
+
+```text
+=== RUN   TestRateLimitObservationParsesDockerWindowedBudgetHeaders
+    http_test.go:1237: rateLimitObservation: Docker's windowed headers must be observed
+--- FAIL: TestRateLimitObservationParsesDockerWindowedBudgetHeaders (0.00s)
+FAIL
+FAIL	polymetrics.ai/internal/connectors/connsdk	0.474s
+FAIL
+
+=== RUN   TestDockerHubRegistryPullRateLimitsAreEmbedded
+    rate_limits_test.go:16: Docker Hub bundle has no embedded provider-cited rate_limits.json
+--- FAIL: TestDockerHubRegistryPullRateLimitsAreEmbedded (0.01s)
+FAIL
+FAIL	polymetrics.ai/internal/connectors/defs/dockerhub	0.728s
+FAIL
+```
+
+Commands: `go test ./internal/connectors/connsdk -run
+TestRateLimitObservationParsesDockerWindowedBudgetHeaders -count=1 -v` and
+`go test ./internal/connectors/defs/dockerhub -run
+TestDockerHubRegistryPullRateLimitsAreEmbedded -count=1 -v`.
