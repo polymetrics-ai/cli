@@ -7,7 +7,7 @@ description: Zoom connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads, approval-gated Chatbot, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.
+Reads Zoom users, meetings, webinars, bounded module-specific data, and SCIM2 groups/users through the Zoom REST API; includes sensitive Cobrowse SDK and SCIM2 reads, approval-gated Chatbot, SCIM2, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.
 
 ## Icon
 
@@ -34,6 +34,7 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
 - max_pages
 - mode
 - page_size
+- scim2_base_url
 - user_id
 - access_token (secret)
 - chatbot_client_id (secret)
@@ -69,14 +70,14 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
 
 ## Security
 
-- read risk: external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data
-- write risk: typed Zoom Chatbot message, Link Unfurls, healthcare clinical-note, and Quality Management actions, plus Customer Managed Keys Hybrid archival key decryption with redacted output
-- approval: mutating commands require plan, preview, explicit approval, and execute; Chatbot deletion and Customer Managed Keys Hybrid archival key decryption additionally require typed confirmation; read-only commands require none
+- read risk: external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, Cobrowse SDK session, and SCIM2 user/group data
+- write risk: typed Zoom Chatbot message, Link Unfurls, SCIM2 group/user, healthcare clinical-note, and Quality Management actions, plus Customer Managed Keys Hybrid archival key decryption with redacted output
+- approval: mutating commands require plan, preview, explicit approval, and execute; Chatbot and SCIM2 deletion plus Customer Managed Keys Hybrid archival key decryption additionally require typed confirmation; read-only commands require none
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
 
-- Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.
+- Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.
 - Usage: pm zoom <group> <command> [flags]
 - Source CLI: Zoom API reference (OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05)
 - Global flags:
@@ -120,6 +121,18 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
   - chatbot messages edit - Edit one Zoom Chatbot message. [intent=direct_write availability=implemented operation=zoom.edit_chatbot_message]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Changes provider-defined Chatbot content and carries account/JID identifiers.; notes: Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. Message and JID values are redacted in plans, errors, and JSON output.; flags: --message-id (required), --account-id (required), --content (required), --robot-jid (required), --is-markdown-support, --user-jid
   - chatbot messages delete - Delete one Zoom Chatbot message. [intent=direct_write availability=implemented operation=zoom.delete_chatbot_message]; approval: Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.; risk: Irreversibly deletes a Zoom Chatbot message.; notes: Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. The message identifier and JSON response are redacted.; flags: --message-id (required)
   - chatbot link-unfurls create - Create one Zoom Chatbot Link Unfurls action. [intent=direct_write availability=implemented operation=zoom.create_chatbot_link_unfurl]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Posts provider-defined Link Unfurls content for a Chatbot trigger.; notes: Uses the declared Chatbot-only client-credentials token exchange with HTTP Basic client authentication; it never reuses the ordinary Zoom access token. Zoom returns 204 No Content, which is recorded as a successful status-only action.; flags: --user-id (required), --trigger-id (required), --content (required)
+- SCIM2
+  - scim2 groups list - List Zoom SCIM2 groups. [intent=direct_read availability=implemented operation=zoom.list_scim2_groups]; notes: Bounded sensitive Zoom SCIM2 read with a fixed provider root path. The live artifact does not declare a standalone paging input, so no paging flag is exposed.
+  - scim2 groups create - Create one Zoom SCIM2 group. [intent=direct_write availability=implemented operation=zoom.create_scim2_group]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Creates a Zoom SCIM2 group with provider-defined membership and alias data.; notes: The named resource flag accepts exactly one documented SCIM Group object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. Group values are redacted in previews, errors, and JSON output.; flags: --resource (required)
+  - scim2 groups get - Get one Zoom SCIM2 group. [intent=direct_read availability=implemented operation=zoom.get_scim2_group]; notes: Bounded sensitive Zoom SCIM2 read with a typed required group-id path parameter. The live artifact documents no standalone paging input.; flags: --group-id (required)
+  - scim2 groups delete - Delete one Zoom SCIM2 group. [intent=direct_write availability=implemented operation=zoom.delete_scim2_group]; approval: Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.; risk: Irreversibly deletes a Zoom SCIM2 group.; notes: The fixed SCIM2 delete endpoint returns documented 204 No Content. Success is asserted by status without inventing a response body.; flags: --group-id (required)
+  - scim2 groups update - Update one Zoom SCIM2 group. [intent=direct_write availability=implemented operation=zoom.update_scim2_group]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Changes Zoom SCIM2 group membership or metadata through a provider-defined PatchOp.; notes: The named patch flag accepts exactly one documented SCIM PatchOp object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. The documented 204 response is recorded as a status-only success.; flags: --group-id (required), --patch (required)
+  - scim2 users list - List Zoom SCIM2 users. [intent=direct_read availability=implemented operation=zoom.list_scim2_users]; notes: Bounded sensitive Zoom SCIM2 read with a fixed provider root path. The live artifact does not declare a standalone paging input, so no paging flag is exposed.
+  - scim2 users create - Create one Zoom SCIM2 user. [intent=direct_write availability=implemented operation=zoom.create_scim2_user]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Creates a Zoom SCIM2 user with provider-defined profile, contact, organization, and extension data.; notes: The named resource flag accepts exactly one documented SCIM User object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. User and account values are redacted in previews, errors, and JSON output.; flags: --resource (required)
+  - scim2 users get - Get one Zoom SCIM2 user. [intent=direct_read availability=implemented operation=zoom.get_scim2_user]; notes: Bounded sensitive Zoom SCIM2 read with a typed required user-id path parameter. The live artifact documents no standalone paging input.; flags: --user-id (required)
+  - scim2 users update - Update one Zoom SCIM2 user. [intent=direct_write availability=implemented operation=zoom.update_scim2_user]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Replaces Zoom SCIM2 user profile, contact, organization, or extension data.; notes: The named resource flag accepts exactly one documented SCIM User object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. User and account values are redacted in previews, errors, and JSON output.; flags: --user-id (required), --resource (required)
+  - scim2 users delete - Delete one Zoom SCIM2 user. [intent=direct_write availability=implemented operation=zoom.delete_scim2_user]; approval: Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.; risk: Irreversibly deletes a Zoom SCIM2 user.; notes: The fixed SCIM2 delete endpoint returns documented 204 No Content. Success is asserted by status without inventing a response body.; flags: --user-id (required)
+  - scim2 users deactivate - Deactivate one Zoom SCIM2 user. [intent=direct_write availability=implemented operation=zoom.deactivate_scim2_user]; approval: Requires plan, no-network preview, and explicit single-use approval before execute.; risk: Changes a Zoom SCIM2 user's active state through a provider-defined PatchOp.; notes: The named patch flag accepts exactly one documented SCIM activation-state PatchOp object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. User and account values are redacted in previews, errors, and JSON output.; flags: --user-id (required), --patch (required)
 - Customer Managed Keys Hybrid
   - customer-managed-keys-hybrid archival-key decrypt - Decrypt one Customer Managed Keys Hybrid archival data key. [intent=direct_write availability=implemented operation=zoom.decrypt_customer_managed_key_archival]; approval: Requires plan, no-network preview, explicit single-use approval, typed confirmation, then execute.; risk: Returns sensitive key material only through a redacted output policy.; notes: Requires an operator-provisioned Customer Managed Keys Hybrid credential with key_connector_base_url ending in /api/v2 and an environment- or stdin-supplied key_connector_jwt. The operation declares its own customer-hosted origin and bearer; it never reuses the ordinary Zoom OAuth bearer.; flags: --encrypt-context (required), --key-id (required)
 - Help topics:

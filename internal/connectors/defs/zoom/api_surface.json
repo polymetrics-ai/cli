@@ -21627,144 +21627,78 @@
     {
       "method": "GET",
       "path": "/scim2/Groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=List groups; provider_server=https://api.zoom.us; provider_path=/scim2/Groups; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "scim2 groups list"
       }
     },
     {
       "method": "POST",
       "path": "/scim2/Groups",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Create a group; provider_server=https://api.zoom.us; provider_path=/scim2/Groups; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "scim2 groups create"
       }
     },
     {
       "method": "GET",
       "path": "/scim2/Groups/{groupId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Get a group; provider_server=https://api.zoom.us; provider_path=/scim2/Groups/{groupId}; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "scim2 groups get"
       }
     },
     {
       "method": "DELETE",
       "path": "/scim2/Groups/{groupId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Delete a group; provider_server=https://api.zoom.us; provider_path=/scim2/Groups/{groupId}; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "scim2 groups delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/scim2/Groups/{groupId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Update a group; provider_server=https://api.zoom.us; provider_path=/scim2/Groups/{groupId}; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "scim2 groups update"
       }
     },
     {
       "method": "GET",
       "path": "/scim2/Users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=List users; provider_server=https://api.zoom.us; provider_path=/scim2/Users; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "scim2 users list"
       }
     },
     {
       "method": "POST",
       "path": "/scim2/Users",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Create a user; provider_server=https://api.zoom.us; provider_path=/scim2/Users; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "scim2 users create"
       }
     },
     {
       "method": "GET",
       "path": "/scim2/Users/{userId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Get a user; provider_server=https://api.zoom.us; provider_path=/scim2/Users/{userId}; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "scim2 users get"
       }
     },
     {
       "method": "PUT",
       "path": "/scim2/Users/{userId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Update a user; provider_server=https://api.zoom.us; provider_path=/scim2/Users/{userId}; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "scim2 users update"
       }
     },
     {
       "method": "DELETE",
       "path": "/scim2/Users/{userId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Delete a user; provider_server=https://api.zoom.us; provider_path=/scim2/Users/{userId}; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "scim2 users delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/scim2/Users/{userId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/scim2.md",
-        "notes": "classification=implementable_now; provider_module=scim2; operation_title=Deactivate a user; provider_server=https://api.zoom.us; provider_path=/scim2/Users/{userId}; artifact=https://developers.zoom.us/docs/api/scim2.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "scim2 users deactivate"
       }
     },
     {

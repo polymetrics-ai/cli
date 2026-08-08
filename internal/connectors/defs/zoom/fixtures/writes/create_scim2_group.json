@@ -1,0 +1,35 @@
+{
+  "record": {
+    "displayName": "fixture SCIM group",
+    "schemas": [
+      "urn:ietf:params:scim:schemas:core:2.0:Group"
+    ],
+    "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group": {
+      "emailAlias": "fixture-group-alias"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/scim2/Groups",
+    "body": {
+      "displayName": "fixture SCIM group",
+      "schemas": [
+        "urn:ietf:params:scim:schemas:core:2.0:Group"
+      ],
+      "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group": {
+        "emailAlias": "fixture-group-alias"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture-scim-group",
+      "displayName": "fixture SCIM group",
+      "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group": {
+        "emailAlias": "fixture-group-alias"
+      },
+      "token": "fixture-scim-response-token"
+    }
+  }
+}

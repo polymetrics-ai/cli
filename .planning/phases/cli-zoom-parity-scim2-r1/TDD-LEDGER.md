@@ -171,3 +171,46 @@ ok      polymetrics.ai/internal/connectors/defs/zoom
   path, declared Bearer header, JSON body, redaction, and no paging input.
 - The ledger changes only the eleven `provider_module=scim2` endpoints; zero Zoom rows become
   `unsafe_or_disallowed`.
+
+## GREEN connector — all eleven SCIM2 operations
+
+The completed bundle declares all eleven live-artifact operations as fixed typed commands:
+
+- Four `rest_read`/`direct_read` actions (`groups list|get`, `users list|get`) use the declared
+  `scim2_base_url` root and paired ordinary Zoom Bearer secret. They expose no invented paging
+  input and redact Group/User, contact, membership, organization, and extension data.
+- Seven `rest_write`/`direct_write` actions use the plan → no-network preview → explicit
+  single-use approval → execute lifecycle. Group/User resources and SCIM PatchOp values accept one
+  named declared JSON object at a fixed endpoint, never a raw/generic body.
+- Group/user deletion requires destructive typed confirmation. Group PATCH and both DELETE routes
+  assert the provider's 204 status with `output_policy: none`; no response body is invented.
+- Synthetic fixtures exercise exact method/path/body, the SCIM-only root/auth transport, redaction,
+  no paging query, status-only behavior, and approval/confirmation gates. No real credentials or
+  provider mutations were used.
+
+The generated operation-endpoint ledger adds only the four SCIM2 read paths. `surface-reconcile`
+changed only the eleven `provider_module=scim2` API-surface rows to direct-read/direct-write
+coverage; the Zoom `unsafe_or_disallowed` count remains zero.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...
+ok      polymetrics.ai/internal/connectors/defs/zoom
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner ./internal/connectors/engine ./cmd/connectorgen
+ok      polymetrics.ai/internal/connectors/commandrunner
+ok      polymetrics.ai/internal/connectors/engine
+ok      polymetrics.ai/cmd/connectorgen
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/zoom
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ go run ./cmd/connectorgen surface-reconcile --check --notes-contains provider_module=scim2
+connectorgen surface-reconcile: 551 connector(s) scanned; covered=0 blocked=0 unchanged=0 refused=0
+```
+
+The fresh compiled binary also completed `pm help zoom`, bare `pm zoom`, bare `pm zoom scim2`, and
+`--help` for every one of the eleven SCIM2 command paths. Each returned contextual help and never
+reported `unknown command`.

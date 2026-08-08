@@ -1,5 +1,5 @@
 {
-  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
   "usage": "pm zoom <group> <command> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
@@ -70,6 +70,13 @@
       "title": "Chatbot",
       "commands": [
         "chatbot"
+      ]
+    },
+    {
+      "id": "scim2",
+      "title": "SCIM2",
+      "commands": [
+        "scim2"
       ]
     },
     {
@@ -1093,6 +1100,418 @@
         }
       ],
       "output_policy": "none"
+    },
+    {
+      "path": "scim2 groups list",
+      "summary": "List Zoom SCIM2 groups.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_scim2_groups",
+      "source_cli_path": "GET /scim2/Groups",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "notes": "Bounded sensitive Zoom SCIM2 read with a fixed provider root path. The live artifact does not declare a standalone paging input, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom scim2 groups list --credential zoom-scim2 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim2/Groups"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 groups create",
+      "summary": "Create one Zoom SCIM2 group.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.create_scim2_group",
+      "source_cli_path": "POST /scim2/Groups",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "resource",
+          "type": "json_object",
+          "summary": "Documented SCIM Group resource as one JSON object.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "displayName",
+        "emailAlias",
+        "members",
+        "value",
+        "display",
+        "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group"
+      ],
+      "risk": "Creates a Zoom SCIM2 group with provider-defined membership and alias data.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named resource flag accepts exactly one documented SCIM Group object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. Group values are redacted in previews, errors, and JSON output.",
+      "examples": [
+        "pm zoom scim2 groups create --credential zoom-scim2 --resource '{\"displayName\":\"team\",\"schemas\":[\"urn:ietf:params:scim:schemas:core:2.0:Group\"]}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scim2/Groups"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 groups get",
+      "summary": "Get one Zoom SCIM2 group.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_scim2_group",
+      "source_cli_path": "GET /scim2/Groups/{groupId}",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "group-id",
+          "type": "string",
+          "summary": "Zoom SCIM2 group identifier.",
+          "maps_to": "path.groupId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom SCIM2 read with a typed required group-id path parameter. The live artifact documents no standalone paging input.",
+      "examples": [
+        "pm zoom scim2 groups get --credential zoom-scim2 --group-id group --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim2/Groups/{groupId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 groups delete",
+      "summary": "Delete one Zoom SCIM2 group.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.delete_scim2_group",
+      "source_cli_path": "DELETE /scim2/Groups/{groupId}",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "group-id",
+          "type": "string",
+          "summary": "Zoom SCIM2 group identifier to delete.",
+          "maps_to": "path.groupId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "id"
+      ],
+      "risk": "Irreversibly deletes a Zoom SCIM2 group.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+      "notes": "The fixed SCIM2 delete endpoint returns documented 204 No Content. Success is asserted by status without inventing a response body.",
+      "examples": [
+        "pm zoom scim2 groups delete --credential zoom-scim2 --group-id group --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/scim2/Groups/{groupId}"
+        }
+      ],
+      "output_policy": "none"
+    },
+    {
+      "path": "scim2 groups update",
+      "summary": "Update one Zoom SCIM2 group.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_scim2_group",
+      "source_cli_path": "PATCH /scim2/Groups/{groupId}",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "group-id",
+          "type": "string",
+          "summary": "Zoom SCIM2 group identifier to update.",
+          "maps_to": "path.groupId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "patch",
+          "type": "json_object",
+          "summary": "Documented SCIM PatchOp object as one JSON object.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "Operations",
+        "displayName",
+        "emailAlias",
+        "members",
+        "value",
+        "display"
+      ],
+      "risk": "Changes Zoom SCIM2 group membership or metadata through a provider-defined PatchOp.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named patch flag accepts exactly one documented SCIM PatchOp object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. The documented 204 response is recorded as a status-only success.",
+      "examples": [
+        "pm zoom scim2 groups update --credential zoom-scim2 --group-id group --patch '{\"schemas\":[\"urn:ietf:params:scim:api:messages:2.0:PatchOp\"],\"Operations\":[{\"op\":\"replace\",\"path\":\"displayName\",\"value\":\"team\"}]}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/scim2/Groups/{groupId}"
+        }
+      ],
+      "output_policy": "none"
+    },
+    {
+      "path": "scim2 users list",
+      "summary": "List Zoom SCIM2 users.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_scim2_users",
+      "source_cli_path": "GET /scim2/Users",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "notes": "Bounded sensitive Zoom SCIM2 read with a fixed provider root path. The live artifact does not declare a standalone paging input, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom scim2 users list --credential zoom-scim2 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim2/Users"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 users create",
+      "summary": "Create one Zoom SCIM2 user.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.create_scim2_user",
+      "source_cli_path": "POST /scim2/Users",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "resource",
+          "type": "json_object",
+          "summary": "Documented SCIM User resource as one JSON object.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "active",
+        "costCenter",
+        "department",
+        "displayName",
+        "emails",
+        "employeeNumber",
+        "groups",
+        "locale",
+        "manager",
+        "name",
+        "organization",
+        "phoneNumbers",
+        "roles",
+        "title",
+        "userName",
+        "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+        "urn:ietf:params:scim:schemas:extension:zoom:2.0:User"
+      ],
+      "risk": "Creates a Zoom SCIM2 user with provider-defined profile, contact, organization, and extension data.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named resource flag accepts exactly one documented SCIM User object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. User and account values are redacted in previews, errors, and JSON output.",
+      "examples": [
+        "pm zoom scim2 users create --credential zoom-scim2 --resource '{\"userName\":\"person@example.invalid\",\"schemas\":[\"urn:ietf:params:scim:schemas:core:2.0:User\"]}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scim2/Users"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 users get",
+      "summary": "Get one Zoom SCIM2 user.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_scim2_user",
+      "source_cli_path": "GET /scim2/Users/{userId}",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom SCIM2 user identifier.",
+          "maps_to": "path.userId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom SCIM2 read with a typed required user-id path parameter. The live artifact documents no standalone paging input.",
+      "examples": [
+        "pm zoom scim2 users get --credential zoom-scim2 --user-id user --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim2/Users/{userId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 users update",
+      "summary": "Update one Zoom SCIM2 user.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_scim2_user",
+      "source_cli_path": "PUT /scim2/Users/{userId}",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom SCIM2 user identifier to replace.",
+          "maps_to": "path.userId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "resource",
+          "type": "json_object",
+          "summary": "Documented replacement SCIM User resource as one JSON object.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "active",
+        "costCenter",
+        "department",
+        "displayName",
+        "emails",
+        "employeeNumber",
+        "groups",
+        "locale",
+        "manager",
+        "name",
+        "organization",
+        "phoneNumbers",
+        "roles",
+        "title",
+        "userName",
+        "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+        "urn:ietf:params:scim:schemas:extension:zoom:2.0:User"
+      ],
+      "risk": "Replaces Zoom SCIM2 user profile, contact, organization, or extension data.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named resource flag accepts exactly one documented SCIM User object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. User and account values are redacted in previews, errors, and JSON output.",
+      "examples": [
+        "pm zoom scim2 users update --credential zoom-scim2 --user-id user --resource '{\"userName\":\"person@example.invalid\",\"active\":true}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/scim2/Users/{userId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 users delete",
+      "summary": "Delete one Zoom SCIM2 user.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.delete_scim2_user",
+      "source_cli_path": "DELETE /scim2/Users/{userId}",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom SCIM2 user identifier to delete.",
+          "maps_to": "path.userId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "id"
+      ],
+      "risk": "Irreversibly deletes a Zoom SCIM2 user.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+      "notes": "The fixed SCIM2 delete endpoint returns documented 204 No Content. Success is asserted by status without inventing a response body.",
+      "examples": [
+        "pm zoom scim2 users delete --credential zoom-scim2 --user-id user --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/scim2/Users/{userId}"
+        }
+      ],
+      "output_policy": "none"
+    },
+    {
+      "path": "scim2 users deactivate",
+      "summary": "Deactivate one Zoom SCIM2 user.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.deactivate_scim2_user",
+      "source_cli_path": "PATCH /scim2/Users/{userId}",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom SCIM2 user identifier to deactivate.",
+          "maps_to": "path.userId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "patch",
+          "type": "json_object",
+          "summary": "Documented SCIM activation-state PatchOp object as one JSON object.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "Operations",
+        "active",
+        "displayName",
+        "emails",
+        "name",
+        "phoneNumbers",
+        "userName"
+      ],
+      "risk": "Changes a Zoom SCIM2 user's active state through a provider-defined PatchOp.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named patch flag accepts exactly one documented SCIM activation-state PatchOp object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. User and account values are redacted in previews, errors, and JSON output.",
+      "examples": [
+        "pm zoom scim2 users deactivate --credential zoom-scim2 --user-id user --patch '{\"schemas\":[\"urn:ietf:params:scim:api:messages:2.0:PatchOp\"],\"Operations\":[{\"op\":\"replace\",\"value\":{\"active\":false}}]}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/scim2/Users/{userId}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "customer-managed-keys-hybrid archival-key decrypt",

@@ -1,0 +1,54 @@
+{
+  "record": {
+    "userName": "fixture.user@example.invalid",
+    "displayName": "Fixture SCIM user",
+    "active": true,
+    "emails": [
+      {
+        "value": "fixture.user@example.invalid",
+        "primary": true
+      }
+    ],
+    "schemas": [
+      "urn:ietf:params:scim:schemas:core:2.0:User"
+    ],
+    "urn:ietf:params:scim:schemas:extension:zoom:2.0:User": {
+      "customAttribute": "fixture-custom-attribute"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/scim2/Users",
+    "body": {
+      "userName": "fixture.user@example.invalid",
+      "displayName": "Fixture SCIM user",
+      "active": true,
+      "emails": [
+        {
+          "value": "fixture.user@example.invalid",
+          "primary": true
+        }
+      ],
+      "schemas": [
+        "urn:ietf:params:scim:schemas:core:2.0:User"
+      ],
+      "urn:ietf:params:scim:schemas:extension:zoom:2.0:User": {
+        "customAttribute": "fixture-custom-attribute"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture-scim-user",
+      "userName": "fixture.user@example.invalid",
+      "displayName": "Fixture SCIM user",
+      "emails": [
+        {
+          "value": "fixture.user@example.invalid"
+        }
+      ],
+      "token": "fixture-scim-response-token"
+    }
+  }
+}

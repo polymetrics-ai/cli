@@ -12426,6 +12426,30 @@
   "zoom": [
     {
       "method": "GET",
+      "path": "/scim2/Groups",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/scim2/Groups/{groupId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/scim2/Users",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/scim2/Users/{userId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/v2/aic/users/{userId}/conversation_archive",
       "kind": "rest_read",
       "max_bytes": 1048576

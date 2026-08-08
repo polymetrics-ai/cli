@@ -1,0 +1,9 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/scim2/Groups/fixture-scim-group"
+  },
+  "response": {
+    "status": 204
+  }
+}

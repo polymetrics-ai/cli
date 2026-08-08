@@ -1,0 +1,25 @@
+{
+  "status": 200,
+  "body": {
+    "schemas": [
+      "urn:ietf:params:scim:api:messages:2.0:ListResponse"
+    ],
+    "totalResults": 1,
+    "Resources": [
+      {
+        "id": "fixture-scim-group",
+        "displayName": "fixture SCIM group",
+        "members": [
+          {
+            "value": "fixture-group-member",
+            "display": "Fixture group member"
+          }
+        ],
+        "urn:ietf:params:scim:schemas:extension:zoom:2.0:Group": {
+          "emailAlias": "fixture-group-alias"
+        }
+      }
+    ],
+    "token": "fixture-scim-response-token"
+  }
+}
