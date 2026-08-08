@@ -506,6 +506,29 @@ func TestOperationJSONWriteAdmitsDeclaredMutationRedirect(t *testing.T) {
 	}
 }
 
+// TestOperationJSONMutationRedirectRequiresClosedBody keeps the JSON redirect
+// exception declaration-owned all the way through nested request members. An
+// open nested object would turn a documented fixed event call into a generic
+// caller-shaped JSON mutation, so it must remain refused.
+func TestOperationJSONMutationRedirectRequiresClosedBody(t *testing.T) {
+	op := OperationSpec{
+		ID:   "zoom.clips.files.multipart_upload_events.open_body",
+		Kind: "rest_write",
+		REST: &RESTOperationSpec{
+			BaseURL:     "https://fileapi.zoom.us/v2",
+			Auth:        []AuthSpec{{Mode: "bearer", Token: "{{ secrets.fixture_token }}"}},
+			ContentType: "application/json",
+			MaxBytes:    1024,
+			BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"params":{"type":"object","properties":{"file_name":{"type":"string"}}}}}`),
+			Redirect:    &MutationRedirectSpec{AllowedHostSuffixes: []string{"zoom.us"}, MaxHops: 1},
+		},
+	}
+	err := validateOperationMutationRedirectSemantics(0, op)
+	if err == nil || !strings.Contains(err.Error(), "rest.redirect body_schema/params is an object and must declare additionalProperties: false") {
+		t.Fatalf("open JSON mutation redirect = %v, want nested closed-body rejection", err)
+	}
+}
+
 // TestOperationDirectWriteJSONFollowsDeclaredRedirect verifies that the
 // declaration-owned JSON event body is reproduced at the one admitted redirect
 // target with the operation's bearer credential retained. It exercises the
