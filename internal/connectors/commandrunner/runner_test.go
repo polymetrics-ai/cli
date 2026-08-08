@@ -1926,6 +1926,47 @@ func TestBuildOperationDirectWriteCommandMapsNamedRootJSONObject(t *testing.T) {
 	}
 }
 
+// TestBuildOperationDirectWriteCommandRedactsLiteralRootJSONObjectField keeps
+// provider-defined JSON member names that contain dots (such as a SCIM URN)
+// private in a direct-write plan. The field is a literal root member, not a
+// dotted record path, so it must be recognized before nested-path traversal.
+func TestBuildOperationDirectWriteCommandRedactsLiteralRootJSONObjectField(t *testing.T) {
+	const extension = "urn:ietf:params:scim:schemas:extension:zoom:2.0:User"
+	connector := &fakeConnector{
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:     "acme.scim_user_create",
+			MutationClass: "create",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json_redacted",
+			Batchable:     false,
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "scim users create",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.scim_user_create",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/scim2/Users"}},
+			OutputPolicy: "json_redacted",
+			RedactFields: []string{extension},
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "resource", Type: "json_object", MapsTo: "body", Required: true},
+			},
+		}}},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path:  []string{"scim", "users", "create"},
+		Flags: map[string][]string{"resource": {`{"urn:ietf:params:scim:schemas:extension:zoom:2.0:User":{"customAttribute":"fixture-private-value"}}`}},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand literal SCIM extension: %v", err)
+	}
+	if command.RedactedRecord[extension] != "redacted" {
+		t.Fatalf("literal root extension field was not redacted in direct-write preview")
+	}
+}
+
 func TestBuildOperationDirectWriteCommandKeepsCompleteInputError(t *testing.T) {
 	connector := &fakeConnector{
 		directWriteMetadata: connectors.OperationDirectWriteMetadata{
