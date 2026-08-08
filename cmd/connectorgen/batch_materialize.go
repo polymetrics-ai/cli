@@ -801,8 +801,13 @@ func parseBatchOpenAPIArtifact(raw []byte) ([]batchArtifactEndpoint, error) {
 	if err != nil {
 		return nil, fmt.Errorf("artifact swagger field: %w", err)
 	}
-	if openAPI == "" && swagger == "" {
+	switch {
+	case openAPI != "" && strings.HasPrefix(openAPI, "3.") && swagger == "":
+	case swagger == "2.0" && openAPI == "":
+	case openAPI == "" && swagger == "":
 		return nil, errors.New("artifact is not an OpenAPI or Swagger document")
+	default:
+		return nil, fmt.Errorf("artifact must declare OpenAPI 3.x or Swagger 2.0 (openapi=%q swagger=%q)", openAPI, swagger)
 	}
 	if webhooks, ok := fields["webhooks"]; ok {
 		if err := batchArtifactWebhooksUnknown(webhooks); err != nil {
