@@ -1002,13 +1002,15 @@ paths:
 func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 	for _, raw := range []string{
 		"https://user@example.test/openapi.json",
-		"https://example.test/openapi.json?token=value",
 		"https://example.test/openapi.json#access_token=value",
 		"https://127.0.0.1/openapi.json",
 	} {
 		if err := validateBatchArtifactURL(raw); err == nil {
 			t.Fatalf("validateBatchArtifactURL(%q) succeeded, want rejection", raw)
 		}
+	}
+	if err := validateBatchArtifactURL("https://example.test/openapi.json?version=3"); err != nil {
+		t.Fatalf("version-selector query was rejected: %v", err)
 	}
 	privateLookup := func(context.Context, string) ([]net.IPAddr, error) {
 		return []net.IPAddr{{IP: net.ParseIP("169.254.169.254")}}, nil
