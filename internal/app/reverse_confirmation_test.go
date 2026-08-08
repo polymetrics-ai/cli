@@ -210,6 +210,60 @@ func TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice(t *testing.T) {
 	}
 }
 
+// The live GitHub validation must use the declaration's precise issue endpoint.
+// This request-target assertion prevents a plan/preview/run success from hiding
+// a malformed URL that only fails after approval is consumed.
+func TestGitHubCreateIssueReversePlanUsesDeclaredEndpoint(t *testing.T) {
+	ctx := context.Background()
+	var calls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls.Add(1)
+		if r.Method != http.MethodPost {
+			t.Errorf("method = %s, want POST", r.Method)
+		}
+		if r.URL.Path != "/repos/acme/widgets/issues" {
+			t.Errorf("path = %q, want /repos/acme/widgets/issues", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		_, _ = w.Write([]byte(`{"number":1,"title":"fixture issue"}`))
+	}))
+	defer server.Close()
+
+	a, root := setupGitHubApp(t, ctx, server.URL)
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
+		t.Fatalf("mkdir warehouse: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(warehouseDir, "issue_candidates.jsonl"), []byte("{\"title\":\"fixture issue\",\"body\":\"fixture body\"}\n"), 0o600); err != nil {
+		t.Fatalf("write issue candidate: %v", err)
+	}
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "create_fixture_issue",
+		SourceTable:           "issue_candidates",
+		DestinationConnector:  "github",
+		DestinationCredential: "github-local",
+		Action:                "create_issue",
+		Mappings:              map[string]string{"title": "title", "body": "body"},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL() error = %v", err)
+	}
+	if _, _, err := a.PreviewReversePlan(ctx, plan.ID); err != nil {
+		t.Fatalf("PreviewReversePlan() error = %v", err)
+	}
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL() error = %v", err)
+	}
+	if run.Status != "completed" || run.RecordsSucceeded != 1 {
+		t.Fatalf("run = %+v, want one completed issue creation", run)
+	}
+	if calls.Load() != 1 {
+		t.Fatalf("create issue calls = %d, want 1", calls.Load())
+	}
+}
+
 func TestRunReverseETLAcceptsDestructiveConnectorCommandWithMatchingConfirmation(t *testing.T) {
 	ctx := context.Background()
 	calls := 0

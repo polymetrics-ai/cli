@@ -69,6 +69,24 @@ go test -timeout 20m ./internal/app -run '^(TestLimitedReversePlanPreviewsAndRun
 # ok   polymetrics.ai/internal/app
 ```
 
+## Live GitHub write-target investigation
+
+The captain-authorized live `create_issue` dispatch returned
+`Post "https://api.github.com/.../issues%22: EOF` before a private-repository
+mutation. A local regression was added to assert the full generic reverse
+workflow sends exactly `POST /repos/acme/widgets/issues`. It is GREEN on the
+current implementation:
+
+```sh
+go test -timeout 20m ./internal/app -run '^TestGitHubCreateIssueReversePlanUsesDeclaredEndpoint$' -count=1
+# ok   polymetrics.ai/internal/app
+```
+
+This does **not** reproduce the live EOF, so it is recorded as an environment
+or transport-path finding rather than papered over with a parallel client. No
+production code was changed for that observation; a live retry is only safe
+after independently confirming the private repository still has zero issues.
+
 ## Red/green commands
 
 ```sh
