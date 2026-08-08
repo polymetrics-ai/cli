@@ -165,6 +165,36 @@ FAIL
 
 The declaration contains only a synthetic secret template and performs no request.
 
+### Operation-level base64 path upload — green 2026-08-08
+
+Added the closed `rest.base64_upload` contract for an operation body schema. Its required local
+source field is exposed to the planner as a file identity, bounded/read under the project root,
+checked against declaration-owned filename and sniffed-media policies, verified against the
+planner-provided SHA-256, omitted from preview and wire JSON, then converted to canonical base64
+only at the typed execution boundary. A file changed after preview fails before any network call.
+
+The existing declaration-owned mutation redirect may now admit this snapshot-bound JSON body as
+well as multipart, but still requires one fixed bearer-authenticated base URL, a literal
+same-provider suffix boundary, and a finite 307/308-only hop cap. It does not introduce a generic
+redirect or raw body option.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestOperationDirectWriteBase64PathUploadIsPreviewBound|TestOperationBase64UploadAdmitsDeclaredMutationRedirect|TestOperationDirectWriteBase64UploadFollowsDeclaredRedirect|TestWriteBase64UploadRejectsDeclaredFilePolicy)$'
+ok  	polymetrics.ai/internal/connectors/engine
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok  	polymetrics.ai/internal/connectors/engine
+
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk
+ok  	polymetrics.ai/internal/connectors/connsdk
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen
+ok  	polymetrics.ai/cmd/connectorgen
+```
+
+All fixtures are local and synthetic; no credential, token-derived value, or signed redirect URL
+was emitted.
+
 ## GREEN connector — pending
 
 Record the real runner fixture lifecycle, source reconciliation, and command reachability here

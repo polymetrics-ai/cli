@@ -1672,6 +1672,59 @@ func TestWriteBase64UploadEncodesFileAndOmitsSourceField(t *testing.T) {
 	}
 }
 
+// TestWriteBase64UploadRejectsDeclaredFilePolicy proves base64 path uploads
+// enforce the provider's filename and sniffed-media boundaries before a body
+// is encoded or a request reaches the provider. Zoom Clips adopts this shared
+// policy for its temporary image upload.
+func TestWriteBase64UploadRejectsDeclaredFilePolicy(t *testing.T) {
+	png, err := base64.StdEncoding.DecodeString("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9WlCkZYAAAAASUVORK5CYII=")
+	if err != nil {
+		t.Fatalf("decode fixture png: %v", err)
+	}
+	tests := []struct {
+		name    string
+		file    string
+		content []byte
+		want    string
+	}{
+		{
+			name:    "wrong extension",
+			file:    "temporary.txt",
+			content: png,
+			want:    "allowed file extensions",
+		},
+		{
+			name:    "wrong sniffed media type",
+			file:    "temporary.png",
+			content: []byte("not an image"),
+			want:    "allowed media types",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv, cap := captureServer(t, http.StatusCreated, `{}`)
+			dir, rel := writeTempPayload(t, tt.file, tt.content)
+			bundle := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+				SourceField:           "file_path",
+				ContentField:          "file",
+				MaxDecodedBytes:       2 << 20,
+				AllowedMediaTypes:     []string{"image/png", "image/jpeg", "image/gif"},
+				AllowedFileExtensions: []string{".png", ".jpg", ".jpeg", ".gif"},
+			}))
+			_, err := Write(context.Background(), bundle, connectors.WriteRequest{
+				Action: "upload_attachment",
+				Config: connectors.RuntimeConfig{ProjectDir: dir},
+			}, []connectors.Record{{"file_path": rel, "filename": tt.file, "contentType": "application/octet-stream"}}, nil)
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Write() error = %v, want %q", err, tt.want)
+			}
+			if cap.method != "" {
+				t.Fatalf("rejected base64 file policy reached provider: %s %s", cap.method, cap.path)
+			}
+		})
+	}
+}
+
 func TestWriteBase64UploadRejectsOversizePayload(t *testing.T) {
 	srv, cap := captureServer(t, http.StatusOK, `{}`)
 	dir, rel := writeTempPayload(t, "big.bin", bytes.Repeat([]byte("x"), 64))

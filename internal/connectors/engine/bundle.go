@@ -612,6 +612,16 @@ type Base64UploadSpec struct {
 	// APIs document the encoded limit — Airtable's attachment cap is 5 MB of
 	// base64, not 5 MB of file.
 	MaxEncodedBytes int64 `json:"max_encoded_bytes,omitempty"`
+
+	// AllowedMediaTypes bounds a path source by its sniffed bytes. It is absent
+	// only when the provider documents no content-type boundary; a present list
+	// must be non-empty and is checked before a byte is encoded or transmitted.
+	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
+
+	// AllowedFileExtensions bounds a path source by its declared source name.
+	// This is distinct from sniffing: a provider can require .png/.jpg names
+	// even when the bytes themselves are otherwise valid images.
+	AllowedFileExtensions []string `json:"allowed_file_extensions,omitempty"`
 }
 
 type MultipartPartSpec struct {
@@ -812,11 +822,16 @@ type RESTOperationSpec struct {
 	// absent block preserves metadata-only multipart rows until their connector
 	// adoption lane supplies an executable declared contract.
 	Multipart *MultipartSpec `json:"multipart,omitempty"`
+	// Base64Upload is an opt-in operation-level local-file-to-base64 JSON
+	// transformation. BodySchema governs the closed input object containing the
+	// local source field; the source path is removed and ContentField becomes the
+	// sole encoded wire field before the request is sent.
+	Base64Upload *Base64UploadSpec `json:"base64_upload,omitempty"`
 	// Redirect is an opt-in, declaration-owned 307/308 replay policy for one
-	// snapshot-bound multipart rest_write. It exists for providers such as Zoom
-	// Tasks that document a same-provider upload redirect requiring bearer
-	// authentication at the admitted final host; ordinary direct writes remain
-	// redirect-refusing.
+	// snapshot-bound multipart or base64-upload rest_write. It exists for
+	// providers such as Zoom Tasks/Clips that document a same-provider upload
+	// redirect requiring bearer authentication at the admitted final host;
+	// ordinary direct writes remain redirect-refusing.
 	Redirect *MutationRedirectSpec `json:"redirect,omitempty"`
 	// RequiredQuery declares query-parameter cardinality for endpoints that
 	// must never be called unfiltered — a listing that returns an entire
@@ -828,8 +843,8 @@ type RESTOperationSpec struct {
 	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
 }
 
-// MutationRedirectSpec is the closed operation declaration for a multipart
-// mutation whose documented transport requires a bounded same-provider
+// MutationRedirectSpec is the closed operation declaration for a multipart or
+// bounded base64 mutation whose documented transport requires a same-provider
 // cross-host 307/308 redirect. It deliberately accepts no caller-supplied URL
 // or header: the declaration owns both the host boundary and hop cap.
 type MutationRedirectSpec struct {
@@ -1702,6 +1717,22 @@ func validateBase64UploadSpec(i int, action WriteAction) error {
 			return fmt.Errorf("action %d (%q) base64_upload max_encoded_bytes %d cannot hold max_decoded_bytes %d (needs %d)", i, action.Name, spec.MaxEncodedBytes, spec.MaxDecodedBytes, needed)
 		}
 	}
+	if spec.AllowedMediaTypes != nil {
+		if len(spec.AllowedMediaTypes) == 0 {
+			return fmt.Errorf("action %d (%q) base64_upload allowed_media_types must not be empty; omit it to leave the source unconstrained", i, action.Name)
+		}
+		for _, raw := range spec.AllowedMediaTypes {
+			if _, _, err := mime.ParseMediaType(raw); err != nil {
+				return fmt.Errorf("action %d (%q) base64_upload allowed_media_types entry %q is not a valid media type: %w", i, action.Name, raw, err)
+			}
+		}
+	}
+	if err := connsdk.ValidateMultipartFileContentPolicy("", spec.AllowedFileExtensions); err != nil {
+		return fmt.Errorf("action %d (%q) base64_upload: %w", i, action.Name, err)
+	}
+	if spec.Source == "base64" && spec.AllowedFileExtensions != nil {
+		return fmt.Errorf("action %d (%q) base64_upload allowed_file_extensions requires source path", i, action.Name)
+	}
 	return nil
 }
 
@@ -2230,17 +2261,80 @@ func validateOperationMultipartSemantics(i int, op OperationSpec) error {
 	return nil
 }
 
+// validateOperationBase64UploadSemantics closes an inline file upload before
+// it can be exposed as a rest_write. Unlike writes.json's base64 body type,
+// this declaration starts with a command-owned input object: the local path is
+// required by the closed schema, then the executor removes it and inserts the
+// declaration-owned encoded field. The caller can never send arbitrary raw
+// base64 under the provider's content member.
+func validateOperationBase64UploadSemantics(i int, op OperationSpec) error {
+	if op.REST == nil || op.REST.Base64Upload == nil {
+		return nil
+	}
+	if op.Kind != "rest_write" {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload is only valid for rest_write operations, got %q", i, op.ID, op.Kind)
+	}
+	if op.REST.Multipart != nil {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload cannot be combined with rest.multipart", i, op.ID)
+	}
+	if op.REST.MaxBytes <= 0 {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload requires positive rest.max_bytes response capture limit", i, op.ID)
+	}
+	mediaType, _, err := mime.ParseMediaType(strings.TrimSpace(op.REST.ContentType))
+	if err != nil || !strings.EqualFold(mediaType, "application/json") {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload requires content_type application/json", i, op.ID)
+	}
+	if len(op.REST.BodySchema) == 0 {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload requires body_schema", i, op.ID)
+	}
+
+	var bodySchema map[string]any
+	if err := json.Unmarshal(op.REST.BodySchema, &bodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload body_schema is not an object: %w", i, op.ID, err)
+	}
+	if !isObjectType(bodySchema) {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload body_schema must be an object", i, op.ID)
+	}
+	if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload body_schema: %w", i, op.ID, err)
+	}
+	if err := requireClosedMultipartBodySchema(i, op.ID, bodySchema, "body_schema"); err != nil {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload: %w", i, op.ID, err)
+	}
+
+	spec := op.REST.Base64Upload
+	action := WriteAction{Name: op.ID, BodyType: "base64_upload", Base64Upload: spec}
+	if err := validateBase64UploadSpec(i, action); err != nil {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload: %w", i, op.ID, err)
+	}
+	if spec.Source != "" && spec.Source != "path" {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload source must be path", i, op.ID)
+	}
+	properties, ok := bodySchema["properties"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload body_schema must declare source_field %q", i, op.ID, spec.SourceField)
+	}
+	sourceSchema, ok := properties[spec.SourceField].(map[string]any)
+	if !ok || !multipartSchemaRequired(bodySchema, spec.SourceField) || !multipartSchemaString(sourceSchema) {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload source_field %q must be a required string body property", i, op.ID, spec.SourceField)
+	}
+	if _, exists := properties[spec.ContentField]; exists {
+		return fmt.Errorf("operation %d (%q) rest.base64_upload content_field %q must not be caller-supplied in body_schema", i, op.ID, spec.ContentField)
+	}
+	return nil
+}
+
 // validateOperationMutationRedirectSemantics preserves the existing strict
 // direct-write redirect refusal unless a provider has declared every boundary
-// needed for one snapshot-bound multipart replay. The actual target URL is
-// never user input and the runtime only reapplies the declared bearer after
-// admitting the redirect host.
+// needed for one snapshot-bound multipart or base64-upload replay. The actual
+// target URL is never user input and the runtime only reapplies the declared
+// bearer after admitting the redirect host.
 func validateOperationMutationRedirectSemantics(i int, op OperationSpec) error {
 	if op.REST == nil || op.REST.Redirect == nil {
 		return nil
 	}
-	if op.Kind != "rest_write" || op.REST.Multipart == nil {
-		return fmt.Errorf("operation %d (%q) rest.redirect is only valid for a multipart rest_write", i, op.ID)
+	if op.Kind != "rest_write" || (op.REST.Multipart == nil && op.REST.Base64Upload == nil) {
+		return fmt.Errorf("operation %d (%q) rest.redirect is only valid for a multipart or base64_upload rest_write", i, op.ID)
 	}
 	if strings.TrimSpace(op.REST.BaseURL) == "" || len(op.REST.Auth) != 1 {
 		return fmt.Errorf("operation %d (%q) rest.redirect requires one fixed operation base_url and bearer auth", i, op.ID)
@@ -2379,6 +2473,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		return err
 	}
 	if err := validateOperationMultipartSemantics(i, op); err != nil {
+		return err
+	}
+	if err := validateOperationBase64UploadSemantics(i, op); err != nil {
 		return err
 	}
 	if err := validateOperationMutationRedirectSemantics(i, op); err != nil {

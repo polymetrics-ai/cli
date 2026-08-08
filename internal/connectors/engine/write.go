@@ -807,6 +807,12 @@ func resolveBase64UploadPayload(action WriteAction, spec *Base64UploadSpec, rec 
 	if err != nil {
 		return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q: %w", action.Name, spec.SourceField, err)
 	}
+	if err := connsdk.ValidateFileNameExtensions(spec.SourceField, value, spec.AllowedFileExtensions); err != nil {
+		return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q: %w", action.Name, spec.SourceField, err)
+	}
+	if err := connsdk.ValidateFileMediaTypes(spec.SourceField, decoded, spec.AllowedMediaTypes); err != nil {
+		return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q: %w", action.Name, spec.SourceField, err)
+	}
 	if err := verifyApprovedPayload(action, spec.SourceField, recordIndex, decoded, cfg); err != nil {
 		return nil, err
 	}

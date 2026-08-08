@@ -8,8 +8,8 @@
 - [x] RED capture committed before production declaration or foundation changes.
 - [x] Closed root-array direct-write foundation is green with object-body regressions.
 - [x] Declared bearer redirect foundation is green without permitting arbitrary credential forwarding.
-- [ ] Closed operation-level base64 image upload foundation is green with pre-network bounds,
-  media/name, snapshot, and redaction assertions.
+- [x] Closed operation-level base64 image upload foundation is green with pre-network bounds,
+  media/name, snapshot, redaction, and provider-bounded bearer-redirect assertions.
 - [ ] All 21 endpoint rows and 23 concrete commands run through real preflight and fixtures.
 - [ ] Every documented `204` action is status-only and destructive confirmation-gated.
 - [ ] Endpoint ledger reconciliation is confined to Zoom Clips; zero Zoom rows are

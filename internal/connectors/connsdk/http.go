@@ -35,17 +35,17 @@ const maxDeclaredMutationRedirectHops = 3
 
 // DeclaredMutationRedirect is a declaration-owned exception to the default
 // no-redirect policy for strict mutation requests. It exists only so an
-// operation-level multipart upload can rebuild its already snapshot-bound body
-// at a provider-documented, same-provider host; callers never provide a target
-// URL or authentication header.
+// operation-level multipart or bounded base64 upload can rebuild its already
+// snapshot-bound body at a provider-documented, same-provider host; callers
+// never provide a target URL or authentication header.
 type DeclaredMutationRedirect struct {
 	AllowedHostSuffixes []string
 	MaxHops             int
 }
 
 // Validate rejects a redirect policy that is too broad to safely replay a
-// non-idempotent multipart operation. The engine also validates this at bundle
-// load time; keeping the check here makes direct Requester use fail closed.
+// non-idempotent mutation. The engine also validates this at bundle load time;
+// keeping the check here makes direct Requester use fail closed.
 func (p DeclaredMutationRedirect) Validate() error {
 	if p.MaxHops < 1 || p.MaxHops > maxDeclaredMutationRedirectHops {
 		return fmt.Errorf("declared mutation redirect max_hops must be between 1 and %d", maxDeclaredMutationRedirectHops)
@@ -689,6 +689,36 @@ func ValidateMultipartFileContentPolicy(validation string, extensions []string) 
 		seen[extension] = struct{}{}
 	}
 	return nil
+}
+
+// ValidateFileNameExtensions applies the same declaration-owned filename
+// policy used by multipart uploads to an already-confined local source. It is
+// shared with inline-base64 uploads so extension parsing cannot drift between
+// two ways of sending a provider-declared file.
+func ValidateFileNameExtensions(fieldName, name string, extensions []string) error {
+	if err := ValidateMultipartFileContentPolicy("", extensions); err != nil {
+		return err
+	}
+	if extensions == nil {
+		return nil
+	}
+	file := MultipartFile{FieldName: fieldName, Path: name, AllowedFileExtensions: extensions}
+	return checkAllowedFileExtension(file)
+}
+
+// ValidateFileMediaTypes applies the multipart upload byte-sniff policy to a
+// bounded in-memory file. Inline base64 uploads are necessarily buffered, so
+// checking the actual bytes before encoding preserves the same fail-closed
+// guarantee without creating a second media-type matcher.
+func ValidateFileMediaTypes(fieldName string, content []byte, allowed []string) error {
+	if allowed == nil {
+		return nil
+	}
+	if len(allowed) == 0 {
+		return fmt.Errorf("allowed_media_types must not be empty; omit it to leave the file unconstrained")
+	}
+	file := MultipartFile{FieldName: fieldName, AllowedMediaTypes: allowed}
+	return checkAllowedMediaType(file, http.DetectContentType(content))
 }
 
 func canonicalMultipartFileExtension(raw string) string {

@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-clips-r1",
   "issue": 3936,
   "parent_issue": 3915,
-  "status": "red-captured",
+  "status": "foundations-green",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -36,7 +36,7 @@
   },
   "prior_worker_handoff": "Inspected old worktree five-file candidate read-only; it is the already-landed Healthcare implementation (commit 1d260747c) and its writes.json is tracked on this branch. No stale change was copied or deleted.",
   "red": "captured: current 102/1740/55/42 totals fail the 123/1719/61/58 target; all 23 Clips commands are unknown; json_array is unsupported; a permitted binary redirect strips bearer; operation base64 source path is not transformed.",
-  "green": "root-json-array plan lifecycle and declared bearer binary redirect foundations passed; operation-base64 foundation remains",
+  "green": "root-json-array plan lifecycle, declared bearer binary redirect, and operation-level bounded base64 path upload foundations passed",
   "verification": "pending",
   "review": "pending"
 }
