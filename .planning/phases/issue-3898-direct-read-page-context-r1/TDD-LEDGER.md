@@ -62,6 +62,13 @@ preview and execution instead read `RecordCount + 1`, hashing a second,
 unapproved record as if it were drift. The pre-existing changed-row rejection
 remains a separate green regression.
 
+Green after changing both preview and run to read `max(1, RecordCount)`:
+
+```sh
+go test -timeout 20m ./internal/app -run '^(TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice|TestRunReverseETLRejectsPlanHashMismatchWhenRowsChange)$' -count=1
+# ok   polymetrics.ai/internal/app
+```
+
 ## Red/green commands
 
 ```sh

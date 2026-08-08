@@ -1771,7 +1771,10 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount+1)})
+	// Hash and preview the precise slice that the plan approved. A row outside
+	// that slice is not part of this plan's payload, so treating it as drift
+	// would make every limited plan reject its own unchanged source.
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount)})
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
@@ -2141,7 +2144,9 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
 		return ReverseRun{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount+1)})
+	// Re-read exactly the records whose mapped payload produced PlanHash. This
+	// keeps the hash check and the dispatched records on the same approved slice.
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount)})
 	if err != nil {
 		return ReverseRun{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
