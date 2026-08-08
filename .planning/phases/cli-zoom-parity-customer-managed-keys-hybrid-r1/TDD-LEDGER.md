@@ -78,9 +78,31 @@ ok  polymetrics.ai/internal/app  3.241s
 This reusable foundation is committed separately from Zoom JSON authoring in `0987a58bc` and is
 pushed before the connector declaration begins.
 
+## RED operation-origin/auth foundation — captured before foundation code
+
+The provider's Key Connector archival request has a distinct customer-hosted origin and a distinct
+JWKS-signed bearer credential. Reusing the bundle-wide Zoom OAuth transport for that request
+would make a configuration mistake capable of sending the ordinary Zoom bearer to the customer
+host. The focused test declares the two fields in `operations.json` and exercises the real
+preview/approval/execute path; it is RED because the current operation schema has no such
+operation-scoped origin/auth contract.
+
+```text
+$ go test -count=1 -timeout 20m -run TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth ./internal/connectors/engine
+--- FAIL: TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth (0.00s)
+    direct_write_test.go:223: Load declared per-operation origin/auth bundle: load bundle acme: operations.json: /operations/0/rest/auth: additional property not allowed
+FAIL
+FAIL    polymetrics.ai/internal/connectors/engine    0.717s
+FAIL
+```
+
+The test uses loopback servers and synthetic credentials only. It asserts that the ordinary API
+server receives zero requests and the operation-scoped server receives exactly the declared bearer
+request. It is committed and pushed before extending the engine/meta-schema.
+
 ## GREEN connector — pending
 
 The connector declaration will make the existing RED Zoom surface test green: one exact POST,
-one endpoint-ledger row, an approval-gated typed command, required body flags, customer-hosted
-JWT profile selection, and redacted response/error outputs. Generated docs/catalog changes will
-be regenerated and mechanically scoped to Zoom.
+one endpoint-ledger row, an approval-gated typed command, required body flags, operation-scoped
+customer-hosted JWT selection, and redacted response/error outputs. Generated docs/catalog changes
+will be regenerated and mechanically scoped to Zoom.

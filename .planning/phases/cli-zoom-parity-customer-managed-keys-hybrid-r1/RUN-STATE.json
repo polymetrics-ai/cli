@@ -4,7 +4,7 @@
   "sub_issue": 3950,
   "connector": "zoom",
   "provider_module": "customer-managed-keys-hybrid",
-  "state": "foundation_green",
+  "state": "operation_origin_auth_red",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -49,9 +49,15 @@
     "green_commit": "0987a58bc",
     "scope": "response/error/plan redaction and typed confirmation for secret-sensitive rest_write operations"
   },
+  "operation_origin_auth_foundation": {
+    "state": "red",
+    "command": "go test -count=1 -timeout 20m -run TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth ./internal/connectors/engine",
+    "result": "failed as expected: operations.json rest.auth is not yet an accepted per-operation direct-write contract",
+    "scope": "a rest_write-only operation origin/auth override that prevents an ordinary Zoom OAuth bearer from reaching a declared customer-hosted Key Connector origin"
+  },
   "green": {
     "commit": "",
     "result": "pending"
   },
-  "next": "author the one Zoom rest_write declaration; Zoom command-surface test remains intentionally RED until then"
+  "next": "implement and verify the separate operation-origin/auth foundation; Zoom command-surface test remains intentionally RED until the following connector declaration"
 }

@@ -84,11 +84,16 @@ ledger-exact `/api/v2/...` path while the existing base-URL normalizer sends the
    secret-sensitive direct write require the existing typed confirmation grant. Run targeted
    engine/commandrunner/app tests. The Zoom surface remains intentionally RED until its following
    declaration commit.
-4. **GREEN connector checkpoint** — declare the one `rest_write`, CLI group/command/body flags,
-   auth profile, endpoint projection, metadata, fixture, and generated docs. Test exact normalized
-   request path, key-connector bearer selection, required fields, response/error redaction, no
-   pagination flags, and approval-gated execution through an isolated fixture server.
-5. **Verify/review checkpoint** — build `pm`; run base, group, and command help plus plan-lifecycle
+4. **GREEN operation-origin/auth foundation checkpoint** — add a typed `rest.base_url` and
+   `rest.auth` override for declared `rest_write` operations only. It must bind preview and
+   execution to the same customer-hosted origin, retain the shared approval/rate-limit/transport
+   controls, and prove the ordinary Zoom OAuth bearer is never sent to that origin. Commit it
+   separately before authoring Zoom JSON.
+5. **GREEN connector checkpoint** — declare the one `rest_write`, CLI group/command/body flags,
+   operation-scoped auth profile, endpoint projection, metadata, fixture, and generated docs. Test
+   exact normalized request path, key-connector bearer selection, required fields, response/error
+   redaction, no pagination flags, and approval-gated execution through an isolated fixture server.
+6. **Verify/review checkpoint** — build `pm`; run base, group, and command help plus plan-lifecycle
    reachability from the binary. A live customer key connector is not discoverable without an
    operator-owned deployment, so run the exact command only against an isolated loopback fixture
    with an environment-only synthetic JWT and prove it reaches the declared POST/approval gate,
