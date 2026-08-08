@@ -5,8 +5,13 @@ must prove real connector behaviour and release all of its disk-bearing resource
 assertion failure, and interrupt. It is intentionally configuration-driven so MariaDB, PostgreSQL,
 SQL Server, and Oracle can follow without copying harness code.
 
-This PR is task-backed rather than issue-backed. It carries the full inline GSD/TDD delivery record
-in `.planning/phases/mysql-container-harness-r1/`.
+Closes #3953.
+
+Deferred work is tracked, not dropped: #3954 carries pre-8.4 CDC binlog-status support, #3955
+carries per-event CDC column metadata, and #3956 carries the skopeo isolated-image-copy follow-up so
+a run can hold its own copy of the engine image instead of sharing the machine's source reference.
+None of the three is implemented here. The full inline GSD/TDD delivery record is in
+`.planning/phases/mysql-container-harness-r1/`.
 
 ## What Changed
 
@@ -57,8 +62,14 @@ whose machine it created itself through `dbtest.NewMachine`; its live assertion 
 ordinary build noise after teardown, and the fresh proof passed that assertion. A machine this
 process did not create — caller-supplied, pre-existing, shared, or remote — is reported with its
 still-reclaimable byte count rather than trimmed, because `fstrim -av` reaches every filesystem on a
-machine and a matching name proves nothing about who else is using it. Retaining the source image is
-opt-in only via `POLYMETRICS_DATABASE_KEEP_IMAGE=1`.
+machine and a matching name proves nothing about who else is using it. The same ownership answer now
+gates the pulled source image: it is removed on a machine this run created, and left alone on a
+caller-supplied, shared, or remote one, because that reference is shared with every other lane there
+and a pull against an already-cached image is a no-op that proves nothing about who put it there.
+`POLYMETRICS_DATABASE_REMOVE_SHARED_IMAGE=1` is the explicit opt-in to delete it anyway. A pull that
+would have to download the image is refused before it starts when host free space is below three
+times the image's declared footprint. The skipped-reclaim report is the host free-space delta across
+the run, labelled as the estimate it is rather than as per-image reclaimability.
 
 The ownership gate is proven, not inferred: `POLYMETRICS_DATABASE_OWN_MACHINE=1` re-ran the tagged
 live proof on a machine the test created (`pmdb-mysql-eddc7350dec5`), recorded `reclaimed=true` with

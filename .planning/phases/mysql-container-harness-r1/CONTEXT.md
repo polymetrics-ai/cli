@@ -20,7 +20,10 @@ path.
   logged endpoint.
 - The MySQL source image is pinned at `docker.io/library/mysql:8.4.11`. Each run creates a unique
   local tag, then cleanup attempts container → volume → run tag → pulled source image even after an
-  earlier cleanup error. `POLYMETRICS_DATABASE_KEEP_IMAGE=1` is the only retention opt-in.
+  earlier cleanup error. The source image is removed only on a machine this run created, where
+  nothing else can be using it; on a shared machine it is retained unless
+  `POLYMETRICS_DATABASE_REMOVE_SHARED_IMAGE=1` opts in. A pull that has to download the image is
+  refused when host free space is below three times its declared footprint.
 - Cleanup runs two explicit `fstrim` passes against the configured machine after Podman cleanup.
   This is required on macOS VM-backed storage to return freed guest blocks to the host sparse disk.
   It is no longer an opt-in, but it runs only against a machine this process created through

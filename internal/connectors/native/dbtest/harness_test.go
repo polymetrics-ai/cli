@@ -43,6 +43,11 @@ func (r *scriptedRunner) Run(_ context.Context, connection string, args ...strin
 		if len(args) > 2 {
 			r.setImage(args[2], false)
 		}
+	case commandHasPrefix(args, "image", "inspect"):
+		if len(args) > 2 && r.imagePresent(args[2]) {
+			return "", nil
+		}
+		return "", errPodmanResourceNotFound
 	case commandHasPrefix(args, "volume", "inspect"):
 		if r.volumeInspectErr != nil {
 			return "", r.volumeInspectErr
@@ -186,12 +191,29 @@ func testConfig(runner CommandRunner) Config {
 		ContainerPort:  3306,
 		DataVolumePath: "/var/lib/mysql",
 		Connection:     "lane-machine",
-		Run:            runner,
-		RunMachine:     &scriptedMachineRunner{},
+		// Small enough that the default 123-byte disk clears the pull headroom;
+		// the low-disk cases below configure their own realistic sizes.
+		ExpectedImageBytes: 32,
+		Run:                runner,
+		RunMachine:         &scriptedMachineRunner{},
 		DiskFree: func() (uint64, error) {
 			return 123, nil
 		},
 	}
+}
+
+// ownedMachineConfig points a config at a machine this test created, which is
+// the only state in which the source image may be removed and the machine
+// trimmed.
+func ownedMachineConfig(t *testing.T, runner CommandRunner) (Config, *scriptedMachineRunner, *Machine) {
+	t.Helper()
+	machineRunner := &scriptedMachineRunner{}
+	machine := newOwnedTestMachine(t, machineRunner)
+	config := testConfig(runner)
+	config.Connection = machine.Connection()
+	config.Machine = machine.Name()
+	config.RunMachine = machineRunner
+	return config, machineRunner, machine
 }
 
 func TestNewRejectsUnscopedConnection(t *testing.T) {
@@ -254,8 +276,13 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	if err := h.Close(context.Background()); err != nil {
 		t.Fatalf("Close(): %v", err)
 	}
-	if runner.imagePresent(config.Image) || runner.imagePresent(h.runImage) {
-		t.Fatalf("images after cleanup = %#v, want every run-owned reference removed", runner.images)
+	if runner.imagePresent(h.runImage) {
+		t.Fatalf("images after cleanup = %#v, want the run-generated reference removed", runner.images)
+	}
+	// The default connection names a machine this run did not create, so the
+	// shared source reference is not this run's to remove.
+	if !runner.imagePresent(config.Image) {
+		t.Fatalf("images after cleanup = %#v, want the shared source image left in place", runner.images)
 	}
 
 	var gotCleanup [][]string
@@ -264,7 +291,7 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 			gotCleanup = append(gotCleanup, command[:2])
 		}
 	}
-	want := [][]string{{"container", "rm"}, {"volume", "rm"}, {"image", "rm"}, {"image", "rm"}}
+	want := [][]string{{"container", "rm"}, {"volume", "rm"}, {"image", "rm"}}
 	if !reflect.DeepEqual(gotCleanup, want) {
 		t.Fatalf("cleanup order = %v, want %v", gotCleanup, want)
 	}
@@ -282,28 +309,55 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	}
 }
 
-func TestCleanupKeepsSourceImageOnlyWhenOptedIn(t *testing.T) {
-	runner := &scriptedRunner{}
-	config := testConfig(runner)
-	config.KeepImage = true
-	h, err := New(config)
-	if err != nil {
-		t.Fatalf("New(): %v", err)
-	}
-	if _, err := h.Start(context.Background()); err != nil {
-		t.Fatalf("Start(): %v", err)
-	}
-	if err := h.Close(context.Background()); err != nil {
-		t.Fatalf("Close(): %v", err)
-	}
-	if !runner.imagePresent(config.Image) {
-		t.Fatalf("images after opted-in cleanup = %#v, want retained source image", runner.images)
-	}
-	if runner.imagePresent(h.runImage) {
-		t.Fatalf("images after opted-in cleanup = %#v, want generated reference removed", runner.images)
-	}
-	if commandsContain(runner.commands, "image", "rm", config.Image) {
-		t.Fatalf("commands = %v, want no source image removal when KeepImage is set", runner.commands)
+// The source reference is shared with every other lane on a machine this run
+// did not create, and a pull against an already-cached image is a no-op, so
+// pulling it successfully proves nothing about who put it there. Ownership of
+// the machine is the only evidence that removing it can affect nobody else.
+func TestCleanupRemovesTheSourceImageOnlyWithOwnershipOrAnExplicitOptIn(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		ownMachine bool
+		optIn      bool
+		wantRemove bool
+	}{
+		{name: "machine this run did not create", wantRemove: false},
+		{name: "machine this run created", ownMachine: true, wantRemove: true},
+		{name: "shared machine with the explicit opt-in", optIn: true, wantRemove: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			runner := &scriptedRunner{}
+			config := testConfig(runner)
+			if tc.ownMachine {
+				config, _, _ = ownedMachineConfig(t, runner)
+			}
+			config.RemoveSharedSourceImage = tc.optIn
+			h, err := New(config)
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			if _, err := h.Start(context.Background()); err != nil {
+				t.Fatalf("Start(): %v", err)
+			}
+			if err := h.Close(context.Background()); err != nil {
+				t.Fatalf("Close(): %v", err)
+			}
+			// The run-generated reference is always this run's own.
+			if runner.imagePresent(h.runImage) {
+				t.Fatalf("images after cleanup = %#v, want the generated reference removed", runner.images)
+			}
+			removed := commandsContain(runner.commands, "image", "rm", config.Image)
+			if removed != tc.wantRemove || runner.imagePresent(config.Image) == tc.wantRemove {
+				t.Fatalf("source image removed = %t (present = %t), want removed = %t",
+					removed, runner.imagePresent(config.Image), tc.wantRemove)
+			}
+			report := h.Report()
+			if report.SourceImageRemoved != tc.wantRemove {
+				t.Fatalf("report = %+v, want SourceImageRemoved = %t", report, tc.wantRemove)
+			}
+			if (report.SourceImageRetainedReason == "") != tc.wantRemove {
+				t.Fatalf("report = %+v, want a named retention reason only when the image was kept", report)
+			}
+		})
 	}
 }
 
@@ -457,9 +511,15 @@ func TestStartReleasesTheEngineSlotOnEveryExitPath(t *testing.T) {
 	}
 }
 
-func TestStartUsesGeneratedImageReferenceWithoutInspectingSource(t *testing.T) {
+// The source inspect exists only to size the pull. A present source image is
+// not ownership evidence: it may have been cached by any other lane, so a run
+// against a machine it did not create must still leave it alone.
+func TestStartInspectsTheSourceImageOnlyToSizeThePull(t *testing.T) {
 	runner := &scriptedRunner{}
 	config := testConfig(runner)
+	config.ExpectedImageBytes = 830 << 20
+	config.DiskFree = func() (uint64, error) { return 8 << 30, nil }
+	runner.setImage(config.Image, true)
 	h, err := New(config)
 	if err != nil {
 		t.Fatalf("New(): %v", err)
@@ -467,12 +527,14 @@ func TestStartUsesGeneratedImageReferenceWithoutInspectingSource(t *testing.T) {
 	if _, err := h.Start(context.Background()); err != nil {
 		t.Fatalf("Start(): %v", err)
 	}
-	defer func() { _ = h.Close(context.Background()) }()
-	if commandsContain(runner.commands, "image", "inspect") {
-		t.Fatalf("commands = %v, want no shared image inspection", runner.commands)
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
 	}
 	if !commandsContain(runner.commands, "pull", config.Image) || !commandsContain(runner.commands, "image", "tag", config.Image, h.runImage) {
 		t.Fatalf("commands = %v, want generated image reference", runner.commands)
+	}
+	if commandsContain(runner.commands, "image", "rm", config.Image) {
+		t.Fatalf("commands = %v, want no removal of an image this run only found present", runner.commands)
 	}
 }
 
@@ -617,12 +679,7 @@ func TestNewMachineRemovesWhatAFailedInitLeftBehind(t *testing.T) {
 
 func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	runner := &scriptedRunner{}
-	machineRunner := &scriptedMachineRunner{}
-	machine := newOwnedTestMachine(t, machineRunner)
-	config := testConfig(runner)
-	config.Connection = machine.Connection()
-	config.Machine = machine.Name()
-	config.RunMachine = machineRunner
+	config, machineRunner, machine := ownedMachineConfig(t, runner)
 	h, err := New(config)
 	if err != nil {
 		t.Fatalf("New(): %v", err)
@@ -645,12 +702,27 @@ func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	if want := [][]string{trim, trim}; !reflect.DeepEqual(trims, want) {
 		t.Fatalf("machine trim commands = %v, want %v", trims, want)
 	}
-	if !commandsContain(machineRunner.commands, "machine", "inspect", "--format", "{{.Name}}", machine.Name()) {
+	// Ownership is what permits the trim, so it has to be established first.
+	inspected, trimmed := -1, -1
+	for index, command := range machineRunner.commands {
+		if commandHasPrefix(command, "machine", "inspect", "--format", "{{.Name}}", machine.Name()) && inspected < 0 {
+			inspected = index
+		}
+		if commandHasPrefix(command, "machine", "ssh") && trimmed < 0 {
+			trimmed = index
+		}
+	}
+	if inspected < 0 || trimmed < inspected {
 		t.Fatalf("machine commands = %v, want the machine confirmed before the trim", machineRunner.commands)
 	}
 	report := h.Report()
 	if !report.HostDiskReclaimed || report.HostDiskReclaimSkipped != "" {
 		t.Fatalf("report = %+v, want a completed host-disk reclaim", report)
+	}
+	// Nothing else can be using an image on a machine this run created, so
+	// both references go before the trim that reclaims their bytes.
+	if runner.imagePresent(config.Image) || runner.imagePresent(h.runImage) {
+		t.Fatalf("images after cleanup = %#v, want both references removed on an owned machine", runner.images)
 	}
 	lastContainerCleanup := -1
 	for index, command := range runner.commands {
@@ -758,8 +830,15 @@ func TestCleanupNeverTrimsAMachineThisRunDidNotCreate(t *testing.T) {
 			if report.HostDiskReclaimed || report.HostDiskReclaimSkipped == "" {
 				t.Fatalf("report = %+v, want a skipped reclaim with a named reason", report)
 			}
-			if report.HostDiskReclaimableBytes != 3072 {
-				t.Fatalf("report = %+v, want the still-held host bytes reported", report)
+			// The delta is reported as an estimate of what the run released,
+			// which is negative here because the run still holds the space a
+			// trim would have returned.
+			if report.HostDiskReleasedBytesEstimate != -3072 {
+				t.Fatalf("report = %+v, want the host free-space delta reported", report)
+			}
+			// The source image belongs to whoever else uses that machine.
+			if report.SourceImageRemoved || report.SourceImageRetainedReason == "" {
+				t.Fatalf("report = %+v, want the shared source image retained with a reason", report)
 			}
 		})
 	}
@@ -892,14 +971,135 @@ func TestCloseDuringCreateStillRemovesTheCreatedResource(t *testing.T) {
 			if runner.volumePresent {
 				t.Fatal("interrupt left the volume behind")
 			}
-			if runner.imagePresent(h.runImage) || runner.imagePresent(config.Image) {
-				t.Fatalf("interrupt left images behind: %#v", runner.images)
+			// Only the run-generated reference is this run's to remove here:
+			// the config names a machine it did not create, so the shared
+			// source image stays whatever the interrupt found it as.
+			if runner.imagePresent(h.runImage) {
+				t.Fatalf("interrupt left the generated image behind: %#v", runner.images)
 			}
 			select {
 			case engineSlots <- struct{}{}:
 				<-engineSlots
 			default:
 				t.Fatal("interrupt leaked the engine slot")
+			}
+		})
+	}
+}
+
+// teardownProbeRunner records whether this run is still covered by the
+// interrupt handler at the moment each removal command runs.
+type teardownProbeRunner struct {
+	scriptedRunner
+	harness *Harness
+	probes  []teardownProbe
+}
+
+type teardownProbe struct {
+	command    string
+	registered bool
+	armed      bool
+}
+
+func (r *teardownProbeRunner) Run(ctx context.Context, connection string, args ...string) (string, error) {
+	if len(args) > 1 && args[1] == "rm" {
+		interruptCleanup.mu.Lock()
+		_, registered := interruptCleanup.live[r.harness]
+		armed := interruptCleanup.signals != nil
+		interruptCleanup.mu.Unlock()
+		r.probes = append(r.probes, teardownProbe{command: args[0] + " " + args[1], registered: registered, armed: armed})
+	}
+	return r.scriptedRunner.Run(ctx, connection, args...)
+}
+
+// Unregistering first restored default signal handling for the whole teardown,
+// so a Ctrl-C between the first and last removal killed the process with this
+// run's container, volume, and images still on the machine.
+func TestCloseKeepsInterruptCleanupArmedUntilTeardownFinishes(t *testing.T) {
+	runner := &teardownProbeRunner{}
+	config := testConfig(runner)
+	config.RemoveSharedSourceImage = true
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	runner.harness = h
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if len(runner.probes) != 4 {
+		t.Fatalf("teardown probes = %+v, want one per removal", runner.probes)
+	}
+	for _, probe := range runner.probes {
+		if !probe.registered || !probe.armed {
+			t.Fatalf("%q ran outside the interrupt cleanup: registered=%t armed=%t", probe.command, probe.registered, probe.armed)
+		}
+	}
+	// The registration must not outlive the teardown either, or the process
+	// keeps a handler for a harness that owns nothing.
+	interruptCleanup.mu.Lock()
+	_, registered := interruptCleanup.live[h]
+	interruptCleanup.mu.Unlock()
+	if registered {
+		t.Fatal("Close left the finished harness registered for interrupt cleanup")
+	}
+}
+
+func TestNewRequiresTheImageFootprint(t *testing.T) {
+	for _, bytes := range []uint64{0, maxExpectedImageBytes + 1} {
+		config := testConfig(&scriptedRunner{})
+		config.ExpectedImageBytes = bytes
+		if _, err := New(config); err == nil {
+			t.Fatalf("New() accepted an image footprint of %d, which cannot gate a pull", bytes)
+		}
+	}
+}
+
+// A pull that fills the disk partway through leaves a partial image and a
+// container to clean up on a host with nothing left to work with, so the
+// shortfall is reported before the download starts.
+func TestStartRefusesToPullWithoutHeadroomForTheImage(t *testing.T) {
+	const imageBytes = 830 << 20
+	for _, tc := range []struct {
+		name     string
+		free     uint64
+		cached   bool
+		wantPull bool
+	}{
+		{name: "free space barely exceeds the image itself", free: 854 << 20},
+		{name: "free space clears the documented headroom", free: imagePullFreeSpaceFactor * imageBytes, wantPull: true},
+		{name: "an already cached image needs no headroom", free: 854 << 20, cached: true, wantPull: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			runner := &scriptedRunner{}
+			config := testConfig(runner)
+			config.ExpectedImageBytes = imageBytes
+			config.DiskFree = func() (uint64, error) { return tc.free, nil }
+			if tc.cached {
+				runner.setImage(config.Image, true)
+			}
+			h, err := New(config)
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			_, startErr := h.Start(context.Background())
+			if err := h.Close(context.Background()); err != nil {
+				t.Fatalf("Close(): %v", err)
+			}
+			if tc.wantPull && startErr != nil {
+				t.Fatalf("Start(): %v", startErr)
+			}
+			if !tc.wantPull && startErr == nil {
+				t.Fatal("Start() pulled an image the host had no room for")
+			}
+			if pulled := commandsContain(runner.commands, "pull", config.Image); pulled != tc.wantPull {
+				t.Fatalf("pull issued = %t, want %t (commands = %v)", pulled, tc.wantPull, runner.commands)
+			}
+			if !tc.wantPull && (runner.containerLive || runner.volumePresent) {
+				t.Fatal("a refused start left a container or volume behind")
 			}
 		})
 	}

@@ -98,9 +98,21 @@ visible reason when the opt-in or the connection is missing, and fails rather th
 engine is unreachable.
 
 Cleanup runs on every exit path, including a failed assertion and an interrupt: the generated
-container, its named volume, the run-owned image tag, the pulled source image, and any machine this
-run created are all removed. `POLYMETRICS_DATABASE_KEEP_IMAGE=1` retains the source image for a
-subsequent run.
+container, its named volume, the run-owned image tag, and any machine this run created are all
+removed. The interrupt handler stays installed until the last of those removals returns, so a
+Ctrl-C during teardown cannot exit the process with resources still on the machine.
+
+The pulled source image is removed only on a machine this run created, where nothing else can be
+using it. On a caller-supplied, pre-existing, shared, or remote machine it is left in place: that
+reference is shared with every other lane there, and a pull against an already-cached image is a
+no-op, so a successful pull proves nothing about who put the image there.
+`POLYMETRICS_DATABASE_REMOVE_SHARED_IMAGE=1` is the explicit opt-in to delete it anyway.
+
+A pull that has to download the image is refused before it starts when host free space is below
+three times the image's declared footprint. The image is written compressed and then extracted, and
+the container's writable layer and data volume have to fit alongside it, so a pull started with
+only the image's own size free fills the disk partway through and leaves both a partial image and a
+container to clean up on a host with nothing left.
 
 A machine is claimed before `podman machine init` runs, not after it succeeds, because init writes
 the VM config and a multi-GiB disk image before it can fail and a cancelled context kills it
@@ -119,8 +131,9 @@ end.
 The trim runs only against a machine this process created through `dbtest.NewMachine` and still
 holds an ownership record for. A matching name is not ownership: `fstrim -av` reaches every
 filesystem on a machine, so a caller-supplied, pre-existing, shared, or remote machine is never
-trimmed no matter what it is called. Those runs report the reason together with the host bytes still
-reclaimable instead. Two weaker checks follow the ownership record as defence in depth — the scoped
+trimmed no matter what it is called. Those runs report the reason together with the host free-space
+delta across the run, which is an estimate of what the run released and not a measurement of any
+image's own size. Two weaker checks follow the ownership record as defence in depth — the scoped
 connection must address that machine (`<machine>` or `<machine>-root`), and `podman machine inspect`
 must still resolve it locally. `POLYMETRICS_PODMAN_MACHINE` names the machine behind a
 caller-supplied connection whose name differs; it does not confer ownership.

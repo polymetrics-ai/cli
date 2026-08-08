@@ -99,15 +99,38 @@ type Config struct {
 	ContainerArgs []string
 	// EngineArgs are passed to the engine process after the image reference.
 	EngineArgs []string
-	// KeepImage retains the pulled source image for a subsequent run. The
-	// default removes it, because on a VM-backed host a retained image holds
-	// its bytes in the machine's disk file.
-	KeepImage bool
+	// ExpectedImageBytes is the engine image's approximate on-disk footprint.
+	// It is mandatory because it is what the pre-pull headroom check is
+	// measured against; an engine that declares nothing would silently skip
+	// that check. See imagePullFreeSpaceFactor.
+	ExpectedImageBytes uint64
+	// RemoveSharedSourceImage opts in to removing the pulled source image from
+	// a machine this run did not create. It is off by default: the source
+	// reference is shared with every other lane on that machine, and a pull
+	// against an already-cached image is a no-op, so a run cannot tell whether
+	// it or someone else put the image there. The run-generated tag is always
+	// removed, and on a machine this run created through NewMachine the source
+	// image is removed too, because nothing else can be using it.
+	RemoveSharedSourceImage bool
 
 	Run        CommandRunner
 	RunMachine MachineRunner
 	DiskFree   func() (uint64, error)
 }
+
+// imagePullFreeSpaceFactor is the multiple of Config.ExpectedImageBytes that
+// must be free on the host before an absent source image is pulled. A pull
+// writes the compressed layers and then extracts them, so it transiently costs
+// roughly twice what the image finally occupies, and the container's writable
+// layer and the engine's data volume have to fit alongside it. Three times the
+// declared footprint is the documented safety threshold: below it the pull is
+// refused before it starts rather than filling the host and failing partway
+// through with a disk the test then has to clean up.
+const imagePullFreeSpaceFactor = 3
+
+// maxExpectedImageBytes bounds the declared footprint, so the headroom
+// multiplication above cannot overflow.
+const maxExpectedImageBytes = uint64(1) << 40
 
 // Report records disk free before startup and after all teardown work,
 // including the host-disk reclaim. A caller can print only these aggregate
@@ -120,10 +143,19 @@ type Report struct {
 	// and is empty when the trim ran. A machine this run cannot prove it owns
 	// is reported, never trimmed.
 	HostDiskReclaimSkipped string
-	// HostDiskReclaimableBytes is how much host free space the run still holds
-	// when the trim was skipped, so an unreclaimed run reports its cost instead
-	// of reading as a clean one.
-	HostDiskReclaimableBytes uint64
+	// HostDiskReleasedBytesEstimate is the host free-space delta across the
+	// whole run (after minus before). It is an estimate of what this run gave
+	// back and nothing more: no image's own size is measured here, and any
+	// unrelated host activity during the run lands in the same number. A
+	// negative value is space the run still holds, which is what a skipped trim
+	// leaves inside a machine's sparse disk file.
+	HostDiskReleasedBytesEstimate int64
+	// SourceImageRemoved reports whether the shared source image reference was
+	// removed by this run.
+	SourceImageRemoved bool
+	// SourceImageRetainedReason names why the shared source image was left in
+	// place, and is empty when it was removed or was never pulled.
+	SourceImageRetainedReason string
 }
 
 // Harness owns exactly one generated container and one generated named
@@ -180,6 +212,9 @@ func New(config Config) (*Harness, error) {
 	if !safeName(config.Machine) {
 		return nil, errors.New("database test harness requires a safe Podman machine name")
 	}
+	if config.ExpectedImageBytes == 0 || config.ExpectedImageBytes > maxExpectedImageBytes {
+		return nil, errors.New("database test harness requires the engine image's approximate size in bytes")
+	}
 	if config.Run == nil {
 		config.Run = podmanRunner{}
 	}
@@ -205,9 +240,10 @@ func New(config Config) (*Harness, error) {
 
 // Start pulls the configured source image, tags it under one generated image
 // reference, creates one named volume, starts one loopback-published
-// container, and returns its dynamically assigned, non-default port. Call
-// Close in a defer immediately after a successful New; Close is also safe
-// after an unsuccessful Start.
+// container, and returns its dynamically assigned, non-default port. A pull
+// that would have to download the image is refused when the host lacks the
+// documented headroom for it. Call Close in a defer immediately after a
+// successful New; Close is also safe after an unsuccessful Start.
 func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error) {
 	if err := ctx.Err(); err != nil {
 		return Endpoint{}, err
@@ -264,11 +300,25 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		return Endpoint{}, err
 	}
 
+	// This inspect sizes the pull; it is never ownership evidence. A source
+	// reference that is already present may have been cached by any other lane
+	// on a shared machine, which is exactly why cleanup gates its removal on
+	// machine ownership rather than on presence.
+	sourceAbsent, err := h.resourceAbsent(ctx, "image", "inspect", h.config.Image)
+	if err != nil {
+		return Endpoint{}, fmt.Errorf("inspect %s test source image: %w", h.config.Engine, err)
+	}
+	// A cached image costs no disk to "pull", so the headroom gate applies only
+	// to a pull that has to download and extract one.
+	if sourceAbsent {
+		if err := h.assertPullHeadroom(before); err != nil {
+			return Endpoint{}, err
+		}
+	}
 	if _, err := h.config.Run.Run(ctx, h.config.Connection, "pull", h.config.Image); err != nil {
 		return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
 	}
-	// The source reference now exists because this run's pull returned
-	// success. Ownership is not inferred from an earlier inspect.
+	// The source reference now exists because this run's pull returned success.
 	// Claim both references before issuing the tag. A tag that returns an
 	// error may still have created the reference, so ownership is claimed
 	// ahead of the command and cleanup tolerates absence.
@@ -348,12 +398,20 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 }
 
 // Close unconditionally attempts container, volume, generated image, source
-// image, and optional host-disk reclaim cleanup in that order. Each later
-// action still runs if an earlier one fails. A tagged test must call this in
-// a defer before assertions, so a failing assertion cannot leak an image.
+// image, and host-disk reclaim cleanup in that order. Each later action still
+// runs if an earlier one fails. A tagged test must call this in a defer before
+// assertions, so a failing assertion cannot leak an image.
+//
+// The last two actions are gated on this run having created the backing
+// machine: the source image is shared with every other lane on a machine this
+// run did not create, and `fstrim -av` reaches every filesystem on it.
 func (h *Harness) Close(ctx context.Context) error {
 	h.closeOnce.Do(func() {
-		unregisterInterruptCleanup(h)
+		// The interrupt registration outlives every removal below. Dropping it
+		// first restored default signal handling for the whole teardown, so a
+		// Ctrl-C between here and the last removal killed the process with this
+		// run's container, volume, and images still on the machine.
+		defer unregisterInterruptCleanup(h)
 		defer h.releaseSlot()
 		// Refuse further creates, abort any in flight, then wait for the
 		// create sequence to settle. Without this wait, cleanup could run
@@ -368,6 +426,12 @@ func (h *Harness) Close(ctx context.Context) error {
 		}
 		h.opMu.Lock()
 		defer h.opMu.Unlock()
+
+		// Ownership is proven before the first image removal, not after it: the
+		// same answer decides whether the shared source image may be removed and
+		// whether the machine may be trimmed, so it has to be established once,
+		// ahead of both.
+		machineOwned, ownershipReason := h.machineOwnership(ctx)
 
 		var errs []error
 		if h.known(func(h *Harness) bool { return h.containerKnown }) {
@@ -385,14 +449,27 @@ func (h *Harness) Close(ctx context.Context) error {
 				errs = append(errs, fmt.Errorf("remove %s test image: %w", h.config.Engine, err))
 			}
 		}
-		if !h.config.KeepImage && h.known(func(h *Harness) bool { return h.sourceImageKnown }) {
+		sourceRemoved, sourceRetained := false, ""
+		switch {
+		case !h.known(func(h *Harness) bool { return h.sourceImageKnown }):
+		case machineOwned || h.config.RemoveSharedSourceImage:
 			if _, err := h.config.Run.Run(ctx, h.config.Connection, "image", "rm", h.config.Image); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test source image: %w", h.config.Engine, err))
+			} else {
+				sourceRemoved = true
 			}
+		default:
+			sourceRetained = ownershipReason
 		}
-		reclaimed, skipped, reclaimErr := h.reclaimHostDisk(ctx)
-		if reclaimErr != nil {
-			errs = append(errs, reclaimErr)
+
+		reclaimed, skipped := false, ownershipReason
+		if machineOwned {
+			trimmed, reclaimErr := h.reclaimHostDisk(ctx)
+			if reclaimErr != nil {
+				errs = append(errs, reclaimErr)
+				skipped = "podman machine trim failed"
+			}
+			reclaimed = trimmed
 		}
 		after, err := h.config.DiskFree()
 		if err != nil {
@@ -401,11 +478,11 @@ func (h *Harness) Close(ctx context.Context) error {
 		h.mu.Lock()
 		h.report.HostDiskReclaimed = reclaimed
 		h.report.HostDiskReclaimSkipped = skipped
+		h.report.SourceImageRemoved = sourceRemoved
+		h.report.SourceImageRetainedReason = sourceRetained
 		if err == nil {
 			h.report.DiskFreeAfter = after
-			if !reclaimed && h.report.DiskFreeBefore > after {
-				h.report.HostDiskReclaimableBytes = h.report.DiskFreeBefore - after
-			}
+			h.report.HostDiskReleasedBytesEstimate = releasedBytesEstimate(h.report.DiskFreeBefore, after)
 		}
 		h.mu.Unlock()
 		h.closeErr = errors.Join(errs...)
@@ -416,24 +493,46 @@ func (h *Harness) Close(ctx context.Context) error {
 // reclaimHostDisk discards freed guest blocks so the machine's sparse disk
 // file shrinks on the host, because removing an image frees space inside the
 // VM but leaves the host file inflated. It runs on every cleanup rather than
-// on an opt-in, but only against a machine this process created; an unowned
-// machine is reported through the Report instead, never trimmed, because a
-// pre-existing, shared, or remote endpoint belongs to another lane.
+// on an opt-in, but its caller invokes it only once machineOwnership has
+// proven this process created the machine; an unowned machine is reported
+// through the Report instead, never trimmed, because a pre-existing, shared,
+// or remote endpoint belongs to another lane.
 //
 // Two passes are required: measured on Podman 5.3 with applehv, a single
 // fstrim immediately after an image removal returns only part of the space,
 // because the guest has not finished committing the deletion when the first
 // discard is issued.
-func (h *Harness) reclaimHostDisk(ctx context.Context) (reclaimed bool, skipped string, err error) {
-	if owned, reason := h.machineOwnership(ctx); !owned {
-		return false, reason, nil
-	}
+func (h *Harness) reclaimHostDisk(ctx context.Context) (bool, error) {
 	for range 2 {
 		if _, err := h.config.RunMachine.Run(ctx, "machine", "ssh", h.config.Machine, "sudo fstrim -av"); err != nil {
-			return false, "", fmt.Errorf("reclaim host disk after %s test: %w", h.config.Engine, err)
+			return false, fmt.Errorf("reclaim host disk after %s test: %w", h.config.Engine, err)
 		}
 	}
-	return true, "", nil
+	return true, nil
+}
+
+// assertPullHeadroom refuses a pull the host cannot afford. Reporting the
+// shortfall before the download starts is the whole point: a pull that fills
+// the disk partway through leaves both a partial image and a container the
+// test then has to clean up on a host with nothing left to work with.
+func (h *Harness) assertPullHeadroom(free uint64) error {
+	required := h.config.ExpectedImageBytes * imagePullFreeSpaceFactor
+	if free >= required {
+		return nil
+	}
+	return fmt.Errorf("refusing to pull the %s test image: %d bytes free is below the %d bytes required for an image of about %d bytes",
+		h.config.Engine, free, required, h.config.ExpectedImageBytes)
+}
+
+// releasedBytesEstimate reports the host free-space delta across a run.
+// Negative means the run ended holding space it had not released, which is
+// what a skipped trim leaves behind.
+func releasedBytesEstimate(before, after uint64) int64 {
+	const maxInt64 = uint64(1)<<63 - 1
+	if after >= before {
+		return int64(min(after-before, maxInt64))
+	}
+	return -int64(min(before-after, maxInt64))
 }
 
 // machineOwnership proves, or refuses to prove, that trimming the configured

@@ -316,8 +316,11 @@ caller; add an engine through a `dbtest.Config`, not a copied harness.
   explicitly scoped; never rely on or change the global default connection,
   and never touch another lane's machine, container, image, or volume.
 - A harness run owns only its uniquely named container, volume, and run-specific
-  image reference. Cleanup is unconditional and idempotent, including failure
-  and interrupt paths; report free disk before and after, and keep engines
+  image reference. The pulled source image is shared, so it is removed only on a
+  machine the run created itself or behind an explicit opt-in, and a pull the
+  host has no headroom for is refused before it starts. Cleanup is unconditional
+  and idempotent, including failure and interrupt paths, and stays armed until
+  the last removal returns; report free disk before and after, and keep engines
   sequential unless bounded parallelism is explicitly opted into.
 - Native SQL connectors share `internal/connectors/native/sqltls` and its
   `sslmode`/`sslrootcert`/`sslservername` option shape. Reuse it so transport

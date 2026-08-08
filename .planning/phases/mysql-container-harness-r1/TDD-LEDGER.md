@@ -5,7 +5,9 @@
 | H1 | Scoped execution | A missing or unsafe Podman connection can fall through to the global default. | `TestNewRejectsUnscopedConnection` rejects empty, whitespace, and argument-injecting names; every runner invocation receives the supplied connection. |
 | H2 | Isolation and sequencing | Runs can collide on a resource name or multiply database peak disk/memory. | Random generated container/volume/tag names are unit-tested; `TestStartReleasesTheEngineSlotOnEveryExitPath` proves the default one-slot semaphore returns on success and failure. |
 | H3 | Unconditional cleanup | Assertion failure or interrupt can leave a container, volume, or image behind. | `TestCloseDuringCreateStillRemovesTheCreatedResource` and `TestStartRefusesToCreateAfterClose` cover the create/interrupt race; `Close` continues all cleanup stages and the live post-run scoped listings were empty. |
-| H4 | Image ownership | Cleanup guesses whether a shared image existed and deletes another run's reference. | A successful pull is immediately re-tagged to a run-specific local reference before startup; `TestStartUsesGeneratedImageReferenceWithoutInspectingSource` and `TestCleanupKeepsSourceImageOnlyWhenOptedIn` cover ownership and retention. |
+| H4 | Image ownership | Cleanup guesses whether a shared image existed and deletes another run's reference. | A successful pull is immediately re-tagged to a run-specific local reference before startup; `TestStartInspectsTheSourceImageOnlyToSizeThePull` and `TestCleanupRemovesTheSourceImageOnlyWithOwnershipOrAnExplicitOptIn` cover ownership, retention, and the explicit opt-in. |
+| H7 | Interrupt coverage spans teardown | Cleanup drops the interrupt handler before its own removals, so a Ctrl-C during teardown exits with resources still on the machine. | `TestCloseKeepsInterruptCleanupArmedUntilTeardownFinishes` probes the registry at every removal command and asserts the handler is still installed, then that it is released once teardown returns. |
+| H8 | Pull headroom | A pull started on a nearly full host fills the disk partway through and leaves a partial image plus a container to clean up. | `TestStartRefusesToPullWithoutHeadroomForTheImage` proves ~854 MiB free refuses a ~830 MiB image with no `pull` issued, that three times the footprint proceeds, and that an already-cached image needs no headroom; `TestNewRequiresTheImageFootprint` stops an engine from silently skipping the gate. |
 | H5 | Non-default endpoint | A connector silently assumes 3306 on the host. | `TestStartPublishesOnlyLoopback` asserts `127.0.0.1::<port>` publishing; `TestParseMappedPortRefusesTheEngineDefaultPort` refuses a default host mapping. |
 | H6 | Host-disk reclamation | Removing an image returns space only inside the VM. | `TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup` asserts two explicit `fstrim` passes after cleanup; the live test records before/after byte counts and fails if the reclaimed run exceeds ordinary build noise. |
 | M1 | Honest CDC declaration | MySQL can advertise generic/logical CDC without an executable binlog reader. | Closed-schema validation accepts only `binlog_replication`; descriptor/executor tests and the live row-event proof earn `cdc: true`. |
@@ -177,3 +179,31 @@ backslash escapes everywhere except a backquoted identifier, which is the single
 independently of `sql_mode` — and reports an unterminated span as unattributable so
 `statementReachesDatabase` fails closed instead of concluding the statement is unrelated. The
 existing "database name only inside a literal" case stays skipped.
+
+**Red — review round 5 (harness ownership and headroom):**
+
+```text
+go test -count=1 -timeout 5m ./internal/connectors/native/dbtest \
+  -run 'Test(CloseKeepsInterruptCleanupArmedUntilTeardownFinishes|StartRefusesToPullWithoutHeadroomForTheImage|CleanupRemovesTheSourceImageOnlyWithOwnershipOrAnExplicitOptIn|NewRequiresTheImageFootprint)'
+```
+
+All four failed as intended. `Close` unregistered the interrupt handler as its first statement, so
+the probe recorded `registered=false armed=false` at every removal; `Start` sent `podman pull` with
+no free-space measurement, so the ~854 MiB-free / ~830 MiB-image case pulled anyway; cleanup removed
+`docker.io/library/mysql:8.4.11` from a machine the run never created, because the gate was the
+opt-out `KeepImage` rather than machine ownership; and `New` accepted a config with no declared
+image footprint, which silently skipped the gate.
+
+**Green — review round 5:**
+
+```text
+gofmt -l cmd internal
+go vet ./internal/connectors/native/... && go vet -tags databaseintegration ./internal/connectors/native/mysql
+go test -race -count=1 -timeout 5m ./internal/connectors/native/dbtest ./internal/connectors/native/mysql
+```
+
+Passed. `Close` now defers the unregister so the handler covers every removal, proves machine
+ownership once before both the source-image removal and the trim, retains a shared source image with
+a named reason, and reports the host free-space delta as `HostDiskReleasedBytesEstimate` rather than
+as per-image reclaimability. `Config.ExpectedImageBytes` is mandatory and `Start` refuses a pull
+below three times that footprint.

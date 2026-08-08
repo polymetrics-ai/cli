@@ -26,6 +26,10 @@ const (
 	mysqlIntegrationDatabase = "pm_harness"
 	mysqlIntegrationTable    = "events"
 	mysqlReplicationServerID = "731001"
+	// mysqlIntegrationImageBytes is the pinned image's approximate on-disk
+	// footprint, which is what the harness measures its pre-pull headroom
+	// against. Measured for 8.4.11 on arm64.
+	mysqlIntegrationImageBytes = 830 << 20
 )
 
 // envConnection names the Podman connection to target. There is deliberately
@@ -35,7 +39,11 @@ const (
 	envEnabled    = "POLYMETRICS_DATABASE_INTEGRATION"
 	envConnection = "POLYMETRICS_PODMAN_CONNECTION"
 	envMachine    = "POLYMETRICS_PODMAN_MACHINE"
-	envKeepImage  = "POLYMETRICS_DATABASE_KEEP_IMAGE"
+	// envRemoveSharedImage opts in to deleting the pulled source image from a
+	// machine this run did not create. It is off by default because that image
+	// is shared with every other lane on such a machine; on a machine this run
+	// created, the image is always removed and this variable is irrelevant.
+	envRemoveSharedImage = "POLYMETRICS_DATABASE_REMOVE_SHARED_IMAGE"
 	// envOwnMachine makes this run create and delete its own Podman machine.
 	// Only a machine the test infrastructure created is trimmable, so this is
 	// the mode that proves the host-disk reclaim end to end.
@@ -87,13 +95,14 @@ func TestMySQLContainerHarness(t *testing.T) {
 		machine = connection
 	}
 	harness, err := dbtest.New(dbtest.Config{
-		Engine:         "mysql",
-		Image:          mysqlIntegrationImage,
-		ContainerPort:  3306,
-		DataVolumePath: "/var/lib/mysql",
-		Connection:     connection,
-		Machine:        machine,
-		KeepImage:      os.Getenv(envKeepImage) == "1",
+		Engine:                  "mysql",
+		Image:                   mysqlIntegrationImage,
+		ContainerPort:           3306,
+		DataVolumePath:          "/var/lib/mysql",
+		Connection:              connection,
+		Machine:                 machine,
+		ExpectedImageBytes:      mysqlIntegrationImageBytes,
+		RemoveSharedSourceImage: os.Getenv(envRemoveSharedImage) == "1",
 		ContainerArgs: []string{
 			"--env", "MYSQL_ALLOW_EMPTY_PASSWORD=yes",
 			"--env", "MYSQL_ROOT_HOST=%",
@@ -117,8 +126,8 @@ func TestMySQLContainerHarness(t *testing.T) {
 			t.Errorf("MySQL database test cleanup failed")
 		}
 		report := harness.Report()
-		t.Logf("MySQL database test disk free bytes: before=%d after=%d reclaimed=%t",
-			report.DiskFreeBefore, report.DiskFreeAfter, report.HostDiskReclaimed)
+		t.Logf("MySQL database test disk free bytes: before=%d after=%d reclaimed=%t source_image_removed=%t",
+			report.DiskFreeBefore, report.DiskFreeAfter, report.HostDiskReclaimed, report.SourceImageRemoved)
 		if !report.HostDiskReclaimed {
 			// On a machine this run created, a skip is a failure of the gate
 			// itself and must be red rather than a quiet log: the whole point
@@ -127,11 +136,12 @@ func TestMySQLContainerHarness(t *testing.T) {
 				t.Errorf("MySQL database test did not reclaim host disk on the machine it created: %s", report.HostDiskReclaimSkipped)
 				return
 			}
-			// A caller-supplied machine is never trimmed, because the trim
-			// reaches every workload on it. Report the cost instead of
-			// asserting against space the run was not allowed to free.
-			t.Logf("MySQL database test skipped the host-disk reclaim (%s); %d bytes remain reclaimable on the backing machine",
-				report.HostDiskReclaimSkipped, report.HostDiskReclaimableBytes)
+			// A caller-supplied machine is never trimmed, and its shared source
+			// image is never removed, because both reach every other workload
+			// on it. Report the free-space delta instead of asserting against
+			// space the run was not allowed to free.
+			t.Logf("MySQL database test skipped the host-disk reclaim (%s); host free space changed by %d bytes across the run",
+				report.HostDiskReclaimSkipped, report.HostDiskReleasedBytesEstimate)
 			return
 		}
 		// The image is roughly 830 MB. Allow one ordinary build's worth of
