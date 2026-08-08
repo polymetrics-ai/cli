@@ -95,3 +95,9 @@ result carries the context needed to reach the next one.
 7. Record each live operation's outcome, returned record count, and any exact
    failure before the verify-work and code-review gates. The private test
    repository is deliberately retained for the captain to delete.
+8. Captain-required live reverse validation exposed an internal reverse-plan
+   consistency defect before dispatch: a plan limited to one row re-read one
+   additional row during preview/run and then rejected its own unchanged
+   source hash. Add a red regression that plans, previews, and runs a
+   one-row slice from a multi-row fixture; preserve the source-drift rejection
+   test, then make preview/run hash and dispatch exactly the planned slice.
