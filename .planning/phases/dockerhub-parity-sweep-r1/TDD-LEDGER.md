@@ -302,3 +302,19 @@ retains a caller's TLS `NextProtos` advertisement of `h2`. A TLS server therefor
 negotiates HTTP/2 and receives a raw HTTP/1 request. The production fix must clone
 the TLS config and pin its ALPN list to `http/1.1`, preserving every other TLS
 setting and the no-replay safeguards.
+
+### GREEN
+
+`noReplayClient` now clones any caller TLS config (or supplies a zero-value one)
+and sets only `NextProtos` to `[]string{"http/1.1"}` alongside its existing
+fresh-connection/no-redirect/no-replay policy. The caller config remains
+unmodified. Re-ran the focused reproduction:
+
+```text
+=== RUN   TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer
+--- PASS: TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer (0.00s)
+PASS
+ok  	polymetrics.ai/internal/connectors/connsdk	0.356s
+```
+
+Then ran `go test ./internal/connectors/connsdk -count=1` → PASS.
