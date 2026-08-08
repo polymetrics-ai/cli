@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync/atomic"
 	"testing"
 )
@@ -42,6 +43,17 @@ func uploadEcho(t *testing.T, got *string) *httptest.Server {
 		*got = string(raw)
 		_, _ = w.Write([]byte(`{"ok":true}`))
 	}))
+}
+
+func TestMultipartJSONContentValidationRequiresBoundedSnapshot(t *testing.T) {
+	err := validateMultipartForm(MultipartForm{Files: []MultipartFile{{
+		FieldName:         "payload",
+		Path:              "payload.json",
+		ContentValidation: "json",
+	}}})
+	if err == nil || !strings.Contains(err.Error(), "requires a positive file or aggregate max_bytes") {
+		t.Fatalf("validateMultipartForm JSON content validation error = %v, want a bounded snapshot rejection", err)
+	}
 }
 
 // TestRequesterDoMultipartRefusesEscapingSymlinkSwappedAfterValidation pins the

@@ -105,7 +105,26 @@ FAIL
 The command exited `1`, as required. This red checkpoint contains only its test and evidence; no
 multipart JSON-file implementation has been added yet.
 
-## GREEN JSON-file foundation — pending
+## GREEN JSON-file foundation — captured before Tasks connector authoring
+
+The separate foundation adds only declaration-owned `content_validation: "json"` and
+`allowed_file_extensions` file-part constraints. It validates a single JSON document from the
+approved bounded snapshot and rejects an extension mismatch before a request. JSON validation
+requires a positive file or aggregate upload cap; no caller can select a file type, validator, or
+header. The exact green run was:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/connsdk ./internal/connectors/commandrunner ./cmd/connectorgen
+ok      polymetrics.ai/internal/connectors/engine           6.769s
+ok      polymetrics.ai/internal/connectors/connsdk          0.957s
+ok      polymetrics.ai/internal/connectors/commandrunner    7.461s
+ok      polymetrics.ai/cmd/connectorgen                    13.539s
+```
+
+The JSON-file test proves a valid `.json` source reaches a loopback endpoint with an
+`application/json` part header, while a `.txt` name or malformed JSON produces a local error and
+no second request. Constraint tests cover extension-policy syntax, file-only use, JSON header
+compatibility, and bounded-snapshot enforcement.
 
 ## GREEN connector — pending
 

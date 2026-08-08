@@ -56,6 +56,65 @@ func TestValidateMultipartMediaTypes(t *testing.T) {
 	}
 }
 
+func TestValidateMultipartContentConstraints(t *testing.T) {
+	tests := []struct {
+		name    string
+		part    MultipartPartSpec
+		wantErr string
+	}{
+		{
+			name: "declared JSON file is accepted",
+			part: MultipartPartSpec{
+				Name:                  "file",
+				Type:                  "file",
+				Field:                 "file_path",
+				ContentType:           "application/json",
+				ContentValidation:     "json",
+				AllowedFileExtensions: []string{".json"},
+			},
+		},
+		{
+			name:    "validation is file-only",
+			part:    MultipartPartSpec{Name: "metadata", Type: "field", Field: "metadata", ContentValidation: "json"},
+			wantErr: "only meaningful on a file part",
+		},
+		{
+			name:    "JSON validation requires an application JSON part header",
+			part:    MultipartPartSpec{Name: "file", Type: "file", Field: "file_path", ContentType: "text/plain", ContentValidation: "json"},
+			wantErr: "requires content_type application/json",
+		},
+		{
+			name:    "extension lists cannot be empty",
+			part:    MultipartPartSpec{Name: "file", Type: "file", Field: "file_path", AllowedFileExtensions: []string{}},
+			wantErr: "must not be empty",
+		},
+		{
+			name:    "extension list rejects traversal-like values",
+			part:    MultipartPartSpec{Name: "file", Type: "file", Field: "file_path", AllowedFileExtensions: []string{"../json"}},
+			wantErr: "invalid extension",
+		},
+		{
+			name:    "extension list rejects surrounding whitespace",
+			part:    MultipartPartSpec{Name: "file", Type: "file", Field: "file_path", AllowedFileExtensions: []string{" .json"}},
+			wantErr: "invalid extension",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateMultipartContentConstraints(tt.part)
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("validateMultipartContentConstraints error = %v, want nil", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("validateMultipartContentConstraints error = %v, want it to contain %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 // TestMultipartRootRelativePath pins how record-supplied paths are converted for
 // os.Root. Absolute paths inside the project directory stay accepted, as they
 // were before confinement, and anything escaping is refused.

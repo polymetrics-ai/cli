@@ -24,12 +24,14 @@ type declarativeWriteDefinition struct {
 }
 
 type canonicalMultipartFile struct {
-	FieldName         string   `json:"field_name"`
-	SourcePathDigest  string   `json:"source_path_digest"`
-	ContentSHA256     string   `json:"content_sha256,omitempty"`
-	ContentType       string   `json:"content_type,omitempty"`
-	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
-	MaxBytes          int64    `json:"max_bytes,omitempty"`
+	FieldName             string   `json:"field_name"`
+	SourcePathDigest      string   `json:"source_path_digest"`
+	ContentSHA256         string   `json:"content_sha256,omitempty"`
+	ContentType           string   `json:"content_type,omitempty"`
+	AllowedMediaTypes     []string `json:"allowed_media_types,omitempty"`
+	ContentValidation     string   `json:"content_validation,omitempty"`
+	AllowedFileExtensions []string `json:"allowed_file_extensions,omitempty"`
+	MaxBytes              int64    `json:"max_bytes,omitempty"`
 }
 
 func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (PreparedWrite, error) {
@@ -284,12 +286,14 @@ func prepareCanonicalMultipartSpec(subject string, multipart *MultipartSpec, rec
 			return nil, fmt.Errorf("engine: %s: multipart file part %q is missing its approved payload digest", subject, part.Name)
 		}
 		files = append(files, canonicalMultipartFile{
-			FieldName:         part.Name,
-			SourcePathDigest:  digestBytes([]byte(filepath.Clean(path))),
-			ContentSHA256:     approved,
-			ContentType:       part.ContentType,
-			AllowedMediaTypes: append([]string(nil), part.AllowedMediaTypes...),
-			MaxBytes:          part.MaxBytes,
+			FieldName:             part.Name,
+			SourcePathDigest:      digestBytes([]byte(filepath.Clean(path))),
+			ContentSHA256:         approved,
+			ContentType:           part.ContentType,
+			AllowedMediaTypes:     append([]string(nil), part.AllowedMediaTypes...),
+			ContentValidation:     part.ContentValidation,
+			AllowedFileExtensions: append([]string(nil), part.AllowedFileExtensions...),
+			MaxBytes:              part.MaxBytes,
 		})
 	}
 	return struct {
