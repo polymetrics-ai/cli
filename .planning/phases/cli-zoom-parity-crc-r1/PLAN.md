@@ -89,6 +89,17 @@ The artifact shows response-only pagination values for list responses. No `page`
    `PATCH /crc/room_templates/{templateId}` as status-only actions. The three DELETE operations
    additionally require destructive typed confirmation.
 
+## Required reusable foundation — camelCase path-variable derivation
+
+The generated CLI standard is kebab-case (`--connector-id`), while Zoom's own endpoint templates
+use camelCase (`{connectorId}`). `surface-sync` previously considered only a kebab-to-snake case
+match, leaving a required path binding absent and making a command fail runtime preflight. This is
+derived metadata, not a connector-author choice, so the foundation extends `surface-sync` to derive
+the exact lower-camel path variable only when it is explicitly present in the declared operation
+path. It does not infer query/body bindings, alter authored non-path mappings, or accept generic
+paths. The foundation is developed and committed separately from CRC declarations; it benefits any
+provider artifact using conventional camelCase path templates.
+
 ## TDD execution
 
 1. **Plan checkpoint** — record the live artifact, source/ledger comparison, operation inventory,
@@ -96,9 +107,11 @@ The artifact shows response-only pagination values for list responses. No `page`
 2. **RED checkpoint** — add only CRC command-surface/lifecycle tests and target-count bumps;
    run them against the current bundle and commit the failure verbatim before any production
    bundle edit.
-3. **GREEN connector** — author `operations.json`, `cli_surface.json`, and ledger coverage;
+3. **GREEN foundation** — deliver camelCase path-variable derivation as its own red/green commit,
+   then rerun `surface-sync` to fill CRC's required path bindings.
+4. **GREEN connector** — author `operations.json`, `cli_surface.json`, and ledger coverage;
    use `surface-sync` and scoped reconciliation instead of hand-editing derived metadata.
-4. **Verify/review** — execute fixture lifecycle checks, build a fresh binary and run every CRC
+5. **Verify/review** — execute fixture lifecycle checks, build a fresh binary and run every CRC
    help route, run scoped validation/gates, record manual `verify-work` and `code-review`, then
    commit and push the coherent category slice.
 

@@ -158,6 +158,35 @@ func TestSyncBundleReportsDivergentFlagMapsTo(t *testing.T) {
 	}
 }
 
+// TestSyncBundleDerivesKebabFlagToCamelCasePathVariable keeps path bindings
+// definition-owned when a provider's OpenAPI template uses camelCase but the
+// CLI surface uses its conventional kebab-case flag spelling. The reconciler
+// must derive this narrow equivalent instead of requiring every connector to
+// hand-copy path metadata.
+func TestSyncBundleDerivesKebabFlagToCamelCasePathVariable(t *testing.T) {
+	cli, ops := directWriteBundle(nil, "", "")
+	command := cli.(map[string]any)["commands"].([]any)[0].(map[string]any)
+	command["flags"] = []any{map[string]any{"name": "connector-id", "type": "string"}}
+	operation := ops.(map[string]any)["operations"].([]any)[0].(map[string]any)
+	operation["rest"].(map[string]any)["path"] = "/api-connectors/{connectorId}"
+	dir := writeSyncBundle(t, cli, ops)
+
+	stats, err := syncBundle(dir, true)
+	if err != nil {
+		t.Fatalf("syncBundle check: %v", err)
+	}
+	if stats.Filled.FlagMapsTo != 1 {
+		t.Fatalf("filled path maps_to = %d, want 1 (stats: %+v)", stats.Filled.FlagMapsTo, stats)
+	}
+
+	if _, err := syncBundle(dir, false); err != nil {
+		t.Fatalf("syncBundle write: %v", err)
+	}
+	if got := readSyncedCommand(t, dir)["flags"]; !flagMapsTo(got, "path.connectorId") {
+		t.Fatalf("flags = %v, want derived path.connectorId", got)
+	}
+}
+
 // A direct read has exactly one opaque-cursor channel: --page-cursor. Legacy
 // command surfaces predate that contract and can still carry raw provider
 // cursor flags. Keep an explicit size override, but never leave a second

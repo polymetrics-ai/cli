@@ -56,6 +56,25 @@ FAIL
 The output contains only command paths and declared operation names; it does not contain a
 credential, token-derived value, private key, or signed URL.
 
+### Derived camelCase path mapping — additional RED 2026-08-08
+
+The CRC declaration intentionally leaves path `maps_to` values to `surface-sync`. The existing
+deriver handled `issue-id` → `{issue_id}` but not the equally conventional
+`connector-id` → `{connectorId}` spelling. The focused generator test was added and run before
+the shared derivation change:
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestSyncBundleDerivesKebabFlagToCamelCasePathVariable$'
+--- FAIL: TestSyncBundleDerivesKebabFlagToCamelCasePathVariable (0.00s)
+    surfacesync_test.go:179: filled path maps_to = 0, want 1 (stats: {Filled:api_surface=1 output_policy=1 flag_maps_to=0 flag_derived=0 rest.max_bytes=1 Corrected:api_surface=0 output_policy=0 flag_maps_to=0 flag_derived=0 rest.max_bytes=0})
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	0.727s
+FAIL
+```
+
+The fixture is local only, declares no credential or request, and proves a reusable metadata
+derivation gap rather than a CRC-specific handwritten exception.
+
 ## GREEN — pending
 
 The passing command and output will be appended after the category declaration and generated
