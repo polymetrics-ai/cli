@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -231,6 +232,16 @@ func TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth(t *testing.T) {
 		}
 		if r.Header.Get("X-Ordinary-Token") != "" {
 			t.Fatal("key connector request inherited an ordinary API secret header")
+		}
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			t.Fatalf("read no-body direct-write request: %v", err)
+		}
+		if len(body) != 0 {
+			t.Fatalf("no-body direct-write payload = %q, want no payload", body)
+		}
+		if r.Header.Get("Content-Type") != "" {
+			t.Fatalf("no-body direct-write Content-Type = %q, want empty", r.Header.Get("Content-Type"))
 		}
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"ok":true}`))
