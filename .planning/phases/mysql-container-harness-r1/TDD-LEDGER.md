@@ -12,6 +12,7 @@
 | M2 | SQL safety | Stream/schema/cursor strings can be concatenated unvalidated. | Unit tests reject unsafe identifiers and reads use only quoted validated identifiers plus parameter values. |
 | M3 | Paging/incremental | Reads only prove one record or ignore state. | Live seed/read results prove multiple request pages and exact cursor filtering. |
 | M4 | Change capture | A binlog event succeeds without emitting/asserting a real row change or safely committing state. | Real insert/update/delete events are decoded, delivered, and their file/position state commits only after acknowledgement. |
+| M5 | Direct-read page-context boundary | A native SQL ETL reader can be mistaken for an HTTP direct-read endpoint and silently return one page without #3902 context. | `TestReadIsETLNotPagewiseDirectRead` proves MySQL exposes neither `DirectReader` nor `OperationDirectReader`; it has no REST/direct-read surface. Its `Read` drains deterministic keyset SQL pages into the sync pipeline under `page_size` and `read_limit`, and the live proof asserts five records with `page_size=2`. |
 
 ## Red evidence
 

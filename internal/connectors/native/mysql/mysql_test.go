@@ -55,6 +55,22 @@ func TestNameMetadataAndExecutableChangefeed(t *testing.T) {
 	}
 }
 
+// #3902's DirectReadPage contract applies to one-page HTTP/API exploration.
+// MySQL exposes no direct-read command or REST operation: Read is the ETL
+// interface and deliberately drains its deterministic SQL pages into the
+// caller's sync pipeline, bounded by page_size and read_limit. Adding a
+// DirectReader later must add page context rather than silently repurposing
+// this bulk reader.
+func TestReadIsETLNotPagewiseDirectRead(t *testing.T) {
+	connector := New()
+	if _, ok := any(connector).(connectors.DirectReader); ok {
+		t.Fatal("native MySQL Read must not be exposed as a pagewise DirectReader")
+	}
+	if _, ok := any(connector).(connectors.OperationDirectReader); ok {
+		t.Fatal("native MySQL has no declared operation direct-read surface")
+	}
+}
+
 func TestInitialStateOmitsCursorUntilOneExists(t *testing.T) {
 	state, err := New().InitialState(context.Background(), "analytics.events", testConfig())
 	if err != nil {
