@@ -4,7 +4,11 @@ import (
 	"encoding/json"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
@@ -126,6 +130,107 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
 		"blocked": 98,
 	})
+}
+
+// TestGitHubStatusAndTextOperationContracts pins the classified endpoints
+// which become executable only after the closed none/text/raw-body engine
+// contracts exist. This is intentionally a concrete table rather than a
+// promotion of every blocked direct_read row: each entry asserts its documented
+// method, bounded response policy, input shape, and the real operation
+// preflight the command uses.
+func TestGitHubStatusAndTextOperationContracts(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("load embedded github bundle: %v", err)
+	}
+	commands := map[string]engine.CLICommand{}
+	for _, command := range bundle.CLISurface.Commands {
+		commands[command.Path] = command
+	}
+	operations := map[string]engine.OperationSpec{}
+	for _, operation := range bundle.Operations {
+		operations[operation.ID] = operation
+	}
+
+	type flag struct {
+		name, kind, mapsTo string
+		required           bool
+		values             []string
+	}
+	tests := []struct {
+		command, method, endpoint, outputPolicy, contentType, bodyType string
+		maxBytes                                                       int
+		flags                                                          []flag
+	}{
+		{"gists star check", "GET", "/gists/{gist_id}/star", "none", "", "", 1024, []flag{{"gist-id", "string", "path.gist_id", true, nil}}},
+		{"orgs blocks check", "GET", "/orgs/{org}/blocks/{username}", "none", "", "", 1024, []flag{{"org", "string", "path.org", true, nil}, {"username", "string", "path.username", true, nil}}},
+		{"orgs members check", "GET", "/orgs/{org}/members/{username}", "none", "", "", 1024, []flag{{"org", "string", "path.org", true, nil}, {"username", "string", "path.username", true, nil}}},
+		{"orgs public-members check", "GET", "/orgs/{org}/public_members/{username}", "none", "", "", 1024, []flag{{"org", "string", "path.org", true, nil}, {"username", "string", "path.username", true, nil}}},
+		{"teams members check", "GET", "/teams/{team_id}/members/{username}", "none", "", "", 1024, []flag{{"team-id", "integer", "path.team_id", true, nil}, {"username", "string", "path.username", true, nil}}},
+		{"user blocks check", "GET", "/user/blocks/{username}", "none", "", "", 1024, []flag{{"username", "string", "path.username", true, nil}}},
+		{"user following check", "GET", "/user/following/{username}", "none", "", "", 1024, []flag{{"username", "string", "path.username", true, nil}}},
+		{"user starred check", "GET", "/user/starred/{owner}/{repo}", "none", "", "", 1024, []flag{{"owner", "string", "path.owner", true, nil}, {"repo", "string", "path.repo", true, nil}}},
+		{"users following check", "GET", "/users/{username}/following/{target_user}", "none", "", "", 1024, []flag{{"username", "string", "path.username", true, nil}, {"target-user", "string", "path.target_user", true, nil}}},
+		{"meta zen view", "GET", "/zen", "text", "", "", 1024, nil},
+		{"meta octocat view", "GET", "/octocat", "text", "", "", 16384, []flag{{"s", "string", "query.s", false, nil}}},
+		{"markdown render", "POST", "/markdown", "text", "application/json", "object", 1048576, []flag{{"text", "string", "body.text", true, nil}, {"mode", "enum", "body.mode", false, []string{"markdown", "gfm"}}, {"context", "string", "body.context", false, nil}}},
+		{"markdown raw render", "POST", "/markdown/raw", "text", "text/plain", "string", 400 * 1024, []flag{{"text", "string", "body", true, nil}}},
+	}
+
+	for _, tt := range tests {
+		t.Run(strings.ReplaceAll(tt.command, " ", "_"), func(t *testing.T) {
+			command, ok := commands[tt.command]
+			if !ok {
+				t.Fatalf("generated command %q is missing", tt.command)
+			}
+			if command.Intent != "direct_read" || command.Availability != "implemented" {
+				t.Fatalf("command = intent %q availability %q, want implemented direct_read", command.Intent, command.Availability)
+			}
+			if command.OutputPolicy != tt.outputPolicy {
+				t.Fatalf("output_policy = %q, want %q", command.OutputPolicy, tt.outputPolicy)
+			}
+			op, ok := operations[command.Operation]
+			if !ok || op.REST == nil {
+				t.Fatalf("command operation %q = %#v, want REST operation", command.Operation, op)
+			}
+			if op.Kind != "rest_read" || op.REST.Method != tt.method || op.REST.Path != tt.endpoint || op.REST.MaxBytes != tt.maxBytes {
+				t.Fatalf("operation = kind=%q method=%q path=%q max_bytes=%d, want rest_read %s %s %d", op.Kind, op.REST.Method, op.REST.Path, op.REST.MaxBytes, tt.method, tt.endpoint, tt.maxBytes)
+			}
+			if op.REST.ContentType != tt.contentType {
+				t.Fatalf("content_type = %q, want %q", op.REST.ContentType, tt.contentType)
+			}
+			if tt.bodyType != "" {
+				var schema map[string]any
+				if err := json.Unmarshal(op.REST.BodySchema, &schema); err != nil {
+					t.Fatalf("unmarshal body_schema: %v", err)
+				}
+				if schema["type"] != tt.bodyType {
+					t.Fatalf("body_schema type = %#v, want %q", schema["type"], tt.bodyType)
+				}
+			}
+			if err := engine.PreflightOperationDirectRead(bundle, command.Operation, tt.method, tt.endpoint, tt.maxBytes, command.OutputPolicy); err != nil {
+				t.Fatalf("operation preflight: %v", err)
+			}
+			for _, want := range tt.flags {
+				got, ok := githubCommandFlag(command, want.name)
+				if !ok {
+					t.Fatalf("flag --%s is missing from %#v", want.name, command.Flags)
+				}
+				if got.Type != want.kind || got.MapsTo != want.mapsTo || got.Required != want.required || !reflect.DeepEqual(got.Values, want.values) {
+					t.Fatalf("flag --%s = type=%q maps_to=%q required=%t values=%#v, want type=%q maps_to=%q required=%t values=%#v", want.name, got.Type, got.MapsTo, got.Required, got.Values, want.kind, want.mapsTo, want.required, want.values)
+				}
+			}
+		})
+	}
+}
+
+func githubCommandFlag(command engine.CLICommand, name string) (engine.CLIFlag, bool) {
+	for _, flag := range command.Flags {
+		if flag.Name == name {
+			return flag, true
+		}
+	}
+	return engine.CLIFlag{}, false
 }
 
 type githubOperation struct {

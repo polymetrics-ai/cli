@@ -1051,3 +1051,32 @@ ok	polymetrics.ai/internal/connectors/commandrunner
 ok	polymetrics.ai/internal/connectors/connsdk
 ok	polymetrics.ai/cmd/connectorgen
 ```
+
+**Red 14c — GitHub's classified status/text rows still had no generated executable contracts.**
+The generator-contract table names all nine documented `204` checks and the four text/Markdown
+endpoints, including `POST /markdown/raw`'s 400 KiB declared plain-text ceiling. It loads the
+embedded bundle and calls the real operation preflight, so it cannot be satisfied by changing only
+the API ledger. Before the GitHub generator knows these explicit exceptions, every expected command
+is absent:
+
+```
+$ go test -timeout 20m ./cmd/connectorgen/ -run TestGitHubStatusAndTextOperationContracts -count=1
+--- FAIL: TestGitHubStatusAndTextOperationContracts
+    generated command "gists star check" is missing
+    generated command "orgs blocks check" is missing
+    generated command "orgs members check" is missing
+    generated command "orgs public-members check" is missing
+    generated command "teams members check" is missing
+    generated command "user blocks check" is missing
+    generated command "user following check" is missing
+    generated command "user starred check" is missing
+    generated command "users following check" is missing
+    generated command "meta zen view" is missing
+    generated command "meta octocat view" is missing
+    generated command "markdown render" is missing
+    generated command "markdown raw render" is missing
+FAIL
+```
+
+The next green step changes the source generator's narrow table, regenerates only the GitHub bundle
+and shared ledger, and then updates the derived inventory snapshot from 1126/98 to 1139/85.
