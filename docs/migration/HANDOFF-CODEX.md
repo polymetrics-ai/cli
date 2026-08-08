@@ -14,7 +14,8 @@ then hand results back for validation. Read `docs/migration/conventions.md` and
   fan-out is **actively running in the primary Claude session** and owns those 275 `defs/` dirs.
 - **Certify harness complete** (`internal/connectors/certify/`, 21 stages + batch + `pm connectors
   certify` CLI). **CDC**: engine-ready but postgres `ReadCDC` is a documented stub (needs the
-  human-gated `pglogrepl` dependency); no connector advertises `cdc:true`.
+  human-gated `pglogrepl` dependency). Which connectors advertise `cdc:true` is bundle state, not
+  a fact this snapshot tracks — read `capabilities.cdc` in each `defs/<name>/metadata.json`.
 - 95 fully-expanded connectors already committed/pushed to PR #27; more land as phased commits.
 
 ## Hard rule: avoid working-tree collisions

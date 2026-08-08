@@ -187,8 +187,9 @@ not a full override by default.
   `non_data_endpoint`, `duplicate_of`, `out_of_scope`.
 - **`changefeed.json` is evidence-backed and fail-closed**: add this optional file only after
   reviewing a provider artifact. It records a closed status (`implemented`, `planned`,
-  `unsupported`, or `unknown`), a closed mechanism (`logical_replication`, `incremental_cursor`,
-  `webhook`, `event_stream`, or `polling_watermark`), and a source artifact URL, version, and
+  `unsupported`, or `unknown`), a closed mechanism (`logical_replication`, `binlog_replication`,
+  `incremental_cursor`, `webhook`, `event_stream`, or `polling_watermark` — the `mechanism` enum
+  of the schema named below), and a source artifact URL, version, and
   retrieval date. An `implemented` declaration also requires a named executor, checkpoint and
   recovery contract, delivery guarantees, and covered streams, but it does not set public `cdc`
   by itself: the registered connector must expose a matching `ChangefeedExecutor`. An
