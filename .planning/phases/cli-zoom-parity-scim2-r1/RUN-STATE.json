@@ -1,0 +1,40 @@
+{
+  "phase": "cli-zoom-parity-scim2-r1",
+  "parent_issue": 3915,
+  "sub_issue": 3942,
+  "connector": "zoom",
+  "provider_module": "scim2",
+  "state": "planned",
+  "manual_gsd_fallback": {
+    "reason": "provider-category phase is not registered by the official GSD runtime",
+    "mode": "single-worker inline execution; parent contract forbids role spawning"
+  },
+  "artifact": {
+    "url": "https://developers.zoom.us/docs/api/scim2.md",
+    "retrieved_at": "2026-08-08T13:33:09Z",
+    "http_status": 200,
+    "bytes": 171559,
+    "sha256": "ba86462a888677ea38a8bcc0557e9c4cf5809cd78fc6bc7655f85f79e5b27264",
+    "operation_count": 11,
+    "ledger_delta": 0
+  },
+  "baseline": {
+    "covered_operations": 27,
+    "locally_blocked_operations": 1815,
+    "direct_reads": 17,
+    "direct_writes": 5,
+    "reverse_etl_writes": 2
+  },
+  "target": {
+    "covered_operations": 38,
+    "locally_blocked_operations": 1804,
+    "direct_reads": 21,
+    "direct_writes": 12,
+    "reverse_etl_writes": 2
+  },
+  "planned_foundations": [
+    "operation-scoped rest_read origin/auth isolation",
+    "named json_object root body mapping"
+  ],
+  "next": "add and run the test-only RED checkpoint before any production bundle or engine edit"
+}
