@@ -22,10 +22,10 @@ secret field and is never logged. Do not put credentials in a host or URL-shaped
 `preferred` is the only mode that may fall back. `required` and both verifying modes fail closed
 when the server offers no TLS. `sslrootcert` names an absolute PEM CA path for the verifying modes
 and defaults to the host trust store; `sslservername` overrides the verified name under
-`verify-identity`, for example when connecting to an IP address. libpq spellings
-(`disable`/`prefer`/`require`/`verify-full`) are accepted so a value means the same thing here as on
-the PostgreSQL connector. The mode applies to discovery, reads, and the binary-log replication
-stream alike.
+`verify-identity`, for example when connecting to an IP address. Compatibility spellings
+(`disable`/`allow`/`prefer`/`require`/`verify-full` and `verify_ca`/`verify_identity`) are accepted;
+use the canonical modes in the table for a portable policy across SQL connectors. The mode applies
+to discovery, reads, and the binary-log replication stream alike.
 
 For CDC, configure a positive `replication_server_id` unique among replication clients. The MySQL
 server must enable binary logging with row format and full row images; it must also grant the

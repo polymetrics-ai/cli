@@ -27,8 +27,8 @@
     },
     "sslmode": {
       "type": "string",
-      "enum": ["disabled", "preferred", "required", "verify-ca", "verify-identity"],
-      "description": "Transport security. disabled never negotiates TLS; preferred (the default) encrypts when the server offers TLS and is the only mode that falls back to plaintext; required encrypts and fails when the server offers no TLS; verify-ca also verifies the server chain; verify-identity also verifies the server name. libpq spellings (disable/prefer/require/verify-full) are accepted so a value means the same thing here and on the PostgreSQL connector."
+      "enum": ["disabled", "preferred", "required", "verify-ca", "verify-identity", "disable", "allow", "prefer", "require", "verify-full", "verify_ca", "verify_identity"],
+      "description": "Transport security. disabled never negotiates TLS; preferred (the default) encrypts when the server offers TLS and is the only mode that falls back to plaintext; required encrypts and fails when the server offers no TLS; verify-ca also verifies the server chain; verify-identity also verifies the server name. libpq and underscore spellings are accepted for compatibility; use canonical values for a portable policy across SQL connectors."
     },
     "sslrootcert": {
       "type": "string",

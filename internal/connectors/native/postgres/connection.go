@@ -60,6 +60,7 @@ type connConfig struct {
 	username string
 	password string
 	sslmode  string
+	tls      sqltls.Options
 	schema   string
 }
 
@@ -80,7 +81,54 @@ func (c connConfig) dsn() string {
 		kv("password", c.password),
 		kv("sslmode", c.sslmode),
 	}
+	if c.tls.RootCAPath != "" {
+		parts = append(parts, kv("sslrootcert", c.tls.RootCAPath))
+	}
 	return strings.Join(parts, " ")
+}
+
+// poolConfig converts the validated connector config into pgx's pool
+// configuration. sslrootcert is rendered through libpq's supported keyword;
+// sslservername is deliberately applied after parsing because pgx uses the
+// TLS config's ServerName rather than accepting a separate libpq option for
+// it. Strict modes have no plaintext fallback, and preferred/allow retain the
+// driver's documented fallback behavior.
+func (c connConfig) poolConfig() (*pgxpool.Config, error) {
+	poolConfig, err := pgxpool.ParseConfig(c.dsn())
+	if err != nil {
+		// pgx can include caller-provided config in parse errors. Never return
+		// it to a command surface because it may include authentication data.
+		return nil, errors.New("postgres configuration could not create a connection pool")
+	}
+	if c.tls.Mode != sqltls.ModeVerifyIdentity || c.tls.ServerName == "" {
+		return poolConfig, nil
+	}
+	if poolConfig.ConnConfig.TLSConfig == nil {
+		return nil, errors.New("postgres verify-identity did not configure TLS")
+	}
+	poolConfig.ConnConfig.TLSConfig.ServerName = c.tls.ServerName
+	for _, fallback := range poolConfig.ConnConfig.Fallbacks {
+		if fallback != nil && fallback.TLSConfig != nil {
+			fallback.TLSConfig.ServerName = c.tls.ServerName
+		}
+	}
+	return poolConfig, nil
+}
+
+// openPool makes every PostgreSQL operation use the same validated transport
+// security configuration. In particular, it prevents Catalog and Read from
+// silently ignoring sslservername while Check honours it.
+func (c connConfig) openPool(ctx context.Context) (*pgxpool.Pool, error) {
+	poolConfig, err := c.poolConfig()
+	if err != nil {
+		return nil, err
+	}
+	pool, err := pgxpool.NewWithConfig(ctx, poolConfig)
+	if err != nil {
+		// Keep endpoint and credentials out of user-visible errors.
+		return nil, errors.New("connect postgres failed")
+	}
+	return pool, nil
 }
 
 // resolveConfig validates config + secrets into a connConfig. It enforces
@@ -138,6 +186,10 @@ func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
 	if err != nil {
 		return connConfig{}, err
 	}
+	transport, err := sqltls.Resolve(get, sqltls.ModeDisabled)
+	if err != nil {
+		return connConfig{}, fmt.Errorf("postgres config: %w", err)
+	}
 
 	schema := get("schema")
 	if schema == "" {
@@ -151,6 +203,7 @@ func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
 		username: username,
 		password: password,
 		sslmode:  sslmode,
+		tls:      transport,
 		schema:   schema,
 	}, nil
 }
@@ -243,7 +296,7 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	if fixtureMode(cfg) {
 		return nil
 	}
-	pool, err := pgxpool.New(ctx, conn.dsn())
+	pool, err := conn.openPool(ctx)
 	if err != nil {
 		return fmt.Errorf("check postgres: open pool: %w", err)
 	}
