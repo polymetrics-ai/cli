@@ -64593,7 +64593,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": "destructive; requires --allow-destructive + typed confirmation"
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "repo archive",
@@ -64609,7 +64609,7 @@
           "output_policy": "",
           "risk": "high",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": ""
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "repo unarchive",
@@ -64625,7 +64625,7 @@
           "output_policy": "",
           "risk": "high",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": ""
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "repo fork",
@@ -65491,7 +65491,7 @@
           "output_policy": "",
           "risk": "medium",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": "destructive; requires --allow-destructive + typed confirmation"
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "label list",
@@ -65879,7 +65879,7 @@
           "output_policy": "",
           "risk": "high",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": "destructive; requires --allow-destructive + typed confirmation"
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "variable list",
@@ -66563,7 +66563,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": "destructive; requires --allow-destructive + typed confirmation"
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "repo update",
@@ -67733,7 +67733,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": "destructive; requires --allow-destructive + typed confirmation"
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "run logs view-3",
@@ -69135,7 +69135,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": "destructive; requires --allow-destructive + typed confirmation"
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "check-runs create",
@@ -70644,7 +70644,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": "destructive; requires --allow-destructive + typed confirmation"
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "deployments statuses view",
@@ -73950,7 +73950,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-          "notes": "destructive; requires --allow-destructive + typed confirmation"
+          "notes": "destructive; requires typed confirmation --confirm destructive"
         },
         {
           "path": "vulnerability-alerts delete",
