@@ -5,7 +5,12 @@ VERIFY_JOBS ?= 2
 # fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary certify-timing
+# DuckDB is the query engine and the only Parquet implementation in the binary,
+# so cgo is required rather than optional. Building with CGO_ENABLED=0 no longer
+# produces a pm that can read or write a warehouse table.
+export CGO_ENABLED ?= 1
+
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary certify-timing
 
 # Packages covered by `lint` include declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not hard-fail
@@ -76,7 +81,7 @@ smoke-no-build:
 	./pm reverse preview "$$PLAN_ID" --root "$$SMOKE_DIR" --json >/dev/null; \
 	APPROVAL=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Approval token:/ {print $$3}'); \
 	./pm reverse run "$$PLAN_ID" --approve "$$APPROVAL" --root "$$SMOKE_DIR" --json >/dev/null; \
-	TABLE=$$(ls "$$SMOKE_DIR"/.polymetrics/warehouse/*/*/*/tables/sample_customers.jsonl); \
+	TABLE=$$(ls "$$SMOKE_DIR"/.polymetrics/warehouse/*/*/*/tables/sample_customers.parquet); \
 	test -s "$$TABLE"; \
 	test -s "$$(dirname "$$(dirname "$$TABLE")")/owner.json"; \
 	test -s "$$SMOKE_DIR/.polymetrics/outbox/customers_to_outbox.jsonl"; \
@@ -105,6 +110,7 @@ connector-boundary:
 
 release-workflow-check:
 	./scripts/tests/homebrew-release-notify.sh
+	./scripts/tests/release-target-parity.sh
 
 verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
 
@@ -113,10 +119,6 @@ verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check
 verify-parallel: fmt tidy-check
 	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
 	$(MAKE) -j$(VERIFY_JOBS) docs-check-no-build smoke-no-build
-
-verify-duckdb:
-	CGO_ENABLED=1 go build -tags duckdb ./cmd/pm
-	CGO_ENABLED=1 go test -tags duckdb ./...
 
 perf-free: build
 	./pm perf compare --iterations 50 --json

@@ -1,5 +1,3 @@
-//go:build duckdb
-
 package app_test
 
 import (
@@ -11,7 +9,7 @@ import (
 )
 
 // TestDuckDBJoinAndAggregate is the red-first test for the DuckDB-backed query
-// engine (only built with -tags duckdb). It proves real analytical SQL — a JOIN
+// engine. It proves real analytical SQL — a JOIN
 // plus GROUP BY aggregation over two warehouse tables.
 func TestDuckDBJoinAndAggregate(t *testing.T) {
 	ctx := context.Background()
@@ -24,7 +22,7 @@ func TestDuckDBJoinAndAggregate(t *testing.T) {
 		t.Fatalf("Open: %v", err)
 	}
 	if got := a.QueryEngineName(); got != "duckdb" {
-		t.Fatalf("QueryEngineName() = %q, want duckdb (-tags duckdb build)", got)
+		t.Fatalf("QueryEngineName() = %q, want duckdb", got)
 	}
 
 	seedWarehouseTable(t, root, "customers", []map[string]any{

@@ -208,7 +208,7 @@ func (w Warehouse) Manifest() Manifest {
 		ConfigFields: []ConfigField{
 			{Name: "path", Description: "Local warehouse directory.", Required: false},
 		},
-		Streams:              []Stream{{Name: "tables", Description: "Local JSONL warehouse tables."}},
+		Streams:              []Stream{{Name: "tables", Description: "Local Parquet warehouse tables."}},
 		SyncModes:            allSyncModes(),
 		SourceSyncModes:      readSourceSyncModes(),
 		DestinationSyncModes: warehouseDestinationSyncModes(),

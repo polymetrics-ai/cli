@@ -25,6 +25,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/warehouse"
 )
 
 const (
@@ -262,13 +263,12 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 			written, failed := 0, 0
 			if engine.DestructiveTargetForWrite(b.Name, action).RequiresApproval() {
 				table := "fixture_" + action.Name
-				raw, err := json.Marshal(fixture.Record)
-				if err != nil {
-					t.Fatalf("Marshal(%q fixture) = %v", action.Name, err)
-				}
-				warehousePath := filepath.Join(application.ProjectDir(), "warehouse", table+".jsonl")
-				if err := os.WriteFile(warehousePath, append(raw, '\n'), 0o600); err != nil {
-					t.Fatalf("WriteFile(%q fixture) = %v", action.Name, err)
+				// Written through the real Parquet writer: a hand-written JSONL
+				// table is a format pm refuses, so the fixture would fail the
+				// reverse plan before the action under test ran at all.
+				warehousePath := filepath.Join(application.ProjectDir(), "warehouse", table+warehouse.TableFileExt)
+				if err := warehouse.WriteTable(context.Background(), warehousePath, []warehouse.Row{warehouse.Row(fixture.Record)}); err != nil {
+					t.Fatalf("WriteTable(%q fixture) = %v", action.Name, err)
 				}
 				mappings := make(map[string]string, len(fixture.Record))
 				for field := range fixture.Record {

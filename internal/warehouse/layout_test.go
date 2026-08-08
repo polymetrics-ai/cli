@@ -1,6 +1,7 @@
 package warehouse
 
 import (
+	"context"
 	"errors"
 	"os"
 	"path/filepath"
@@ -175,7 +176,7 @@ func TestAssertOwnedTableCatchesAReintroducedSharedPath(t *testing.T) {
 
 	// The shape a regression would take: a table path back at the shared root,
 	// outside any connection's directory.
-	shared := filepath.Join(root, TablesDirName, "records.jsonl")
+	shared := filepath.Join(root, TablesDirName, "records"+TableFileExt)
 	err = location.AssertOwnedTable(shared, "records")
 	var ownership *OwnershipError
 	if !errors.As(err, &ownership) {
@@ -193,9 +194,7 @@ func TestCheckLegacyLayoutRefusesTheRemovedFlatLayout(t *testing.T) {
 	}
 	// A root-level table on its own is an unattributed direct write, not the
 	// shared-table layout, so it is left alone.
-	if err := os.WriteFile(filepath.Join(root, "records.jsonl"), []byte("{}\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
+	writeTableFixture(t, filepath.Join(root, "records"+TableFileExt), Row{"id": "direct"})
 	if err := CheckLegacyLayout(root); err != nil {
 		t.Fatalf("CheckLegacyLayout(root table) error = %v, want nil", err)
 	}
@@ -263,9 +262,7 @@ func TestFindTableReportsAmbiguityInsteadOfPickingAWinner(t *testing.T) {
 	// A root-level table shares the namespace but has no owning connection, so
 	// it is named by the selector that reaches it rather than rendered as an
 	// empty entry — an entry no value could select would be a false promise.
-	if err := os.WriteFile(filepath.Join(root, "records.jsonl"), []byte(`{"id":"direct"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
+	writeTableFixture(t, filepath.Join(root, "records"+TableFileExt), Row{"id": "direct"})
 	_, err = FindTable(root, "records", "")
 	if !errors.As(err, &ambiguous) {
 		t.Fatalf("FindTable(with root table) error = %T %v, want *AmbiguousTableError", err, err)
@@ -277,7 +274,7 @@ func TestFindTableReportsAmbiguityInsteadOfPickingAWinner(t *testing.T) {
 	if err != nil {
 		t.Fatalf("FindTable(%q) error = %v, want the root-level table", UnattributedConnection, err)
 	}
-	if unattributed.Path != filepath.Join(root, "records.jsonl") {
+	if unattributed.Path != filepath.Join(root, "records"+TableFileExt) {
 		t.Fatalf("FindTable(%q) path = %q, want the root-level table", UnattributedConnection, unattributed.Path)
 	}
 	if err := ValidateConnectionName(UnattributedConnection); err == nil {
@@ -317,9 +314,7 @@ func TestTablesReportsAnUnreadableOwnershipRecord(t *testing.T) {
 			if err := os.MkdirAll(tables, 0o700); err != nil {
 				t.Fatal(err)
 			}
-			if err := os.WriteFile(filepath.Join(tables, "records.jsonl"), []byte("{}\n"), 0o600); err != nil {
-				t.Fatal(err)
-			}
+			writeTableFixture(t, filepath.Join(tables, "records"+TableFileExt), Row{"id": "r1"})
 			if err := os.WriteFile(filepath.Join(connectionDir, OwnerFileName), []byte(tc.record), 0o600); err != nil {
 				t.Fatal(err)
 			}
@@ -449,9 +444,7 @@ func TestOwnershipRecordWithoutADisplayNameCannotPassAsUnattributed(t *testing.T
 	if err := os.MkdirAll(tables, 0o700); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(tables, "records.jsonl"), []byte(`{"id":"a1"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
+	writeTableFixture(t, filepath.Join(tables, "records"+TableFileExt), Row{"id": "a1"})
 	record := `{"version":1,"workspace":"ws_1","connector":"hubspot","connection":"conn_a"}`
 	if err := os.WriteFile(filepath.Join(connectionDir, OwnerFileName), []byte(record), 0o600); err != nil {
 		t.Fatal(err)
@@ -475,14 +468,12 @@ func TestOwnershipRecordWithoutADisplayNameCannotPassAsUnattributed(t *testing.T
 
 	// A genuinely unattributed table of the same name is still selectable, and
 	// it does not inherit the damaged directory's rows.
-	if err := os.WriteFile(filepath.Join(root, "records.jsonl"), []byte(`{"id":"direct"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
+	writeTableFixture(t, filepath.Join(root, "records"+TableFileExt), Row{"id": "direct"})
 	found, err := FindTable(root, "records", UnattributedConnection)
 	if err != nil {
 		t.Fatalf("FindTable(records, %q) error = %v, want the root-level table", UnattributedConnection, err)
 	}
-	if found.Path != filepath.Join(root, "records.jsonl") {
+	if found.Path != filepath.Join(root, "records"+TableFileExt) {
 		t.Fatalf("FindTable(records, %q) path = %q, want the root-level table", UnattributedConnection, found.Path)
 	}
 }
@@ -581,9 +572,7 @@ func TestDamagedRecordCannotDecideWhichConnectionAnUnscopedReadReturns(t *testin
 	}
 
 	// A root-level file the damaged directory cannot hold stays selectable.
-	if err := os.WriteFile(filepath.Join(root, "direct.jsonl"), []byte(`{"id":"d1"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
+	writeTableFixture(t, filepath.Join(root, "direct"+TableFileExt), Row{"id": "d1"})
 	if _, err := FindTable(root, "direct", UnattributedConnection); err != nil {
 		t.Fatalf("FindTable(direct, %q) error = %v, want the unattributed read to succeed", UnattributedConnection, err)
 	}
@@ -615,9 +604,7 @@ func TestTablesSkipsDirectoriesWithoutAnOwnershipRecord(t *testing.T) {
 	if err := os.MkdirAll(orphan, 0o700); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(orphan, "records.jsonl"), []byte("{}\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
+	writeTableFixture(t, filepath.Join(orphan, "records"+TableFileExt), Row{"id": "r1"})
 	tables, faults, err := Tables(root)
 	if err != nil {
 		t.Fatal(err)
@@ -629,5 +616,15 @@ func TestTablesSkipsDirectoriesWithoutAnOwnershipRecord(t *testing.T) {
 	// not damaged, it is simply not anyone's to read.
 	if len(faults) != 0 {
 		t.Fatalf("Tables() faults = %#v, want a missing record treated as a skip", faults)
+	}
+}
+
+// writeTableFixture materializes a table the way a sync would, so a layout test
+// exercises the real on-disk format rather than a hand-rolled stand-in that
+// could drift from it.
+func writeTableFixture(t *testing.T, path string, rows ...Row) {
+	t.Helper()
+	if err := WriteTable(context.Background(), path, rows); err != nil {
+		t.Fatalf("write table fixture %s: %v", path, err)
 	}
 }

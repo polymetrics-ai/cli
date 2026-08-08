@@ -4,12 +4,14 @@ NAME
 
 SYNOPSIS
   pm query run --table <table> [--connection name] [--limit n] [--json]
-  pm query run --sql "select * from <table> limit n" [--json]
+  pm query run --sql "select status, count(*) from <table> group by status" [--json]
   pm query run --table <table> --agent-mode summary --fields id,email --sample 3
   pm query run --table <table> --agent-mode stream --fields id,email
 
 DESCRIPTION
-  The MVP query engine supports table reads and a small SELECT * FROM parser.
+  Queries run on an embedded DuckDB engine over the warehouse's Parquet tables,
+  so --sql accepts read-only SELECT and WITH statements in full: joins, filters,
+  aggregates, GROUP BY, window functions and CTEs. Writes are refused.
   Agent mode can emit compact summary JSON or projected NDJSON rows to reduce
   token usage for external agents.
 

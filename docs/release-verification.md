@@ -47,8 +47,6 @@ For a future tag such as `v0.2.0`, the GitHub release is expected to contain:
   - `pm_0.2.0_darwin_arm64.tar.gz`
   - `pm_0.2.0_linux_amd64.tar.gz`
   - `pm_0.2.0_linux_arm64.tar.gz`
-  - `pm_0.2.0_windows_amd64.zip`
-  - `pm_0.2.0_windows_arm64.zip`
 - native standalone Linux packages:
   - `pm_0.2.0_linux_amd64.deb`
   - `pm_0.2.0_linux_arm64.deb`

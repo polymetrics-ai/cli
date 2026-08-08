@@ -51,13 +51,15 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
+# Windows is deliberately absent, both architectures. windows/arm64 was never
+# buildable — pm embeds DuckDB and go-duckdb ships no library for it — and
+# windows/amd64 was dropped because pm has no Windows customer. It returns on a
+# customer ask, restored from git history.
 archive_targets=(
   "darwin amd64 tar.gz pm"
   "darwin arm64 tar.gz pm"
   "linux amd64 tar.gz pm"
   "linux arm64 tar.gz pm"
-  "windows amd64 zip pm.exe"
-  "windows arm64 zip pm.exe"
 )
 
 package_targets=(

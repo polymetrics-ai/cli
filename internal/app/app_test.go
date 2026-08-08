@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -14,6 +13,7 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/warehouse"
 )
 
 type capturedBitbucketRequest struct {
@@ -323,7 +323,7 @@ func TestBitbucketReverseETLClosedSchemasDoNotReceiveInternalPlanFields(t *testi
 		t.Fatalf("AddCredential(bitbucket) error = %v", err)
 	}
 
-	writeWarehouseJSONLRows(t, root, "bitbucket_repo_create", `{"workspace":"ws","repo_slug":"repo","scm":"git","is_private":true}`)
+	seedWarehouseTableRows(t, root, "bitbucket_repo_create", `{"workspace":"ws","repo_slug":"repo","scm":"git","is_private":true}`)
 	createPlan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 		Name:                  "bitbucket_repo_create",
 		SourceTable:           "bitbucket_repo_create",
@@ -354,7 +354,7 @@ func TestBitbucketReverseETLClosedSchemasDoNotReceiveInternalPlanFields(t *testi
 		t.Fatalf("unexpected create run: %+v", createRun)
 	}
 
-	writeWarehouseJSONLRows(t, root, "bitbucket_issue_delete", `{"workspace":"ws","repo_slug":"repo","issue_id":123}`)
+	seedWarehouseTableRows(t, root, "bitbucket_issue_delete", `{"workspace":"ws","repo_slug":"repo","issue_id":123}`)
 	deletePlan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 		Name:                  "bitbucket_issue_delete",
 		SourceTable:           "bitbucket_issue_delete",
@@ -416,12 +416,23 @@ func TestBitbucketReverseETLClosedSchemasDoNotReceiveInternalPlanFields(t *testi
 	}
 }
 
-func writeWarehouseJSONLRows(t *testing.T, root, table string, rows ...string) {
+// seedWarehouseTableRows materializes an unattributed root-level table from
+// JSON row literals. It writes through the real Parquet writer rather than
+// hand-rolling the file, so a test fixture can never drift from the format a
+// sync produces.
+func seedWarehouseTableRows(t *testing.T, root, table string, rows ...string) {
 	t.Helper()
-	path := filepath.Join(root, ".polymetrics", "warehouse", table+".jsonl")
-	content := strings.Join(rows, "\n") + "\n"
-	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
-		t.Fatalf("write warehouse rows: %v", err)
+	decoded := make([]warehouse.Row, 0, len(rows))
+	for _, row := range rows {
+		var record warehouse.Row
+		if err := json.Unmarshal([]byte(row), &record); err != nil {
+			t.Fatalf("decode seed row %s: %v", row, err)
+		}
+		decoded = append(decoded, record)
+	}
+	path := filepath.Join(root, ".polymetrics", "warehouse", table+warehouse.TableFileExt)
+	if err := warehouse.WriteTable(context.Background(), path, decoded); err != nil {
+		t.Fatalf("seed warehouse table %s: %v", table, err)
 	}
 }
 

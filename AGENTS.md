@@ -37,7 +37,24 @@ the parent PR into `main` remains human-gated. Legacy connector Go under
 
 ## Project
 
-Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, connector inspection, credential management, local warehouse queries, and optional runtime-backed execution.
+Polymetrics is a Go CLI monolith for dependency-free ETL, reverse ETL, connector inspection, credential management, local warehouse queries, and optional runtime-backed execution.
+
+"Dependency-free" means at **runtime**: no database, cache, network service, or
+container is required to run `pm`. It no longer means the build is pure Go.
+DuckDB is embedded — it is the query engine and the only Parquet implementation
+in the binary — so **building `pm` requires cgo and a C toolchain**, and
+`CGO_ENABLED=0` no longer produces a binary that can read or write a warehouse
+table. There is deliberately no build tag and no CGO-free variant: two builds
+writing different table formats is the install-time drift *Command Surface Must
+Stay Executable* exists to prevent.
+
+**Windows is not a release target.** `windows/arm64` never could be — go-duckdb
+ships no library for it — and `windows/amd64` was dropped for having no user
+asking for it, along with the Windows runner, the MSI/WiX path and the WinGet
+manifests. `scripts/tests/release-target-parity.sh` asserts Windows stays absent
+from the assembler, the verifier and the build matrix together, so it cannot
+return in one file without the rest. It returns on a customer ask, from git
+history.
 
 ## Agent Rules
 
@@ -284,6 +301,28 @@ drifted and let 174 commands validate clean while blocking on every invocation.
 Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and
 `operations.json`, the command is not ready.
+
+## The Table Format Is Derived; The Write-Ahead Log Is Not
+
+A table is a **single Parquet file** at `tables/<table>.parquet`, rebuilt
+wholesale from `wal/<stream>.jsonl` on every sync. Three rules follow, and
+`internal/warehouse/parquet.go` is where they live.
+
+- **The WAL stays JSONL.** It is opened `O_APPEND` and fsynced per batch, and a
+  Parquet file cannot be appended to once closed. Keeping the log appendable is
+  precisely what makes the table format switchable; it is not a compromise.
+  Every sync mode therefore materializes its table from the log, including the
+  append modes that used to stream into it.
+- **A table is one file, never a directory of parts.** Parts were measured and
+  bought no read or write parallelism at our scale — DuckDB already parallelises
+  across row groups inside one file — and a directory cannot be renamed into
+  place over an existing one, so swapping it opens a window where a reader sees
+  no table while its rows sit on disk. Evidence:
+  `.planning/phases/cli-parquet-duckdb-warehouse-r1/`.
+- **A pre-Parquet JSONL table is refused, on read and on write.** It is never
+  read and never deleted. `pm` does not write into a warehouse it will not read:
+  a sync that reported success into one told the operator at once that the sync
+  worked and that the table cannot be read.
 
 ## Warehouse Paths Are Structural, Never Conventional
 

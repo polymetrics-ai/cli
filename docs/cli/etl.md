@@ -66,30 +66,30 @@ SOURCE STREAMS
 
 DESTINATIONS
   warehouse
-    Local JSONL warehouse tables. Supports append, overwrite, append_dedup, and
+    Local Parquet warehouse tables. Supports append, overwrite, append_dedup, and
     overwrite_dedup destination behavior through ETL sync modes.
 
 SYNC MODES
   full_refresh_append
-    Reads every source record and appends to the final JSONL table. Duplicates
-    across runs are expected.
+    Reads every source record and appends to the write-ahead log, then rebuilds
+    the final Parquet table from it. Duplicates across runs are expected.
 
   full_refresh_overwrite
-    Reads every source record into a temp final file, then atomically replaces
-    the final JSONL table only after the run succeeds.
+    Replaces the write-ahead log with this run's records, then atomically
+    replaces the final Parquet table only after the run succeeds.
 
   full_refresh_overwrite_deduped
-    Reads every source record, writes current-generation raw JSONL, dedupes by
-    primary key and cursor, then atomically replaces the final JSONL table.
+    Replaces the write-ahead log with this run's records, dedupes by primary key
+    and cursor, then atomically replaces the final Parquet table.
 
   incremental_append
-    Reads records at or after the saved cursor and appends accepted records.
-    Cursor state advances only after successful writes.
+    Reads records at or after the saved cursor and appends accepted records to
+    the write-ahead log. Cursor state advances only after successful writes.
 
   incremental_append_deduped
-    Appends accepted records to raw JSONL history and materializes a final JSONL
-    table with one latest row per primary key. Delete/tombstone records remove
-    the row from final output.
+    Appends accepted records to the write-ahead log and materializes a final
+    Parquet table with one latest row per primary key. Delete/tombstone records
+    remove the row from final output.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.

@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors/certify"
+	"polymetrics.ai/internal/warehouse"
 )
 
 func TestSampleOutboxWriteLifecycleAgainstRealCLI(t *testing.T) {
@@ -17,15 +18,11 @@ func TestSampleOutboxWriteLifecycleAgainstRealCLI(t *testing.T) {
 	mustHarnessKind(t, h, "InitResult", "init", "--json")
 
 	tag := "pm-cert-sample-real-write"
-	seedPath := filepath.Join(root, ".polymetrics", "warehouse", "cert_write_seed_sample.jsonl")
-	if err := os.MkdirAll(filepath.Dir(seedPath), 0o700); err != nil {
-		t.Fatalf("mkdir seed warehouse: %v", err)
-	}
-	seed, err := json.Marshal(map[string]string{"id": tag, "tag": tag})
-	if err != nil {
-		t.Fatalf("marshal seed record: %v", err)
-	}
-	if err := os.WriteFile(seedPath, append(seed, '\n'), 0o600); err != nil {
+	// Seeded through the real Parquet writer rather than hand-written: a
+	// hand-written JSONL table is a format the binary under test refuses, and
+	// it would drift the moment the format changes again.
+	seedPath := filepath.Join(root, ".polymetrics", "warehouse", "cert_write_seed_sample"+warehouse.TableFileExt)
+	if err := warehouse.WriteTable(context.Background(), seedPath, []warehouse.Row{{"id": tag, "tag": tag}}); err != nil {
 		t.Fatalf("write seed record: %v", err)
 	}
 

@@ -30,18 +30,9 @@ func TestWarehouseCatalogNamesEveryHolderOfATableName(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := os.MkdirAll(filepath.Dir(owned), 0o700); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(owned, []byte(`{"id":"a1"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(root, "records.jsonl"), []byte(`{"id":"direct"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(root, "seeded.jsonl"), []byte(`{"id":"s1"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
+	writeWarehouseTableFixture(t, owned, warehouse.Row{"id": "a1"})
+	writeWarehouseTableFixture(t, filepath.Join(root, "records"+warehouse.TableFileExt), warehouse.Row{"id": "direct"})
+	writeWarehouseTableFixture(t, filepath.Join(root, "seeded"+warehouse.TableFileExt), warehouse.Row{"id": "s1"})
 
 	catalog, err := Warehouse{}.Catalog(context.Background(), cfg)
 	if err != nil {
@@ -107,8 +98,14 @@ func TestWarehouseValidateWriteAgreesWithWrite(t *testing.T) {
 		{Stream: "records", Table: "."},
 		{Stream: "", Table: ""},
 		{Stream: "sub/stream", Table: ""},
+		// A warehouse still holding a pre-Parquet table refuses every write.
+		// The predictor has to know that too, or a reverse plan approved
+		// against such a warehouse could never run.
+		{Stream: "records", Config: legacyFormatWarehouseConfig(t)},
 	} {
-		req.Config = RuntimeConfig{Config: map[string]string{"path": t.TempDir()}}
+		if req.Config.Config == nil {
+			req.Config = RuntimeConfig{Config: map[string]string{"path": t.TempDir()}}
+		}
 		validated := (Warehouse{}).ValidateWrite(ctx, req, nil)
 		_, written := (Warehouse{}).Write(ctx, req, []Record{{"id": "a1"}})
 		if (validated == nil) != (written == nil) {
@@ -118,4 +115,25 @@ func TestWarehouseValidateWriteAgreesWithWrite(t *testing.T) {
 			t.Fatalf("ValidateWrite refusal %q does not match the Write refusal %q", validated, written)
 		}
 	}
+}
+
+// writeWarehouseTableFixture materializes a table the way a sync would, so a
+// connector test exercises the real on-disk format rather than a hand-rolled
+// stand-in that could drift from it.
+func writeWarehouseTableFixture(t *testing.T, path string, rows ...warehouse.Row) {
+	t.Helper()
+	if err := warehouse.WriteTable(context.Background(), path, rows); err != nil {
+		t.Fatalf("write table fixture %s: %v", path, err)
+	}
+}
+
+// legacyFormatWarehouseConfig points at a warehouse still holding a table in
+// the pre-Parquet format.
+func legacyFormatWarehouseConfig(t *testing.T) RuntimeConfig {
+	t.Helper()
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "left_over"+warehouse.LegacyTableFileExt), []byte(`{"id":"legacy-1"}`+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	return RuntimeConfig{Config: map[string]string{"path": root}}
 }
