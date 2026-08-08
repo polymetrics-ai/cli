@@ -12534,6 +12534,60 @@
     },
     {
       "method": "GET",
+      "path": "/v2/crc/api_connectors",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/api_connectors/{connectorId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/api_connectors/{connectorId}/private_key",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/managed_rooms",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/managed_rooms/account_setting",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/managed_rooms/{deviceId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/participant_identifier_code",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/room_templates",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/crc/room_templates/{templateId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/v2/dialer/call-histories/{callHistoryId}",
       "kind": "rest_read",
       "max_bytes": 1048576

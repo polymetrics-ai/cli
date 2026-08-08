@@ -1,5 +1,5 @@
 {
-  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads and Clip downloads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads and Clip downloads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, Clips, CRC, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
   "usage": "pm zoom <group> <command> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
@@ -119,6 +119,13 @@
       "title": "Customer Managed Keys Hybrid",
       "commands": [
         "customer-managed-keys-hybrid"
+      ]
+    },
+    {
+      "id": "crc",
+      "title": "Conference Room Connector (CRC)",
+      "commands": [
+        "crc"
       ]
     }
   ],
@@ -4931,6 +4938,789 @@
         }
       ],
       "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc managed-rooms account-setting get",
+      "summary": "Get the CRC managed-room account setting.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_managed_room_account_setting",
+      "source_cli_path": "GET /crc/managed_rooms/account_setting",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "account_id",
+        "connector_id",
+        "connector_log_level",
+        "firmware_key",
+        "ip_address",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Reads sensitive CRC account settings.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom crc managed-rooms account-setting get --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/managed_rooms/account_setting"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc managed-rooms account-setting update",
+      "summary": "Update the CRC managed-room account setting.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_crc_managed_room_account_setting",
+      "source_cli_path": "PATCH /crc/managed_rooms/account_setting",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "account-settings",
+          "type": "json_object",
+          "summary": "Closed object of documented CRC account-setting fields.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "account_id",
+        "connector_id",
+        "connector_log_level",
+        "firmware_key",
+        "ip_address",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Changes a provider-defined CRC account setting.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named account-settings object is closed to the documented multipart fields; it is not a generic JSON or HTTP write. Its 204 response is status-only success.",
+      "examples": [
+        "pm zoom crc managed-rooms account-setting update --credential zoom-fixture --account-settings '{\"enable_1080p\":true}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/crc/managed_rooms/account_setting"
+        }
+      ],
+      "output_policy": "none"
+    },
+    {
+      "path": "crc api-connectors list",
+      "summary": "List CRC API Connectors.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_crc_api_connectors",
+      "source_cli_path": "GET /crc/api_connectors",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "connector_id",
+        "description",
+        "managed_rooms",
+        "networks",
+        "private_key"
+      ],
+      "risk": "Reads sensitive CRC API Connector details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom crc api-connectors list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/api_connectors"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc api-connectors create",
+      "summary": "Create one CRC API Connector.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.create_crc_api_connector",
+      "source_cli_path": "POST /crc/api_connectors",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "api-connector",
+          "type": "json_object",
+          "summary": "Closed object of documented CRC API Connector fields.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "connector_id",
+        "description",
+        "managed_rooms",
+        "networks",
+        "private_key"
+      ],
+      "risk": "Creates a provider-defined CRC API Connector.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named api-connector object is closed to the documented endpoint fields; it is not a generic JSON or HTTP write.",
+      "examples": [
+        "pm zoom crc api-connectors create --credential zoom-fixture --api-connector '{\"description\":\"CRC connector\"}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/crc/api_connectors"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc api-connectors get",
+      "summary": "Get one CRC API Connector.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_api_connector",
+      "source_cli_path": "GET /crc/api_connectors/{connectorId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "connector-id",
+          "type": "string",
+          "summary": "CRC API Connector identifier.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.connectorId"
+        }
+      ],
+      "redact_fields": [
+        "connector_id",
+        "description",
+        "managed_rooms",
+        "networks",
+        "private_key"
+      ],
+      "risk": "Reads sensitive CRC API Connector details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The connector ID is a fixed provider path parameter and is redacted in output.",
+      "examples": [
+        "pm zoom crc api-connectors get --credential zoom-fixture --connector-id connector --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/api_connectors/{connectorId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc api-connectors delete",
+      "summary": "Delete one CRC API Connector.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.delete_crc_api_connector",
+      "source_cli_path": "DELETE /crc/api_connectors/{connectorId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "connector-id",
+          "type": "string",
+          "summary": "CRC API Connector identifier to delete.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.connectorId"
+        }
+      ],
+      "redact_fields": [
+        "connector_id",
+        "description",
+        "managed_rooms",
+        "networks",
+        "private_key"
+      ],
+      "risk": "Deletes a provider-defined CRC API Connector.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+      "notes": "The documented 204 response is status-only success; no response body is invented.",
+      "examples": [
+        "pm zoom crc api-connectors delete --credential zoom-fixture --connector-id connector --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/crc/api_connectors/{connectorId}"
+        }
+      ],
+      "output_policy": "none"
+    },
+    {
+      "path": "crc api-connectors update",
+      "summary": "Update one CRC API Connector.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_crc_api_connector",
+      "source_cli_path": "PATCH /crc/api_connectors/{connectorId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "connector-id",
+          "type": "string",
+          "summary": "CRC API Connector identifier to update.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.connectorId"
+        },
+        {
+          "name": "api-connector",
+          "type": "json_object",
+          "summary": "Closed object of documented CRC API Connector update fields.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "connector_id",
+        "description",
+        "managed_rooms",
+        "networks",
+        "private_key"
+      ],
+      "risk": "Changes a provider-defined CRC API Connector.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named api-connector object is closed to documented update members; its 204 response is status-only success.",
+      "examples": [
+        "pm zoom crc api-connectors update --credential zoom-fixture --connector-id connector --api-connector '{\"log_level\":\"INFO\"}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/crc/api_connectors/{connectorId}"
+        }
+      ],
+      "output_policy": "none"
+    },
+    {
+      "path": "crc api-connectors private-key get",
+      "summary": "Get one CRC API Connector private key.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_api_connector_private_key",
+      "source_cli_path": "GET /crc/api_connectors/{connectorId}/private_key",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "connector-id",
+          "type": "string",
+          "summary": "CRC API Connector identifier.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.connectorId"
+        }
+      ],
+      "redact_fields": [
+        "connector_id",
+        "private_key"
+      ],
+      "risk": "Reads a private key only through redacted output.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The declared json_redacted policy prevents the private key from reaching CLI output.",
+      "examples": [
+        "pm zoom crc api-connectors private-key get --credential zoom-fixture --connector-id connector --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/api_connectors/{connectorId}/private_key"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc api-connectors private-key update",
+      "summary": "Regenerate one CRC API Connector private key.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_crc_api_connector_private_key",
+      "source_cli_path": "PATCH /crc/api_connectors/{connectorId}/private_key",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "connector-id",
+          "type": "string",
+          "summary": "CRC API Connector identifier whose private key is regenerated.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.connectorId"
+        }
+      ],
+      "redact_fields": [
+        "connector_id",
+        "private_key"
+      ],
+      "risk": "Regenerates a private key and returns it only through redacted output.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, typed confirmation, then execute; output remains redacted.",
+      "notes": "This provider-defined secret-returning action has no request body. Its declared typed confirmation and json_redacted output prevent private key disclosure.",
+      "examples": [
+        "pm zoom crc api-connectors private-key update --credential zoom-fixture --connector-id connector --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/crc/api_connectors/{connectorId}/private_key"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc managed-rooms list",
+      "summary": "List CRC managed rooms.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_crc_managed_rooms",
+      "source_cli_path": "GET /crc/managed_rooms",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "auth_password",
+        "auth_username",
+        "connector_id",
+        "device_id",
+        "device_password",
+        "device_username",
+        "firmware_key",
+        "ip_address",
+        "name",
+        "room_host_key",
+        "serial_number",
+        "template_id"
+      ],
+      "risk": "Reads sensitive CRC managed-room details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom crc managed-rooms list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/managed_rooms"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc managed-rooms create",
+      "summary": "Create one CRC managed room.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.create_crc_managed_room",
+      "source_cli_path": "POST /crc/managed_rooms",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "managed-room",
+          "type": "json_object",
+          "summary": "Closed object of documented CRC managed-room fields.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "auth_password",
+        "auth_username",
+        "connector_id",
+        "device_id",
+        "device_password",
+        "device_username",
+        "firmware_key",
+        "ip_address",
+        "name",
+        "room_host_key",
+        "serial_number",
+        "template_id"
+      ],
+      "risk": "Creates a provider-defined CRC managed room.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named managed-room object is closed to documented endpoint fields; credentials and room identifiers are redacted.",
+      "examples": [
+        "pm zoom crc managed-rooms create --credential zoom-fixture --managed-room '{\"name\":\"CRC room\"}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/crc/managed_rooms"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc managed-rooms get",
+      "summary": "Get one CRC managed room.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_managed_room",
+      "source_cli_path": "GET /crc/managed_rooms/{deviceId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "device-id",
+          "type": "string",
+          "summary": "CRC managed-room device identifier.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.deviceId"
+        }
+      ],
+      "redact_fields": [
+        "auth_password",
+        "auth_username",
+        "connector_id",
+        "device_id",
+        "device_password",
+        "device_username",
+        "firmware_key",
+        "ip_address",
+        "name",
+        "room_host_key",
+        "serial_number",
+        "template_id"
+      ],
+      "risk": "Reads sensitive CRC managed-room details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The device ID is a fixed provider path parameter and is redacted in output.",
+      "examples": [
+        "pm zoom crc managed-rooms get --credential zoom-fixture --device-id device --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/managed_rooms/{deviceId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc managed-rooms delete",
+      "summary": "Delete one CRC managed room.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.delete_crc_managed_room",
+      "source_cli_path": "DELETE /crc/managed_rooms/{deviceId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "device-id",
+          "type": "string",
+          "summary": "CRC managed-room device identifier to delete.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.deviceId"
+        }
+      ],
+      "redact_fields": [
+        "auth_password",
+        "auth_username",
+        "connector_id",
+        "device_id",
+        "device_password",
+        "device_username",
+        "firmware_key",
+        "ip_address",
+        "name",
+        "room_host_key",
+        "serial_number",
+        "template_id"
+      ],
+      "risk": "Deletes a provider-defined CRC managed room.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+      "notes": "The documented 204 response is status-only success; no response body is invented.",
+      "examples": [
+        "pm zoom crc managed-rooms delete --credential zoom-fixture --device-id device --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/crc/managed_rooms/{deviceId}"
+        }
+      ],
+      "output_policy": "none"
+    },
+    {
+      "path": "crc managed-rooms update",
+      "summary": "Update one CRC managed room.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_crc_managed_room",
+      "source_cli_path": "PATCH /crc/managed_rooms/{deviceId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "device-id",
+          "type": "string",
+          "summary": "CRC managed-room device identifier to update.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.deviceId"
+        },
+        {
+          "name": "managed-room",
+          "type": "json_object",
+          "summary": "Closed object of documented CRC managed-room update fields.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "auth_password",
+        "auth_username",
+        "connector_id",
+        "device_id",
+        "device_password",
+        "device_username",
+        "firmware_key",
+        "ip_address",
+        "name",
+        "room_host_key",
+        "serial_number",
+        "template_id"
+      ],
+      "risk": "Changes a provider-defined CRC managed room.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named managed-room object is closed to documented update members; its 204 response is status-only success.",
+      "examples": [
+        "pm zoom crc managed-rooms update --credential zoom-fixture --device-id device --managed-room '{\"enable_1080p\":true}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/crc/managed_rooms/{deviceId}"
+        }
+      ],
+      "output_policy": "none"
+    },
+    {
+      "path": "crc participant-identifier-code get",
+      "summary": "Get the CRC participant identifier code.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_participant_identifier_code",
+      "source_cli_path": "GET /crc/participant_identifier_code",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "meeting_id",
+        "participant_identifier_code",
+        "participant_id"
+      ],
+      "risk": "Reads a CRC meeting authentication identifier.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The participant identifier code is redacted in output.",
+      "examples": [
+        "pm zoom crc participant-identifier-code get --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/participant_identifier_code"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc room-templates list",
+      "summary": "List CRC room templates.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_crc_room_templates",
+      "source_cli_path": "GET /crc/room_templates",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "device_type",
+        "name",
+        "template_id",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Reads sensitive CRC room-template details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom crc room-templates list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/room_templates"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc room-templates create",
+      "summary": "Create one CRC room template.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.create_crc_room_template",
+      "source_cli_path": "POST /crc/room_templates",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "room-template",
+          "type": "json_object",
+          "summary": "Closed object of documented CRC room-template fields.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "device_type",
+        "name",
+        "template_id",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Creates a provider-defined CRC room template.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named room-template object is closed to documented endpoint fields; it is not a generic JSON or HTTP write.",
+      "examples": [
+        "pm zoom crc room-templates create --credential zoom-fixture --room-template '{\"device_type\":\"Cisco Series\",\"name\":\"CRC template\"}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/crc/room_templates"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc room-templates get",
+      "summary": "Get one CRC room template.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_room_template",
+      "source_cli_path": "GET /crc/room_templates/{templateId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "template-id",
+          "type": "string",
+          "summary": "CRC room-template identifier.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.templateId"
+        }
+      ],
+      "redact_fields": [
+        "device_type",
+        "name",
+        "template_id",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Reads sensitive CRC room-template details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The template ID is a fixed provider path parameter and is redacted in output.",
+      "examples": [
+        "pm zoom crc room-templates get --credential zoom-fixture --template-id template --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/room_templates/{templateId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc room-templates delete",
+      "summary": "Delete one CRC room template.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.delete_crc_room_template",
+      "source_cli_path": "DELETE /crc/room_templates/{templateId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "template-id",
+          "type": "string",
+          "summary": "CRC room-template identifier to delete.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.templateId"
+        }
+      ],
+      "redact_fields": [
+        "device_type",
+        "name",
+        "template_id",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Deletes a provider-defined CRC room template.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+      "notes": "The documented 204 response is status-only success; no response body is invented.",
+      "examples": [
+        "pm zoom crc room-templates delete --credential zoom-fixture --template-id template --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/crc/room_templates/{templateId}"
+        }
+      ],
+      "output_policy": "none"
+    },
+    {
+      "path": "crc room-templates update",
+      "summary": "Update one CRC room template.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_crc_room_template",
+      "source_cli_path": "PATCH /crc/room_templates/{templateId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "template-id",
+          "type": "string",
+          "summary": "CRC room-template identifier to update.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.templateId"
+        },
+        {
+          "name": "room-template",
+          "type": "json_object",
+          "summary": "Closed object of documented CRC room-template update fields.",
+          "maps_to": "body",
+          "required": true
+        }
+      ],
+      "redact_fields": [
+        "device_type",
+        "name",
+        "template_id",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Changes a provider-defined CRC room template.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named room-template object is closed to documented update members; its 204 response is status-only success.",
+      "examples": [
+        "pm zoom crc room-templates update --credential zoom-fixture --template-id template --room-template '{\"name\":\"Renamed template\"}' --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/crc/room_templates/{templateId}"
+        }
+      ],
+      "output_policy": "none"
     }
   ],
   "help_topics": [

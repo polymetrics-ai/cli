@@ -952,6 +952,486 @@ func TestClipsStatusOnlyDirectWritesExecuteWithFixtures(t *testing.T) {
 	}
 }
 
+// TestCRCDirectReadCommandsExecuteWithFixtures runs every documented CRC GET
+// through the real command runner. The loopback server proves each provider
+// path, bearer transport, derived camelCase path binding, and declared output
+// redaction without ever contacting Zoom.
+func TestCRCDirectReadCommandsExecuteWithFixtures(t *testing.T) {
+	const accessToken = "fixture-crc-read-access-token"
+	type crcReadAction struct {
+		name         string
+		path         []string
+		flags        map[string][]string
+		requestPath  string
+		redactFields []string
+		response     json.RawMessage
+	}
+	actions := []crcReadAction{
+		{
+			name:        "get managed-room account setting",
+			path:        []string{"crc", "managed-rooms", "account-setting", "get"},
+			requestPath: "/v2/crc/managed_rooms/account_setting",
+			redactFields: []string{
+				"account_id", "connector_id", "connector_log_level", "firmware_key", "ip_address", "time_server", "time_zone",
+			},
+		},
+		{
+			name:        "list API connectors",
+			path:        []string{"crc", "api-connectors", "list"},
+			requestPath: "/v2/crc/api_connectors",
+			redactFields: []string{
+				"connector_id", "description", "managed_rooms", "networks", "private_key",
+			},
+		},
+		{
+			name:         "get API connector",
+			path:         []string{"crc", "api-connectors", "get"},
+			flags:        map[string][]string{"connector-id": {"fixture-crc-connector"}},
+			requestPath:  "/v2/crc/api_connectors/fixture-crc-connector",
+			redactFields: []string{"connector_id", "description", "managed_rooms", "networks", "private_key"},
+		},
+		{
+			name:         "get API connector private key",
+			path:         []string{"crc", "api-connectors", "private-key", "get"},
+			flags:        map[string][]string{"connector-id": {"fixture-crc-connector"}},
+			requestPath:  "/v2/crc/api_connectors/fixture-crc-connector/private_key",
+			redactFields: []string{"connector_id", "private_key"},
+		},
+		{
+			name:        "list managed rooms",
+			path:        []string{"crc", "managed-rooms", "list"},
+			requestPath: "/v2/crc/managed_rooms",
+			redactFields: []string{
+				"auth_password", "auth_username", "connector_id", "device_id", "device_password", "device_username", "firmware_key", "ip_address", "name", "room_host_key", "serial_number", "template_id",
+			},
+		},
+		{
+			name:         "get managed room",
+			path:         []string{"crc", "managed-rooms", "get"},
+			flags:        map[string][]string{"device-id": {"fixture-crc-device"}},
+			requestPath:  "/v2/crc/managed_rooms/fixture-crc-device",
+			redactFields: []string{"auth_password", "auth_username", "connector_id", "device_id", "device_password", "device_username", "firmware_key", "ip_address", "name", "room_host_key", "serial_number", "template_id"},
+		},
+		{
+			name:         "get participant identifier code",
+			path:         []string{"crc", "participant-identifier-code", "get"},
+			requestPath:  "/v2/crc/participant_identifier_code",
+			redactFields: []string{"meeting_id", "participant_identifier_code", "participant_id"},
+		},
+		{
+			name:         "list room templates",
+			path:         []string{"crc", "room-templates", "list"},
+			requestPath:  "/v2/crc/room_templates",
+			redactFields: []string{"device_type", "name", "template_id", "time_server", "time_zone"},
+		},
+		{
+			name:         "get room template",
+			path:         []string{"crc", "room-templates", "get"},
+			flags:        map[string][]string{"template-id": {"fixture-crc-template"}},
+			requestPath:  "/v2/crc/room_templates/fixture-crc-template",
+			redactFields: []string{"device_type", "name", "template_id", "time_server", "time_zone"},
+		},
+	}
+	for i := range actions {
+		fixture := map[string]any{"visible": "fixture-crc-visible"}
+		for _, field := range actions[i].redactFields {
+			fixture[field] = "fixture-crc-sensitive-value"
+		}
+		response, err := json.Marshal(fixture)
+		if err != nil {
+			t.Fatalf("marshal CRC read fixture %s: %v", actions[i].name, err)
+		}
+		actions[i].response = response
+	}
+	byRequest := make(map[string]*crcReadAction, len(actions))
+	for i := range actions {
+		byRequest[http.MethodGet+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("CRC read fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("CRC read fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("CRC read fixture received undeclared query or paging input")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write(action.response)
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	config := connectors.RuntimeConfig{
+		Config:  map[string]string{"base_url": server.URL + "/v2"},
+		Secrets: map[string]string{"access_token": accessToken},
+	}
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   action.path,
+				Flags:  action.flags,
+				Config: config,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for a CRC direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q): %v", strings.Join(action.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != http.StatusOK {
+				t.Fatalf("Run(%q) direct read = %#v, want HTTP %d", strings.Join(action.path, " "), result.DirectRead, http.StatusOK)
+			}
+			encoded, err := json.Marshal(result.DirectRead.Body)
+			if err != nil {
+				t.Fatalf("marshal CRC read response: %v", err)
+			}
+			if strings.Contains(string(encoded), "fixture-crc-sensitive-value") {
+				t.Fatal("CRC read response exposed a declared sensitive field")
+			}
+			for _, field := range action.redactFields {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("CRC read response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("CRC read fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+// TestCRCDirectWriteCommandsExecuteWithFixtures sends every documented CRC
+// mutation through plan, no-network preview, single-use approval, and execute.
+// It keeps 204 actions status-only, requires typed confirmation for deletes
+// and the secret-returning key regeneration, and proves redacted responses.
+func TestCRCDirectWriteCommandsExecuteWithFixtures(t *testing.T) {
+	const (
+		credentialName = "zoom-crc-write-fixture"
+		accessToken    = "fixture-crc-write-access-token"
+	)
+	type crcWriteAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		method            string
+		requestPath       string
+		expectedBody      json.RawMessage
+		multipartFields   map[string]string
+		status            int
+		response          json.RawMessage
+		destructive       bool
+		secretSensitive   bool
+		statusOnly        bool
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []crcWriteAction{
+		{
+			name:            "update managed-room account setting",
+			path:            []string{"crc", "managed-rooms", "account-setting", "update"},
+			flags:           map[string][]string{"account-settings": {`{"enable_1080p":true}`}},
+			method:          http.MethodPatch,
+			requestPath:     "/v2/crc/managed_rooms/account_setting",
+			multipartFields: map[string]string{"enable_1080p": "true"},
+			status:          http.StatusNoContent,
+			statusOnly:      true,
+		},
+		{
+			name:              "create API connector",
+			path:              []string{"crc", "api-connectors", "create"},
+			flags:             map[string][]string{"api-connector": {`{"description":"Fixture CRC API connector","log_level":"INFO"}`}},
+			method:            http.MethodPost,
+			requestPath:       "/v2/crc/api_connectors",
+			expectedBody:      json.RawMessage(`{"description":"Fixture CRC API connector","log_level":"INFO"}`),
+			status:            http.StatusCreated,
+			response:          json.RawMessage(`{"connector_id":"fixture-crc-sensitive-response"}`),
+			responseSensitive: []string{"fixture-crc-sensitive-response"},
+			responseMarkers:   []string{"connector_id"},
+		},
+		{
+			name:        "delete API connector",
+			path:        []string{"crc", "api-connectors", "delete"},
+			flags:       map[string][]string{"connector-id": {"fixture-crc-connector"}},
+			method:      http.MethodDelete,
+			requestPath: "/v2/crc/api_connectors/fixture-crc-connector",
+			status:      http.StatusNoContent,
+			destructive: true,
+			statusOnly:  true,
+		},
+		{
+			name:         "update API connector",
+			path:         []string{"crc", "api-connectors", "update"},
+			flags:        map[string][]string{"connector-id": {"fixture-crc-connector"}, "api-connector": {`{"log_level":"INFO"}`}},
+			method:       http.MethodPatch,
+			requestPath:  "/v2/crc/api_connectors/fixture-crc-connector",
+			expectedBody: json.RawMessage(`{"log_level":"INFO"}`),
+			status:       http.StatusNoContent,
+			statusOnly:   true,
+		},
+		{
+			name:              "regenerate API connector private key",
+			path:              []string{"crc", "api-connectors", "private-key", "update"},
+			flags:             map[string][]string{"connector-id": {"fixture-crc-connector"}},
+			method:            http.MethodPatch,
+			requestPath:       "/v2/crc/api_connectors/fixture-crc-connector/private_key",
+			status:            http.StatusOK,
+			response:          json.RawMessage(`{"connector_id":"fixture-crc-sensitive-response","private_key":"fixture-crc-private-key-response"}`),
+			secretSensitive:   true,
+			responseSensitive: []string{"fixture-crc-sensitive-response", "fixture-crc-private-key-response"},
+			responseMarkers:   []string{"connector_id", "private_key"},
+		},
+		{
+			name:              "create managed room",
+			path:              []string{"crc", "managed-rooms", "create"},
+			flags:             map[string][]string{"managed-room": {`{"device_type":"Cisco Series","name":"Fixture CRC managed room"}`}},
+			method:            http.MethodPost,
+			requestPath:       "/v2/crc/managed_rooms",
+			expectedBody:      json.RawMessage(`{"device_type":"Cisco Series","name":"Fixture CRC managed room"}`),
+			status:            http.StatusCreated,
+			response:          json.RawMessage(`{"device_id":"fixture-crc-sensitive-response","auth_username":"fixture-crc-sensitive-response"}`),
+			responseSensitive: []string{"fixture-crc-sensitive-response"},
+			responseMarkers:   []string{"device_id", "auth_username"},
+		},
+		{
+			name:        "delete managed room",
+			path:        []string{"crc", "managed-rooms", "delete"},
+			flags:       map[string][]string{"device-id": {"fixture-crc-device"}},
+			method:      http.MethodDelete,
+			requestPath: "/v2/crc/managed_rooms/fixture-crc-device",
+			status:      http.StatusNoContent,
+			destructive: true,
+			statusOnly:  true,
+		},
+		{
+			name:         "update managed room",
+			path:         []string{"crc", "managed-rooms", "update"},
+			flags:        map[string][]string{"device-id": {"fixture-crc-device"}, "managed-room": {`{"enable_1080p":true}`}},
+			method:       http.MethodPatch,
+			requestPath:  "/v2/crc/managed_rooms/fixture-crc-device",
+			expectedBody: json.RawMessage(`{"enable_1080p":true}`),
+			status:       http.StatusNoContent,
+			statusOnly:   true,
+		},
+		{
+			name:              "create room template",
+			path:              []string{"crc", "room-templates", "create"},
+			flags:             map[string][]string{"room-template": {`{"device_type":"Cisco Series","name":"Fixture CRC room template"}`}},
+			method:            http.MethodPost,
+			requestPath:       "/v2/crc/room_templates",
+			expectedBody:      json.RawMessage(`{"device_type":"Cisco Series","name":"Fixture CRC room template"}`),
+			status:            http.StatusCreated,
+			response:          json.RawMessage(`{"template_id":"fixture-crc-sensitive-response"}`),
+			responseSensitive: []string{"fixture-crc-sensitive-response"},
+			responseMarkers:   []string{"template_id"},
+		},
+		{
+			name:        "delete room template",
+			path:        []string{"crc", "room-templates", "delete"},
+			flags:       map[string][]string{"template-id": {"fixture-crc-template"}},
+			method:      http.MethodDelete,
+			requestPath: "/v2/crc/room_templates/fixture-crc-template",
+			status:      http.StatusNoContent,
+			destructive: true,
+			statusOnly:  true,
+		},
+		{
+			name:         "update room template",
+			path:         []string{"crc", "room-templates", "update"},
+			flags:        map[string][]string{"template-id": {"fixture-crc-template"}, "room-template": {`{"name":"Fixture CRC room template"}`}},
+			method:       http.MethodPatch,
+			requestPath:  "/v2/crc/room_templates/fixture-crc-template",
+			expectedBody: json.RawMessage(`{"name":"Fixture CRC room template"}`),
+			status:       http.StatusNoContent,
+			statusOnly:   true,
+		},
+	}
+	byRequest := make(map[string]*crcWriteAction, len(actions))
+	for i := range actions {
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("CRC write fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("CRC write fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("CRC write fixture received undeclared query or paging input")
+		}
+		switch {
+		case len(action.multipartFields) > 0:
+			assertCRCMultipartFields(t, request, action.multipartFields)
+		case len(action.expectedBody) == 0:
+			body, err := io.ReadAll(request.Body)
+			if err != nil {
+				t.Fatalf("read CRC no-body request: %v", err)
+			}
+			if len(body) != 0 {
+				t.Fatal("CRC no-body action sent an undeclared request body")
+			}
+		default:
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("CRC body action did not declare JSON content")
+			}
+			var got, want any
+			if err := json.NewDecoder(request.Body).Decode(&got); err != nil {
+				t.Fatalf("decode CRC action body: %v", err)
+			}
+			if err := json.Unmarshal(action.expectedBody, &want); err != nil {
+				t.Fatalf("decode expected CRC action body: %v", err)
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatal("CRC action body did not contain exactly the declared documented fields")
+			}
+		}
+		if len(action.response) > 0 {
+			w.Header().Set("Content-Type", "application/json")
+		}
+		w.WriteHeader(action.status)
+		if len(action.response) > 0 {
+			_, _ = w.Write(action.response)
+		}
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s): %v", action.name, err)
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config:    map[string]string{"base_url": server.URL + "/v2"},
+		Secrets:   map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			beforeRequests := requests
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("CRC write plan did not produce a no-network preview and single-use approval")
+			}
+			requiresTypedConfirmation := action.destructive || action.secretSensitive
+			if requiresTypedConfirmation != (plan.ConfirmationChallenge == string(connectors.ConfirmationKindDestructive)) {
+				t.Fatal("CRC write action did not retain its declared typed-confirmation policy")
+			}
+			if requests != beforeRequests {
+				t.Fatal("CRC write plan or preview reached the fixture endpoint")
+			}
+
+			runRequest := app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}
+			if requiresTypedConfirmation {
+				if _, err := application.RunReverseETL(context.Background(), runRequest); err == nil {
+					t.Fatal("CRC typed-confirmation action bypassed its confirmation gate")
+				}
+				if requests != beforeRequests {
+					t.Fatal("unconfirmed CRC action reached the fixture endpoint")
+				}
+				runRequest.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+			}
+			run, err := application.RunReverseETL(context.Background(), runRequest)
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != action.status {
+				t.Fatalf("CRC write run = %#v, want completed declared action status %d", run, action.status)
+			}
+			if action.statusOnly {
+				if run.OperationDirectWrite.Body != nil {
+					t.Fatal("CRC 204 status-only action returned an invented response body")
+				}
+				return
+			}
+			encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+			if err != nil {
+				t.Fatalf("marshal CRC write response: %v", err)
+			}
+			for _, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatal("CRC write response exposed a declared sensitive field")
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("CRC write response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("CRC write fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+func assertCRCMultipartFields(t *testing.T, request *http.Request, wantFields map[string]string) {
+	t.Helper()
+	mediaType, params, err := mime.ParseMediaType(request.Header.Get("Content-Type"))
+	if err != nil || mediaType != "multipart/form-data" || params["boundary"] == "" {
+		t.Fatalf("CRC multipart content type = %q, want multipart/form-data with boundary", request.Header.Get("Content-Type"))
+	}
+	reader := multipart.NewReader(request.Body, params["boundary"])
+	gotFields := make(map[string]string, len(wantFields))
+	for {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Fatalf("read CRC multipart part: %v", err)
+		}
+		if part.FileName() != "" {
+			_ = part.Close()
+			t.Fatal("CRC account-setting multipart request contains an undeclared file part")
+		}
+		content, err := io.ReadAll(part)
+		_ = part.Close()
+		if err != nil {
+			t.Fatalf("read CRC multipart field: %v", err)
+		}
+		gotFields[part.FormName()] = string(content)
+	}
+	if !reflect.DeepEqual(gotFields, wantFields) {
+		t.Fatalf("CRC multipart fields = %#v, want %#v", gotFields, wantFields)
+	}
+}
+
 // TestAutoDialerDirectReadCommandsExecuteWithFixtures runs every published Auto
 // Dialer GET through the real command runner. It proves the ordinary Zoom
 // bearer, each exact fixed endpoint, no undeclared query or paging input, and

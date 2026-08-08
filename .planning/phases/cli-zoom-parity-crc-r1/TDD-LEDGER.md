@@ -91,7 +91,31 @@ $ go test -count=1 -timeout 20m ./cmd/connectorgen
 ok  	polymetrics.ai/cmd/connectorgen	11.417s
 ```
 
-## GREEN — pending
+## GREEN — captured 2026-08-09
 
-The passing command and output will be appended after the category declaration and generated
-surface reconciliation are complete.
+The CRC bundle was generated from the fetched source by
+`traces/author_crc_bundle.mjs`, then `surface-sync` filled the 11 derivable
+camelCase path mappings and all derived surface metadata. No path mapping, endpoint reference,
+output policy, paging flag, or response cap was hand-authored.
+
+```text
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ go run ./cmd/connectorgen surface-reconcile --check --notes-contains provider_module=crc
+connectorgen surface-reconcile: 551 connector(s) scanned; covered=0 blocked=0 unchanged=0 refused=0
+
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run 'TestCRC(OperationCommandsAreReachable|DirectReadCommandsExecuteWithFixtures|DirectWriteCommandsExecuteWithFixtures)|TestProviderInventoryLedgerIsComplete|TestCoveredStreamsHaveReachableCommands'
+ok  polymetrics.ai/internal/connectors/defs/zoom  2.776s
+```
+
+`TestCRCDirectReadCommandsExecuteWithFixtures` drives all nine declared GETs through the real
+command runner and asserts their exact fixture path/auth/no-query behavior plus named-field
+redaction. `TestCRCDirectWriteCommandsExecuteWithFixtures` executes all eleven mutations through
+plan → no-network preview → approval → execute; it proves all seven `204 No Content` actions have
+no invented response body, the three DELETEs require typed confirmation, and the private-key
+regeneration both requires typed confirmation and redacts its response. Fixtures contain only
+synthetic non-credential values and assertions never print them.
+
+The fresh binary proof was split into bounded harness invocations: `pm help zoom`, bare
+`pm zoom`, bare `pm zoom crc`, and exact `--help` routes 1–7, 8–14, and 15–20 all exited zero.
