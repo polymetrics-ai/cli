@@ -106,8 +106,14 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		switch prepared.format {
 		case "form":
 			response, err = requester.DoFormLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.form, prepared.maxBytes)
-		case "json", "none":
+		case "json":
 			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, prepared.maxBytes)
+		case "none":
+			// prepared.body is a typed nil map for a declared no-body action.
+			// Passing that map through an interface would serialize it as JSON
+			// null, so pass an untyped nil and preserve the provider's actual
+			// empty-body contract.
+			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, nil, prepared.maxBytes)
 		case "multipart":
 			root, rootErr := openMultipartRoot(prepared.cfg.ProjectDir)
 			if rootErr != nil {
