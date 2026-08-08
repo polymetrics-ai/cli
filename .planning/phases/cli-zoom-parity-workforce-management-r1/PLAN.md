@@ -22,9 +22,9 @@ Workforce Management is Zoom's own published category and one Markdown artifact.
 are filter groups, forecasts, imports, organizational groups, reports, scheduling groups, and
 users; they belong together without inventing a cross-cutting delivery lane. All eighteen actions
 are independently implementable through the declarative direct read/write engine, except that the
-two published CSV file imports need a declared CSV validator the engine does not yet provide.
-That narrow foundation ships here in its own red/green commits rather than classifying uploads as
-unsafe or deferring them.
+two published CSV file imports needed a declared CSV validator and staffing needs the source's
+numeric `forecast_duration_weeks` range (`1`–`4`). Those narrow foundations ship here in their own
+red/green commits rather than classifying uploads as unsafe or deferring them.
 
 ## Live artifact audit — completed before RED
 
@@ -85,6 +85,12 @@ add a closed `content_validation: "csv"` option to the existing bounded multipar
   published 1 MB; the historical-queue artifact omits a maximum, so its declaration uses a
   documented-in-plan 10 MB local transport safety cap rather than an unbounded upload.
 
+The staffing operation's `forecast_duration_weeks` remains a provider-declared number constrained
+by Draft-07 `minimum: 1` and `maximum: 4`; it is not weakened to an unbounded number or narrowed
+to an invented integer-only enum. The engine's numeric-bound compiler/validator foundation must
+validate finite numeric instances and reject an unsatisfiable declared range before the connector
+is considered executable.
+
 ## Locked decisions
 
 - Implement all eighteen audited operations: eleven bounded `rest_read` / `direct_read` commands
@@ -106,16 +112,20 @@ add a closed `content_validation: "csv"` option to the existing bounded multipar
 1. **Plan checkpoint** — commit this source audit, target accounting, CSV foundation decision, and
    inline manual-GSD fallback before test or production changes.
 2. **RED checkpoint** — add only the Workforce Management command-surface test and a CSV
-   multipart-foundation test. Capture the current `84 → 95` executable, `1,758 → 1,740`
+   multipart-foundation test. Capture the current `84 → 102` executable, `1,758 → 1,740`
    Zoom-local, `44 → 55` direct-read, and `35 → 42` direct-write failure, and prove every
    provider-native path is unknown through real preflight. Prove `content_validation: "csv"` is
    rejected by the existing closed policy before production change.
 3. **GREEN CSV foundation** — add CSV syntax validation in its own commits, test valid upload and
    pre-network malformed/extension rejections, and preserve the JSON policy.
-4. **GREEN connector** — declare all 18 Workforce Management operations and CLI paths, add exact
+4. **RED/GREEN numeric range foundation** — capture and separately fix the closed schema
+   compiler's rejection of the source-required `minimum`/`maximum` numeric bounds. Validate
+   source boundary values, fractional in-range values, out-of-range values, compile-time
+   contradictory ranges, and nonnumeric Draft-07 applicability.
+5. **GREEN connector** — declare all 18 Workforce Management operations and CLI paths, add exact
    fixtures, reconcile only this module, generate derived metadata/docs/site, and run every action
    through the real runner.
-5. **Verify/review** — run fixture lifecycle tests, source/ledger checks, fresh binary base/group/
+6. **Verify/review** — run fixture lifecycle tests, source/ledger checks, fresh binary base/group/
    every-command help, generated-output scope checks, and inline review.
 
 ## Target accounting

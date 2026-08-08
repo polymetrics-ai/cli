@@ -86,6 +86,39 @@ wrong extension fail before a second request. Constraint tests cover file-only u
 extension lists, `text/csv` header compatibility, positive max-byte requirements, and the
 unchanged JSON path.
 
+## RED numeric-range foundation — captured before numeric-bound production change
+
+The live staffing-import schema additionally publishes
+`forecast_duration_weeks` as a **number** in the inclusive range `1`–`4`. During connector
+validation, the closed schema compiler rejected the standard Draft-07 `minimum` and `maximum`
+keywords. Replacing the numeric contract with an integer enum would change the provider surface,
+so the reusable declaration-owned numeric-range foundation is required before this operation can
+ship. The following test-only checkpoint was staged and committed before engine production code;
+the uncommitted Workforce Management declaration was deliberately not included in that test
+commit.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestCompileSchemaNumericRangeKeywords|TestSchemaValidateNumericRange|TestSchemaNumericRangeIgnoresNonNumbers|TestCompileSchemaRejectsInvalidNumericRange'
+--- FAIL: TestCompileSchemaNumericRangeKeywords (0.00s)
+    schema_test.go:496: CompileSchema({"type":"number","minimum":1}): unexpected error: compile schema: unknown keyword "minimum"
+--- FAIL: TestSchemaValidateNumericRange (0.00s)
+    schema_test.go:504: CompileSchema: compile schema: unknown keyword "minimum"
+--- FAIL: TestSchemaNumericRangeIgnoresNonNumbers (0.00s)
+    schema_test.go:538: CompileSchema: compile schema: unknown keyword "minimum"
+--- FAIL: TestCompileSchemaRejectsInvalidNumericRange (0.00s)
+    --- FAIL: TestCompileSchemaRejectsInvalidNumericRange/maximum_below_minimum (0.00s)
+        schema_test.go:564: error should mention "maximum", got compile schema: unknown keyword "minimum"
+FAIL
+FAIL	polymetrics.ai/internal/connectors/engine	0.757s
+FAIL
+```
+
+The command exited `1`, exactly as expected. The required green foundation must accept only
+finite JSON numbers, reject an unsatisfiable maximum below a declared minimum at compile time,
+and apply the bounds only to numeric instances just as Draft-07 specifies.
+
+## GREEN numeric-range foundation — pending
+
 ## GREEN connector — pending
 
 ## Verification/review — pending
