@@ -22,31 +22,33 @@ import (
 )
 
 type fakeConnector struct {
-	surface                   *connectors.CommandSurface
-	manifest                  connectors.Manifest
-	readReq                   connectors.ReadRequest
-	directReadReq             connectors.DirectReadRequest
-	operationDirectReadReq    connectors.OperationDirectReadRequest
-	operationReadPreflight    operationDirectReadPreflightCall
-	operationReadPreflightErr error
-	operationDirectWriteReq   connectors.OperationDirectWriteRequest
-	directWriteMetadata       connectors.OperationDirectWriteMetadata
-	binaryDownloadReq         connectors.OperationBinaryDownloadRequest
-	directReadErr             error
-	ignoresPageNavigation     bool
-	operationDirectReadErr    error
-	binaryDownloadErr         error
-	validateReq               connectors.WriteRequest
-	dryRunReq                 connectors.WriteRequest
-	writeReq                  connectors.WriteRequest
-	writeRecords              []connectors.Record
-	validateErr               error
-	dryRunErr                 error
-	readErr                   error
-	writeErr                  error
-	readRecords               []connectors.Record
-	preview                   connectors.WritePreview
-	writeResult               connectors.WriteResult
+	surface                    *connectors.CommandSurface
+	manifest                   connectors.Manifest
+	readReq                    connectors.ReadRequest
+	directReadReq              connectors.DirectReadRequest
+	operationDirectReadReq     connectors.OperationDirectReadRequest
+	operationReadPreflight     operationDirectReadPreflightCall
+	operationReadPreflightErr  error
+	operationWritePreflight    operationDirectWritePreflightCall
+	operationWritePreflightErr error
+	operationDirectWriteReq    connectors.OperationDirectWriteRequest
+	directWriteMetadata        connectors.OperationDirectWriteMetadata
+	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
+	directReadErr              error
+	ignoresPageNavigation      bool
+	operationDirectReadErr     error
+	binaryDownloadErr          error
+	validateReq                connectors.WriteRequest
+	dryRunReq                  connectors.WriteRequest
+	writeReq                   connectors.WriteRequest
+	writeRecords               []connectors.Record
+	validateErr                error
+	dryRunErr                  error
+	readErr                    error
+	writeErr                   error
+	readRecords                []connectors.Record
+	preview                    connectors.WritePreview
+	writeResult                connectors.WriteResult
 }
 
 type operationDirectReadPreflightCall struct {
@@ -54,6 +56,13 @@ type operationDirectReadPreflightCall struct {
 	method       string
 	path         string
 	maxBytes     int
+	outputPolicy string
+}
+
+type operationDirectWritePreflightCall struct {
+	operation    string
+	method       string
+	path         string
 	outputPolicy string
 }
 
@@ -140,6 +149,15 @@ func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path str
 		outputPolicy: outputPolicy,
 	}
 	return f.operationReadPreflightErr
+}
+func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+	f.operationWritePreflight = operationDirectWritePreflightCall{
+		operation:    operation,
+		method:       method,
+		path:         path,
+		outputPolicy: outputPolicy,
+	}
+	return f.operationWritePreflightErr
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -1826,6 +1844,14 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	}
 	if command.ConfirmationChallenge != "destructive" {
 		t.Fatalf("confirmation = %q, want destructive", command.ConfirmationChallenge)
+	}
+	if got, want := connector.operationWritePreflight, (operationDirectWritePreflightCall{
+		operation:    "acme.vote",
+		method:       http.MethodPost,
+		path:         "/api/vote",
+		outputPolicy: "json_redacted",
+	}); got != want {
+		t.Fatalf("operation direct-write preflight = %#v, want %#v", got, want)
 	}
 
 	_, err = Run(context.Background(), connector, Request{Path: []string{"vote"}}, func(connectors.Record) error {

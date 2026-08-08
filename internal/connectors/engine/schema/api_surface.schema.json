@@ -53,6 +53,11 @@
               "direct_reads": {
                 "type": "array",
                 "items": { "type": "string" }
+              },
+              "direct_write": { "type": "string" },
+              "direct_writes": {
+                "type": "array",
+                "items": { "type": "string" }
               }
             }
           },

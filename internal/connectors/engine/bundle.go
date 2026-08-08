@@ -674,9 +674,11 @@ type SurfaceCoverage struct {
 	// Writes names every write action an endpoint backs when it backs more than
 	// one. A provider documents one path per operation, but a bundle may model
 	// several distinct write contracts over that one path.
-	Writes      []string `json:"writes,omitempty"`
-	DirectRead  string   `json:"direct_read,omitempty"`
-	DirectReads []string `json:"direct_reads,omitempty"`
+	Writes       []string `json:"writes,omitempty"`
+	DirectRead   string   `json:"direct_read,omitempty"`
+	DirectReads  []string `json:"direct_reads,omitempty"`
+	DirectWrite  string   `json:"direct_write,omitempty"`
+	DirectWrites []string `json:"direct_writes,omitempty"`
 }
 
 // WriteTargets returns every write action a coverage entry names, singular and

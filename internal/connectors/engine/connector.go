@@ -152,6 +152,13 @@ func (c *Connector) OperationDirectWriteMetadata(operation string) (connectors.O
 	return OperationDirectWriteMetadata(c.bundle, operation)
 }
 
+// PreflightOperationDirectWrite proves a command's declared binding can reach
+// this connector's typed write lifecycle without resolving credentials or
+// making a network request.
+func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy)
+}
+
 // OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
 // delegating to the package-level executor. The engine-local request type stays
 // the executor's own contract; this adapter is the seam that lets a CLI command
@@ -265,6 +272,12 @@ func (b Base) CommandSurface() *connectors.CommandSurface {
 // operation direct-read binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
 	return PreflightOperationDirectRead(b.bundle, operation, method, path, maxBytes, outputPolicy)
+}
+
+// PreflightOperationDirectWrite validates a native connector's declared
+// operation direct-write binding without resolving credentials or network I/O.
+func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
 }
 
 // OperationDirectReadMaxBytes returns the bounded response limit for a

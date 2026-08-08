@@ -60,7 +60,7 @@ func TestRunSurfaceReconcileCoversSensitiveDirectWriteWithRuntimePreflight(t *te
 		t.Fatalf("stats = %+v, want one runtime-covered direct write", stats)
 	}
 
-	endpoint := readSurfaceReconcileEndpointAt(t, surfacePath, "PUT", "/v2/calls/{id}/media")
+	endpoint := readSurfaceReconcileEndpointAt(t, surfacePath, "POST", "/v2/crm/entity-schema")
 	if endpoint.Operation != nil {
 		t.Fatalf("reconciled direct-write endpoint still has operation = %+v", endpoint.Operation)
 	}
@@ -74,7 +74,7 @@ func TestRunSurfaceReconcileHelp(t *testing.T) {
 	if code := run([]string{"surface-reconcile", "--help"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("surface-reconcile --help exit = %d, want 0; stderr=%s", code, stderr.String())
 	}
-	if !strings.Contains(stdout.String(), "Derive direct-read api_surface coverage") {
+	if !strings.Contains(stdout.String(), "Derive direct-read and direct-write api_surface coverage") {
 		t.Fatalf("surface-reconcile --help stdout = %q, want command description", stdout.String())
 	}
 }
@@ -194,7 +194,7 @@ func writeSurfaceReconcileDirectWriteFixture(t *testing.T) (string, string) {
 		case endpoint["method"] == reconcileFixtureMethod && endpoint["path"] == reconcileFixturePath:
 			delete(endpoint, "operation")
 			endpoint["covered_by"] = map[string]any{"direct_read": "meetings integration-status"}
-		case endpoint["method"] == "PUT" && endpoint["path"] == "/v2/calls/{id}/media":
+		case endpoint["method"] == "POST" && endpoint["path"] == "/v2/crm/entity-schema":
 			delete(endpoint, "covered_by")
 			endpoint["operation"] = map[string]any{
 				"model":              "sensitive_reverse_etl",
@@ -230,11 +230,11 @@ func writeSurfaceReconcileDirectWriteFixture(t *testing.T) (string, string) {
 			continue
 		}
 		command["intent"] = "direct_write"
-		command["operation"] = "gong.calls_media_upload"
+		command["operation"] = "gong.crm_upload_entity_schema"
 		command["output_policy"] = "gong_bounded_input_redacted"
 		command["api_surface"] = []any{map[string]any{
-			"method": "PUT",
-			"path":   "/v2/calls/{id}/media",
+			"method": "POST",
+			"path":   "/v2/crm/entity-schema",
 		}}
 		writeSurfaceReconcileJSON(t, cliPath, cli)
 		return root, surfacePath

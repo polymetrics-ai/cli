@@ -19,7 +19,7 @@ import (
 // runtime preflight that guards `availability: implemented`. It deliberately
 // does not infer coverage from a command declaration: only a command that
 // matches the endpoint and passes commandrunner.Preflight can replace an
-// operation row with covered_by.direct_read.
+// operation row with covered_by.direct_read or covered_by.direct_write.
 //
 // A row without such a command is still a known blocked fact, so the tool
 // derives its reason from the current command state. Unknown operation models,
@@ -152,10 +152,11 @@ func runSurfaceReconcile(args []string, stdout, stderr io.Writer) int {
 func surfaceReconcileUsage() string {
 	return `usage: connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text] [--notes-contains text]
 
-Derive direct-read api_surface coverage and blocked reasons from real command
-runtime preflight. The optional reason/notes selectors are conjunctive and
-scope which operation rows are considered. In --check mode, report pending
-reclassifications without writing files and exit 1 when a row would change.`
+Derive direct-read and direct-write api_surface coverage and blocked reasons
+from real command runtime preflight. The optional reason/notes selectors are
+conjunctive and scope which operation rows are considered. In --check mode,
+report pending reclassifications without writing files and exit 1 when a row
+would change.`
 }
 
 func surfaceReconcileBundleDirs(dir string) ([]string, error) {
@@ -181,11 +182,12 @@ func surfaceReconcileBundleDirs(dir string) ([]string, error) {
 	return bundles, nil
 }
 
-// reconcileBundle reclassifies only operation-model direct_read ledger rows.
-// It loads the disk bundle through the engine and calls commandrunner.Preflight
-// against that engine connector, so a generated covered_by value has the same
-// admission proof as the CLI path. In check mode it mutates only the decoded
-// in-memory document and reports the prospective changes.
+// reconcileBundle reclassifies direct-read and mutation operation-model ledger
+// rows. It loads the disk bundle through the engine and calls
+// commandrunner.Preflight against that engine connector, so a generated
+// covered_by value has the same admission proof as the CLI path. In check mode
+// it mutates only the decoded in-memory document and reports prospective
+// changes.
 func reconcileBundle(dir string, check bool, reasonContains, notesContains string) (surfaceReconcileStats, error) {
 	stats := surfaceReconcileStats{}
 	absDir, err := filepath.Abs(dir)
@@ -236,10 +238,6 @@ func reconcileBundle(dir string, check bool, reasonContains, notesContains strin
 			continue
 		}
 		stats.Scanned++
-		if stringField(operation, "model") != "direct_read" {
-			stats.Refused++
-			continue
-		}
 		method := strings.ToUpper(strings.TrimSpace(stringField(endpoint, "method")))
 		path := stringField(endpoint, "path")
 		if method == "" || path == "" {
@@ -247,16 +245,32 @@ func reconcileBundle(dir string, check bool, reasonContains, notesContains strin
 			continue
 		}
 
-		passing, reasons := directReadCandidates(connector, bundle.CLISurface.Commands, method, path)
+		var passing []string
+		var reasons []string
+		var coverage *orderedObject
+		var blockedReason func(string, string, []string) string
+		switch stringField(operation, "model") {
+		case "direct_read":
+			passing, reasons = directReadCandidates(connector, bundle.CLISurface.Commands, method, path)
+			coverage = directReadCoverage(passing)
+			blockedReason = blockedDirectReadReason
+		case "sensitive_reverse_etl", "admin_reverse_etl", "destructive_action":
+			passing, reasons = directWriteCandidates(connector, bundle.CLISurface.Commands, method, path)
+			coverage = directWriteCoverage(passing)
+			blockedReason = blockedDirectWriteReason
+		default:
+			stats.Refused++
+			continue
+		}
 		if len(passing) > 0 {
 			endpoint.remove("operation")
-			endpoint.set("covered_by", directReadCoverage(passing))
+			endpoint.set("covered_by", coverage)
 			stats.Covered++
 			changed = true
 			continue
 		}
 
-		reason := blockedDirectReadReason(method, path, reasons)
+		reason := blockedReason(method, path, reasons)
 		rowChanged := false
 		if stringField(operation, "status") != "blocked" {
 			operation.set("status", "blocked")
@@ -291,6 +305,18 @@ func reconcileBundle(dir string, check bool, reasonContains, notesContains strin
 // for implemented candidates; a planned command is a useful blocked reason but
 // cannot be treated as reachable.
 func directReadCandidates(connector connectors.Connector, commands []engine.CLICommand, method, path string) ([]string, []string) {
+	return operationCommandCandidates(connector, commands, "direct_read", method, path)
+}
+
+// directWriteCandidates returns direct_write commands that are both endpoint
+// exact and runtime-preflight reachable. The preflight call includes the
+// operation-to-command endpoint binding, so reconciliation cannot promote a
+// command that happens to name a different rest_write operation.
+func directWriteCandidates(connector connectors.Connector, commands []engine.CLICommand, method, path string) ([]string, []string) {
+	return operationCommandCandidates(connector, commands, "direct_write", method, path)
+}
+
+func operationCommandCandidates(connector connectors.Connector, commands []engine.CLICommand, intent, method, path string) ([]string, []string) {
 	type candidate struct {
 		path         string
 		availability string
@@ -299,7 +325,7 @@ func directReadCandidates(connector connectors.Connector, commands []engine.CLIC
 	}
 	candidates := make([]candidate, 0)
 	for _, command := range commands {
-		if command.Intent != "direct_read" || !commandMatchesEndpoint(command, method, path) {
+		if command.Intent != intent || !commandMatchesEndpoint(command, method, path) {
 			continue
 		}
 		entry := candidate{path: command.Path, availability: command.Availability}
@@ -357,9 +383,30 @@ func directReadCoverage(commands []string) *orderedObject {
 	return coverage
 }
 
+func directWriteCoverage(commands []string) *orderedObject {
+	coverage := newOrderedObject()
+	if len(commands) == 1 {
+		coverage.set("direct_write", commands[0])
+		return coverage
+	}
+	values := make([]any, len(commands))
+	for i, command := range commands {
+		values[i] = command
+	}
+	coverage.set("direct_writes", values)
+	return coverage
+}
+
 func blockedDirectReadReason(method, path string, reasons []string) string {
 	if len(reasons) == 0 {
 		return fmt.Sprintf("No reachable direct-read command declares %s %s.", method, path)
 	}
 	return "No reachable direct-read command: " + strings.Join(reasons, "; ") + "."
+}
+
+func blockedDirectWriteReason(method, path string, reasons []string) string {
+	if len(reasons) == 0 {
+		return fmt.Sprintf("No reachable direct-write command declares %s %s.", method, path)
+	}
+	return "No reachable direct-write command: " + strings.Join(reasons, "; ") + "."
 }

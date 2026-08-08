@@ -45,6 +45,17 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	}
 }
 
+func TestAddSurfaceCoverageCountsIncludesDirectWrites(t *testing.T) {
+	counts := map[string]int{}
+	addSurfaceCoverageCounts(counts, &engine.SurfaceCoverage{
+		DirectWrite:  "widget update",
+		DirectWrites: []string{"widget archive", "widget restore"},
+	})
+	if counts["direct_write"] != 1 || counts["direct_writes"] != 2 {
+		t.Fatalf("direct-write coverage counts = %#v, want singular=1 plural=2", counts)
+	}
+}
+
 // TestSurfaceInventoryCountsPluralOnlyWriteCoverage pins the two shipped
 // bundles whose covered_by rows use ONLY the plural `writes` spelling. github
 // cannot catch a regression here: all 231 of its write rows use the singular

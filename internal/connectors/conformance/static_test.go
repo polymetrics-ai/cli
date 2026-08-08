@@ -175,6 +175,39 @@ func TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage(t *testi
 	}
 }
 
+func TestCheckSurfaceComplete_DirectWriteCoverageRequiresWriteCapability(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Write: true},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "PATCH",
+				Path:      "/widgets/1",
+				CoveredBy: &engine.SurfaceCoverage{DirectWrite: "widget update"},
+			}},
+		},
+		CLISurface: &engine.CLISurface{
+			Commands: []engine.CLICommand{{
+				Path:         "widget update",
+				Intent:       "direct_write",
+				Availability: "implemented",
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete rejected implemented direct_write coverage: %v", err)
+	}
+
+	b.Metadata.Capabilities.Write = false
+	if err := checkSurfaceComplete(b); err == nil || !strings.Contains(err.Error(), "capabilities.write") {
+		t.Fatalf("checkSurfaceComplete error = %v, want write capability rejection", err)
+	}
+}
+
 func TestCheckSurfaceComplete_RequiresV2EndpointProvenance(t *testing.T) {
 	b := engine.Bundle{
 		Name: "acme",
