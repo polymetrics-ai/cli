@@ -1,0 +1,42 @@
+{
+  "phase": "cli-zoom-parity-clips-r1",
+  "issue": 3936,
+  "parent_issue": 3915,
+  "status": "planned",
+  "lifecycle": {
+    "mode": "inline-manual-gsd-fallback",
+    "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
+    "sources_resolved": [
+      "discuss-phase",
+      "plan-phase",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ],
+    "sources_resolved_at": "2026-08-08"
+  },
+  "source_artifact": {
+    "url": "https://developers.zoom.us/docs/api/clips.md",
+    "retrieved_at": "2026-08-08T17:23:43Z",
+    "http_status": 200,
+    "bytes": 57603,
+    "sha256": "ea22469a6432b79f2bc09ad6345419d737577e53ca170a70e7855327c011d764",
+    "openapi": "3.1.1",
+    "server": "https://api.zoom.us/",
+    "ledger_delta": 0
+  },
+  "operations": 21,
+  "target": {
+    "covered": 123,
+    "locally_blocked": 1719,
+    "direct_reads": 61,
+    "direct_writes": 58,
+    "binary_downloads": 1,
+    "unsafe_or_disallowed": 0
+  },
+  "prior_worker_handoff": "Inspected old worktree five-file candidate read-only; it is the already-landed Healthcare implementation (commit 1d260747c) and its writes.json is tracked on this branch. No stale change was copied or deleted.",
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "review": "pending"
+}
