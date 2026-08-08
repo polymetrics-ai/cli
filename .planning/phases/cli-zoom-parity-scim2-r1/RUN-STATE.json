@@ -4,7 +4,7 @@
   "sub_issue": 3942,
   "connector": "zoom",
   "provider_module": "scim2",
-  "state": "root_object_foundation_green",
+  "state": "literal_root_redaction_foundation_green",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -54,5 +54,14 @@
       "go test -count=1 -timeout 20m ./internal/connectors/commandrunner ./cmd/connectorgen"
     ]
   },
-  "next": "commit and push this root-object foundation, then declare all eleven Zoom SCIM2 operations"
+  "literal_root_json_member_redaction_foundation": {
+    "state": "green",
+    "scope": "direct-write preview redaction checks an exact root record member before established dotted-path traversal",
+    "unblocks": "provider-defined root JSON members whose literal names contain dots, including Zoom SCIM extension URNs",
+    "verification": [
+      "go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestBuildOperationDirectWriteCommandRedactsLiteralRootJSONObjectField$'",
+      "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... -run '^TestSCIM2DirectWriteCommandsExecuteWithFixtures$'"
+    ]
+  },
+  "next": "commit and push the literal-root redaction foundation, then complete SCIM2 connector declaration, docs, binary reachability, and verification"
 }
