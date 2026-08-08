@@ -1,5 +1,5 @@
 {
-  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note and Quality Management interaction actions.",
+  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads including sensitive Cobrowse SDK sessions, and approval-gated clinical-note and Quality Management interaction actions.",
   "usage": "pm zoom <group> <command> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
@@ -56,6 +56,13 @@
       "title": "Quality Management",
       "commands": [
         "quality-management"
+      ]
+    },
+    {
+      "id": "cobrowse-sdk",
+      "title": "Cobrowse SDK",
+      "commands": [
+        "cobrowse-sdk"
       ]
     }
   ],
@@ -685,6 +692,138 @@
       "examples": [
         "pm zoom quality-management interactions create --download-url https://files.example.invalid/interaction.mp3 --interaction-channel-type voice --preview --json"
       ]
+    },
+    {
+      "path": "cobrowse-sdk live-sessions list",
+      "summary": "List live Cobrowse SDK sessions for an optional monthly date range.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_cobrowse_live_sessions",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "flags": [
+        {
+          "name": "from",
+          "type": "string",
+          "format": "date",
+          "summary": "Optional report start date (YYYY-MM-DD).",
+          "maps_to": "query.from",
+          "allow_empty": false
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "format": "date",
+          "summary": "Optional report end date (YYYY-MM-DD).",
+          "maps_to": "query.to",
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags.",
+      "examples": [
+        "pm zoom cobrowse-sdk live-sessions list --credential zoom-fixture --from 2026-08-01 --to 2026-08-08 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cobrowsesdk/live_sessions"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "cobrowse-sdk past-sessions list",
+      "summary": "List past Cobrowse SDK sessions for an optional monthly date range.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_cobrowse_past_sessions",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "flags": [
+        {
+          "name": "from",
+          "type": "string",
+          "format": "date",
+          "summary": "Optional report start date (YYYY-MM-DD).",
+          "maps_to": "query.from",
+          "allow_empty": false
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "format": "date",
+          "summary": "Optional report end date (YYYY-MM-DD).",
+          "maps_to": "query.to",
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags.",
+      "examples": [
+        "pm zoom cobrowse-sdk past-sessions list --credential zoom-fixture --from 2026-08-01 --to 2026-08-08 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cobrowsesdk/past_sessions"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "cobrowse-sdk sessions get",
+      "summary": "Get details for one Cobrowse SDK session.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_cobrowse_session",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "flags": [
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Cobrowse SDK session ID.",
+          "maps_to": "path.sessionId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required session-id path parameter; session pins, user/session identifiers, display names, connection IDs, and IP addresses are redacted before output.",
+      "examples": [
+        "pm zoom cobrowse-sdk sessions get --credential zoom-fixture --session-id fixture-session --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cobrowsesdk/sessions/{sessionId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "cobrowse-sdk sessions users list",
+      "summary": "List users from one Cobrowse SDK session.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_cobrowse_session_users",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "flags": [
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Cobrowse SDK session ID.",
+          "maps_to": "path.sessionId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required session-id path parameter; page_size and next_page_token are response-only fields and session/user connection data is redacted before output.",
+      "examples": [
+        "pm zoom cobrowse-sdk sessions users list --credential zoom-fixture --session-id fixture-session --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cobrowsesdk/sessions/{sessionId}/users"
+        }
+      ],
+      "output_policy": "json_redacted"
     }
   ],
   "help_topics": [

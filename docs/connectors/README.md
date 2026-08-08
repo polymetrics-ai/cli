@@ -563,4 +563,4 @@
 - [zoho-inventory](zoho-inventory/MANUAL.md): Reads Zoho Inventory contacts, items, and sales orders through the Zoho Inventory REST API.
 - [zoho-invoice](zoho-invoice/MANUAL.md): Reads Zoho Invoice customers, invoices, and payments through the Zoho Invoice REST API.
 - [zonka-feedback](zonka-feedback/MANUAL.md): Reads Zonka Feedback responses, surveys, contacts, devices, tasks, locations, users, workspaces, stats, and distribution logs; writes responses, contacts, survey sends, and tasks through the Zonka Feedback REST API.
-- [zoom](zoom/MANUAL.md): Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes approval-gated clinical-note and Quality Management interaction actions.
+- [zoom](zoom/MANUAL.md): Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads and approval-gated clinical-note and Quality Management interaction actions.

@@ -3837,53 +3837,29 @@
     {
       "method": "GET",
       "path": "/v2/cobrowsesdk/live_sessions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
-        "notes": "classification=implementable_now; provider_module=cobrowse-sdk; operation_title=List live sessions; provider_server=https://api.zoom.us/v2; provider_path=/cobrowsesdk/live_sessions; artifact=https://developers.zoom.us/docs/api/cobrowse-sdk.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "cobrowse-sdk live-sessions list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/cobrowsesdk/past_sessions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
-        "notes": "classification=implementable_now; provider_module=cobrowse-sdk; operation_title=List past sessions; provider_server=https://api.zoom.us/v2; provider_path=/cobrowsesdk/past_sessions; artifact=https://developers.zoom.us/docs/api/cobrowse-sdk.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "cobrowse-sdk past-sessions list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/cobrowsesdk/sessions/{sessionId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
-        "notes": "classification=implementable_now; provider_module=cobrowse-sdk; operation_title=Get session details; provider_server=https://api.zoom.us/v2; provider_path=/cobrowsesdk/sessions/{sessionId}; artifact=https://developers.zoom.us/docs/api/cobrowse-sdk.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "cobrowse-sdk sessions get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/cobrowsesdk/sessions/{sessionId}/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
-        "notes": "classification=implementable_now; provider_module=cobrowse-sdk; operation_title=List session users; provider_server=https://api.zoom.us/v2; provider_path=/cobrowsesdk/sessions/{sessionId}/users; artifact=https://developers.zoom.us/docs/api/cobrowse-sdk.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "cobrowse-sdk sessions users list"
       }
     },
     {

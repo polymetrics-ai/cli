@@ -294,6 +294,106 @@
         "path": "/v2/qm/interactions/{interactionId}",
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "zoom.list_cobrowse_live_sessions",
+      "kind": "rest_read",
+      "summary": "List live Cobrowse SDK sessions",
+      "description": "Bounded Zoom read for GET /v2/cobrowsesdk/live_sessions; returns live Cobrowse SDK sessions for an optional monthly date range.",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "session_pin",
+          "session_id",
+          "user_id",
+          "user_name",
+          "user_connection_id",
+          "ip_address"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cobrowsesdk/live_sessions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_cobrowse_past_sessions",
+      "kind": "rest_read",
+      "summary": "List past Cobrowse SDK sessions",
+      "description": "Bounded Zoom read for GET /v2/cobrowsesdk/past_sessions; returns past Cobrowse SDK sessions for an optional monthly date range.",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "session_pin",
+          "session_id",
+          "user_id",
+          "user_name",
+          "user_connection_id",
+          "ip_address"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cobrowsesdk/past_sessions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_cobrowse_session",
+      "kind": "rest_read",
+      "summary": "Get Cobrowse SDK session details",
+      "description": "Bounded Zoom read for GET /v2/cobrowsesdk/sessions/{sessionId}; returns one live or past Cobrowse SDK session.",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "session_pin",
+          "session_id",
+          "user_id",
+          "user_name",
+          "user_connection_id",
+          "ip_address"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cobrowsesdk/sessions/{sessionId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_cobrowse_session_users",
+      "kind": "rest_read",
+      "summary": "List Cobrowse SDK session users",
+      "description": "Bounded Zoom read for GET /v2/cobrowsesdk/sessions/{sessionId}/users; returns users from one live or past Cobrowse SDK session.",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "session_pin",
+          "session_id",
+          "user_id",
+          "user_name",
+          "user_connection_id",
+          "ip_address"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cobrowsesdk/sessions/{sessionId}/users",
+        "max_bytes": 1048576
+      }
     }
   ]
 }

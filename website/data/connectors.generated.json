@@ -383387,7 +383387,7 @@
   {
     "slug": "zoom",
     "name": "Zoom",
-    "description": "Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes approval-gated clinical-note and Quality Management interaction actions.",
+    "description": "Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads and approval-gated clinical-note and Quality Management interaction actions.",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "integration_type": "api",
     "release_stage": "ga",
@@ -383438,7 +383438,7 @@
       }
     ],
     "cli_surface": {
-      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note and Quality Management interaction actions.",
+      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads including sensitive Cobrowse SDK sessions, and approval-gated clinical-note and Quality Management interaction actions.",
       "usage": "pm zoom <group> <command> [flags]",
       "source_cli": {
         "name": "Zoom API reference",
@@ -383495,6 +383495,13 @@
           "title": "Quality Management",
           "commands": [
             "quality-management"
+          ]
+        },
+        {
+          "id": "cobrowse-sdk",
+          "title": "Cobrowse SDK",
+          "commands": [
+            "cobrowse-sdk"
           ]
         }
       ],
@@ -384326,6 +384333,196 @@
           "risk": "high: imports a third-party interaction into Zoom Quality Management through an approval-gated reverse ETL action",
           "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
           "notes": "Typed high-risk mutation. Download URL and interaction-info fields are redacted in generic write errors; preview and explicit approval are required before execute. If any interaction-info field is supplied, Zoom requires interaction-channel-type."
+        },
+        {
+          "path": "cobrowse-sdk live-sessions list",
+          "summary": "List live Cobrowse SDK sessions for an optional monthly date range.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_cobrowse_live_sessions",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "Optional report start date (YYYY-MM-DD).",
+              "values": [],
+              "maps_to": "query.from",
+              "format": "date",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Optional report end date (YYYY-MM-DD).",
+              "values": [],
+              "maps_to": "query.to",
+              "format": "date",
+              "allow_empty": false
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom cobrowse-sdk live-sessions list --credential zoom-fixture --from 2026-08-01 --to 2026-08-08 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags."
+        },
+        {
+          "path": "cobrowse-sdk past-sessions list",
+          "summary": "List past Cobrowse SDK sessions for an optional monthly date range.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_cobrowse_past_sessions",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "Optional report start date (YYYY-MM-DD).",
+              "values": [],
+              "maps_to": "query.from",
+              "format": "date",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Optional report end date (YYYY-MM-DD).",
+              "values": [],
+              "maps_to": "query.to",
+              "format": "date",
+              "allow_empty": false
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom cobrowse-sdk past-sessions list --credential zoom-fixture --from 2026-08-01 --to 2026-08-08 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags."
+        },
+        {
+          "path": "cobrowse-sdk sessions get",
+          "summary": "Get details for one Cobrowse SDK session.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_cobrowse_session",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+          "flags": [
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Cobrowse SDK session ID.",
+              "values": [],
+              "maps_to": "path.sessionId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom cobrowse-sdk sessions get --credential zoom-fixture --session-id fixture-session --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read with a typed required session-id path parameter; session pins, user/session identifiers, display names, connection IDs, and IP addresses are redacted before output."
+        },
+        {
+          "path": "cobrowse-sdk sessions users list",
+          "summary": "List users from one Cobrowse SDK session.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_cobrowse_session_users",
+          "source_cli_path": "",
+          "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+          "flags": [
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Cobrowse SDK session ID.",
+              "values": [],
+              "maps_to": "path.sessionId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom cobrowse-sdk sessions users list --credential zoom-fixture --session-id fixture-session --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Zoom read with a typed required session-id path parameter; page_size and next_page_token are response-only fields and session/user connection data is redacted before output."
         }
       ],
       "help_topics": [
@@ -384335,7 +384532,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nReads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.\nThe current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes, and\nHealthcare clinical-note and Quality Management routes; both module write actions remain\napproval-gated.\n\nThe provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1\nreference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build\n`2026-08-03T14-58-19-06-00`, and is being brought to full documented-operation parity one Zoom\nprovider module at a time (see issue #3915 for the module-by-module tracker). Wave 1 exposes the\nthree existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list`, and\n`pm zoom webinars list`. Later waves add bounded direct-read/write commands module by module; see\n\"Direct reads\" below and \"Executable today\" in Known limits for the exact current set.\n\nTwo high-risk Zoom write actions are implemented for Healthcare and Quality Management. All\nremaining provider operations stay explicitly disposed in `api_surface.json`; the ledger is not a\nclaim that those operations are executable.\n\nService API documentation: https://developers.zoom.us/docs/api/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token\n  (Authorization: Bearer `<access_token>`). Never logged.\n- `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL\n  override for tests or proxies.\n- `max_pages` (optional, string); default `0`. The field remains in the connection specification,\n  but the current Zoom cursor paginator does not consume it.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; records per page (1-300); sent as the `page_size`\n  query parameter.\n- `user_id` (optional, string); Zoom user ID or email that scopes the `meetings` and `webinars`\n  streams. Set it in credential configuration or override it with `--user-id` for either command.\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://api.zoom.us/v2`, `max_pages=0`, `page_size=100`.\n`max_pages` is materialized as configuration but does not affect Zoom pagination.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/users` with query `page_size`=`1`.\n\n## Streams notes\n\nDefault pagination is cursor pagination: send `next_page_token` and take the next token from\n`next_page_token`. The stream command `--limit` bounds emitted records (default 100).\n\n- `users`: `pm zoom users list` reads GET `/v2/users` through stream `users`. Records are at\n  `users`; query `page_size`=`{{ config.page_size }}`; computed output fields are `name` and\n  `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/users.md.\n- `meetings`: `pm zoom meetings list` reads GET `/v2/users/{userId}/meetings` through stream\n  `meetings`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `meetings`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n- `webinars`: `pm zoom webinars list` reads GET `/v2/users/{userId}/webinars` through stream\n  `webinars`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `webinars`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n\n### Direct reads (qss module)\n\nThree bounded, single-request `direct_read` commands read the `qss` (Quality of Service\nSubscription) provider module. Each takes one required typed path-parameter flag and returns the\ndecoded JSON response under the `json_redacted` output policy; unlike the ETL streams above these\nare not paginated by the connector — call again with a different id, there is no `--limit` or\ncursor auto-continuation. Only account/subscriptions with the QSS add-on and a subscribed QSS\nsummary event receive non-empty data; see\n[Zoom's QSS product page](https://explore.zoom.us/en/qss/).\n\n- `pm zoom qss meeting-participants list --meeting-id <id>` reads GET\n  `/v2/metrics/meetings/{meetingId}/participants/qos_summary` (operation\n  `zoom.list_meeting_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss webinar-participants list --webinar-id <id>` reads GET\n  `/v2/metrics/webinars/{webinarId}/participants/qos_summary` (operation\n  `zoom.list_webinar_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss session-users list --session-id <id>` reads GET\n  `/v2/videosdk/sessions/{sessionId}/users/qos_summary` (operation\n  `zoom.list_session_users_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n\nAll three responses carry a `next_page_token` field in Zoom's own schema (used to fetch a further\npage of participants/users, not exposed as a command flag in this slice — see Known limits). The\nshared `json_redacted` output policy redacts any field whose name contains `token`\n(`engine/direct_read.go`'s `shouldRedactJSONField`), so `next_page_token` returns as\n`next_page_token_redacted: true` rather than its wire value even though it is a pagination cursor,\nnot a credential.\n\n### Direct reads (ai-companion module)\n\n- `pm zoom ai-companion conversation-archive get --user-id <id>` reads GET\n  `/v2/aic/users/{userId}/conversation_archive` (operation\n  `zoom.get_ai_companion_conversation_archives`). Provider reference:\n  https://developers.zoom.us/docs/api/ai-companion.md. The response's `aic_history_download_url`\n  and `physical_files[].download_url` fields are redacted by `json_redacted` (both fields' names\n  contain `download`+`url`, matching `shouldRedactJSONField`'s download-URL rule) since they are\n  direct download links to a user's AI conversation history/attachments.\n\n### Direct reads (my-notes module)\n\n- `pm zoom my-notes list` reads GET `/v2/my_notes/notes` (operation `zoom.list_my_notes`). No\n  request parameters; the live artifact documents none. Provider reference:\n  https://developers.zoom.us/docs/api/my-notes.md.\n- `pm zoom my-notes content get --note-id <id> [--include transcript]` reads GET\n  `/v2/my_notes/notes/{noteId}/content` (operation `zoom.get_my_notes_content`). Unlike qss's\n  response-only pagination fields, the `include=transcript` query parameter here is explicitly\n  documented in the provider's operation description prose, so it is exposed as an optional\n  `--include` flag. Provider reference: https://developers.zoom.us/docs/api/my-notes.md.\n\n### Direct reads (healthcare module)\n\nThe Healthcare routes return clinical note content and clinical identifiers, so both commands use\nthe existing `clinical_json_redacted` policy. It redacts note content, EHR appointment/patient/\nprovider identifiers, note owner/modifier identifiers, and token-shaped response fields before\noutput. Sanitized fixtures exercise the returned structure; no provider clinical example is retained\nin this repository.\n\n- `pm zoom healthcare clinical-notes list [--note-owner-user-id <id>] [--meeting-id <id>]` reads\n  GET `/v2/clinical_notes/notes` (operation `zoom.list_clinical_notes`). The two optional filters\n  are explicitly described by Zoom's operation prose. `from`, `to`, `page_size`, and\n  `next_page_token` appear only in the `200` response schema and are not request flags. Provider\n  reference: https://developers.zoom.us/docs/api/healthcare.md.\n- `pm zoom healthcare clinical-notes get --note-id <id>` reads GET\n  `/v2/clinical_notes/notes/{noteId}` (operation `zoom.get_clinical_note`). Provider reference:\n  https://developers.zoom.us/docs/api/healthcare.md.\n\n### Direct reads (quality-management module)\n\nQuality Management responses can carry agent/consumer names, contact values, account/user\nidentifiers, and token-shaped pagination fields. The five bounded reads use `json_redacted` plus a\nconnector-local sensitive field policy, so those values are removed before CLI output. Fixtures are\nsynthetic and do not retain Zoom response examples.\n\n- `pm zoom quality-management automated-evaluations list` reads GET\n  `/v2/qm/automated_evaluations` (operation\n  `zoom.list_quality_management_automated_evaluations`). The provider artifact declares no request\n  parameters; `page_size` and `next_page_token` are response fields, not flags.\n- `pm zoom quality-management evaluations list` reads GET `/v2/qm/evaluation` (operation\n  `zoom.list_quality_management_evaluations`). The provider artifact declares no request parameters.\n- `pm zoom quality-management evaluations get --evaluation-id <id>` reads GET\n  `/v2/qm/evaluation/{evaluationId}` (operation `zoom.get_quality_management_evaluation`).\n- `pm zoom quality-management interactions list` reads GET `/v2/qm/interactions` (operation\n  `zoom.list_quality_management_interactions`). The provider artifact declares no request\n  parameters; response-only date/pagination fields are not flags.\n- `pm zoom quality-management interactions get --interaction-id <id>` reads GET\n  `/v2/qm/interactions/{interactionId}` (operation `zoom.get_quality_management_interaction`).\n  Provider reference for all five routes: https://developers.zoom.us/docs/api/quality-management.md.\n\n## Write actions & risks\n\nRead behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My\nNotes, healthcare clinical-note, and Quality Management data.\n\n- `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`\n  plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action\n  (`update_clinical_note`). It changes a clinical-note completion status and therefore must use the\n  existing plan → preview → explicit approval → execute path. The note ID is redacted in write\n  errors. Zoom's `204 No Content` success response is recorded as a successful action.\n\n- `pm zoom quality-management interactions create --download-url <url>` plans the typed POST\n  `/v2/qm/interactions` action (`create_quality_management_interaction`). It imports a third-party\n  interaction into Quality Management and must use plan → preview → explicit approval → execute.\n  The command exposes each documented optional scalar request field, including nested\n  `interaction_info` fields; if an interaction-info field is supplied, `--interaction-channel-type`\n  is required by Zoom. Download URLs and interaction-info fields are redacted in generic write\n  errors. Fixture execution proves the documented `201 Created` response succeeds.\n\nThe provider inventory records 1,032 documented writes. Only the Healthcare completion-status and\nQuality Management interaction-creation actions are currently declared; all remaining write rows\nare either blocked on connector-local typed contracts, safety/approval evidence, and fixtures, or\non the corresponding Zoom account entitlement. Future writes must use the existing plan → preview\n→ explicit approval → execute path; destructive operations additionally require the typed\nconfirmation gate.\n\n## Known limits\n\n- Batch default: `read_page_size=100`.\n- Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See\n  issue #3915 for the full module-by-module tracking table.\n- Executable today: 18 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3\n  bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded\n  `my-notes` module direct reads, 2 Healthcare direct reads, 1 Healthcare PATCH action, 5 Quality\n  Management direct reads, and 1 approval-gated Quality Management POST action.\n- Direct-read commands in this connector take only the request inputs the live provider artifact\n  expressly documents. A response-body field of the same name (including Healthcare's `from`, `to`,\n  `page_size`, and `next_page_token`) is not sufficient evidence of an accepted request parameter.\n  This is a deliberate module-by-module scope-narrowing, not an oversight.\n- Pending connector-local delivery: 1,824 operations have no shared foundation blocker, but still\n  need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can\n  become commands.\n- Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one\n  Meeting audit trail, and four Phone blocked-list routes) remain blocked until Zoom enables the\n  corresponding product/account capability.\n- Justified exclusions: 54 provider-deprecated operations remain recorded as `deprecated` ledger\n  evidence and are not implemented.\n",
+    "docs_md": "# Overview\n\nReads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.\nThe current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes,\nHealthcare clinical-note, Quality Management, and Cobrowse SDK routes; both module write actions\nremain approval-gated.\n\nThe provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1\nreference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build\n`2026-08-03T14-58-19-06-00`, and is being brought to full documented-operation parity one Zoom\nprovider module at a time (see issue #3915 for the module-by-module tracker). Wave 1 exposes the\nthree existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list`, and\n`pm zoom webinars list`. Later waves add bounded direct-read/write commands module by module; see\n\"Direct reads\" below and \"Executable today\" in Known limits for the exact current set.\n\nTwo high-risk Zoom write actions are implemented for Healthcare and Quality Management. All\nremaining provider operations stay explicitly disposed in `api_surface.json`; the ledger is not a\nclaim that those operations are executable.\n\nService API documentation: https://developers.zoom.us/docs/api/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token\n  (Authorization: Bearer `<access_token>`). Never logged.\n- `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL\n  override for tests or proxies.\n- `max_pages` (optional, string); default `0`. The field remains in the connection specification,\n  but the current Zoom cursor paginator does not consume it.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; records per page (1-300); sent as the `page_size`\n  query parameter.\n- `user_id` (optional, string); Zoom user ID or email that scopes the `meetings` and `webinars`\n  streams. Set it in credential configuration or override it with `--user-id` for either command.\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://api.zoom.us/v2`, `max_pages=0`, `page_size=100`.\n`max_pages` is materialized as configuration but does not affect Zoom pagination.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/users` with query `page_size`=`1`.\n\n## Streams notes\n\nDefault pagination is cursor pagination: send `next_page_token` and take the next token from\n`next_page_token`. The stream command `--limit` bounds emitted records (default 100).\n\n- `users`: `pm zoom users list` reads GET `/v2/users` through stream `users`. Records are at\n  `users`; query `page_size`=`{{ config.page_size }}`; computed output fields are `name` and\n  `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/users.md.\n- `meetings`: `pm zoom meetings list` reads GET `/v2/users/{userId}/meetings` through stream\n  `meetings`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `meetings`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n- `webinars`: `pm zoom webinars list` reads GET `/v2/users/{userId}/webinars` through stream\n  `webinars`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `webinars`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n\n### Direct reads (qss module)\n\nThree bounded, single-request `direct_read` commands read the `qss` (Quality of Service\nSubscription) provider module. Each takes one required typed path-parameter flag and returns the\ndecoded JSON response under the `json_redacted` output policy; unlike the ETL streams above these\nare not paginated by the connector — call again with a different id, there is no `--limit` or\ncursor auto-continuation. Only account/subscriptions with the QSS add-on and a subscribed QSS\nsummary event receive non-empty data; see\n[Zoom's QSS product page](https://explore.zoom.us/en/qss/).\n\n- `pm zoom qss meeting-participants list --meeting-id <id>` reads GET\n  `/v2/metrics/meetings/{meetingId}/participants/qos_summary` (operation\n  `zoom.list_meeting_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss webinar-participants list --webinar-id <id>` reads GET\n  `/v2/metrics/webinars/{webinarId}/participants/qos_summary` (operation\n  `zoom.list_webinar_participants_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n- `pm zoom qss session-users list --session-id <id>` reads GET\n  `/v2/videosdk/sessions/{sessionId}/users/qos_summary` (operation\n  `zoom.list_session_users_qos_summary`). Provider reference:\n  https://developers.zoom.us/docs/api/qss.md.\n\nAll three responses carry a `next_page_token` field in Zoom's own schema (used to fetch a further\npage of participants/users, not exposed as a command flag in this slice — see Known limits). The\nshared `json_redacted` output policy redacts any field whose name contains `token`\n(`engine/direct_read.go`'s `shouldRedactJSONField`), so `next_page_token` returns as\n`next_page_token_redacted: true` rather than its wire value even though it is a pagination cursor,\nnot a credential.\n\n### Direct reads (ai-companion module)\n\n- `pm zoom ai-companion conversation-archive get --user-id <id>` reads GET\n  `/v2/aic/users/{userId}/conversation_archive` (operation\n  `zoom.get_ai_companion_conversation_archives`). Provider reference:\n  https://developers.zoom.us/docs/api/ai-companion.md. The response's `aic_history_download_url`\n  and `physical_files[].download_url` fields are redacted by `json_redacted` (both fields' names\n  contain `download`+`url`, matching `shouldRedactJSONField`'s download-URL rule) since they are\n  direct download links to a user's AI conversation history/attachments.\n\n### Direct reads (my-notes module)\n\n- `pm zoom my-notes list` reads GET `/v2/my_notes/notes` (operation `zoom.list_my_notes`). No\n  request parameters; the live artifact documents none. Provider reference:\n  https://developers.zoom.us/docs/api/my-notes.md.\n- `pm zoom my-notes content get --note-id <id> [--include transcript]` reads GET\n  `/v2/my_notes/notes/{noteId}/content` (operation `zoom.get_my_notes_content`). Unlike qss's\n  response-only pagination fields, the `include=transcript` query parameter here is explicitly\n  documented in the provider's operation description prose, so it is exposed as an optional\n  `--include` flag. Provider reference: https://developers.zoom.us/docs/api/my-notes.md.\n\n### Direct reads (healthcare module)\n\nThe Healthcare routes return clinical note content and clinical identifiers, so both commands use\nthe existing `clinical_json_redacted` policy. It redacts note content, EHR appointment/patient/\nprovider identifiers, note owner/modifier identifiers, and token-shaped response fields before\noutput. Sanitized fixtures exercise the returned structure; no provider clinical example is retained\nin this repository.\n\n- `pm zoom healthcare clinical-notes list [--note-owner-user-id <id>] [--meeting-id <id>]` reads\n  GET `/v2/clinical_notes/notes` (operation `zoom.list_clinical_notes`). The two optional filters\n  are explicitly described by Zoom's operation prose. `from`, `to`, `page_size`, and\n  `next_page_token` appear only in the `200` response schema and are not request flags. Provider\n  reference: https://developers.zoom.us/docs/api/healthcare.md.\n- `pm zoom healthcare clinical-notes get --note-id <id>` reads GET\n  `/v2/clinical_notes/notes/{noteId}` (operation `zoom.get_clinical_note`). Provider reference:\n  https://developers.zoom.us/docs/api/healthcare.md.\n\n### Direct reads (quality-management module)\n\nQuality Management responses can carry agent/consumer names, contact values, account/user\nidentifiers, and token-shaped pagination fields. The five bounded reads use `json_redacted` plus a\nconnector-local sensitive field policy, so those values are removed before CLI output. Fixtures are\nsynthetic and do not retain Zoom response examples.\n\n- `pm zoom quality-management automated-evaluations list` reads GET\n  `/v2/qm/automated_evaluations` (operation\n  `zoom.list_quality_management_automated_evaluations`). The provider artifact declares no request\n  parameters; `page_size` and `next_page_token` are response fields, not flags.\n- `pm zoom quality-management evaluations list` reads GET `/v2/qm/evaluation` (operation\n  `zoom.list_quality_management_evaluations`). The provider artifact declares no request parameters.\n- `pm zoom quality-management evaluations get --evaluation-id <id>` reads GET\n  `/v2/qm/evaluation/{evaluationId}` (operation `zoom.get_quality_management_evaluation`).\n- `pm zoom quality-management interactions list` reads GET `/v2/qm/interactions` (operation\n  `zoom.list_quality_management_interactions`). The provider artifact declares no request\n  parameters; response-only date/pagination fields are not flags.\n- `pm zoom quality-management interactions get --interaction-id <id>` reads GET\n  `/v2/qm/interactions/{interactionId}` (operation `zoom.get_quality_management_interaction`).\n  Provider reference for all five routes: https://developers.zoom.us/docs/api/quality-management.md.\n\n### Direct reads (cobrowse-sdk module)\n\nCobrowse SDK responses can contain join-capable session pins, session/user identifiers, display\nnames, connection IDs, IP addresses, and token-shaped pagination fields. The four bounded reads use\n`json_redacted` plus a connector-local sensitive field policy, so those values are removed before\nCLI output. Fixtures are synthetic and do not retain Zoom response examples.\n\n- `pm zoom cobrowse-sdk live-sessions list [--from <YYYY-MM-DD>] [--to <YYYY-MM-DD>]` reads GET\n  `/v2/cobrowsesdk/live_sessions` (operation `zoom.list_cobrowse_live_sessions`). Zoom explicitly\n  permits the optional monthly date range in the operation prose; the range must fall in the past\n  six months. `page_size` and `next_page_token` are response fields, not flags.\n- `pm zoom cobrowse-sdk past-sessions list [--from <YYYY-MM-DD>] [--to <YYYY-MM-DD>]` reads GET\n  `/v2/cobrowsesdk/past_sessions` (operation `zoom.list_cobrowse_past_sessions`) with the same\n  documented monthly range semantics. Response `from`, `to`, `page_size`, and `next_page_token`\n  do not create additional inputs beyond the two explicitly documented query dates.\n- `pm zoom cobrowse-sdk sessions get --session-id <id>` reads GET\n  `/v2/cobrowsesdk/sessions/{sessionId}` (operation `zoom.get_cobrowse_session`).\n- `pm zoom cobrowse-sdk sessions users list --session-id <id>` reads GET\n  `/v2/cobrowsesdk/sessions/{sessionId}/users` (operation `zoom.list_cobrowse_session_users`).\n  Provider reference for all four routes: https://developers.zoom.us/docs/api/cobrowse-sdk.md.\n\n## Write actions & risks\n\nRead behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My\nNotes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data.\n\n- `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`\n  plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action\n  (`update_clinical_note`). It changes a clinical-note completion status and therefore must use the\n  existing plan → preview → explicit approval → execute path. The note ID is redacted in write\n  errors. Zoom's `204 No Content` success response is recorded as a successful action.\n\n- `pm zoom quality-management interactions create --download-url <url>` plans the typed POST\n  `/v2/qm/interactions` action (`create_quality_management_interaction`). It imports a third-party\n  interaction into Quality Management and must use plan → preview → explicit approval → execute.\n  The command exposes each documented optional scalar request field, including nested\n  `interaction_info` fields; if an interaction-info field is supplied, `--interaction-channel-type`\n  is required by Zoom. Download URLs and interaction-info fields are redacted in generic write\n  errors. Fixture execution proves the documented `201 Created` response succeeds.\n\nThe provider inventory records 1,032 documented writes. Only the Healthcare completion-status and\nQuality Management interaction-creation actions are currently declared; all remaining write rows\nare either blocked on connector-local typed contracts, safety/approval evidence, and fixtures, or\non the corresponding Zoom account entitlement. Future writes must use the existing plan → preview\n→ explicit approval → execute path; destructive operations additionally require the typed\nconfirmation gate.\n\n## Known limits\n\n- Batch default: `read_page_size=100`.\n- Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See\n  issue #3915 for the full module-by-module tracking table.\n- Executable today: 22 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3\n  bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded\n  `my-notes` module direct reads, 2 Healthcare direct reads, 1 Healthcare PATCH action, 5 Quality\n  Management direct reads, 1 approval-gated Quality Management POST action, and 4 sensitive\n  Cobrowse SDK direct reads.\n- Direct-read commands in this connector take only the request inputs the live provider artifact\n  expressly documents. Cobrowse's `from`/`to` range is exposed because the operation prose declares\n  it as a query input; a response-body field alone (including `page_size` and `next_page_token`) is\n  not sufficient evidence of an accepted request parameter. This is a deliberate module-by-module\n  scope-narrowing, not an oversight.\n- Pending connector-local delivery: 1,820 operations have no shared foundation blocker, but still\n  need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can\n  become commands.\n- Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one\n  Meeting audit trail, and four Phone blocked-list routes) remain blocked until Zoom enables the\n  corresponding product/account capability.\n- Justified exclusions: 54 provider-deprecated operations remain recorded as `deprecated` ledger\n  evidence and are not implemented.\n",
     "icon": {
       "id": "zoom",
       "path": "icons/zoom.svg",

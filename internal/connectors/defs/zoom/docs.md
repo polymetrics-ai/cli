@@ -1,9 +1,9 @@
 # Overview
 
 Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.
-The current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes, and
-Healthcare clinical-note and Quality Management routes; both module write actions remain
-approval-gated.
+The current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes,
+Healthcare clinical-note, Quality Management, and Cobrowse SDK routes; both module write actions
+remain approval-gated.
 
 The provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1
 reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build
@@ -158,10 +158,31 @@ synthetic and do not retain Zoom response examples.
   `/v2/qm/interactions/{interactionId}` (operation `zoom.get_quality_management_interaction`).
   Provider reference for all five routes: https://developers.zoom.us/docs/api/quality-management.md.
 
+### Direct reads (cobrowse-sdk module)
+
+Cobrowse SDK responses can contain join-capable session pins, session/user identifiers, display
+names, connection IDs, IP addresses, and token-shaped pagination fields. The four bounded reads use
+`json_redacted` plus a connector-local sensitive field policy, so those values are removed before
+CLI output. Fixtures are synthetic and do not retain Zoom response examples.
+
+- `pm zoom cobrowse-sdk live-sessions list [--from <YYYY-MM-DD>] [--to <YYYY-MM-DD>]` reads GET
+  `/v2/cobrowsesdk/live_sessions` (operation `zoom.list_cobrowse_live_sessions`). Zoom explicitly
+  permits the optional monthly date range in the operation prose; the range must fall in the past
+  six months. `page_size` and `next_page_token` are response fields, not flags.
+- `pm zoom cobrowse-sdk past-sessions list [--from <YYYY-MM-DD>] [--to <YYYY-MM-DD>]` reads GET
+  `/v2/cobrowsesdk/past_sessions` (operation `zoom.list_cobrowse_past_sessions`) with the same
+  documented monthly range semantics. Response `from`, `to`, `page_size`, and `next_page_token`
+  do not create additional inputs beyond the two explicitly documented query dates.
+- `pm zoom cobrowse-sdk sessions get --session-id <id>` reads GET
+  `/v2/cobrowsesdk/sessions/{sessionId}` (operation `zoom.get_cobrowse_session`).
+- `pm zoom cobrowse-sdk sessions users list --session-id <id>` reads GET
+  `/v2/cobrowsesdk/sessions/{sessionId}/users` (operation `zoom.list_cobrowse_session_users`).
+  Provider reference for all four routes: https://developers.zoom.us/docs/api/cobrowse-sdk.md.
+
 ## Write actions & risks
 
 Read behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My
-Notes, healthcare clinical-note, and Quality Management data.
+Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data.
 
 - `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`
   plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action
@@ -189,15 +210,17 @@ confirmation gate.
 - Batch default: `read_page_size=100`.
 - Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See
   issue #3915 for the full module-by-module tracking table.
-- Executable today: 18 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
+- Executable today: 22 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
   bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded
   `my-notes` module direct reads, 2 Healthcare direct reads, 1 Healthcare PATCH action, 5 Quality
-  Management direct reads, and 1 approval-gated Quality Management POST action.
+  Management direct reads, 1 approval-gated Quality Management POST action, and 4 sensitive
+  Cobrowse SDK direct reads.
 - Direct-read commands in this connector take only the request inputs the live provider artifact
-  expressly documents. A response-body field of the same name (including Healthcare's `from`, `to`,
-  `page_size`, and `next_page_token`) is not sufficient evidence of an accepted request parameter.
-  This is a deliberate module-by-module scope-narrowing, not an oversight.
-- Pending connector-local delivery: 1,824 operations have no shared foundation blocker, but still
+  expressly documents. Cobrowse's `from`/`to` range is exposed because the operation prose declares
+  it as a query input; a response-body field alone (including `page_size` and `next_page_token`) is
+  not sufficient evidence of an accepted request parameter. This is a deliberate module-by-module
+  scope-narrowing, not an oversight.
+- Pending connector-local delivery: 1,820 operations have no shared foundation blocker, but still
   need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can
   become commands.
 - Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one
