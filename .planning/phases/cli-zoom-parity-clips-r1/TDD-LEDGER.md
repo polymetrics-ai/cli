@@ -147,6 +147,24 @@ FAIL
 The fixture uses a synthetic one-pixel image and contains no credential, token-derived value, or
 signed URL.
 
+### Base64 mutation redirect — additional RED 2026-08-08
+
+The source artifact requires the temporary image endpoint to retain bearer authentication on a
+provider-owned 30x hop. The existing declared-mutation redirect transport can safely replay its
+bounded JSON body, but bundle validation admitted only multipart contracts. The focused semantic
+test failed verbatim before that narrow admission was extended:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationBase64UploadAdmitsDeclaredMutationRedirect$'
+--- FAIL: TestOperationBase64UploadAdmitsDeclaredMutationRedirect (0.00s)
+    direct_write_test.go:482: base64 operation declared redirect = operation 0 ("zoom.clips.files.temporary_upload") rest.redirect is only valid for a multipart rest_write, want admitted provider-owned boundary
+FAIL
+FAIL	polymetrics.ai/internal/connectors/engine	0.750s
+FAIL
+```
+
+The declaration contains only a synthetic secret template and performs no request.
+
 ## GREEN connector — pending
 
 Record the real runner fixture lifecycle, source reconciliation, and command reachability here
