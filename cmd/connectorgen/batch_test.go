@@ -1246,6 +1246,9 @@ func TestParseBatchOpenAPIArtifactResolvesExternalPathItemReferences(t *testing.
 	if len(inventory.Sources) != 2 || inventory.Sources[1].URL != "https://provider.example/paths/widgets.yaml" {
 		t.Fatalf("parsed sources = %+v, want root plus referenced document", inventory.Sources)
 	}
+	if inventory.Endpoints[0].SourceCoordinate != "#/widgets/get" {
+		t.Fatalf("external endpoint coordinate = %q, want source-local pointer", inventory.Endpoints[0].SourceCoordinate)
+	}
 }
 
 func TestParseBatchOpenAPIArtifactStillFailsClosedForUnsupportedOperationContainers(t *testing.T) {
@@ -1339,6 +1342,25 @@ func TestParseBatchHTMLReferenceTraversesOfficialMachineSource(t *testing.T) {
 	}
 }
 
+func TestParseBatchHTMLReferenceDoesNotScanMachineDocumentProse(t *testing.T) {
+	rootURL := "https://provider.example/reference"
+	machineURL := "https://provider.example/openapi.json"
+	root := []byte(`<html><body><a href="/openapi.json">OpenAPI export</a></body></html>`)
+	machine := []byte(`{"openapi":"3.1.0","paths":{"/widgets":{"get":{"description":"Use GET /internal-preview"}}}}`)
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: rootURL, Kind: "html_reference", Retrieved: "2026-08-08"}, func(rawURL string) ([]byte, error) {
+		if rawURL != machineURL {
+			t.Fatalf("traversed URL = %q, want official machine source", rawURL)
+		}
+		return machine, nil
+	})
+	if err != nil {
+		t.Fatalf("parse HTML reference: %v", err)
+	}
+	if len(inventory.Endpoints) != 1 || inventory.Endpoints[0].Method != http.MethodGet || inventory.Endpoints[0].Path != "/widgets" {
+		t.Fatalf("machine inventory = %+v, want only declared machine operation", inventory.Endpoints)
+	}
+}
+
 func TestParseBatchHTMLReferenceTraversesMarkdownMachineSource(t *testing.T) {
 	rootURL := "https://provider.example/docs/llms.txt"
 	machineURL := "https://provider.example/docs/openapi.json"
@@ -1420,6 +1442,15 @@ func TestParseBatchHTMLReferenceFailsClosedForMalformedSelectedLink(t *testing.T
 	}
 }
 
+func TestParseBatchHTMLReferenceFailsClosedForSelectedLinkRejectedByAdmission(t *testing.T) {
+	root := []byte(`<html><body><p>GET /widgets</p><a href="/openapi.json?api_key=fixture;v=1">OpenAPI export</a></body></html>`)
+	_, err := parseBatchHTMLReference(root, batchArtifactSource{URL: "https://provider.example/reference", Kind: "html_reference", Retrieved: "2026-08-08"}, nil)
+	var unknown *batchArtifactInventoryUnknownError
+	if !errors.As(err, &unknown) || !strings.Contains(err.Error(), "failed URL admission") {
+		t.Fatalf("parse error = %v, want admission failure unknown inventory", err)
+	}
+}
+
 func TestParseBatchHTMLReferenceFailsClosedForSelectedLinkFailures(t *testing.T) {
 	rootURL := "https://provider.example/reference"
 	machineURL := "https://provider.example/openapi.json"
@@ -1479,6 +1510,35 @@ func TestParseBatchHTMLReferenceFailsClosedAtDocumentLimit(t *testing.T) {
 	}
 }
 
+func TestParseBatchHTMLReferenceSharesBudgetWithLinkedOpenAPIReferences(t *testing.T) {
+	var root strings.Builder
+	root.WriteString("<html><body>")
+	for index := 0; index < maxBatchArtifactReferenceDocuments-2; index++ {
+		root.WriteString(`<a href="/reference/`)
+		root.WriteString(strconv.Itoa(index))
+		root.WriteString(`">Reference</a>`)
+	}
+	root.WriteString(`<a href="/machine.openapi.json">OpenAPI export</a></body></html>`)
+	machine := []byte(`{"openapi":"3.1.0","paths":{"/widgets":{"$ref":"/paths/widgets.yaml#/widgets"}}}`)
+	_, err := parseBatchHTMLReference([]byte(root.String()), batchArtifactSource{URL: "https://provider.example/reference", Kind: "html_reference", Retrieved: "2026-08-08"}, func(rawURL string) ([]byte, error) {
+		switch {
+		case rawURL == "https://provider.example/machine.openapi.json":
+			return machine, nil
+		case strings.HasPrefix(rawURL, "https://provider.example/reference/"):
+			return []byte(`<html><body></body></html>`), nil
+		case rawURL == "https://provider.example/paths/widgets.yaml":
+			t.Fatal("external path-item reference fetched after shared document budget was exhausted")
+		default:
+			t.Fatalf("traversed URL = %q, want bounded official reference", rawURL)
+		}
+		return nil, nil
+	})
+	var unknown *batchArtifactInventoryUnknownError
+	if !errors.As(err, &unknown) || !strings.Contains(err.Error(), "reference limit") {
+		t.Fatalf("parse error = %v, want shared-reference-budget failure", err)
+	}
+}
+
 func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 	for _, raw := range []string{
 		"https://user@example.test/openapi.json",
@@ -1530,13 +1590,46 @@ func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 }
 
 func TestParseBatchReferenceURLRejectsCredentialQueryAliases(t *testing.T) {
-	for _, key := range []string{"api_key", "api-key", "apikey", "access-key", "sig", "signature"} {
+	for _, key := range []string{"api_key", "api-key", "apikey", "access-key", "key", "sig", "signature"} {
 		t.Run(key, func(t *testing.T) {
 			_, err := parseBatchReferenceURL("https://example.test/openapi.json?" + key + "=fixture")
 			if err == nil || !strings.Contains(err.Error(), "credential-shaped") {
 				t.Fatalf("parseBatchReferenceURL(%q) error = %v, want credential-query rejection", key, err)
 			}
 		})
+	}
+}
+
+func TestMergeBatchArtifactInventoriesPreservesFallbackAlternatives(t *testing.T) {
+	primary := batchArtifactInventory{Endpoints: []batchArtifactEndpoint{{
+		Method:           http.MethodGet,
+		Path:             "/widgets",
+		SourceURL:        "https://provider.example/openapi.json",
+		SourceKind:       "openapi",
+		SourceCoordinate: `paths["/widgets"].get`,
+	}}}
+	fallback := batchArtifactInventory{Endpoints: []batchArtifactEndpoint{{
+		Method:           http.MethodGet,
+		Path:             "/widgets",
+		SourceURL:        "https://provider.example/reference/first.json",
+		SourceKind:       "official-reference",
+		SourceCoordinate: `#/paths/~1widgets/get`,
+		Alternatives: []batchArtifactEndpointAlternative{{
+			SourceURL:        "https://provider.example/reference/second.json",
+			SourceKind:       "official-reference",
+			SourceCoordinate: `#/paths/~1widgets/get`,
+		}, {
+			SourceURL:        "https://provider.example/reference/first.json",
+			SourceKind:       "official-reference",
+			SourceCoordinate: `#/paths/~1widgets/get`,
+		}},
+	}}}
+	merged := mergeBatchArtifactInventories(primary, fallback)
+	if len(merged.Endpoints) != 1 || len(merged.Endpoints[0].Alternatives) != 2 {
+		t.Fatalf("merged endpoints = %+v, want both deduplicated fallback citations", merged.Endpoints)
+	}
+	if merged.Endpoints[0].Alternatives[0].SourceURL != "https://provider.example/reference/first.json" || merged.Endpoints[0].Alternatives[1].SourceURL != "https://provider.example/reference/second.json" {
+		t.Fatalf("merged alternatives = %+v, want fallback primary and secondary citations", merged.Endpoints[0].Alternatives)
 	}
 }
 

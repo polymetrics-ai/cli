@@ -42,19 +42,20 @@ func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batch
 	seen := map[string]bool{rootURL.String(): true}
 	sources := []batchArtifactSource{source}
 	inventory := batchArtifactInventory{}
-	totalBytes := len(raw)
+	budget := newBatchArtifactReferenceBudget(raw)
 	for len(queue) > 0 {
 		current := queue[0]
 		queue = queue[1:]
 
 		machineSource := current.Source
 		machineSource.Kind = "official-reference"
-		machine, isMachine, machineErr := parseBatchReferenceMachineArtifact(current.Raw, machineSource, fetch)
+		machine, isMachine, machineErr := parseBatchReferenceMachineArtifactWithBudget(current.Raw, machineSource, fetch, budget)
 		if machineErr != nil {
 			return batchArtifactInventory{}, machineErr
 		}
 		if isMachine {
 			inventory = mergeBatchArtifactInventories(inventory, machine)
+			continue
 		}
 
 		for _, match := range batchHTMLExplicitOperation.FindAllSubmatch(current.Raw, -1) {
@@ -92,17 +93,19 @@ func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batch
 			if fetch == nil {
 				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference link %q cannot be fetched during traversal", link)
 			}
-			if len(seen) >= maxBatchArtifactReferenceDocuments {
+			if !budget.hasDocumentCapacity() {
 				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference traversal exceeds the %d-document limit", maxBatchArtifactReferenceDocuments)
 			}
 			linkRaw, linkErr := fetch(link)
 			if linkErr != nil {
 				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference link %q could not be fetched: %v", link, linkErr)
 			}
-			if len(linkRaw) > maxMaterializeArtifactBytes || totalBytes > maxBatchArtifactReferenceBytes-len(linkRaw) {
+			if err := budget.addFetched(linkRaw); err != nil {
+				if err == errBatchArtifactReferenceDocumentLimit {
+					return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference traversal exceeds the %d-document limit", maxBatchArtifactReferenceDocuments)
+				}
 				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference traversal exceeds the bounded %d-byte source budget", maxBatchArtifactReferenceBytes)
 			}
-			totalBytes += len(linkRaw)
 			seen[link] = true
 			linkSource := batchArtifactSource{
 				URL:       link,
@@ -135,7 +138,11 @@ func parseBatchReferenceArtifact(raw []byte, source batchArtifactSource, fetch b
 }
 
 func parseBatchReferenceMachineArtifact(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, bool, error) {
-	inventory, openAPIErr := parseBatchOpenAPIArtifactSource(raw, source, fetch)
+	return parseBatchReferenceMachineArtifactWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
+}
+
+func parseBatchReferenceMachineArtifactWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, bool, error) {
+	inventory, openAPIErr := parseBatchOpenAPIArtifactSourceWithBudget(raw, source, fetch, budget)
 	if openAPIErr == nil {
 		return inventory, true, nil
 	}
@@ -225,15 +232,13 @@ func batchHTMLReferenceLinks(raw []byte, base *url.URL) ([]string, error) {
 		resolved := base.ResolveReference(parsed)
 		resolved.Fragment = ""
 		resolved.RawFragment = ""
-		if resolved.Scheme != "https" || resolved.Host == "" || resolved.User != nil {
-			return nil
-		}
 		if !strings.EqualFold(strings.TrimSuffix(resolved.Hostname(), "."), strings.TrimSuffix(base.Hostname(), ".")) {
 			return nil
 		}
-		if validateBatchReferenceURLObject(resolved) == nil {
-			links[resolved.String()] = true
+		if err := validateBatchReferenceURLObject(resolved); err != nil {
+			return batchArtifactInventoryUnknown("official reference contains a selected link that failed URL admission")
 		}
+		links[resolved.String()] = true
 		return nil
 	}
 	tokenizer := nethtml.NewTokenizer(bytes.NewReader(raw))
