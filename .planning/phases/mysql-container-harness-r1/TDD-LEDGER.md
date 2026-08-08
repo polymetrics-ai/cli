@@ -98,3 +98,45 @@ Both packages passed with the sources restored. `internal/connectors/defs/mysql/
 the MySQL 8.4+ CDC bound with 8.4.11 as the verified server, the scoped statement-event rejection
 rule, and the proven-ownership host-disk reclaim; the website connector artifacts were regenerated
 from that bundle and changed only the `mysql` entry.
+
+**Red — review round 3 fixes (ANSI-quoted CDC identifiers, machine ownership record):**
+
+```text
+go test -count=1 ./internal/connectors/native/mysql -run TestCDCQueryEventsFailClosed
+go test -count=1 ./internal/connectors/native/dbtest -run TestCleanupNeverTrimsAMachineThisRunDidNotCreate
+```
+
+Both assertions were run against the pre-fix behaviour, restored, and observed red:
+
+- `TestCDCQueryEventsFailClosed` failed on `cross_schema_ansi_quoted_alter` and
+  `cross_schema_ansi_quoted_drop` while `statementIdentifiers` sent every `"`-delimited span to
+  `skipQuotedLiteral`. Under `sql_mode=ANSI_QUOTES` that span is an identifier, so
+  `ALTER TABLE "pm_harness"."events" CHANGE COLUMN label title VARCHAR(64)` logged under another
+  default schema spelled no identifier the scan could see and the changefeed skipped it. A rename
+  or type change keeps the column count, so nothing downstream would have caught it either.
+- `TestCleanupNeverTrimsAMachineThisRunDidNotCreate` failed on
+  `caller_supplied_a_machine_this_run_never_created` and `ownership_was_released_before_cleanup`
+  while the gate was a name comparison: it issued `machine ssh <name> sudo fstrim -av` against a
+  machine the process never created, and against one it had already removed. `fstrim -av` reaches
+  every filesystem on a machine, so a name match is not an ownership claim.
+- `TestNewMachineCreatesAndRemovesOnlyItsOwnMachine` had no target before the fix: there was no API
+  to create an owned machine and therefore no ownership record to check.
+
+**Green — review round 3 fixes:**
+
+```text
+gofmt -l cmd internal
+go vet ./internal/connectors/native/... && go vet -tags databaseintegration ./internal/connectors/native/mysql
+go test -count=1 -timeout 5m ./internal/connectors/native/dbtest ./internal/connectors/native/mysql
+```
+
+Both packages passed. The reclaim gate was then proven live rather than by inference: see
+VERIFICATION.md "Live MySQL proof — re-run against the ownership-gated reclaim", which recorded
+`reclaimed=true` on a machine the test created (`pmdb-mysql-eddc7350dec5`) and removed again.
+
+One defect surfaced only in that live run: Podman refuses a machine name longer than 30 characters,
+and the machine runner discards command output by design, so the first attempt failed with an opaque
+`create database test machine: podman machine command failed`. Machine names are now built to a
+shorter budget than container names and the length is asserted in `NewMachine` and in
+`TestNewMachineCreatesAndRemovesOnlyItsOwnMachine`, so the limit fails as a named error rather than
+as an unattributable Podman exit.

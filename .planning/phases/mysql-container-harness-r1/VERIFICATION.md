@@ -35,11 +35,6 @@ POLYMETRICS_DATABASE_INTEGRATION=1 \
     -run '^TestMySQLContainerHarness$' ./internal/connectors/native/mysql
 ```
 
-The live proof above predates the review fix that made the host-disk reclaim unconditional on a
-proven-owned machine; at that time it was requested with `POLYMETRICS_DATABASE_RECLAIM_DISK=1`. The
-trim itself, its two passes, and the leak assertion are unchanged — only the gate moved from an
-environment opt-in to proven machine ownership, which the task-owned machine above satisfies.
-
 - [x] The non-cached live invocation completed successfully; a follow-up identical invocation was
       reported by Go as cached pass.
 - [x] It asserted a real check, dynamic catalog, full five-record read with `page_size=2`, exact
@@ -49,6 +44,45 @@ environment opt-in to proven machine ownership, which the task-owned machine abo
 - [x] Scoped post-run `ps --all`, `volume ls`, and `images` returned no records.
 - [x] The task-owned machine was explicitly stopped and removed immediately after the proof. No
       other Podman machine, container, or volume was touched by this verification.
+
+### Live MySQL proof — re-run against the ownership-gated reclaim (review round 3)
+
+The proof above predates the review fix that replaced the name-matching reclaim gate with an
+ownership record, so it was re-run end to end against that gate. The machine is now created by the
+test infrastructure itself, which is the only thing that establishes ownership:
+
+```bash
+POLYMETRICS_DATABASE_INTEGRATION=1 \
+  POLYMETRICS_DATABASE_OWN_MACHINE=1 \
+  go test -tags=databaseintegration -count=1 -v -timeout 30m \
+    -run '^TestMySQLContainerHarness$' ./internal/connectors/native/mysql
+```
+
+```text
+mysql_integration_test.go:81: MySQL database test created task-owned Podman machine "pmdb-mysql-eddc7350dec5"
+mysql_integration_test.go:120: MySQL database test disk free bytes: before=18050224128 after=22241910784 reclaimed=true
+--- PASS: TestMySQLContainerHarness (80.93s)
+ok      polymetrics.ai/internal/connectors/native/mysql  81.690s
+```
+
+- [x] The run created its own uniquely named 2 CPU / 2 GiB / 16 GiB machine
+      (`pmdb-mysql-eddc7350dec5`) rather than being handed one.
+- [x] `reclaimed=true`: the ownership gate permitted the trim, so this is observed rather than
+      inferred. Host free went from 18,050,224,128 to 22,241,910,784 bytes across teardown — the
+      trim returned more than the run consumed, and the leak assertion was evaluated rather than
+      skipped.
+- [x] All four `sslmode` subtests, the reads, and the binary-log CDC assertions passed on the
+      task-owned machine.
+- [x] `podman machine list` afterwards showed no `pmdb-` machine and the two pre-existing machines
+      (`polymetrics-runtime`, `fm-bahmni-lab-r1-machine`) still present and stopped. Nothing else
+      was touched.
+
+One disclosed residue: `podman machine rm --force` leaves a 128 KiB
+`efi-bl-<machine>` file in Podman's own machine state directory. This is Podman-side behaviour, not
+harness behaviour — the same file exists for machines this repository never created
+(`efi-bl-podman-machine-default`) — and the harness deliberately does not reach into Podman's state
+directory to delete files, because guessing at that layout risks deleting another machine's state
+for 128 KiB.
 
 ### Contract reconciliation
 

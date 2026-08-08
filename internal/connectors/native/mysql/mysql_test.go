@@ -389,6 +389,13 @@ func TestCDCQueryEventsFailClosed(t *testing.T) {
 		// never proof of what a statement touched.
 		{name: "cross schema qualified alter", schema: "other_app", query: "ALTER TABLE pm_harness.events ADD COLUMN ignored INT", wantErr: true},
 		{name: "cross schema backquoted alter", schema: "other_app", query: "ALTER TABLE `pm_harness`.`events` ADD COLUMN ignored INT", wantErr: true},
+		// Under sql_mode=ANSI_QUOTES a double-quoted span is an identifier, and
+		// a rename or type change keeps the column count, so nothing downstream
+		// would notice it. What the quote means is undecidable here, so it is
+		// read as a name rather than skipped as a constant.
+		{name: "cross schema ansi quoted alter", schema: "other_app", query: `ALTER TABLE "pm_harness"."events" CHANGE COLUMN label title VARCHAR(64)`, wantErr: true},
+		{name: "cross schema ansi quoted drop", schema: "other_app", query: `DROP TABLE "pm_harness"."events"`, wantErr: true},
+		{name: "unrelated ansi quoted alter", schema: "other_app", query: `ALTER TABLE "other_app"."events" CHANGE COLUMN label title VARCHAR(64)`},
 		{name: "cross schema drop database", schema: "other_app", query: "DROP DATABASE pm_harness", wantErr: true},
 		{name: "cross schema rename into target", schema: "other_app", query: "RENAME TABLE other_app.events TO pm_harness.events", wantErr: true},
 		// A literal that merely spells the database name is not an object

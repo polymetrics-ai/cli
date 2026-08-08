@@ -64,8 +64,9 @@ it does not create, alter, or delete database data.
   Other statement events, including DDL, are rejected only when they can reach the configured
   database: the binary log is server-wide, so unrelated schema activity does not end a changefeed,
   while a statement that names the configured database — including one qualified from another
-  default schema — does. A statement that cannot be attributed to a schema is rejected too. New CDC
-  subscriptions capture their binary-log position before loading column metadata.
+  default schema, in backquotes or in `sql_mode=ANSI_QUOTES` double quotes — does. A statement that
+  cannot be attributed to a schema is rejected too. New CDC subscriptions capture their binary-log
+  position before loading column metadata.
 - Tables and columns whose identifiers this connector cannot safely quote are omitted from the
   catalog rather than advertised, because a Read against them would always fail.
 - GTID checkpointing, client certificate authentication, schema-change event projection, and
@@ -81,19 +82,23 @@ the records actually returned.
 
 ```bash
 POLYMETRICS_DATABASE_INTEGRATION=1 \
-  POLYMETRICS_PODMAN_CONNECTION=<your-machine> \
+  POLYMETRICS_DATABASE_OWN_MACHINE=1 \
   go test -tags=databaseintegration -count=1 -v ./internal/connectors/native/mysql
 ```
 
-`POLYMETRICS_PODMAN_CONNECTION` is mandatory and has no default. Every Podman command is scoped to
-it with `--connection`, because a bare `podman` command targets whichever machine is the global
-default, which on a shared host belongs to someone else. The test skips with a visible reason when
-the opt-in or the connection is missing, and fails rather than passing when the engine is
-unreachable.
+`POLYMETRICS_DATABASE_OWN_MACHINE=1` makes the run create its own uniquely named Podman machine,
+use it, and delete it again. This is the mode that proves host-disk reclaim, because only a machine
+this process created is trimmable. Pass `POLYMETRICS_PODMAN_CONNECTION=<your-machine>` instead to
+run against an existing machine; one of the two is mandatory, and there is no default, because a
+bare `podman` command targets whichever machine is the global default, which on a shared host
+belongs to someone else. Every Podman command is scoped with `--connection`. The test skips with a
+visible reason when the opt-in or the connection is missing, and fails rather than passing when the
+engine is unreachable.
 
 Cleanup runs on every exit path, including a failed assertion and an interrupt: the generated
-container, its named volume, the run-owned image tag, and the pulled source image are all removed.
-`POLYMETRICS_DATABASE_KEEP_IMAGE=1` retains the source image for a subsequent run.
+container, its named volume, the run-owned image tag, the pulled source image, and any machine this
+run created are all removed. `POLYMETRICS_DATABASE_KEEP_IMAGE=1` retains the source image for a
+subsequent run.
 
 Cleanup also trims the backing machine so freed guest blocks are punched out of the host's sparse
 disk file. This matters on macOS: removing an image frees space inside the VM but leaves the host
@@ -102,12 +107,14 @@ measured to return only about a quarter of the space, while a second pass return
 it. Measured on Podman 5.3.2 with applehv, one full run moved host free space by under 2 MiB end to
 end.
 
-The trim runs only against a machine the run can prove it owns: the Podman connection every command
-was scoped to must address that machine by name (`<machine>` or `<machine>-root`), and
-`podman machine inspect` must confirm the machine is defined on this host. A shared or remote
-endpoint satisfies neither, so the trim is skipped and the run reports the reason together with the
-host bytes still reclaimable, rather than trimming a machine that belongs to someone else. Set
-`POLYMETRICS_PODMAN_MACHINE` when the connection name differs from the machine name.
+The trim runs only against a machine this process created through `dbtest.NewMachine` and still
+holds an ownership record for. A matching name is not ownership: `fstrim -av` reaches every
+filesystem on a machine, so a caller-supplied, pre-existing, shared, or remote machine is never
+trimmed no matter what it is called. Those runs report the reason together with the host bytes still
+reclaimable instead. Two weaker checks follow the ownership record as defence in depth — the scoped
+connection must address that machine (`<machine>` or `<machine>-root`), and `podman machine inspect`
+must still resolve it locally. `POLYMETRICS_PODMAN_MACHINE` names the machine behind a
+caller-supplied connection whose name differs; it does not confer ownership.
 
 ### Adding a second engine
 

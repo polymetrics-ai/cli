@@ -227,18 +227,25 @@ func statementReachesDatabase(statement, defaultSchema, database string) bool {
 	return false
 }
 
-// statementIdentifiers extracts every bare or backquoted identifier a
-// statement spells. It over-collects — a keyword or a column name is returned
-// too — which only ever makes the caller more conservative, and it skips
-// quoted literals so a string constant cannot look like an object reference.
+// statementIdentifiers extracts every name a statement could be spelling as an
+// object reference. It over-collects — a keyword, a column name, and the body
+// of a double-quoted span are all returned — which only ever makes the caller
+// more conservative.
+//
+// A double-quoted span is collected rather than skipped because what it means
+// is not decidable from the statement alone: under sql_mode=ANSI_QUOTES, which
+// the ANSI combination also sets, `"` quotes an identifier rather than a string.
+// Skipping it let a fully-qualified `"db"."table"` reach the target database
+// while spelling no identifier this scan could see. Only a single-quoted span
+// is a string constant under every sql_mode, so only that one is skipped.
 func statementIdentifiers(statement string) []string {
 	var identifiers []string
 	runes := []rune(statement)
 	for index := 0; index < len(runes); {
 		switch character := runes[index]; {
-		case character == '\'' || character == '"':
+		case character == '\'':
 			index = skipQuotedLiteral(runes, index)
-		case character == '`':
+		case character == '`' || character == '"':
 			identifier, next := readQuotedIdentifier(runes, index)
 			identifiers = append(identifiers, identifier)
 			index = next
@@ -270,15 +277,16 @@ func skipQuotedLiteral(runes []rune, index int) int {
 }
 
 func readQuotedIdentifier(runes []rune, index int) (string, int) {
+	quote := runes[index]
 	var identifier strings.Builder
 	for index++; index < len(runes); index++ {
-		if runes[index] != '`' {
+		if runes[index] != quote {
 			identifier.WriteRune(runes[index])
 			continue
 		}
-		// MySQL escapes a backquote inside a quoted identifier by doubling it.
-		if index+1 < len(runes) && runes[index+1] == '`' {
-			identifier.WriteRune('`')
+		// MySQL escapes a quote inside a quoted identifier by doubling it.
+		if index+1 < len(runes) && runes[index+1] == quote {
+			identifier.WriteRune(quote)
 			index++
 			continue
 		}

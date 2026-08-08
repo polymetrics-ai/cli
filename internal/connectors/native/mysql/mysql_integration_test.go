@@ -36,6 +36,10 @@ const (
 	envConnection = "POLYMETRICS_PODMAN_CONNECTION"
 	envMachine    = "POLYMETRICS_PODMAN_MACHINE"
 	envKeepImage  = "POLYMETRICS_DATABASE_KEEP_IMAGE"
+	// envOwnMachine makes this run create and delete its own Podman machine.
+	// Only a machine the test infrastructure created is trimmable, so this is
+	// the mode that proves the host-disk reclaim end to end.
+	envOwnMachine = "POLYMETRICS_DATABASE_OWN_MACHINE"
 )
 
 var errCollectedCDCEvents = errors.New("test collected required mysql change events")
@@ -46,17 +50,42 @@ func TestMySQLContainerHarness(t *testing.T) {
 	if os.Getenv(envEnabled) != "1" {
 		t.Skipf("database integration skipped: set %s=1 to run the MySQL Podman proof", envEnabled)
 	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+
 	connection := strings.TrimSpace(os.Getenv(envConnection))
-	if connection == "" {
-		t.Skipf("database integration skipped: %s must name the explicit Podman connection, because the default connection belongs to another lane", envConnection)
-	}
 	machine := strings.TrimSpace(os.Getenv(envMachine))
+	ownsMachine := os.Getenv(envOwnMachine) == "1"
+	if ownsMachine {
+		// Registered before the harness defer below, so it runs last: the
+		// container has to be removed before the machine hosting it is.
+		created, err := dbtest.NewMachine(ctx, dbtest.MachineConfig{
+			Engine:    "mysql",
+			CPUs:      2,
+			MemoryMiB: 2048,
+			DiskGiB:   16,
+		})
+		if created != nil {
+			defer func() {
+				removeCtx, removeCancel := context.WithTimeout(context.Background(), 5*time.Minute)
+				defer removeCancel()
+				if err := created.Remove(removeCtx); err != nil {
+					t.Errorf("could not remove the task-owned MySQL test machine %q", created.Name())
+				}
+			}()
+		}
+		if err != nil {
+			t.Fatalf("could not create the task-owned MySQL test machine: %v", err)
+		}
+		connection, machine = created.Connection(), created.Name()
+		t.Logf("MySQL database test created task-owned Podman machine %q", machine)
+	} else if connection == "" {
+		t.Skipf("database integration skipped: set %s=1 to run against a task-owned machine, or %s to name an explicit existing Podman connection, because the default connection belongs to another lane",
+			envOwnMachine, envConnection)
+	}
 	if machine == "" {
 		machine = connection
 	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
-	defer cancel()
 	harness, err := dbtest.New(dbtest.Config{
 		Engine:         "mysql",
 		Image:          mysqlIntegrationImage,
@@ -91,9 +120,16 @@ func TestMySQLContainerHarness(t *testing.T) {
 		t.Logf("MySQL database test disk free bytes: before=%d after=%d reclaimed=%t",
 			report.DiskFreeBefore, report.DiskFreeAfter, report.HostDiskReclaimed)
 		if !report.HostDiskReclaimed {
-			// A machine this run cannot prove it owns is never trimmed, because
-			// the trim would reach a shared or remote host. Report the cost
-			// instead of asserting against space the run was not allowed to free.
+			// On a machine this run created, a skip is a failure of the gate
+			// itself and must be red rather than a quiet log: the whole point
+			// of owning the machine is that the trim is permitted.
+			if ownsMachine {
+				t.Errorf("MySQL database test did not reclaim host disk on the machine it created: %s", report.HostDiskReclaimSkipped)
+				return
+			}
+			// A caller-supplied machine is never trimmed, because the trim
+			// reaches every workload on it. Report the cost instead of
+			// asserting against space the run was not allowed to free.
 			t.Logf("MySQL database test skipped the host-disk reclaim (%s); %d bytes remain reclaimable on the backing machine",
 				report.HostDiskReclaimSkipped, report.HostDiskReclaimableBytes)
 			return

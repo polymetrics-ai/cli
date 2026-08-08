@@ -53,10 +53,18 @@ were empty, then that exact machine was stopped and removed. No other machine, c
 was touched.
 
 The harness emits disk-free bytes before and after each engine, and reclaims host disk on every run
-whose machine it can prove it owns; its live assertion then allows only ordinary build noise after
-teardown, and the fresh proof passed that assertion. A machine that cannot be proven owned is
-reported with its still-reclaimable byte count rather than trimmed. Retaining the source image is
+whose machine it created itself through `dbtest.NewMachine`; its live assertion then allows only
+ordinary build noise after teardown, and the fresh proof passed that assertion. A machine this
+process did not create — caller-supplied, pre-existing, shared, or remote — is reported with its
+still-reclaimable byte count rather than trimmed, because `fstrim -av` reaches every filesystem on a
+machine and a matching name proves nothing about who else is using it. Retaining the source image is
 opt-in only via `POLYMETRICS_DATABASE_KEEP_IMAGE=1`.
+
+The ownership gate is proven, not inferred: `POLYMETRICS_DATABASE_OWN_MACHINE=1` re-ran the tagged
+live proof on a machine the test created (`pmdb-mysql-eddc7350dec5`), recorded `reclaimed=true` with
+host free rising from 18,050,224,128 to 22,241,910,784 bytes across teardown, and removed that exact
+machine afterwards. See VERIFICATION.md for the full transcript and the one disclosed Podman-side
+residue.
 
 ## Dependency Evidence — `github.com/go-mysql-org/go-mysql v1.16.0`
 

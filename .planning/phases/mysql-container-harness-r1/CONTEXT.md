@@ -23,10 +23,13 @@ path.
   earlier cleanup error. `POLYMETRICS_DATABASE_KEEP_IMAGE=1` is the only retention opt-in.
 - Cleanup runs two explicit `fstrim` passes against the configured machine after Podman cleanup.
   This is required on macOS VM-backed storage to return freed guest blocks to the host sparse disk.
-  It is no longer an opt-in, but it runs only against a machine the run can prove it owns: the
-  scoped connection must address that machine by name and `podman machine inspect` must confirm it
-  is defined on this host. An unproven machine is reported with the still-reclaimable byte count,
-  never trimmed, because a shared or remote endpoint belongs to another lane.
+  It is no longer an opt-in, but it runs only against a machine this process created through
+  `dbtest.NewMachine` and still holds an ownership record for. A matching name is not ownership:
+  `fstrim -av` reaches every filesystem on a machine, so a caller-supplied, pre-existing, shared, or
+  remote machine is reported with its still-reclaimable byte count and never trimmed. The scoped
+  connection and a live `podman machine inspect` follow as defence in depth.
+- `POLYMETRICS_DATABASE_OWN_MACHINE=1` is how the live proof creates, uses, and deletes its own
+  machine; that is the mode in which the reclaim is exercised at all.
 - The test database uses only its isolated ephemeral server configuration. No credential or
   connection string is printed, logged, or stored.
 - MySQL is a dynamic-schema Tier-3 native connector. Its binary-log mechanism is declared through

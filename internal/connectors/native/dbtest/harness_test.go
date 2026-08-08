@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os/exec"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -101,24 +102,65 @@ func commandsContain(commands [][]string, prefix ...string) bool {
 	return false
 }
 
-// scriptedMachineRunner answers "machine inspect" with the local machine it
-// was told exists, so a test can choose whether this run owns the machine
-// without a VM. The zero value owns nothing.
+// scriptedMachineRunner tracks the machines a test created through NewMachine
+// and answers "machine inspect" for exactly those, so ownership can be
+// exercised without a VM. inspectName and inspectErr override that answer to
+// model a host that disagrees with the record.
 type scriptedMachineRunner struct {
-	localMachine string
-	inspectErr   error
-	commands     [][]string
+	inspectName string
+	inspectErr  error
+	initErr     error
+	created     map[string]bool
+	commands    [][]string
 }
 
 func (r *scriptedMachineRunner) Run(_ context.Context, args ...string) (string, error) {
 	r.commands = append(r.commands, append([]string(nil), args...))
-	if commandHasPrefix(args, "machine", "inspect") {
+	switch {
+	case commandHasPrefix(args, "machine", "init"):
+		if r.initErr != nil {
+			return "", r.initErr
+		}
+		r.setCreated(args[len(args)-1], true)
+	case commandHasPrefix(args, "machine", "rm"):
+		r.setCreated(args[len(args)-1], false)
+	case commandHasPrefix(args, "machine", "inspect"):
 		if r.inspectErr != nil {
 			return "", r.inspectErr
 		}
-		return r.localMachine + "\n", nil
+		if r.inspectName != "" {
+			return r.inspectName + "\n", nil
+		}
+		name := args[len(args)-1]
+		if !r.created[name] {
+			return "", errors.New("no such machine")
+		}
+		return name + "\n", nil
 	}
 	return "", nil
+}
+
+func (r *scriptedMachineRunner) setCreated(name string, present bool) {
+	if r.created == nil {
+		r.created = make(map[string]bool)
+	}
+	if present {
+		r.created[name] = true
+		return
+	}
+	delete(r.created, name)
+}
+
+// newOwnedTestMachine creates a machine through the package's own API, which
+// is the only thing that establishes an ownership record.
+func newOwnedTestMachine(t *testing.T, runner *scriptedMachineRunner) *Machine {
+	t.Helper()
+	machine, err := NewMachine(context.Background(), MachineConfig{Engine: "mysql", RunMachine: runner})
+	if err != nil {
+		t.Fatalf("NewMachine(): %v", err)
+	}
+	t.Cleanup(func() { _ = machine.Remove(context.Background()) })
+	return machine
 }
 
 func testConfig(runner CommandRunner) Config {
@@ -455,12 +497,51 @@ func TestStartPreservesPreexistingGeneratedVolume(t *testing.T) {
 	}
 }
 
+func TestNewMachineCreatesAndRemovesOnlyItsOwnMachine(t *testing.T) {
+	runner := &scriptedMachineRunner{}
+	machine, err := NewMachine(context.Background(), MachineConfig{Engine: "mysql", RunMachine: runner})
+	if err != nil {
+		t.Fatalf("NewMachine(): %v", err)
+	}
+	if !strings.HasPrefix(machine.Name(), machineNamePrefix+"mysql-") || machine.Connection() != machine.Name() {
+		t.Fatalf("machine = %q / %q, want a generated name addressed by its own connection", machine.Name(), machine.Connection())
+	}
+	// Podman refuses a longer name, and the runner discards its output, so an
+	// over-long name would surface only as an opaque init failure.
+	if len(machine.Name()) > maxPodmanMachineNameLength {
+		t.Fatalf("machine name %q is %d characters, want at most %d", machine.Name(), len(machine.Name()), maxPodmanMachineNameLength)
+	}
+	if !machineIsOwned(machine.Name()) {
+		t.Fatal("NewMachine() did not record this run as the machine's owner")
+	}
+	if !commandsContain(runner.commands, "machine", "init") || !commandsContain(runner.commands, "machine", "start") {
+		t.Fatalf("machine commands = %v, want init and start", runner.commands)
+	}
+
+	if err := machine.Remove(context.Background()); err != nil {
+		t.Fatalf("Remove(): %v", err)
+	}
+	if !commandsContain(runner.commands, "machine", "rm", "--force", machine.Name()) {
+		t.Fatalf("machine commands = %v, want the created machine removed by name", runner.commands)
+	}
+	// Ownership must not outlive the machine: a later run reusing the name
+	// would otherwise inherit a trim right over a VM this process no longer has.
+	if machineIsOwned(machine.Name()) {
+		t.Fatal("Remove() kept the ownership record for a deleted machine")
+	}
+	if err := machine.Remove(context.Background()); err != nil {
+		t.Fatalf("second Remove(): %v", err)
+	}
+}
+
 func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	runner := &scriptedRunner{}
-	machine := &scriptedMachineRunner{localMachine: "lane-machine"}
+	machineRunner := &scriptedMachineRunner{}
+	machine := newOwnedTestMachine(t, machineRunner)
 	config := testConfig(runner)
-	config.Machine = "lane-machine"
-	config.RunMachine = machine
+	config.Connection = machine.Connection()
+	config.Machine = machine.Name()
+	config.RunMachine = machineRunner
 	h, err := New(config)
 	if err != nil {
 		t.Fatalf("New(): %v", err)
@@ -473,10 +554,18 @@ func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	}
 	// Two passes are required: one discard immediately after an image removal
 	// returns only part of the space on Podman 5.3 with applehv.
-	inspect := []string{"machine", "inspect", "--format", "{{.Name}}", "lane-machine"}
-	trim := []string{"machine", "ssh", "lane-machine", "sudo fstrim -av"}
-	if want := [][]string{inspect, trim, trim}; !reflect.DeepEqual(machine.commands, want) {
-		t.Fatalf("machine lifecycle commands = %v, want %v", machine.commands, want)
+	var trims [][]string
+	for _, command := range machineRunner.commands {
+		if commandHasPrefix(command, "machine", "ssh") {
+			trims = append(trims, command)
+		}
+	}
+	trim := []string{"machine", "ssh", machine.Name(), "sudo fstrim -av"}
+	if want := [][]string{trim, trim}; !reflect.DeepEqual(trims, want) {
+		t.Fatalf("machine trim commands = %v, want %v", trims, want)
+	}
+	if !commandsContain(machineRunner.commands, "machine", "inspect", "--format", "{{.Name}}", machine.Name()) {
+		t.Fatalf("machine commands = %v, want the machine confirmed before the trim", machineRunner.commands)
 	}
 	report := h.Report()
 	if !report.HostDiskReclaimed || report.HostDiskReclaimSkipped != "" {
@@ -493,33 +582,76 @@ func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	}
 }
 
-func TestCleanupNeverTrimsAMachineThisRunCannotProveItOwns(t *testing.T) {
+// fstrim reaches every filesystem on a machine, so the gate has to be
+// ownership rather than a name that happens to match what a caller configured.
+func TestCleanupNeverTrimsAMachineThisRunDidNotCreate(t *testing.T) {
 	for _, tc := range []struct {
-		name    string
-		machine *scriptedMachineRunner
-		mutate  func(*Config)
+		name  string
+		setup func(*testing.T, *Config) *scriptedMachineRunner
 	}{
 		{
-			name:    "connection addresses another machine",
-			machine: &scriptedMachineRunner{localMachine: "other-machine"},
-			mutate:  func(c *Config) { c.Machine = "other-machine" },
+			// The decisive case: everything a name check could look at agrees,
+			// and the machine is still not this run's to trim.
+			name: "caller supplied a machine this run never created",
+			setup: func(_ *testing.T, config *Config) *scriptedMachineRunner {
+				runner := &scriptedMachineRunner{inspectName: "lane-machine"}
+				config.Connection = "lane-machine"
+				config.Machine = "lane-machine"
+				return runner
+			},
 		},
 		{
-			name:    "machine is not defined on this host",
-			machine: &scriptedMachineRunner{inspectErr: errors.New("machine inspect failed")},
-			mutate:  func(c *Config) { c.Machine = "lane-machine" },
+			name: "ownership was released before cleanup",
+			setup: func(t *testing.T, config *Config) *scriptedMachineRunner {
+				runner := &scriptedMachineRunner{}
+				machine := newOwnedTestMachine(t, runner)
+				config.Connection = machine.Connection()
+				config.Machine = machine.Name()
+				runner.inspectName = machine.Name()
+				if err := machine.Remove(context.Background()); err != nil {
+					t.Fatalf("Remove(): %v", err)
+				}
+				return runner
+			},
 		},
 		{
-			name:    "machine inspect names a different machine",
-			machine: &scriptedMachineRunner{localMachine: "someone-elses-machine"},
-			mutate:  func(c *Config) { c.Machine = "lane-machine" },
+			name: "connection addresses another machine",
+			setup: func(t *testing.T, config *Config) *scriptedMachineRunner {
+				runner := &scriptedMachineRunner{}
+				machine := newOwnedTestMachine(t, runner)
+				config.Connection = "lane-machine"
+				config.Machine = machine.Name()
+				return runner
+			},
+		},
+		{
+			name: "machine is no longer defined on this host",
+			setup: func(t *testing.T, config *Config) *scriptedMachineRunner {
+				runner := &scriptedMachineRunner{}
+				machine := newOwnedTestMachine(t, runner)
+				config.Connection = machine.Connection()
+				config.Machine = machine.Name()
+				runner.inspectErr = errors.New("machine inspect failed")
+				return runner
+			},
+		},
+		{
+			name: "machine inspect names a different machine",
+			setup: func(t *testing.T, config *Config) *scriptedMachineRunner {
+				runner := &scriptedMachineRunner{}
+				machine := newOwnedTestMachine(t, runner)
+				config.Connection = machine.Connection()
+				config.Machine = machine.Name()
+				runner.inspectName = "someone-elses-machine"
+				return runner
+			},
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			runner := &scriptedRunner{}
 			config := testConfig(runner)
-			config.RunMachine = tc.machine
-			tc.mutate(&config)
+			config.RunMachine = tc.setup(t, &config)
+			machineRunner := config.RunMachine.(*scriptedMachineRunner)
 			free := []uint64{4096, 1024}
 			config.DiskFree = func() (uint64, error) {
 				value := free[0]
@@ -538,8 +670,8 @@ func TestCleanupNeverTrimsAMachineThisRunCannotProveItOwns(t *testing.T) {
 			if err := h.Close(context.Background()); err != nil {
 				t.Fatalf("Close(): %v", err)
 			}
-			if commandsContain(tc.machine.commands, "machine", "ssh") {
-				t.Fatalf("machine commands = %v, want no trim of an unowned machine", tc.machine.commands)
+			if commandsContain(machineRunner.commands, "machine", "ssh") {
+				t.Fatalf("machine commands = %v, want no trim of an unowned machine", machineRunner.commands)
 			}
 			report := h.Report()
 			if report.HostDiskReclaimed || report.HostDiskReclaimSkipped == "" {

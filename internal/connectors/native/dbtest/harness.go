@@ -91,8 +91,9 @@ type Config struct {
 	// falling back to it is refused before any Podman call.
 	Connection string
 	// Machine names the Podman machine backing Connection and defaults to
-	// Connection. The host-disk reclaim runs only when this run can prove it
-	// owns that machine; see reclaimHostDisk.
+	// Connection. The host-disk reclaim runs only against a machine this
+	// process created through NewMachine; a caller-supplied name is used for
+	// nothing but reporting. See reclaimHostDisk.
 	Machine string
 	// ContainerArgs are passed to "podman run" before the image reference.
 	ContainerArgs []string
@@ -415,9 +416,9 @@ func (h *Harness) Close(ctx context.Context) error {
 // reclaimHostDisk discards freed guest blocks so the machine's sparse disk
 // file shrinks on the host, because removing an image frees space inside the
 // VM but leaves the host file inflated. It runs on every cleanup rather than
-// on an opt-in, but only against a machine this run can prove it owns; an
-// unproven machine is reported through the Report instead, never trimmed,
-// because a shared or remote endpoint belongs to another lane.
+// on an opt-in, but only against a machine this process created; an unowned
+// machine is reported through the Report instead, never trimmed, because a
+// pre-existing, shared, or remote endpoint belongs to another lane.
 //
 // Two passes are required: measured on Podman 5.3 with applehv, a single
 // fstrim immediately after an image removal returns only part of the space,
@@ -436,21 +437,28 @@ func (h *Harness) reclaimHostDisk(ctx context.Context) (reclaimed bool, skipped 
 }
 
 // machineOwnership proves, or refuses to prove, that trimming the configured
-// machine can only affect this run's host. Two independent facts must hold:
-// the connection every container command was scoped to addresses that machine
-// by name, which is how Podman names a machine's own connections; and the
-// machine is one this host defines locally, which a remote endpoint is not.
-// The returned reason names the failed check without echoing configuration.
+// machine can only affect this run. The decisive fact is that this process
+// created the machine and still holds its ownership record: `fstrim -av`
+// reaches every filesystem on a machine, so a name that merely matches
+// caller-supplied configuration proves nothing about who else is using it.
+// Two weaker checks follow as defence in depth — the connection every
+// container command was scoped to must address that machine, which is how
+// Podman names a machine's own connections, and the machine must still be
+// locally defined. The returned reason names the failed check without echoing
+// configuration.
 func (h *Harness) machineOwnership(ctx context.Context) (bool, string) {
+	if !machineIsOwned(h.config.Machine) {
+		return false, "podman machine was not created by this run"
+	}
 	if h.config.Connection != h.config.Machine && h.config.Connection != h.config.Machine+"-root" {
-		return false, "podman connection does not address the configured machine"
+		return false, "podman connection does not address the machine this run created"
 	}
 	name, err := h.config.RunMachine.Run(ctx, "machine", "inspect", "--format", "{{.Name}}", h.config.Machine)
 	if err != nil {
 		return false, "podman machine ownership could not be verified"
 	}
 	if strings.TrimSpace(name) != h.config.Machine {
-		return false, "podman machine is not a local machine this run owns"
+		return false, "podman machine is not the local machine this run created"
 	}
 	return true, ""
 }
@@ -506,16 +514,31 @@ func (h *Harness) resourceAbsent(ctx context.Context, args ...string) (bool, err
 // bounded parallel mode. One registry closes every live harness before the
 // process exits.
 var interruptCleanup = struct {
-	mu      sync.Mutex
-	live    map[*Harness]struct{}
-	signals chan os.Signal
-	idle    chan struct{}
-}{live: make(map[*Harness]struct{})}
+	mu       sync.Mutex
+	live     map[*Harness]struct{}
+	machines map[*Machine]struct{}
+	signals  chan os.Signal
+	idle     chan struct{}
+}{live: make(map[*Harness]struct{}), machines: make(map[*Machine]struct{})}
 
 func (h *Harness) installInterruptCleanup() {
 	interruptCleanup.mu.Lock()
 	defer interruptCleanup.mu.Unlock()
 	interruptCleanup.live[h] = struct{}{}
+	armInterruptWatchLocked()
+}
+
+// registerInterruptMachine adds a machine this process created, so an
+// interrupt removes a whole VM rather than leaking its disk image. Only owned
+// machines are ever registered here.
+func registerInterruptMachine(machine *Machine) {
+	interruptCleanup.mu.Lock()
+	defer interruptCleanup.mu.Unlock()
+	interruptCleanup.machines[machine] = struct{}{}
+	armInterruptWatchLocked()
+}
+
+func armInterruptWatchLocked() {
 	if interruptCleanup.signals != nil {
 		return
 	}
@@ -534,7 +557,18 @@ func unregisterInterruptCleanup(h *Harness) {
 	interruptCleanup.mu.Lock()
 	defer interruptCleanup.mu.Unlock()
 	delete(interruptCleanup.live, h)
-	if len(interruptCleanup.live) != 0 || interruptCleanup.signals == nil {
+	disarmInterruptWatchLocked()
+}
+
+func unregisterInterruptMachine(machine *Machine) {
+	interruptCleanup.mu.Lock()
+	defer interruptCleanup.mu.Unlock()
+	delete(interruptCleanup.machines, machine)
+	disarmInterruptWatchLocked()
+}
+
+func disarmInterruptWatchLocked() {
+	if len(interruptCleanup.live) != 0 || len(interruptCleanup.machines) != 0 || interruptCleanup.signals == nil {
 		return
 	}
 	signal.Stop(interruptCleanup.signals)
@@ -550,8 +584,12 @@ func awaitInterrupt(signals chan os.Signal, idle chan struct{}) {
 	case <-signals:
 	}
 	signal.Stop(signals)
-	cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+	cleanupCtx, cancel := context.WithTimeout(context.Background(), 6*time.Minute)
+	// Containers first: they live inside the machines removed next, and a
+	// machine torn down underneath an in-flight container removal would report
+	// a cleanup failure for work that had already become moot.
 	closeLiveHarnesses(cleanupCtx)
+	removeOwnedMachines(cleanupCtx)
 	cancel()
 	os.Exit(130)
 }
@@ -574,6 +612,27 @@ func closeLiveHarnesses(ctx context.Context) {
 			defer wg.Done()
 			_ = harness.Close(ctx)
 		}(harness)
+	}
+	wg.Wait()
+}
+
+// removeOwnedMachines deletes every machine this process created. It removes
+// nothing else: a machine that was already on the host has no record here.
+func removeOwnedMachines(ctx context.Context) {
+	interruptCleanup.mu.Lock()
+	machines := make([]*Machine, 0, len(interruptCleanup.machines))
+	for machine := range interruptCleanup.machines {
+		machines = append(machines, machine)
+	}
+	interruptCleanup.mu.Unlock()
+
+	var wg sync.WaitGroup
+	for _, machine := range machines {
+		wg.Add(1)
+		go func(machine *Machine) {
+			defer wg.Done()
+			_ = machine.Remove(ctx)
+		}(machine)
 	}
 	wg.Wait()
 }
