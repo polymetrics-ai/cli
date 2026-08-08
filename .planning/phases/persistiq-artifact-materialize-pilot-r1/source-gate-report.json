@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/manifest.json",
+  "candidates": 1,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "persistiq",
+      "stage": "provenance",
+      "reason": "api_surface.json has legacy v0 provenance; batch candidates require complete v2 provenance matched to manifest artifact URL \"https://persistiq.com/api-docs/v1/swagger.json\""
+    }
+  ],
+  "provenance_refusals": 1,
+  "surveyed_operations": {
+    "total": 21,
+    "read": 12,
+    "write": 9
+  },
+  "declared_operations": 0,
+  "operation_split": {
+    "executable": 0,
+    "provider_blocked": 0,
+    "excluded": 0
+  }
+}

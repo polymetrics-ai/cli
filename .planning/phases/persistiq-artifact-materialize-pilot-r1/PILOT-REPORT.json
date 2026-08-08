@@ -1,0 +1,52 @@
+{
+  "connector": "persistiq",
+  "status": "failed_at_materialization",
+  "scope": {"connectors_attempted": 1, "second_connector_started": false},
+  "artifact": {
+    "url": "https://persistiq.com/api-docs/v1/swagger.json",
+    "format": "openapi",
+    "version": "3.0.1",
+    "bytes": 47796,
+    "sha256": "0bf3e1ecbfbf6215360b5bb8f9d4fda816df4e1872470a00b529fb3e8b80946f",
+    "paths": 14,
+    "operations": 21,
+    "parsed": true
+  },
+  "operation_mapping": {
+    "etl": 11,
+    "direct_read": 1,
+    "reverse_etl": 7,
+    "direct_write": 2,
+    "binary_download": 0,
+    "unclassified": 0
+  },
+  "timings_seconds": {
+    "identify_link": 0.02,
+    "map_operations": 0.04,
+    "fetch_digest_parse": 2.75,
+    "materialize_and_gates": 16.92,
+    "report": 0.01,
+    "total": 19.74
+  },
+  "counts": {
+    "fetched": 1,
+    "parsed": 1,
+    "materialized": 0,
+    "gated": 0,
+    "reachable": 0,
+    "failed": 1
+  },
+  "failure": {
+    "stage": "batch_materialize.coverage",
+    "reason": "executable coverage GET /v1/mailboxes is absent from the cited artifact",
+    "other_current_executable_paths_absent_from_artifact": [
+      "GET /v1/activities",
+      "GET /v1/accounts"
+    ]
+  },
+  "certification": {
+    "status": "withheld",
+    "provider_exercised": false,
+    "note": "implemented evidence is not certification; no credentials or provider data were used"
+  }
+}

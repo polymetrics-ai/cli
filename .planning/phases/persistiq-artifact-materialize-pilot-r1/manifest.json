@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 250,
+    "criteria": "status=done; artifact_kind=openapi|swagger; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope"
+  },
+  "connectors": [
+    {
+      "connector": "persistiq",
+      "operations_total": 21,
+      "operations_read": 12,
+      "operations_write": 9,
+      "artifact": {
+        "url": "https://persistiq.com/api-docs/v1/swagger.json",
+        "kind": "openapi",
+        "version": "PersistIQ API V1; OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-06"
+      },
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "The metadata-linked PersistIQ Swagger UI is live and directly configures its PersistIQ API V1 document at this URL. The artifact declares api.persistiq.com as production, OpenAPI 3.0.1, and an x-api-key header security scheme.",
+      "counting_note": "PersistIQ's current provider-hosted Swagger UI links this complete OpenAPI document. It defines 14 paths and 21 HTTP operation objects: 12 GET, 6 POST, 1 PATCH, 1 PUT, and 1 DELETE. GET actions list or retrieve campaign leads, campaigns, DNC domains, events, lead fields/statuses, leads, campaign replies, tags, users, and webhook-plugin settings, so they are reads. All non-GET actions add/remove campaign leads, create/duplicate campaigns, add DNC domains, create/update leads, send a campaign reply, or update webhook-plugin settings; each changes provider or outbound-email state, so there is no semantic non-GET read. Inbound webhook deliveries are excluded; callable webhook-plugin settings retrieval/update is retained.",
+      "processed_at": "2026-08-06T14:31:56Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}
