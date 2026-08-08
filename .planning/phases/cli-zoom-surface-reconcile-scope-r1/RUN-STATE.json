@@ -2,10 +2,14 @@
   "phase": "cli-zoom-surface-reconcile-scope-r1",
   "parent_issue": 3915,
   "consumer_issue": 3946,
-  "state": "planned",
+  "state": "red_captured",
   "manual_gsd_fallback": {
     "reason": "named phase is not initialized in gsd-sdk; use the parent contract's inline single-worker fallback",
     "role_spawning": "forbidden by parent contract"
   },
-  "next": "add and capture the focused red selector test before changing connectorgen"
+  "red": {
+    "command": "go test -count=1 ./cmd/connectorgen -run TestRunSurfaceReconcileNotesContainsScopesOperationRows",
+    "result": "failed as expected: unknown flag --notes-contains"
+  },
+  "next": "commit and push the red test checkpoint before changing connectorgen"
 }

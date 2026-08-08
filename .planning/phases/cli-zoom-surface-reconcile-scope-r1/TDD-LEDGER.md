@@ -1,10 +1,18 @@
 # TDD Ledger — scoped operation-surface reconciliation, R1
 
-## RED — pending
+## RED — captured before production code
 
 The red test invokes `surface-reconcile --notes-contains provider_module=healthcare` against a
 synthetic bundle row whose provider-module provenance lives only in `operation.notes`. The installed
-tool must fail before implementation because it does not recognize that selector.
+tool failed before implementation because it did not recognize that selector:
+
+```text
+--- FAIL: TestRunSurfaceReconcileNotesContainsScopesOperationRows (0.01s)
+    surfacereconcile_test.go:67: surface-reconcile unmatched --notes-contains exit = 2, want 0; stdout= stderr=connectorgen surface-reconcile: unknown flag "--notes-contains"
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	0.741s
+FAIL
+```
 
 ## GREEN — pending
 

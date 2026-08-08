@@ -59,6 +59,27 @@ func TestRunSurfaceReconcileHelp(t *testing.T) {
 	}
 }
 
+func TestRunSurfaceReconcileNotesContainsScopesOperationRows(t *testing.T) {
+	root, surfacePath := writeSurfaceReconcileFixture(t, "implemented", "direct_read")
+
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"surface-reconcile", root, "--notes-contains", "provider_module=phone"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("surface-reconcile unmatched --notes-contains exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if endpoint := readSurfaceReconcileEndpoint(t, surfacePath); endpoint.Operation == nil || endpoint.CoveredBy != nil {
+		t.Fatalf("unmatched notes selector rewrote endpoint = %+v", endpoint)
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	if code := run([]string{"surface-reconcile", root, "--notes-contains", "provider_module=healthcare"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("surface-reconcile matching --notes-contains exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if endpoint := readSurfaceReconcileEndpoint(t, surfacePath); endpoint.Operation != nil || endpoint.CoveredBy == nil || endpoint.CoveredBy.DirectRead != "meetings integration-status" {
+		t.Fatalf("matching notes selector did not reconcile endpoint = %+v", endpoint)
+	}
+}
+
 func TestSurfaceReconcileKeepsUnreachableRowsBlockedAndRefusesUnknownModel(t *testing.T) {
 	t.Run("declared but planned command", func(t *testing.T) {
 		root, surfacePath := writeSurfaceReconcileFixture(t, "planned", "direct_read")
@@ -169,6 +190,7 @@ func writeSurfaceReconcileFixture(t *testing.T, availability, model string, comm
 			"risk":               "low",
 			"blocked_by_default": true,
 			"reason":             "Blocked by missing shared foundation #2985; stale fixture prose.",
+			"notes":              "provider_module=healthcare",
 		}
 		found = true
 	}
