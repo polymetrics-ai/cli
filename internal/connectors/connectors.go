@@ -467,6 +467,15 @@ type OperationDirectWriteMetadataProvider interface {
 	OperationDirectWriteMetadata(operation string) (OperationDirectWriteMetadata, error)
 }
 
+// OperationDirectWritePreflighter exposes the no-network operation-to-command
+// admission check for a declared direct write. Command preflight passes the
+// exact endpoint binding through this interface so availability "implemented"
+// cannot claim an operation whose endpoint differs from the command's
+// api_surface declaration.
+type OperationDirectWritePreflighter interface {
+	PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error
+}
+
 // OperationBinaryDownloadRequest is one bounded binary/file download driven by
 // a declared binary_download operation.
 //

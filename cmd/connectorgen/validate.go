@@ -575,9 +575,9 @@ func checkWritePathFields(b engine.Bundle) []Finding {
 //  1. every endpoint has exactly one executable covered_by row or an explicit
 //     blocked non-executable classifier. Legacy surfaces use excluded;
 //     operation-ledger surfaces use operation.
-//  2. covered_by.stream/covered_by.write/covered_by.direct_read resolves to a
-//     declared stream/action/implemented direct-read command, and every
-//     declared stream/action appears in the surface.
+//  2. covered_by.stream/covered_by.write/covered_by.direct_read/
+//     covered_by.direct_write resolves to a declared stream/action/implemented
+//     command, and every declared stream/action appears in the surface.
 //  3. excluded.category is from the closed vocabulary (defense-in-depth; the
 //     loader's meta-schema enum already enforces this at load time), and
 //     operation rows use the closed operation vocabulary.
@@ -611,6 +611,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 		writes[w.Name] = true
 	}
 	directReads := map[string]bool{}
+	directWrites := map[string]bool{}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
 			// binary_download commands consume an api_surface endpoint the same
@@ -619,6 +620,9 @@ func checkAPISurface(b engine.Bundle) []Finding {
 			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download") &&
 				cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
+			}
+			if cmd.Intent == "direct_write" && cmd.Availability == "implemented" {
+				directWrites[cmd.Path] = true
 			}
 		}
 	}
@@ -630,7 +634,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(coveredDirectWriteTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -699,10 +703,25 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					})
 				}
 			}
+			for _, directWrite := range coveredDirectWriteTargets(ep.CoveredBy) {
+				if !directWrites[directWrite] {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceUnknownTarget,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_write %q is not an implemented direct_write command", i, ep.Method, ep.Path, directWrite),
+					})
+				}
+				method := strings.ToUpper(strings.TrimSpace(ep.Method))
+				if !mutationMethods[method] {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_write must use POST, PUT, PATCH, or DELETE", i, ep.Method, ep.Path),
+					})
+				}
+			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
-			if ep.CoveredBy.Write != "" && mutationMethods[strings.ToUpper(ep.Method)] {
+			if (ep.CoveredBy.Write != "" || len(coveredDirectWriteTargets(ep.CoveredBy)) > 0) && mutationMethods[strings.ToUpper(ep.Method)] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:
@@ -1814,6 +1833,9 @@ func checkCLISurfaceEndpointCoverage(
 				directReadCoverageMatches(state.coveredBy, cmd.Path) {
 				continue
 			}
+			if cmd.Intent == "direct_write" && directWriteCoverageMatches(state.coveredBy, cmd.Path) {
+				continue
+			}
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
@@ -1876,6 +1898,26 @@ func coveredDirectReadTargets(covered *engine.SurfaceCoverage) []string {
 
 func directReadCoverageMatches(covered *engine.SurfaceCoverage, path string) bool {
 	for _, target := range coveredDirectReadTargets(covered) {
+		if target == path {
+			return true
+		}
+	}
+	return false
+}
+
+func coveredDirectWriteTargets(covered *engine.SurfaceCoverage) []string {
+	if covered == nil {
+		return nil
+	}
+	targets := append([]string{}, covered.DirectWrites...)
+	if covered.DirectWrite != "" {
+		targets = append(targets, covered.DirectWrite)
+	}
+	return targets
+}
+
+func directWriteCoverageMatches(covered *engine.SurfaceCoverage, path string) bool {
+	for _, target := range coveredDirectWriteTargets(covered) {
 		if target == path {
 			return true
 		}

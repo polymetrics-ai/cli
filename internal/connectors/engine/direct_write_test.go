@@ -151,6 +151,62 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	}
 }
 
+func TestPreflightOperationDirectWriteValidatesDeclaredContract(t *testing.T) {
+	bundle := Bundle{
+		Name: "acme",
+		Operations: []OperationSpec{{
+			ID:            "acme.vote",
+			Kind:          "rest_write",
+			Summary:       "Vote on a post",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json_redacted",
+			MutationClass: "update",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/api/vote",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodPost,
+			Path:   "/api/vote",
+			CoveredBy: &SurfaceCoverage{
+				DirectWrite: "vote",
+			},
+		}}},
+	}
+
+	tests := []struct {
+		name    string
+		method  string
+		path    string
+		policy  string
+		wantErr string
+	}{
+		{name: "exact declared binding", method: http.MethodPost, path: "/api/vote", policy: "json_redacted"},
+		{name: "wrong method", method: http.MethodPatch, path: "/api/vote", policy: "json_redacted", wantErr: "method PATCH does not match"},
+		{name: "wrong path", method: http.MethodPost, path: "/api/other", policy: "json_redacted", wantErr: "path \"/api/other\" does not match"},
+		{name: "wrong output policy", method: http.MethodPost, path: "/api/vote", policy: "unsupported", wantErr: "not supported"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := PreflightOperationDirectWrite(bundle, "acme.vote", tt.method, tt.path, tt.policy)
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("PreflightOperationDirectWrite: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("PreflightOperationDirectWrite error = %v, want %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 // TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth proves a
 // credential-sensitive operation can bind its customer-hosted origin and
 // bearer credential together, without reusing the connector's ordinary API

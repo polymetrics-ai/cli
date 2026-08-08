@@ -669,10 +669,12 @@ type SurfaceProvenance struct {
 
 // SurfaceCoverage names the executable connector surface that covers an endpoint.
 type SurfaceCoverage struct {
-	Stream      string   `json:"stream,omitempty"`
-	Write       string   `json:"write,omitempty"`
-	DirectRead  string   `json:"direct_read,omitempty"`
-	DirectReads []string `json:"direct_reads,omitempty"`
+	Stream       string   `json:"stream,omitempty"`
+	Write        string   `json:"write,omitempty"`
+	DirectRead   string   `json:"direct_read,omitempty"`
+	DirectReads  []string `json:"direct_reads,omitempty"`
+	DirectWrite  string   `json:"direct_write,omitempty"`
+	DirectWrites []string `json:"direct_writes,omitempty"`
 }
 
 // SurfaceExclusion names why an endpoint is intentionally out of scope.

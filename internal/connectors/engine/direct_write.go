@@ -281,6 +281,24 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 	}, nil
 }
 
+// PreflightOperationDirectWrite proves a command's named operation can reach
+// the typed direct-write lifecycle with its declared endpoint and output
+// policy. It shares operationDirectWriteSpec with execution and is deliberately
+// no-network, so command surface sweeps can safely call it for every bundle.
+func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, outputPolicy string) error {
+	op, declaredMethod, err := operationDirectWriteSpec(b, operation)
+	if err != nil {
+		return err
+	}
+	if !strings.EqualFold(strings.TrimSpace(method), declaredMethod) {
+		return fmt.Errorf("operation direct write method %s does not match declared operation method %s", strings.ToUpper(strings.TrimSpace(method)), declaredMethod)
+	}
+	if endpointPath != op.REST.Path {
+		return fmt.Errorf("operation direct write path %q does not match declared operation path %q", endpointPath, op.REST.Path)
+	}
+	return validateOperationDirectWriteOutputPolicy(outputPolicy)
+}
+
 // operationDirectWritePayloadFileFields keeps multipart file identity
 // discovery declaration-owned. Returning a non-nil empty slice for a multipart
 // operation distinguishes it from the legacy name-based fallback used by
@@ -482,8 +500,9 @@ func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath string) 
 	}
 	for _, endpoint := range surface.Endpoints {
 		if strings.EqualFold(endpoint.Method, method) && endpoint.Path == endpointPath {
-			if endpoint.Operation == nil {
-				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation", method, endpointPath)
+			if endpoint.Operation == nil && (endpoint.CoveredBy == nil ||
+				(endpoint.CoveredBy.DirectWrite == "" && len(endpoint.CoveredBy.DirectWrites) == 0)) {
+				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation or direct_write command", method, endpointPath)
 			}
 			return nil
 		}
