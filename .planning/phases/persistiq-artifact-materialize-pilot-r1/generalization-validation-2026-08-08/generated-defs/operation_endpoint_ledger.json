@@ -1,4 +1,429 @@
 {
+  "copper": [
+    {
+      "method": "GET",
+      "path": "/account",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{example_activity_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/activity_types",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{example_company_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/contact_types",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/custom_activity_types",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/custom_activity_types/{custom_activity_type_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field_definitions",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field_definitions/{custom_field_definition_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/customer_sources",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/lead_statuses",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/leads/{example_lead_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/loss_reasons",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{example_opportunity_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/people/{example_person_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/pipeline_stages",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/pipeline_stages/pipeline/{pipeline_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{example_project_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/related_links",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{example_task_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/users/{example_user_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks{example_webhook_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/files",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/files/s3_signed_url",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/files/{file_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/related/",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/{entity_id}/related/{related_entity_name}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    }
+  ],
+  "docuseal": [],
+  "float": [
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/clients/{client_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/currencies",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/currencies/{currency_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/deleted/logged-time",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/deleted/tasks",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/deleted/timeoffs",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/departments/{department_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/holidays",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/holidays/{holiday_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/logged-time/{logged_time_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/milestones",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/milestones/{milestone_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/people/{people_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/phases",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/phases/{phase_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/project-expenses",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/project-expenses/{project_expense_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/project-stages",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/project-stages/{id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/project-tasks",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/project-tasks/{project_task_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/project-templates",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/project-templates/{project_template_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/public-holidays",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/public-holidays/{public_holiday_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/rate-cards",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/rate-cards/{rate_card_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/reports/people",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/reports/projects",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/roles/{role_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/status/{status_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff-types",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff-types/{timeoff_type_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/timeoffs",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/timeoffs/{timeoff_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    }
+  ],
   "watchmode": [
     {
       "method": "GET",
