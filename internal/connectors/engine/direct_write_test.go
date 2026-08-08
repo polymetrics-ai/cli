@@ -483,6 +483,29 @@ func TestOperationBase64UploadAdmitsDeclaredMutationRedirect(t *testing.T) {
 	}
 }
 
+// TestOperationJSONWriteAdmitsDeclaredMutationRedirect proves that a closed,
+// preview-bound JSON body can use the same provider-owned redirect contract as
+// an upload. Zoom's Clips multipart event endpoint documents precisely this
+// case: its JSON initiate/complete calls must retain bearer authentication at
+// an admitted Zoom redirect target. The target and body remain declaration-
+// owned; this does not make redirect URLs or headers caller configurable.
+func TestOperationJSONWriteAdmitsDeclaredMutationRedirect(t *testing.T) {
+	op := OperationSpec{
+		ID:   "zoom.clips.files.multipart_upload_events",
+		Kind: "rest_write",
+		REST: &RESTOperationSpec{
+			BaseURL:     "https://fileapi.zoom.us/v2",
+			Auth:        []AuthSpec{{Mode: "bearer", Token: "{{ secrets.fixture_token }}"}},
+			ContentType: "application/json",
+			BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"required":["method"],"properties":{"method":{"type":"string","enum":["CreateMultipartUpload"]}}}`),
+			Redirect:    &MutationRedirectSpec{AllowedHostSuffixes: []string{"zoom.us"}, MaxHops: 1},
+		},
+	}
+	if err := validateOperationMutationRedirectSemantics(0, op); err != nil {
+		t.Fatalf("closed JSON operation declared redirect = %v, want admitted provider-owned boundary", err)
+	}
+}
+
 // TestOperationDirectWriteBase64UploadFollowsDeclaredRedirect proves that the
 // narrowly admitted JSON upload reuses the mutation redirect transport without
 // widening it into a caller-selected redirect or credential policy.
