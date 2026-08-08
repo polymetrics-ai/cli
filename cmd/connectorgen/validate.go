@@ -1097,18 +1097,28 @@ func checkCLISurfaceOperationBodyMappingsForIntent(b engine.Bundle, i int, cmd e
 	mappedTargets := make([]cliBodyFlagMapping, 0, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
 		if strings.TrimSpace(flag.MapsTo) == "body" {
-			mappedTargets = append(mappedTargets, cliBodyFlagMapping{root: true, name: flag.Name, required: flag.Required})
+			mappedTargets = append(mappedTargets, cliBodyFlagMapping{root: true, name: flag.Name, flagType: flag.Type, required: flag.Required})
 			continue
 		}
 		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
 		if ok && target != "" {
-			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
+			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, flagType: flag.Type, required: flag.Required})
 		}
 	}
 	var findings []Finding
 	for _, mapping := range mappedTargets {
-		if mapping.root && !schema.isObject() {
-			findings = append(findings, Finding{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented %s command %d (%q) operation %q root body mapping requires an object body_schema", intent, i, cmd.Path, op.ID)})
+		if !mapping.root {
+			continue
+		}
+		switch mapping.flagType {
+		case "json_object":
+			if !schema.isObject() {
+				findings = append(findings, Finding{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented %s command %d (%q) operation %q json_object root body mapping requires an object body_schema", intent, i, cmd.Path, op.ID)})
+			}
+		case "json_array":
+			if !schema.isArray() {
+				findings = append(findings, Finding{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented %s command %d (%q) operation %q json_array root body mapping requires an array body_schema", intent, i, cmd.Path, op.ID)})
+			}
 		}
 	}
 	if len(requiredPaths) == 0 {
@@ -1133,6 +1143,7 @@ func checkCLISurfaceOperationBodyMappingsForIntent(b engine.Bundle, i int, cmd e
 type cliBodyFlagMapping struct {
 	target   string
 	name     string
+	flagType string
 	required bool
 	root     bool
 }
