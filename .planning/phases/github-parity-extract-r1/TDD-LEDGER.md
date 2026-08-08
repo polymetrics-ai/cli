@@ -804,3 +804,36 @@ Error [ERR_MODULE_NOT_FOUND]: Cannot find module
 
 The fixture string is deliberately token-shaped but non-secret; the assertion rejects it from the
 serialized record rather than putting a credential in a test fixture or report.
+
+**Green 12b — committed GitHub-only proof accounting.**
+`scripts/github-live-proof-sweep.mjs` now loads the production GitHub `cli_surface.json` itself,
+derives the complete `availability: implemented` set, and refuses a case file that omits even one
+command. It permits only `proven`, `untestable`, and `failed` records; `proven` requires a 2xx
+provider status plus a matched returned-data assertion, while the other two require a concrete
+reason. Raw stdout, stderr, bodies, approval grants, credentials, and token-shaped text are
+discarded or rejected before a JSON report is written.
+
+Live mode is deliberately GitHub-only and requires an explicit built `pm` path, project root,
+saved GitHub credential, test owner/repository, complete case file, report destination, and an
+additional `--execute-writes` acknowledgement before it will dispatch a mutation. It inspects the
+credential metadata first and refuses a credential not scoped to the supplied dedicated test
+repository. Write cases use the runtime's existing plan → preview → caller-supplied confirmation
+when declared → single-use grant sequence; transient plan and grant values stay in process memory
+and are redacted from the stored invocation.
+
+```
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+✔ enumerates every and only implemented GitHub command
+✔ rejects an omitted command instead of treating a sample as a sweep
+✔ requires a returned-data assertion or a concrete untestable reason
+✔ redacts raw subprocess output before it can become a report record
+ℹ pass 4
+ℹ fail 0
+
+$ node scripts/github-live-proof-sweep.mjs --self-test
+github live proof self-test: ok
+```
+
+No test was weakened, skipped, or deleted. The runner intentionally records a missing runtime HTTP
+status as a failed live result rather than fabricating success; the full run therefore identifies
+which intent paths need observability repairs before they can be counted as proven.
