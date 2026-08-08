@@ -3,6 +3,7 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 // RecordSchemaShape is the promotion-relevant shape of a declarative write
@@ -71,6 +72,45 @@ func ValidatePromotableRecordSchema(raw json.RawMessage) error {
 	}
 	if shape.AdmitsOnlyEmptyObject {
 		return fmt.Errorf("record_schema admits only an empty object ({})")
+	}
+	return nil
+}
+
+// ValidateStructuredJSONRecordField is the shared declaration gate for a
+// command flag which supplies one structured JSON value to a reverse-ETL
+// record. A JSON flag is deliberately narrower than a generic request body:
+// it must name exactly one top-level field of a concrete write action, and
+// that field must itself be an explicitly typed object or array. The runner
+// calls this through Connector during runtime preflight; connectorgen calls
+// the same function while validating authored CLI metadata.
+func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error {
+	field = strings.TrimSpace(field)
+	if field == "" || strings.Contains(field, ".") {
+		return fmt.Errorf("structured JSON field %q must map to one top-level record property", field)
+	}
+	if err := ValidatePromotableRecordSchema(raw); err != nil {
+		return err
+	}
+
+	var root struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(raw, &root); err != nil {
+		return fmt.Errorf("invalid record_schema: %w", err)
+	}
+	property, ok := root.Properties[field]
+	if !ok {
+		return fmt.Errorf("structured JSON field %q is not declared in record_schema", field)
+	}
+
+	var schema struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(property, &schema); err != nil {
+		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	}
+	if schema.Type != "object" && schema.Type != "array" {
+		return fmt.Errorf("structured JSON field %q must declare type object or array", field)
 	}
 	return nil
 }

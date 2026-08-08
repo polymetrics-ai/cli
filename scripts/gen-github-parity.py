@@ -168,6 +168,218 @@ EXPLICIT_DIRECT_READ_CONTRACTS = {
     },
 }
 
+# These eight documented POST endpoints put genuinely alternative request
+# contracts at the root of a oneOf. A oneOf is not one executable command
+# contract: each arm gets a closed, separately named write action and command.
+# Do not broaden this table into a generic oneOf promotion. The 19 arms below
+# were taken from the GitHub OpenAPI artifact recorded in the parity plan, and
+# each is covered by a generator contract test through the real preflight.
+def one_of_arm(action, cli_path, required, properties, destructive=False):
+    return {
+        "action": action,
+        "cli_path": cli_path,
+        "required": required,
+        "properties": properties,
+        "destructive": destructive,
+    }
+
+CAMPAIGN_COMMON_PROPERTIES = {
+    "name": {"type": "string"},
+    "description": {"type": "string"},
+    "managers": {"type": "array"},
+    "team_managers": {"type": "array"},
+    "ends_at": {"type": "string"},
+    "contact_link": {"type": "string"},
+    "generate_issues": {"type": "boolean"},
+}
+
+PROJECT_FIELD_PROPERTIES = {
+    "name": {"type": "string"},
+    "data_type": {"type": "string"},
+}
+
+PROJECT_ITEM_PROPERTIES = {
+    "type": {"type": "string"},
+    "id": {"type": "integer"},
+    "owner": {"type": "string"},
+    "repo": {"type": "string"},
+    "number": {"type": "integer"},
+}
+
+EXPLICIT_ONE_OF_WRITE_CONTRACTS = {
+    ("POST", "/orgs/{org}/attestations/delete-request"): {
+        "arms": [
+            one_of_arm(
+                "orgs_attestations_delete_request_by_subject_digests",
+                "orgs attestations delete-by-subject-digests",
+                ["subject_digests"],
+                {"subject_digests": {"type": "array"}},
+                destructive=True,
+            ),
+            one_of_arm(
+                "orgs_attestations_delete_request_by_attestation_ids",
+                "orgs attestations delete-by-attestation-ids",
+                ["attestation_ids"],
+                {"attestation_ids": {"type": "array"}},
+                destructive=True,
+            ),
+        ],
+    },
+    ("POST", "/users/{username}/attestations/delete-request"): {
+        "arms": [
+            one_of_arm(
+                "users_attestations_delete_request_by_subject_digests",
+                "users attestations delete-by-subject-digests",
+                ["subject_digests"],
+                {"subject_digests": {"type": "array"}},
+                destructive=True,
+            ),
+            one_of_arm(
+                "users_attestations_delete_request_by_attestation_ids",
+                "users attestations delete-by-attestation-ids",
+                ["attestation_ids"],
+                {"attestation_ids": {"type": "array"}},
+                destructive=True,
+            ),
+        ],
+    },
+    ("POST", "/orgs/{org}/campaigns"): {
+        "arms": [
+            one_of_arm(
+                "orgs_campaigns_create_code_scanning",
+                "orgs campaigns create-code-scanning",
+                ["code_scanning_alerts", "description", "ends_at", "name"],
+                dict(CAMPAIGN_COMMON_PROPERTIES, code_scanning_alerts={"type": "array"}),
+            ),
+            one_of_arm(
+                "orgs_campaigns_create_secret_scanning",
+                "orgs campaigns create-secret-scanning",
+                ["description", "ends_at", "name", "secret_scanning_alerts"],
+                dict(CAMPAIGN_COMMON_PROPERTIES, secret_scanning_alerts={"type": "array"}),
+            ),
+        ],
+    },
+    ("POST", "/orgs/{org}/projectsV2/{project_number}/fields"): {
+        "arms": [
+            one_of_arm(
+                "orgs_projectsv2_fields_create_existing_issue_field",
+                "orgs projects fields create-existing-issue-field",
+                ["issue_field_id"],
+                {"issue_field_id": {"type": "integer"}},
+            ),
+            one_of_arm(
+                "orgs_projectsv2_fields_create_new_field",
+                "orgs projects fields create-new-field",
+                ["data_type", "name"],
+                PROJECT_FIELD_PROPERTIES,
+            ),
+            one_of_arm(
+                "orgs_projectsv2_fields_create_single_select",
+                "orgs projects fields create-single-select",
+                ["data_type", "name", "single_select_options"],
+                dict(PROJECT_FIELD_PROPERTIES, single_select_options={"type": "array"}),
+            ),
+            one_of_arm(
+                "orgs_projectsv2_fields_create_iteration",
+                "orgs projects fields create-iteration",
+                ["data_type", "iteration_configuration", "name"],
+                dict(PROJECT_FIELD_PROPERTIES, iteration_configuration={"type": "object"}),
+            ),
+        ],
+    },
+    ("POST", "/users/{username}/projectsV2/{project_number}/fields"): {
+        "arms": [
+            one_of_arm(
+                "users_projectsv2_fields_create_new_field",
+                "users projects fields create-new-field",
+                ["data_type", "name"],
+                PROJECT_FIELD_PROPERTIES,
+            ),
+            one_of_arm(
+                "users_projectsv2_fields_create_single_select",
+                "users projects fields create-single-select",
+                ["data_type", "name", "single_select_options"],
+                dict(PROJECT_FIELD_PROPERTIES, single_select_options={"type": "array"}),
+            ),
+            one_of_arm(
+                "users_projectsv2_fields_create_iteration",
+                "users projects fields create-iteration",
+                ["data_type", "iteration_configuration", "name"],
+                dict(PROJECT_FIELD_PROPERTIES, iteration_configuration={"type": "object"}),
+            ),
+        ],
+    },
+    ("POST", "/orgs/{org}/projectsV2/{project_number}/items"): {
+        "arms": [
+            one_of_arm(
+                "orgs_projectsv2_items_create_by_id",
+                "orgs projects items create-by-id",
+                ["id", "type"],
+                PROJECT_ITEM_PROPERTIES,
+            ),
+            one_of_arm(
+                "orgs_projectsv2_items_create_by_repo_number",
+                "orgs projects items create-by-repo-number",
+                ["number", "owner", "repo", "type"],
+                PROJECT_ITEM_PROPERTIES,
+            ),
+        ],
+    },
+    ("POST", "/users/{username}/projectsV2/{project_number}/items"): {
+        "arms": [
+            one_of_arm(
+                "users_projectsv2_items_create_by_id",
+                "users projects items create-by-id",
+                ["id", "type"],
+                PROJECT_ITEM_PROPERTIES,
+            ),
+            one_of_arm(
+                "users_projectsv2_items_create_by_repo_number",
+                "users projects items create-by-repo-number",
+                ["number", "owner", "repo", "type"],
+                PROJECT_ITEM_PROPERTIES,
+            ),
+        ],
+    },
+    ("POST", "/user/codespaces"): {
+        "arms": [
+            one_of_arm(
+                "user_codespaces_create_from_repository",
+                "codespaces create-from-repository",
+                ["repository_id"],
+                {
+                    "repository_id": {"type": "integer"},
+                    "ref": {"type": "string"},
+                    "location": {"type": "string"},
+                    "geo": {"type": "string"},
+                    "client_ip": {"type": "string"},
+                    "machine": {"type": "string"},
+                    "devcontainer_path": {"type": "string"},
+                    "multi_repo_permissions_opt_out": {"type": "boolean"},
+                    "working_directory": {"type": "string"},
+                    "idle_timeout_minutes": {"type": "integer"},
+                    "display_name": {"type": "string"},
+                    "retention_period_minutes": {"type": "integer"},
+                },
+            ),
+            one_of_arm(
+                "user_codespaces_create_from_pull_request",
+                "codespaces create-from-pull-request",
+                ["pull_request"],
+                {
+                    "pull_request": {"type": "object"},
+                    "location": {"type": "string"},
+                    "geo": {"type": "string"},
+                    "machine": {"type": "string"},
+                    "devcontainer_path": {"type": "string"},
+                    "working_directory": {"type": "string"},
+                    "idle_timeout_minutes": {"type": "integer"},
+                },
+            ),
+        ],
+    },
+}
+
 def slugify(s):
     return re.sub(r"[^a-z0-9]+", "_", s.lower()).strip("_")
 
@@ -241,6 +453,110 @@ def make_op_id(group, api_path):
         base = "repo"
     return f"github.{base}"
 
+def scalar_path_schema(name):
+    return {"type": "integer"} if "id" in name or "number" in name else {"type": "string"}
+
+def structured_record_flag(name, schema, required=False):
+    kind = schema.get("type")
+    if kind in ("object", "array"):
+        flag_type = "json"
+    elif kind in ("string", "integer", "number", "boolean"):
+        flag_type = kind
+    else:
+        raise ValueError(f"oneOf field {name!r} has unsupported schema type {kind!r}")
+    return contract_flag(name.replace("_", "-"), flag_type, f"record.{name}", required=required)
+
+def append_explicit_one_of_write_contract(endpoint, operation, contract):
+    """Append all concrete write contracts for one documented oneOf endpoint."""
+    method = endpoint["method"]
+    api_path = endpoint["path"]
+    params = path_params(api_path)
+    path_fields = [p for p in params if p not in ("owner", "repo")]
+    path_properties = {p: scalar_path_schema(p) for p in path_fields}
+    actions = []
+
+    for arm in contract["arms"]:
+        action_name = arm["action"]
+        cli_path = arm["cli_path"]
+        op_id = f"github.{action_name}"
+        if action_name in existing_write_names or action_name in seen_write:
+            raise ValueError(f"oneOf action name collision: {action_name}")
+        if cli_path in existing_cli_paths or cli_path in seen_cli_path:
+            raise ValueError(f"oneOf CLI path collision: {cli_path}")
+        if op_id in existing_op_ids or op_id in seen_op:
+            raise ValueError(f"oneOf operation id collision: {op_id}")
+
+        record_properties = dict(path_properties)
+        record_properties.update(arm["properties"])
+        required = list(path_fields) + list(arm["required"])
+        action = {
+            "name": action_name,
+            "kind": "create",
+            "method": method,
+            "path": api_path,
+            "path_fields": path_fields,
+            "body_type": "json",
+            "record_schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "additionalProperties": False,
+                "required": required,
+                "properties": record_properties,
+            },
+            "risk": operation.get("risk", "medium"),
+        }
+        mutation_class = "admin"
+        approval = SAFE_WRITE_APPROVAL
+        operation_approval = "plan, approval, execute"
+        if arm.get("destructive"):
+            mutation_class = "destructive"
+            approval = DESTRUCTIVE_WRITE_APPROVAL
+            operation_approval = "plan, preview, approval, execute (caller-supplied intent acknowledgement)"
+            action["confirm"] = "destructive"
+
+        new_writes.append(action)
+        new_ops.append({
+            "id": op_id,
+            "kind": "rest_write",
+            "summary": f"{method} {api_path} ({arm['action']})",
+            "source_url": operation.get("source_url", ""),
+            "risk": operation.get("risk", "medium"),
+            "approval": operation_approval,
+            "output_policy": "json",
+            "mutation_class": mutation_class,
+            "destructive": True if arm.get("destructive") else None,
+            "rest": {"method": method, "path": api_path},
+        })
+        # Omit a false JSON key instead of making an authored non-destructive
+        # operation look like it needs an explicit exception from the safety
+        # rule. The write action remains the confirmation source of truth.
+        if not arm.get("destructive"):
+            new_ops[-1].pop("destructive")
+
+        flags = [contract_flag(p.replace("_", "-"), scalar_path_schema(p)["type"], f"record.{p}", required=True) for p in path_fields]
+        required_fields = set(arm["required"])
+        flags.extend(
+            structured_record_flag(name, schema, required=name in required_fields)
+            for name, schema in arm["properties"].items()
+        )
+        new_cmds.append({
+            "path": cli_path,
+            "summary": f"{method} {api_path} ({arm['action']})",
+            "intent": "reverse_etl",
+            "availability": "implemented",
+            "write": action_name,
+            "source_cli_path": "",
+            "risk": operation.get("risk", "medium"),
+            "approval": approval,
+            "flags": flags,
+        })
+        seen_write.add(action_name)
+        seen_cli_path.add(cli_path)
+        seen_op.add(op_id)
+        actions.append(action_name)
+
+    endpoint["covered_by"] = {"writes": actions}
+
 new_ops, new_writes, new_cmds = [], [], []
 covered_added = 0
 seen_op, seen_write, seen_cli = set(), set(), set()
@@ -254,11 +570,16 @@ for e in api["endpoints"]:
     method = e.get("method", "GET")
     api_path = e.get("path", "")
     explicit_read = EXPLICIT_DIRECT_READ_CONTRACTS.get((method, api_path))
-    if model in ("duplicate", "deprecated", "disallowed") and not explicit_read:
+    explicit_one_of_write = EXPLICIT_ONE_OF_WRITE_CONTRACTS.get((method, api_path))
+    if model in ("duplicate", "deprecated", "disallowed") and not explicit_read and not explicit_one_of_write:
         continue
     if e.get("covered_by"):
         continue  # already converted
     e.pop("operation", None)  # covered_by replaces the operation classifier
+    if explicit_one_of_write:
+        append_explicit_one_of_write_contract(e, op, explicit_one_of_write)
+        covered_added += 1
+        continue
     params = path_params(api_path)
     if explicit_read:
         model = "direct_read"

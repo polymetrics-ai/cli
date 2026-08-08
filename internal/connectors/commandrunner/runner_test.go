@@ -1313,12 +1313,15 @@ func TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags(t *testi
 		})
 	}
 
-	// A structured JSON flag must never turn into a generic scalar setter just
-	// because a bundle says `json`: its target schema must explicitly admit an
-	// object or array before preflight makes it reachable.
-	invalid := newConnector("json", "record.payload.kind")
-	if err := Preflight(invalid, []string{"widgets", "create"}); err == nil || !strings.Contains(err.Error(), "structured JSON") {
-		t.Fatalf("Preflight scalar structured-json mapping error = %v, want declared object/array rejection", err)
+	// A structured JSON flag must never turn into a generic scalar setter or
+	// body escape hatch just because a bundle says `json`: its target schema
+	// must explicitly admit one top-level object/array record field before
+	// preflight makes it reachable.
+	for _, target := range []string{"record.payload.kind", "body.payload"} {
+		invalid := newConnector("json", target)
+		if err := Preflight(invalid, []string{"widgets", "create"}); err == nil || !strings.Contains(err.Error(), "structured JSON") {
+			t.Fatalf("Preflight structured-json mapping %q error = %v, want declared object/array record rejection", target, err)
+		}
 	}
 }
 

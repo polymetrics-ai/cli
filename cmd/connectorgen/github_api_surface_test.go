@@ -85,11 +85,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 1224 {
 		t.Fatalf("endpoints = %d, want 1224", len(surface.Endpoints))
 	}
-	if covered != 1139 {
-		t.Fatalf("covered endpoints = %d, want 1139", covered)
+	if covered != 1147 {
+		t.Fatalf("covered endpoints = %d, want 1147", covered)
 	}
-	if operations != 85 {
-		t.Fatalf("operation endpoints = %d, want 85 (duplicate/deprecated, plus the operations no runtime component can execute)", operations)
+	if operations != 77 {
+		t.Fatalf("operation endpoints = %d, want 77 (duplicate/deprecated, plus the operations no runtime component can execute)", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -107,26 +107,26 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"GET":     582,
 		"GRAPHQL": 4,
 		"PATCH":   65,
-		"POST":    177,
+		"POST":    185,
 		"PUT":     132,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 8,
 		"GET":    54,
 		"PATCH":  5,
-		"POST":   16,
+		"POST":   8,
 		"PUT":    2,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
-		"disallowed": 17,
+		"disallowed": 9,
 		"duplicate":  67,
 		"deprecated": 1,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"low": 85,
+		"low": 77,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 85,
+		"blocked": 77,
 	})
 }
 
@@ -266,8 +266,8 @@ func TestGitHubOneOfWriteContracts(t *testing.T) {
 	}
 	const destructive = string(connectors.ConfirmationKindDestructive)
 	contracts := []contract{
-		{"orgs attestations delete-by-subject-digests", "orgs_attestations_delete_request_by_subject_digests", "POST", "/orgs/{org}/attestations/delete-request", destructive, []string{"subject_digests"}},
-		{"orgs attestations delete-by-attestation-ids", "orgs_attestations_delete_request_by_attestation_ids", "POST", "/orgs/{org}/attestations/delete-request", destructive, []string{"attestation_ids"}},
+		{"orgs attestations delete-by-subject-digests", "orgs_attestations_delete_request_by_subject_digests", "POST", "/orgs/{org}/attestations/delete-request", destructive, []string{"org", "subject_digests"}},
+		{"orgs attestations delete-by-attestation-ids", "orgs_attestations_delete_request_by_attestation_ids", "POST", "/orgs/{org}/attestations/delete-request", destructive, []string{"attestation_ids", "org"}},
 		{"users attestations delete-by-subject-digests", "users_attestations_delete_request_by_subject_digests", "POST", "/users/{username}/attestations/delete-request", destructive, []string{"subject_digests", "username"}},
 		{"users attestations delete-by-attestation-ids", "users_attestations_delete_request_by_attestation_ids", "POST", "/users/{username}/attestations/delete-request", destructive, []string{"attestation_ids", "username"}},
 		{"orgs campaigns create-code-scanning", "orgs_campaigns_create_code_scanning", "POST", "/orgs/{org}/campaigns", "", []string{"code_scanning_alerts", "description", "ends_at", "name", "org"}},

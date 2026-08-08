@@ -16,11 +16,11 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.Endpoints != 1224 {
 		t.Fatalf("Endpoints = %d, want 1224", result.Endpoints)
 	}
-	if result.Covered != 1139 {
-		t.Fatalf("Covered = %d, want 1139", result.Covered)
+	if result.Covered != 1147 {
+		t.Fatalf("Covered = %d, want 1147", result.Covered)
 	}
-	if result.Blocked != 85 {
-		t.Fatalf("Blocked = %d, want 85", result.Blocked)
+	if result.Blocked != 77 {
+		t.Fatalf("Blocked = %d, want 77", result.Blocked)
 	}
 	if result.CoveredBy["stream"] != 37 {
 		t.Fatalf("CoveredBy[stream] = %d, want 37", result.CoveredBy["stream"])
@@ -29,8 +29,8 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	// several write contracts each, so this count has to come from
 	// WriteTargets(); reading only the singular field leaves those endpoints
 	// looking uncovered and fails the whole inventory.
-	if result.CoveredBy["write"] != 555 {
-		t.Fatalf("CoveredBy[write] = %d, want 555", result.CoveredBy["write"])
+	if result.CoveredBy["write"] != 574 {
+		t.Fatalf("CoveredBy[write] = %d, want 574", result.CoveredBy["write"])
 	}
 	if result.CoveredBy["direct_read"] != 368 {
 		t.Fatalf("CoveredBy[direct_read] = %d, want 368", result.CoveredBy["direct_read"])

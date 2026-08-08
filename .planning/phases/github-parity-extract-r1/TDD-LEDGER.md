@@ -1160,3 +1160,53 @@ FAIL
 
 The green step must change the generator source, regenerate GitHub's bundle and shared ledger, and
 keep the shared ledger delta confined to `github`.
+
+**Green 15 — each documented root `oneOf` arm has one closed, executable contract.**
+The engine owns the common structural rule: a `json` CLI flag is admissible only for a declared
+top-level `record.<field>` whose record schema declares an `object` or `array`. The generator's
+static validation and the commandrunner's real preflight both call that same engine rule. The
+parser accepts exactly one bounded (1 MiB) JSON object or array with `UseNumber`; it neither
+re-enables generic `json` flags nor permits `body.*`, nested record paths, scalars, or undeclared
+fields to escape a write schema.
+
+`EXPLICIT_ONE_OF_WRITE_CONTRACTS` is deliberately a small, source-owned table rather than a broad
+classifier bypass. It expands the eight reviewed GitHub endpoints into 19 closed reverse-ETL
+actions, with `covered_by.writes` on each source endpoint. Only the four attestation-delete arms
+carry the existing destructive caller-supplied intent acknowledgement; the other fifteen are
+ordinary approval-gated writes. Regeneration changed only GitHub definition artifacts. This is a
+write-only slice, so `surface-sync` was still rerun but correctly made no shared direct-read ledger
+change.
+
+The generated inventory is now 1,147 covered / 77 blocked endpoints, with 377 operations, 574
+write actions, and 1,179 GitHub CLI commands. The planning source correction also fixes the
+secret-scanning campaign arm's property name from `code_scanning_alerts` to
+`secret_scanning_alerts`.
+
+```
+$ python3 -m py_compile scripts/gen-github-parity.py
+$ python3 scripts/gen-github-parity.py
+generated: 8 endpoints covered
+  new operations: 19 (total 377)
+  new write actions: 19 (total 574)
+  new cli commands: 19 (total 1179)
+
+$ go test -timeout 20m ./internal/connectors/engine/
+ok  polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/commandrunner/
+ok  polymetrics.ai/internal/connectors/commandrunner
+
+$ go test -timeout 20m ./internal/connectors/certify/
+ok  polymetrics.ai/internal/connectors/certify
+
+$ go test -timeout 20m ./cmd/connectorgen/
+ok  polymetrics.ai/cmd/connectorgen
+
+$ go vet ./...
+$ go build ./cmd/pm
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
