@@ -101,3 +101,10 @@ result carries the context needed to reach the next one.
    source hash. Add a red regression that plans, previews, and runs a
    one-row slice from a multi-row fixture; preserve the source-drift rejection
    test, then make preview/run hash and dispatch exactly the planned slice.
+9. The first actual GitHub `create_issue` execution received EOF against a
+   malformed `.../issues%22` target. Reproduce the exact create-issue request
+   through a local GitHub bundle fixture before any retry against the private
+   repository. If the fixture isolates an implementation defect, add its red
+   request-target assertion and correct it; if it passes, treat the live
+   transport result as a separate environment/provider finding and report it
+   without substituting another client for `pm`.
