@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"strings"
 	"sync"
 
@@ -45,18 +46,20 @@ func replaceRateLimitRegistryForTest(registry *coordination.RateLimitRegistry) f
 type rateLimitResolver struct {
 	connector            string
 	config               map[string]string
+	host                 string
 	coordinationIdentity connectors.CoordinationIdentity
 	policies             []connsdk.RateLimitPolicy
 	registry             *coordination.RateLimitRegistry
 }
 
-func newRateLimitResolver(b Bundle, cfg connectors.RuntimeConfig) *rateLimitResolver {
+func newRateLimitResolver(b Bundle, cfg connectors.RuntimeConfig, baseURL string) *rateLimitResolver {
 	if b.RateLimits == nil || b.RateLimits.State != connsdk.RateLimitStateDeclared || len(b.RateLimits.Policies) == 0 {
 		return nil
 	}
 	return &rateLimitResolver{
 		connector:            b.Name,
 		config:               cfg.Config,
+		host:                 rateLimitRequestHost(baseURL),
 		coordinationIdentity: cfg.CoordinationIdentity,
 		policies:             b.RateLimits.Policies,
 		registry:             currentRateLimitRegistry(),
@@ -69,7 +72,7 @@ func (r *rateLimitResolver) requesterFor(base *connsdk.Requester, method, path s
 	}
 	matched := make([]resolvedRateLimitPolicy, 0, len(r.policies))
 	for _, policy := range r.policies {
-		if !rateLimitSelectorMatches(policy.Selector, method, path, r.config) {
+		if !rateLimitSelectorMatches(policy.Selector, method, path, r.host, r.config) {
 			continue
 		}
 		resolved, err := r.resolve(policy)
@@ -109,7 +112,7 @@ func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.
 	}
 	matched := make([]resolvedRateLimitPolicy, 0, len(r.policies))
 	for _, policy := range r.policies {
-		if len(policy.Selector.Endpoints) != 0 || !rateLimitSelectorMatches(policy.Selector, "", "", r.config) {
+		if len(policy.Selector.Endpoints) != 0 || !rateLimitSelectorMatches(policy.Selector, "", "", r.host, r.config) {
 			continue
 		}
 		resolved, err := r.resolve(policy)
@@ -190,7 +193,7 @@ func coordinationRateScopeKind(subject connsdk.RateLimitScopeSubjectKind) (conne
 	}
 }
 
-func rateLimitSelectorMatches(selector connsdk.RateLimitSelector, method, path string, cfg map[string]string) bool {
+func rateLimitSelectorMatches(selector connsdk.RateLimitSelector, method, path, host string, cfg map[string]string) bool {
 	if selector.All {
 		return true
 	}
@@ -206,10 +209,30 @@ func rateLimitSelectorMatches(selector connsdk.RateLimitSelector, method, path s
 			return false
 		}
 	}
+	if len(selector.Hosts) > 0 && !rateLimitSelectorHostMatches(selector.Hosts, host) {
+		return false
+	}
 	if len(selector.Tiers) > 0 && !rateLimitSelectorValueMatches(selector.Tiers, cfg["tier"]) {
 		return false
 	}
 	return len(selector.AuthTypes) == 0 || rateLimitSelectorValueMatches(selector.AuthTypes, cfg["auth_type"])
+}
+
+func rateLimitRequestHost(baseURL string) string {
+	parsed, err := url.Parse(baseURL)
+	if err != nil {
+		return ""
+	}
+	return strings.ToLower(parsed.Hostname())
+}
+
+func rateLimitSelectorHostMatches(hosts []string, host string) bool {
+	for _, candidate := range hosts {
+		if strings.EqualFold(candidate, host) {
+			return true
+		}
+	}
+	return false
 }
 
 func rateLimitSelectorValueMatches(values []string, value string) bool {

@@ -27,12 +27,15 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
+  auth_type
   base_url
   docker_username
   namespace
   page_size
+  registry_client_ip
   repository
   tag
+  tier
   docker_pat (secret)
   scim_bearer_token (secret)
 

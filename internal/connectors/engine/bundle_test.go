@@ -511,6 +511,11 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			want: "endpoints[0].path",
 		},
 		{
+			name: "host selector must be an exact hostname",
+			data: strings.Replace(validProviderCitedRateLimits, `"tiers": ["enterprise"]`, `"hosts": ["https://registry.example.test"], "tiers": ["enterprise"]`, 1),
+			want: "hosts[0]",
+		},
+		{
 			name: "leaky bucket needs a positive restore rate",
 			data: strings.Replace(validProviderCitedRateLimits, `"restore_per_second": 2`, `"restore_per_second": 0`, 1),
 			want: "restore_per_second",
@@ -616,6 +621,12 @@ func TestRateLimitSelectorsOverlap(t *testing.T) {
 			name:  "disjoint auth types do not overlap",
 			left:  connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, AuthTypes: []string{"oauth"}},
 			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, AuthTypes: []string{"api_key"}},
+			want:  false,
+		},
+		{
+			name:  "different hosts do not overlap",
+			left:  connsdk.RateLimitSelector{Hosts: []string{"hub.example.test"}},
+			right: connsdk.RateLimitSelector{Hosts: []string{"registry.example.test"}},
 			want:  false,
 		},
 	}

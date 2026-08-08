@@ -33,6 +33,22 @@
       "default": 100,
       "description": "Page size (1-100) for the initial request of each paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own absolute next URL verbatim."
     },
+    "tier": {
+      "type": "string",
+      "enum": ["free", "paid"],
+      "default": "free",
+      "description": "Docker Registry subscription class used only by the provider-cited pull-rate policy. Use paid for Pro, Team, Business, or partner/unlimited Registry access; Hub API abuse limits are not inferred from this field."
+    },
+    "auth_type": {
+      "type": "string",
+      "enum": ["unauthenticated", "authenticated"],
+      "default": "unauthenticated",
+      "description": "Docker Registry pull authentication profile used only by the provider-cited Registry rate-limit policy. This is intentionally separate from the optional Docker Hub API PAT/session hook."
+    },
+    "registry_client_ip": {
+      "type": "string",
+      "description": "Public IPv4 address or IPv6 /64 used to scope the unauthenticated Docker Registry pull quota. Required only when base_url targets registry-1.docker.io and auth_type is unauthenticated; never store a credential here."
+    },
     "docker_pat": {
       "type": "string",
       "x-secret": true,
