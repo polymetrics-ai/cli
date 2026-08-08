@@ -53,6 +53,39 @@ FAIL
 
 This is the committed red state. Connector declaration work begins only after it is pushed.
 
-## GREEN connector — pending
+## GREEN connector
 
-## Verification/review — pending
+The declarative connector now contains all sixteen fixed Auto Dialer contracts: eight bounded
+`rest_read` commands and eight approval-gated `rest_write` commands. Every command maps to exactly
+one live-artifact method/path and carries normal Zoom bearer authentication, source-derived typed
+path/body input, and a redacted or status-only output policy. No generic transport, raw JSON,
+or hand-authored paging flag was introduced.
+
+- Both DELETE commands, call-list update, and single-prospect update assert documented `204 No
+  Content` by status only; DELETE additionally requires destructive typed confirmation.
+- Typed named-object bodies remain restricted to their declared operation schemas. Call-list and
+  single-prospect updates require a nonempty object; batch prospect update requires a prospect ID
+  plus at least one mutable member, and batch request limits match the documented 1,000-item cap.
+- `go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...` passes after declarations,
+  fixture lifecycle checks, generated metadata, and source-reconciled endpoint coverage.
+- `go run ./cmd/connectorgen surface-sync --check` and
+  `go run ./cmd/connectorgen surface-reconcile --check --notes-contains provider_module=auto-dialer`
+  both pass with zero pending changes.
+
+No missing engine foundation was discovered or added in this slice.
+
+## Verification/review
+
+Inline manual `verify-work` and `code-review` were completed because this provider-category phase
+is not registered by the official runtime and the parent contract prohibits role spawning. The
+fixture tests exercise all eight reads and all eight writes against the real commandrunner path,
+including exact bearer/method/path/body/status assertions, no invented query/paging input,
+redaction, approval flow, and destructive confirmation. A fresh compiled binary reaches Zoom,
+the bare Auto Dialer namespace, and all sixteen command help routes. Scoped tests, vet, generated
+docs/site validation, Make gates, and website typecheck/lint pass; website lint has only the
+repository's 13 pre-existing warnings and no errors.
+
+Manual review found and corrected two contract-hardening details before the final checks: a batch
+prospect update can no longer submit an ID-only no-op object, and the output policies now redact
+the provider's call, contact, prospect, company, report, and transcript-sensitive fields. No
+remaining blocking review finding exists.

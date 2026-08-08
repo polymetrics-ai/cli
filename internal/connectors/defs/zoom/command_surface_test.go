@@ -456,6 +456,431 @@ func TestAutoDialerOperationCommandsAreReachable(t *testing.T) {
 	}
 }
 
+// TestAutoDialerDirectReadCommandsExecuteWithFixtures runs every published Auto
+// Dialer GET through the real command runner. It proves the ordinary Zoom
+// bearer, each exact fixed endpoint, no undeclared query or paging input, and
+// named sensitive-field redaction without reaching the provider.
+func TestAutoDialerDirectReadCommandsExecuteWithFixtures(t *testing.T) {
+	const accessToken = "fixture-auto-dialer-access-token"
+	type autoDialerReadAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		requestPath       string
+		fixture           string
+		status            int
+		response          json.RawMessage
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []autoDialerReadAction{
+		{
+			name:              "get call history",
+			path:              []string{"auto-dialer", "call-histories", "get"},
+			flags:             map[string][]string{"call-history-id": {"fixture-ad-call-history"}},
+			requestPath:       "/v2/dialer/call-histories/fixture-ad-call-history",
+			fixture:           "get_auto_dialer_call_history.json",
+			responseSensitive: []string{"fixture-ad-call-history", "fixture-ad-call", "fixture-ad-prospect", "fixture Auto Dialer private call note", "fixture.ad@example.invalid", "fixture-ad-response-token"},
+			responseMarkers:   []string{"call_history_id", "call_id", "prospect_id", "call_note", "email_addresses", "token"},
+		},
+		{
+			name:              "list call history",
+			path:              []string{"auto-dialer", "call-history", "list"},
+			requestPath:       "/v2/dialer/call-history",
+			fixture:           "list_auto_dialer_call_history.json",
+			responseSensitive: []string{"fixture-ad-call-history", "fixture-ad-call", "fixture Auto Dialer history note", "fixture-ad-page-token", "fixture-ad-response-token"},
+			responseMarkers:   []string{"call_history", "next_page_token", "token"},
+		},
+		{
+			name:              "list report call history",
+			path:              []string{"auto-dialer", "reports", "call-history", "list"},
+			requestPath:       "/v2/dialer/reports/call-history",
+			fixture:           "list_auto_dialer_report_call_history.json",
+			responseSensitive: []string{"fixture-ad-report-call-history", "Fixture Auto Dialer seller", "+15550000000", "fixture-ad-page-token", "fixture-ad-response-token"},
+			responseMarkers:   []string{"call_history", "next_page_token", "token"},
+		},
+		{
+			name:              "get seller productivity report",
+			path:              []string{"auto-dialer", "reports", "seller-productivity", "get"},
+			requestPath:       "/v2/dialer/reports/seller-productivity",
+			fixture:           "get_auto_dialer_seller_productivity_report.json",
+			responseSensitive: []string{"fixture-ad-seller", "Fixture Auto Dialer seller", "fixture.seller@example.invalid", "fixture-ad-response-token"},
+			responseMarkers:   []string{"seller_id", "seller_name", "email", "token"},
+		},
+		{
+			name:              "list call lists",
+			path:              []string{"auto-dialer", "call-lists", "list"},
+			requestPath:       "/v2/dialer/call-lists",
+			fixture:           "list_auto_dialer_call_lists.json",
+			responseSensitive: []string{"fixture-ad-call-list", "fixture-ad-user", "fixture.user@example.invalid", "Fixture Auto Dialer call list", "fixture call-list description", "fixture-ad-page-token", "fixture-ad-response-token"},
+			responseMarkers:   []string{"call_lists", "next_page_token", "token"},
+		},
+		{
+			name:              "get call list",
+			path:              []string{"auto-dialer", "call-lists", "get"},
+			flags:             map[string][]string{"call-list-id": {"fixture-ad-call-list"}},
+			requestPath:       "/v2/dialer/call-lists/fixture-ad-call-list",
+			fixture:           "get_auto_dialer_call_list.json",
+			responseSensitive: []string{"fixture-ad-call-list", "fixture-ad-user", "fixture.user@example.invalid", "Fixture Auto Dialer call list", "fixture call-list description", "fixture-ad-response-token"},
+			responseMarkers:   []string{"call_list_id", "assigned_to_user_id", "assigned_to_user_email", "name", "description", "token"},
+		},
+		{
+			name:              "list call-list prospects",
+			path:              []string{"auto-dialer", "call-lists", "prospects", "list"},
+			flags:             map[string][]string{"call-list-id": {"fixture-ad-call-list"}},
+			requestPath:       "/v2/dialer/call-lists/fixture-ad-call-list/prospects",
+			fixture:           "list_auto_dialer_call_list_prospects.json",
+			responseSensitive: []string{"fixture-ad-prospect", "Fixture Auto Dialer prospect", "+15550000000", "fixture-ad-page-token", "fixture-ad-response-token"},
+			responseMarkers:   []string{"prospects", "next_page_token", "token"},
+		},
+		{
+			name:              "get prospect",
+			path:              []string{"auto-dialer", "prospects", "get"},
+			flags:             map[string][]string{"prospect-id": {"fixture-ad-prospect"}},
+			requestPath:       "/v2/dialer/prospects/fixture-ad-prospect",
+			fixture:           "get_auto_dialer_prospect.json",
+			responseSensitive: []string{"fixture-ad-prospect", "fixture-ad-user", "fixture-ad-call-list", "Fixture Auto Dialer prospect", "Fixture Auto Dialer company", "fixture.prospect@example.invalid", "+15550000000", "fixture-ad-response-token"},
+			responseMarkers:   []string{"prospect_id", "assignee_user_id", "call_list_id", "primary_name", "company", "email_addresses", "phone_numbers", "token"},
+		},
+	}
+	byRequest := make(map[string]*autoDialerReadAction, len(actions))
+	for i := range actions {
+		actions[i].status, actions[i].response = zoomDirectReadFixture(t, actions[i].fixture)
+		byRequest[http.MethodGet+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Auto Dialer read fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Auto Dialer read fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Auto Dialer read fixture received undeclared query or paging input")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(action.status)
+		_, _ = w.Write(action.response)
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	config := connectors.RuntimeConfig{
+		Config:  map[string]string{"base_url": server.URL + "/v2"},
+		Secrets: map[string]string{"access_token": accessToken},
+	}
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   action.path,
+				Flags:  action.flags,
+				Config: config,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for an Auto Dialer direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q): %v", strings.Join(action.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != action.status {
+				t.Fatalf("Run(%q) result = %#v, want status %d", strings.Join(action.path, " "), result.DirectRead, action.status)
+			}
+			encoded, err := json.Marshal(result.DirectRead.Body)
+			if err != nil {
+				t.Fatalf("marshal Auto Dialer read response: %v", err)
+			}
+			for index, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatalf("Auto Dialer read response exposed declared or generic sensitive field %d", index)
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("Auto Dialer read response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Auto Dialer read fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+// TestAutoDialerDirectWriteCommandsExecuteWithFixtures runs every published
+// Auto Dialer mutation through plan, no-network preview, single-use approval,
+// and execute. It proves exact fixed methods/body schemas/auth/status, typed
+// destructive confirmation, and 204 status-only semantics without Zoom.
+func TestAutoDialerDirectWriteCommandsExecuteWithFixtures(t *testing.T) {
+	const (
+		credentialName = "zoom-auto-dialer-fixture"
+		accessToken    = "fixture-auto-dialer-access-token"
+	)
+	type autoDialerWriteAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		rootFlag          string
+		fixture           string
+		method            string
+		requestPath       string
+		expectedBody      json.RawMessage
+		status            int
+		response          json.RawMessage
+		destructive       bool
+		inputSensitive    []string
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []autoDialerWriteAction{
+		{
+			name: "create call list",
+			path: []string{"auto-dialer", "call-lists", "create"},
+			flags: map[string][]string{
+				"assigned-to-user-id": {"fixture-ad-user"},
+				"name":                {"Fixture Auto Dialer call list"},
+				"prospect-type":       {"CONTACT"},
+				"description":         {"fixture call-list description"},
+			},
+			fixture:           "create_auto_dialer_call_list.json",
+			inputSensitive:    []string{"fixture-ad-user", "Fixture Auto Dialer call list", "fixture call-list description"},
+			responseSensitive: []string{"fixture-ad-call-list", "fixture-ad-user", "Fixture Auto Dialer call list", "fixture-ad-response-token"},
+			responseMarkers:   []string{"call_list_id", "assigned_to_user_id", "name", "token"},
+		},
+		{
+			name:        "delete call list",
+			path:        []string{"auto-dialer", "call-lists", "delete"},
+			flags:       map[string][]string{"call-list-id": {"fixture-ad-call-list"}},
+			fixture:     "delete_auto_dialer_call_list.json",
+			destructive: true,
+		},
+		{
+			name:           "update call list",
+			path:           []string{"auto-dialer", "call-lists", "update"},
+			flags:          map[string][]string{"call-list-id": {"fixture-ad-call-list"}},
+			rootFlag:       "call-list",
+			fixture:        "update_auto_dialer_call_list.json",
+			inputSensitive: []string{"Updated Fixture Auto Dialer call list", "updated fixture call-list description"},
+		},
+		{
+			name:              "create prospect",
+			path:              []string{"auto-dialer", "call-lists", "prospects", "create"},
+			flags:             map[string][]string{"call-list-id": {"fixture-ad-call-list"}},
+			rootFlag:          "prospect",
+			fixture:           "create_auto_dialer_prospect.json",
+			inputSensitive:    []string{"Fixture Auto Dialer prospect", "Fixture Auto Dialer company", "fixture custom field", "+15550000000", "fixture.prospect@example.invalid", "fixture-ad-external-id"},
+			responseSensitive: []string{"fixture-ad-prospect", "Fixture Auto Dialer prospect", "+15550000000", "fixture-ad-response-token"},
+			responseMarkers:   []string{"prospect_id", "primary_name", "primary_phone", "token"},
+		},
+		{
+			name:              "update prospects batch",
+			path:              []string{"auto-dialer", "call-lists", "prospects", "update-batch"},
+			flags:             map[string][]string{"call-list-id": {"fixture-ad-call-list"}},
+			rootFlag:          "request",
+			fixture:           "update_auto_dialer_prospects_batch.json",
+			inputSensitive:    []string{"fixture-ad-prospect", "Updated Fixture Auto Dialer prospect", "+15550000001", "updated.fixture.prospect@example.invalid", "fixture-ad-other-call-list"},
+			responseSensitive: []string{"fixture-ad-prospect", "fixture-ad-failed-prospect", "fixture validation detail", "fixture-ad-user", "fixture.user@example.invalid", "fixture-ad-response-token"},
+			responseMarkers:   []string{"prospect_id", "error_message", "assigned_to_user_id", "assigned_to_user_email", "token"},
+		},
+		{
+			name:              "create prospects batch",
+			path:              []string{"auto-dialer", "call-lists", "prospects", "create-batch"},
+			flags:             map[string][]string{"call-list-id": {"fixture-ad-call-list"}},
+			rootFlag:          "request",
+			fixture:           "create_auto_dialer_prospects_batch.json",
+			inputSensitive:    []string{"Fixture batch Auto Dialer prospect", "Fixture Auto Dialer company", "+15550000002", "batch.fixture.prospect@example.invalid"},
+			responseSensitive: []string{"fixture-ad-batch-prospect", "Fixture batch Auto Dialer prospect", "+15550000002", "fixture-ad-user", "fixture.user@example.invalid", "fixture-ad-response-token"},
+			responseMarkers:   []string{"prospect_id", "name", "phone", "assigned_to_user_id", "assigned_to_user_email", "token"},
+		},
+		{
+			name:        "delete prospect",
+			path:        []string{"auto-dialer", "call-lists", "prospects", "delete"},
+			flags:       map[string][]string{"call-list-id": {"fixture-ad-call-list"}, "prospect-id": {"fixture-ad-prospect"}},
+			fixture:     "delete_auto_dialer_prospect.json",
+			destructive: true,
+		},
+		{
+			name:           "update prospect",
+			path:           []string{"auto-dialer", "call-lists", "prospects", "update"},
+			flags:          map[string][]string{"call-list-id": {"fixture-ad-call-list"}, "prospect-id": {"fixture-ad-prospect"}},
+			rootFlag:       "prospect",
+			fixture:        "update_auto_dialer_prospect.json",
+			inputSensitive: []string{"Updated Fixture Auto Dialer prospect", "Fixture sales title"},
+		},
+	}
+	byRequest := make(map[string]*autoDialerWriteAction, len(actions))
+	for i := range actions {
+		fixture := zoomSCIM2WriteFixture(t, actions[i].fixture)
+		actions[i].method = fixture.Expect.Method
+		actions[i].requestPath = fixture.Expect.Path
+		actions[i].expectedBody = fixture.Expect.Body
+		actions[i].status = fixture.Response.Status
+		actions[i].response = fixture.Response.Body
+		if actions[i].rootFlag != "" {
+			if actions[i].flags == nil {
+				actions[i].flags = map[string][]string{}
+			}
+			var record any
+			if err := json.Unmarshal(fixture.Record, &record); err != nil {
+				t.Fatalf("decode Auto Dialer fixture record %s: %v", actions[i].fixture, err)
+			}
+			compactRecord, err := json.Marshal(record)
+			if err != nil {
+				t.Fatalf("compact Auto Dialer fixture record %s: %v", actions[i].fixture, err)
+			}
+			actions[i].flags[actions[i].rootFlag] = []string{string(compactRecord)}
+		}
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Auto Dialer write fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Auto Dialer write fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Auto Dialer write fixture received undeclared query or paging input")
+		}
+		if len(action.expectedBody) == 0 {
+			var unexpected any
+			if err := json.NewDecoder(request.Body).Decode(&unexpected); err == nil {
+				t.Fatal("Auto Dialer no-body action unexpectedly sent a request body")
+			}
+		} else {
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("Auto Dialer body action did not declare JSON content")
+			}
+			var got, want any
+			if err := json.NewDecoder(request.Body).Decode(&got); err != nil {
+				t.Fatalf("decode Auto Dialer action body: %v", err)
+			}
+			if err := json.Unmarshal(action.expectedBody, &want); err != nil {
+				t.Fatalf("decode Auto Dialer fixture body: %v", err)
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatal("Auto Dialer action body did not contain exactly the declared documented fields")
+			}
+		}
+		if len(action.response) > 0 {
+			w.Header().Set("Content-Type", "application/json")
+		}
+		w.WriteHeader(action.status)
+		if len(action.response) > 0 {
+			_, _ = w.Write(action.response)
+		}
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s): %v", action.name, err)
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config:    map[string]string{"base_url": server.URL + "/v2"},
+		Secrets:   map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			beforeRequests := requests
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("Auto Dialer plan did not produce a no-network preview and single-use approval")
+			}
+			if action.destructive != (plan.ConfirmationChallenge == string(connectors.ConfirmationKindDestructive)) {
+				t.Fatal("Auto Dialer plan did not retain the declared destructive confirmation policy")
+			}
+			encodedPlan, err := json.Marshal(plan.Sample)
+			if err != nil {
+				t.Fatalf("marshal Auto Dialer plan sample: %v", err)
+			}
+			for index, raw := range action.inputSensitive {
+				if strings.Contains(string(encodedPlan), raw) {
+					t.Fatalf("Auto Dialer plan sample exposed declared sensitive input %d", index)
+				}
+			}
+			if requests != beforeRequests {
+				t.Fatal("Auto Dialer plan or preview reached the fixture endpoint")
+			}
+
+			runRequest := app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}
+			if action.destructive {
+				if _, err := application.RunReverseETL(context.Background(), runRequest); err == nil {
+					t.Fatal("Auto Dialer DELETE execution bypassed typed destructive confirmation")
+				}
+				if requests != beforeRequests {
+					t.Fatal("unconfirmed Auto Dialer DELETE reached the fixture endpoint")
+				}
+				runRequest.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+			}
+			run, err := application.RunReverseETL(context.Background(), runRequest)
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != action.status {
+				t.Fatalf("Auto Dialer run = %#v, want completed declared action status %d", run, action.status)
+			}
+			if len(action.response) == 0 {
+				if run.OperationDirectWrite.Body != nil {
+					t.Fatal("Auto Dialer status-only action returned an invented response body")
+				}
+				return
+			}
+			encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+			if err != nil {
+				t.Fatalf("marshal Auto Dialer action response: %v", err)
+			}
+			for index, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatalf("Auto Dialer action response exposed declared or generic sensitive field %d", index)
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("Auto Dialer action response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Auto Dialer write fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
 // verifyDirectWriteOperationCommands is the direct-write counterpart of
 // verifyOperationCommands. It keeps rest_write declarations inside the real
 // commandrunner preflight and plan lifecycle rather than treating a POST as a

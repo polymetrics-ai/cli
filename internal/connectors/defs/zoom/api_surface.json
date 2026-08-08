@@ -1159,209 +1159,113 @@
     {
       "method": "GET",
       "path": "/v2/dialer/call-histories/{callHistoryId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get call history by ID; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-histories/{callHistoryId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-histories get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/call-history",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Call History; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-history; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-history list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/reports/call-history",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Report Call History; provider_server=https://api.zoom.us/v2; provider_path=/dialer/reports/call-history; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer reports call-history list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/reports/seller-productivity",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Seller Productivity Report; provider_server=https://api.zoom.us/v2; provider_path=/dialer/reports/seller-productivity; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer reports seller-productivity get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/call-lists",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=List Call Lists; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-lists list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/dialer/call-lists",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Create Call List; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "auto-dialer call-lists create"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/call-lists/{callListId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Call List by ID; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-lists get"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/dialer/call-lists/{callListId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Delete Call List; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "auto-dialer call-lists delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/dialer/call-lists/{callListId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Update Call List; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "auto-dialer call-lists update"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/call-lists/{callListId}/prospects",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=List All Prospects in Call List; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}/prospects; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer call-lists prospects list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/dialer/call-lists/{callListId}/prospects",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Create Prospect; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}/prospects; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "auto-dialer call-lists prospects create"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/dialer/call-lists/{callListId}/prospects",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Update Prospects batch; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}/prospects; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "auto-dialer call-lists prospects update-batch"
       }
     },
     {
       "method": "POST",
       "path": "/v2/dialer/call-lists/{callListId}/prospects/batch",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Create Prospects batch; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}/prospects/batch; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "auto-dialer call-lists prospects create-batch"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/dialer/call-lists/{callListId}/prospects/{prospectId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Delete Prospect; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}/prospects/{prospectId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "auto-dialer call-lists prospects delete"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/dialer/call-lists/{callListId}/prospects/{prospectId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Update Prospect; provider_server=https://api.zoom.us/v2; provider_path=/dialer/call-lists/{callListId}/prospects/{prospectId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "auto-dialer call-lists prospects update"
       }
     },
     {
       "method": "GET",
       "path": "/v2/dialer/prospects/{prospectId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
-        "notes": "classification=implementable_now; provider_module=auto-dialer; operation_title=Get Prospect by ID; provider_server=https://api.zoom.us/v2; provider_path=/dialer/prospects/{prospectId}; artifact=https://developers.zoom.us/docs/api/auto-dialer.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "auto-dialer prospects get"
       }
     },
     {

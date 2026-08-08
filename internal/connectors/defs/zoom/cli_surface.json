@@ -1,5 +1,5 @@
 {
-  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, Virtual Agent, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
   "usage": "pm zoom <group> <command> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
@@ -84,6 +84,13 @@
       "title": "Virtual Agent",
       "commands": [
         "virtual-agent"
+      ]
+    },
+    {
+      "id": "auto-dialer",
+      "title": "Auto Dialer",
+      "commands": [
+        "auto-dialer"
       ]
     },
     {
@@ -2014,6 +2021,284 @@
           "path": "/v2/ai_studio/reports/operation_logs"
         }
       ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-histories get",
+      "summary": "Get one Zoom Auto Dialer call-history record.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_auto_dialer_call_history",
+      "source_cli_path": "GET /v2/dialer/call-histories/{callHistoryId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-history-id", "type": "string", "summary": "Auto Dialer call-history identifier.", "maps_to": "path.callHistoryId", "required": true, "allow_empty": false}
+      ],
+      "notes": "Bounded sensitive Auto Dialer read at a fixed path. The provider artifact declares no request paging, token, date, or query input.",
+      "examples": ["pm zoom auto-dialer call-histories get --credential zoom-fixture --call-history-id call-history --json"],
+      "api_surface": [{"method": "GET", "path": "/v2/dialer/call-histories/{callHistoryId}"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-history list",
+      "summary": "List Zoom Auto Dialer call history.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_auto_dialer_call_history",
+      "source_cli_path": "GET /v2/dialer/call-history",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "notes": "Bounded sensitive Auto Dialer read. The provider artifact declares paging values only in the response schema, so no request query flag is exposed.",
+      "examples": ["pm zoom auto-dialer call-history list --credential zoom-fixture --json"],
+      "api_surface": [{"method": "GET", "path": "/v2/dialer/call-history"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer reports call-history list",
+      "summary": "List Zoom Auto Dialer report call history.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_auto_dialer_report_call_history",
+      "source_cli_path": "GET /v2/dialer/reports/call-history",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "notes": "Bounded sensitive Auto Dialer report read. The provider artifact declares no request paging, token, date, or query input.",
+      "examples": ["pm zoom auto-dialer reports call-history list --credential zoom-fixture --json"],
+      "api_surface": [{"method": "GET", "path": "/v2/dialer/reports/call-history"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer reports seller-productivity get",
+      "summary": "Get the Zoom Auto Dialer seller-productivity report.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_auto_dialer_seller_productivity_report",
+      "source_cli_path": "GET /v2/dialer/reports/seller-productivity",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "notes": "Bounded sensitive Auto Dialer report read. The provider artifact declares no request paging, token, date, or query input.",
+      "examples": ["pm zoom auto-dialer reports seller-productivity get --credential zoom-fixture --json"],
+      "api_surface": [{"method": "GET", "path": "/v2/dialer/reports/seller-productivity"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists list",
+      "summary": "List Zoom Auto Dialer call lists.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_auto_dialer_call_lists",
+      "source_cli_path": "GET /v2/dialer/call-lists",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "notes": "Bounded sensitive Auto Dialer call-list read. The provider artifact declares paging values only in the response schema, so no request query flag is exposed.",
+      "examples": ["pm zoom auto-dialer call-lists list --credential zoom-fixture --json"],
+      "api_surface": [{"method": "GET", "path": "/v2/dialer/call-lists"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists create",
+      "summary": "Create one Zoom Auto Dialer call list.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.create_auto_dialer_call_list",
+      "source_cli_path": "POST /v2/dialer/call-lists",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "assigned-to-user-id", "type": "string", "summary": "Provider-required assignee user identifier.", "maps_to": "body.assigned_to_user_id", "required": true, "allow_empty": false},
+        {"name": "name", "type": "string", "summary": "Provider-required call-list name.", "maps_to": "body.name", "required": true, "allow_empty": false},
+        {"name": "prospect-type", "type": "enum", "values": ["CONTACT", "LEAD"], "summary": "Provider-required call-list prospect type.", "maps_to": "body.prospect_type", "required": true},
+        {"name": "description", "type": "string", "summary": "Optional call-list description.", "maps_to": "body.description", "allow_empty": false}
+      ],
+      "redact_fields": ["assigned_to_user_id", "call_list_id", "description", "name"],
+      "risk": "Creates a Zoom Auto Dialer call list.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "Uses only the documented typed call-list members at this fixed endpoint; it is not a generic JSON or HTTP write. Assignee and call-list values are redacted in plans and output.",
+      "examples": ["pm zoom auto-dialer call-lists create --credential zoom-fixture --assigned-to-user-id user --name 'Call list' --prospect-type CONTACT --preview --json"],
+      "api_surface": [{"method": "POST", "path": "/v2/dialer/call-lists"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists get",
+      "summary": "Get one Zoom Auto Dialer call list.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_auto_dialer_call_list",
+      "source_cli_path": "GET /v2/dialer/call-lists/{callListId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-list-id", "type": "string", "summary": "Auto Dialer call-list identifier.", "maps_to": "path.callListId", "required": true, "allow_empty": false}
+      ],
+      "notes": "Bounded sensitive Auto Dialer call-list read at a fixed path. The provider artifact declares no request query input.",
+      "examples": ["pm zoom auto-dialer call-lists get --credential zoom-fixture --call-list-id call-list --json"],
+      "api_surface": [{"method": "GET", "path": "/v2/dialer/call-lists/{callListId}"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists delete",
+      "summary": "Delete one Zoom Auto Dialer call list.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.delete_auto_dialer_call_list",
+      "source_cli_path": "DELETE /v2/dialer/call-lists/{callListId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-list-id", "type": "string", "summary": "Auto Dialer call-list identifier to delete.", "maps_to": "path.callListId", "required": true, "allow_empty": false}
+      ],
+      "redact_fields": ["call_list_id"],
+      "risk": "Irreversibly deletes a Zoom Auto Dialer call list.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+      "notes": "The fixed documented endpoint returns 204 No Content. Success is asserted by status without inventing a response body.",
+      "examples": ["pm zoom auto-dialer call-lists delete --credential zoom-fixture --call-list-id call-list --preview --json"],
+      "api_surface": [{"method": "DELETE", "path": "/v2/dialer/call-lists/{callListId}"}],
+      "output_policy": "none"
+    },
+    {
+      "path": "auto-dialer call-lists update",
+      "summary": "Update one Zoom Auto Dialer call list.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_auto_dialer_call_list",
+      "source_cli_path": "PATCH /v2/dialer/call-lists/{callListId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-list-id", "type": "string", "summary": "Auto Dialer call-list identifier to update.", "maps_to": "path.callListId", "required": true, "allow_empty": false},
+        {"name": "call-list", "type": "json_object", "summary": "Documented Auto Dialer call-list update object.", "maps_to": "body", "required": true}
+      ],
+      "redact_fields": ["assigned_to_user_id", "call_list_id", "description", "name"],
+      "risk": "Changes a Zoom Auto Dialer call list through a provider-defined typed object.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named call-list flag accepts exactly one documented call-list object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. The 204 response is status-only success.",
+      "examples": ["pm zoom auto-dialer call-lists update --credential zoom-fixture --call-list-id call-list --call-list '{\"name\":\"Renamed list\"}' --preview --json"],
+      "api_surface": [{"method": "PATCH", "path": "/v2/dialer/call-lists/{callListId}"}],
+      "output_policy": "none"
+    },
+    {
+      "path": "auto-dialer call-lists prospects list",
+      "summary": "List prospects in one Zoom Auto Dialer call list.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_auto_dialer_call_list_prospects",
+      "source_cli_path": "GET /v2/dialer/call-lists/{callListId}/prospects",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-list-id", "type": "string", "summary": "Auto Dialer call-list identifier.", "maps_to": "path.callListId", "required": true, "allow_empty": false}
+      ],
+      "notes": "Bounded sensitive Auto Dialer prospect read at a fixed call-list path. The provider artifact declares response-only paging values, so no request query flag is exposed.",
+      "examples": ["pm zoom auto-dialer call-lists prospects list --credential zoom-fixture --call-list-id call-list --json"],
+      "api_surface": [{"method": "GET", "path": "/v2/dialer/call-lists/{callListId}/prospects"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists prospects create",
+      "summary": "Create one prospect in a Zoom Auto Dialer call list.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.create_auto_dialer_prospect",
+      "source_cli_path": "POST /v2/dialer/call-lists/{callListId}/prospects",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-list-id", "type": "string", "summary": "Auto Dialer call-list identifier.", "maps_to": "path.callListId", "required": true, "allow_empty": false},
+        {"name": "prospect", "type": "json_object", "summary": "Documented Auto Dialer prospect object.", "maps_to": "body", "required": true}
+      ],
+      "redact_fields": ["annual_revenue", "company", "company_description", "company_linkedIn_url", "company_url", "custom_fields", "department", "description", "email_addresses", "external_id", "industry", "lead_linkedIn_url", "lead_rating", "lead_source", "lead_status", "linkedIn_url", "mailing_city", "mailing_country", "mailing_state", "mailing_street", "mailing_zip_code", "number_of_employees", "phone_numbers", "primary_name", "secondary_name", "title", "topic"],
+      "risk": "Creates a Zoom Auto Dialer prospect with sensitive personal and company data.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named prospect flag accepts exactly one documented prospect object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. Prospect values are redacted in plans and output.",
+      "examples": ["pm zoom auto-dialer call-lists prospects create --credential zoom-fixture --call-list-id call-list --prospect '{\"primary_name\":\"Prospect\",\"phone_numbers\":[{\"number\":\"+15550000000\",\"type\":\"PRIMARY_PHONE\"}]}' --preview --json"],
+      "api_surface": [{"method": "POST", "path": "/v2/dialer/call-lists/{callListId}/prospects"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists prospects update-batch",
+      "summary": "Update Zoom Auto Dialer prospects in batch.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_auto_dialer_prospects_batch",
+      "source_cli_path": "PATCH /v2/dialer/call-lists/{callListId}/prospects",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-list-id", "type": "string", "summary": "Auto Dialer call-list identifier.", "maps_to": "path.callListId", "required": true, "allow_empty": false},
+        {"name": "request", "type": "json_object", "summary": "Documented Auto Dialer batch prospect-update object.", "maps_to": "body", "required": true}
+      ],
+      "redact_fields": ["assign_to_call_list_id", "assigned_to_user_email", "assigned_to_user_id", "company", "custom_fields", "email_addresses", "error_message", "phone_numbers", "primary_name", "prospects", "prospect_id"],
+      "risk": "Updates up to 1,000 Zoom Auto Dialer prospects through a provider-defined typed object.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named request flag accepts exactly the documented bounded batch-update object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. Provider 200 and 207 response data are redacted.",
+      "examples": ["pm zoom auto-dialer call-lists prospects update-batch --credential zoom-fixture --call-list-id call-list --request '{\"prospects\":[{\"prospect_id\":\"prospect\",\"primary_name\":\"Updated\"}]}' --preview --json"],
+      "api_surface": [{"method": "PATCH", "path": "/v2/dialer/call-lists/{callListId}/prospects"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists prospects create-batch",
+      "summary": "Create Zoom Auto Dialer prospects in batch.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.create_auto_dialer_prospects_batch",
+      "source_cli_path": "POST /v2/dialer/call-lists/{callListId}/prospects/batch",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-list-id", "type": "string", "summary": "Auto Dialer call-list identifier.", "maps_to": "path.callListId", "required": true, "allow_empty": false},
+        {"name": "request", "type": "json_object", "summary": "Documented Auto Dialer batch prospect-create object.", "maps_to": "body", "required": true}
+      ],
+      "redact_fields": ["assigned_to_user_email", "assigned_to_user_id", "company", "custom_fields", "email_addresses", "error_message", "phone_numbers", "primary_name", "prospects", "prospect_id"],
+      "risk": "Creates up to 1,000 Zoom Auto Dialer prospects through a provider-defined typed object.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named request flag accepts exactly the documented bounded batch-create object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. Prospect values are redacted in plans and output.",
+      "examples": ["pm zoom auto-dialer call-lists prospects create-batch --credential zoom-fixture --call-list-id call-list --request '{\"prospects\":[{\"primary_name\":\"Prospect\",\"phone_numbers\":[{\"number\":\"+15550000000\",\"type\":\"PRIMARY_PHONE\"}]}]}' --preview --json"],
+      "api_surface": [{"method": "POST", "path": "/v2/dialer/call-lists/{callListId}/prospects/batch"}],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists prospects delete",
+      "summary": "Delete one prospect from a Zoom Auto Dialer call list.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.delete_auto_dialer_prospect",
+      "source_cli_path": "DELETE /v2/dialer/call-lists/{callListId}/prospects/{prospectId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-list-id", "type": "string", "summary": "Auto Dialer call-list identifier.", "maps_to": "path.callListId", "required": true, "allow_empty": false},
+        {"name": "prospect-id", "type": "string", "summary": "Auto Dialer prospect identifier to delete.", "maps_to": "path.prospectId", "required": true, "allow_empty": false}
+      ],
+      "redact_fields": ["call_list_id", "prospect_id"],
+      "risk": "Irreversibly deletes a Zoom Auto Dialer prospect.",
+      "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+      "notes": "The fixed documented endpoint returns 204 No Content. Success is asserted by status without inventing a response body.",
+      "examples": ["pm zoom auto-dialer call-lists prospects delete --credential zoom-fixture --call-list-id call-list --prospect-id prospect --preview --json"],
+      "api_surface": [{"method": "DELETE", "path": "/v2/dialer/call-lists/{callListId}/prospects/{prospectId}"}],
+      "output_policy": "none"
+    },
+    {
+      "path": "auto-dialer call-lists prospects update",
+      "summary": "Update one Zoom Auto Dialer prospect.",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "zoom.update_auto_dialer_prospect",
+      "source_cli_path": "PATCH /v2/dialer/call-lists/{callListId}/prospects/{prospectId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "call-list-id", "type": "string", "summary": "Auto Dialer call-list identifier.", "maps_to": "path.callListId", "required": true, "allow_empty": false},
+        {"name": "prospect-id", "type": "string", "summary": "Auto Dialer prospect identifier to update.", "maps_to": "path.prospectId", "required": true, "allow_empty": false},
+        {"name": "prospect", "type": "json_object", "summary": "Documented Auto Dialer prospect-update object.", "maps_to": "body", "required": true}
+      ],
+      "redact_fields": ["annual_revenue", "assign_to_call_list_id", "call_list_id", "company", "company_description", "company_linkedIn_url", "company_url", "custom_fields", "department", "description", "email_addresses", "external_id", "industry", "lead_linkedIn_url", "lead_rating", "lead_source", "lead_status", "linkedIn_url", "mailing_city", "mailing_country", "mailing_state", "mailing_street", "mailing_zip_code", "number_of_employees", "phone_numbers", "primary_name", "primary_phone", "secondary_name", "title", "topic"],
+      "risk": "Changes a Zoom Auto Dialer prospect through a provider-defined typed object.",
+      "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+      "notes": "The named prospect flag accepts exactly one documented prospect-update object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. The 204 response is status-only success.",
+      "examples": ["pm zoom auto-dialer call-lists prospects update --credential zoom-fixture --call-list-id call-list --prospect-id prospect --prospect '{\"primary_name\":\"Updated\"}' --preview --json"],
+      "api_surface": [{"method": "PATCH", "path": "/v2/dialer/call-lists/{callListId}/prospects/{prospectId}"}],
+      "output_policy": "none"
+    },
+    {
+      "path": "auto-dialer prospects get",
+      "summary": "Get one Zoom Auto Dialer prospect.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_auto_dialer_prospect",
+      "source_cli_path": "GET /v2/dialer/prospects/{prospectId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {"name": "prospect-id", "type": "string", "summary": "Auto Dialer prospect identifier.", "maps_to": "path.prospectId", "required": true, "allow_empty": false}
+      ],
+      "notes": "Bounded sensitive Auto Dialer prospect read at a fixed path. The provider artifact declares no request query input.",
+      "examples": ["pm zoom auto-dialer prospects get --credential zoom-fixture --prospect-id prospect --json"],
+      "api_surface": [{"method": "GET", "path": "/v2/dialer/prospects/{prospectId}"}],
       "output_policy": "json_redacted"
     },
     {

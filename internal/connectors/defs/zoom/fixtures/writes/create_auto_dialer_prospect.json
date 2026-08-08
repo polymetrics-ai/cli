@@ -1,0 +1,31 @@
+{
+  "record": {
+    "primary_name": "Fixture Auto Dialer prospect",
+    "company": "Fixture Auto Dialer company",
+    "custom_fields": ["fixture custom field"],
+    "phone_numbers": [{"number": "+15550000000", "type": "PRIMARY_PHONE", "ext": "123"}],
+    "email_addresses": [{"email": "fixture.prospect@example.invalid", "type": "PRIMARY_EMAIL"}],
+    "external_id": "fixture-ad-external-id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/dialer/call-lists/fixture-ad-call-list/prospects",
+    "body": {
+      "primary_name": "Fixture Auto Dialer prospect",
+      "company": "Fixture Auto Dialer company",
+      "custom_fields": ["fixture custom field"],
+      "phone_numbers": [{"number": "+15550000000", "type": "PRIMARY_PHONE", "ext": "123"}],
+      "email_addresses": [{"email": "fixture.prospect@example.invalid", "type": "PRIMARY_EMAIL"}],
+      "external_id": "fixture-ad-external-id"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "prospect_id": "fixture-ad-prospect",
+      "primary_name": "Fixture Auto Dialer prospect",
+      "primary_phone": "+15550000000",
+      "token": "fixture-ad-response-token"
+    }
+  }
+}

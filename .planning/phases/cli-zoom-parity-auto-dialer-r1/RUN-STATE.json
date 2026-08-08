@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-auto-dialer-r1",
   "issue": 3940,
   "parent_issue": 3915,
-  "status": "red-captured",
+  "status": "complete",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -34,7 +34,17 @@
     "unsafe_or_disallowed": 0
   },
   "red": "captured: go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... failed only on the target ledger totals and 16 unknown Auto Dialer command paths before production changes",
-  "green": "pending",
-  "verification": "pending",
-  "review": "pending"
+  "green": "all 16 operations declared and reconciled; go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... passes",
+  "verification": "fixture lifecycle, surface sync/reconcile/validate, generated docs/site, fresh binary help, scoped tests/vet/Make gates passed",
+  "review": "inline manual code review after resolved code-review GSD source corrected batch-update no-op validation and expanded field redaction; no blocking finding remains",
+  "actual": {
+    "covered": 67,
+    "locally_blocked": 1775,
+    "direct_reads": 38,
+    "direct_writes": 24,
+    "unsafe_or_disallowed": 0,
+    "auto_dialer_endpoint_rows_reconciled": 16,
+    "global_endpoint_ledger_reads_added": 8,
+    "non_zoom_endpoint_ledger_hash": "7170208799055da56fb04ddcdc642fec68495e138808a41904e7f37cf8837691"
+  }
 }

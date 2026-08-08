@@ -1,0 +1,13 @@
+{
+  "status": 200,
+  "body": {
+    "prospect_id": "fixture-ad-prospect",
+    "assignee_user_id": "fixture-ad-user",
+    "call_list_id": "fixture-ad-call-list",
+    "primary_name": "Fixture Auto Dialer prospect",
+    "company": "Fixture Auto Dialer company",
+    "email_addresses": [{"email": "fixture.prospect@example.invalid", "type": "PRIMARY_EMAIL"}],
+    "phone_numbers": [{"number": "+15550000000", "type": "PRIMARY_PHONE"}],
+    "token": "fixture-ad-response-token"
+  }
+}

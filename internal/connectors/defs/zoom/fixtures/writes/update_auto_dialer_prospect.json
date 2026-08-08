@@ -1,0 +1,17 @@
+{
+  "record": {
+    "primary_name": "Updated Fixture Auto Dialer prospect",
+    "title": "Fixture sales title"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/dialer/call-lists/fixture-ad-call-list/prospects/fixture-ad-prospect",
+    "body": {
+      "primary_name": "Updated Fixture Auto Dialer prospect",
+      "title": "Fixture sales title"
+    }
+  },
+  "response": {
+    "status": 204
+  }
+}

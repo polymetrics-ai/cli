@@ -1,0 +1,17 @@
+{
+  "record": {
+    "name": "Updated Fixture Auto Dialer call list",
+    "description": "updated fixture call-list description"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/dialer/call-lists/fixture-ad-call-list",
+    "body": {
+      "name": "Updated Fixture Auto Dialer call list",
+      "description": "updated fixture call-list description"
+    }
+  },
+  "response": {
+    "status": 204
+  }
+}
