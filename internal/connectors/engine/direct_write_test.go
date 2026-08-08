@@ -229,6 +229,9 @@ func TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth(t *testing.T) {
 		if r.Header.Get("Authorization") != "Bearer "+keyConnectorJWT {
 			t.Fatal("key connector request did not receive the operation-declared bearer credential")
 		}
+		if r.Header.Get("X-Ordinary-Token") != "" {
+			t.Fatal("key connector request inherited an ordinary API secret header")
+		}
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"ok":true}`))
 	}))
@@ -249,6 +252,7 @@ func TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth(t *testing.T) {
 		"base": {
 			"url": "{{ config.base_url }}",
 			"auth": [{"mode": "bearer", "token": "{{ secrets.access_token }}"}],
+			"headers": {"X-Ordinary-Token": "{{ secrets.access_token }}"},
 			"pagination": {"type": "none"}
 		},
 		"streams": []
