@@ -1250,6 +1250,7 @@ func batchArtifactEndpointKey(method, path string) string {
 func copyMaterializedClassifier(dst *engine.SurfaceEndpoint, src engine.SurfaceEndpoint) {
 	if src.CoveredBy != nil {
 		coverage := *src.CoveredBy
+		coverage.Writes = append([]string(nil), src.CoveredBy.Writes...)
 		coverage.DirectReads = append([]string(nil), src.CoveredBy.DirectReads...)
 		dst.CoveredBy = &coverage
 		return
@@ -1342,8 +1343,8 @@ func ensureMaterializedCoverage(bundle engine.Bundle, surface engine.APISurface)
 		if endpoint.CoveredBy.Stream != "" {
 			coveredStreams[endpoint.CoveredBy.Stream] = true
 		}
-		if endpoint.CoveredBy.Write != "" {
-			coveredWrites[endpoint.CoveredBy.Write] = true
+		for _, write := range endpoint.CoveredBy.WriteTargets() {
+			coveredWrites[write] = true
 		}
 	}
 	for _, stream := range bundle.Streams {
@@ -1382,8 +1383,8 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		if endpoint.CoveredBy.Stream != "" {
 			streamRefs[endpoint.CoveredBy.Stream] = append(streamRefs[endpoint.CoveredBy.Stream], ref)
 		}
-		if endpoint.CoveredBy.Write != "" {
-			writeRefs[endpoint.CoveredBy.Write] = append(writeRefs[endpoint.CoveredBy.Write], ref)
+		for _, write := range endpoint.CoveredBy.WriteTargets() {
+			writeRefs[write] = append(writeRefs[write], ref)
 		}
 	}
 

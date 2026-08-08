@@ -1,11 +1,15 @@
 # Overview
 
-Reads Workday REST API resources (workers, organizations, job profiles) with bearer-token
-authentication. Read-only.
+Reads and writes the documented Workday REST surface across the 52 independently versioned services
+Workday's own directory publishes, with bearer-token authentication.
+
+Current official operation ledger: 911 documented HTTP operations (651 GET, 153 POST, 56 PATCH, 32
+DELETE, 19 PUT). Implemented rows: 911 commands = 654 bounded direct reads + 252 typed writes + 5
+binary downloads. Those commands, together with the 3 stream-backed reads, classify 910 documented
+endpoints; 1 endpoint is blocked as deprecated. Certified rows: 0 (fixture-only; no live provider
+calls were made).
 
 Readable streams: `workers`, `organizations`, `jobs`.
-
-This connector is read-only; no write actions are declared.
 
 ## Auth setup
 
@@ -47,12 +51,24 @@ Default pagination: page-number pagination; page parameter `page`; size paramete
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Workday REST API read of worker, organization,
-and job profile data (HR/PII-adjacent).
+The connector declares 252 typed write actions (145 POST creates, 56 PATCH updates, 32 DELETE
+removals, 19 PUT upserts) across the HCM, Financials, Student and Platform services, including
+HR/PII-adjacent worker, absence, payroll, and financial records.
+
+Writes are only available through reverse ETL plan -> preview -> explicit approval -> execute. Every
+DELETE action is gated as destructive and additionally requires a typed confirmation. The bundle
+does not expose arbitrary request bodies, raw query strings, generic method/path/body, file bytes,
+shell commands, or passthrough HTTP tools.
+
+Read behavior: external Workday REST API read across HCM, Financials, Student and Platform services
+(HR/PII-adjacent).
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 3 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  out_of_scope=1.
+- API coverage includes 3 stream-backed endpoint group(s); the remaining documented reads are
+  exposed as bounded direct reads rather than ETL streams.
+- Other documented endpoints are not exposed by this connector where they are blocked in the
+  operation ledger as deprecated=1.
+- Fixture-only evidence: no live Workday credentials, provider calls, provider writes, or
+  certification run were used.

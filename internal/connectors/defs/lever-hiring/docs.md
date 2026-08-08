@@ -4,7 +4,9 @@ Reads Lever Hiring opportunities, postings, users, requisitions, stages, and rel
 
 Service API documentation: https://hire.lever.co/developer/documentation.
 
-Current official operation ledger: 117 operations total (107 HTTP operations and 10 webhook trigger/event names). Implemented rows: 25 stream-backed reads, 23 bounded direct reads, and 14 typed writes. Blocked/planned rows: 55. Certified rows: 0 (fixture-only; no live provider calls were made).
+Current official operation ledger: 106 HTTP operations (55 GET, 26 POST, 14 PUT, 11 DELETE). Implemented rows: 60 = 25 stream-backed reads + 21 bounded direct reads + 14 typed writes. Blocked/planned rows: 46. Certified rows: 0 (fixture-only; no live provider calls were made).
+
+Lever additionally documents 10 webhook trigger/event names. Those are provider-pushed event payloads, not HTTP operations the connector can call, so they are tracked separately and are not part of the 106 counted above.
 
 ## Auth setup
 

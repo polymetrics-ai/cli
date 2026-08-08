@@ -1340,7 +1340,8 @@ Reads and writes the full documented Jira Cloud platform REST API v3 surface: 61
 ## Security
 
 - read risk: external Jira Cloud API read of issue, project, and user data
-- approval: reverse ETL writes require plan, preview, approval, execute; reads are HTTP Basic authenticated with an Atlassian API token
+- write risk: external Jira Cloud API mutation across issues, projects, users, fields, workflows, dashboards, and instance administration; 84 of the 292 write actions are DELETEs that permanently remove Jira issues, projects, or instance configuration
+- approval: required for every write action; reverse ETL plan, preview, approval, execute, and every DELETE action is gated as destructive and additionally requires a typed confirmation; reads are HTTP Basic authenticated with an Atlassian API token
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
