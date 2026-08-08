@@ -46,12 +46,12 @@
   "foundation": {
     "name": "declared direct-write redacted output and sensitive confirmation",
     "red_commit": "5a0172053",
-    "green_commit": "recorded after this foundation commit",
+    "green_commit": "0987a58bc",
     "scope": "response/error/plan redaction and typed confirmation for secret-sensitive rest_write operations"
   },
   "green": {
     "commit": "",
     "result": "pending"
   },
-  "next": "complete RED before any production engine or Zoom declarations"
+  "next": "author the one Zoom rest_write declaration; Zoom command-surface test remains intentionally RED until then"
 }
