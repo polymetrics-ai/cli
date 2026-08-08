@@ -1,0 +1,25 @@
+{
+  "record": {
+    "name": "Fixture Workforce Management organizational group",
+    "description": "Fixture Workforce Management organizational group description",
+    "scheduling_group_ids": ["fixture-wfm-scheduling-group"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/workforce-management/organizational-groups",
+    "body": {
+      "name": "Fixture Workforce Management organizational group",
+      "description": "Fixture Workforce Management organizational group description",
+      "scheduling_group_ids": ["fixture-wfm-scheduling-group"]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "org_group_id": "fixture-wfm-org-group",
+      "name": "Fixture Workforce Management organizational group",
+      "description": "Fixture Workforce Management organizational group description",
+      "scheduling_group_ids": ["fixture-wfm-scheduling-group"]
+    }
+  }
+}

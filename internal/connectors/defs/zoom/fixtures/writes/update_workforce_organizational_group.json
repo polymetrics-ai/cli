@@ -1,0 +1,19 @@
+{
+  "record": {
+    "description": "Fixture Workforce Management updated organizational group description"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/workforce-management/organizational-groups/fixture-wfm-org-group",
+    "body": {
+      "description": "Fixture Workforce Management updated organizational group description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "org_group_id": "fixture-wfm-org-group",
+      "description": "Fixture Workforce Management updated organizational group description"
+    }
+  }
+}

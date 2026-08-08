@@ -134,6 +134,52 @@ nonnumeric applicability, malformed bounds, and a contradictory declared range. 
 unblocks any declarative connector that must preserve provider-published numeric request bounds;
 its implementation commit is separate from the Workforce Management authoring commit.
 
-## GREEN connector — pending
+## GREEN connector — captured
 
-## Verification/review — pending
+All eighteen audited Workforce Management operations are now declarative, typed, and executable:
+eleven fixed-path reads and seven approval-gated writes. The two source-declared `204 No Content`
+DELETE actions require destructive confirmation and assert status-only success; the two CSV writes
+use the closed CSV policy. No request paging flag was introduced.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... -run 'TestWorkforceManagement(OperationCommandsAreReachable|DirectReadCommandsExecuteWithFixtures|JSONDirectWriteCommandsExecuteWithFixtures|CSVDirectWritesExecuteWithFixtures)'
+ok      polymetrics.ai/internal/connectors/defs/zoom    3.762s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/...
+ok      polymetrics.ai/internal/connectors/defs/zoom    15.171s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/connsdk ./internal/connectors/commandrunner ./cmd/connectorgen
+ok      polymetrics.ai/internal/connectors/engine           5.313s
+ok      polymetrics.ai/internal/connectors/connsdk          0.952s
+ok      polymetrics.ai/internal/connectors/commandrunner    8.033s
+ok      polymetrics.ai/cmd/connectorgen                    13.080s
+```
+
+The fixture lifecycle reaches all eleven GET paths via the real command runner and all seven
+writes via plan → no-network preview → single-use approval → execute. It proves ordinary bearer
+delivery, exact paths, absent undeclared query/paging input, JSON or multipart bodies, CSV
+snapshot/header validation, output redaction, and both destructive confirmation gates. The
+staffing fixture also proves that `4.01` is rejected by the declared source maximum before any
+network dispatch.
+
+```text
+$ go run ./cmd/connectorgen surface-reconcile --notes-contains provider_module=workforce-management
+zoom: reconciled covered=18 blocked=0 unchanged=0 refused=0
+connectorgen surface-reconcile: 551 connector(s) scanned; covered=18 blocked=0 unchanged=0 refused=0
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+Reconciliation converts exactly the audited Zoom rows to `11` direct reads and `7` direct writes;
+the generated endpoint-ledger delta consists only of Zoom's eleven `rest_read` Workforce
+Management paths. The provider has zero `unsafe_or_disallowed` rows.
+
+## Verification/review — captured
+
+A fresh `go build -o .tmp/pm ./cmd/pm` binary returned success for `pm help zoom`, bare `pm zoom`,
+bare `pm zoom workforce-management`, and every one of the eighteen exact Workforce Management
+command paths with `--help`. Generated connector docs were validated; whole-tree docs generation
+retained only Zoom manuals, and whole-tree website generation retained only the Zoom records after
+non-Zoom JSON equivalence checks. Scoped vet, lint, CLI tests, contract, smoke, documentation,
+surface, boundary, and release-workflow checks are recorded in `VERIFICATION.md`.

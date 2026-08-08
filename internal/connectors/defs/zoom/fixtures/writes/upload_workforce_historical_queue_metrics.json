@@ -1,0 +1,22 @@
+{
+  "record": {
+    "file": "imports/fixture-wfm-queue-metrics.csv",
+    "allow_overwrite": true,
+    "timezone": "UTC"
+  },
+  "source_csv": "queue_id,metric\nfixture-wfm-queue,7\n",
+  "expect": {
+    "method": "POST",
+    "path": "/v2/workforce-management/imports/historical-queue-metrics",
+    "fields": {
+      "allow_overwrite": "true",
+      "timezone": "UTC"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "import_id": "fixture-wfm-queue-import"
+    }
+  }
+}

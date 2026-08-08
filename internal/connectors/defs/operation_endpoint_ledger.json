@@ -12687,6 +12687,72 @@
       "path": "/v2/virtual_agent/report/transcripts",
       "kind": "rest_read",
       "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/filter-groups",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/forecasts",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/imports/{importId}/historical-queue-metrics",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/organizational-groups",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/organizational-groups/{organizationalGroupId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/reports/adherence/agents",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/reports/schedules/agents",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/schedules/agents",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/scheduling-groups",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workforce-management/users",
+      "kind": "rest_read",
+      "max_bytes": 1048576
     }
   ]
 }

@@ -312436,7 +312436,7 @@
   {
     "slug": "zoom",
     "name": "Zoom",
-    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, Auto Dialer call history/reports/call lists/prospects, and Tasks assignee/collaborator/comment/import/item data through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, Auto Dialer, and Tasks reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, Auto Dialer call history/reports/call lists/prospects, Tasks assignee/collaborator/comment/import/item data, and Workforce Management filter/forecast/import/organizational-group/report/schedule/user data through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, Auto Dialer, Tasks, and Workforce Management reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "integration_type": "api",
     "release_stage": "ga",
@@ -312487,7 +312487,7 @@
       }
     ],
     "cli_surface": {
-      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
       "usage": "pm zoom <group> <command> [flags]",
       "source_cli": {
         "name": "Zoom API reference",
@@ -312586,6 +312586,13 @@
           "title": "Tasks",
           "commands": [
             "tasks"
+          ]
+        },
+        {
+          "id": "workforce-management",
+          "title": "Workforce Management",
+          "commands": [
+            "workforce-management"
           ]
         },
         {
@@ -316101,6 +316108,684 @@
           "risk": "Changes documented fields of a Zoom Task.",
           "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
           "notes": "The named task flag accepts exactly one documented closed Task partial-update object for this fixed endpoint; it is not a generic JSON or HTTP write. The 204 response is status-only success."
+        },
+        {
+          "path": "workforce-management filter-groups list",
+          "summary": "List Zoom Workforce Management filter groups.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_workforce_filter_groups",
+          "source_cli_path": "GET /v2/workforce-management/filter-groups",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management filter-groups list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Workforce Management filter-group read. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management forecasts list",
+          "summary": "List Zoom Workforce Management forecasts.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_workforce_forecasts",
+          "source_cli_path": "GET /v2/workforce-management/forecasts",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management forecasts list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Workforce Management forecast read. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management forecasts scheduling-groups get",
+          "summary": "Get a Workforce Management forecast for one scheduling group.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_workforce_forecast_scheduling_group",
+          "source_cli_path": "GET /v2/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "forecast-id",
+              "type": "string",
+              "summary": "Workforce Management forecast identifier.",
+              "values": [],
+              "maps_to": "path.forecastId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "scheduling-group-id",
+              "type": "string",
+              "summary": "Workforce Management scheduling-group identifier.",
+              "values": [],
+              "maps_to": "path.schedulingGroupId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management forecasts scheduling-groups get --credential zoom-fixture --forecast-id forecast --scheduling-group-id group --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive forecast scheduling-group read at the provider's fixed path. The artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management imports historical-agent-status upload",
+          "summary": "Upload documented Workforce Management historical agent statuses.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.upload_workforce_historical_agent_status",
+          "source_cli_path": "POST /v2/workforce-management/imports/historical-agent-status",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "status-import",
+              "type": "json_object",
+              "summary": "Documented closed Workforce Management status-import object.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management imports historical-agent-status upload --credential zoom-fixture --status-import '{\"statuses\":[{\"change_time\":\"2026-01-01T00:00:00Z\",\"previous_status_code\":\"offline\",\"previous_status_name\":\"Offline\",\"status_code\":\"available\",\"status_name\":\"Available\",\"user_id\":\"user\"}]}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Imports historical agent status events into Zoom Workforce Management.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named status-import flag accepts only the provider's documented closed event object for this fixed endpoint; it is not a generic JSON or HTTP write. Status values are redacted."
+        },
+        {
+          "path": "workforce-management imports historical-agent-status delete",
+          "summary": "Delete documented Workforce Management historical agent statuses.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_workforce_historical_agent_status",
+          "source_cli_path": "DELETE /v2/workforce-management/imports/historical-agent-status",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "status-deletion",
+              "type": "json_object",
+              "summary": "Documented closed Workforce Management status-deletion object.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management imports historical-agent-status delete --credential zoom-fixture --status-deletion '{\"statuses\":[{\"start_time\":\"2026-01-01T00:00:00Z\",\"end_time\":\"2026-01-01T01:00:00Z\",\"user_id\":\"user\"}]}' --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Irreversibly deletes historical agent-status intervals from Zoom Workforce Management.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The named status-deletion flag accepts only the provider's documented closed deletion object for this fixed endpoint. The 204 response is status-only success; no body is invented."
+        },
+        {
+          "path": "workforce-management imports historical-queue-metrics upload",
+          "summary": "Upload documented Workforce Management historical queue metrics.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.upload_workforce_historical_queue_metrics",
+          "source_cli_path": "POST /v2/workforce-management/imports/historical-queue-metrics",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "file-path",
+              "type": "string",
+              "summary": "Project-contained .csv file to upload (local safety maximum 10 MB).",
+              "values": [],
+              "maps_to": "body.file",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "allow-overwrite",
+              "type": "boolean",
+              "summary": "Whether the documented import may overwrite existing historical queue metrics.",
+              "values": [],
+              "maps_to": "body.allow_overwrite"
+            },
+            {
+              "name": "timezone",
+              "type": "string",
+              "summary": "Optional documented timezone for the CSV import.",
+              "values": [],
+              "maps_to": "body.timezone",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management imports historical-queue-metrics upload --credential zoom-fixture --file-path imports/queue-metrics.csv --timezone UTC --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Imports a bounded provider-declared CSV snapshot of historical queue metrics into Zoom Workforce Management.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "This fixed provider upload accepts only a project-contained syntactically valid .csv snapshot with a text/csv part header. The artifact omits a size cap, so the declared transport safety cap is 10 MB; callers cannot select a URL, parser, MIME policy, or upload target."
+        },
+        {
+          "path": "workforce-management imports staffing upload",
+          "summary": "Upload a documented Workforce Management forecast staffing CSV.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.upload_workforce_forecast_staffing",
+          "source_cli_path": "POST /v2/workforce-management/imports/staffing",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "file-path",
+              "type": "string",
+              "summary": "Project-contained .csv file to upload (maximum 1 MB).",
+              "values": [],
+              "maps_to": "body.file",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "forecast-duration-weeks",
+              "type": "number",
+              "summary": "Documented forecast duration in weeks (1 through 4).",
+              "values": [],
+              "maps_to": "body.forecast_duration_weeks",
+              "minimum": 1,
+              "required": true
+            },
+            {
+              "name": "forecast-name",
+              "type": "string",
+              "summary": "Documented forecast name.",
+              "values": [],
+              "maps_to": "body.forecast_name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "forecast-start-date",
+              "type": "string",
+              "summary": "Documented forecast start date.",
+              "values": [],
+              "maps_to": "body.forecast_start_date",
+              "format": "date",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "has-interval-offsets",
+              "type": "boolean",
+              "summary": "Whether the CSV has documented interval offsets.",
+              "values": [],
+              "maps_to": "body.has_interval_offsets",
+              "required": true
+            },
+            {
+              "name": "timezone",
+              "type": "string",
+              "summary": "Documented timezone for the staffing forecast.",
+              "values": [],
+              "maps_to": "body.timezone",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management imports staffing upload --credential zoom-fixture --file-path imports/staffing.csv --forecast-duration-weeks 2 --forecast-name forecast --forecast-start-date 2026-01-01 --has-interval-offsets=false --timezone UTC --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Imports a bounded provider-declared CSV staffing forecast into Zoom Workforce Management.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "This fixed provider upload accepts only a project-contained syntactically valid .csv snapshot no larger than the documented 1 MB with a text/csv part header. The closed request schema preserves the provider's numeric 1–4 duration range; callers cannot select a URL, parser, MIME policy, or upload target."
+        },
+        {
+          "path": "workforce-management imports historical-queue-metrics get",
+          "summary": "Get Workforce Management historical queue-metrics import metadata.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_workforce_historical_queue_metrics_import",
+          "source_cli_path": "GET /v2/workforce-management/imports/{importId}/historical-queue-metrics",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "import-id",
+              "type": "string",
+              "summary": "Workforce Management queue-metrics import identifier.",
+              "values": [],
+              "maps_to": "path.importId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management imports historical-queue-metrics get --credential zoom-fixture --import-id import --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive historical queue-metrics import-metadata read at the provider's fixed path. The artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management organizational-groups list",
+          "summary": "List Zoom Workforce Management organizational groups.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_workforce_organizational_groups",
+          "source_cli_path": "GET /v2/workforce-management/organizational-groups",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management organizational-groups list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Workforce Management organizational-group read. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management organizational-groups create",
+          "summary": "Create a Zoom Workforce Management organizational group.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.create_workforce_organizational_group",
+          "source_cli_path": "POST /v2/workforce-management/organizational-groups",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "organizational-group",
+              "type": "json_object",
+              "summary": "Documented closed Workforce Management organizational-group creation object.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management organizational-groups create --credential zoom-fixture --organizational-group '{\"name\":\"group\"}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Creates an organizational group in Zoom Workforce Management.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named organizational-group flag accepts only the provider's documented closed creation object for this fixed endpoint; it is not a generic JSON or HTTP write. Group values are redacted."
+        },
+        {
+          "path": "workforce-management organizational-groups get",
+          "summary": "Get one Zoom Workforce Management organizational group.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_workforce_organizational_group",
+          "source_cli_path": "GET /v2/workforce-management/organizational-groups/{organizationalGroupId}",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "organizational-group-id",
+              "type": "string",
+              "summary": "Workforce Management organizational-group identifier.",
+              "values": [],
+              "maps_to": "path.organizationalGroupId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management organizational-groups get --credential zoom-fixture --organizational-group-id group --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive organizational-group detail read at the provider's fixed path. The artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management organizational-groups delete",
+          "summary": "Delete one Zoom Workforce Management organizational group.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_workforce_organizational_group",
+          "source_cli_path": "DELETE /v2/workforce-management/organizational-groups/{organizationalGroupId}",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "organizational-group-id",
+              "type": "string",
+              "summary": "Workforce Management organizational-group identifier to delete.",
+              "values": [],
+              "maps_to": "path.organizationalGroupId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management organizational-groups delete --credential zoom-fixture --organizational-group-id group --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Irreversibly deletes an organizational group from Zoom Workforce Management.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The fixed documented endpoint returns 204 No Content. Success is asserted by status without inventing a response body."
+        },
+        {
+          "path": "workforce-management organizational-groups update",
+          "summary": "Update one Zoom Workforce Management organizational group.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_workforce_organizational_group",
+          "source_cli_path": "PATCH /v2/workforce-management/organizational-groups/{organizationalGroupId}",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "organizational-group-id",
+              "type": "string",
+              "summary": "Workforce Management organizational-group identifier to update.",
+              "values": [],
+              "maps_to": "path.organizationalGroupId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "organizational-group",
+              "type": "json_object",
+              "summary": "Documented closed Workforce Management organizational-group update object.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management organizational-groups update --credential zoom-fixture --organizational-group-id group --organizational-group '{\"description\":\"updated\"}' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Updates documented fields of a Zoom Workforce Management organizational group.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The named organizational-group flag accepts only the provider's documented closed partial-update object for this fixed endpoint; it is not a generic JSON or HTTP write. Group values are redacted."
+        },
+        {
+          "path": "workforce-management reports adherence agents list",
+          "summary": "List Zoom Workforce Management adherence agents.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_workforce_adherence_agents",
+          "source_cli_path": "GET /v2/workforce-management/reports/adherence/agents",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management reports adherence agents list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Workforce Management adherence-agent report read. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management reports schedules agents list",
+          "summary": "List Zoom Workforce Management report schedule agents.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_workforce_report_schedule_agents",
+          "source_cli_path": "GET /v2/workforce-management/reports/schedules/agents",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management reports schedules agents list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Workforce Management report schedule-agent read. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management schedules agents list",
+          "summary": "List Zoom Workforce Management schedule agents.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_workforce_schedule_agents",
+          "source_cli_path": "GET /v2/workforce-management/schedules/agents",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management schedules agents list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Workforce Management schedule-agent read. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management scheduling-groups list",
+          "summary": "List Zoom Workforce Management scheduling groups.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_workforce_scheduling_groups",
+          "source_cli_path": "GET /v2/workforce-management/scheduling-groups",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management scheduling-groups list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Workforce Management scheduling-group read. The provider artifact declares no request query or paging input."
+        },
+        {
+          "path": "workforce-management users list",
+          "summary": "List Zoom Workforce Management users.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_workforce_users",
+          "source_cli_path": "GET /v2/workforce-management/users",
+          "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom workforce-management users list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Workforce Management user read. The provider artifact declares no request query or paging input."
         },
         {
           "path": "customer-managed-keys-hybrid archival-key decrypt",

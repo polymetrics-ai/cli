@@ -1595,6 +1595,695 @@ func assertTasksUploadMultipart(t *testing.T, request *http.Request, want []byte
 	}
 }
 
+// TestWorkforceManagementDirectReadCommandsExecuteWithFixtures sends every
+// documented Workforce Management GET through the real runner. The loopback
+// server proves each fixed path and ordinary Zoom bearer without sending a
+// request to the provider, while the fixture assertions prove output
+// redaction and reject synthesized query/paging input.
+func TestWorkforceManagementDirectReadCommandsExecuteWithFixtures(t *testing.T) {
+	const accessToken = "fixture-wfm-read-access-token"
+	type workforceReadAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		requestPath       string
+		fixture           string
+		status            int
+		response          json.RawMessage
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []workforceReadAction{
+		{
+			name:              "list filter groups",
+			path:              []string{"workforce-management", "filter-groups", "list"},
+			requestPath:       "/v2/workforce-management/filter-groups",
+			fixture:           "list_workforce_filter_groups.json",
+			responseSensitive: []string{"fixture-wfm-filter-group", "Fixture Workforce Management filter group", "fixture-wfm-filter-page"},
+			responseMarkers:   []string{"filter_groups", "next_page_token", "total_records"},
+		},
+		{
+			name:              "list forecasts",
+			path:              []string{"workforce-management", "forecasts", "list"},
+			requestPath:       "/v2/workforce-management/forecasts",
+			fixture:           "list_workforce_forecasts.json",
+			responseSensitive: []string{"fixture-wfm-forecast", "Fixture Workforce Management forecast", "fixture-wfm-scheduling-group", "fixture-wfm-forecast-page"},
+			responseMarkers:   []string{"forecasts", "next_page_token", "total_records"},
+		},
+		{
+			name:              "get forecast scheduling group",
+			path:              []string{"workforce-management", "forecasts", "scheduling-groups", "get"},
+			flags:             map[string][]string{"forecast-id": {"fixture-wfm-forecast"}, "scheduling-group-id": {"fixture-wfm-scheduling-group"}},
+			requestPath:       "/v2/workforce-management/forecasts/fixture-wfm-forecast/scheduling-groups/fixture-wfm-scheduling-group",
+			fixture:           "get_workforce_forecast_scheduling_group.json",
+			responseSensitive: []string{"fixture-wfm-forecast", "fixture-wfm-scheduling-group", "2026-01-01T00:00:00Z", "2026-01-01T00:15:00Z"},
+			responseMarkers:   []string{"forecast_id", "scheduling_group_id", "forecast_intervals"},
+		},
+		{
+			name:              "get historical queue metrics import",
+			path:              []string{"workforce-management", "imports", "historical-queue-metrics", "get"},
+			flags:             map[string][]string{"import-id": {"fixture-wfm-queue-import"}},
+			requestPath:       "/v2/workforce-management/imports/fixture-wfm-queue-import/historical-queue-metrics",
+			fixture:           "get_workforce_historical_queue_metrics_import.json",
+			responseSensitive: []string{"fixture-wfm-queue-import", "fixture-wfm-queue.csv", "fixture-wfm-user", "2026-01-01T00:00:00Z", "UTC"},
+			responseMarkers:   []string{"import_id", "file_name", "imported_by", "create_time", "timezone"},
+		},
+		{
+			name:              "list organizational groups",
+			path:              []string{"workforce-management", "organizational-groups", "list"},
+			requestPath:       "/v2/workforce-management/organizational-groups",
+			fixture:           "list_workforce_organizational_groups.json",
+			responseSensitive: []string{"fixture-wfm-org-group", "Fixture Workforce Management organizational group", "fixture-wfm-org-page"},
+			responseMarkers:   []string{"organizational_groups", "next_page_token", "total_records"},
+		},
+		{
+			name:              "get organizational group",
+			path:              []string{"workforce-management", "organizational-groups", "get"},
+			flags:             map[string][]string{"organizational-group-id": {"fixture-wfm-org-group"}},
+			requestPath:       "/v2/workforce-management/organizational-groups/fixture-wfm-org-group",
+			fixture:           "get_workforce_organizational_group.json",
+			responseSensitive: []string{"fixture-wfm-org-group", "Fixture Workforce Management organizational group", "fixture-wfm-scheduling-group", "2026-01-01T00:00:00Z"},
+			responseMarkers:   []string{"org_group_id", "name", "description", "scheduling_group_ids"},
+		},
+		{
+			name:              "list adherence agents",
+			path:              []string{"workforce-management", "reports", "adherence", "agents", "list"},
+			requestPath:       "/v2/workforce-management/reports/adherence/agents",
+			fixture:           "list_workforce_adherence_agents.json",
+			responseSensitive: []string{"fixture-wfm-adherence-user", "Fixture Workforce Management adherence agent", "fixture-wfm-activity", "fixture-wfm-adherence-page"},
+			responseMarkers:   []string{"agents", "next_page_token"},
+		},
+		{
+			name:              "list report schedule agents",
+			path:              []string{"workforce-management", "reports", "schedules", "agents", "list"},
+			requestPath:       "/v2/workforce-management/reports/schedules/agents",
+			fixture:           "list_workforce_report_schedule_agents.json",
+			responseSensitive: []string{"fixture-wfm-report-user", "fixture.wfm.report@example.invalid", "Fixture Workforce Management report schedule agent", "fixture-wfm-report-page"},
+			responseMarkers:   []string{"user_id", "user_email", "display_name", "activities", "next_page_token"},
+		},
+		{
+			name:              "list schedule agents",
+			path:              []string{"workforce-management", "schedules", "agents", "list"},
+			requestPath:       "/v2/workforce-management/schedules/agents",
+			fixture:           "list_workforce_schedule_agents.json",
+			responseSensitive: []string{"fixture-wfm-schedule-user", "fixture.wfm.schedule@example.invalid", "Fixture Workforce Management schedule agent", "fixture-wfm-schedule-page"},
+			responseMarkers:   []string{"user_id", "user_email", "display_name", "activities", "next_page_token"},
+		},
+		{
+			name:              "list scheduling groups",
+			path:              []string{"workforce-management", "scheduling-groups", "list"},
+			requestPath:       "/v2/workforce-management/scheduling-groups",
+			fixture:           "list_workforce_scheduling_groups.json",
+			responseSensitive: []string{"fixture-wfm-scheduling-group", "Fixture Workforce Management scheduling group", "fixture-wfm-scheduling-page"},
+			responseMarkers:   []string{"scheduling_groups", "next_page_token", "total_records"},
+		},
+		{
+			name:              "list users",
+			path:              []string{"workforce-management", "users", "list"},
+			requestPath:       "/v2/workforce-management/users",
+			fixture:           "list_workforce_users.json",
+			responseSensitive: []string{"fixture-wfm-user", "Fixture Workforce Management user", "fixture.wfm.user@example.invalid", "fixture-wfm-users-page"},
+			responseMarkers:   []string{"users", "next_page_token", "total_records"},
+		},
+	}
+	byRequest := make(map[string]*workforceReadAction, len(actions))
+	for i := range actions {
+		actions[i].status, actions[i].response = zoomDirectReadFixture(t, actions[i].fixture)
+		byRequest[http.MethodGet+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Workforce Management read fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Workforce Management read fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Workforce Management read fixture received undeclared query or paging input")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(action.status)
+		_, _ = w.Write(action.response)
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	config := connectors.RuntimeConfig{
+		Config:  map[string]string{"base_url": server.URL + "/v2"},
+		Secrets: map[string]string{"access_token": accessToken},
+	}
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   action.path,
+				Flags:  action.flags,
+				Config: config,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for a Workforce Management direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q): %v", strings.Join(action.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != action.status {
+				t.Fatalf("Run(%q) result = %#v, want status %d", strings.Join(action.path, " "), result.DirectRead, action.status)
+			}
+			encoded, err := json.Marshal(result.DirectRead.Body)
+			if err != nil {
+				t.Fatalf("marshal Workforce Management read response: %v", err)
+			}
+			for index, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatalf("Workforce Management read response exposed declared or generic sensitive field %d", index)
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("Workforce Management read response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Workforce Management read fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+// TestWorkforceManagementJSONDirectWriteCommandsExecuteWithFixtures exercises
+// the five documented JSON mutations through the typed plan, preview,
+// approval, and execution lifecycle. It makes 204 deletes status-only and
+// proves destructive confirmation is required before either delete can reach
+// the loopback endpoint.
+func TestWorkforceManagementJSONDirectWriteCommandsExecuteWithFixtures(t *testing.T) {
+	const (
+		credentialName = "zoom-wfm-json-fixture"
+		accessToken    = "fixture-wfm-json-access-token"
+	)
+	type workforceWriteAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		rootFlag          string
+		fixture           string
+		method            string
+		requestPath       string
+		expectedBody      json.RawMessage
+		status            int
+		response          json.RawMessage
+		destructive       bool
+		inputSensitive    []string
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []workforceWriteAction{
+		{
+			name:              "upload historical agent status",
+			path:              []string{"workforce-management", "imports", "historical-agent-status", "upload"},
+			rootFlag:          "status-import",
+			fixture:           "upload_workforce_historical_agent_status.json",
+			inputSensitive:    []string{"fixture-wfm-status-user", "offline", "Available"},
+			responseMarkers:   []string{"imported_rows", "created_statuses"},
+		},
+		{
+			name:           "delete historical agent status",
+			path:           []string{"workforce-management", "imports", "historical-agent-status", "delete"},
+			rootFlag:       "status-deletion",
+			fixture:        "delete_workforce_historical_agent_status.json",
+			destructive:    true,
+			inputSensitive: []string{"fixture-wfm-status-user", "2026-01-01T00:00:00Z"},
+		},
+		{
+			name:              "create organizational group",
+			path:              []string{"workforce-management", "organizational-groups", "create"},
+			rootFlag:          "organizational-group",
+			fixture:           "create_workforce_organizational_group.json",
+			inputSensitive:    []string{"Fixture Workforce Management organizational group", "fixture-wfm-scheduling-group"},
+			responseSensitive: []string{"fixture-wfm-org-group", "Fixture Workforce Management organizational group", "fixture-wfm-scheduling-group"},
+			responseMarkers:   []string{"org_group_id", "name", "description", "scheduling_group_ids"},
+		},
+		{
+			name:        "delete organizational group",
+			path:        []string{"workforce-management", "organizational-groups", "delete"},
+			flags:       map[string][]string{"organizational-group-id": {"fixture-wfm-org-group"}},
+			fixture:     "delete_workforce_organizational_group.json",
+			destructive: true,
+		},
+		{
+			name:              "update organizational group",
+			path:              []string{"workforce-management", "organizational-groups", "update"},
+			flags:             map[string][]string{"organizational-group-id": {"fixture-wfm-org-group"}},
+			rootFlag:          "organizational-group",
+			fixture:           "update_workforce_organizational_group.json",
+			inputSensitive:    []string{"Fixture Workforce Management updated organizational group description"},
+			responseSensitive: []string{"fixture-wfm-org-group", "Fixture Workforce Management updated organizational group description"},
+			responseMarkers:   []string{"org_group_id", "description"},
+		},
+	}
+	byRequest := make(map[string]*workforceWriteAction, len(actions))
+	for i := range actions {
+		fixture := zoomSCIM2WriteFixture(t, actions[i].fixture)
+		actions[i].method = fixture.Expect.Method
+		actions[i].requestPath = fixture.Expect.Path
+		actions[i].expectedBody = fixture.Expect.Body
+		actions[i].status = fixture.Response.Status
+		actions[i].response = fixture.Response.Body
+		if actions[i].rootFlag != "" {
+			if actions[i].flags == nil {
+				actions[i].flags = map[string][]string{}
+			}
+			var record any
+			if err := json.Unmarshal(fixture.Record, &record); err != nil {
+				t.Fatalf("decode Workforce Management fixture record %s: %v", actions[i].fixture, err)
+			}
+			compactRecord, err := json.Marshal(record)
+			if err != nil {
+				t.Fatalf("compact Workforce Management fixture record %s: %v", actions[i].fixture, err)
+			}
+			actions[i].flags[actions[i].rootFlag] = []string{string(compactRecord)}
+		}
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Workforce Management JSON write fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Workforce Management JSON write fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Workforce Management JSON write fixture received undeclared query or paging input")
+		}
+		if len(action.expectedBody) == 0 {
+			var unexpected any
+			if err := json.NewDecoder(request.Body).Decode(&unexpected); err == nil {
+				t.Fatal("Workforce Management no-body action unexpectedly sent a request body")
+			}
+		} else {
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("Workforce Management body action did not declare JSON content")
+			}
+			var got, want any
+			if err := json.NewDecoder(request.Body).Decode(&got); err != nil {
+				t.Fatalf("decode Workforce Management action body: %v", err)
+			}
+			if err := json.Unmarshal(action.expectedBody, &want); err != nil {
+				t.Fatalf("decode Workforce Management fixture body: %v", err)
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatal("Workforce Management action body did not contain exactly the declared documented fields")
+			}
+		}
+		if len(action.response) > 0 {
+			w.Header().Set("Content-Type", "application/json")
+		}
+		w.WriteHeader(action.status)
+		if len(action.response) > 0 {
+			_, _ = w.Write(action.response)
+		}
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s): %v", action.name, err)
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config:    map[string]string{"base_url": server.URL + "/v2"},
+		Secrets:   map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			beforeRequests := requests
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("Workforce Management JSON plan did not produce a no-network preview and single-use approval")
+			}
+			if action.destructive != (plan.ConfirmationChallenge == string(connectors.ConfirmationKindDestructive)) {
+				t.Fatal("Workforce Management JSON plan did not retain the declared destructive confirmation policy")
+			}
+			encodedPlan, err := json.Marshal(plan.Sample)
+			if err != nil {
+				t.Fatalf("marshal Workforce Management JSON plan sample: %v", err)
+			}
+			for index, raw := range action.inputSensitive {
+				if strings.Contains(string(encodedPlan), raw) {
+					t.Fatalf("Workforce Management JSON plan sample exposed declared sensitive input %d", index)
+				}
+			}
+			if requests != beforeRequests {
+				t.Fatal("Workforce Management JSON plan or preview reached the fixture endpoint")
+			}
+
+			runRequest := app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}
+			if action.destructive {
+				if _, err := application.RunReverseETL(context.Background(), runRequest); err == nil {
+					t.Fatal("Workforce Management DELETE execution bypassed typed destructive confirmation")
+				}
+				if requests != beforeRequests {
+					t.Fatal("unconfirmed Workforce Management DELETE reached the fixture endpoint")
+				}
+				runRequest.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+			}
+			run, err := application.RunReverseETL(context.Background(), runRequest)
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != action.status {
+				t.Fatalf("Workforce Management JSON run = %#v, want completed declared action status %d", run, action.status)
+			}
+			if len(action.response) == 0 {
+				if run.OperationDirectWrite.Body != nil {
+					t.Fatal("Workforce Management status-only action returned an invented response body")
+				}
+				return
+			}
+			encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+			if err != nil {
+				t.Fatalf("marshal Workforce Management JSON action response: %v", err)
+			}
+			for index, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatalf("Workforce Management JSON action response exposed declared or generic sensitive field %d", index)
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("Workforce Management JSON action response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Workforce Management JSON write fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+// TestWorkforceManagementCSVDirectWritesExecuteWithFixtures exercises both
+// provider-declared CSV imports through the typed plan lifecycle. It proves
+// the approved bounded snapshot, fixed text/csv part header, exact declared
+// non-file parts, source duration range, response redaction, and the absence
+// of caller-controlled URL/query/parser behavior.
+func TestWorkforceManagementCSVDirectWritesExecuteWithFixtures(t *testing.T) {
+	const (
+		credentialName = "zoom-wfm-csv-fixture"
+		accessToken    = "fixture-wfm-csv-access-token"
+	)
+	type workforceCSVFixture struct {
+		Record struct {
+			File string `json:"file"`
+		} `json:"record"`
+		SourceCSV string `json:"source_csv"`
+		Expect    struct {
+			Method string            `json:"method"`
+			Path   string            `json:"path"`
+			Fields map[string]string `json:"fields"`
+		} `json:"expect"`
+		Response struct {
+			Status int             `json:"status"`
+			Body   json.RawMessage `json:"body"`
+		} `json:"response"`
+	}
+	type workforceCSVAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		fixture           string
+		file              string
+		sourceCSV         []byte
+		method            string
+		requestPath       string
+		expectedFields    map[string]string
+		status            int
+		response          json.RawMessage
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []workforceCSVAction{
+		{
+			name:              "upload historical queue metrics",
+			path:              []string{"workforce-management", "imports", "historical-queue-metrics", "upload"},
+			flags:             map[string][]string{"allow-overwrite": {"true"}, "timezone": {"UTC"}},
+			fixture:           "upload_workforce_historical_queue_metrics.json",
+			responseSensitive: []string{"fixture-wfm-queue-import"},
+			responseMarkers:   []string{"import_id"},
+		},
+		{
+			name: "upload forecast staffing",
+			path: []string{"workforce-management", "imports", "staffing", "upload"},
+			flags: map[string][]string{
+				"forecast-duration-weeks": {"2"},
+				"forecast-name":           {"Fixture Workforce Management staffing forecast"},
+				"forecast-start-date":     {"2026-01-01"},
+				"has-interval-offsets":    {"false"},
+				"timezone":                {"UTC"},
+			},
+			fixture:           "upload_workforce_forecast_staffing.json",
+			responseSensitive: []string{"fixture-wfm-staffing-forecast", "Fixture Workforce Management staffing forecast"},
+			responseMarkers:   []string{"forecasts"},
+		},
+	}
+	for i := range actions {
+		raw, err := os.ReadFile(filepath.Join("fixtures", "writes", actions[i].fixture))
+		if err != nil {
+			t.Fatalf("read Workforce Management CSV fixture %s: %v", actions[i].fixture, err)
+		}
+		var fixture workforceCSVFixture
+		if err := json.Unmarshal(raw, &fixture); err != nil {
+			t.Fatalf("decode Workforce Management CSV fixture %s: %v", actions[i].fixture, err)
+		}
+		if fixture.Record.File == "" || fixture.SourceCSV == "" || fixture.Expect.Method == "" || fixture.Expect.Path == "" || fixture.Response.Status == 0 {
+			t.Fatalf("Workforce Management CSV fixture %s lacks a documented lifecycle value", actions[i].fixture)
+		}
+		actions[i].file = fixture.Record.File
+		actions[i].sourceCSV = []byte(fixture.SourceCSV)
+		actions[i].method = fixture.Expect.Method
+		actions[i].requestPath = fixture.Expect.Path
+		actions[i].expectedFields = fixture.Expect.Fields
+		actions[i].status = fixture.Response.Status
+		actions[i].response = fixture.Response.Body
+		actions[i].flags["file-path"] = []string{fixture.Record.File}
+	}
+
+	byRequest := make(map[string]*workforceCSVAction, len(actions))
+	for i := range actions {
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Workforce Management CSV fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Workforce Management CSV fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Workforce Management CSV fixture received undeclared query or paging input")
+		}
+		assertWorkforceManagementCSVMultipart(t, request, action.sourceCSV, filepath.Base(action.file), action.expectedFields)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(action.status)
+		_, _ = w.Write(action.response)
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s): %v", action.name, err)
+		}
+	}
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	for _, action := range actions {
+		sourcePath := filepath.Join(root, ".polymetrics", filepath.FromSlash(action.file))
+		if err := os.MkdirAll(filepath.Dir(sourcePath), 0o755); err != nil {
+			t.Fatalf("MkdirAll Workforce Management CSV source: %v", err)
+		}
+		if err := os.WriteFile(sourcePath, action.sourceCSV, 0o600); err != nil {
+			t.Fatalf("WriteFile Workforce Management CSV source: %v", err)
+		}
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config:    map[string]string{"base_url": server.URL + "/v2"},
+		Secrets:   map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+	invalidStaffingFlags := map[string][]string{
+		"file-path":               {"imports/fixture-wfm-staffing.csv"},
+		"forecast-duration-weeks": {"4.01"},
+		"forecast-name":           {"Fixture Workforce Management staffing forecast"},
+		"forecast-start-date":     {"2026-01-01"},
+		"has-interval-offsets":    {"false"},
+		"timezone":                {"UTC"},
+	}
+	if _, _, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+		Connector:  zoomBundleName,
+		Credential: credentialName,
+		Path:       []string{"workforce-management", "imports", "staffing", "upload"},
+		Flags:      invalidStaffingFlags,
+		Preview:    true,
+	}); err == nil || !strings.Contains(err.Error(), "maximum") {
+		t.Fatalf("PlanConnectorCommand(staffing above source maximum) = %v, want numeric range rejection", err)
+	}
+	if requests != 0 {
+		t.Fatal("Workforce Management invalid staffing plan reached the fixture endpoint")
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			beforeRequests := requests
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("Workforce Management CSV plan did not produce a no-network preview and single-use approval")
+			}
+			encodedPlan, err := json.Marshal(plan.Sample)
+			if err != nil {
+				t.Fatalf("marshal Workforce Management CSV plan sample: %v", err)
+			}
+			if strings.Contains(string(encodedPlan), action.file) || strings.Contains(string(encodedPlan), "UTC") {
+				t.Fatal("Workforce Management CSV plan sample exposed a declared source path or field value")
+			}
+			if requests != beforeRequests {
+				t.Fatal("Workforce Management CSV plan or preview reached the fixture endpoint")
+			}
+
+			run, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != action.status {
+				t.Fatalf("Workforce Management CSV run = %#v, want completed declared action status %d", run, action.status)
+			}
+			encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+			if err != nil {
+				t.Fatalf("marshal Workforce Management CSV action response: %v", err)
+			}
+			for index, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatalf("Workforce Management CSV action response exposed declared sensitive field %d", index)
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("Workforce Management CSV action response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Workforce Management CSV fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+func assertWorkforceManagementCSVMultipart(t *testing.T, request *http.Request, wantFile []byte, wantName string, wantFields map[string]string) {
+	t.Helper()
+	mediaType, params, err := mime.ParseMediaType(request.Header.Get("Content-Type"))
+	if err != nil || mediaType != "multipart/form-data" || params["boundary"] == "" {
+		t.Fatalf("Workforce Management CSV content type = %q, want multipart/form-data with boundary", request.Header.Get("Content-Type"))
+	}
+	reader := multipart.NewReader(request.Body, params["boundary"])
+	gotFields := make(map[string]string, len(wantFields))
+	gotFile := false
+	for {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Fatalf("read Workforce Management CSV multipart part: %v", err)
+		}
+		content, err := io.ReadAll(part)
+		if err != nil {
+			_ = part.Close()
+			t.Fatalf("read Workforce Management CSV multipart content: %v", err)
+		}
+		if part.FormName() == "file" {
+			if gotFile || part.FileName() != wantName {
+				_ = part.Close()
+				t.Fatalf("Workforce Management CSV file part = already=%t name=%q, want one %q", gotFile, part.FileName(), wantName)
+			}
+			if part.Header.Get("Content-Type") != "text/csv" {
+				_ = part.Close()
+				t.Fatalf("Workforce Management CSV file content type = %q, want text/csv", part.Header.Get("Content-Type"))
+			}
+			if !reflect.DeepEqual(content, wantFile) {
+				_ = part.Close()
+				t.Fatal("Workforce Management CSV file content does not match the approved source snapshot")
+			}
+			gotFile = true
+		} else {
+			if part.FileName() != "" {
+				_ = part.Close()
+				t.Fatalf("Workforce Management CSV unexpected file field %q", part.FormName())
+			}
+			gotFields[part.FormName()] = string(content)
+		}
+		_ = part.Close()
+	}
+	if !gotFile {
+		t.Fatal("Workforce Management CSV multipart request is missing the declared file part")
+	}
+	if !reflect.DeepEqual(gotFields, wantFields) {
+		t.Fatalf("Workforce Management CSV fields = %#v, want %#v", gotFields, wantFields)
+	}
+}
+
 type zoomRoundTripperFunc func(*http.Request) (*http.Response, error)
 
 func (fn zoomRoundTripperFunc) RoundTrip(request *http.Request) (*http.Response, error) {

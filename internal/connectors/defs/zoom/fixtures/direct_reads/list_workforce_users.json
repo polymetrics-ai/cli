@@ -1,0 +1,16 @@
+{
+  "status": 200,
+  "body": {
+    "users": [
+      {
+        "user_id": "fixture-wfm-user",
+        "display_name": "Fixture Workforce Management user",
+        "email": "fixture.wfm.user@example.invalid",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ],
+    "next_page_token": "fixture-wfm-users-page",
+    "total_records": 1
+  }
+}
