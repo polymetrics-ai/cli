@@ -534,3 +534,117 @@ regeneration: GitHub is the only changed entry. The generators again wanted the 
 
 No test was weakened, skipped, or deleted. Cycle 9 added one test and inverted one assertion that
 pinned the duplication itself.
+
+## Cycle 10 — the declared contract had to match the enforced one
+
+The review round asked for four corrections, all of them the same shape: a place where what the
+surface *says* about a write's gate does not match what the runtime *does* at that gate. A gate
+described as absent when it is present is the dangerous direction; a gate described as present
+when it is absent is the other one, and it is not harmless — it teaches an operator a step that
+does nothing and hides which commands the real step is protecting.
+
+**Red 10a — a safe preview announced a confirmation nothing would ask for.**
+`engine.PreviewPreparedWrite` stamped `Confirmation: destructive` on *every* prepared write's
+approval target, while `GateDestructiveExecution` consults evidence only when
+`DestructiveTarget.RequiresApproval()` is true. So `pm github repo create --preview --json`
+published `approval_target.confirmation = "destructive"` for an approval-only create, and
+`--confirm destructive` on that plan is rejected as invalid — the preview described a gate that
+does not exist.
+
+New `TestPreparedWritePreviewDeclaresConfirmationOnlyWhereTheGateDemandsIt` asserts the preview
+and the gate agree, over four targets. Red on the two safe ones:
+
+```
+--- FAIL: .../approval-only_create
+    preview approval target confirmation = "destructive", want ""; the gate does not demand one
+--- FAIL: .../update
+    preview approval target confirmation = "destructive", want ""; the gate does not demand one
+```
+
+**Green** — the declaration is keyed on `prepared.Target.RequiresApproval()`, the same predicate
+the gate uses, so the two cannot describe different contracts. DELETE and a declared
+`confirm: destructive` on a non-delete method both still carry it, which is what
+`validateApprovalTarget` requires before `IssueWriteGrant` mints any evidence.
+
+**Red 10b — one caller minted a grant for writes nothing was holding back.** The narrowing broke
+`internal/connectors/conformance`, and the failure was precisely diagnostic: for
+`zendesk-sunshine`, `write_request_shape:delete_object_record` and `:delete_object_type` passed
+while `:create_object_record`, `:upsert_object_record_by_external_id` and
+`:create_relationship_record` failed with `write approval target requires destructive
+confirmation`. `approvedFixtureWriteRequest` requested a grant for every action with a hard-coded
+destructive confirmation. **Green** — it returns the request unchanged when the preview declares
+no confirmation, because a safe action reaches the same dispatch seam with no evidence; asking
+the authority to authorize a write nothing is stopping was always the wrong request. No
+conformance check was relaxed: the destructive ones still mint, verify and consume a real grant.
+
+**Red 10c — the approval metadata claimed every write requires a preview.** All 525 github
+`reverse_etl` commands carried one blanket sentence, `Reverse ETL writes require plan, preview,
+approval, execute.` It is true of the 176 that resolve a typed confirmation and false of the other
+349: `PlanConnectorCommand` mints the approval token at plan time for a command with no
+confirmation and no bound operation, and `RunReverseETL`'s `planRequiresPersistedPreview` is false
+for exactly that command.
+
+New `TestGitHubApprovalTextMatchesTheEnforcedWriteContract` classifies each command through the
+same `ConfirmationChallengeForCommand` resolver the help uses and requires the matching sentence.
+Red on exactly the 349 safe commands:
+
+```
+github "issue create" approval = "Reverse ETL writes require plan, preview, approval, execute.",
+  want "Reverse ETL writes require plan, approval, execute; preview is optional."
+... 349 such failures, 0 on the 176 destructive commands
+```
+
+**Green** — the 349 safe commands now declare `Reverse ETL writes require plan, approval, execute;
+preview is optional.` The 176 destructive ones are unchanged, because the original sentence is
+accurate for them. `scripts/gen-github-parity.py` derives the sentence from `command_approval`
+rather than emitting one literal, so a regeneration cannot restore the blanket claim.
+
+Proven against the built binary, as an A/B on the two classes:
+
+```
+$ pm github repo create ... --name demo-repo
+  Created connector command plan rplan_37e5... for repo create
+  Approval token: 0fe836e9...                        <- issued at plan; no preview step
+$ pm github repo create ... --plan rplan_37e5... --approve 0fe836e9...
+  Reverse ETL run rrun_2f2b... completed: succeeded=1 failed=0
+  mock GitHub received: POST /user/repos BODY={"name":"demo-repo"}
+
+$ pm github repo delete ...
+  Preview required before an approval token is issued.
+  Confirmation required: --confirm destructive
+$ pm github repo delete ... --plan rplan_ad67... --approve <any>
+  error: reverse plan "rplan_ad67..." must be previewed before approval
+  requests dispatched: 0
+```
+
+The destructive gate itself is unchanged end to end — preview issues the token, approval without
+`--confirm` is refused with 0 requests dispatched, and `--confirm destructive` dispatches exactly
+one DELETE.
+
+**Red 10d — the marker naming a flag that does not exist could still come back.** Cycle 7 removed
+`destructive; requires --allow-destructive + typed confirmation` from the bundle, but
+`scripts/gen-github-parity.py` — the generator that put it there — still emitted it for every
+`destructive_action`, so the next regeneration would document the nonexistent flag again on every
+newly covered endpoint. **Green** — the generator emits no `notes` marker at all; the confirmation
+is derived once by `ConfirmationChallengeForCommand` and rendered by the help/manual/skill
+CONFIRMATION field, which `TestGitHubNotesDoNotRestateTheTypedConfirmation` already forbids any
+bundle from duplicating.
+
+**Not red, and recorded as such: `repo delete-2` already carried `repo delete`'s contract.** Both
+bind write action `repo`, so both resolve `destructive` through the same resolver and both render
+the same CONFIRMATION block. The gap was that nothing pinned it, which is how the asymmetry this
+whole phase exists to fix arises in the first place.
+`TestGitHubGeneratedTwinsShareTheirAliasWriteContract` discovers every write action reachable
+under two command names from the bundle rather than from a list, and requires matching
+confirmation, availability and approval; it then pins the `repo delete` / `repo delete-2` pair by
+name. It passed on first run — reported as verified, not as a fix. `risk` is deliberately excluded:
+github states it as prose on the aliases and as a level on the twins, and two names for one
+endpoint may honestly describe different callers' exposure.
+
+Derived artifacts regenerated from the declarations: `docs/connectors/github/{MANUAL,SKILL}.md`,
+`docs/skills/pm-github/SKILL.md`, `website/data/connectors.generated.json` and
+`website/lib/connectors.catalog.data.generated.json`. Each carries exactly 349 changed lines and
+nothing else. The generators again wanted the pre-existing `main` drift across the other 1031 doc
+files; reverted as before.
+
+No test was weakened, skipped, or deleted. Cycle 10 added three tests.
