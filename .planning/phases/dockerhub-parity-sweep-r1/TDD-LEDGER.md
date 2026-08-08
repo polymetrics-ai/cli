@@ -336,3 +336,27 @@ ok  	polymetrics.ai/internal/connectors/connsdk	0.356s
 ```
 
 Then ran `go test ./internal/connectors/connsdk -count=1` → PASS.
+
+## Live read/auth evidence follow-up (2026-08-08)
+
+No production code changed in this follow-up, so the RED/GREEN evidence above
+remains the governing TDD record. Rebuilt the same committed `pm` binary and used
+the live credential matrix to close the read/auth acceptance vector without logging
+credentials, approval tokens, response bodies, or token-derived values.
+
+- **Read + HEAD:** all 28 documented read operations were attempted. Four worked;
+  24 failed with explicit provider/local errors recorded row-by-row in
+  `VERIFICATION.md`.
+- **Authentication:** all three actions completed normal plan → preview → approval
+  before a live dispatch using deliberately invalid non-secret fixtures. Each
+  provider response was an explicit HTTP 401; no real secret appeared in arguments
+  or output.
+- **SCIM-only empirical check:** with only `scim_bearer_token` configured and no
+  `docker_pat`, every SCIM command path returned a visible failure rather than a
+  silent success. Six normal requests returned HTTP 401. The canonical SCIM schema
+  URN was rejected locally as `path variable id contains invalid character ':'`; a
+  URL-safe sentinel for that same operation reached Docker Hub and returned HTTP
+  401. This records observation only and does not change classification.
+- **403 behavior:** a fresh `access-tokens list` request exited nonzero with the
+  specific redacted error `http 403 for https://hub.docker.com/v2/access-tokens`.
+  Permission failures are therefore observable/rejecting, not silent.

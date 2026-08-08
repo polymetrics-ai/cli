@@ -172,9 +172,11 @@ and the ledger.
 **Outcome:** the repaired request and strict-write transport reached the provider,
 but the supplied PAT returned HTTP 403 to the single approved private-repository
 create. Account listing is empty, so the image-push/readback chain cannot proceed.
-The full 54-operation live accounting (23 exercised: 4 worked, 19 failed; 31
-untestable with `Named dependency:` reasons) is recorded in `VERIFICATION.md`; this
-is an account-permission result, not an unverified command route.
+The initial accounting was superseded by the read/auth follow-up: 32 operations are
+now exercised (4 worked, 28 failed), and 22 mutation operations remain untestable
+with `Named dependency:` reasons. `VERIFICATION.md` carries the complete row-level
+matrix; the unresolved external work is an account-permission result, not an
+unverified command route.
 
 ### Strict-write transport TDD follow-up
 
@@ -193,6 +195,31 @@ provider-neutral reproduction is an `httptest` TLS server advertising HTTP/2:
    a new private Docker Hub repository plan/preview/approval/run once, then verify
    the response using documented read operations before progressing through the
    remaining live-safe operation matrix.
+
+## Live read/auth coverage follow-up (2026-08-08)
+
+With the write-scoped token held by the captain, the supplied read credential was
+used immediately rather than idling. The rebuilt binary attempted every documented
+read operation (28, including the three status-only HEAD checks) and all three
+authentication exchanges through their normal plan → preview → approval lifecycle.
+The exact redacted row-level outcomes are recorded in `VERIFICATION.md`:
+
+- read/auth vector: **31/31 attempted** — 4 worked and 27 failed explicitly;
+- including the earlier approved repository-create request: **32 exercised** — 4
+  worked and 28 failed; **22** account/SCIM/repository writes remain untestable;
+- the SCIM-only credential contains `scim_bearer_token` and no `docker_pat`. Its
+  seven command paths returned explicit HTTP 401 outcomes (one canonical schema URN
+  first hit `path variable id contains invalid character ':'`; a URL-safe sentinel
+  then received HTTP 401). This is an empirical non-silent outcome only; it does not
+  change the SCIM classification.
+- a fresh `access-tokens list` diagnostic returned a concrete redacted
+  `http 403 for https://hub.docker.com/v2/access-tokens` error, confirming that the
+  permission rejections surface cleanly rather than failing silently.
+
+The three auth actions deliberately used invalid **non-secret** fixtures, never a
+real credential in a raw CLI argument. Their plan and preview stages passed; each
+live exchange returned explicit HTTP 401. This proves the action routes and approval
+flow, not a successful credential exchange.
 
 ### CLI/doc parity disposition
 

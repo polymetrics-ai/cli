@@ -3,18 +3,25 @@
 ## Result
 
 Live E2E completed as far as the supplied Docker Hub account permits. The repaired
-binary reached every one of the 54 documented command routes; 23 operations made a
-real provider request: **4 worked and 19 failed**. The remaining **31 were
-untestable** without repeating a proven account authorization failure, creating an
-unrecoverable account object, or passing a secret as a raw CLI argument.
+binary reached every one of the 54 documented command routes. The full read/auth
+vector is now complete: all **28 read operations** (including all three HEAD
+status-only paths) and all **3 authentication operations** were attempted. Together
+with the earlier one-time private-repository create, **32 operations made a real
+provider request: 4 worked and 28 failed**. The remaining **22** are writes that
+need the captain-held write-scoped credential, a writable repository, or a real SCIM
+organization bearer credential.
 
 | Metric | Count |
 | --- | ---: |
 | Documented/implemented operations | 54 |
-| Live-exercised (`worked + failed`) | 23 |
+| Requested read/auth live vector | 31 |
+| Read operations attempted (includes 3 HEAD checks) | 28 |
+| Authentication operations attempted | 3 |
+| Earlier private-repository create attempted | 1 |
+| Live-exercised (`worked + failed`) | 32 |
 | Worked | 4 |
-| Failed | 19 |
-| Untestable, with concrete reason below | 31 |
+| Failed | 28 |
+| Untestable, with concrete reason below | 22 |
 | Binary routes reachable with `--help` | 54/54 |
 
 The bare `pm dockerhub` namespace command also rendered contextual help and exited
@@ -58,7 +65,10 @@ All output bodies were discarded after success; only the command outcome was kep
 
 `[redacted]` means the provider body was intentionally not retained. The HTTP
 status is the exact observed error classification, and every command below used the
-isolated project root and `--json` with normal output discarded.
+isolated project root and `--json` with normal output discarded. A fresh
+`access-tokens list` diagnostic returned exit 1 and the specific redacted error
+`http 403 for https://hub.docker.com/v2/access-tokens: [redacted]`; the 403 rows are
+therefore clean provider permission rejections, not silent failures.
 
 | Operation | Exact command shape | Exact observed error | Disposition |
 | --- | --- | --- | --- |
@@ -79,24 +89,35 @@ isolated project root and `--json` with normal output discarded.
 | `org members list` | `pm dockerhub org members list --org-name polymetrics --credential dockerhub-live` | HTTP 403 | PAT/account scope limit. |
 | `org settings get` | `pm dockerhub org settings get --name polymetrics --credential dockerhub-live` | HTTP 403 | PAT/account scope limit. |
 | `org members export` | `pm dockerhub org members export --org-name polymetrics --dest-root <isolated-download-root> --file-name members.csv --credential dockerhub-live` | HTTP 403 | PAT/account scope limit. |
-| `scim-service-provider-config get` | `pm dockerhub scim-service-provider-config get --credential dockerhub-scim-only` | HTTP 401 | A credential containing only `scim_bearer_token` was used; the supplied PAT is not accepted as a SCIM bearer credential. |
+| `scim-resource-types list` | `pm dockerhub scim-resource-types list --credential dockerhub-scim-only` | HTTP 401 | Explicit SCIM provider rejection using the SCIM-only credential. |
+| `scim-resource-types get` | `pm dockerhub scim-resource-types get --name User --credential dockerhub-scim-only` | HTTP 401 | Explicit SCIM provider rejection using the SCIM-only credential. |
+| `scim-schemas list` | `pm dockerhub scim-schemas list --credential dockerhub-scim-only` | HTTP 401 | Explicit SCIM provider rejection using the SCIM-only credential. |
+| `scim-schemas get` | Canonical `--id urn:ietf:params:scim:schemas:core:2.0:User`, then a safe `--id User` live sentinel, both with `dockerhub-scim-only` | Canonical ID: `error: path variable id contains invalid character ':'`; sentinel: HTTP 401 | The normal SCIM URN is rejected locally before dispatch; the sentinel proved the route reaches Docker Hub and receives an explicit SCIM auth rejection. Classification unchanged; record the input-validation gap for a later TDD slice. |
+| `scim-service-provider-config get` | `pm dockerhub scim-service-provider-config get --credential dockerhub-scim-only` | HTTP 401 | Re-run as part of the complete SCIM-only probe; explicit provider rejection. |
+| `scim-users list` | `pm dockerhub scim-users list --credential dockerhub-scim-only` | HTTP 401 | Explicit SCIM provider rejection using the SCIM-only credential. |
+| `scim-users get` | `pm dockerhub scim-users get --id 00000000-0000-0000-0000-000000000000 --credential dockerhub-scim-only` | HTTP 401 | Explicit SCIM provider rejection using the SCIM-only credential. |
+| `auth token create` | `pm dockerhub auth token create` with deliberately invalid non-secret identifier/secret fixture, then plan → preview → approve | HTTP 401 | Plan and preview succeeded; live exchange cleanly rejected the non-secret fixture. No real credential was passed as a raw argument. |
+| `auth login create` | `pm dockerhub auth login create` with deliberately invalid non-secret username/password fixture, then plan → preview → approve | HTTP 401 | Plan and preview succeeded; live exchange cleanly rejected the non-secret fixture. No real credential was passed as a raw argument. |
+| `auth 2fa-login create` | `pm dockerhub auth 2fa-login create` with deliberately invalid non-secret intermediate-token/code fixture, then plan → preview → approve | HTTP 401 | Plan and preview succeeded; live exchange cleanly rejected the non-secret fixture. No real credential was passed as a raw argument. |
 | `repository create` | command shown in the mandatory chain above | HTTP 403 | PAT/account scope limit; no retry performed. |
 
-## Untestable operations (31)
+## Untestable live operations (22)
 
 | Operations | Count | Machine-checkable reason for not dispatching |
 | --- | ---: | --- |
-| `scim-resource-types get/list`, `scim-schemas get/list`, `scim-users get/list` | 6 | `Named dependency: valid Docker Hub organization SCIM bearer token`; the SCIM-only empirical request returned HTTP 401, so repeating the same auth failure would add no coverage. |
-| `auth token create`, `auth login create`, `auth 2fa-login create` | 3 | `Named dependency: connector-command secret-reference/from-env input`; their required secret values are raw action flags (`--secret`, `--password`, or a one-time 2FA value), which cannot be supplied without violating the no-secret-in-arguments rule. Credential validation already proved the connector's protected login hook itself succeeds. |
-| `access-tokens create/delete/update`; `groups create/delete/members add/members remove/replace/update`; `invites bulk-create/cancel/resend`; `org access-tokens create/delete/update`; `org members remove/update`; `org settings update` | 18 | `Named dependency: Docker Hub PAT with account/organization write scope`; matching read endpoints consistently returned HTTP 403, and no disposable target can be safely created/cleaned with this credential. |
+| `access-tokens create/delete/update`; `groups create/delete/members add/members remove/replace/update`; `invites bulk-create/cancel/resend`; `org access-tokens create/delete/update`; `org members remove/update`; `org settings update` | 18 | `Named dependency: Docker Hub PAT with account/organization write scope in this worker`; matching reads return explicit HTTP 403, and no disposable target can be safely created/cleaned with the current credential. |
 | `repository group assign`, `repository immutable-tags update` | 2 | `Named dependency: writable Docker Hub repository in polymetrics`; repository creation returned HTTP 403 and account listing is empty. |
-| `scim-users create/update` | 2 | `Named dependency: valid Docker Hub organization SCIM bearer token`; same SCIM-only account limit as the six SCIM reads. |
+| `scim-users create/update` | 2 | `Named dependency: valid Docker Hub organization SCIM bearer token`; the SCIM-only reads return explicit HTTP 401. |
 
-The SCIM-only request establishes that the connector did not silently succeed through
-the normal session credential: that credential contained no `docker_pat`. The 401
-alone cannot distinguish an invalid bearer token from an omitted bearer header, so
-this evidence does **not** change the existing SCIM classification or claim a new
-runtime defect.
+The SCIM probe used a credential configured with **only** `scim_bearer_token` (and
+non-secret username configuration), with no `docker_pat`. Every one of the seven
+SCIM command paths produced an explicit nonzero result rather than a silent success:
+six normal requests returned HTTP 401, and `scim-schemas get` returned HTTP 401 when
+its URL-safe sentinel was used. The canonical documented URN first hit the local
+colon-validation error recorded above. This proves the command outcome is not
+silently unauthenticated/successful; without wire-header visibility, HTTP 401 alone
+still cannot distinguish an invalid bearer from an omitted bearer header. The SCIM
+classification therefore remains unchanged, as directed.
 
 ## TDD and local verification
 
@@ -121,6 +142,14 @@ runtime defect.
 - The supplied PAT authenticates and supports public/HEAD paths but not repository
   creation or account/organization APIs, preventing the required image-push chain
   and all safe mutation cleanup.
+- Docker Hub SCIM schema identifiers are documented as colon-bearing URNs, while the
+  current direct-read path guard rejects `:` before dispatch. A URL-safe sentinel
+  reached the service and returned the expected explicit 401, so the live auth
+  observation is complete; canonical-URN support needs its own later TDD slice.
+- Authentication exchanges take sensitive fields as action flags. Deliberately
+  invalid non-secret fixtures can verify plan/preview/approval and provider error
+  handling, but a successful exchange needs a future secret-reference/from-env
+  action-input foundation rather than raw credential flags.
 - Full route-help verification must be chunked in this execution environment; one
   54-process sweep exceeds a single command window even though all routes pass.
 
@@ -131,16 +160,19 @@ Resolved the adapter sources for `verify-work` and `code-review` with
 canonical parent-worker contract forbids spawning the requested GSD verifier/reviewer
 roles, so both phases use the documented inline/manual fallback.
 
-- **verify-work verdict:** code and command-route verification pass; live acceptance
-  remains blocked only on the supplied account's missing repository-write,
-  organization, and SCIM scopes, documented above with exact operation accounting.
+- **verify-work verdict:** code and command-route verification pass; the full
+  read/auth vector is now live-accounted. Live acceptance remains blocked only on
+  the captain-held repository-write/account/organization scope and a valid SCIM
+  organization bearer credential, documented above with exact operation accounting.
 - **code-review scope:** `internal/connectors/connsdk/http.go`, its local TLS/HTTP2
   regression test, Docker Hub `writes.json`, the Docker Hub write-path regression
   test, and phase evidence.
-- **code-review findings:** no Critical, Warning, or Info findings. The strict
-  transport clones rather than mutates caller TLS configuration; all provider paths
-  are tested as engine-relative and interpolated; no secret appears in source,
-  output, or evidence.
+- **code-review findings:** no Critical, Warning, or Info findings in the committed
+  source scope. The strict transport clones rather than mutates caller TLS
+  configuration; all provider paths are tested as engine-relative and interpolated;
+  no secret appears in source, output, or evidence. The canonical SCIM-URN input
+  rejection above is recorded as a follow-up correctness gap, not reclassified or
+  changed in this evidence-only slice.
 - **additional review evidence:** `go test -race ./internal/connectors/connsdk -run
   TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer -count=1` → PASS;
   `git diff --check` → clean.
