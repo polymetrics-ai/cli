@@ -1,0 +1,23 @@
+{
+  "status": 200,
+  "body": {
+    "surveys": [
+      {
+        "survey_id": "fixture-va-survey",
+        "survey_name": "Fixture survey",
+        "engagement_id": "fixture-va-engagement",
+        "consumer": "fixture survey consumer",
+        "virtual_agent": "Fixture Virtual Agent",
+        "results": [
+          {
+            "question": "fixture survey question",
+            "answer": "fixture survey answer"
+          }
+        ]
+      }
+    ],
+    "next_page_token": "fixture-va-page-token",
+    "page_size": 10,
+    "token": "fixture-va-response-token"
+  }
+}

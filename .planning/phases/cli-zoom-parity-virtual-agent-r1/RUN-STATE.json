@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-virtual-agent-r1",
   "issue": 3941,
   "parent_issue": 3915,
-  "status": "red-captured",
+  "status": "complete",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -34,7 +34,17 @@
     "unsafe_or_disallowed": 0
   },
   "red": "captured: go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... failed only on the target ledger totals and 13 unknown Virtual Agent command paths before production changes",
-  "green": "pending",
-  "verification": "pending",
-  "review": "pending"
+  "green": "all 13 operations declared and reconciled; go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... passes",
+  "verification": "fixture lifecycle, surface sync/reconcile/validate, generated docs/site, fresh binary help, scoped tests/vet/Make gates passed",
+  "review": "inline manual code review after resolved code-review GSD source found no blocking issue",
+  "actual": {
+    "covered": 51,
+    "locally_blocked": 1791,
+    "direct_reads": 30,
+    "direct_writes": 16,
+    "unsafe_or_disallowed": 0,
+    "virtual_agent_endpoint_rows_reconciled": 13,
+    "global_endpoint_ledger_reads_added": 9,
+    "non_zoom_endpoint_ledger_hash": "7170208799055da56fb04ddcdc642fec68495e138808a41904e7f37cf8837691"
+  }
 }

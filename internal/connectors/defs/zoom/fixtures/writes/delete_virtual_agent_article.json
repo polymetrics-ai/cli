@@ -1,0 +1,10 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/km/kbs/fixture-va-kb/articles/fixture-va-article"
+  },
+  "response": {
+    "status": 204
+  }
+}

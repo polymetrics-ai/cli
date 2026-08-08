@@ -1,0 +1,34 @@
+{
+  "status": 200,
+  "body": {
+    "engagements": [
+      {
+        "engagement_id": "fixture-va-engagement",
+        "consumer_id": "fixture-va-consumer",
+        "agents": [
+          {
+            "agent_id": "fixture-va-agent",
+            "agent_name": "Fixture Virtual Agent"
+          }
+        ],
+        "articles": [
+          {
+            "article_id": "fixture-va-article",
+            "article_title": "Fixture Virtual Agent article",
+            "article_answer": "fixture article answer",
+            "article_url": "https://fixture.invalid/virtual-agent/article"
+          }
+        ],
+        "query_summary": "fixture engagement query summary",
+        "intent_summary": "fixture engagement intent summary",
+        "user_phone_number": "+10000000000",
+        "start_time": "2026-01-01T00:00:00Z"
+      }
+    ],
+    "next_page_token": "fixture-va-page-token",
+    "page_size": 10,
+    "from": "2026-01-01T00:00:00Z",
+    "to": "2026-01-02T00:00:00Z",
+    "token": "fixture-va-response-token"
+  }
+}

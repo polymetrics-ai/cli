@@ -1297,6 +1297,442 @@
       }
     },
     {
+      "id": "zoom.list_virtual_agent_articles",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent knowledge base articles",
+      "description": "Bounded Zoom Virtual Agent read for GET /v2/km/kbs/{kbId}/articles. Knowledge-base and article values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva:read:km_kbs",
+        "zva:read:km_article",
+        "zva:read:km_article:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "category",
+          "content",
+          "external_id",
+          "id",
+          "kb_id",
+          "title",
+          "url"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/km/kbs/{kbId}/articles",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.create_virtual_agent_article",
+      "kind": "rest_write",
+      "summary": "Create a Virtual Agent knowledge base article",
+      "description": "Approval-gated Zoom Virtual Agent article creation with the documented fixed knowledge-base endpoint. Article, knowledge-base, and external-reference values are redacted in previews and output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva:write:km_kbs",
+        "zva:create:km_article",
+        "zva:create:km_article:admin"
+      ],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "category",
+          "content",
+          "external_id",
+          "id",
+          "kb_id",
+          "title",
+          "url"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/km/kbs/{kbId}/articles",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "content",
+            "exclude",
+            "title"
+          ],
+          "properties": {
+            "category": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "exclude": {
+              "type": "boolean"
+            },
+            "external_id": {
+              "type": "string"
+            },
+            "language": {
+              "type": "string",
+              "enum": [
+                "zh-CN", "zh-TW", "en-US", "en-GB", "en-AU", "en-NZ", "fr-FR", "fr-CA", "pt-PT", "pt-BR", "es-ES", "es-US", "es-MX", "da-DK", "nl-NL", "nl-BE", "en-CA", "fr-BE", "fr-LU", "de-DE", "de-AT", "de-CH", "it-IT", "ja-JP", "ko-KR", "no-NO", "pl-PL", "ro-RO", "ru-RU", "sv-SE", "tr-TR"
+              ]
+            },
+            "title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_virtual_agent_article",
+      "kind": "rest_read",
+      "summary": "Get a Virtual Agent knowledge base article",
+      "description": "Bounded Zoom Virtual Agent read for GET /v2/km/kbs/{kbId}/articles/{articleId}. Knowledge-base and article values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva:read:km_kbs",
+        "zva:read:km_article",
+        "zva:read:km_article:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "category",
+          "content",
+          "external_id",
+          "id",
+          "kb_id",
+          "title",
+          "url"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.update_virtual_agent_article",
+      "kind": "rest_write",
+      "summary": "Update a Virtual Agent knowledge base article",
+      "description": "Approval-gated Zoom Virtual Agent article update with the documented fixed knowledge-base endpoint. Article, knowledge-base, and external-reference values are redacted in previews and output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva:write:km_kbs",
+        "zva:update:km_article",
+        "zva:update:km_article:admin"
+      ],
+      "mutation_class": "update",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "category",
+          "content",
+          "external_id",
+          "id",
+          "kb_id",
+          "title",
+          "url"
+        ]
+      },
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "content",
+            "exclude",
+            "title"
+          ],
+          "properties": {
+            "category": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "exclude": {
+              "type": "boolean"
+            },
+            "external_id": {
+              "type": "string"
+            },
+            "language": {
+              "type": "string",
+              "enum": [
+                "zh-CN", "zh-TW", "en-US", "en-GB", "en-AU", "en-NZ", "fr-FR", "fr-CA", "pt-PT", "pt-BR", "es-ES", "es-US", "es-MX", "da-DK", "nl-NL", "nl-BE", "en-CA", "fr-BE", "fr-LU", "de-DE", "de-AT", "de-CH", "it-IT", "ja-JP", "ko-KR", "no-NO", "pl-PL", "ro-RO", "ru-RU", "sv-SE", "tr-TR"
+              ]
+            },
+            "title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.delete_virtual_agent_article",
+      "kind": "rest_write",
+      "summary": "Delete a Virtual Agent knowledge base article",
+      "description": "Destructive Zoom Virtual Agent article deletion. The documented 204 No Content response is recorded as a status-only success and requires typed destructive confirmation.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "auth_scopes": [
+        "zva:write:km_kbs",
+        "zva:delete:km_article",
+        "zva:delete:km_article:admin"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "article_id",
+          "kb_id"
+        ]
+      },
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/km/kbs/{kbId}/articles/{articleId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.create_virtual_agent_sync_request",
+      "kind": "rest_write",
+      "summary": "Create a Virtual Agent knowledge base sync request",
+      "description": "Approval-gated Zoom Virtual Agent knowledge-base sync request with no request body. Knowledge-base, sync, and error detail values are redacted in output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva:write:km_kbs",
+        "zva:update:km_kb:admin"
+      ],
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "error_message",
+          "kb_id",
+          "sync_id"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/km/kbs/{kbId}/sync",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_virtual_agent_sync",
+      "kind": "rest_read",
+      "summary": "Get a Virtual Agent knowledge base sync",
+      "description": "Bounded Zoom Virtual Agent read for GET /v2/km/kbs/{kbId}/sync/{syncId}. Knowledge-base, sync, and error detail values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva:read:km_kbs",
+        "zva:read:km_kb:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "error_message",
+          "kb_id",
+          "sync_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/km/kbs/{kbId}/sync/{syncId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_engagements",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent engagements",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/engagements. Engagement, consumer, agent, article, and conversation data are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_engagements:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "agent_id", "agent_name", "agents", "article_answer", "article_id", "article_title", "article_url", "articles", "bot_id", "bot_name", "campaign_name", "consumer", "consumer_id", "engagement_id", "escalation_reason", "global_variables", "intent_id", "intent_name", "intent_summary", "kb_articles", "launch_url", "query_details", "query_id", "query_summary", "query_text", "topic_name", "user_phone_number"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/engagements",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_engagement_query_details",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent engagement query details",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/engagements/query_details. Engagement, agent, bot, article, query, intent, and knowledge-base values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_queries:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "agent_id", "agent_name", "agent_session_id", "article_answer", "article_id", "article_title", "article_url", "articles", "bot_id", "bot_name", "bot_session_id", "engagement_id", "group_id", "group_name", "intent_id", "intent_name", "kb_details", "query_details", "query_id", "query_text", "topic_name"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/engagements/query_details",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_engagement_variable_details",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent engagement variable details",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/engagements/variables. Engagement, variable, group, and submitted values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_variables:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "engagement_id", "group_id", "group_name", "name", "value", "variable_details", "variable_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/engagements/variables",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_surveys",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent surveys",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/surveys. Consumer, engagement, survey, question, and answer values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_surveys:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "answer", "consumer", "engagement_id", "question", "results", "survey_id", "survey_name", "virtual_agent"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/surveys",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_transcripts",
+      "kind": "rest_read",
+      "summary": "Get Virtual Agent transcripts",
+      "description": "Bounded Zoom Virtual Agent report read for GET /v2/virtual_agent/report/transcripts. Engagement, message, article, and transcript content are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_transcripts:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "engagement_id", "kb_articles", "messages", "text", "title", "url"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/virtual_agent/report/transcripts",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_virtual_agent_operation_logs",
+      "kind": "rest_read",
+      "summary": "List AI Management operation logs",
+      "description": "Bounded Zoom AI Management report read for GET /v2/ai_studio/reports/operation_logs. Account, business, operator, resource, filter, and detail values are redacted before output.",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "zva_report:read",
+        "zva_report:read:admin",
+        "zva:read:list_operation_logs:admin"
+      ],
+      "sensitive_policy": {
+        "redact_fields": [
+          "account_id", "action_filter_key", "ai_studio_operation_id", "business_id", "category_filter_key", "detail", "operator_id", "operator_info", "resource_id", "subaction"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/ai_studio/reports/operation_logs",
+        "max_bytes": 1048576
+      }
+    },
+    {
       "id": "zoom.decrypt_customer_managed_key_archival",
       "kind": "rest_write",
       "summary": "Decrypt a Customer Managed Keys Hybrid archival data key",

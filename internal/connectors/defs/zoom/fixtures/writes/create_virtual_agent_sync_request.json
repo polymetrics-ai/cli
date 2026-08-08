@@ -1,0 +1,17 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/v2/km/kbs/fixture-va-kb/sync"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "sync_id": "fixture-va-sync",
+      "kb_id": "fixture-va-kb",
+      "sync_status": "QUEUED",
+      "error_message": "fixture Virtual Agent sync detail",
+      "token": "fixture-va-response-token"
+    }
+  }
+}

@@ -383387,7 +383387,7 @@
   {
     "slug": "zoom",
     "name": "Zoom",
-    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, and SCIM2 groups/users through the Zoom REST API; includes sensitive Cobrowse SDK and SCIM2 reads, approval-gated Chatbot, SCIM2, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+    "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, and Virtual Agent knowledge-base/report data through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, and Virtual Agent reads, approval-gated Chatbot, SCIM2, Virtual Agent, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
     "docs_url": "https://developers.zoom.us/docs/api/",
     "integration_type": "api",
     "release_stage": "ga",
@@ -383438,7 +383438,7 @@
       }
     ],
     "cli_surface": {
-      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+      "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, approval-gated Chatbot, SCIM2, Virtual Agent, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
       "usage": "pm zoom <group> <command> [flags]",
       "source_cli": {
         "name": "Zoom API reference",
@@ -383516,6 +383516,13 @@
           "title": "SCIM2",
           "commands": [
             "scim2"
+          ]
+        },
+        {
+          "id": "virtual-agent",
+          "title": "Virtual Agent",
+          "commands": [
+            "virtual-agent"
           ]
         },
         {
@@ -385156,6 +385163,605 @@
           "risk": "Changes a Zoom SCIM2 user's active state through a provider-defined PatchOp.",
           "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
           "notes": "The named patch flag accepts exactly one documented SCIM activation-state PatchOp object for this fixed endpoint; it is not a generic JSON or HTTP escape hatch. User and account values are redacted in previews, errors, and JSON output."
+        },
+        {
+          "path": "virtual-agent knowledge-bases articles list",
+          "summary": "List Zoom Virtual Agent knowledge base articles.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_virtual_agent_articles",
+          "source_cli_path": "GET /v2/km/kbs/{kbId}/articles",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "kb-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent knowledge base identifier.",
+              "values": [],
+              "maps_to": "path.kbId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent knowledge-bases articles list --credential zoom-fixture --kb-id knowledge-base --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Virtual Agent read with a fixed knowledge-base path. The live artifact declares paging values only in response schemas, so no paging, token, date, or guessed query flag is exposed."
+        },
+        {
+          "path": "virtual-agent knowledge-bases articles create",
+          "summary": "Create one Zoom Virtual Agent knowledge base article.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.create_virtual_agent_article",
+          "source_cli_path": "POST /v2/km/kbs/{kbId}/articles",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "kb-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent knowledge base identifier.",
+              "values": [],
+              "maps_to": "path.kbId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "summary": "Documented article content.",
+              "values": [],
+              "maps_to": "body.content",
+              "required": true
+            },
+            {
+              "name": "exclude",
+              "type": "boolean",
+              "summary": "Whether Zoom excludes the article from query solutions.",
+              "values": [],
+              "maps_to": "body.exclude",
+              "required": true
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "summary": "Documented article title.",
+              "values": [],
+              "maps_to": "body.title",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "category",
+              "type": "string",
+              "summary": "Optional documented article category.",
+              "values": [],
+              "maps_to": "body.category",
+              "allow_empty": false
+            },
+            {
+              "name": "external-id",
+              "type": "string",
+              "summary": "Optional documented external article identifier.",
+              "values": [],
+              "maps_to": "body.external_id",
+              "allow_empty": false
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "summary": "Optional documented article language code.",
+              "values": [],
+              "maps_to": "body.language",
+              "allow_empty": false
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "summary": "Optional documented article URL.",
+              "values": [],
+              "maps_to": "body.url",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent knowledge-bases articles create --credential zoom-fixture --kb-id knowledge-base --content 'article text' --exclude=false --title 'Article title' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Creates a Zoom Virtual Agent knowledge base article containing provider content and external references.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "Uses only the documented typed article fields on the fixed endpoint; it is not a generic JSON or HTTP write. Article and knowledge-base values are redacted in plans, errors, and JSON output."
+        },
+        {
+          "path": "virtual-agent knowledge-bases articles get",
+          "summary": "Get one Zoom Virtual Agent knowledge base article.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_virtual_agent_article",
+          "source_cli_path": "GET /v2/km/kbs/{kbId}/articles/{articleId}",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "kb-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent knowledge base identifier.",
+              "values": [],
+              "maps_to": "path.kbId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "article-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent article identifier.",
+              "values": [],
+              "maps_to": "path.articleId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent knowledge-bases articles get --credential zoom-fixture --kb-id knowledge-base --article-id article --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Virtual Agent read with fixed knowledge-base and article path parameters. The live artifact declares no standalone request paging input."
+        },
+        {
+          "path": "virtual-agent knowledge-bases articles update",
+          "summary": "Update one Zoom Virtual Agent knowledge base article.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.update_virtual_agent_article",
+          "source_cli_path": "PUT /v2/km/kbs/{kbId}/articles/{articleId}",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "kb-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent knowledge base identifier.",
+              "values": [],
+              "maps_to": "path.kbId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "article-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent article identifier.",
+              "values": [],
+              "maps_to": "path.articleId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "summary": "Documented replacement article content.",
+              "values": [],
+              "maps_to": "body.content",
+              "required": true
+            },
+            {
+              "name": "exclude",
+              "type": "boolean",
+              "summary": "Whether Zoom excludes the replacement article from query solutions.",
+              "values": [],
+              "maps_to": "body.exclude",
+              "required": true
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "summary": "Documented replacement article title.",
+              "values": [],
+              "maps_to": "body.title",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "category",
+              "type": "string",
+              "summary": "Optional documented article category.",
+              "values": [],
+              "maps_to": "body.category",
+              "allow_empty": false
+            },
+            {
+              "name": "external-id",
+              "type": "string",
+              "summary": "Optional documented external article identifier.",
+              "values": [],
+              "maps_to": "body.external_id",
+              "allow_empty": false
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "summary": "Optional documented article language code.",
+              "values": [],
+              "maps_to": "body.language",
+              "allow_empty": false
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "summary": "Optional documented article URL.",
+              "values": [],
+              "maps_to": "body.url",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent knowledge-bases articles update --credential zoom-fixture --kb-id knowledge-base --article-id article --content 'updated article text' --exclude=false --title 'Updated title' --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Changes a Zoom Virtual Agent knowledge base article containing provider content and external references.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "Uses only the documented typed article fields on the fixed endpoint; it is not a generic JSON or HTTP write. Article and knowledge-base values are redacted in plans, errors, and JSON output."
+        },
+        {
+          "path": "virtual-agent knowledge-bases articles delete",
+          "summary": "Delete one Zoom Virtual Agent knowledge base article.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.delete_virtual_agent_article",
+          "source_cli_path": "DELETE /v2/km/kbs/{kbId}/articles/{articleId}",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "kb-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent knowledge base identifier.",
+              "values": [],
+              "maps_to": "path.kbId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "article-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent article identifier to delete.",
+              "values": [],
+              "maps_to": "path.articleId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent knowledge-bases articles delete --credential zoom-fixture --kb-id knowledge-base --article-id article --preview --json"
+          ],
+          "output_policy": "none",
+          "risk": "Irreversibly deletes a Zoom Virtual Agent knowledge base article.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": "The fixed documented delete endpoint returns 204 No Content. Success is asserted by status without inventing a response body."
+        },
+        {
+          "path": "virtual-agent knowledge-bases sync create",
+          "summary": "Create one Zoom Virtual Agent knowledge base sync request.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.create_virtual_agent_sync_request",
+          "source_cli_path": "POST /v2/km/kbs/{kbId}/sync",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "kb-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent knowledge base identifier.",
+              "values": [],
+              "maps_to": "path.kbId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent knowledge-bases sync create --credential zoom-fixture --kb-id knowledge-base --preview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Starts a Zoom Virtual Agent knowledge base synchronization request.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": "The documented fixed POST has no request body. Knowledge-base, sync, and error detail values are redacted in plans, errors, and JSON output."
+        },
+        {
+          "path": "virtual-agent knowledge-bases sync get",
+          "summary": "Get one Zoom Virtual Agent knowledge base sync.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_virtual_agent_sync",
+          "source_cli_path": "GET /v2/km/kbs/{kbId}/sync/{syncId}",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "kb-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent knowledge base identifier.",
+              "values": [],
+              "maps_to": "path.kbId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "sync-id",
+              "type": "string",
+              "summary": "Zoom Virtual Agent synchronization request identifier.",
+              "values": [],
+              "maps_to": "path.syncId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent knowledge-bases sync get --credential zoom-fixture --kb-id knowledge-base --sync-id sync --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Virtual Agent read with fixed knowledge-base and sync path parameters. The live artifact declares no standalone request paging input."
+        },
+        {
+          "path": "virtual-agent reports engagements list",
+          "summary": "List Zoom Virtual Agent engagements.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_virtual_agent_engagements",
+          "source_cli_path": "GET /v2/virtual_agent/report/engagements",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent reports engagements list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed."
+        },
+        {
+          "path": "virtual-agent reports engagements query-details list",
+          "summary": "List Zoom Virtual Agent engagement query details.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_virtual_agent_engagement_query_details",
+          "source_cli_path": "GET /v2/virtual_agent/report/engagements/query_details",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent reports engagements query-details list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed."
+        },
+        {
+          "path": "virtual-agent reports engagements variable-details list",
+          "summary": "List Zoom Virtual Agent engagement variable details.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_virtual_agent_engagement_variable_details",
+          "source_cli_path": "GET /v2/virtual_agent/report/engagements/variables",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent reports engagements variable-details list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed."
+        },
+        {
+          "path": "virtual-agent reports surveys list",
+          "summary": "List Zoom Virtual Agent surveys.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_virtual_agent_surveys",
+          "source_cli_path": "GET /v2/virtual_agent/report/surveys",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent reports surveys list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed."
+        },
+        {
+          "path": "virtual-agent reports transcripts list",
+          "summary": "List Zoom Virtual Agent transcripts.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_virtual_agent_transcripts",
+          "source_cli_path": "GET /v2/virtual_agent/report/transcripts",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent reports transcripts list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed."
+        },
+        {
+          "path": "virtual-agent reports operation-logs list",
+          "summary": "List Zoom AI Management operation logs.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_virtual_agent_operation_logs",
+          "source_cli_path": "GET /v2/ai_studio/reports/operation_logs",
+          "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+          "flags": [
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm zoom virtual-agent reports operation-logs list --credential zoom-fixture --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Bounded sensitive AI Management report read under Zoom's Virtual Agent artifact. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed."
         },
         {
           "path": "customer-managed-keys-hybrid archival-key decrypt",

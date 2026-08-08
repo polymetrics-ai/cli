@@ -1718,6 +1718,406 @@ func TestChatbotCommandsExecuteWithFixture(t *testing.T) {
 	}
 }
 
+// TestVirtualAgentDirectReadCommandsExecuteWithFixtures runs each documented
+// Virtual Agent GET through its fixed endpoint and ordinary Zoom bearer
+// transport. It proves response-only paging values are never sent as query
+// input and that sensitive report/content data is redacted before output.
+func TestVirtualAgentDirectReadCommandsExecuteWithFixtures(t *testing.T) {
+	const accessToken = "fixture-virtual-agent-access-token"
+	type virtualAgentReadAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		requestPath       string
+		fixture           string
+		status            int
+		response          json.RawMessage
+		responseSensitive []string
+		responseMarkers   []string
+	}
+	actions := []virtualAgentReadAction{
+		{
+			name:              "list articles",
+			path:              []string{"virtual-agent", "knowledge-bases", "articles", "list"},
+			flags:             map[string][]string{"kb-id": {"fixture-va-kb"}},
+			requestPath:       "/v2/km/kbs/fixture-va-kb/articles",
+			fixture:           "list_virtual_agent_articles.json",
+			responseSensitive: []string{"fixture-va-article", "fixture-va-kb", "fixture category", "Fixture Virtual Agent article", "https://fixture.invalid/virtual-agent/article", "fixture-va-external-id", "fixture Virtual Agent article content", "fixture-va-page-token", "fixture-va-response-token"},
+			responseMarkers:   []string{"id", "kb_id", "category", "title", "url", "external_id", "content", "next_page_token", "token"},
+		},
+		{
+			name:              "get article",
+			path:              []string{"virtual-agent", "knowledge-bases", "articles", "get"},
+			flags:             map[string][]string{"kb-id": {"fixture-va-kb"}, "article-id": {"fixture-va-article"}},
+			requestPath:       "/v2/km/kbs/fixture-va-kb/articles/fixture-va-article",
+			fixture:           "get_virtual_agent_article.json",
+			responseSensitive: []string{"fixture-va-article", "fixture-va-kb", "fixture category", "Fixture Virtual Agent article", "https://fixture.invalid/virtual-agent/article", "fixture-va-external-id", "fixture Virtual Agent article content", "fixture-va-response-token"},
+			responseMarkers:   []string{"id", "kb_id", "category", "title", "url", "external_id", "content", "token"},
+		},
+		{
+			name:              "get sync",
+			path:              []string{"virtual-agent", "knowledge-bases", "sync", "get"},
+			flags:             map[string][]string{"kb-id": {"fixture-va-kb"}, "sync-id": {"fixture-va-sync"}},
+			requestPath:       "/v2/km/kbs/fixture-va-kb/sync/fixture-va-sync",
+			fixture:           "get_virtual_agent_sync.json",
+			responseSensitive: []string{"fixture-va-sync", "fixture-va-kb", "fixture Virtual Agent sync detail", "fixture-va-response-token"},
+			responseMarkers:   []string{"sync_id", "kb_id", "error_message", "token"},
+		},
+		{
+			name:              "list engagements",
+			path:              []string{"virtual-agent", "reports", "engagements", "list"},
+			requestPath:       "/v2/virtual_agent/report/engagements",
+			fixture:           "list_virtual_agent_engagements.json",
+			responseSensitive: []string{"fixture-va-engagement", "fixture-va-consumer", "fixture-va-agent", "Fixture Virtual Agent", "fixture-va-article", "Fixture Virtual Agent article", "fixture article answer", "https://fixture.invalid/virtual-agent/article", "fixture engagement query summary", "fixture engagement intent summary", "+10000000000", "fixture-va-page-token", "fixture-va-response-token"},
+			responseMarkers:   []string{"engagement_id", "consumer_id", "agents", "articles", "query_summary", "intent_summary", "user_phone_number", "next_page_token", "token"},
+		},
+		{
+			name:              "list engagement query details",
+			path:              []string{"virtual-agent", "reports", "engagements", "query-details", "list"},
+			requestPath:       "/v2/virtual_agent/report/engagements/query_details",
+			fixture:           "list_virtual_agent_engagement_query_details.json",
+			responseSensitive: []string{"fixture-va-engagement", "fixture-va-query", "fixture query text", "fixture-va-agent", "Fixture Virtual Agent", "fixture-va-agent-session", "fixture-va-bot", "Fixture Virtual Agent bot", "fixture-va-bot-session", "fixture-va-intent", "Fixture intent", "fixture-va-article", "Fixture Virtual Agent article", "fixture article answer", "https://fixture.invalid/virtual-agent/article", "fixture-va-page-token", "fixture-va-response-token"},
+			responseMarkers:   []string{"engagement_id", "query_details", "next_page_token", "token"},
+		},
+		{
+			name:              "list engagement variable details",
+			path:              []string{"virtual-agent", "reports", "engagements", "variable-details", "list"},
+			requestPath:       "/v2/virtual_agent/report/engagements/variables",
+			fixture:           "list_virtual_agent_engagement_variable_details.json",
+			responseSensitive: []string{"fixture-va-engagement", "fixture-va-variable", "fixture variable name", "fixture variable value", "fixture-va-group", "Fixture variable group", "fixture-va-page-token", "fixture-va-response-token"},
+			responseMarkers:   []string{"engagement_id", "variable_details", "next_page_token", "token"},
+		},
+		{
+			name:              "list surveys",
+			path:              []string{"virtual-agent", "reports", "surveys", "list"},
+			requestPath:       "/v2/virtual_agent/report/surveys",
+			fixture:           "list_virtual_agent_surveys.json",
+			responseSensitive: []string{"fixture-va-survey", "Fixture survey", "fixture-va-engagement", "fixture survey consumer", "Fixture Virtual Agent", "fixture survey question", "fixture survey answer", "fixture-va-page-token", "fixture-va-response-token"},
+			responseMarkers:   []string{"survey_id", "survey_name", "engagement_id", "consumer", "virtual_agent", "results", "next_page_token", "token"},
+		},
+		{
+			name:              "list transcripts",
+			path:              []string{"virtual-agent", "reports", "transcripts", "list"},
+			requestPath:       "/v2/virtual_agent/report/transcripts",
+			fixture:           "list_virtual_agent_transcripts.json",
+			responseSensitive: []string{"fixture-va-engagement", "fixture transcript text", "Fixture Virtual Agent article", "https://fixture.invalid/virtual-agent/article", "fixture-va-page-token", "fixture-va-response-token"},
+			responseMarkers:   []string{"engagement_id", "messages", "next_page_token", "token"},
+		},
+		{
+			name:              "list operation logs",
+			path:              []string{"virtual-agent", "reports", "operation-logs", "list"},
+			requestPath:       "/v2/ai_studio/reports/operation_logs",
+			fixture:           "list_virtual_agent_operation_logs.json",
+			responseSensitive: []string{"fixture-va-account", "fixture action filter", "fixture-va-operation-log", "fixture-va-business", "fixture category filter", "fixture operation detail", "fixture-va-operator", "fixture operator info", "fixture-va-resource", "fixture subaction", "fixture-va-page-token", "fixture-va-response-token"},
+			responseMarkers:   []string{"account_id", "action_filter_key", "ai_studio_operation_id", "business_id", "category_filter_key", "detail", "operator_id", "operator_info", "resource_id", "subaction", "next_page_token", "token"},
+		},
+	}
+	byRequest := make(map[string]*virtualAgentReadAction, len(actions))
+	for i := range actions {
+		actions[i].status, actions[i].response = zoomDirectReadFixture(t, actions[i].fixture)
+		byRequest[http.MethodGet+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Virtual Agent read fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Virtual Agent read fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Virtual Agent read fixture received undeclared query or paging input")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(action.status)
+		_, _ = w.Write(action.response)
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	config := connectors.RuntimeConfig{
+		Config:  map[string]string{"base_url": server.URL + "/v2"},
+		Secrets: map[string]string{"access_token": accessToken},
+	}
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   action.path,
+				Flags:  action.flags,
+				Config: config,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for a Virtual Agent direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q): %v", strings.Join(action.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != action.status {
+				t.Fatalf("Run(%q) result = %#v, want status %d", strings.Join(action.path, " "), result.DirectRead, action.status)
+			}
+			encoded, err := json.Marshal(result.DirectRead.Body)
+			if err != nil {
+				t.Fatalf("marshal Virtual Agent read response: %v", err)
+			}
+			for index, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatalf("Virtual Agent read response exposed declared or generic sensitive field %d", index)
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("Virtual Agent read response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Virtual Agent read fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+// TestVirtualAgentDirectWriteCommandsExecuteWithFixtures exercises every
+// documented Virtual Agent mutation through the shared plan/preview/approval
+// lifecycle. It proves typed article input, no-body sync creation, destructive
+// article deletion, exact endpoint/auth/status contracts, and redacted output.
+func TestVirtualAgentDirectWriteCommandsExecuteWithFixtures(t *testing.T) {
+	const (
+		credentialName = "zoom-virtual-agent-fixture"
+		accessToken    = "fixture-virtual-agent-access-token"
+	)
+	type virtualAgentWriteAction struct {
+		name              string
+		path              []string
+		flags             map[string][]string
+		fixture           string
+		method            string
+		requestPath       string
+		expectedBody      json.RawMessage
+		destructive       bool
+		inputSensitive    []string
+		responseSensitive []string
+		responseMarkers   []string
+		status            int
+		response          json.RawMessage
+	}
+	actions := []virtualAgentWriteAction{
+		{
+			name: "create article",
+			path: []string{"virtual-agent", "knowledge-bases", "articles", "create"},
+			flags: map[string][]string{
+				"kb-id":       {"fixture-va-kb"},
+				"content":     {"fixture Virtual Agent article content"},
+				"exclude":     {"false"},
+				"title":       {"Fixture Virtual Agent article"},
+				"category":    {"fixture category"},
+				"external-id": {"fixture-va-external-id"},
+				"language":    {"en-US"},
+				"url":         {"https://fixture.invalid/virtual-agent/article"},
+			},
+			fixture:           "create_virtual_agent_article.json",
+			inputSensitive:    []string{"fixture Virtual Agent article content", "Fixture Virtual Agent article", "fixture category", "fixture-va-external-id", "https://fixture.invalid/virtual-agent/article"},
+			responseSensitive: []string{"fixture-va-article", "fixture-va-kb", "fixture Virtual Agent article content", "Fixture Virtual Agent article", "fixture-va-response-token"},
+			responseMarkers:   []string{"id", "kb_id", "content", "title", "token"},
+		},
+		{
+			name: "update article",
+			path: []string{"virtual-agent", "knowledge-bases", "articles", "update"},
+			flags: map[string][]string{
+				"kb-id":       {"fixture-va-kb"},
+				"article-id":  {"fixture-va-article"},
+				"content":     {"fixture updated Virtual Agent article content"},
+				"exclude":     {"true"},
+				"title":       {"Fixture updated Virtual Agent article"},
+				"category":    {"fixture updated category"},
+				"external-id": {"fixture-va-external-id"},
+				"language":    {"en-US"},
+				"url":         {"https://fixture.invalid/virtual-agent/article-updated"},
+			},
+			fixture:           "update_virtual_agent_article.json",
+			inputSensitive:    []string{"fixture updated Virtual Agent article content", "Fixture updated Virtual Agent article", "fixture updated category", "fixture-va-external-id", "https://fixture.invalid/virtual-agent/article-updated"},
+			responseSensitive: []string{"fixture-va-article", "fixture-va-kb", "fixture updated Virtual Agent article content", "Fixture updated Virtual Agent article", "fixture-va-response-token"},
+			responseMarkers:   []string{"id", "kb_id", "content", "title", "token"},
+		},
+		{
+			name:        "delete article",
+			path:        []string{"virtual-agent", "knowledge-bases", "articles", "delete"},
+			flags:       map[string][]string{"kb-id": {"fixture-va-kb"}, "article-id": {"fixture-va-article"}},
+			fixture:     "delete_virtual_agent_article.json",
+			destructive: true,
+		},
+		{
+			name:              "create sync request",
+			path:              []string{"virtual-agent", "knowledge-bases", "sync", "create"},
+			flags:             map[string][]string{"kb-id": {"fixture-va-kb"}},
+			fixture:           "create_virtual_agent_sync_request.json",
+			responseSensitive: []string{"fixture-va-sync", "fixture-va-kb", "fixture Virtual Agent sync detail", "fixture-va-response-token"},
+			responseMarkers:   []string{"sync_id", "kb_id", "error_message", "token"},
+		},
+	}
+	byRequest := make(map[string]*virtualAgentWriteAction, len(actions))
+	for i := range actions {
+		fixture := zoomSCIM2WriteFixture(t, actions[i].fixture)
+		actions[i].method = fixture.Expect.Method
+		actions[i].requestPath = fixture.Expect.Path
+		actions[i].expectedBody = fixture.Expect.Body
+		actions[i].status = fixture.Response.Status
+		actions[i].response = fixture.Response.Body
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("Virtual Agent write fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("Virtual Agent write fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("Virtual Agent write fixture received undeclared query or paging input")
+		}
+		if len(action.expectedBody) == 0 {
+			var unexpected any
+			if err := json.NewDecoder(request.Body).Decode(&unexpected); err == nil {
+				t.Fatal("Virtual Agent no-body action unexpectedly sent a request body")
+			}
+		} else {
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("Virtual Agent body action did not declare JSON content")
+			}
+			var got, want any
+			if err := json.NewDecoder(request.Body).Decode(&got); err != nil {
+				t.Fatalf("decode Virtual Agent action body: %v", err)
+			}
+			if err := json.Unmarshal(action.expectedBody, &want); err != nil {
+				t.Fatalf("decode Virtual Agent fixture body: %v", err)
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatal("Virtual Agent action body did not contain exactly the declared documented fields")
+			}
+		}
+		if len(action.response) > 0 {
+			w.Header().Set("Content-Type", "application/json")
+		}
+		w.WriteHeader(action.status)
+		if len(action.response) > 0 {
+			_, _ = w.Write(action.response)
+		}
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s): %v", action.name, err)
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config:    map[string]string{"base_url": server.URL + "/v2"},
+		Secrets:   map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			beforeRequests := requests
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("Virtual Agent plan did not produce a no-network preview and single-use approval")
+			}
+			if action.destructive != (plan.ConfirmationChallenge == string(connectors.ConfirmationKindDestructive)) {
+				t.Fatal("Virtual Agent plan did not retain the declared destructive confirmation policy")
+			}
+			encodedPlan, err := json.Marshal(plan.Sample)
+			if err != nil {
+				t.Fatalf("marshal Virtual Agent plan sample: %v", err)
+			}
+			for index, raw := range action.inputSensitive {
+				if strings.Contains(string(encodedPlan), raw) {
+					t.Fatalf("Virtual Agent plan sample exposed declared sensitive input %d", index)
+				}
+			}
+			if requests != beforeRequests {
+				t.Fatal("Virtual Agent plan or preview reached the fixture endpoint")
+			}
+
+			if action.destructive {
+				if _, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}); err == nil {
+					t.Fatal("Virtual Agent DELETE execution bypassed typed destructive confirmation")
+				}
+				if requests != beforeRequests {
+					t.Fatal("unconfirmed Virtual Agent DELETE reached the fixture endpoint")
+				}
+			}
+
+			run, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{
+				PlanID:        plan.ID,
+				ApprovalToken: plan.ApprovalToken,
+				Confirmation: connectors.WriteConfirmation{
+					Kind: connectors.ConfirmationKindDestructive,
+				},
+			})
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != action.status {
+				t.Fatalf("Virtual Agent run = %#v, want completed declared action status %d", run, action.status)
+			}
+			if len(action.response) == 0 {
+				if run.OperationDirectWrite.Body != nil {
+					t.Fatal("Virtual Agent status-only action returned an invented response body")
+				}
+				return
+			}
+			encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+			if err != nil {
+				t.Fatalf("marshal Virtual Agent action response: %v", err)
+			}
+			for index, raw := range action.responseSensitive {
+				if strings.Contains(string(encoded), raw) {
+					t.Fatalf("Virtual Agent action response exposed declared or generic sensitive field %d", index)
+				}
+			}
+			for _, field := range action.responseMarkers {
+				if !strings.Contains(string(encoded), "\""+field+"_redacted\":true") {
+					t.Fatalf("Virtual Agent action response is missing %s_redacted marker", field)
+				}
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("Virtual Agent write fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
 // TestSCIM2DirectReadCommandsExecuteWithFixtures runs every documented SCIM2
 // read through the real command runner. The loopback server proves that the
 // operation-scoped SCIM root/auth transport is used instead of the ordinary

@@ -1,0 +1,17 @@
+{
+  "status": 200,
+  "body": {
+    "id": "fixture-va-article",
+    "kb_id": "fixture-va-kb",
+    "category": "fixture category",
+    "title": "Fixture Virtual Agent article",
+    "url": "https://fixture.invalid/virtual-agent/article",
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T01:00:00Z",
+    "exclude": false,
+    "language": "en-US",
+    "external_id": "fixture-va-external-id",
+    "content": "fixture Virtual Agent article content",
+    "token": "fixture-va-response-token"
+  }
+}
