@@ -3,6 +3,7 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/url"
 	"reflect"
 	"regexp"
@@ -50,6 +51,15 @@ type schemaNode struct {
 	maxItems    int
 	hasMaxItems bool
 
+	// minimum/maximum are the numeric-range pair. Their presence flags retain
+	// the distinction between an absent bound and a documented zero bound.
+	// Bounds are Draft-07 applicability constraints: they govern numeric
+	// instances and leave nonnumeric instances alone when no type forbids them.
+	minimum    float64
+	hasMinimum bool
+	maximum    float64
+	hasMaximum bool
+
 	// extensions
 	secret      bool     // x-secret
 	primaryKey  []string // x-primary-key (only meaningful at the root)
@@ -88,6 +98,8 @@ var structuralKeywords = map[string]bool{
 	"minProperties":        true,
 	"minItems":             true,
 	"maxItems":             true,
+	"minimum":              true,
+	"maximum":              true,
 	"additionalProperties": true,
 	"x-secret":             true,
 	"x-primary-key":        true,
@@ -222,6 +234,9 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 	if err := compileArrayCardinality(m, n); err != nil {
 		return nil, err
 	}
+	if err := compileNumericRange(m, n); err != nil {
+		return nil, err
+	}
 
 	if raw, ok := m["default"]; ok {
 		var def any
@@ -317,6 +332,44 @@ func compileNonNegativeInt(raw json.RawMessage, keyword string) (int, error) {
 	return v, nil
 }
 
+// compileNumericRange compiles Draft-07 minimum/maximum bounds. Bounds may be
+// negative or fractional, unlike array cardinality, but must be finite JSON
+// numbers. A maximum below a minimum is unsatisfiable and therefore a bundle
+// authoring error rather than a request-time surprise.
+func compileNumericRange(m map[string]json.RawMessage, n *schemaNode) error {
+	if raw, ok := m["minimum"]; ok {
+		value, err := compileFiniteNumber(raw, "minimum")
+		if err != nil {
+			return err
+		}
+		n.minimum = value
+		n.hasMinimum = true
+	}
+	if raw, ok := m["maximum"]; ok {
+		value, err := compileFiniteNumber(raw, "maximum")
+		if err != nil {
+			return err
+		}
+		n.maximum = value
+		n.hasMaximum = true
+	}
+	if n.hasMinimum && n.hasMaximum && n.maximum < n.minimum {
+		return fmt.Errorf("compile schema: maximum %g is below minimum %g", n.maximum, n.minimum)
+	}
+	return nil
+}
+
+func compileFiniteNumber(raw json.RawMessage, keyword string) (float64, error) {
+	var value float64
+	if err := json.Unmarshal(raw, &value); err != nil {
+		return 0, fmt.Errorf("compile schema: %s: %w", keyword, err)
+	}
+	if math.IsNaN(value) || math.IsInf(value, 0) {
+		return 0, fmt.Errorf("compile schema: %s must be a finite JSON number", keyword)
+	}
+	return value, nil
+}
+
 func compileTypes(raw json.RawMessage) ([]string, error) {
 	var single string
 	if err := json.Unmarshal(raw, &single); err == nil {
@@ -360,6 +413,10 @@ func (n *schemaNode) validate(v any, path string) error {
 		if !matched {
 			return fmt.Errorf("%s: value not in enum %v", displayPath(path), n.enum)
 		}
+	}
+
+	if err := n.validateNumericRange(v, path); err != nil {
+		return err
 	}
 
 	switch val := v.(type) {
@@ -412,6 +469,26 @@ func (n *schemaNode) validateArrayCardinality(count int, path string) error {
 	}
 	if n.hasMaxItems && count > n.maxItems {
 		return fmt.Errorf("%s: maxItems %d exceeded (got %d)", displayPath(path), n.maxItems, count)
+	}
+	return nil
+}
+
+func (n *schemaNode) validateNumericRange(v any, path string) error {
+	if !n.hasMinimum && !n.hasMaximum {
+		return nil
+	}
+	if !isNumber(v) {
+		return nil
+	}
+	value, ok := normalizeNumber(v)
+	if !ok || math.IsNaN(value) || math.IsInf(value, 0) {
+		return fmt.Errorf("%s: numeric value must be finite", displayPath(path))
+	}
+	if n.hasMinimum && value < n.minimum {
+		return fmt.Errorf("%s: minimum %g not satisfied (got %g)", displayPath(path), n.minimum, value)
+	}
+	if n.hasMaximum && value > n.maximum {
+		return fmt.Errorf("%s: maximum %g exceeded (got %g)", displayPath(path), n.maximum, value)
 	}
 	return nil
 }
@@ -578,6 +655,8 @@ func normalizeNumber(v any) (float64, bool) {
 		return f, true
 	case float64:
 		return n, true
+	case float32:
+		return float64(n), true
 	case int:
 		return float64(n), true
 	case int64:
