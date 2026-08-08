@@ -28,12 +28,15 @@ Reads public Docker Hub repositories and image tags for a configured target name
 
 ## Configuration
 
+- auth_type
 - base_url
 - docker_username
 - namespace
 - page_size
+- registry_client_ip
 - repository
 - tag
+- tier
 - docker_pat (secret)
 - scim_bearer_token (secret)
 
