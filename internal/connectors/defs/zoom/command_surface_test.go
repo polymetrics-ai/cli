@@ -596,30 +596,32 @@ func TestClipsOperationCommandsAreReachable(t *testing.T) {
 		method    string
 		apiPath   string
 		policy    string
+		opPolicy  string
+		minItems  int
 	}{
-		{path: "clips list", operation: "zoom.list_clips", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips", policy: "json_redacted"},
-		{path: "clips starred set", operation: "zoom.set_clips_starred", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/starred", policy: "none"},
-		{path: "clips collaborators list", operation: "zoom.list_clip_collaborators", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/{clipId}/collaborators", policy: "json_redacted"},
-		{path: "clips collaborators share", operation: "zoom.share_clip_collaborators", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/{clipId}/collaborators", policy: "json_redacted"},
-		{path: "clips collaborators remove", operation: "zoom.remove_clip_collaborator", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/clips/{clipId}/collaborators", policy: "none"},
-		{path: "clips comments list", operation: "zoom.list_clip_comments", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/{clipId}/comments", policy: "json_redacted"},
-		{path: "clips comments delete", operation: "zoom.delete_clip_comment", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/clips/{clipId}/comments/{commentId}", policy: "none"},
-		{path: "clips download", operation: "zoom.download_clip", intent: "binary_download", method: http.MethodGet, apiPath: "/v2/clips/{clipId}/download", policy: "binary_file_bounded"},
-		{path: "clips get", operation: "zoom.get_clip", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/{clipId}", policy: "json_redacted"},
-		{path: "clips delete", operation: "zoom.delete_clip", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/clips/{clipId}", policy: "none"},
-		{path: "clips update", operation: "zoom.update_clip", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/clips/{clipId}", policy: "none"},
-		{path: "clips chapters get", operation: "zoom.get_clip_chapters", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/{clipId}/chapters", policy: "json_redacted"},
-		{path: "clips chapters create", operation: "zoom.create_clip_chapters", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/{clipId}/chapters", policy: "json_redacted"},
-		{path: "clips duplicate", operation: "zoom.duplicate_clip", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/{clipId}/duplicate", policy: "json_redacted"},
-		{path: "clips share-settings update", operation: "zoom.update_clip_share_settings", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/clips/{clipId}/share_settings", policy: "none"},
-		{path: "clips transfers partial", operation: "zoom.transfer_clips_partial", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/transfers", policy: "json_redacted"},
-		{path: "clips transfers full", operation: "zoom.transfer_clips_full", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/transfers", policy: "json_redacted"},
-		{path: "clips transfers get", operation: "zoom.get_clip_transfer", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/transfers/{taskId}", policy: "json_redacted"},
-		{path: "clips files upload", operation: "zoom.upload_clip_file", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files", policy: "json_redacted"},
-		{path: "clips files multipart upload", operation: "zoom.upload_clip_multipart_part", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files/multipart", policy: "json_redacted"},
-		{path: "clips files multipart initiate", operation: "zoom.initiate_clip_multipart_upload", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files/multipart/upload_events", policy: "json_redacted"},
-		{path: "clips files multipart complete", operation: "zoom.complete_clip_multipart_upload", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files/multipart/upload_events", policy: "json_redacted"},
-		{path: "clips files temporary upload", operation: "zoom.upload_clip_temporary_file", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files/tmp", policy: "json_redacted"},
+		{path: "clips list", operation: "zoom.list_clips", intent: "direct_read", method: http.MethodGet, apiPath: "/clips", policy: "json_redacted"},
+		{path: "clips starred set", operation: "zoom.set_clips_starred", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/starred", policy: "none"},
+		{path: "clips collaborators list", operation: "zoom.list_clip_collaborators", intent: "direct_read", method: http.MethodGet, apiPath: "/clips/{clipId}/collaborators", policy: "json_redacted"},
+		{path: "clips collaborators share", operation: "zoom.share_clip_collaborators", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/{clipId}/collaborators", policy: "json_redacted"},
+		{path: "clips collaborators remove", operation: "zoom.remove_clip_collaborator", intent: "direct_write", method: http.MethodDelete, apiPath: "/clips/{clipId}/collaborators", policy: "none"},
+		{path: "clips comments list", operation: "zoom.list_clip_comments", intent: "direct_read", method: http.MethodGet, apiPath: "/clips/{clipId}/comments", policy: "json_redacted"},
+		{path: "clips comments delete", operation: "zoom.delete_clip_comment", intent: "direct_write", method: http.MethodDelete, apiPath: "/clips/{clipId}/comments/{commentId}", policy: "none"},
+		{path: "clips download", operation: "zoom.download_clip", intent: "binary_download", method: http.MethodGet, apiPath: "/clips/{clipId}/download", policy: "", opPolicy: "binary_file_bounded"},
+		{path: "clips get", operation: "zoom.get_clip", intent: "direct_read", method: http.MethodGet, apiPath: "/clips/{clipId}", policy: "json_redacted"},
+		{path: "clips delete", operation: "zoom.delete_clip", intent: "direct_write", method: http.MethodDelete, apiPath: "/clips/{clipId}", policy: "none"},
+		{path: "clips update", operation: "zoom.update_clip", intent: "direct_write", method: http.MethodPatch, apiPath: "/clips/{clipId}", policy: "none"},
+		{path: "clips chapters get", operation: "zoom.get_clip_chapters", intent: "direct_read", method: http.MethodGet, apiPath: "/clips/{clipId}/chapters", policy: "json_redacted"},
+		{path: "clips chapters create", operation: "zoom.create_clip_chapters", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/{clipId}/chapters", policy: "json_redacted"},
+		{path: "clips duplicate", operation: "zoom.duplicate_clip", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/{clipId}/duplicate", policy: "json_redacted"},
+		{path: "clips share-settings update", operation: "zoom.update_clip_share_settings", intent: "direct_write", method: http.MethodPatch, apiPath: "/clips/{clipId}/share_settings", policy: "none"},
+		{path: "clips transfers partial", operation: "zoom.transfer_clips_partial", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/transfers", policy: "json_redacted", minItems: 1},
+		{path: "clips transfers full", operation: "zoom.transfer_clips_full", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/transfers", policy: "json_redacted"},
+		{path: "clips transfers get", operation: "zoom.get_clip_transfer", intent: "direct_read", method: http.MethodGet, apiPath: "/clips/transfers/{taskId}", policy: "json_redacted"},
+		{path: "clips files upload", operation: "zoom.upload_clip_file", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/files", policy: "json_redacted"},
+		{path: "clips files multipart upload", operation: "zoom.upload_clip_multipart_part", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/files/multipart", policy: "json_redacted"},
+		{path: "clips files multipart initiate", operation: "zoom.initiate_clip_multipart_upload", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/files/multipart/upload_events", policy: "json_redacted"},
+		{path: "clips files multipart complete", operation: "zoom.complete_clip_multipart_upload", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/files/multipart/upload_events", policy: "json_redacted"},
+		{path: "clips files temporary upload", operation: "zoom.upload_clip_temporary_file", intent: "direct_write", method: http.MethodPost, apiPath: "/clips/files/tmp", policy: "json_redacted"},
 	}
 	for _, want := range wants {
 		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
@@ -637,9 +639,63 @@ func TestClipsOperationCommandsAreReachable(t *testing.T) {
 			t.Errorf("Clips command %q does not retain its declared operation/endpoint/output contract", want.path)
 			continue
 		}
+		if want.opPolicy != "" {
+			var operation *engine.OperationSpec
+			for i := range bundle.Operations {
+				if bundle.Operations[i].ID == want.operation {
+					operation = &bundle.Operations[i]
+					break
+				}
+			}
+			gotPolicy := ""
+			if operation != nil {
+				gotPolicy = operation.OutputPolicy
+			}
+			if gotPolicy != want.opPolicy {
+				t.Errorf("Clips binary command %q operation output_policy = %q, want %q", want.path, gotPolicy, want.opPolicy)
+			}
+		}
+		hasListUserID := false
+		gotMinItems := 0
 		for _, flag := range found.Flags {
 			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
 				t.Errorf("Clips command %q invents paging flag --%s", want.path, flag.Name)
+			}
+			if want.path == "clips list" && flag.Name == "user-id" && flag.MapsTo == "query.user_id" && !flag.Required && flag.AllowEmpty != nil && !*flag.AllowEmpty {
+				hasListUserID = true
+			}
+			if want.path == "clips transfers partial" && flag.Name == "clip-id-list" {
+				gotMinItems = flag.MinItems
+			}
+		}
+		if want.path == "clips list" && !hasListUserID {
+			t.Errorf("Clips command %q does not retain the documented optional --user-id query selector", want.path)
+		}
+		if want.minItems > 0 {
+			if gotMinItems != want.minItems {
+				t.Errorf("Clips command %q clip-id-list min_items = %d, want %d", want.path, gotMinItems, want.minItems)
+			}
+			var operation *engine.OperationSpec
+			for i := range bundle.Operations {
+				if bundle.Operations[i].ID == want.operation {
+					operation = &bundle.Operations[i]
+					break
+				}
+			}
+			if operation == nil || operation.REST == nil {
+				t.Errorf("Clips command %q does not retain its REST operation schema", want.path)
+				continue
+			}
+			var schema struct {
+				Properties map[string]struct {
+					MinItems int `json:"minItems"`
+				} `json:"properties"`
+			}
+			if err := json.Unmarshal(operation.REST.BodySchema, &schema); err != nil {
+				t.Fatalf("decode Clips command %q body schema: %v", want.path, err)
+			}
+			if schema.Properties["clip_id_list"].MinItems != want.minItems {
+				t.Errorf("Clips operation %q clip_id_list minItems = %d, want %d", want.operation, schema.Properties["clip_id_list"].MinItems, want.minItems)
 			}
 		}
 	}
@@ -2407,8 +2463,8 @@ func verifyDirectWriteOperationCommands(t *testing.T, bundle engine.Bundle, conn
 					t.Errorf("direct-write command %q path flag --%s maps_to %q, but %q is absent from %q", command.Path, flag.Name, mapsTo, placeholder, op.REST.Path)
 				}
 			case mapsTo == "body":
-				if flag.Type != "json_object" {
-					t.Errorf("direct-write command %q root body flag --%s type = %q, want json_object", command.Path, flag.Name, flag.Type)
+				if flag.Type != "json_object" && flag.Type != "json_array" {
+					t.Errorf("direct-write command %q root body flag --%s type = %q, want json_object or json_array", command.Path, flag.Name, flag.Type)
 				}
 			case strings.HasPrefix(mapsTo, "body."), strings.HasPrefix(mapsTo, "query."):
 				// Required and optional provider-defined body/query members are
