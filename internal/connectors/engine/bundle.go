@@ -151,7 +151,12 @@ type AuthSpec struct {
 	TokenURL     string `json:"token_url,omitempty"`
 	ClientID     string `json:"client_id,omitempty"`
 	ClientSecret string `json:"client_secret,omitempty"`
-	Scopes       string `json:"scopes,omitempty"`
+	// ClientAuth selects OAuth client credential placement for
+	// oauth2_client_credentials: form (the backward-compatible default) or
+	// basic (HTTP Basic for client_secret_basic providers). It is deliberately
+	// unavailable to non-client-credentials modes.
+	ClientAuth string `json:"client_auth,omitempty"`
+	Scopes     string `json:"scopes,omitempty"`
 	// ExtraParams (S4 engine mini-wave item 4: auth0's audience form param,
 	// box's box_subject_type/box_subject_id) are additional templated
 	// key->value form params sent on every oauth2_client_credentials token

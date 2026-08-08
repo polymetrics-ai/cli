@@ -113,6 +113,10 @@ func buildAuthenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec 
 }
 
 func buildOAuth2ClientCredentials(spec AuthSpec, vars Vars) (connsdk.Authenticator, error) {
+	clientAuth, err := oauth2ClientAuthStyle(spec.ClientAuth)
+	if err != nil {
+		return nil, fmt.Errorf("oauth2_client_credentials: client_auth: %w", err)
+	}
 	tokenURL, err := Interpolate(spec.TokenURL, vars)
 	if err != nil {
 		return nil, fmt.Errorf("oauth2_client_credentials: token_url: %w", err)
@@ -144,9 +148,21 @@ func buildOAuth2ClientCredentials(spec AuthSpec, vars Vars) (connsdk.Authenticat
 		TokenURL:     tokenURL,
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
+		ClientAuth:   clientAuth,
 		Scopes:       scopes,
 		ExtraParams:  extraParams,
 	}, nil
+}
+
+func oauth2ClientAuthStyle(raw string) (string, error) {
+	switch strings.ToLower(strings.TrimSpace(raw)) {
+	case "", "form":
+		return "form", nil
+	case "basic":
+		return "basic", nil
+	default:
+		return "", fmt.Errorf("unsupported client auth style %q", raw)
+	}
 }
 
 // resolveExtraParams resolves every AuthSpec.ExtraParams entry (S4 engine
