@@ -101,6 +101,46 @@ suite spans 551 connectors and routinely exceeds an agent's per-command timeout,
 is indistinguishable from a hang. Scoped package runs plus the individual `make verify` gates
 were run instead, and CI carries the whole suite.
 
+## 5b. Gates re-run locally on the recovered head (`133d7174a`)
+
+The `no-mistakes` run reached `review: completed, 0 findings` and then failed at the test step on
+the agent's monthly spend limit — an external blocker, not a code failure. Its five commits were
+recovered with `no-mistakes axi sync --recover` and the gates re-run here:
+
+```
+go build ./cmd/pm                                              ok
+gofmt -l cmd internal                                          clean
+go vet ./...                                                   clean
+go test ./internal/app/                                        ok  (251.4s)
+go test ./internal/connectors/commandrunner/                   ok
+go test ./internal/connectors/hooks/github/                    ok
+go test ./cmd/connectorgen/                                    ok
+go run ./cmd/connectorgen validate internal/connectors/defs    551 checked, 0 findings
+go run ./cmd/connectorgen surface-sync --check                 no drift
+make lint                                                      0 issues
+make docs-check                                                ok
+make connector-boundary                                        ok
+make agent-contract-check                                      contract and projections current
+bash scripts/verify-gsd-workflow                               exit 0
+```
+
+## 5c. The shared-code redaction exposure, re-counted independently
+
+The review reported 170 commands across 14 connectors. That number was **re-derived from the
+bundles here rather than taken on trust**, by matching every `implemented` reverse-ETL command's
+flag `maps_to` against its own write action's `redact_fields`:
+
+```
+commands with a flag feeding a redact_fields field: 170
+connectors: 14
+  ashby 87, mailchimp 20, asana 10, amazon-sqs 8, recurly 8, google-calendar 7,
+  freshchat 5, zendesk-support 5, hubplanner 5, youtube-analytics 5,
+  google-search-console 4, bahmni 3, github 2, stripe 1
+```
+
+Exact match. Every one of those persisted declared-sensitive values to `state.json` before this
+change, permanently, because reverse plans are append-only.
+
 ## 6. Surface totals
 
 | | main (`08cc41c87`) | this branch |
