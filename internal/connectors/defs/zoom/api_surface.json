@@ -9921,40 +9921,22 @@
     {
       "method": "GET",
       "path": "/v2/clinical_notes/notes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
-        "notes": "classification=implementable_now; provider_module=healthcare; operation_title=List clinical notes; provider_server=https://api.zoom.us/v2; provider_path=/clinical_notes/notes; artifact=https://developers.zoom.us/docs/api/healthcare.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "healthcare clinical-notes list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/clinical_notes/notes/{noteId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
-        "notes": "classification=implementable_now; provider_module=healthcare; operation_title=Get a Clinical Note; provider_server=https://api.zoom.us/v2; provider_path=/clinical_notes/notes/{noteId}; artifact=https://developers.zoom.us/docs/api/healthcare.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "healthcare clinical-notes get"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/clinical_notes/notes/{noteId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
-        "notes": "classification=implementable_now; provider_module=healthcare; operation_title=Update a Clinical Note; provider_server=https://api.zoom.us/v2; provider_path=/clinical_notes/notes/{noteId}; artifact=https://developers.zoom.us/docs/api/healthcare.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "write": "update_clinical_note"
       }
     },
     {

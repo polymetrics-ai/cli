@@ -89,6 +89,56 @@
         "path": "/v2/my_notes/notes/{noteId}/content",
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "zoom.list_clinical_notes",
+      "kind": "rest_read",
+      "summary": "List clinical notes",
+      "description": "Bounded Zoom read for GET /v2/clinical_notes/notes; returns clinical notes filtered by owner and/or meeting.",
+      "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "clinical_json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "note_content",
+          "patient_id",
+          "provider_id",
+          "appointment_id",
+          "note_owner_user_id",
+          "note_last_modified_user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/clinical_notes/notes",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_clinical_note",
+      "kind": "rest_read",
+      "summary": "Get a Clinical Note",
+      "description": "Bounded Zoom read for GET /v2/clinical_notes/notes/{noteId}; returns a single clinical note.",
+      "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "clinical_json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "note_content",
+          "patient_id",
+          "provider_id",
+          "appointment_id",
+          "note_owner_user_id",
+          "note_last_modified_user_id"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/clinical_notes/notes/{noteId}",
+        "max_bytes": 1048576
+      }
     }
   ]
 }

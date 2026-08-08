@@ -600,6 +600,7 @@ func TestHealthcareClinicalNoteCommandsExecuteWithFixtures(t *testing.T) {
 		requestPath string
 		query       map[string]string
 		fixture     string
+		pageToken   bool
 	}{
 		{
 			name:        "list",
@@ -608,6 +609,7 @@ func TestHealthcareClinicalNoteCommandsExecuteWithFixtures(t *testing.T) {
 			requestPath: "/v2/clinical_notes/notes",
 			query:       map[string]string{"note_owner_user_id": "fixture-owner", "meeting_id": "fixture-meeting"},
 			fixture:     "list_clinical_notes.json",
+			pageToken:   true,
 		},
 		{
 			name:        "get",
@@ -663,7 +665,7 @@ func TestHealthcareClinicalNoteCommandsExecuteWithFixtures(t *testing.T) {
 			if result.DirectRead == nil || result.DirectRead.Status != wantStatus {
 				t.Fatalf("Run(%q) direct read = %#v, want status %d", strings.Join(test.path, " "), result.DirectRead, wantStatus)
 			}
-			assertClinicalResponseRedacted(t, result.DirectRead.Body)
+			assertClinicalResponseRedacted(t, result.DirectRead.Body, test.pageToken)
 			if requests != 1 {
 				t.Errorf("requests = %d, want 1", requests)
 			}
@@ -726,7 +728,7 @@ func TestHealthcareClinicalNoteCommandsExecuteWithFixtures(t *testing.T) {
 	})
 }
 
-func assertClinicalResponseRedacted(t *testing.T, body any) {
+func assertClinicalResponseRedacted(t *testing.T, body any, expectPageToken bool) {
 	t.Helper()
 	encoded, err := json.Marshal(body)
 	if err != nil {
@@ -738,8 +740,12 @@ func assertClinicalResponseRedacted(t *testing.T, body any) {
 			t.Errorf("clinical response exposed %q: %s", raw, got)
 		}
 	}
-	for _, field := range []string{"note_content", "patient_id", "provider_id", "appointment_id", "note_owner_user_id", "note_last_modified_user_id", "next_page_token"} {
-		if !strings.Contains(got, "\\\""+field+"_redacted\\\":true") {
+	fields := []string{"note_content", "patient_id", "provider_id", "appointment_id", "note_owner_user_id", "note_last_modified_user_id"}
+	if expectPageToken {
+		fields = append(fields, "next_page_token")
+	}
+	for _, field := range fields {
+		if !strings.Contains(got, "\""+field+"_redacted\":true") {
 			t.Errorf("clinical response is missing %s_redacted marker: %s", field, got)
 		}
 	}

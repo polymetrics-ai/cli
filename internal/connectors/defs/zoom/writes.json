@@ -1,0 +1,36 @@
+{
+  "actions": [
+    {
+      "name": "update_clinical_note",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/clinical_notes/notes/{{ record.note_id }}",
+      "path_fields": [
+        "note_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "note_id": {
+            "type": "string",
+            "description": "Clinical note identifier used only in the fixed request path."
+          },
+          "is_note_completed": {
+            "type": "boolean",
+            "description": "Whether the clinical note is marked completed."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "note_id",
+          "is_note_completed"
+        ]
+      },
+      "redact_fields": [
+        "note_id"
+      ],
+      "risk": "high: mutates a patient's clinical note completion status; requires reverse ETL approval"
+    }
+  ]
+}

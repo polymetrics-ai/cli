@@ -36,7 +36,8 @@ the write preflight and 204 behavior explicit.
 - The read response contains clinical note content and EHR identifiers. Use the existing generic
   `clinical_json_redacted` output policy plus explicit `sensitive_policy.redact_fields` for
   `note_content`, the EHR identifiers, and note-owner/last-modifier identifiers. Do not change the
-  shared engine policy.
+  shared engine policy. `surface-sync` defaults direct reads to `json_redacted`; the stricter
+  clinical policy is therefore an intentional declared override, not copied endpoint metadata.
 - Expose `--note-owner-user-id` and `--meeting-id` only for the list operation because the live
   operation prose explicitly says they are inputs. Do not expose `--from`, `--to`, paging, or
   `limit` request flags: the artifact presents those only as response fields and the runtime owns
@@ -49,7 +50,10 @@ the write preflight and 204 behavior explicit.
   one record written.
 - Derivable `cli_surface.json` metadata, `api_surface.json` coverage state, and
   `internal/connectors/defs/operation_endpoint_ledger.json` are generated through
-  `go run ./cmd/connectorgen surface-sync`; no generated output is hand-edited.
+  `go run ./cmd/connectorgen surface-sync`; no generated output is hand-edited. The two direct-read
+  ledger rows are generated with `surface-reconcile --notes-contains provider_module=healthcare`.
+  The PATCH row's `covered_by.write` is the source ledger's required typed-action linkage; the
+  reconciler intentionally owns direct-read rows only.
 
 ## Execution slices
 
@@ -61,7 +65,8 @@ the write preflight and 204 behavior explicit.
    against the unmodified bundle, capture its literal failure, commit and push before any bundle or
    documentation production edit.
 3. **GREEN checkpoint** — author `operations.json`, `writes.json`, `cli_surface.json`, local
-   fixtures, `metadata.json`, and `docs.md`; run `surface-sync` to derive coverage/projection;
+   fixtures, `metadata.json`, and `docs.md`; run `surface-sync` for derivable command metadata and
+   the scoped reconciler for direct-read coverage/projection;
    update the scoped Zoom docs and any Zoom-only golden transcript delta. Run the targeted tests,
    validator, and binary help/live-reachability checks. Commit and push only after green.
 4. **Verify/review checkpoint** — execute the generated GSD verify-work/code-review intent inline,
@@ -70,10 +75,10 @@ the write preflight and 204 behavior explicit.
 
 ## CLI help/manual/website parity
 
-- [ ] `pm help zoom`, `pm zoom`, `pm zoom healthcare`, and every new command's `--help` checked via the built binary.
-- [ ] Invalid/missing required flag behavior remains a usage error; the bare namespace remains contextual help and exits successfully.
-- [ ] `docs/connectors/zoom/{MANUAL.md,SKILL.md}`, `docs/connectors/README.md`, and generated/golden CLI output are updated only when the live generator shows Zoom-specific required drift.
-- [ ] `pm docs validate --connectors-dir docs/connectors` passes; no website-specific Zoom page exists, so `website/**` is not applicable.
+- [x] `pm help zoom`, `pm zoom`, `pm zoom healthcare`, and every new command's `--help` checked via the built binary.
+- [x] Invalid/missing required flag behavior remains a usage error; the bare namespace remains contextual help and exits successfully.
+- [x] `docs/connectors/zoom/{MANUAL.md,SKILL.md}`, `docs/connectors/README.md`, and generated/golden CLI output are updated only when the live generator shows Zoom-specific required drift.
+- [x] `pm docs validate --connectors-dir docs/connectors` passes; no website-specific Zoom page exists, so `website/**` is not applicable.
 
 ## Verification plan
 

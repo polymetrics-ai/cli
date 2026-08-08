@@ -4,7 +4,7 @@
   "sub_issue": 3946,
   "connector": "zoom",
   "provider_module": "healthcare",
-  "state": "red_captured",
+  "state": "ready_to_commit",
   "manual_gsd_fallback": {
     "reason": "gsd-sdk query init.phase-op cli-zoom-parity-healthcare-r1 returned phase_found=false",
     "mode": "single-worker inline execution; role spawning is forbidden by the parent contract"
@@ -21,5 +21,19 @@
     "command": "go test -count=1 ./internal/connectors/defs/zoom/...",
     "result": "failed as expected before Healthcare production declarations existed"
   },
-  "next": "commit and push the red test checkpoint, then author the Healthcare bundle declarations"
+  "green": {
+    "covered_operations": 12,
+    "zoom_local_blocked_operations": 1830,
+    "targeted_tests": "passed",
+    "binary": {
+      "help_routes": 3,
+      "read_reachability": "two Zoom HTTP 401 responses; no unknown command",
+      "write": "typed preview only; no live PATCH"
+    }
+  },
+  "verify_review": {
+    "mode": "inline manual-GSD fallback",
+    "result": "passed; REVIEW.md records the scoped review and dispositions"
+  },
+  "next": "commit and push the Healthcare green slice, then update #3946 and #3915 with the next category handoff"
 }
