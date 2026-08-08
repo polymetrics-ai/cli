@@ -787,6 +787,24 @@ $ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 ```
 
+**Red 12d — a live write case could replace the dedicated repository owner before `pm` started.**
+The proof runner's credential metadata check bound the saved credential to the supplied test
+repository, but case arguments were still accepted unchanged.  The new deterministic test provides
+the implemented `repos create-using-template` write with `--owner
+outside-the-dedicated-repository` and a fake `pm` that leaves a marker if invoked.  Before the
+guard, validation reached that fake process instead of rejecting the case:
+
+```
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+✖ rejects a write case that overrides the dedicated repository owner before starting pm
+  AssertionError: expected /dedicated repository owner/i
+  actual: github live proof: named credential is not a GitHub credential
+```
+
+The fake credential error is the behavioral proof of the gap: the case made it past validation and
+the runner had already started `pm`.  No credential, provider request, or real write is involved in
+the test.
+
 **Red 12b — no committed live-proof accounting runner existed.** The deterministic Node test
 defines the non-negotiable accounting contract before a runner exists: it enumerates only
 `availability: implemented`, rejects an omitted command, rejects fixture coverage as a terminal

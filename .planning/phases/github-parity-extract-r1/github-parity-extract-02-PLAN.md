@@ -56,6 +56,7 @@ Output: a tested script plus any smallest safe GitHub redirect fix discovered by
 | Token/grant or provider body leaks into a report | Keep raw subprocess output in memory; persist only redacted command identity, HTTP status, and assertion summary. | Fixture test injects token-like output and proves it is absent from records/logs. |
 | Partial sweep passes as full proof | Derive command list from GitHub `cli_surface.json` and fail if any `implemented` row lacks a terminal result. | Self-test uses a deliberately omitted command and expects failure. |
 | Redirect forwards Authorization to codeload | Trace engine binary request policy and restrict redirect follow behavior to bounded, safe targets. | Unit test asserts redirect succeeds only under safe policy and sensitive headers are not forwarded. |
+| A case overrides the dedicated repository target before a live write | Reject a write-case `--owner` or `--repo` value unless it exactly equals the runner's supplied dedicated test repository identity. | Deterministic Node test supplies a mismatched owner and expects case validation to fail before any subprocess is started. |
 | Generic cross-provider harness expands scope | Place runner under `scripts/github-*`; it may read only GitHub definitions. | Test/scope check rejects a non-GitHub connector argument. |
 </threat_model>
 
@@ -139,6 +140,28 @@ Output: a tested script plus any smallest safe GitHub redirect fix discovered by
       - A test exists only when a real redirect defect is reproduced; it fails before and passes after the fix.
       - Redirect handling does not relax destination, byte limit, or header safety.
       - GitHub's binary candidate returns a bounded manifest/assertion rather than a redirect error.
+    </acceptance_criteria>
+  </task>
+  <task type="tdd">
+    <name>RED/GREEN — contain every executable write case to the dedicated repository</name>
+    <read_first>
+      - scripts/github-live-proof-sweep.mjs
+      - scripts/tests/github-live-proof-sweep.test.mjs
+      - internal/connectors/defs/github/cli_surface.json
+    </read_first>
+    <action>
+      Add a deterministic failing case-validation test before changing the live runner: an
+      executable GitHub write case that supplies a different `--owner` or `--repo` must be
+      rejected before credential inspection, planning, preview, or execution. Then pass the
+      production command metadata into case validation and accept only matching values (including
+      `--flag=value` syntax). Reads remain eligible to use non-test public data; this containment
+      rule is only for dispatchable writes. Record both commands and the behavioral RED/GREEN
+      result in the TDD ledger.
+    </action>
+    <acceptance_criteria>
+      - A mismatched write `--owner` or `--repo` fails case validation with no `pm` subprocess.
+      - Exact matching values and writes that use the credential's configured target remain valid.
+      - The Node regression suite and self-test pass after the change.
     </acceptance_criteria>
   </task>
 </tasks>
