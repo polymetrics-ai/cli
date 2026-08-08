@@ -304,11 +304,66 @@ safe GET automatically.
 The POST endpoints are GitHub render/query operations and create no repository
 or account state. This is decisive: a strict GET has no request body and no
 mutation semantics, so `GetBody`, issue payload construction, authorization,
-and the `/issues` endpoint cannot explain its EOF. The common variable is the
-strict client configuration — fresh/no-keep-alive connection, forced HTTP/1,
-and one-use `Close` request — not method or body. No no-duplicate-write
-safeguard was changed. The next investigation must isolate the safe transport
-configuration detail before any production edit.
+and the `/issues` endpoint cannot explain its EOF.
+
+### Red: forced HTTP/1 and TLS ALPN disagreed
+
+A GET-only flag matrix held `DisableRetries` constant so requester-managed
+retries could not hide a first-attempt error. It showed:
+
+| Configuration | Result |
+| --- | --- |
+| ordinary transport, no requester retry | HTTP 200 |
+| `DisableKeepAlives` only | HTTP 200 |
+| request `Close` only | HTTP 200 |
+| force HTTP/1 only | transport EOF |
+| `DisableKeepAlives` + force HTTP/1 | transport EOF |
+| full strict configuration | transport EOF |
+| full strict configuration with requester retries | transport EOF |
+
+The strict live `httptrace` then proved the mismatch directly: the strict
+transport declared HTTP/1-only while its cloned TLS configuration still
+advertised `h2`; GitHub selected `h2`, the request received EOF, and no first
+response byte arrived. A local HTTP/2-capable TLS fixture reproduced the exact
+failure: it logged an HTTP/1.1 request preface on an `h2` connection.
+
+The focused red regressions failed before production code changed:
+
+```text
+--- FAIL: TestNoReplayClientKeepsHTTPNegotiationAvailable
+    strict transport forced an HTTP protocol instead of preserving normal negotiation
+--- FAIL: TestNoReplayClientALPNMatchesConfiguredProtocol
+    strict TLS negotiated protocol = "h2", want "http/1.1"
+```
+
+### Green: strict transport negotiates honestly
+
+`noReplayClient` now retains the cloned transport's normal protocol negotiation
+instead of setting `Transport.Protocols` to HTTP/1 after cloning. This lets the
+already-advertised HTTP/2 implementation handle an `h2` ALPN result correctly.
+It does **not** restore mutation replay: `DisableKeepAlives`, one-use request
+`Close`, cleared `GetBody` and idempotency headers, zero requester retries, and
+redirect refusal remain unchanged.
+
+Green local regression command:
+
+```sh
+go test -timeout 2m ./internal/connectors/connsdk \
+  -run '^(TestNoReplayClientKeepsHTTPNegotiationAvailable|TestNoReplayClientALPNMatchesConfiguredProtocol|TestRequesterDisableRetriesMakesMutationNonReplayable|TestRequesterDisableRetriesPreventsBodylessMutationTransportReplay|TestRequesterStrictMutationAvoidsStaleIdleConnectionReplay)$' \
+  -count=1
+# ok  polymetrics.ai/internal/connectors/connsdk
+```
+
+The safe live matrix is now green in every cell:
+
+| Request | Ordinary transport | Strict transport |
+| --- | --- | --- |
+| Authenticated private-repository GET | HTTP 200 | HTTP 200 |
+| `POST /markdown` with `{"text":"hi"}` | HTTP 200 | HTTP 200 |
+| `POST /graphql` with read-only `viewer { login }` query | HTTP 200 | HTTP 200 |
+
+The strict TLS trace now reports negotiated `h2` with no transport EOF. No
+repository or account state was created by these probes.
 
 ## Red/green commands
 

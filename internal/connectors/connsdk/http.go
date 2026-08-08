@@ -222,9 +222,6 @@ func noReplayClient(client *http.Client) *http.Client {
 	}
 	strictTransport := transport.Clone()
 	strictTransport.DisableKeepAlives = true
-	protocols := http.Protocols{}
-	protocols.SetHTTP1(true)
-	strictTransport.Protocols = &protocols
 	clone.Transport = strictTransport
 	return &clone
 }

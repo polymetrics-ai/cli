@@ -146,3 +146,9 @@ result carries the context needed to reach the next one.
     through the ordinary transport. Also run those safe POSTs through strict
     transport so method, body, and `/issues` are not confounders. Do not alter
     the no-duplicate-write contract based on this diagnostic.
+16. Add a RED ALPN invariant reproducing the strict transport's protocol
+    mismatch with a local HTTP/2-capable TLS server. Keep the strict fresh
+    connection/replay safeguards, but remove only the forced HTTP/1 setting so
+    the cloned transport and TLS ALPN negotiation agree. Green the existing
+    no-replay tests, the new ALPN test, and the live non-mutating matrix before
+    any future captain-authorized mutation retest.

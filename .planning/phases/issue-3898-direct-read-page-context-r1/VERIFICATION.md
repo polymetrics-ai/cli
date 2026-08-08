@@ -81,14 +81,17 @@ node website/scripts/cli-surface.test.mjs 7/7 pass
   disposable vault was intentionally removed, so this is a reconstruction of
   the same construction path rather than an assertion about inaccessible
   historical ciphertext.
-- The strict transport itself is now isolated as the live failure surface. A
-  `connsdk` matrix produced HTTP 200 for ordinary authenticated GitHub GET,
-  Markdown-render POST, and read-only GraphQL POST, while the exact strict
-  configuration produced transport EOF for all three — including the GET with
-  no body. Therefore the failure is not specific to writes, JSON bodies,
-  `/issues`, or credentials. No change has been made to the strict
-  no-duplicate-write contract; only its safe transport configuration remains
-  under investigation.
+- Strict transport was the live failure surface, not writes: its exact former
+  configuration returned EOF for a GET with no body and both non-mutating
+  GitHub POSTs, while ordinary transport returned HTTP 200. `httptrace` then
+  showed the former HTTP/1-only transport still advertised and negotiated
+  `h2` via ALPN, reproducing locally as HTTP/1.1 bytes written onto an HTTP/2
+  connection. The fix removes only that forced-protocol setting, allowing the
+  cloned transport to negotiate and speak HTTP/2 consistently. The local ALPN
+  regressions and existing no-replay/fresh-connection tests pass; all six live
+  ordinary/strict matrix cells now return HTTP 200. `DisableKeepAlives`,
+  request `Close`, cleared replay material, zero requester retries, and
+  redirect refusal remain intact.
 - `docs/connectors/**` regeneration carries unrelated pre-existing drift
   (field types). Verifiable by running `pm docs generate` on a clean tree, which
   changes 1028 files with no code changes at all.

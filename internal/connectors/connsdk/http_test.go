@@ -3,6 +3,7 @@ package connsdk
 import (
 	"context"
 	"crypto/sha256"
+	"crypto/tls"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"net/http/httptrace"
 	"net/url"
 	"os"
 	"slices"
@@ -619,6 +621,74 @@ func TestRequesterDisableRetriesMakesMutationNonReplayable(t *testing.T) {
 	}
 	if !sawClose {
 		t.Fatal("DisableRetries did not require a fresh connection for a mutation")
+	}
+}
+
+func TestNoReplayClientKeepsHTTPNegotiationAvailable(t *testing.T) {
+	client := noReplayClient(&http.Client{Transport: http.DefaultTransport})
+	transport, ok := client.Transport.(*http.Transport)
+	if !ok {
+		t.Fatalf("strict transport type = %T, want *http.Transport", client.Transport)
+	}
+	if !transport.DisableKeepAlives {
+		t.Fatal("strict transport must keep one-use connections enabled")
+	}
+	if transport.Protocols != nil {
+		t.Fatal("strict transport forced an HTTP protocol instead of preserving normal negotiation")
+	}
+}
+
+func TestNoReplayClientALPNMatchesConfiguredProtocol(t *testing.T) {
+	var handlerProtocol string
+	srv := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		handlerProtocol = req.Proto
+		w.WriteHeader(http.StatusOK)
+	}))
+	srv.EnableHTTP2 = true
+	srv.StartTLS()
+	defer srv.Close()
+
+	base := srv.Client()
+	transport, ok := base.Transport.(*http.Transport)
+	if !ok {
+		t.Fatalf("test transport type = %T, want *http.Transport", base.Transport)
+	}
+	transport = transport.Clone()
+	tlsConfig := transport.TLSClientConfig.Clone()
+	tlsConfig.NextProtos = []string{"h2", "http/1.1"}
+	transport.TLSClientConfig = tlsConfig
+	base.Transport = transport
+
+	strictClient := noReplayClient(base)
+	strictTransport, ok := strictClient.Transport.(*http.Transport)
+	if !ok {
+		t.Fatalf("strict transport type = %T, want *http.Transport", strictClient.Transport)
+	}
+	wantALPN := "http/1.1"
+	wantHandlerProtocol := "HTTP/1.1"
+	if strictTransport.Protocols == nil || strictTransport.Protocols.HTTP2() {
+		wantALPN = "h2"
+		wantHandlerProtocol = "HTTP/2.0"
+	}
+
+	requester := &Requester{BaseURL: srv.URL, Client: strictClient, DisableRetries: true}
+	var negotiatedProtocol string
+	ctx := httptrace.WithClientTrace(context.Background(), &httptrace.ClientTrace{
+		TLSHandshakeDone: func(state tls.ConnectionState, err error) {
+			if err == nil {
+				negotiatedProtocol = state.NegotiatedProtocol
+			}
+		},
+	})
+	_, err := requester.Do(ctx, http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"})
+	if got, want := negotiatedProtocol, wantALPN; got != want {
+		t.Fatalf("strict TLS negotiated protocol = %q, want %q", got, want)
+	}
+	if err != nil {
+		t.Fatalf("strict mutation: %v", err)
+	}
+	if got, want := handlerProtocol, wantHandlerProtocol; got != want {
+		t.Fatalf("handler protocol = %q, want %q", got, want)
 	}
 }
 
