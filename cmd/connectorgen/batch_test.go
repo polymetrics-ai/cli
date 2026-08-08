@@ -477,6 +477,7 @@ func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) 
 	writeBatchBundle(t, sourceDefsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
 	defsRoot := t.TempDir()
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	setBatchManifestOperationCounts(t, manifestPath, 3, 1, 2)
 	artifactDir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
 		"openapi": "3.0.0",
@@ -609,6 +610,7 @@ func TestBatchMaterializeMapsUnsupportedOperationsAndFlagsSurfaceDiscrepancies(t
 	writeBatchBundle(t, sourceDefsRoot, fsys)
 	defsRoot := t.TempDir()
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	setBatchManifestOperationCounts(t, manifestPath, 3, 1, 2)
 	artifactDir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
 		"openapi": "3.0.0",
@@ -694,6 +696,7 @@ func TestBatchMaterializeRetainsMissingExecutableCoverageAsDiscrepancy(t *testin
 	writeBatchBundle(t, sourceDefsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
 	defsRoot := t.TempDir()
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	setBatchManifestOperationCounts(t, manifestPath, 1, 1, 0)
 	artifactDir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
 		"openapi": "3.0.0",
@@ -1451,6 +1454,15 @@ func TestParseBatchHTMLReferenceFailsClosedForSelectedLinkRejectedByAdmission(t 
 	}
 }
 
+func TestParseBatchHTMLReferenceFailsClosedForSelectedOffHostLink(t *testing.T) {
+	root := []byte(`<html><body><p>GET /widgets</p><a href="https://api.provider.example/openapi.json">OpenAPI export</a></body></html>`)
+	_, err := parseBatchHTMLReference(root, batchArtifactSource{URL: "https://docs.provider.example/reference", Kind: "html_reference", Retrieved: "2026-08-08"}, nil)
+	var unknown *batchArtifactInventoryUnknownError
+	if !errors.As(err, &unknown) || !strings.Contains(err.Error(), "trusted provider host") {
+		t.Fatalf("parse error = %v, want off-host selected-link unknown inventory", err)
+	}
+}
+
 func TestParseBatchHTMLReferenceFailsClosedForSelectedLinkFailures(t *testing.T) {
 	rootURL := "https://provider.example/reference"
 	machineURL := "https://provider.example/openapi.json"
@@ -1589,12 +1601,22 @@ func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 	}
 }
 
-func TestParseBatchReferenceURLRejectsCredentialQueryAliases(t *testing.T) {
-	for _, key := range []string{"api_key", "api-key", "apikey", "access-key", "key", "sig", "signature"} {
+func TestParseBatchReferenceURLRejectsUnsafeQueryParameters(t *testing.T) {
+	for _, key := range []string{"api_key", "api-key", "apikey", "access-key", "auth-key", "key", "sig", "signature", "subscription-key"} {
 		t.Run(key, func(t *testing.T) {
 			_, err := parseBatchReferenceURL("https://example.test/openapi.json?" + key + "=fixture")
-			if err == nil || !strings.Contains(err.Error(), "credential-shaped") {
-				t.Fatalf("parseBatchReferenceURL(%q) error = %v, want credential-query rejection", key, err)
+			if err == nil || !strings.Contains(err.Error(), "non-sensitive") {
+				t.Fatalf("parseBatchReferenceURL(%q) error = %v, want unsafe-query rejection", key, err)
+			}
+		})
+	}
+}
+
+func TestParseBatchReferenceURLAcceptsNonSensitiveQueryParameters(t *testing.T) {
+	for _, key := range []string{"api-version", "format", "lang", "locale", "version"} {
+		t.Run(key, func(t *testing.T) {
+			if _, err := parseBatchReferenceURL("https://example.test/openapi.json?" + key + "=fixture"); err != nil {
+				t.Fatalf("parseBatchReferenceURL(%q) error = %v, want non-sensitive query admission", key, err)
 			}
 		})
 	}
@@ -1655,6 +1677,193 @@ func TestReadBatchMaterializeArtifactCacheAcceptsOfficialReferenceText(t *testin
 	}
 }
 
+func TestBatchArtifactSourceFetcherRejectsSymlinkedCacheComponent(t *testing.T) {
+	artifactDir := t.TempDir()
+	outside := t.TempDir()
+	if err := os.Symlink(outside, filepath.Join(artifactDir, "acme")); err != nil {
+		t.Fatalf("symlink cache component: %v", err)
+	}
+	fetch := batchArtifactSourceFetcher(batchMaterializeOptions{artifactDir: artifactDir}, BatchManifestConnector{Connector: "acme"})
+	if _, err := fetch("https://provider.example/openapi.yaml"); err == nil || !strings.Contains(err.Error(), "non-symlink directory") {
+		t.Fatalf("fetch error = %v, want symlinked cache rejection", err)
+	}
+	entries, err := os.ReadDir(outside)
+	if err != nil {
+		t.Fatalf("read external directory: %v", err)
+	}
+	if len(entries) != 0 {
+		t.Fatalf("external cache directory entries = %+v, want no write through symlink", entries)
+	}
+}
+
+func TestParseBatchManifestArtifactRequiresCompleteReconciledInventory(t *testing.T) {
+	tests := []struct {
+		name       string
+		primaryRaw string
+		total      int
+	}{
+		{
+			name:       "primary and fallback remain short",
+			primaryRaw: `{"openapi":"3.1.0","paths":{"/widgets":{"get":{}}}}`,
+			total:      3,
+		},
+		{
+			name:       "fallback only remains short",
+			primaryRaw: `not an OpenAPI document`,
+			total:      2,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			artifactDir := t.TempDir()
+			candidate := BatchManifestConnector{
+				Connector:            "acme",
+				OperationsTotal:      test.total,
+				ProviderReferenceURL: "https://provider.example/reference",
+				Artifact:             BatchArtifact{URL: "https://provider.example/acme.json", Kind: "openapi", Version: "3.1.0"},
+			}
+			referencePath, err := batchArtifactReferenceCachePath(artifactDir, candidate.Connector, candidate.ProviderReferenceURL)
+			if err != nil {
+				t.Fatalf("reference cache path: %v", err)
+			}
+			if err := os.WriteFile(referencePath, []byte("GET /gadgets\n"), 0o644); err != nil {
+				t.Fatalf("write reference cache: %v", err)
+			}
+			_, err = parseBatchManifestArtifact(batchMaterializeOptions{artifactDir: artifactDir, retrievedAt: "2026-08-08"}, candidate, []byte(test.primaryRaw))
+			var unknown *batchArtifactInventoryUnknownError
+			if !errors.As(err, &unknown) || !strings.Contains(err.Error(), "below the ledger") {
+				t.Fatalf("parse error = %v, want incomplete reconciled inventory rejection", err)
+			}
+		})
+	}
+}
+
+func TestParseBatchManifestArtifactSharesBudgetWithFallback(t *testing.T) {
+	artifactDir := t.TempDir()
+	candidate := BatchManifestConnector{
+		Connector:            "acme",
+		OperationsTotal:      maxBatchArtifactReferenceDocuments,
+		ProviderReferenceURL: "https://provider.example/reference",
+		Artifact:             BatchArtifact{URL: "https://provider.example/acme.json", Kind: "openapi", Version: "3.1.0"},
+	}
+	var paths strings.Builder
+	paths.WriteString(`{"openapi":"3.1.0","paths":{`)
+	for index := 0; index < maxBatchArtifactReferenceDocuments-1; index++ {
+		if index > 0 {
+			paths.WriteByte(',')
+		}
+		paths.WriteString(strconv.Quote("/widgets/" + strconv.Itoa(index)))
+		paths.WriteString(`:{"$ref":"references/`)
+		paths.WriteString(strconv.Itoa(index))
+		paths.WriteString(`.yaml#/item"}`)
+		referenceURL := "https://provider.example/references/" + strconv.Itoa(index) + ".yaml"
+		referencePath, err := batchArtifactReferenceCachePath(artifactDir, candidate.Connector, referenceURL)
+		if err != nil {
+			t.Fatalf("reference cache path %d: %v", index, err)
+		}
+		if err := os.WriteFile(referencePath, []byte("item:\n  get: {}\n"), 0o644); err != nil {
+			t.Fatalf("write reference cache %d: %v", index, err)
+		}
+	}
+	paths.WriteString(`}}`)
+
+	_, err := parseBatchManifestArtifact(batchMaterializeOptions{artifactDir: artifactDir, retrievedAt: "2026-08-08"}, candidate, []byte(paths.String()))
+	var unknown *batchArtifactInventoryUnknownError
+	if !errors.As(err, &unknown) || !strings.Contains(err.Error(), "64-document") {
+		t.Fatalf("parse error = %v, want candidate-wide traversal-budget rejection", err)
+	}
+}
+
+func TestStagedFloatExternalReferenceCoordinatesAreSourceLocal(t *testing.T) {
+	stageRoot := filepath.Join("..", "..", ".planning", "phases", "persistiq-artifact-materialize-pilot-r1", "generalization-validation-2026-08-08")
+	var surface struct {
+		Endpoints []struct {
+			Method     string `json:"method"`
+			Path       string `json:"path"`
+			Provenance struct {
+				Artifact   string `json:"artifact"`
+				SourceURL  string `json:"source_url"`
+				SourceKind string `json:"source_kind"`
+				Coordinate string `json:"coordinate"`
+			} `json:"provenance"`
+		} `json:"endpoints"`
+	}
+	decodeJSONFile(t, filepath.Join(stageRoot, "generated-defs", "float", "api_surface.json"), &surface)
+	documents := map[string]batchArtifactDocument{}
+	coordinates := map[string]string{}
+	artifacts := map[string]string{}
+	externalEndpoints := 0
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Provenance.SourceKind != "referenced-document" {
+			continue
+		}
+		externalEndpoints++
+		coordinate := endpoint.Provenance.Coordinate
+		if !strings.HasPrefix(coordinate, "#/") {
+			t.Fatalf("external endpoint %s %s coordinate = %q, want source-local pointer", endpoint.Method, endpoint.Path, coordinate)
+		}
+		document, ok := documents[endpoint.Provenance.SourceURL]
+		if !ok {
+			cachePath, err := batchArtifactReferenceCachePath(filepath.Join(stageRoot, "artifacts"), "float", endpoint.Provenance.SourceURL)
+			if err != nil {
+				t.Fatalf("reference cache path for %q: %v", endpoint.Provenance.SourceURL, err)
+			}
+			raw, err := readBoundedArtifactFile(cachePath)
+			if err != nil {
+				t.Fatalf("read reference source %q: %v", endpoint.Provenance.SourceURL, err)
+			}
+			document, err = parseBatchArtifactDocument(raw, batchArtifactSource{URL: endpoint.Provenance.SourceURL})
+			if err != nil {
+				t.Fatalf("parse reference source %q: %v", endpoint.Provenance.SourceURL, err)
+			}
+			documents[endpoint.Provenance.SourceURL] = document
+		}
+		pointerAndMethod := strings.TrimPrefix(coordinate, "#")
+		separator := strings.LastIndex(pointerAndMethod, "/")
+		if separator <= 0 {
+			t.Fatalf("external endpoint %s %s coordinate = %q, want pointer and method", endpoint.Method, endpoint.Path, coordinate)
+		}
+		node, err := resolveBatchArtifactJSONPointer(document.Root, pointerAndMethod[:separator], coordinate)
+		if err != nil {
+			t.Fatalf("resolve external endpoint %s %s coordinate %q: %v", endpoint.Method, endpoint.Path, coordinate, err)
+		}
+		fields, err := batchYAMLFields(node)
+		if err != nil {
+			t.Fatalf("external endpoint %s %s coordinate %q fields: %v", endpoint.Method, endpoint.Path, coordinate, err)
+		}
+		if _, ok := fields[pointerAndMethod[separator+1:]]; !ok {
+			t.Fatalf("external endpoint %s %s coordinate = %q, want method in source document", endpoint.Method, endpoint.Path, coordinate)
+		}
+		key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
+		coordinates[key] = coordinate
+		artifacts[key] = endpoint.Provenance.Artifact
+	}
+	if externalEndpoints == 0 {
+		t.Fatal("staged Float surface has no external-reference endpoints")
+	}
+
+	var mapping struct {
+		Operations []struct {
+			Method     string `json:"method"`
+			Path       string `json:"path"`
+			Provenance struct {
+				Artifact   string `json:"artifact"`
+				Coordinate string `json:"coordinate"`
+			} `json:"provenance"`
+		} `json:"operations"`
+	}
+	decodeJSONFile(t, filepath.Join(stageRoot, "reports", "float-operation-mapping-rerun-2.json"), &mapping)
+	for _, operation := range mapping.Operations {
+		key := batchArtifactEndpointKey(operation.Method, operation.Path)
+		if want, ok := coordinates[key]; ok && operation.Provenance.Coordinate != want {
+			t.Fatalf("Float operation mapping %s %s coordinate = %q, want %q", operation.Method, operation.Path, operation.Provenance.Coordinate, want)
+		}
+		if want, ok := artifacts[key]; ok && operation.Provenance.Artifact != want {
+			t.Fatalf("Float operation mapping %s %s artifact = %q, want %q", operation.Method, operation.Path, operation.Provenance.Artifact, want)
+		}
+	}
+}
+
 func TestBatchArtifactResponseRejectsIncompleteInventories(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -1708,6 +1917,7 @@ func TestBatchMaterializeConvertsLegacyExclusionsAndDerivesWriteFlags(t *testing
 	}`)}
 	writeBatchBundle(t, sourceDefsRoot, fsys)
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	setBatchManifestOperationCounts(t, manifestPath, 3, 2, 1)
 	artifactDir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
 		"openapi": "3.0.0",
@@ -1830,6 +2040,23 @@ func writeBatchManifestFixture(t *testing.T, names ...string) string {
 		t.Fatalf("write manifest: %v", err)
 	}
 	return path
+}
+
+func setBatchManifestOperationCounts(t *testing.T, path string, total, read, write int) {
+	t.Helper()
+	manifest, err := readBatchManifest(path)
+	if err != nil {
+		t.Fatalf("read manifest fixture: %v", err)
+	}
+	if len(manifest.Connectors) != 1 {
+		t.Fatalf("manifest fixture connectors = %d, want one", len(manifest.Connectors))
+	}
+	manifest.Connectors[0].OperationsTotal = total
+	manifest.Connectors[0].OperationsRead = read
+	manifest.Connectors[0].OperationsWrite = write
+	if err := writeBatchManifest(path, manifest); err != nil {
+		t.Fatalf("write manifest fixture counts: %v", err)
+	}
 }
 
 type batchGateReportFixture struct {

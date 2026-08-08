@@ -17,13 +17,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-2e691f4a39dee0bb",
+        "artifact": "float-artifact-ref-2e691f4a39dee0bb-0c03909be18d1886",
         "source_url": "https://developer.float.com/paths/accounts.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "2e691f4a39dee0bb5b4521f06ff92e0edea7e63fca1291d6541299fc81423b7d",
-        "coordinate": "paths[\"/accounts\"].get"
+        "coordinate": "#/accounts/get"
       }
     },
     {
@@ -32,13 +32,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-2e691f4a39dee0bb",
+        "artifact": "float-artifact-ref-2e691f4a39dee0bb-0c03909be18d1886",
         "source_url": "https://developer.float.com/paths/accounts.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "2e691f4a39dee0bb5b4521f06ff92e0edea7e63fca1291d6541299fc81423b7d",
-        "coordinate": "paths[\"/accounts/{account_id}\"].get"
+        "coordinate": "#/account-id/get"
       }
     },
     {
@@ -47,13 +47,13 @@
       "bucket": "etl",
       "disposition": "covered",
       "provenance": {
-        "artifact": "float-artifact-ref-4c2b23c1c0a7044f",
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
         "source_url": "https://developer.float.com/paths/clients.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
-        "coordinate": "paths[\"/clients\"].get"
+        "coordinate": "#/clients/get"
       }
     },
     {
@@ -62,13 +62,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-4c2b23c1c0a7044f",
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
         "source_url": "https://developer.float.com/paths/clients.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
-        "coordinate": "paths[\"/clients\"].post"
+        "coordinate": "#/clients/post"
       }
     },
     {
@@ -77,13 +77,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-4c2b23c1c0a7044f",
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
         "source_url": "https://developer.float.com/paths/clients.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
-        "coordinate": "paths[\"/clients/{client_id}\"].get"
+        "coordinate": "#/clients-id/get"
       }
     },
     {
@@ -92,13 +92,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-4c2b23c1c0a7044f",
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
         "source_url": "https://developer.float.com/paths/clients.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
-        "coordinate": "paths[\"/clients/{client_id}\"].patch"
+        "coordinate": "#/clients-id/patch"
       }
     },
     {
@@ -107,13 +107,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-4c2b23c1c0a7044f",
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
         "source_url": "https://developer.float.com/paths/clients.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
-        "coordinate": "paths[\"/clients/{client_id}\"].delete"
+        "coordinate": "#/clients-id/delete"
       }
     },
     {
@@ -122,13 +122,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-4efb46b5a96bc526",
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
         "source_url": "https://developer.float.com/paths/currencies.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
-        "coordinate": "paths[\"/currencies\"].get"
+        "coordinate": "#/currencies/get"
       }
     },
     {
@@ -137,13 +137,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-4efb46b5a96bc526",
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
         "source_url": "https://developer.float.com/paths/currencies.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
-        "coordinate": "paths[\"/currencies\"].post"
+        "coordinate": "#/currencies/post"
       }
     },
     {
@@ -152,13 +152,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-4efb46b5a96bc526",
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
         "source_url": "https://developer.float.com/paths/currencies.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
-        "coordinate": "paths[\"/currencies/{currency_id}\"].get"
+        "coordinate": "#/currencies-id/get"
       }
     },
     {
@@ -167,13 +167,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-4efb46b5a96bc526",
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
         "source_url": "https://developer.float.com/paths/currencies.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
-        "coordinate": "paths[\"/currencies/{currency_id}\"].patch"
+        "coordinate": "#/currencies-id/patch"
       }
     },
     {
@@ -182,13 +182,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-4efb46b5a96bc526",
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
         "source_url": "https://developer.float.com/paths/currencies.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
-        "coordinate": "paths[\"/currencies/{currency_id}\"].delete"
+        "coordinate": "#/currencies-id/delete"
       }
     },
     {
@@ -197,13 +197,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-7d110518b2b3c1c6",
+        "artifact": "float-artifact-ref-7d110518b2b3c1c6-812f95a6f49ec720",
         "source_url": "https://developer.float.com/paths/deleted.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "7d110518b2b3c1c6ef20ce7cb37343c89661ee251641ca47c8023f140213f89f",
-        "coordinate": "paths[\"/deleted/logged-time\"].get"
+        "coordinate": "#/deleted-logged-time/get"
       }
     },
     {
@@ -212,13 +212,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-7d110518b2b3c1c6",
+        "artifact": "float-artifact-ref-7d110518b2b3c1c6-812f95a6f49ec720",
         "source_url": "https://developer.float.com/paths/deleted.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "7d110518b2b3c1c6ef20ce7cb37343c89661ee251641ca47c8023f140213f89f",
-        "coordinate": "paths[\"/deleted/tasks\"].get"
+        "coordinate": "#/deleted-tasks/get"
       }
     },
     {
@@ -227,13 +227,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-7d110518b2b3c1c6",
+        "artifact": "float-artifact-ref-7d110518b2b3c1c6-812f95a6f49ec720",
         "source_url": "https://developer.float.com/paths/deleted.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "7d110518b2b3c1c6ef20ce7cb37343c89661ee251641ca47c8023f140213f89f",
-        "coordinate": "paths[\"/deleted/timeoffs\"].get"
+        "coordinate": "#/deleted-timeoffs/get"
       }
     },
     {
@@ -242,13 +242,13 @@
       "bucket": "etl",
       "disposition": "covered",
       "provenance": {
-        "artifact": "float-artifact-ref-0cb807ec3add5fd5",
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
         "source_url": "https://developer.float.com/paths/departments.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
-        "coordinate": "paths[\"/departments\"].get"
+        "coordinate": "#/departments/get"
       }
     },
     {
@@ -257,13 +257,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-0cb807ec3add5fd5",
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
         "source_url": "https://developer.float.com/paths/departments.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
-        "coordinate": "paths[\"/departments\"].post"
+        "coordinate": "#/departments/post"
       }
     },
     {
@@ -272,13 +272,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-0cb807ec3add5fd5",
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
         "source_url": "https://developer.float.com/paths/departments.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
-        "coordinate": "paths[\"/departments/{department_id}\"].get"
+        "coordinate": "#/departments-id/get"
       }
     },
     {
@@ -287,13 +287,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-0cb807ec3add5fd5",
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
         "source_url": "https://developer.float.com/paths/departments.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
-        "coordinate": "paths[\"/departments/{department_id}\"].patch"
+        "coordinate": "#/departments-id/patch"
       }
     },
     {
@@ -302,13 +302,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-0cb807ec3add5fd5",
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
         "source_url": "https://developer.float.com/paths/departments.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
-        "coordinate": "paths[\"/departments/{department_id}\"].delete"
+        "coordinate": "#/departments-id/delete"
       }
     },
     {
@@ -317,13 +317,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-23f5285165116540",
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
         "source_url": "https://developer.float.com/paths/holidays.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
-        "coordinate": "paths[\"/holidays\"].get"
+        "coordinate": "#/holidays/get"
       }
     },
     {
@@ -332,13 +332,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-23f5285165116540",
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
         "source_url": "https://developer.float.com/paths/holidays.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
-        "coordinate": "paths[\"/holidays\"].post"
+        "coordinate": "#/holidays/post"
       }
     },
     {
@@ -347,13 +347,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-23f5285165116540",
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
         "source_url": "https://developer.float.com/paths/holidays.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
-        "coordinate": "paths[\"/holidays/{holiday_id}\"].get"
+        "coordinate": "#/holidays-id/get"
       }
     },
     {
@@ -362,13 +362,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-23f5285165116540",
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
         "source_url": "https://developer.float.com/paths/holidays.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
-        "coordinate": "paths[\"/holidays/{holiday_id}\"].patch"
+        "coordinate": "#/holidays-id/patch"
       }
     },
     {
@@ -377,13 +377,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-23f5285165116540",
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
         "source_url": "https://developer.float.com/paths/holidays.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
-        "coordinate": "paths[\"/holidays/{holiday_id}\"].delete"
+        "coordinate": "#/holidays-id/delete"
       }
     },
     {
@@ -392,13 +392,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-58b20f69f076082f",
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
         "source_url": "https://developer.float.com/paths/loggedtime.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
-        "coordinate": "paths[\"/logged-time\"].get"
+        "coordinate": "#/logged-time/get"
       }
     },
     {
@@ -407,13 +407,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-58b20f69f076082f",
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
         "source_url": "https://developer.float.com/paths/loggedtime.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
-        "coordinate": "paths[\"/logged-time\"].post"
+        "coordinate": "#/logged-time/post"
       }
     },
     {
@@ -422,13 +422,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-58b20f69f076082f",
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
         "source_url": "https://developer.float.com/paths/loggedtime.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
-        "coordinate": "paths[\"/logged-time/{logged_time_id}\"].get"
+        "coordinate": "#/logged-time-id/get"
       }
     },
     {
@@ -437,13 +437,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-58b20f69f076082f",
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
         "source_url": "https://developer.float.com/paths/loggedtime.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
-        "coordinate": "paths[\"/logged-time/{logged_time_id}\"].patch"
+        "coordinate": "#/logged-time-id/patch"
       }
     },
     {
@@ -452,13 +452,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-58b20f69f076082f",
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
         "source_url": "https://developer.float.com/paths/loggedtime.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
-        "coordinate": "paths[\"/logged-time/{logged_time_id}\"].delete"
+        "coordinate": "#/logged-time-id/delete"
       }
     },
     {
@@ -467,13 +467,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-b542db62ff7ed61b",
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
         "source_url": "https://developer.float.com/paths/milestones.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
-        "coordinate": "paths[\"/milestones\"].get"
+        "coordinate": "#/milestones/get"
       }
     },
     {
@@ -482,13 +482,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-b542db62ff7ed61b",
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
         "source_url": "https://developer.float.com/paths/milestones.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
-        "coordinate": "paths[\"/milestones\"].post"
+        "coordinate": "#/milestones/post"
       }
     },
     {
@@ -497,13 +497,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-b542db62ff7ed61b",
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
         "source_url": "https://developer.float.com/paths/milestones.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
-        "coordinate": "paths[\"/milestones/{milestone_id}\"].get"
+        "coordinate": "#/milestones-id/get"
       }
     },
     {
@@ -512,13 +512,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-b542db62ff7ed61b",
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
         "source_url": "https://developer.float.com/paths/milestones.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
-        "coordinate": "paths[\"/milestones/{milestone_id}\"].patch"
+        "coordinate": "#/milestones-id/patch"
       }
     },
     {
@@ -527,13 +527,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-b542db62ff7ed61b",
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
         "source_url": "https://developer.float.com/paths/milestones.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
-        "coordinate": "paths[\"/milestones/{milestone_id}\"].delete"
+        "coordinate": "#/milestones-id/delete"
       }
     },
     {
@@ -542,13 +542,13 @@
       "bucket": "etl",
       "disposition": "covered",
       "provenance": {
-        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93",
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
         "source_url": "https://developer.float.com/paths/people.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
-        "coordinate": "paths[\"/people\"].get"
+        "coordinate": "#/people/get"
       }
     },
     {
@@ -557,13 +557,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93",
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
         "source_url": "https://developer.float.com/paths/people.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
-        "coordinate": "paths[\"/people\"].post"
+        "coordinate": "#/people/post"
       }
     },
     {
@@ -572,13 +572,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93",
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
         "source_url": "https://developer.float.com/paths/people.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
-        "coordinate": "paths[\"/people/{people_id}\"].get"
+        "coordinate": "#/people-id/get"
       }
     },
     {
@@ -587,13 +587,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93",
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
         "source_url": "https://developer.float.com/paths/people.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
-        "coordinate": "paths[\"/people/{people_id}\"].patch"
+        "coordinate": "#/people-id/patch"
       }
     },
     {
@@ -602,13 +602,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93",
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
         "source_url": "https://developer.float.com/paths/people.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
-        "coordinate": "paths[\"/people/{people_id}\"].delete"
+        "coordinate": "#/people-id/delete"
       }
     },
     {
@@ -617,13 +617,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-3189cd8cd5e67511",
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
         "source_url": "https://developer.float.com/paths/phases.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
-        "coordinate": "paths[\"/phases\"].get"
+        "coordinate": "#/phases/get"
       }
     },
     {
@@ -632,13 +632,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-3189cd8cd5e67511",
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
         "source_url": "https://developer.float.com/paths/phases.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
-        "coordinate": "paths[\"/phases\"].post"
+        "coordinate": "#/phases/post"
       }
     },
     {
@@ -647,13 +647,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-3189cd8cd5e67511",
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
         "source_url": "https://developer.float.com/paths/phases.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
-        "coordinate": "paths[\"/phases/{phase_id}\"].get"
+        "coordinate": "#/phases-id/get"
       }
     },
     {
@@ -662,13 +662,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-3189cd8cd5e67511",
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
         "source_url": "https://developer.float.com/paths/phases.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
-        "coordinate": "paths[\"/phases/{phase_id}\"].patch"
+        "coordinate": "#/phases-id/patch"
       }
     },
     {
@@ -677,13 +677,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-3189cd8cd5e67511",
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
         "source_url": "https://developer.float.com/paths/phases.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
-        "coordinate": "paths[\"/phases/{phase_id}\"].delete"
+        "coordinate": "#/phases-id/delete"
       }
     },
     {
@@ -692,13 +692,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-778d4dad8a1dfccc",
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
         "source_url": "https://developer.float.com/paths/project-expenses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
-        "coordinate": "paths[\"/project-expenses\"].get"
+        "coordinate": "#/project-expenses/get"
       }
     },
     {
@@ -707,13 +707,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-778d4dad8a1dfccc",
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
         "source_url": "https://developer.float.com/paths/project-expenses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
-        "coordinate": "paths[\"/project-expenses\"].post"
+        "coordinate": "#/project-expenses/post"
       }
     },
     {
@@ -722,13 +722,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-778d4dad8a1dfccc",
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
         "source_url": "https://developer.float.com/paths/project-expenses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
-        "coordinate": "paths[\"/project-expenses/{project_expense_id}\"].get"
+        "coordinate": "#/project-expenses-id/get"
       }
     },
     {
@@ -737,13 +737,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-778d4dad8a1dfccc",
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
         "source_url": "https://developer.float.com/paths/project-expenses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
-        "coordinate": "paths[\"/project-expenses/{project_expense_id}\"].patch"
+        "coordinate": "#/project-expenses-id/patch"
       }
     },
     {
@@ -752,13 +752,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-778d4dad8a1dfccc",
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
         "source_url": "https://developer.float.com/paths/project-expenses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
-        "coordinate": "paths[\"/project-expenses/{project_expense_id}\"].delete"
+        "coordinate": "#/project-expenses-id/delete"
       }
     },
     {
@@ -767,13 +767,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-a708054049a896e6",
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
         "source_url": "https://developer.float.com/paths/project-stages.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
-        "coordinate": "paths[\"/project-stages\"].get"
+        "coordinate": "#/project-stages/get"
       }
     },
     {
@@ -782,13 +782,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-a708054049a896e6",
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
         "source_url": "https://developer.float.com/paths/project-stages.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
-        "coordinate": "paths[\"/project-stages\"].post"
+        "coordinate": "#/project-stages/post"
       }
     },
     {
@@ -797,13 +797,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-a708054049a896e6",
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
         "source_url": "https://developer.float.com/paths/project-stages.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
-        "coordinate": "paths[\"/project-stages/{id}\"].get"
+        "coordinate": "#/project-stages-id/get"
       }
     },
     {
@@ -812,13 +812,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-a708054049a896e6",
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
         "source_url": "https://developer.float.com/paths/project-stages.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
-        "coordinate": "paths[\"/project-stages/{id}\"].patch"
+        "coordinate": "#/project-stages-id/patch"
       }
     },
     {
@@ -827,13 +827,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-a708054049a896e6",
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
         "source_url": "https://developer.float.com/paths/project-stages.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
-        "coordinate": "paths[\"/project-stages/{id}\"].delete"
+        "coordinate": "#/project-stages-id/delete"
       }
     },
     {
@@ -842,13 +842,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-881440dfabb211a7",
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
         "source_url": "https://developer.float.com/paths/project-tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
-        "coordinate": "paths[\"/project-tasks\"].get"
+        "coordinate": "#/project-tasks/get"
       }
     },
     {
@@ -857,13 +857,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-881440dfabb211a7",
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
         "source_url": "https://developer.float.com/paths/project-tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
-        "coordinate": "paths[\"/project-tasks\"].post"
+        "coordinate": "#/project-tasks/post"
       }
     },
     {
@@ -872,13 +872,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-881440dfabb211a7",
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
         "source_url": "https://developer.float.com/paths/project-tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
-        "coordinate": "paths[\"/project-tasks/merge\"].post"
+        "coordinate": "#/project-tasks-merge/post"
       }
     },
     {
@@ -887,13 +887,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-881440dfabb211a7",
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
         "source_url": "https://developer.float.com/paths/project-tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
-        "coordinate": "paths[\"/project-tasks/{project_task_id}\"].get"
+        "coordinate": "#/project-task-id/get"
       }
     },
     {
@@ -902,13 +902,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-881440dfabb211a7",
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
         "source_url": "https://developer.float.com/paths/project-tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
-        "coordinate": "paths[\"/project-tasks/{project_task_id}\"].patch"
+        "coordinate": "#/project-task-id/patch"
       }
     },
     {
@@ -917,13 +917,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-881440dfabb211a7",
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
         "source_url": "https://developer.float.com/paths/project-tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
-        "coordinate": "paths[\"/project-tasks/{project_task_id}\"].delete"
+        "coordinate": "#/project-task-id/delete"
       }
     },
     {
@@ -932,13 +932,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-759441a5cf64e2b0",
+        "artifact": "float-artifact-ref-759441a5cf64e2b0-5ed7ec8392fa0535",
         "source_url": "https://developer.float.com/paths/project-templates.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "759441a5cf64e2b0bfbd3eaeef3a965fcdcd294a2ee278958e68ef6887b179ee",
-        "coordinate": "paths[\"/project-templates\"].get"
+        "coordinate": "#/project-templates/get"
       }
     },
     {
@@ -947,13 +947,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-759441a5cf64e2b0",
+        "artifact": "float-artifact-ref-759441a5cf64e2b0-5ed7ec8392fa0535",
         "source_url": "https://developer.float.com/paths/project-templates.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "759441a5cf64e2b0bfbd3eaeef3a965fcdcd294a2ee278958e68ef6887b179ee",
-        "coordinate": "paths[\"/project-templates/{project_template_id}\"].get"
+        "coordinate": "#/project-templates-id/get"
       }
     },
     {
@@ -962,13 +962,13 @@
       "bucket": "etl",
       "disposition": "covered",
       "provenance": {
-        "artifact": "float-artifact-ref-1733cd3c5729a0bf",
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
         "source_url": "https://developer.float.com/paths/projects.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
-        "coordinate": "paths[\"/projects\"].get"
+        "coordinate": "#/projects/get"
       }
     },
     {
@@ -977,13 +977,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-1733cd3c5729a0bf",
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
         "source_url": "https://developer.float.com/paths/projects.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
-        "coordinate": "paths[\"/projects\"].post"
+        "coordinate": "#/projects/post"
       }
     },
     {
@@ -992,13 +992,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-759441a5cf64e2b0",
+        "artifact": "float-artifact-ref-759441a5cf64e2b0-5ed7ec8392fa0535",
         "source_url": "https://developer.float.com/paths/project-templates.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "759441a5cf64e2b0bfbd3eaeef3a965fcdcd294a2ee278958e68ef6887b179ee",
-        "coordinate": "paths[\"/projects/from-template/{project_template_id}\"].post"
+        "coordinate": "#/projects-from-template/post"
       }
     },
     {
@@ -1007,13 +1007,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-1733cd3c5729a0bf",
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
         "source_url": "https://developer.float.com/paths/projects.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
-        "coordinate": "paths[\"/projects/{project_id}\"].get"
+        "coordinate": "#/projects-id/get"
       }
     },
     {
@@ -1022,13 +1022,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-1733cd3c5729a0bf",
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
         "source_url": "https://developer.float.com/paths/projects.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
-        "coordinate": "paths[\"/projects/{project_id}\"].patch"
+        "coordinate": "#/projects-id/patch"
       }
     },
     {
@@ -1037,13 +1037,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-1733cd3c5729a0bf",
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
         "source_url": "https://developer.float.com/paths/projects.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
-        "coordinate": "paths[\"/projects/{project_id}\"].delete"
+        "coordinate": "#/projects-id/delete"
       }
     },
     {
@@ -1052,13 +1052,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-55e014ac4325d1e9",
+        "artifact": "float-artifact-ref-55e014ac4325d1e9-0cc13ec5103551bf",
         "source_url": "https://developer.float.com/paths/publicholidays.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "55e014ac4325d1e9f33c0f5b5e0514d89270d8487344b0201166e5f9829d5cb2",
-        "coordinate": "paths[\"/public-holidays\"].get"
+        "coordinate": "#/public-holidays/get"
       }
     },
     {
@@ -1067,13 +1067,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-55e014ac4325d1e9",
+        "artifact": "float-artifact-ref-55e014ac4325d1e9-0cc13ec5103551bf",
         "source_url": "https://developer.float.com/paths/publicholidays.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "55e014ac4325d1e9f33c0f5b5e0514d89270d8487344b0201166e5f9829d5cb2",
-        "coordinate": "paths[\"/public-holidays/{public_holiday_id}\"].get"
+        "coordinate": "#/public-holidays-id/get"
       }
     },
     {
@@ -1082,13 +1082,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-ce5a3a3ea2048a04",
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
         "source_url": "https://developer.float.com/paths/rate-cards.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
-        "coordinate": "paths[\"/rate-cards\"].get"
+        "coordinate": "#/rate-cards/get"
       }
     },
     {
@@ -1097,13 +1097,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-ce5a3a3ea2048a04",
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
         "source_url": "https://developer.float.com/paths/rate-cards.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
-        "coordinate": "paths[\"/rate-cards\"].post"
+        "coordinate": "#/rate-cards/post"
       }
     },
     {
@@ -1112,13 +1112,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-ce5a3a3ea2048a04",
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
         "source_url": "https://developer.float.com/paths/rate-cards.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
-        "coordinate": "paths[\"/rate-cards/{rate_card_id}\"].get"
+        "coordinate": "#/rate-cards-id/get"
       }
     },
     {
@@ -1127,13 +1127,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-ce5a3a3ea2048a04",
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
         "source_url": "https://developer.float.com/paths/rate-cards.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
-        "coordinate": "paths[\"/rate-cards/{rate_card_id}\"].patch"
+        "coordinate": "#/rate-cards-id/patch"
       }
     },
     {
@@ -1142,13 +1142,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-ce5a3a3ea2048a04",
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
         "source_url": "https://developer.float.com/paths/rate-cards.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
-        "coordinate": "paths[\"/rate-cards/{rate_card_id}\"].delete"
+        "coordinate": "#/rate-cards-id/delete"
       }
     },
     {
@@ -1157,13 +1157,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-dd53ef84c8c11e53",
+        "artifact": "float-artifact-ref-dd53ef84c8c11e53-8f6bf3a972c2908b",
         "source_url": "https://developer.float.com/paths/reports.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "dd53ef84c8c11e53edbd99f892eb94153ecca772d329c1145a1947b21468423d",
-        "coordinate": "paths[\"/reports/people\"].get"
+        "coordinate": "#/reports-people/get"
       }
     },
     {
@@ -1172,13 +1172,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-dd53ef84c8c11e53",
+        "artifact": "float-artifact-ref-dd53ef84c8c11e53-8f6bf3a972c2908b",
         "source_url": "https://developer.float.com/paths/reports.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "dd53ef84c8c11e53edbd99f892eb94153ecca772d329c1145a1947b21468423d",
-        "coordinate": "paths[\"/reports/projects\"].get"
+        "coordinate": "#/reports-projects/get"
       }
     },
     {
@@ -1187,13 +1187,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c",
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
         "source_url": "https://developer.float.com/paths/roles.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
-        "coordinate": "paths[\"/roles\"].get"
+        "coordinate": "#/roles/get"
       }
     },
     {
@@ -1202,13 +1202,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c",
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
         "source_url": "https://developer.float.com/paths/roles.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
-        "coordinate": "paths[\"/roles\"].post"
+        "coordinate": "#/roles/post"
       }
     },
     {
@@ -1217,13 +1217,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c",
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
         "source_url": "https://developer.float.com/paths/roles.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
-        "coordinate": "paths[\"/roles/{role_id}\"].get"
+        "coordinate": "#/role-id/get"
       }
     },
     {
@@ -1232,13 +1232,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c",
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
         "source_url": "https://developer.float.com/paths/roles.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
-        "coordinate": "paths[\"/roles/{role_id}\"].patch"
+        "coordinate": "#/role-id/patch"
       }
     },
     {
@@ -1247,13 +1247,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c",
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
         "source_url": "https://developer.float.com/paths/roles.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
-        "coordinate": "paths[\"/roles/{role_id}\"].delete"
+        "coordinate": "#/role-id/delete"
       }
     },
     {
@@ -1262,13 +1262,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-e0cd500f20c6fc37",
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
         "source_url": "https://developer.float.com/paths/statuses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
-        "coordinate": "paths[\"/status\"].get"
+        "coordinate": "#/statuses/get"
       }
     },
     {
@@ -1277,13 +1277,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-e0cd500f20c6fc37",
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
         "source_url": "https://developer.float.com/paths/statuses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
-        "coordinate": "paths[\"/status\"].post"
+        "coordinate": "#/statuses/post"
       }
     },
     {
@@ -1292,13 +1292,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-e0cd500f20c6fc37",
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
         "source_url": "https://developer.float.com/paths/statuses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
-        "coordinate": "paths[\"/status/{status_id}\"].get"
+        "coordinate": "#/statuses-id/get"
       }
     },
     {
@@ -1307,13 +1307,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-e0cd500f20c6fc37",
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
         "source_url": "https://developer.float.com/paths/statuses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
-        "coordinate": "paths[\"/status/{status_id}\"].patch"
+        "coordinate": "#/statuses-id/patch"
       }
     },
     {
@@ -1322,13 +1322,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-e0cd500f20c6fc37",
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
         "source_url": "https://developer.float.com/paths/statuses.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
-        "coordinate": "paths[\"/status/{status_id}\"].delete"
+        "coordinate": "#/statuses-id/delete"
       }
     },
     {
@@ -1337,13 +1337,13 @@
       "bucket": "etl",
       "disposition": "covered",
       "provenance": {
-        "artifact": "float-artifact-ref-b5e148795294c788",
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
         "source_url": "https://developer.float.com/paths/tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
-        "coordinate": "paths[\"/tasks\"].get"
+        "coordinate": "#/tasks/get"
       }
     },
     {
@@ -1352,13 +1352,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-b5e148795294c788",
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
         "source_url": "https://developer.float.com/paths/tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
-        "coordinate": "paths[\"/tasks\"].post"
+        "coordinate": "#/tasks/post"
       }
     },
     {
@@ -1367,13 +1367,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-b5e148795294c788",
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
         "source_url": "https://developer.float.com/paths/tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
-        "coordinate": "paths[\"/tasks/{task_id}\"].get"
+        "coordinate": "#/tasks-id/get"
       }
     },
     {
@@ -1382,13 +1382,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-b5e148795294c788",
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
         "source_url": "https://developer.float.com/paths/tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
-        "coordinate": "paths[\"/tasks/{task_id}\"].patch"
+        "coordinate": "#/tasks-id/patch"
       }
     },
     {
@@ -1397,13 +1397,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-b5e148795294c788",
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
         "source_url": "https://developer.float.com/paths/tasks.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
-        "coordinate": "paths[\"/tasks/{task_id}\"].delete"
+        "coordinate": "#/tasks-id/delete"
       }
     },
     {
@@ -1412,13 +1412,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-34cc76b9c72b3e44",
+        "artifact": "float-artifact-ref-34cc76b9c72b3e44-0bf1dde1864d101b",
         "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "34cc76b9c72b3e4427a7c2ceb438beeb55c9377bb432f87dffa8efca34e24f90",
-        "coordinate": "paths[\"/timeoff-types\"].get"
+        "coordinate": "#/timeoff-types/get"
       }
     },
     {
@@ -1427,13 +1427,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-34cc76b9c72b3e44",
+        "artifact": "float-artifact-ref-34cc76b9c72b3e44-0bf1dde1864d101b",
         "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "34cc76b9c72b3e4427a7c2ceb438beeb55c9377bb432f87dffa8efca34e24f90",
-        "coordinate": "paths[\"/timeoff-types\"].post"
+        "coordinate": "#/timeoff-types/post"
       }
     },
     {
@@ -1442,13 +1442,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-34cc76b9c72b3e44",
+        "artifact": "float-artifact-ref-34cc76b9c72b3e44-0bf1dde1864d101b",
         "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "34cc76b9c72b3e4427a7c2ceb438beeb55c9377bb432f87dffa8efca34e24f90",
-        "coordinate": "paths[\"/timeoff-types/{timeoff_type_id}\"].get"
+        "coordinate": "#/timeoff-types-id/get"
       }
     },
     {
@@ -1457,13 +1457,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-34cc76b9c72b3e44",
+        "artifact": "float-artifact-ref-34cc76b9c72b3e44-0bf1dde1864d101b",
         "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "34cc76b9c72b3e4427a7c2ceb438beeb55c9377bb432f87dffa8efca34e24f90",
-        "coordinate": "paths[\"/timeoff-types/{timeoff_type_id}\"].patch"
+        "coordinate": "#/timeoff-types-id/patch"
       }
     },
     {
@@ -1472,13 +1472,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-0aa24a0881713678",
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
         "source_url": "https://developer.float.com/paths/timeoffs.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
-        "coordinate": "paths[\"/timeoffs\"].get"
+        "coordinate": "#/timeoffs/get"
       }
     },
     {
@@ -1487,13 +1487,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-0aa24a0881713678",
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
         "source_url": "https://developer.float.com/paths/timeoffs.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
-        "coordinate": "paths[\"/timeoffs\"].post"
+        "coordinate": "#/timeoffs/post"
       }
     },
     {
@@ -1502,13 +1502,13 @@
       "bucket": "direct_read",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-0aa24a0881713678",
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
         "source_url": "https://developer.float.com/paths/timeoffs.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
-        "coordinate": "paths[\"/timeoffs/{timeoff_id}\"].get"
+        "coordinate": "#/timeoffs-id/get"
       }
     },
     {
@@ -1517,13 +1517,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-0aa24a0881713678",
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
         "source_url": "https://developer.float.com/paths/timeoffs.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
-        "coordinate": "paths[\"/timeoffs/{timeoff_id}\"].patch"
+        "coordinate": "#/timeoffs-id/patch"
       }
     },
     {
@@ -1532,13 +1532,13 @@
       "bucket": "direct_write",
       "disposition": "blocked",
       "provenance": {
-        "artifact": "float-artifact-ref-0aa24a0881713678",
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
         "source_url": "https://developer.float.com/paths/timeoffs.yaml",
         "source_kind": "referenced-document",
         "version": "Float Developer API 3.0.0 (Swagger 2.0)",
         "retrieved_at": "2026-08-08",
         "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
-        "coordinate": "paths[\"/timeoffs/{timeoff_id}\"].delete"
+        "coordinate": "#/timeoffs-id/delete"
       }
     }
   ]
