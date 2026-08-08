@@ -62,7 +62,29 @@ FAIL
 Both commands exited `1`, exactly as expected. This is the committed red state; only the red tests
 and phase evidence changed before it was captured.
 
-## GREEN foundation — pending
+## GREEN foundation — captured before Tasks connector authoring
+
+The redirect foundation was implemented separately from any Zoom Tasks bundle declaration. It is
+closed to operation-level `rest_write` multipart uploads with one literal base URL, one declared
+bearer authenticator, a non-wildcard provider DNS-suffix boundary that includes the base host, and
+one through three same-scheme `307`/`308` hops. The execution path rebuilds the preview-bound
+multipart snapshot and reapplies the declared bearer for each admitted hop; ordinary strict direct
+writes continue to reject redirects. Redirect target query/fragment/userinfo cannot appear in a
+returned error or response URL.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestOperationDirectWriteMultipart|TestBundleLoad.*Multipart'
+ok      polymetrics.ai/internal/connectors/engine  0.755s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk ./internal/connectors/commandrunner
+ok      polymetrics.ai/internal/connectors/connsdk          0.724s
+ok      polymetrics.ai/internal/connectors/commandrunner    7.053s
+```
+
+These GREEN tests cover bearer retention, multipart field/file replay, fixed-base and bearer-only
+load validation, suffix/wildcard/IP rejection, source-base containment, status/method refusal,
+hop caps, and signed redirect-value redaction. They also exercise the existing command runner so
+the added requester field does not change ordinary strict-write preflight behavior.
 
 ## GREEN connector — pending
 

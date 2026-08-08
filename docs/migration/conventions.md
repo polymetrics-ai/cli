@@ -1100,7 +1100,20 @@ that file: their endpoint validation is derived only from the included
 not provider documented-surface provenance. #3773 owns the separate per-operation
 `api_surface` provenance foundation. Neither check is an execution allowlist.
 
-All multipart mutations retain the plan → preview → approval → execute lifecycle. Preview is network-free and binds the resolved method, target/query, the full multipart declaration, typed form values, source-path identities, and the approved SHA-256 for every file. Execution re-prepares that canonical request, refuses a stale preview or changed/missing file before network dispatch, then uses the existing project-root confinement, regular-file, cap, snapshot, digest, and media checks. Declared `rest_write` multipart calls are single-attempt (`DisableRetries=true`): non-idempotent calls are never retried, and redirect replay remains refused. Runtime response and error content is preserved in full subject only to the declaration's response-capture bound; this flow does not add a masking policy.
+**Declared multipart redirects**: direct writes otherwise refuse every redirect.
+Use `rest.redirect` only where a provider's fixed multipart upload endpoint documents
+a bearer-preserving redirect, and only alongside a literal operation `base_url`, one
+declared bearer auth block, and `rest.multipart`. Its closed shape is
+`{"allowed_host_suffixes":["provider.example"],"max_hops":1}`: the original
+base host and each target must be within a listed DNS suffix, no IP literal or
+wildcard is allowed, and the cap is one through three. Runtime follows only
+same-scheme `307` or `308` responses, rebuilds the approved multipart snapshot for
+each admitted hop, and reapplies only the declared bearer auth. It never accepts a
+caller-selected target or header; it strips redirect query/fragment/userinfo from
+returned target metadata and fails closed for every other redirect status, host,
+scheme, or cap breach.
+
+All multipart mutations retain the plan → preview → approval → execute lifecycle. Preview is network-free and binds the resolved method, target/query, the full multipart declaration, typed form values, source-path identities, and the approved SHA-256 for every file. Execution re-prepares that canonical request, refuses a stale preview or changed/missing file before network dispatch, then uses the existing project-root confinement, regular-file, cap, snapshot, digest, and media checks. Declared `rest_write` multipart calls are single-attempt (`DisableRetries=true`): non-idempotent calls are never retried, and redirects remain refused unless the preceding closed `rest.redirect` policy is present. Runtime response and error content is preserved in full subject only to the declaration's response-capture bound; this flow does not add a masking policy.
 
 This is separate from the already executable reverse-ETL `writes.json` `body_type: "multipart"` path. Gong's `upload_call_media` action and `pm gong calls upload-media` command are its existing proof; no operation-level connector adoption is implied here. The legacy `operations.json` `kind: "file_upload"` remains planned/non-executable until a connector moves each endpoint to a complete declared contract and proves it. This shared-runtime documentation makes **no** GitLab, Freshchat, Gong, or other provider operation newly available. CLI/help/manual/website parity is therefore not applicable to this foundation: each adoption lane must update its own runtime help, `docs/cli/**`, website docs, generated manuals, command surface, and executable evidence before claiming `availability: implemented`.
 

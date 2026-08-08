@@ -75,12 +75,14 @@ typed multipart `rest_write` foundation from #3761 intentionally refuses every r
 The foundation will be its own red/green commits before Tasks authoring. It remains narrow:
 
 - Add a closed declaration-owned redirect contract only for a typed multipart `rest_write` with a
-  fixed literal HTTPS operation base URL and declared bearer authentication.
+  fixed literal HTTP(S) operation base URL and declared bearer authentication. The Zoom adoption
+  itself uses its documented HTTPS endpoint.
 - Bind a finite redirect-hop cap and a provider-owned hostname-suffix allowlist into the preview
   definition. Zoom's declaration permits only `zoom.us` hosts; no command accepts a URL, hostname,
   header, or redirect policy value.
-- Manually follow only an admitted HTTPS redirect, rebuild the already snapshot-bound multipart
-  body for that one declared redirect hop, and reapply only the declared bearer authentication.
+- Manually follow only an admitted same-scheme `307` or `308` redirect, rebuild the already
+  snapshot-bound multipart body for that one declared redirect hop, and reapply only the declared
+  bearer authentication.
   Ordinary direct writes retain their no-retry/no-redirect behavior.
 - Preserve root confinement, file media/type and 10 MB caps, approved SHA-256 binding,
   single-use approval, bounded response capture, and redacted error/result policy. A redirect to a
@@ -143,7 +145,7 @@ and eventual PR body.
 ## Verification plan
 
 - RED/GREEN real-commandrunner preflight and fixture lifecycle tests for all 17 actions.
-- Foundation loopback tests for the permitted Zoom-suffix HTTPS multipart redirect plus all
+- Foundation loopback tests for the permitted provider-suffix multipart redirect plus all
   rejection paths; fixture tests prove exact initial/final request method/body/auth and 10 MB cap.
 - `go run ./cmd/connectorgen surface-sync --check`, full connector validation, and scoped
   `surface-reconcile --check --notes-contains provider_module=tasks`.

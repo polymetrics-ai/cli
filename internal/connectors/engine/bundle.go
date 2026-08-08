@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/fs"
 	"mime"
+	"net/url"
 	"regexp"
 	"sort"
 	"strconv"
@@ -784,6 +785,12 @@ type RESTOperationSpec struct {
 	// absent block preserves metadata-only multipart rows until their connector
 	// adoption lane supplies an executable declared contract.
 	Multipart *MultipartSpec `json:"multipart,omitempty"`
+	// Redirect is an opt-in, declaration-owned 307/308 replay policy for one
+	// snapshot-bound multipart rest_write. It exists for providers such as Zoom
+	// Tasks that document a same-provider upload redirect requiring bearer
+	// authentication at the admitted final host; ordinary direct writes remain
+	// redirect-refusing.
+	Redirect *MutationRedirectSpec `json:"redirect,omitempty"`
 	// RequiredQuery declares query-parameter cardinality for endpoints that
 	// must never be called unfiltered — a listing that returns an entire
 	// enterprise when no filter is supplied, for example. Every group must be
@@ -792,6 +799,15 @@ type RESTOperationSpec struct {
 	// the constraint is about the wire request rather than about who supplied
 	// it. Empty (the default) imposes nothing.
 	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+}
+
+// MutationRedirectSpec is the closed operation declaration for a multipart
+// mutation whose documented transport requires a bounded same-provider
+// cross-host 307/308 redirect. It deliberately accepts no caller-supplied URL
+// or header: the declaration owns both the host boundary and hop cap.
+type MutationRedirectSpec struct {
+	AllowedHostSuffixes []string `json:"allowed_host_suffixes"`
+	MaxHops             int      `json:"max_hops"`
 }
 
 // RequiredQueryGroup is one "at least one of these" constraint. Several groups
@@ -2137,6 +2153,45 @@ func validateOperationMultipartSemantics(i int, op OperationSpec) error {
 	return nil
 }
 
+// validateOperationMutationRedirectSemantics preserves the existing strict
+// direct-write redirect refusal unless a provider has declared every boundary
+// needed for one snapshot-bound multipart replay. The actual target URL is
+// never user input and the runtime only reapplies the declared bearer after
+// admitting the redirect host.
+func validateOperationMutationRedirectSemantics(i int, op OperationSpec) error {
+	if op.REST == nil || op.REST.Redirect == nil {
+		return nil
+	}
+	if op.Kind != "rest_write" || op.REST.Multipart == nil {
+		return fmt.Errorf("operation %d (%q) rest.redirect is only valid for a multipart rest_write", i, op.ID)
+	}
+	if strings.TrimSpace(op.REST.BaseURL) == "" || len(op.REST.Auth) != 1 {
+		return fmt.Errorf("operation %d (%q) rest.redirect requires one fixed operation base_url and bearer auth", i, op.ID)
+	}
+	if strings.Contains(op.REST.BaseURL, "{{") || strings.Contains(op.REST.BaseURL, "}}") {
+		return fmt.Errorf("operation %d (%q) rest.redirect base_url must be a fixed literal URL", i, op.ID)
+	}
+	baseURL, err := url.Parse(op.REST.BaseURL)
+	if err != nil || (baseURL.Scheme != "http" && baseURL.Scheme != "https") || baseURL.Host == "" || baseURL.RawQuery != "" || baseURL.Fragment != "" {
+		return fmt.Errorf("operation %d (%q) rest.redirect base_url must be an absolute HTTP URL without query or fragment", i, op.ID)
+	}
+	auth := op.REST.Auth[0]
+	if auth.Mode != "bearer" || strings.TrimSpace(auth.Token) == "" {
+		return fmt.Errorf("operation %d (%q) rest.redirect requires one declared bearer auth", i, op.ID)
+	}
+	policy := connsdk.DeclaredMutationRedirect{
+		AllowedHostSuffixes: append([]string(nil), op.REST.Redirect.AllowedHostSuffixes...),
+		MaxHops:             op.REST.Redirect.MaxHops,
+	}
+	if err := policy.Validate(); err != nil {
+		return fmt.Errorf("operation %d (%q) rest.redirect: %w", i, op.ID, err)
+	}
+	if !policy.AllowsHost(baseURL.Hostname()) {
+		return fmt.Errorf("operation %d (%q) rest.redirect base_url host is not within the declared allowed host suffixes", i, op.ID)
+	}
+	return nil
+}
+
 // requireClosedMultipartBodySchema recursively closes every object reachable
 // from an operation multipart body. Command flags can materialize dotted body
 // paths, so closing only the root would still leave an undeclared nested body
@@ -2227,6 +2282,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		return err
 	}
 	if err := validateOperationMultipartSemantics(i, op); err != nil {
+		return err
+	}
+	if err := validateOperationMutationRedirectSemantics(i, op); err != nil {
 		return err
 	}
 	if op.REST != nil {

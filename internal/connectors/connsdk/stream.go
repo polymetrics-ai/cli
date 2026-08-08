@@ -82,7 +82,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
 	baseClient := r.streamClient(base, opts, &credKeys)
 	if strictWrite {
-		baseClient = noReplayClient(baseClient)
+		baseClient = noReplayClient(baseClient, false)
 	}
 	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt)
 
