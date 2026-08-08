@@ -4,7 +4,7 @@
   "sub_issue": 3950,
   "connector": "zoom",
   "provider_module": "customer-managed-keys-hybrid",
-  "state": "operation_origin_auth_green",
+  "state": "direct_write_endpoint_ledger_red",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -60,6 +60,12 @@
       "go test -count=1 -timeout 20m ./cmd/connectorgen",
       "go vet ./internal/connectors/engine ./cmd/connectorgen"
     ]
+  },
+  "direct_write_endpoint_ledger_foundation": {
+    "state": "red",
+    "red_command": "go test -count=1 -timeout 20m -run TestRunSurfaceReconcileCoversSensitiveDirectWriteWithRuntimePreflight ./cmd/connectorgen",
+    "red_result": "failed as expected: the reconciler refused a sensitive rest_write operation despite a matching implemented command that passes runtime preflight",
+    "scope": "operation-ledger direct_write coverage, validator/conformance accounting, and exact operation-to-command preflight binding"
   },
   "green": {
     "commit": "",
