@@ -169,6 +169,13 @@ and the ledger.
    repository is private before Docker image push. Record every live result without
    secret, approval-token, or token-derived values.
 
+**Outcome:** the repaired request and strict-write transport reached the provider,
+but the supplied PAT returned HTTP 403 to the single approved private-repository
+create. Account listing is empty, so the image-push/readback chain cannot proceed.
+The full 54-operation live accounting (23 exercised: 4 worked, 19 failed; 31
+untestable with `Named dependency:` reasons) is recorded in `VERIFICATION.md`; this
+is an account-permission result, not an unverified command route.
+
 ### Strict-write transport TDD follow-up
 
 The first post-path-fix approved execution produced a malformed HTTP/1 response
@@ -193,3 +200,13 @@ No command, flag, help text, output shape, generated manual, or website catalog
 contract changes: this corrects the bundle-internal execution target behind existing
 commands. Runtime help/manual/website regeneration is intentionally not applicable;
 the rebuilt binary's existing command help remains rechecked as part of live reachability.
+
+## Required skills used
+
+Loaded via `.agents/agentic-delivery/references/required-skills-routing.md`:
+`golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
+`golang-security`, `golang-safety`, `golang-design-patterns`,
+`golang-structs-interfaces`, and `golang-troubleshooting`. GSD workflow guidance
+used: `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, and
+`gsd-code-review`; the canonical single-worker rule required the recorded inline
+fallback rather than role spawning.
