@@ -90,7 +90,8 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		requestCtx, cancel := context.WithTimeout(gated, defaultOperationDirectWriteTimeout)
 		defer cancel()
 
-		rt, err := newRuntime(requestCtx, b, prepared.cfg, h)
+		requestBundle := operationDirectWriteTransportBundle(b, prepared.op)
+		rt, err := newRuntime(requestCtx, requestBundle, prepared.cfg, h)
 		if err != nil {
 			return err
 		}
@@ -127,7 +128,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			return fmt.Errorf("operation %q has unsupported prepared body format %q", prepared.op.ID, prepared.format)
 		}
 		if err != nil {
-			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
+			class, hint := applyErrorMap(requestBundle.HTTP.ErrorMap, err)
 			message := operationDirectWriteErrorText(err, prepared.policy, redactFields, redactionValues)
 			if hint != "" {
 				message += ": " + hint
@@ -372,7 +373,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			return preparedOperationDirectWrite{}, err
 		}
 	}
-	baseURL, err := operationDirectWriteBaseURL(b, cfg)
+	baseURL, err := operationDirectWriteBaseURL(b, cfg, op)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -448,6 +449,11 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 	}
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		return OperationSpec{}, "", fmt.Errorf("operation direct write endpoint must be connector-relative, got absolute URL")
+	}
+	hasOperationBaseURL := strings.TrimSpace(op.REST.BaseURL) != ""
+	hasOperationAuth := len(op.REST.Auth) > 0
+	if hasOperationBaseURL != hasOperationAuth {
+		return OperationSpec{}, "", fmt.Errorf("operation direct write requires rest.base_url and rest.auth to be declared together")
 	}
 	if err := requireOperationDirectWriteEndpoint(b, method, op.REST.Path); err != nil {
 		return OperationSpec{}, "", err
@@ -594,8 +600,22 @@ func clampOperationDirectWriteMaxBytes(declared int) int {
 	return declared
 }
 
-func operationDirectWriteBaseURL(b Bundle, cfg connectors.RuntimeConfig) (string, error) {
-	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
+func operationDirectWriteTransportBundle(b Bundle, op OperationSpec) Bundle {
+	if op.REST == nil || strings.TrimSpace(op.REST.BaseURL) == "" {
+		return b
+	}
+	requestBundle := b
+	requestBundle.HTTP.URL = op.REST.BaseURL
+	requestBundle.HTTP.Auth = append([]AuthSpec(nil), op.REST.Auth...)
+	return requestBundle
+}
+
+func operationDirectWriteBaseURL(b Bundle, cfg connectors.RuntimeConfig, op OperationSpec) (string, error) {
+	template := b.HTTP.URL
+	if op.REST != nil && strings.TrimSpace(op.REST.BaseURL) != "" {
+		template = op.REST.BaseURL
+	}
+	baseURL, err := Interpolate(template, requestVars(cfg, nil, ""))
 	if err != nil {
 		return "", fmt.Errorf("operation direct write resolve base URL: %w", err)
 	}

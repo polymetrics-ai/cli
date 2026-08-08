@@ -94,6 +94,34 @@
             "properties": {
               "method": { "type": "string" },
               "path": { "type": "string" },
+              "base_url": { "type": "string" },
+              "auth": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "mode": { "type": "string" },
+                    "token": { "type": "string" },
+                    "username": { "type": "string" },
+                    "password": { "type": "string" },
+                    "header": { "type": "string" },
+                    "prefix": { "type": "string" },
+                    "param": { "type": "string" },
+                    "value": { "type": "string" },
+                    "token_url": { "type": "string" },
+                    "client_id": { "type": "string" },
+                    "client_secret": { "type": "string" },
+                    "scopes": { "type": "string" },
+                    "extra_params": { "type": "object" },
+                    "refresh_token": { "type": "string" },
+                    "refresh_token_store_key": { "type": "string" },
+                    "hook": { "type": "string" },
+                    "when": { "type": "string" }
+                  }
+                }
+              },
               "content_type": { "type": "string" },
               "max_bytes": { "type": "integer" },
               "parameters": {

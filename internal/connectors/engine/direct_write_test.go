@@ -152,10 +152,10 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 }
 
 // TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth proves a
-// secret-sensitive operation can bind its customer-hosted origin and bearer
-// credential together, without reusing the connector's ordinary API bearer
-// token. The operation declaration is deliberately loaded from JSON so the
-// meta-schema and runtime must accept the same narrow contract.
+// credential-sensitive operation can bind its customer-hosted origin and
+// bearer credential together, without reusing the connector's ordinary API
+// bearer token. The operation declaration is deliberately loaded from JSON
+// so the meta-schema and runtime must accept the same narrow contract.
 func TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth(t *testing.T) {
 	var ordinaryAPICalls, keyConnectorCalls int
 	ordinaryAPI := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

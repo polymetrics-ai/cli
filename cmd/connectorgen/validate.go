@@ -365,8 +365,9 @@ var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 
 // checkInterpolations resolves every {{ }} template found in the bundle's
 // streams.json (base URL/headers/query/path/pagination knobs are strings
-// there) and writes.json (path templates) against spec.json's declared
-// property set, using engine.ResolveCheck.
+// there), writes.json (path templates), and operation-scoped rest_write
+// transport overrides against spec.json's declared property set, using
+// engine.ResolveCheck.
 func checkInterpolations(b engine.Bundle) []Finding {
 	specKeys := map[string]bool{}
 	if b.Spec != nil {
@@ -450,6 +451,20 @@ func checkInterpolations(b engine.Bundle) []Finding {
 				findings = append(findings, Finding{
 					Connector: b.Name, File: "writes.json", Rule: ruleInterpolationUnresolved,
 					Message: fmt.Sprintf("write action %q: %v", w.Name, err),
+				})
+			}
+		}
+	}
+	for _, op := range b.Operations {
+		if op.REST == nil {
+			continue
+		}
+		check("operations.json", op.REST.BaseURL)
+		for _, auth := range op.REST.Auth {
+			if err := engine.ResolveCheckAuthSpec(auth, specKeys); err != nil {
+				findings = append(findings, Finding{
+					Connector: b.Name, File: "operations.json", Rule: ruleInterpolationUnresolved,
+					Message: fmt.Sprintf("operation %q: %v", op.ID, err),
 				})
 			}
 		}
