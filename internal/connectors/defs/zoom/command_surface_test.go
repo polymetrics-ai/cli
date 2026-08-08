@@ -37,15 +37,20 @@ const zoomBundleName = "zoom"
 // Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
 // quality-management reads (5), Cobrowse SDK reads (4), SCIM2 reads (4),
 // Virtual Agent reads (9), Auto Dialer reads (8), Tasks reads (6), and Workforce
-// Management reads (11). Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, and
-// Workforce Management mutations are tracked by wantModuleDirectWriteCommandCount.
-const wantModuleOperationCommandCount = 55
+// Management reads (11). Clips adds six JSON direct reads; its binary download
+// has a separate typed executor and is asserted in TestClipsOperationCommandsAreReachable.
+// Chatbot, SCIM2, Virtual Agent, Auto Dialer, Tasks, Workforce Management, and
+// Clips mutations are tracked by wantModuleDirectWriteCommandCount.
+const wantModuleOperationCommandCount = 61
 
 // wantModuleDirectWriteCommandCount is the running total of implemented
 // operations.json rest_write commands. It is distinct from writes.json
 // reverse-ETL actions because direct writes are executable only through the
 // typed plan lifecycle.
-const wantModuleDirectWriteCommandCount = 42
+// Clips has fourteen documented write endpoints and sixteen concrete typed
+// commands: transfer and multipart-event oneOf contracts are represented by
+// separate named request arms rather than a generic union body.
+const wantModuleDirectWriteCommandCount = 58
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -156,11 +161,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 102 {
-		t.Errorf("executable rows = %d, want 102", got)
+	if got := covered; got != 123 {
+		t.Errorf("executable rows = %d, want 123", got)
 	}
-	if got := implementableNow; got != 1740 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1740", got)
+	if got := implementableNow; got != 1719 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1719", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -572,6 +577,69 @@ func TestWorkforceManagementOperationCommandsAreReachable(t *testing.T) {
 		for _, flag := range found.Flags {
 			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
 				t.Errorf("Workforce Management command %q invents paging flag --%s", want.path, flag.Name)
+			}
+		}
+	}
+}
+
+// TestClipsOperationCommandsAreReachable is the provider-category RED surface
+// contract. It enumerates every Clips endpoint through real commandrunner
+// preflight. The source's two discriminated payloads intentionally have two
+// concrete command contracts each, rather than a generic oneOf/raw-body path.
+func TestClipsOperationCommandsAreReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	wants := []struct {
+		path      string
+		operation string
+		intent    string
+		method    string
+		apiPath   string
+		policy    string
+	}{
+		{path: "clips list", operation: "zoom.list_clips", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips", policy: "json_redacted"},
+		{path: "clips starred set", operation: "zoom.set_clips_starred", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/starred", policy: "none"},
+		{path: "clips collaborators list", operation: "zoom.list_clip_collaborators", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/{clipId}/collaborators", policy: "json_redacted"},
+		{path: "clips collaborators share", operation: "zoom.share_clip_collaborators", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/{clipId}/collaborators", policy: "json_redacted"},
+		{path: "clips collaborators remove", operation: "zoom.remove_clip_collaborator", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/clips/{clipId}/collaborators", policy: "none"},
+		{path: "clips comments list", operation: "zoom.list_clip_comments", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/{clipId}/comments", policy: "json_redacted"},
+		{path: "clips comments delete", operation: "zoom.delete_clip_comment", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/clips/{clipId}/comments/{commentId}", policy: "none"},
+		{path: "clips download", operation: "zoom.download_clip", intent: "binary_download", method: http.MethodGet, apiPath: "/v2/clips/{clipId}/download", policy: "binary_file_bounded"},
+		{path: "clips get", operation: "zoom.get_clip", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/{clipId}", policy: "json_redacted"},
+		{path: "clips delete", operation: "zoom.delete_clip", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/clips/{clipId}", policy: "none"},
+		{path: "clips update", operation: "zoom.update_clip", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/clips/{clipId}", policy: "none"},
+		{path: "clips chapters get", operation: "zoom.get_clip_chapters", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/{clipId}/chapters", policy: "json_redacted"},
+		{path: "clips chapters create", operation: "zoom.create_clip_chapters", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/{clipId}/chapters", policy: "json_redacted"},
+		{path: "clips duplicate", operation: "zoom.duplicate_clip", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/{clipId}/duplicate", policy: "json_redacted"},
+		{path: "clips share-settings update", operation: "zoom.update_clip_share_settings", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/clips/{clipId}/share_settings", policy: "none"},
+		{path: "clips transfers partial", operation: "zoom.transfer_clips_partial", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/transfers", policy: "json_redacted"},
+		{path: "clips transfers full", operation: "zoom.transfer_clips_full", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/transfers", policy: "json_redacted"},
+		{path: "clips transfers get", operation: "zoom.get_clip_transfer", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/clips/transfers/{taskId}", policy: "json_redacted"},
+		{path: "clips files upload", operation: "zoom.upload_clip_file", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files", policy: "json_redacted"},
+		{path: "clips files multipart upload", operation: "zoom.upload_clip_multipart_part", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files/multipart", policy: "json_redacted"},
+		{path: "clips files multipart initiate", operation: "zoom.initiate_clip_multipart_upload", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files/multipart/upload_events", policy: "json_redacted"},
+		{path: "clips files multipart complete", operation: "zoom.complete_clip_multipart_upload", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files/multipart/upload_events", policy: "json_redacted"},
+		{path: "clips files temporary upload", operation: "zoom.upload_clip_temporary_file", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/clips/files/tmp", policy: "json_redacted"},
+	}
+	for _, want := range wants {
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want declared executable Clips action", want.path, err)
+			continue
+		}
+		var found *connectors.CommandSurfaceCommand
+		for i := range connector.CommandSurface().Commands {
+			if connector.CommandSurface().Commands[i].Path == want.path {
+				found = &connector.CommandSurface().Commands[i]
+				break
+			}
+		}
+		if found == nil || found.Intent != want.intent || found.Availability != "implemented" || found.Operation != want.operation || len(found.APISurface) != 1 || found.APISurface[0].Method != want.method || found.APISurface[0].Path != want.apiPath || found.OutputPolicy != want.policy {
+			t.Errorf("Clips command %q does not retain its declared operation/endpoint/output contract", want.path)
+			continue
+		}
+		for _, flag := range found.Flags {
+			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
+				t.Errorf("Clips command %q invents paging flag --%s", want.path, flag.Name)
 			}
 		}
 	}
@@ -1802,12 +1870,12 @@ func TestWorkforceManagementJSONDirectWriteCommandsExecuteWithFixtures(t *testin
 	}
 	actions := []workforceWriteAction{
 		{
-			name:              "upload historical agent status",
-			path:              []string{"workforce-management", "imports", "historical-agent-status", "upload"},
-			rootFlag:          "status-import",
-			fixture:           "upload_workforce_historical_agent_status.json",
-			inputSensitive:    []string{"fixture-wfm-status-user", "offline", "Available"},
-			responseMarkers:   []string{"imported_rows", "created_statuses"},
+			name:            "upload historical agent status",
+			path:            []string{"workforce-management", "imports", "historical-agent-status", "upload"},
+			rootFlag:        "status-import",
+			fixture:         "upload_workforce_historical_agent_status.json",
+			inputSensitive:  []string{"fixture-wfm-status-user", "offline", "Available"},
+			responseMarkers: []string{"imported_rows", "created_statuses"},
 		},
 		{
 			name:           "delete historical agent status",

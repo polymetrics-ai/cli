@@ -2,10 +2,12 @@ package engine
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -323,6 +325,101 @@ func TestOperationDirectWriteUsesDeclaredOperationOriginAndAuth(t *testing.T) {
 	}
 	if keyConnectorCalls != 1 {
 		t.Fatalf("key connector requests = %d, want 1", keyConnectorCalls)
+	}
+}
+
+// TestOperationDirectWriteBase64PathUploadIsPreviewBound captures the typed
+// operation-level upload needed by Zoom Clips temporary image files. The
+// locally supplied path must be replaced by a bounded canonical base64 value
+// before preview and before network dispatch; there is no generic raw body or
+// caller-selected encoder involved.
+func TestOperationDirectWriteBase64PathUploadIsPreviewBound(t *testing.T) {
+	decoded, err := base64.StdEncoding.DecodeString("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9WlCkZYAAAAASUVORK5CYII=")
+	if err != nil {
+		t.Fatalf("decode fixture png: %v", err)
+	}
+	dir := t.TempDir()
+	sourcePath := dir + "/fixture.png"
+	if err := os.WriteFile(sourcePath, decoded, 0o600); err != nil {
+		t.Fatalf("write fixture image: %v", err)
+	}
+	want := base64.StdEncoding.EncodeToString(decoded)
+	calls := 0
+	gotFile := ""
+	leakedPath := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode temporary-file request: %v", err)
+		}
+		gotFile, _ = body["file"].(string)
+		_, leakedPath = body["file_path"]
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"file_id":"fixture-temporary-file"}`))
+	}))
+	defer srv.Close()
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:              "acme.clips.temporary_file",
+			Kind:            "rest_write",
+			Summary:         "Upload one bounded temporary image",
+			Risk:            "high",
+			Approval:        "plan-preview-confirm-execute",
+			OutputPolicy:    "json_redacted",
+			MutationClass:   "create",
+			SensitivePolicy: &SensitivePolicySpec{RedactFields: []string{"file", "file_id", "file_path"}},
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/clips/files/tmp",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/clips/files/tmp",
+			Operation: &SurfaceOperation{Model: "sensitive_reverse_etl", Status: "blocked", Risk: "high", BlockedByDefault: true, Reason: "operation metadata is bound by the executor"},
+		}}},
+	}
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.clips.temporary_file",
+		Config: connectors.RuntimeConfig{
+			ProjectDir:          dir,
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"file_path": sourcePath},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite temporary image: %v", err)
+	}
+	encodedPreview, err := json.Marshal(preview)
+	if err != nil {
+		t.Fatalf("marshal preview: %v", err)
+	}
+	if strings.Contains(string(encodedPreview), sourcePath) {
+		t.Fatal("temporary-file preview exposed local source path")
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err != nil {
+		t.Fatalf("OperationDirectWrite temporary image: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("temporary-file calls = %d, want one", calls)
+	}
+	if gotFile != want {
+		t.Fatalf("temporary-file base64 = %q, want canonical local image payload", gotFile)
+	}
+	if leakedPath {
+		t.Fatal("temporary-file request exposed local source path")
 	}
 }
 

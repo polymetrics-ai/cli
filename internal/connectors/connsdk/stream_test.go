@@ -245,6 +245,39 @@ func TestDoStreamAllowedHostsPermitsNamedHost(t *testing.T) {
 	}
 }
 
+// TestDoStreamDeclaredBearerRedirectRetainsAuthorization captures the narrow
+// provider contract used by Zoom Clips downloads. Current allowed-host support
+// intentionally strips every credential, so this must fail until a separate
+// declaration-owned bearer-only suffix policy exists; it must never weaken
+// the custom-header stripping tests above.
+func TestDoStreamDeclaredBearerRedirectRetainsAuthorization(t *testing.T) {
+	const token = "fixture-clips-download-token"
+	var gotAuthorization atomic.Value
+	gotAuthorization.Store("")
+	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotAuthorization.Store(r.Header.Get("Authorization"))
+		_, _ = w.Write([]byte("clip-bytes"))
+	}))
+	defer target.Close()
+	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, target.URL+"/download", http.StatusFound)
+	}))
+	defer origin.Close()
+
+	targetHost := strings.TrimPrefix(target.URL, "http://")
+	r := &Requester{BaseURL: origin.URL, Auth: Bearer(token)}
+	resp, err := r.DoStream(context.Background(), http.MethodGet, "/clips/fixture/download", nil, StreamOptions{AllowedHosts: []string{targetHost}})
+	if err != nil {
+		t.Fatalf("DoStream declared bearer redirect: %v", err)
+	}
+	if got := drain(t, resp.Body); got != "clip-bytes" {
+		t.Fatalf("body = %q, want clip bytes", got)
+	}
+	if got := gotAuthorization.Load().(string); got != "Bearer "+token {
+		t.Fatalf("declared provider redirect Authorization = %q, want retained bearer", got)
+	}
+}
+
 // TestDoStreamRetryDiscardsPartialBody: doWithBody retries the whole request
 // up to 5 times. A retry after partial bytes must restart from zero — the
 // caller must never observe two attempts concatenated.
