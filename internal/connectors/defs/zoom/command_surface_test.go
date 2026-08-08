@@ -32,15 +32,16 @@ const zoomBundleName = "zoom"
 // operations.json/cli_surface.json entries exist.
 //
 // Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
-// quality-management reads (5), Cobrowse SDK reads (4), and SCIM2 reads (4).
-// Chatbot and SCIM2 mutations are tracked by wantModuleDirectWriteCommandCount.
-const wantModuleOperationCommandCount = 21
+// quality-management reads (5), Cobrowse SDK reads (4), SCIM2 reads (4), and
+// Virtual Agent reads (9). Chatbot, SCIM2, and Virtual Agent mutations are
+// tracked by wantModuleDirectWriteCommandCount.
+const wantModuleOperationCommandCount = 30
 
 // wantModuleDirectWriteCommandCount is the running total of implemented
 // operations.json rest_write commands. It is distinct from writes.json
 // reverse-ETL actions because direct writes are executable only through the
 // typed plan lifecycle.
-const wantModuleDirectWriteCommandCount = 12
+const wantModuleDirectWriteCommandCount = 16
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -151,11 +152,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 38 {
-		t.Errorf("executable rows = %d, want 38", got)
+	if got := covered; got != 51 {
+		t.Errorf("executable rows = %d, want 51", got)
 	}
-	if got := implementableNow; got != 1804 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1804", got)
+	if got := implementableNow; got != 1791 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1791", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -339,6 +340,60 @@ func TestSCIM2OperationCommandsAreReachable(t *testing.T) {
 		for _, flag := range found.Flags {
 			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" {
 				t.Errorf("SCIM2 command %q invents paging flag --%s", want.path, flag.Name)
+			}
+		}
+	}
+}
+
+// TestVirtualAgentOperationCommandsAreReachable is the provider-category RED
+// surface contract. It enumerates every action in Zoom's published Virtual
+// Agent artifact through the real commandrunner preflight, so an apparently
+// complete JSON bundle cannot claim that a compiled `pm zoom virtual-agent …`
+// route is executable while it remains an unknown command.
+func TestVirtualAgentOperationCommandsAreReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	wants := []struct {
+		path      string
+		operation string
+		intent    string
+		method    string
+		apiPath   string
+		policy    string
+	}{
+		{path: "virtual-agent knowledge-bases articles list", operation: "zoom.list_virtual_agent_articles", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/km/kbs/{kbId}/articles", policy: "json_redacted"},
+		{path: "virtual-agent knowledge-bases articles create", operation: "zoom.create_virtual_agent_article", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/km/kbs/{kbId}/articles", policy: "json_redacted"},
+		{path: "virtual-agent knowledge-bases articles get", operation: "zoom.get_virtual_agent_article", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/km/kbs/{kbId}/articles/{articleId}", policy: "json_redacted"},
+		{path: "virtual-agent knowledge-bases articles update", operation: "zoom.update_virtual_agent_article", intent: "direct_write", method: http.MethodPut, apiPath: "/v2/km/kbs/{kbId}/articles/{articleId}", policy: "json_redacted"},
+		{path: "virtual-agent knowledge-bases articles delete", operation: "zoom.delete_virtual_agent_article", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/km/kbs/{kbId}/articles/{articleId}", policy: "none"},
+		{path: "virtual-agent knowledge-bases sync create", operation: "zoom.create_virtual_agent_sync_request", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/km/kbs/{kbId}/sync", policy: "json_redacted"},
+		{path: "virtual-agent knowledge-bases sync get", operation: "zoom.get_virtual_agent_sync", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/km/kbs/{kbId}/sync/{syncId}", policy: "json_redacted"},
+		{path: "virtual-agent reports engagements list", operation: "zoom.list_virtual_agent_engagements", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/virtual_agent/report/engagements", policy: "json_redacted"},
+		{path: "virtual-agent reports engagements query-details list", operation: "zoom.list_virtual_agent_engagement_query_details", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/virtual_agent/report/engagements/query_details", policy: "json_redacted"},
+		{path: "virtual-agent reports engagements variable-details list", operation: "zoom.list_virtual_agent_engagement_variable_details", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/virtual_agent/report/engagements/variables", policy: "json_redacted"},
+		{path: "virtual-agent reports surveys list", operation: "zoom.list_virtual_agent_surveys", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/virtual_agent/report/surveys", policy: "json_redacted"},
+		{path: "virtual-agent reports transcripts list", operation: "zoom.list_virtual_agent_transcripts", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/virtual_agent/report/transcripts", policy: "json_redacted"},
+		{path: "virtual-agent reports operation-logs list", operation: "zoom.list_virtual_agent_operation_logs", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/ai_studio/reports/operation_logs", policy: "json_redacted"},
+	}
+	for _, want := range wants {
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want declared executable Virtual Agent action", want.path, err)
+			continue
+		}
+		var found *connectors.CommandSurfaceCommand
+		for i := range connector.CommandSurface().Commands {
+			if connector.CommandSurface().Commands[i].Path == want.path {
+				found = &connector.CommandSurface().Commands[i]
+				break
+			}
+		}
+		if found == nil || found.Intent != want.intent || found.Availability != "implemented" || found.Operation != want.operation || len(found.APISurface) != 1 || found.APISurface[0].Method != want.method || found.APISurface[0].Path != want.apiPath || found.OutputPolicy != want.policy {
+			t.Errorf("Virtual Agent command %q does not retain its declared operation/endpoint/output contract", want.path)
+			continue
+		}
+		for _, flag := range found.Flags {
+			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
+				t.Errorf("Virtual Agent command %q invents paging flag --%s", want.path, flag.Name)
 			}
 		}
 	}
