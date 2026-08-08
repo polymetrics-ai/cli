@@ -106,6 +106,28 @@ and exposes only a redacted plan sample. Object-body lifecycle regression remain
 
 Remaining foundations: declared bearer redirect; operation-level bounded base64 path upload.
 
+### Declared bearer binary redirect — green 2026-08-08
+
+Added a separate declaration-owned `binary.bearer_redirect` policy. It validates a finite
+provider suffix boundary, requires an unchanged scheme and an admitted original host, strips all
+credential/default headers, then restores only the original non-empty `Bearer` authorization. It
+is mutually exclusive with generic `allow_cross_host` / `allowed_hosts`; the binary executor also
+requires exactly one declared bearer authenticator before enabling it.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk -run 'TestDoStreamDeclaredBearerRedirectRetainsAuthorization|TestDoStreamDeclaredBearerRedirectStripsCustomCredentials'
+ok  polymetrics.ai/internal/connectors/connsdk
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestBinaryDownloadDeclaredBearerRedirectRetainsOnlyBearer|TestBinaryDownloadDeclaredBearerRedirectRequiresBearerAuth'
+ok  polymetrics.ai/internal/connectors/engine
+```
+
+The transport test proves the retained bearer reaches only an allowed suffix, while custom auth is
+refused before the target receives a request. The executor test proves that the declarative binary
+operation, rather than an ad-hoc caller option, selects the narrow policy.
+
+Remaining foundation: operation-level bounded base64 path upload.
+
 ## GREEN connector — pending
 
 Record the real runner fixture lifecycle, source reconciliation, and command reachability here

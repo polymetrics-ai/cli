@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"slices"
 	"strings"
 	"sync/atomic"
@@ -35,6 +36,20 @@ func drain(t *testing.T, rc io.ReadCloser) string {
 		t.Fatalf("read stream: %v", err)
 	}
 	return string(raw)
+}
+
+func localhostServerURL(t *testing.T, raw string) string {
+	t.Helper()
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		t.Fatalf("parse test server URL: %v", err)
+	}
+	_, port, err := net.SplitHostPort(parsed.Host)
+	if err != nil {
+		t.Fatalf("split test server host: %v", err)
+	}
+	parsed.Host = net.JoinHostPort("localhost", port)
+	return parsed.String()
 }
 
 // TestDoStreamReturnsOpenBody: DoStream hands back an OPEN body rather than a
@@ -245,11 +260,9 @@ func TestDoStreamAllowedHostsPermitsNamedHost(t *testing.T) {
 	}
 }
 
-// TestDoStreamDeclaredBearerRedirectRetainsAuthorization captures the narrow
-// provider contract used by Zoom Clips downloads. Current allowed-host support
-// intentionally strips every credential, so this must fail until a separate
-// declaration-owned bearer-only suffix policy exists; it must never weaken
-// the custom-header stripping tests above.
+// TestDoStreamDeclaredBearerRedirectRetainsAuthorization proves the narrow
+// provider contract used by Zoom Clips downloads. It must never weaken the
+// custom-header stripping tests above.
 func TestDoStreamDeclaredBearerRedirectRetainsAuthorization(t *testing.T) {
 	const token = "fixture-clips-download-token"
 	var gotAuthorization atomic.Value
@@ -259,14 +272,14 @@ func TestDoStreamDeclaredBearerRedirectRetainsAuthorization(t *testing.T) {
 		_, _ = w.Write([]byte("clip-bytes"))
 	}))
 	defer target.Close()
+	targetURL := localhostServerURL(t, target.URL)
 	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, target.URL+"/download", http.StatusFound)
+		http.Redirect(w, r, targetURL+"/download", http.StatusFound)
 	}))
 	defer origin.Close()
 
-	targetHost := strings.TrimPrefix(target.URL, "http://")
-	r := &Requester{BaseURL: origin.URL, Auth: Bearer(token)}
-	resp, err := r.DoStream(context.Background(), http.MethodGet, "/clips/fixture/download", nil, StreamOptions{AllowedHosts: []string{targetHost}})
+	r := &Requester{BaseURL: localhostServerURL(t, origin.URL), Auth: Bearer(token)}
+	resp, err := r.DoStream(context.Background(), http.MethodGet, "/clips/fixture/download", nil, StreamOptions{DeclaredBearerRedirect: &DeclaredBearerRedirect{AllowedHostSuffixes: []string{"localhost"}, MaxHops: 1}})
 	if err != nil {
 		t.Fatalf("DoStream declared bearer redirect: %v", err)
 	}
@@ -275,6 +288,34 @@ func TestDoStreamDeclaredBearerRedirectRetainsAuthorization(t *testing.T) {
 	}
 	if got := gotAuthorization.Load().(string); got != "Bearer "+token {
 		t.Fatalf("declared provider redirect Authorization = %q, want retained bearer", got)
+	}
+}
+
+func TestDoStreamDeclaredBearerRedirectStripsCustomCredentials(t *testing.T) {
+	var gotKey, gotAuthorization atomic.Value
+	gotKey.Store("")
+	gotAuthorization.Store("")
+	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotKey.Store(r.Header.Get("X-API-Key"))
+		gotAuthorization.Store(r.Header.Get("Authorization"))
+		_, _ = w.Write([]byte("clip-bytes"))
+	}))
+	defer target.Close()
+	targetURL := localhostServerURL(t, target.URL)
+	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, targetURL+"/download", http.StatusFound)
+	}))
+	defer origin.Close()
+
+	r := &Requester{BaseURL: localhostServerURL(t, origin.URL), Auth: customHeaderAuth("X-API-Key", "fixture-custom-key")}
+	if _, err := r.DoStream(context.Background(), http.MethodGet, "/clips/fixture/download", nil, StreamOptions{DeclaredBearerRedirect: &DeclaredBearerRedirect{AllowedHostSuffixes: []string{"localhost"}, MaxHops: 1}}); err == nil || !strings.Contains(err.Error(), "requires bearer authorization") {
+		t.Fatalf("declared bearer redirect with custom auth = %v, want bearer-only refusal", err)
+	}
+	if got := gotKey.Load().(string); got != "" {
+		t.Fatalf("custom credential reached declared bearer redirect target: %q", got)
+	}
+	if got := gotAuthorization.Load().(string); got != "" {
+		t.Fatalf("authorization reached declared bearer redirect target: %q", got)
 	}
 }
 

@@ -7,7 +7,7 @@
 - [x] Prior-worker five-file handoff inspected without copying or deleting the old worktree.
 - [x] RED capture committed before production declaration or foundation changes.
 - [x] Closed root-array direct-write foundation is green with object-body regressions.
-- [ ] Declared bearer redirect foundation is green without permitting arbitrary credential forwarding.
+- [x] Declared bearer redirect foundation is green without permitting arbitrary credential forwarding.
 - [ ] Closed operation-level base64 image upload foundation is green with pre-network bounds,
   media/name, snapshot, and redaction assertions.
 - [ ] All 21 endpoint rows and 23 concrete commands run through real preflight and fixtures.
