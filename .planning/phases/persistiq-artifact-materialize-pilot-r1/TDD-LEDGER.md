@@ -12,10 +12,18 @@
 
 ## RED
 
-- Status: pending observation before production bundle edits.
+- Status: confirmed before production bundle edits.
 - Test: build/run the real `pm` binary against the baseline PersistIQ bundle;
   assert the pilot command surface is not fully reachable.
-- Captured output: to be filled with verbatim command output before Green.
+- Command: `.planning/phases/persistiq-artifact-materialize-pilot-r1/pm-baseline persistiq leads list --help`
+- Captured output (verbatim):
+
+  ```text
+  error: unknown command "persistiq"
+  ```
+
+  This is the baseline red: the current binary has no reachable PersistIQ
+  command namespace before materialization.
 
 ## GREEN
 
