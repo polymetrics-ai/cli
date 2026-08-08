@@ -19,7 +19,9 @@ import (
 // runtime preflight that guards `availability: implemented`. It deliberately
 // does not infer coverage from a command declaration: only a command that
 // matches the endpoint and passes commandrunner.Preflight can replace an
-// operation row with covered_by.direct_read or covered_by.direct_write.
+// operation row with covered_by.direct_read or covered_by.direct_write. A
+// binary_download shares direct-read coverage bookkeeping because the tracked
+// endpoint is consumed by the command even though its response is a file.
 //
 // A row without such a command is still a known blocked fact, so the tool
 // derives its reason from the current command state. Unknown operation models,
@@ -152,8 +154,8 @@ func runSurfaceReconcile(args []string, stdout, stderr io.Writer) int {
 func surfaceReconcileUsage() string {
 	return `usage: connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text] [--notes-contains text]
 
-Derive direct-read and direct-write api_surface coverage and blocked reasons
-from real command runtime preflight. The optional reason/notes selectors are
+Derive direct-read, direct-write, and binary-download api_surface coverage and
+blocked reasons from real command runtime preflight. The optional reason/notes selectors are
 conjunctive and scope which operation rows are considered. In --check mode,
 report pending reclassifications without writing files and exit 1 when a row
 would change.`
@@ -182,8 +184,8 @@ func surfaceReconcileBundleDirs(dir string) ([]string, error) {
 	return bundles, nil
 }
 
-// reconcileBundle reclassifies direct-read and mutation operation-model ledger
-// rows. It loads the disk bundle through the engine and calls
+// reconcileBundle reclassifies direct-read, binary-download, and mutation
+// operation-model ledger rows. It loads the disk bundle through the engine and calls
 // commandrunner.Preflight against that engine connector, so a generated
 // covered_by value has the same admission proof as the CLI path. In check mode
 // it mutates only the decoded in-memory document and reports prospective
@@ -254,6 +256,10 @@ func reconcileBundle(dir string, check bool, reasonContains, notesContains strin
 			passing, reasons = directReadCandidates(connector, bundle.CLISurface.Commands, method, path)
 			coverage = directReadCoverage(passing)
 			blockedReason = blockedDirectReadReason
+		case "binary_read":
+			passing, reasons = binaryDownloadCandidates(connector, bundle.CLISurface.Commands, method, path)
+			coverage = directReadCoverage(passing)
+			blockedReason = blockedBinaryDownloadReason
 		case "sensitive_reverse_etl", "admin_reverse_etl", "destructive_action":
 			passing, reasons = directWriteCandidates(connector, bundle.CLISurface.Commands, method, path)
 			coverage = directWriteCoverage(passing)
@@ -314,6 +320,13 @@ func directReadCandidates(connector connectors.Connector, commands []engine.CLIC
 // command that happens to name a different rest_write operation.
 func directWriteCandidates(connector connectors.Connector, commands []engine.CLICommand, method, path string) ([]string, []string) {
 	return operationCommandCandidates(connector, commands, "direct_write", method, path)
+}
+
+// binaryDownloadCandidates uses the same single-endpoint and runtime-preflight
+// proof as direct reads. The file-producing executor is deliberately not
+// invoked while reconciling source metadata.
+func binaryDownloadCandidates(connector connectors.Connector, commands []engine.CLICommand, method, path string) ([]string, []string) {
+	return operationCommandCandidates(connector, commands, "binary_download", method, path)
 }
 
 func operationCommandCandidates(connector connectors.Connector, commands []engine.CLICommand, intent, method, path string) ([]string, []string) {
@@ -409,4 +422,11 @@ func blockedDirectWriteReason(method, path string, reasons []string) string {
 		return fmt.Sprintf("No reachable direct-write command declares %s %s.", method, path)
 	}
 	return "No reachable direct-write command: " + strings.Join(reasons, "; ") + "."
+}
+
+func blockedBinaryDownloadReason(method, path string, reasons []string) string {
+	if len(reasons) == 0 {
+		return fmt.Sprintf("No reachable binary-download command declares %s %s.", method, path)
+	}
+	return "No reachable binary-download command: " + strings.Join(reasons, "; ") + "."
 }

@@ -156,6 +156,22 @@ $ go test -count=1 -timeout 20m ./cmd/connectorgen -run 'TestValidate_CLISurface
 ok  	polymetrics.ai/cmd/connectorgen	0.765s
 ```
 
+### Binary-download surface reconciliation — green 2026-08-08
+
+`surface-reconcile` now handles the valid `binary_read` ledger model. It finds
+only matching `binary_download` commands, invokes the real runtime preflight,
+and records the admitted command with the existing direct-read coverage form.
+It never invokes the downloader or supplies a destination, so reconciliation
+cannot perform a network request or write a file.
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestRunSurfaceReconcileCoversBinaryDownloadWithRuntimePreflight|TestSurfaceReconcileKeepsUnreachableRowsBlockedAndRefusesUnknownModel|TestRunSurfaceReconcileHelp)$'
+ok  	polymetrics.ai/cmd/connectorgen	0.777s
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen
+ok  	polymetrics.ai/cmd/connectorgen	11.004s
+```
+
 Remaining foundations: declared bearer redirect; operation-level bounded base64 path upload.
 
 ### Declared bearer binary redirect — green 2026-08-08
