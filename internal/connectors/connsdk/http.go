@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
+	"crypto/tls"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -225,6 +226,16 @@ func noReplayClient(client *http.Client) *http.Client {
 	protocols := http.Protocols{}
 	protocols.SetHTTP1(true)
 	strictTransport.Protocols = &protocols
+	// Protocols governs the RoundTripper, but a caller-supplied TLS config can
+	// still advertise h2 through ALPN. That leaves the server speaking HTTP/2
+	// after this strict client has selected its HTTP/1 parser. Clone every TLS
+	// setting and narrow only the advertised protocol for a one-shot mutation.
+	strictTLSConfig := &tls.Config{}
+	if strictTransport.TLSClientConfig != nil {
+		strictTLSConfig = strictTransport.TLSClientConfig.Clone()
+	}
+	strictTLSConfig.NextProtos = []string{"http/1.1"}
+	strictTransport.TLSClientConfig = strictTLSConfig
 	clone.Transport = strictTransport
 	return &clone
 }
