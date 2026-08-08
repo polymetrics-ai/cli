@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector mysql [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Native MySQL source connector for wire-protocol checks, dynamic schemas, bounded reads, and row-based binary-log replication. Read-only source.
+  Native MySQL source connector for wire-protocol checks, dynamic schemas, and bounded reads. Read-only source.
 
 ICON
   id: mysql
@@ -33,7 +33,6 @@ CONFIGURATION
   page_size
   port
   read_limit
-  replication_server_id
   sslmode
   sslrootcert
   sslservername
@@ -41,7 +40,7 @@ CONFIGURATION
   password (secret)
 
 SECURITY
-  read risk: read-only MySQL wire-protocol queries and binary-log replication against the configured database
+  read risk: read-only MySQL wire-protocol queries against the configured database
   write risk: n/a (read-only source)
   approval: none required for read-only sync
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

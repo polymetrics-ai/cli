@@ -117,8 +117,11 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 		t.Fatalf("mysql registry type = %T, want Tier-3 native override", mysqlConnector)
 	}
 	mysqlDefinition, ok := connectors.DefinitionOf(mysqlConnector)
-	if !ok || !connectors.HasImplementedChangefeed(mysqlConnector, mysqlDefinition.Changefeed) {
-		t.Fatal("mysql registry connector must expose its matching native changefeed")
+	if !ok || mysqlDefinition.Changefeed != nil || mysqlDefinition.Capabilities.CDC {
+		t.Fatal("mysql registry connector must keep CDC non-public before a runtime entrypoint exists")
+	}
+	if _, ok := mysqlConnector.(connectors.ChangefeedExecutor); ok {
+		t.Fatal("mysql registry connector must not expose an internal CDC reader as a changefeed executor")
 	}
 }
 

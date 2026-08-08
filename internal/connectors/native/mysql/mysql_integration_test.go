@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"testing"
@@ -190,31 +191,42 @@ func TestMySQLContainerHarness(t *testing.T) {
 	}
 	assertRecordIDs(t, incremental, []string{"4", "5"})
 
-	assertTransportSecurityIsEnforced(t, ctx, connector, endpoint)
+	caPath := filepath.Join(t.TempDir(), "mysql-ca.pem")
+	if err := harness.CopyFileFromContainer(ctx, "/var/lib/mysql/ca.pem", caPath); err != nil {
+		t.Fatal("could not copy the MySQL test certificate authority")
+	}
+	assertTransportSecurityIsEnforced(t, ctx, connector, endpoint, caPath)
 	assertBinaryLogCDC(t, ctx, connector, config, endpoint, stream)
 }
 
 // assertTransportSecurityIsEnforced proves against the live server that the
 // declared mode is what actually happens on the wire, rather than a spec
-// field nothing reads. The official MySQL image serves TLS with a generated
-// self-signed certificate, so required encrypts, disabled does not, and
-// verify-identity fails closed because that certificate chains to nothing the
-// host trusts.
-func assertTransportSecurityIsEnforced(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint) {
+// field nothing reads.
+func assertTransportSecurityIsEnforced(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint, caPath string) {
 	t.Helper()
 	for _, tc := range []struct {
 		mode        string
 		wantConnect bool
 		wantCipher  bool
+		configure   func(*connectors.RuntimeConfig)
 	}{
 		{mode: "disabled", wantConnect: true},
 		{mode: "preferred", wantConnect: true, wantCipher: true},
 		{mode: "required", wantConnect: true, wantCipher: true},
-		{mode: "verify-identity"},
+		{mode: "verify-ca", wantConnect: true, wantCipher: true, configure: func(config *connectors.RuntimeConfig) {
+			config.Config["sslrootcert"] = caPath
+		}},
+		{mode: "verify-identity", configure: func(config *connectors.RuntimeConfig) {
+			config.Config["sslrootcert"] = caPath
+			config.Config["sslservername"] = "invalid.mysql.test"
+		}},
 	} {
 		t.Run("sslmode="+tc.mode, func(t *testing.T) {
 			config := mysqlConfig(endpoint)
 			config.Config["sslmode"] = tc.mode
+			if tc.configure != nil {
+				tc.configure(&config)
+			}
 			err := connector.Check(ctx, config)
 			if !tc.wantConnect {
 				if err == nil {
@@ -225,7 +237,7 @@ func assertTransportSecurityIsEnforced(t *testing.T, ctx context.Context, connec
 			if err != nil {
 				t.Fatalf("Check() under sslmode %q failed: %v", tc.mode, err)
 			}
-			if cipher := sessionCipher(t, ctx, endpoint, tc.mode); (cipher != "") != tc.wantCipher {
+			if cipher := sessionCipher(t, ctx, config); (cipher != "") != tc.wantCipher {
 				t.Fatalf("sslmode %q negotiated cipher %q, want encrypted=%t", tc.mode, cipher, tc.wantCipher)
 			}
 		})
@@ -234,13 +246,11 @@ func assertTransportSecurityIsEnforced(t *testing.T, ctx context.Context, connec
 
 // sessionCipher asks the server what it actually negotiated. An empty
 // Ssl_cipher means the session is plaintext.
-func sessionCipher(t *testing.T, ctx context.Context, endpoint dbtest.Endpoint, mode string) string {
+func sessionCipher(t *testing.T, ctx context.Context, config connectors.RuntimeConfig) string {
 	t.Helper()
-	config := mysqlConfig(endpoint)
-	config.Config["sslmode"] = mode
 	conn, err := native.DialForTest(ctx, config)
 	if err != nil {
-		t.Fatalf("could not reopen MySQL under sslmode %q: %v", mode, err)
+		t.Fatalf("could not reopen MySQL under sslmode %q: %v", config.Config["sslmode"], err)
 	}
 	defer func() { _ = conn.Close() }()
 	result, err := conn.Execute("SHOW SESSION STATUS LIKE 'Ssl_cipher'")

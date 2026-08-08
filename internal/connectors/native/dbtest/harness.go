@@ -17,6 +17,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -241,8 +242,8 @@ func New(config Config) (*Harness, error) {
 // Start pulls the configured source image, tags it under one generated image
 // reference, creates one named volume, starts one loopback-published
 // container, and returns its dynamically assigned, non-default port. A pull
-// that would have to download the image is refused when the host lacks the
-// documented headroom for it. Call Close in a defer immediately after a
+// that would have to download the image is refused when the target image store
+// lacks the documented headroom for it. Call Close in a defer immediately after a
 // successful New; Close is also safe after an unsuccessful Start.
 func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error) {
 	if err := ctx.Err(); err != nil {
@@ -311,7 +312,11 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	// A cached image costs no disk to "pull", so the headroom gate applies only
 	// to a pull that has to download and extract one.
 	if sourceAbsent {
-		if err := h.assertPullHeadroom(before); err != nil {
+		free, err := h.targetImageStoreFree(ctx)
+		if err != nil {
+			return Endpoint{}, fmt.Errorf("refusing to pull the %s test image because target image-store capacity cannot be measured: %w", h.config.Engine, err)
+		}
+		if err := h.assertPullHeadroom(free); err != nil {
 			return Endpoint{}, err
 		}
 	}
@@ -511,7 +516,7 @@ func (h *Harness) reclaimHostDisk(ctx context.Context) (bool, error) {
 	return true, nil
 }
 
-// assertPullHeadroom refuses a pull the host cannot afford. Reporting the
+// assertPullHeadroom refuses a pull the target image store cannot afford. Reporting the
 // shortfall before the download starts is the whole point: a pull that fills
 // the disk partway through leaves both a partial image and a container the
 // test then has to clean up on a host with nothing left to work with.
@@ -522,6 +527,60 @@ func (h *Harness) assertPullHeadroom(free uint64) error {
 	}
 	return fmt.Errorf("refusing to pull the %s test image: %d bytes free is below the %d bytes required for an image of about %d bytes",
 		h.config.Engine, free, required, h.config.ExpectedImageBytes)
+}
+
+func (h *Harness) targetImageStoreFree(ctx context.Context) (uint64, error) {
+	if h.config.Connection != h.config.Machine && h.config.Connection != h.config.Machine+"-root" {
+		return 0, errors.New("Podman connection cannot be measured through the configured local machine")
+	}
+	name, err := h.config.RunMachine.Run(ctx, "machine", "inspect", "--format", "{{.Name}}", h.config.Machine)
+	if err != nil {
+		return 0, errors.New("configured Podman machine is not locally inspectable")
+	}
+	if strings.TrimSpace(name) != h.config.Machine {
+		return 0, errors.New("configured Podman connection does not identify the local machine")
+	}
+	graphRoot, err := h.config.Run.Run(ctx, h.config.Connection, "info", "--format", "{{.Store.GraphRoot}}")
+	if err != nil {
+		return 0, errors.New("target Podman image store could not be located")
+	}
+	graphRoot, err = safePodmanStorePath(graphRoot)
+	if err != nil {
+		return 0, err
+	}
+	df, err := h.config.RunMachine.Run(ctx, "machine", "ssh", h.config.Machine, "df", "-Pk", graphRoot)
+	if err != nil {
+		return 0, errors.New("target Podman image store capacity query failed")
+	}
+	return parseAvailableDiskBytes(df)
+}
+
+func safePodmanStorePath(raw string) (string, error) {
+	value := strings.TrimSpace(raw)
+	if !path.IsAbs(value) || path.Clean(value) != value || strings.ContainsAny(value, "\r\n\x00") {
+		return "", errors.New("target Podman image store path is invalid")
+	}
+	for _, r := range value {
+		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') && (r < '0' || r > '9') && r != '/' && r != '.' && r != '-' && r != '_' {
+			return "", errors.New("target Podman image store path is unsafe")
+		}
+	}
+	return value, nil
+}
+
+func parseAvailableDiskBytes(raw string) (uint64, error) {
+	for _, line := range strings.Split(raw, "\n") {
+		fields := strings.Fields(line)
+		if len(fields) < 4 || fields[0] == "Filesystem" {
+			continue
+		}
+		available, err := strconv.ParseUint(fields[3], 10, 64)
+		if err != nil || available > ^uint64(0)/1024 {
+			return 0, errors.New("target Podman image store capacity is invalid")
+		}
+		return available * 1024, nil
+	}
+	return 0, errors.New("target Podman image store capacity was not returned")
 }
 
 // releasedBytesEstimate reports the host free-space delta across a run.
@@ -567,6 +626,32 @@ func (h *Harness) Report() Report {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	return h.report
+}
+
+func (h *Harness) CopyFileFromContainer(ctx context.Context, source, destination string) error {
+	if !safeContainerFilePath(source) {
+		return errors.New("database test harness requires a safe absolute container file path")
+	}
+	if !filepath.IsAbs(destination) || filepath.Clean(destination) != destination || strings.ContainsAny(destination, "\r\n\x00") {
+		return errors.New("database test harness requires a safe absolute destination path")
+	}
+	h.mu.Lock()
+	known, closed, container := h.containerKnown, h.closed, h.containerName
+	h.mu.Unlock()
+	if !known || closed {
+		return errors.New("database test harness container is not available")
+	}
+	if _, err := h.config.Run.Run(ctx, h.config.Connection, "cp", container+":"+source, destination); err != nil {
+		return fmt.Errorf("copy database test container file: %w", err)
+	}
+	return nil
+}
+
+func safeContainerFilePath(value string) bool {
+	if !path.IsAbs(value) || path.Clean(value) != value || strings.ContainsAny(value, "\r\n\x00:") {
+		return false
+	}
+	return true
 }
 
 // abortIfClosed stops the create sequence once cleanup has begun.

@@ -90117,7 +90117,7 @@
   {
     "name": "mysql",
     "display_name": "MySQL",
-    "description": "Native MySQL source connector for wire-protocol checks, dynamic schemas, bounded reads, and row-based binary-log replication. Read-only source.",
+    "description": "Native MySQL source connector for wire-protocol checks, dynamic schemas, and bounded reads. Read-only source.",
     "integration_type": "database",
     "docs_url": "https://dev.mysql.com/doc/refman/8.4/en/",
     "release_stage": "ga",
@@ -90126,44 +90126,7 @@
       "catalog": true,
       "read": true,
       "write": false,
-      "query": false,
-      "cdc": true
-    },
-    "changefeed": {
-      "status": "implemented",
-      "mechanism": "binlog_replication",
-      "source": {
-        "artifact_url": "https://dev.mysql.com/doc/refman/8.4/en/replication-options-binary-log.html",
-        "artifact_version": "8.4",
-        "retrieved_at": "2026-08-06"
-      },
-      "executor": {
-        "kind": "native",
-        "id": "mysql-binlog-row-v1"
-      },
-      "checkpoint": {
-        "kind": "binlog_position",
-        "keys": [
-          "binlog_file",
-          "binlog_pos",
-          "schema_fingerprint"
-        ],
-        "commit_after": "downstream_ack",
-        "on_invalid": "resnapshot_required"
-      },
-      "delivery": {
-        "ordering": "source_ordered",
-        "duplicates": "at_least_once",
-        "deletes": "tombstone",
-        "dedupe_key": [
-          "binlog_file",
-          "binlog_pos",
-          "binlog_row"
-        ]
-      },
-      "streams": [
-        "*"
-      ]
+      "query": false
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -90233,16 +90196,12 @@
         "read_limit": {
           "type": "string",
           "description": "Total maximum rows for a Read. Defaults to 10000; set to 0, all, or unlimited to disable this bound."
-        },
-        "replication_server_id": {
-          "type": "string",
-          "description": "Positive unique MySQL replication server ID required only for binary-log change capture. Change capture requires MySQL 8.4 or newer (verified against 8.4.11); reads, discovery, and checks carry no version bound."
         }
       }
     },
     "streams": [],
     "risk": {
-      "read": "read-only MySQL wire-protocol queries and binary-log replication against the configured database",
+      "read": "read-only MySQL wire-protocol queries against the configured database",
       "write": "n/a (read-only source)",
       "approval": "none required for read-only sync"
     },

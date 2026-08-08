@@ -11,8 +11,9 @@ forbids spawning the prescribed reviewer role in this task, so this is the requi
 - MySQL's full and incremental reader uses validated identifiers, parameterized keyset boundaries,
   primary-key tie-breaking, and bounded pages. The native reader does not masquerade as #3902
   page-wise direct-read functionality.
-- MySQL CDC declaration, closed vocabulary, descriptor, row-image fail-closure, checkpoint
-  fingerprint, and live executor align. `cdc: true` is not claimed by a stub.
+- MySQL's internally proven row-event reader retains its row-image fail-closure and checkpoint
+  safeguards, while metadata, definition, catalog, and generated projections keep `cdc: false`
+  until a production runtime entrypoint exists.
 - TLS is fail-closed outside `preferred`; normal MySQL and replication connections share the same
   configuration. PostgreSQL now consumes the same explicit options through `openPool` for Check,
   Catalog, and Read, without touching its write path.
@@ -33,8 +34,12 @@ forbids spawning the prescribed reviewer role in this task, so this is the requi
 | An opted-in live startup failure lost its sanitized stage reason. | Fixed locally: the integration test now displays the safe harness stage without exposing endpoint or authentication material. |
 | Earlier planning/PR text claimed actions on other Podman machines. | Removed; current evidence records only the task-owned machine created and removed during this verification. |
 | Recovery of the prior pipeline head showed generated production wiring blank-imported `dbtest`; current-main also placed shared `sqltls` alongside connectors. | Fixed before recovery: source has explicit support-library exclusions, the generated file was regenerated, and a red/green generator test covers both. |
+| MySQL advertised CDC without a production operator entrypoint. | Fixed: metadata, definition, catalog, docs, and website projections now keep `cdc: false`; the internal reader has no public changefeed descriptor or executor. |
+| A task-owned machine could leave Podman's global default altered, and a remote pull used local free-space reporting. | Fixed: initialization disables default updates, snapshots/restores only its own change, and an absent source image needs measured target image-store capacity. |
+| The live TLS matrix omitted `verify-ca`, and public connector documentation contained harness maintenance instructions. | Fixed: the tagged proof copies the container CA for a live `verify-ca` session; maintenance instructions now live in `dbtest/README.md`. |
 
 ## Verdict
 
-No unresolved implementation finding remains. Automated GitHub review and CI are PR-stage gates;
-their outcome must be recorded before handoff.
+No unresolved implementation finding remains. The focused tagged-source check passed without opting
+into a live container. Automated GitHub review and CI are PR-stage gates; their outcome must be
+recorded before handoff.

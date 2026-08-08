@@ -18,7 +18,6 @@ import (
 )
 
 const (
-	mysqlBinlogExecutorID          = "mysql-binlog-row-v1"
 	mysqlCDCSchemaFingerprintState = "schema_fingerprint"
 )
 
@@ -28,26 +27,6 @@ const (
 const currentBinlogStatusQuery = "SHOW BINARY LOG STATUS"
 
 const currentBinlogRequirementsQuery = "SELECT @@GLOBAL.binlog_format AS binlog_format, @@GLOBAL.binlog_row_image AS binlog_row_image"
-
-// ChangefeedExecutorDescriptor is the runtime half of defs/mysql/changefeed.
-// It must remain exactly in sync with the checked-in declaration; this is what
-// keeps public CDC capability fail-closed.
-func (c Connector) ChangefeedExecutorDescriptor() connectors.ChangefeedExecutorDescriptor {
-	return connectors.ChangefeedExecutorDescriptor{
-		Status:    connectors.ChangefeedStatusImplemented,
-		Mechanism: connectors.ChangefeedMechanismBinlogReplication,
-		Executor: connectors.ChangefeedExecutorRef{
-			Kind: "native",
-			ID:   mysqlBinlogExecutorID,
-		},
-		Checkpoint: connectors.ChangefeedCheckpoint{
-			Kind:        "binlog_position",
-			Keys:        []string{"binlog_file", "binlog_pos", mysqlCDCSchemaFingerprintState},
-			CommitAfter: "downstream_ack",
-			OnInvalid:   "resnapshot_required",
-		},
-	}
-}
 
 // ReadCDC consumes row-based binary-log events for one discovered table. It
 // starts from a committed binlog file/position when supplied; otherwise it

@@ -31,24 +31,27 @@ func testConfig() connectors.RuntimeConfig {
 	}}
 }
 
-func TestNameMetadataAndExecutableChangefeed(t *testing.T) {
+func TestNameMetadataKeepsTheInternalCDCReaderNonPublic(t *testing.T) {
 	c := New()
 	if c.Name() != "mysql" {
 		t.Fatalf("Name() = %q, want mysql", c.Name())
 	}
 	caps := connectors.MetadataOf(c).Capabilities
-	if !caps.Check || !caps.Catalog || !caps.Read || !caps.CDC || caps.Write {
-		t.Fatalf("capabilities = %+v, want check/catalog/read/cdc only", caps)
+	if !caps.Check || !caps.Catalog || !caps.Read || caps.CDC || caps.Write {
+		t.Fatalf("capabilities = %+v, want check/catalog/read only", caps)
 	}
 	definition, ok := any(c).(connectors.DefinitionProvider)
 	if !ok {
 		t.Fatal("mysql connector has no bundle definition")
 	}
-	if !connectors.HasImplementedChangefeed(c, definition.Definition().Changefeed) {
-		t.Fatal("mysql connector must expose CDC only through its matching binlog executor")
+	if definition.Definition().Changefeed != nil {
+		t.Fatal("mysql connector must not declare a public changefeed before an operator entrypoint exists")
 	}
-	if checkpoint := c.ChangefeedExecutorDescriptor().Checkpoint.Keys; !reflect.DeepEqual(checkpoint, []string{"binlog_file", "binlog_pos", mysqlCDCSchemaFingerprintState}) {
-		t.Fatalf("CDC checkpoint keys = %v, want schema-bound position", checkpoint)
+	if _, ok := any(c).(connectors.ChangefeedExecutor); ok {
+		t.Fatal("mysql connector must not expose its internal CDC reader as a public changefeed executor")
+	}
+	if _, ok := any(c).(connectors.CDCReader); !ok {
+		t.Fatal("mysql connector lost its internally proven CDC reader")
 	}
 	manifest := connectors.ManifestOf(c)
 	if manifest.Risk.Read == "" || len(manifest.ConfigFields) == 0 || len(manifest.SecretFields) != 1 || manifest.SecretFields[0].Name != "password" {

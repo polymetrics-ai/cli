@@ -19,9 +19,9 @@ None of the three is implemented here. The full inline GSD/TDD delivery record i
   harness with pinned image enforcement, unique container/volume/run-image ownership, dynamic
   loopback port allocation, before/after disk reporting, unconditional cleanup, and optional
   two-pass machine trim.
-- Added the native dynamic-schema MySQL source connector and bundle: check, catalog, bounded full
-  and incremental reads, and row-based binary-log CDC. `integration_type` is `database`; `cdc: true`
-  is exposed only with its matching executable `binlog_replication` reader.
+- Added the native dynamic-schema MySQL source connector and bundle: check, catalog, and bounded
+  full and incremental reads. The internally proven row-based binary-log reader remains non-public:
+  `integration_type` is `database` and `cdc: false` until a production runtime entrypoint exists.
 - Seeded/verified real multi-page data. The tagged proof asserts returned records for check,
   discovery, five-row full read with `page_size=2`, incremental read, TLS modes, and
   insert/update/delete CDC — not merely an exit status.
@@ -67,8 +67,8 @@ gates the pulled source image: it is removed on a machine this run created, and 
 caller-supplied, shared, or remote one, because that reference is shared with every other lane there
 and a pull against an already-cached image is a no-op that proves nothing about who put it there.
 `POLYMETRICS_DATABASE_REMOVE_SHARED_IMAGE=1` is the explicit opt-in to delete it anyway. A pull that
-would have to download the image is refused before it starts when host free space is below three
-times the image's declared footprint. The skipped-reclaim report is the host free-space delta across
+would have to download the image is refused before it starts when the target image store is below
+three times the image's declared footprint; an unmeasurable target fails closed. The skipped-reclaim report is the host free-space delta across
 the run, labelled as the estimate it is rather than as per-image reclaimability.
 
 The ownership gate is proven, not inferred: `POLYMETRICS_DATABASE_OWN_MACHINE=1` re-ran the tagged

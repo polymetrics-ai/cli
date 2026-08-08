@@ -23,7 +23,8 @@ path.
   earlier cleanup error. The source image is removed only on a machine this run created, where
   nothing else can be using it; on a shared machine it is retained unless
   `POLYMETRICS_DATABASE_REMOVE_SHARED_IMAGE=1` opts in. A pull that has to download the image is
-  refused when host free space is below three times its declared footprint.
+  refused when target image-store free space is below three times its declared footprint; an
+  unmeasurable remote or shared target fails closed before pull.
 - Cleanup runs two explicit `fstrim` passes against the configured machine after Podman cleanup.
   This is required on macOS VM-backed storage to return freed guest blocks to the host sparse disk.
   It is no longer an opt-in, but it runs only against a machine this process created through

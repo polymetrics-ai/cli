@@ -7,10 +7,10 @@
 | H3 | Unconditional cleanup | Assertion failure or interrupt can leave a container, volume, or image behind. | `TestCloseDuringCreateStillRemovesTheCreatedResource` and `TestStartRefusesToCreateAfterClose` cover the create/interrupt race; `Close` continues all cleanup stages and the live post-run scoped listings were empty. |
 | H4 | Image ownership | Cleanup guesses whether a shared image existed and deletes another run's reference. | A successful pull is immediately re-tagged to a run-specific local reference before startup; `TestStartInspectsTheSourceImageOnlyToSizeThePull` and `TestCleanupRemovesTheSourceImageOnlyWithOwnershipOrAnExplicitOptIn` cover ownership, retention, and the explicit opt-in. |
 | H7 | Interrupt coverage spans teardown | Cleanup drops the interrupt handler before its own removals, so a Ctrl-C during teardown exits with resources still on the machine. | `TestCloseKeepsInterruptCleanupArmedUntilTeardownFinishes` probes the registry at every removal command and asserts the handler is still installed, then that it is released once teardown returns. |
-| H8 | Pull headroom | A pull started on a nearly full host fills the disk partway through and leaves a partial image plus a container to clean up. | `TestStartRefusesToPullWithoutHeadroomForTheImage` proves ~854 MiB free refuses a ~830 MiB image with no `pull` issued, that three times the footprint proceeds, and that an already-cached image needs no headroom; `TestNewRequiresTheImageFootprint` stops an engine from silently skipping the gate. |
+| H8 | Pull headroom | A pull started on a target with insufficient image-store capacity fills it partway through and leaves a partial image plus a container to clean up. | `TestStartRefusesToPullWithoutHeadroomForTheImage` proves ~854 MiB free refuses a ~830 MiB image with no `pull` issued, that three times the footprint proceeds, and that an already-cached image needs no headroom; `TestStartRefusesAnUnmeasurableTargetBeforePull` proves an unmeasurable remote target fails before `pull`; `TestNewRequiresTheImageFootprint` stops an engine from silently skipping the gate. |
 | H5 | Non-default endpoint | A connector silently assumes 3306 on the host. | `TestStartPublishesOnlyLoopback` asserts `127.0.0.1::<port>` publishing; `TestParseMappedPortRefusesTheEngineDefaultPort` refuses a default host mapping. |
 | H6 | Host-disk reclamation | Removing an image returns space only inside the VM. | `TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup` asserts two explicit `fstrim` passes after cleanup; the live test records before/after byte counts and fails if the reclaimed run exceeds ordinary build noise. |
-| M1 | Honest CDC declaration | MySQL can advertise generic/logical CDC without an executable binlog reader. | Closed-schema validation accepts only `binlog_replication`; descriptor/executor tests and the live row-event proof earn `cdc: true`. |
+| M1 | Honest CDC declaration | MySQL can advertise a CDC capability before a production runtime entrypoint exists. | Metadata, definition, catalog, generated docs, and website data keep `cdc: false`; no changefeed descriptor or executor is registered, while the native row-event reader remains covered by internal evidence. |
 | M2 | SQL safety | Stream/schema/cursor values are concatenated into SQL. | Identifier tests reject unsafe values; queries quote only validated identifiers and bind all values. |
 | M3 | Complete ETL paging and incrementals | A read proves a single record or repeats/skips at shared cursor values. | Keyset query tests cover primary-key and `(cursor, primary_key)` boundaries; the real five-row seed with `page_size=2` proves multiple pages and exact incremental rows. |
 | M4 | Change capture state | Binlog rows can advance state before acknowledgement or be projected against changed metadata. | CDC tests bind checkpoint to ordered column fingerprint and position/row ordinal; live insert/update/delete events assert actual returned rows. |
@@ -207,3 +207,24 @@ ownership once before both the source-image removal and the trim, retains a shar
 a named reason, and reports the host free-space delta as `HostDiskReleasedBytesEstimate` rather than
 as per-image reclaimability. `Config.ExpectedImageBytes` is mandatory and `Start` refuses a pull
 below three times that footprint.
+
+**Red — review round 6 acceptance reconciliation:**
+
+Inspection found MySQL declared `cdc: true` with a public `changefeed.json` and executor despite no
+operator entrypoint; owned-machine initialization did not preserve the global default connection;
+the pull gate used local `statfs` for a remotely targeted image store; the live TLS matrix omitted
+`verify-ca`; and public MySQL documentation contained the harness maintenance procedure.
+
+**Green — review round 6:**
+
+```text
+POLYMETRICS_DATABASE_INTEGRATION=0 go test -count=1 -timeout 20m -tags=databaseintegration \
+  ./internal/connectors/native/dbtest \
+  ./internal/connectors/native/mysql \
+  ./internal/connectors/bundleregistry
+```
+
+Passed. The focused check includes the tagged MySQL integration source without opting into a live
+container. It covers the non-public CDC projection, default-connection restoration and concurrent
+change guard, target-capacity refusal, scoped certificate copy, and compilation of the new
+`verify-ca` live case.

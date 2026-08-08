@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
@@ -20,6 +21,8 @@ type scriptedRunner struct {
 	volumeCreateErr     error
 	containerInspectErr error
 	runErr              error
+	infoErr             error
+	infoOutput          string
 	images              map[string]bool
 	commands            [][]string
 	connections         []string
@@ -76,6 +79,14 @@ func (r *scriptedRunner) Run(_ context.Context, connection string, args ...strin
 		r.containerLive = false
 	case len(args) > 0 && args[0] == "port":
 		return "127.0.0.1:43123\n", nil
+	case len(args) > 0 && args[0] == "info":
+		if r.infoErr != nil {
+			return "", r.infoErr
+		}
+		if r.infoOutput != "" {
+			return r.infoOutput, nil
+		}
+		return "/var/lib/containers/storage\n", nil
 	}
 	return "", nil
 }
@@ -113,9 +124,14 @@ func commandsContain(commands [][]string, prefix ...string) bool {
 // exercised without a VM. inspectName and inspectErr override that answer to
 // model a host that disagrees with the record.
 type scriptedMachineRunner struct {
-	inspectName string
-	inspectErr  error
-	initErr     error
+	inspectName         string
+	inspectErr          error
+	initErr             error
+	defaultConnection   string
+	defaultListErr      error
+	defaultSetErr       error
+	switchDefaultOnInit bool
+	targetDiskFree      uint64
 	// initWritesBeforeFailing models the real command: podman writes the VM
 	// config and its disk image before init can fail, and a cancelled context
 	// kills it mid-write, so the machine exists even though init reported none.
@@ -126,6 +142,22 @@ type scriptedMachineRunner struct {
 
 func (r *scriptedMachineRunner) Run(ctx context.Context, args ...string) (string, error) {
 	r.commands = append(r.commands, append([]string(nil), args...))
+	if commandHasPrefix(args, "system", "connection", "list") {
+		if r.defaultListErr != nil {
+			return "", r.defaultListErr
+		}
+		if r.defaultConnection == "" {
+			return "", nil
+		}
+		return r.defaultConnection + "\ttrue\n", nil
+	}
+	if commandHasPrefix(args, "system", "connection", "default") {
+		if r.defaultSetErr != nil {
+			return "", r.defaultSetErr
+		}
+		r.defaultConnection = args[len(args)-1]
+		return "", nil
+	}
 	name := args[len(args)-1]
 	switch {
 	case commandHasPrefix(args, "machine", "init"):
@@ -139,12 +171,26 @@ func (r *scriptedMachineRunner) Run(ctx context.Context, args ...string) (string
 			return "", r.initErr
 		}
 		r.setCreated(name, true)
+		if r.switchDefaultOnInit {
+			r.defaultConnection = name
+		}
+	case commandHasPrefix(args, "machine", "ssh"):
+		if len(args) >= 6 && args[3] == "df" && args[4] == "-Pk" {
+			free := r.targetDiskFree
+			if free == 0 {
+				free = 1 << 30
+			}
+			return fmt.Sprintf("Filesystem 1024-blocks Used Available Capacity Mounted on\n/dev/vda %d 0 %d 0%% /\n", free/1024, free/1024), nil
+		}
 	case commandHasPrefix(args, "machine", "stop"), commandHasPrefix(args, "machine", "rm"):
 		if !r.created[name] {
 			return "", fmt.Errorf("%w: no such machine", errPodmanResourceNotFound)
 		}
 		if commandHasPrefix(args, "machine", "rm") {
 			r.setCreated(name, false)
+			if r.defaultConnection == name || r.defaultConnection == name+"-root" {
+				r.defaultConnection = ""
+			}
 		}
 	case commandHasPrefix(args, "machine", "inspect"):
 		if r.inspectErr != nil {
@@ -185,6 +231,7 @@ func newOwnedTestMachine(t *testing.T, runner *scriptedMachineRunner) *Machine {
 }
 
 func testConfig(runner CommandRunner) Config {
+	machineRunner := &scriptedMachineRunner{inspectName: "lane-machine", targetDiskFree: 1 << 30}
 	return Config{
 		Engine:         "mysql",
 		Image:          "example.invalid/mysql:8.4.11",
@@ -195,7 +242,7 @@ func testConfig(runner CommandRunner) Config {
 		// the low-disk cases below configure their own realistic sizes.
 		ExpectedImageBytes: 32,
 		Run:                runner,
-		RunMachine:         &scriptedMachineRunner{},
+		RunMachine:         machineRunner,
 		DiskFree: func() (uint64, error) {
 			return 123, nil
 		},
@@ -207,7 +254,7 @@ func testConfig(runner CommandRunner) Config {
 // trimmed.
 func ownedMachineConfig(t *testing.T, runner CommandRunner) (Config, *scriptedMachineRunner, *Machine) {
 	t.Helper()
-	machineRunner := &scriptedMachineRunner{}
+	machineRunner := &scriptedMachineRunner{targetDiskFree: 1 << 30}
 	machine := newOwnedTestMachine(t, machineRunner)
 	config := testConfig(runner)
 	config.Connection = machine.Connection()
@@ -393,6 +440,31 @@ func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
 		return
 	}
 	t.Fatal("Start did not issue a podman run command")
+}
+
+func TestCopyFileFromContainerUsesTheScopedConnection(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	defer func() { _ = h.Close(context.Background()) }()
+	destination := filepath.Join(t.TempDir(), "ca.pem")
+	if err := h.CopyFileFromContainer(context.Background(), "/var/lib/mysql/ca.pem", destination); err != nil {
+		t.Fatalf("CopyFileFromContainer(): %v", err)
+	}
+	if !commandsContain(runner.commands, "cp", h.containerName+":"+"/var/lib/mysql/ca.pem", destination) {
+		t.Fatalf("commands = %v, want scoped container certificate copy", runner.commands)
+	}
+	for _, connection := range runner.connections {
+		if connection != config.Connection {
+			t.Fatalf("connection = %q, want %q", connection, config.Connection)
+		}
+	}
 }
 
 func TestStartPublishesOnlyLoopback(t *testing.T) {
@@ -592,7 +664,7 @@ func TestNewMachineCreatesAndRemovesOnlyItsOwnMachine(t *testing.T) {
 	if !machineIsOwned(machine.Name()) {
 		t.Fatal("NewMachine() did not record this run as the machine's owner")
 	}
-	if !commandsContain(runner.commands, "machine", "init") || !commandsContain(runner.commands, "machine", "start") {
+	if !commandsContain(runner.commands, "machine", "init", "--update-connection=false") || !commandsContain(runner.commands, "machine", "start") {
 		t.Fatalf("machine commands = %v, want init and start", runner.commands)
 	}
 
@@ -609,6 +681,41 @@ func TestNewMachineCreatesAndRemovesOnlyItsOwnMachine(t *testing.T) {
 	}
 	if err := machine.Remove(context.Background()); err != nil {
 		t.Fatalf("second Remove(): %v", err)
+	}
+}
+
+func TestNewMachineRestoresOnlyTheDefaultConnectionItChanged(t *testing.T) {
+	for _, tc := range []struct {
+		name           string
+		before         string
+		changeAfterNew string
+		wantDefault    string
+		wantRestore    bool
+	}{
+		{name: "restores its own switch", before: "other-lane", wantDefault: "other-lane", wantRestore: true},
+		{name: "does not overwrite a later switch", before: "other-lane", changeAfterNew: "third-party", wantDefault: "third-party"},
+		{name: "preserves an unset default", wantDefault: ""},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			runner := &scriptedMachineRunner{defaultConnection: tc.before, switchDefaultOnInit: true}
+			machine, err := NewMachine(context.Background(), MachineConfig{Engine: "mysql", RunMachine: runner})
+			if err != nil {
+				t.Fatalf("NewMachine(): %v", err)
+			}
+			if tc.changeAfterNew != "" {
+				runner.defaultConnection = tc.changeAfterNew
+			}
+			if err := machine.Remove(context.Background()); err != nil {
+				t.Fatalf("Remove(): %v", err)
+			}
+			if runner.defaultConnection != tc.wantDefault {
+				t.Fatalf("default connection = %q, want %q", runner.defaultConnection, tc.wantDefault)
+			}
+			restored := commandsContain(runner.commands, "system", "connection", "default", tc.before)
+			if restored != tc.wantRestore {
+				t.Fatalf("default restore issued = %t, want %t (commands = %v)", restored, tc.wantRestore, runner.commands)
+			}
+		})
 	}
 }
 
@@ -669,7 +776,7 @@ func TestNewMachineRemovesWhatAFailedInitLeftBehind(t *testing.T) {
 				t.Fatalf("cleanup after the failed init reported: %v", err)
 			}
 			for _, command := range tc.runner.commands {
-				if command[len(command)-1] != machine.Name() {
+				if commandHasPrefix(command, "machine") && command[len(command)-1] != machine.Name() {
 					t.Fatalf("machine command %v targeted something other than this run's machine", command)
 				}
 			}
@@ -694,7 +801,7 @@ func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	// returns only part of the space on Podman 5.3 with applehv.
 	var trims [][]string
 	for _, command := range machineRunner.commands {
-		if commandHasPrefix(command, "machine", "ssh") {
+		if commandHasPrefix(command, "machine", "ssh", machine.Name(), "sudo fstrim -av") {
 			trims = append(trims, command)
 		}
 	}
@@ -708,7 +815,7 @@ func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 		if commandHasPrefix(command, "machine", "inspect", "--format", "{{.Name}}", machine.Name()) && inspected < 0 {
 			inspected = index
 		}
-		if commandHasPrefix(command, "machine", "ssh") && trimmed < 0 {
+		if commandHasPrefix(command, "machine", "ssh", machine.Name(), "sudo fstrim -av") && trimmed < 0 {
 			trimmed = index
 		}
 	}
@@ -805,6 +912,7 @@ func TestCleanupNeverTrimsAMachineThisRunDidNotCreate(t *testing.T) {
 			config := testConfig(runner)
 			config.RunMachine = tc.setup(t, &config)
 			machineRunner := config.RunMachine.(*scriptedMachineRunner)
+			runner.setImage(config.Image, true)
 			free := []uint64{4096, 1024}
 			config.DiskFree = func() (uint64, error) {
 				value := free[0]
@@ -823,7 +931,7 @@ func TestCleanupNeverTrimsAMachineThisRunDidNotCreate(t *testing.T) {
 			if err := h.Close(context.Background()); err != nil {
 				t.Fatalf("Close(): %v", err)
 			}
-			if commandsContain(machineRunner.commands, "machine", "ssh") {
+			if commandsContain(machineRunner.commands, "machine", "ssh", config.Machine, "sudo fstrim -av") {
 				t.Fatalf("machine commands = %v, want no trim of an unowned machine", machineRunner.commands)
 			}
 			report := h.Report()
@@ -1078,6 +1186,7 @@ func TestStartRefusesToPullWithoutHeadroomForTheImage(t *testing.T) {
 			config := testConfig(runner)
 			config.ExpectedImageBytes = imageBytes
 			config.DiskFree = func() (uint64, error) { return tc.free, nil }
+			config.RunMachine.(*scriptedMachineRunner).targetDiskFree = tc.free
 			if tc.cached {
 				runner.setImage(config.Image, true)
 			}
@@ -1102,6 +1211,51 @@ func TestStartRefusesToPullWithoutHeadroomForTheImage(t *testing.T) {
 				t.Fatal("a refused start left a container or volume behind")
 			}
 		})
+	}
+}
+
+func TestStartRefusesAnUnmeasurableTargetBeforePull(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	config.Connection = "remote-machine"
+	config.Machine = "remote-machine"
+	config.DiskFree = func() (uint64, error) { return 1 << 40, nil }
+	config.RunMachine = &scriptedMachineRunner{inspectErr: errors.New("remote machine unavailable")}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	_, startErr := h.Start(context.Background())
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if startErr == nil || !strings.Contains(startErr.Error(), "target image-store capacity cannot be measured") {
+		t.Fatalf("Start() error = %v, want an unmeasurable target capacity failure", startErr)
+	}
+	if commandsContain(runner.commands, "pull", config.Image) {
+		t.Fatalf("commands = %v, want no pull before target capacity is measured", runner.commands)
+	}
+}
+
+func TestStartUsesTargetCapacityInsteadOfLocalReportingDisk(t *testing.T) {
+	const imageBytes = 64 << 20
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	config.ExpectedImageBytes = imageBytes
+	config.DiskFree = func() (uint64, error) { return 1, nil }
+	config.RunMachine.(*scriptedMachineRunner).targetDiskFree = imagePullFreeSpaceFactor * imageBytes
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if !commandsContain(runner.commands, "pull", config.Image) {
+		t.Fatalf("commands = %v, want a pull after target capacity passed", runner.commands)
 	}
 }
 

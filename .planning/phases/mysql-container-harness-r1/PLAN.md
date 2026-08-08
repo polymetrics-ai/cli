@@ -3,8 +3,9 @@
 ## Scope and ownership
 
 This phase lands **MySQL only** on a reusable database-container test harness. Production changes
-are the MySQL native connector/bundle, the closed changefeed mechanism vocabulary needed to describe
-binary-log replication, and the shared SQL TLS helper. The only PostgreSQL follow-up is its
+are the MySQL native connector/bundle and the shared SQL TLS helper. The internally proven
+binary-log reader remains outside the public connector capability surface until a production runtime
+entrypoint exists. The only PostgreSQL follow-up is its
 connection configuration adapter so the captain-mandated TLS option shape is actually enforced by
 Check, Catalog, and Read; it deliberately does not edit the incoming PostgreSQL write path.
 
@@ -23,11 +24,11 @@ bounded parallelism is explicit opt-in only.
    order: container, volume, run image, source image, optional two-pass host trim. A later cleanup
    action still runs after an earlier error.
 3. MySQL validates identifiers, does dynamic catalog discovery, reads bounded keyset pages ordered
-   by a primary key (or `(cursor, primary_key)`), preserves an explicit empty cursor state, and
-   reads row-based/full-image binlog events only through the matching `binlog_replication`
-   executor.
+   by a primary key (or `(cursor, primary_key)`), and preserves an explicit empty cursor state. Its
+   row-based/full-image binlog reader remains an internal proof rather than a declared executor.
 4. The tagged integration test starts exactly one real MySQL 8.4.11 server, seeds five deterministic
-   rows with `page_size=2`, asserts check/discovery/full/incremental/CDC records, and defers
+   rows with `page_size=2`, asserts check/discovery/full/incremental records plus internal CDC
+   events, and defers
    `Close` before any assertion. Its failure message retains only the harness's sanitized stage.
 5. SQL transport security has the one shared shape: `sslmode`, `sslrootcert`, and
    `sslservername`. MySQL applies it to normal and replication clients; PostgreSQL feeds it into
@@ -64,6 +65,6 @@ in `PR-BODY.md`. No other direct dependency is added.
 
 - The real server is never assumed at a default host port.
 - Seed data exceeds one SQL page and supports exact incremental assertions.
-- Change capture asserts returned insert/update/delete records and acknowledgement-gated state.
+- Internal change-capture proof asserts returned insert/update/delete records and acknowledgement-gated state.
 - Failure and interrupt teardown share the idempotent cleanup path.
 - A missing live engine cannot silently pass; an absent opt-in/connection emits a visible skip.
