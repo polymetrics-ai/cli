@@ -169,6 +169,30 @@ fail before `spec.json` or `streams.json` is edited. Its failure and command tra
 recorded below verbatim, then the test will become the green regression guard after `namespace`
 is declared required and all five templates interpolate it.
 
+### Verbatim RED failure
+
+```text
+--- FAIL: TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths (0.01s)
+    --- FAIL: TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths/repositories (0.00s)
+        namespace_override_test.go:65: request path = "/namespaces/auth-identity/repositories", want namespace override path "/namespaces/target-namespace/repositories"
+    --- FAIL: TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths/tags (0.00s)
+        namespace_override_test.go:65: request path = "/namespaces/auth-identity/repositories/fixture-repository/tags", want namespace override path "/namespaces/target-namespace/repositories/fixture-repository/tags"
+    --- FAIL: TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths/repository_detail (0.00s)
+        namespace_override_test.go:65: request path = "/namespaces/auth-identity/repositories/fixture-repository", want namespace override path "/namespaces/target-namespace/repositories/fixture-repository"
+    --- FAIL: TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths/tag_detail (0.00s)
+        namespace_override_test.go:65: request path = "/namespaces/auth-identity/repositories/fixture-repository/tags/fixture-tag", want namespace override path "/namespaces/target-namespace/repositories/fixture-repository/tags/fixture-tag"
+    --- FAIL: TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths/check (0.00s)
+        namespace_override_test.go:78: request path = "/namespaces/auth-identity/repositories", want namespace override path "/namespaces/target-namespace/repositories"
+FAIL
+FAIL	polymetrics.ai/internal/connectors/defs/dockerhub	0.721s
+FAIL
+```
+
+Command: `go test ./internal/connectors/defs/dockerhub -run
+TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths -count=1`. No production bundle file
+had changed when this command ran; `namespace_override_test.go` plus this ledger entry are the
+committed red state.
+
 ## Live E2E gap — reverse-ETL paths (2026-08-08)
 
 ### Reproduction before production edits
