@@ -4,7 +4,7 @@
   "sub_issue": 3943,
   "connector": "zoom",
   "provider_module": "quality-management",
-  "state": "green_verified",
+  "state": "completed",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -35,6 +35,7 @@
     "result": "failed as expected: 12 -> 18 covered, 1830 -> 1824 locally blocked, 8 -> 13 direct reads, 1 -> 2 writes, and all six Quality Management routes were unknown"
   },
   "green": {
+    "commit": "b90dcff04",
     "focused_zoom": "passed",
     "zoom_conformance": "passed",
     "surface_sync_check": "passed",
@@ -48,5 +49,5 @@
     "manual_gates": "tidy, lint, docs, smoke, contract, connectorgen, boundary, and release checks passed",
     "website_catalog": "npm --prefix website run gen:catalog changed only zoom; website typecheck passed"
   },
-  "next": "commit and push green slice, record completion commit, then close #3943 and update #3915"
+  "next": "#3943 may be closed; update #3915 and begin the next provider-category slice"
 }

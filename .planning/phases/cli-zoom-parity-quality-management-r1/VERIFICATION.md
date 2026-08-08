@@ -6,7 +6,7 @@
 - [x] GSD command provenance is resolved with `scripts/gsd sources`.
 - [x] Live artifact URL, retrieval time, HTTP status, byte count, and exact six-operation audit are recorded before RED.
 - [x] RED test failure is captured, committed, and pushed before production declarations (`91b7526a5`).
-- [ ] GREEN implementation is committed and pushed.
+- [x] GREEN implementation is committed and pushed (`b90dcff04`).
 - [x] Inline verify-work and code-review evidence are recorded in `REVIEW.md` under the documented manual-GSD fallback.
 
 ## Source parity

@@ -1,6 +1,6 @@
 # Summary — Zoom Quality Management documented-operation parity, R1
 
-Quality Management is green and ready for its source commit. Its provider-owned artifact was
+Quality Management is complete in green commit `b90dcff04`. Its provider-owned artifact was
 re-fetched from `https://developers.zoom.us/docs/api/quality-management.md` on
 `2026-08-08T09:12:11Z` (HTTP `200`, `40,987` bytes). All six live operations matched the inherited
 ledger exactly and are now covered: five sensitive direct reads and one typed, approval-gated POST
