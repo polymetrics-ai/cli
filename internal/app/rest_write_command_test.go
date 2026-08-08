@@ -243,8 +243,11 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	if plan.PlanSeal == nil || plan.PlanSeal.Batchable {
 		t.Fatalf("plan seal batchable = %#v, want batchable:false from the operation declaration", plan.PlanSeal)
 	}
-	if len(plan.Sample) != 1 || plan.Sample[0]["id"] != "t3_abc" {
-		t.Fatalf("plan preview sample = %#v, want complete direct-write input", plan.Sample)
+	if len(plan.Sample) != 1 || plan.Sample[0]["id"] != "redacted" {
+		t.Fatalf("plan preview sample = %#v, want declared direct-write redaction", plan.Sample)
+	}
+	if plan.ConnectorCommandRecord["id"] != "t3_abc" {
+		t.Fatal("direct-write execution record did not retain the private typed input")
 	}
 
 	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}); err == nil {
@@ -269,11 +272,11 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 		t.Fatal("run direct_write result = nil")
 	}
 	body, ok := run.OperationDirectWrite.Body.(map[string]any)
-	if !ok || body["token"] != "fixture-token" {
-		t.Fatalf("safe operation result = %#v, want complete token", run.OperationDirectWrite.Body)
+	if !ok || body["token_redacted"] != true {
+		t.Fatalf("safe operation result = %#v, want a redacted token marker", run.OperationDirectWrite.Body)
 	}
-	if _, redacted := body["token_redacted"]; redacted {
-		t.Fatalf("safe operation result = %#v, must not contain a redaction marker", run.OperationDirectWrite.Body)
+	if _, exposed := body["token"]; exposed {
+		t.Fatal("safe operation result exposed a token-shaped response field")
 	}
 
 	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{

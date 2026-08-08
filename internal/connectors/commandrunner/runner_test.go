@@ -1821,8 +1821,8 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	if got := command.Record["dir"]; got != 1 {
 		t.Fatalf("typed body dir = %#v (%T), want integer 1", got, got)
 	}
-	if got := command.RedactedRecord["id"]; got != "t3_abc" {
-		t.Fatalf("direct-write preview record id = %#v, want complete input", got)
+	if got := command.RedactedRecord["id"]; got != "redacted" {
+		t.Fatalf("direct-write preview record id = %#v, want declared redaction", got)
 	}
 	if command.ConfirmationChallenge != "destructive" {
 		t.Fatalf("confirmation = %q, want destructive", command.ConfirmationChallenge)
