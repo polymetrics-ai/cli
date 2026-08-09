@@ -97,3 +97,16 @@ FAIL
 This is an intentional missing-foundation failure. The test declaration contains a fixed relative
 path, fixed subprotocol, finite input/output/frame caps, and a closed initial frame schema; it
 contains no endpoint chosen by a caller and no secret value.
+
+### Continuation provenance — 2026-08-09
+
+Before resuming this red checkpoint, the official source was fetched again from
+`https://developers.zoom.us/docs/api/ai-services.md` at `2026-08-09T20:57:31Z`.
+The response was HTTP `200`, `87,750` bytes, with SHA-256
+`154631ef97c292468c81a79dc50cd51ea142d18f1f9fab060622215ddf3ba367`, identical to the
+pre-RED audit. The source/ledger set therefore remains 22 AI Services operations.
+
+The reusable WebSocket runtime is now split to dedicated foundation issue #3963 and a stacked PR as
+required by the connector-lane ownership contract. This is a delivery-boundary change only: no
+production connector declaration has changed, and the recorded RED remains the applicable test
+contract for the consumer slice.

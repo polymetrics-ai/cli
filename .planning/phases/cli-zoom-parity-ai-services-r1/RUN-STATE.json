@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-ai-services-r1",
   "issue": 3935,
   "parent_issue": 3915,
-  "status": "red-captured",
+  "status": "blocked-on-foundation-split",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent delivery contract forbids role spawning.",
@@ -17,13 +17,14 @@
   },
   "source_artifact": {
     "url": "https://developers.zoom.us/docs/api/ai-services.md",
-    "retrieved_at": "2026-08-08T20:56:08Z",
+    "retrieved_at": "2026-08-09T20:57:31Z",
     "http_status": 200,
     "bytes": 87750,
     "sha256": "154631ef97c292468c81a79dc50cd51ea142d18f1f9fab060622215ddf3ba367",
     "openapi": "3.1.1",
     "server": "https://api.zoom.us/v2",
-    "ledger_delta": 0
+    "ledger_delta": 0,
+    "continuation_refetch": "byte-for-byte identical to 2026-08-08 audit"
   },
   "operations": 22,
   "target": {
@@ -37,7 +38,9 @@
     "unsafe_or_disallowed": 0
   },
   "red": "captured: current 143/1699/70/69 totals fail the 165/1677/82/78 AI Services target; all 22 exact routes are unknown through real commandrunner preflight",
-  "foundation": "red captured: bundle loader rejects the proposed closed standard-library WebSocket session declaration; green implementation pending separate commits",
+  "foundation": "red captured: bundle loader rejects the proposed closed standard-library WebSocket session declaration; connector-lane contract requires a separate foundation issue/stacked PR before this slice continues",
+  "foundation_issue": 3963,
+  "foundation_pr_base": "fm/cli-zoom-full-parity-r1",
   "green": "pending",
   "verification": "pending",
   "review": "pending"
