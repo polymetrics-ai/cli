@@ -164,6 +164,29 @@ transport error text before returning it. It does not add a CLI command, operati
 frame API, or caller-selected transport control. The next slice starts with an engine frame/session
 RED test.
 
+## Frame/session executor RED — captured 2026-08-10
+
+Before adding an engine session runner, a loopback frame test was added. It requires the runner to
+validate and send a schema-bound `session.update` text frame, split PCM16 into finite masked binary
+frames, send a masked close, answer a server ping, bound server frames, decode only JSON text event
+frames, redact protected response fields, and account for the exact bounded input/output. A second
+case sends one server frame larger than the declared cap.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationWebSocketSession'
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+internal/connectors/engine/websocket_session_runtime_test.go:63:17: undefined: OperationWebSocketSession
+internal/connectors/engine/websocket_session_runtime_test.go:63:110: undefined: WebSocketSessionRequest
+internal/connectors/engine/websocket_session_runtime_test.go:95:12: undefined: OperationWebSocketSession
+internal/connectors/engine/websocket_session_runtime_test.go:95:105: undefined: WebSocketSessionRequest
+FAIL	polymetrics.ai/internal/connectors/engine [build failed]
+FAIL
+```
+
+The fixture speaks only loopback WebSocket framing and synthetic PCM16 bytes. It never emits a
+provider transcript, credential, authorization value, token-derived value, signed URL, or a raw
+transport control.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or
