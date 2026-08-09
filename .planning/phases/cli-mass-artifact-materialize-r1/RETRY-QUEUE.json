@@ -93,7 +93,7 @@
       "connector": "7shifts",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -111,8 +111,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -137,7 +137,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -230,6 +231,13 @@
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
         }
       ]
     },
@@ -237,7 +245,7 @@
       "connector": "activecampaign",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -255,7 +263,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -275,7 +283,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -322,6 +331,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -667,62 +683,6 @@
         {
           "evidence": "batches/batch-012-outcomes.json",
           "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        }
-      ]
-    },
-    {
-      "connector": "amazon-sqs",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-012-outcomes.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-012-outcomes.json",
-        "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
-        "route": "retained batch source attempt",
-        "stage": "artifact_inventory_unknown",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "html_reference",
-        "retrieved_at": "2026-08-05",
-        "source_reason": "",
-        "source_status": "done",
-        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
-      },
-      "provenance_reports": [
-        "batches/batch-012-materialize.json",
-        "batches/batch-012-outcomes.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-012-materialize.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-012-outcomes.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -1573,7 +1533,7 @@
       "connector": "box",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -1591,8 +1551,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference link \"https://developer.box.com/reference/resources/folder--full\" could not be fetched: fetch artifact: Get \"/reference/folders-resources#folder-full\": artifact request URL must not include query or fragment components",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -1610,7 +1570,8 @@
         "batches/batch-015-materialize.json",
         "batches/batch-015-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -1651,6 +1612,13 @@
         {
           "evidence": "batches/batch-021-outcomes.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference link \"https://developer.box.com/reference/resources/folder--full\" could not be fetched: fetch artifact: Get \"/reference/folders-resources#folder-full\": artifact request URL must not include query or fragment components",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -1661,7 +1629,7 @@
       "connector": "box-data-extract",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -1679,8 +1647,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference link \"https://developer.box.com/reference/resources/folder--full\" could not be fetched: fetch artifact: Get \"/reference/folders-resources#folder-full\": artifact request URL must not include query or fragment components",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -1698,7 +1666,8 @@
         "batches/batch-015-materialize.json",
         "batches/batch-015-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -1739,6 +1708,13 @@
         {
           "evidence": "batches/batch-021-outcomes.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference link \"https://developer.box.com/reference/resources/folder--full\" could not be fetched: fetch artifact: Get \"/reference/folders-resources#folder-full\": artifact request URL must not include query or fragment components",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -1885,118 +1861,6 @@
           "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route",
           "route": "retained batch source attempt",
           "stage": "reference_traversal_budget",
-          "status": "attempted_failed"
-        }
-      ]
-    },
-    {
-      "connector": "brex",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-028-outcomes.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-028-outcomes.json",
-        "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued",
-        "route": "primary official artifact isolated retrieval",
-        "stage": "artifact_fetch",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "openapi",
-        "retrieved_at": "2026-08-05",
-        "source_reason": "",
-        "source_status": "done",
-        "url": "https://developer.brex.com/openapi/"
-      },
-      "provenance_reports": [
-        "batches/batch-007-materialize.json",
-        "batches/batch-007-outcomes.json",
-        "batches/batch-015-materialize.json",
-        "batches/batch-015-outcomes.json",
-        "batches/batch-017-materialize.json",
-        "batches/batch-017-outcomes.json",
-        "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json",
-        "batches/batch-028-outcomes.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-007-materialize.json",
-          "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-007-outcomes.json",
-          "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-015-materialize.json",
-          "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-015-outcomes.json",
-          "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-017-materialize.json",
-          "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-017-outcomes.json",
-          "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-021-materialize.json",
-          "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-021-outcomes.json",
-          "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-028-outcomes.json",
-          "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued",
-          "route": "primary official artifact isolated retrieval",
-          "stage": "artifact_fetch",
           "status": "attempted_failed"
         }
       ]
@@ -2453,7 +2317,7 @@
       "connector": "castor-edc",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -2471,8 +2335,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: path item is not a mapping), and official reference fallback \"https://data.castoredc.com/api\" failed: artifact operation inventory is unknown: official reference \"https://data.castoredc.com/swagger-ui/swagger-ui.css\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: path item is not a mapping), and official reference fallback \"https://data.castoredc.com/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -2495,7 +2359,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -2571,6 +2436,13 @@
         {
           "evidence": "batches/batch-022-source-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: path item is not a mapping), and official reference fallback \"https://data.castoredc.com/api\" failed: artifact operation inventory is unknown: official reference \"https://data.castoredc.com/swagger-ui/swagger-ui.css\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: path item is not a mapping), and official reference fallback \"https://data.castoredc.com/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -2973,7 +2845,7 @@
       "connector": "clockify",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -2991,7 +2863,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context",
         "route": "retained batch source attempt",
         "stage": "artifact_parse",
@@ -3015,7 +2887,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -3090,6 +2963,13 @@
         },
         {
           "evidence": "batches/batch-022-source-materialize.json",
+          "reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context",
+          "route": "retained batch source attempt",
+          "stage": "artifact_parse",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context",
           "route": "retained batch source attempt",
           "stage": "artifact_parse",
@@ -3205,7 +3085,7 @@
       "connector": "confluence",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -3223,7 +3103,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact cache has no confluence.{json,yaml,yml,txt,md,html,htm}",
         "route": "retained batch source attempt",
         "stage": "artifact_fetch",
@@ -3247,7 +3127,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -3322,6 +3203,13 @@
         },
         {
           "evidence": "batches/batch-022-source-materialize.json",
+          "reason": "artifact cache has no confluence.{json,yaml,yml,txt,md,html,htm}",
+          "route": "retained batch source attempt",
+          "stage": "artifact_fetch",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact cache has no confluence.{json,yaml,yml,txt,md,html,htm}",
           "route": "retained batch source attempt",
           "stage": "artifact_fetch",
@@ -3575,7 +3463,7 @@
       "connector": "dixa",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -3593,7 +3481,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://docs.dixa.io/openapi/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -3617,7 +3505,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -3685,6 +3574,13 @@
         },
         {
           "evidence": "batches/batch-022-source-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://docs.dixa.io/openapi/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://docs.dixa.io/openapi/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -4282,7 +4178,7 @@
       "connector": "eventzilla",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -4300,7 +4196,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context",
         "route": "retained batch source attempt",
         "stage": "artifact_parse",
@@ -4321,7 +4217,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -4368,6 +4265,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context",
+          "route": "retained batch source attempt",
+          "stage": "artifact_parse",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context",
           "route": "retained batch source attempt",
           "stage": "artifact_parse",
@@ -4731,7 +4635,7 @@
       "connector": "fastly",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -4749,7 +4653,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (Postman collection has no request items), and official reference fallback \"https://www.fastly.com/documentation/reference/api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -4768,7 +4672,8 @@
         "batches/batch-015-materialize.json",
         "batches/batch-015-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -4808,6 +4713,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (Postman collection has no request items), and official reference fallback \"https://www.fastly.com/documentation/reference/api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (Postman collection has no request items), and official reference fallback \"https://www.fastly.com/documentation/reference/api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -4897,62 +4809,6 @@
         {
           "evidence": "batches/batch-022-source-materialize.json",
           "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        }
-      ]
-    },
-    {
-      "connector": "fillout",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-012-outcomes.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-012-outcomes.json",
-        "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-        "route": "retained batch source attempt",
-        "stage": "artifact_inventory_unknown",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "html_reference",
-        "retrieved_at": "2026-08-06",
-        "source_reason": "",
-        "source_status": "done",
-        "url": "https://www.fillout.com/help/fillout-rest-api"
-      },
-      "provenance_reports": [
-        "batches/batch-012-materialize.json",
-        "batches/batch-012-outcomes.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-012-materialize.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-012-outcomes.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -5051,7 +4907,7 @@
       "connector": "finnhub",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -5069,7 +4925,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /ai-chat has unsupported field \"highUsage\"), and official reference fallback \"https://finnhub.io/docs/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -5093,7 +4949,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -5165,6 +5022,13 @@
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /ai-chat has unsupported field \"highUsage\"), and official reference fallback \"https://finnhub.io/docs/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
         }
       ]
     },
@@ -5172,7 +5036,7 @@
       "connector": "finnworlds",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -5190,7 +5054,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "decode OpenAPI or Swagger artifact: yaml: line 26: did not find expected \u003cdocument start\u003e",
         "route": "retained batch source attempt",
         "stage": "artifact_parse",
@@ -5210,7 +5074,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -5257,6 +5122,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "decode OpenAPI or Swagger artifact: yaml: line 26: did not find expected \u003cdocument start\u003e",
+          "route": "retained batch source attempt",
+          "stage": "artifact_parse",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "decode OpenAPI or Swagger artifact: yaml: line 26: did not find expected \u003cdocument start\u003e",
           "route": "retained batch source attempt",
           "stage": "artifact_parse",
@@ -5420,7 +5292,7 @@
       "connector": "freshbooks",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -5438,7 +5310,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode Postman collection: invalid character '\u003c' looking for beginning of value), and official reference fallback \"https://www.freshbooks.com/api/postman-collection\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -5462,7 +5334,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -5541,6 +5414,13 @@
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode Postman collection: invalid character '\u003c' looking for beginning of value), and official reference fallback \"https://www.freshbooks.com/api/postman-collection\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
         }
       ]
     },
@@ -5597,62 +5477,6 @@
           "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
           "route": "retained batch source attempt",
           "stage": "reference_traversal_budget",
-          "status": "attempted_failed"
-        }
-      ]
-    },
-    {
-      "connector": "freshchat",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-012-outcomes.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-012-outcomes.json",
-        "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-        "route": "retained batch source attempt",
-        "stage": "artifact_inventory_unknown",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "html_reference",
-        "retrieved_at": "2026-08-05",
-        "source_reason": "Task-directed skip: this connector is owned by a live lane.",
-        "source_status": "skipped",
-        "url": "https://developers.freshchat.com/api/"
-      },
-      "provenance_reports": [
-        "batches/batch-012-materialize.json",
-        "batches/batch-012-outcomes.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-012-materialize.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-012-outcomes.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
         }
       ]
@@ -6013,7 +5837,7 @@
       "connector": "genesys",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -6031,8 +5855,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact cache has no genesys.{json,yaml,yml,txt,md,html,htm}",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "/Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/genesys.txt exceeds 16777216-byte artifact limit",
         "route": "retained batch source attempt",
         "stage": "artifact_fetch",
         "status": "attempted_failed"
@@ -6050,7 +5874,8 @@
         "batches/batch-015-materialize.json",
         "batches/batch-015-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -6091,6 +5916,13 @@
         {
           "evidence": "batches/batch-021-outcomes.json",
           "reason": "artifact cache has no genesys.{json,yaml,yml,txt,md,html,htm}",
+          "route": "retained batch source attempt",
+          "stage": "artifact_fetch",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "/Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/genesys.txt exceeds 16777216-byte artifact limit",
           "route": "retained batch source attempt",
           "stage": "artifact_fetch",
           "status": "attempted_failed"
@@ -6245,7 +6077,7 @@
       "connector": "glassfrog",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -6263,7 +6095,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value",
         "route": "retained batch source attempt",
         "stage": "artifact_parse",
@@ -6283,7 +6115,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -6334,6 +6167,13 @@
           "route": "retained batch source attempt",
           "stage": "artifact_parse",
           "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value",
+          "route": "retained batch source attempt",
+          "stage": "artifact_parse",
+          "status": "attempted_failed"
         }
       ]
     },
@@ -6341,7 +6181,7 @@
       "connector": "gologin",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -6359,8 +6199,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context), and official reference fallback \"https://api.gologin.com/docs\" failed: artifact operation inventory is unknown: official reference \"https://api.gologin.com/docs/swagger-ui-init.js\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context), and official reference fallback \"https://api.gologin.com/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -6379,7 +6219,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -6427,6 +6268,13 @@
         {
           "evidence": "batches/batch-021-outcomes.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context), and official reference fallback \"https://api.gologin.com/docs\" failed: artifact operation inventory is unknown: official reference \"https://api.gologin.com/docs/swagger-ui-init.js\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context), and official reference fallback \"https://api.gologin.com/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -6499,62 +6347,6 @@
         {
           "evidence": "batches/batch-015-outcomes.json",
           "reason": "artifact operation inventory is unknown: artifact inventory yielded 21 operation(s), below the ledger's 24",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        }
-      ]
-    },
-    {
-      "connector": "gorgias",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-011-outcomes.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-011-outcomes.json",
-        "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-        "route": "retained batch source attempt",
-        "stage": "artifact_inventory_unknown",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "html_reference",
-        "retrieved_at": "2026-08-05",
-        "source_reason": "",
-        "source_status": "done",
-        "url": "https://developers.gorgias.com/reference"
-      },
-      "provenance_reports": [
-        "batches/batch-011-materialize.json",
-        "batches/batch-011-outcomes.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-011-materialize.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-011-outcomes.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -6685,7 +6477,7 @@
       "connector": "guru",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -6703,8 +6495,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.getguru.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.getguru.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -6722,7 +6514,8 @@
         "batches/batch-015-materialize.json",
         "batches/batch-015-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -6763,6 +6556,13 @@
         {
           "evidence": "batches/batch-021-outcomes.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.getguru.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.getguru.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -7359,7 +7159,7 @@
       "connector": "insightful",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -7377,7 +7177,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: artifact inventory yielded 106 operation(s), below the ledger's 112",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -7401,7 +7201,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -7476,6 +7277,13 @@
         },
         {
           "evidence": "batches/batch-022-source-materialize.json",
+          "reason": "artifact operation inventory is unknown: artifact inventory yielded 106 operation(s), below the ledger's 112",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: artifact inventory yielded 106 operation(s), below the ledger's 112",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -7583,7 +7391,7 @@
       "connector": "intercom",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -7601,7 +7409,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact yielded 231 operation(s), below the ledger's 324; official reference fallback \"https://developers.intercom.com/docs/references/rest-api/api.intercom.io\" failed: artifact operation inventory is unknown: official reference \"https://developers.intercom.com/app-data.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact openapi field: must be a string; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -7620,7 +7428,8 @@
         "batches/batch-015-materialize.json",
         "batches/batch-015-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -7653,6 +7462,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact yielded 231 operation(s), below the ledger's 324; official reference fallback \"https://developers.intercom.com/docs/references/rest-api/api.intercom.io\" failed: artifact operation inventory is unknown: official reference \"https://developers.intercom.com/app-data.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact openapi field: must be a string; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact yielded 231 operation(s), below the ledger's 324; official reference fallback \"https://developers.intercom.com/docs/references/rest-api/api.intercom.io\" failed: artifact operation inventory is unknown: official reference \"https://developers.intercom.com/app-data.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact openapi field: must be a string; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -7752,7 +7568,7 @@
       "connector": "invoiceninja",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -7770,7 +7586,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context",
         "route": "retained batch source attempt",
         "stage": "artifact_parse",
@@ -7789,7 +7605,8 @@
         "batches/batch-015-materialize.json",
         "batches/batch-015-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -7829,6 +7646,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context",
+          "route": "retained batch source attempt",
+          "stage": "artifact_parse",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context",
           "route": "retained batch source attempt",
           "stage": "artifact_parse",
@@ -7896,7 +7720,7 @@
       "connector": "jobnimbus",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -7914,7 +7738,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value",
         "route": "retained batch source attempt",
         "stage": "artifact_parse",
@@ -7934,7 +7758,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -7981,6 +7806,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value",
+          "route": "retained batch source attempt",
+          "stage": "artifact_parse",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value",
           "route": "retained batch source attempt",
           "stage": "artifact_parse",
@@ -8080,7 +7912,7 @@
       "connector": "judge-me-reviews",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -8098,7 +7930,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact path \"reviews/{id}\" must be non-empty and connector-relative), and official reference fallback \"https://judge.me/api/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -8119,7 +7951,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -8166,6 +7999,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact path \"reviews/{id}\" must be non-empty and connector-relative), and official reference fallback \"https://judge.me/api/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact path \"reviews/{id}\" must be non-empty and connector-relative), and official reference fallback \"https://judge.me/api/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -8321,7 +8161,7 @@
       "connector": "k6-cloud",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -8339,7 +8179,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact yielded 51 operation(s), below the ledger's 57; official reference fallback \"https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -8360,7 +8200,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -8407,6 +8248,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact yielded 51 operation(s), below the ledger's 57; official reference fallback \"https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact yielded 51 operation(s), below the ledger's 57; official reference fallback \"https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -8482,7 +8330,7 @@
       "connector": "kisi",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -8500,7 +8348,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "decode OpenAPI or Swagger artifact: yaml: line 21: mapping values are not allowed in this context",
         "route": "retained batch source attempt",
         "stage": "artifact_parse",
@@ -8524,7 +8372,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -8599,6 +8448,13 @@
         },
         {
           "evidence": "batches/batch-022-source-materialize.json",
+          "reason": "decode OpenAPI or Swagger artifact: yaml: line 21: mapping values are not allowed in this context",
+          "route": "retained batch source attempt",
+          "stage": "artifact_parse",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "decode OpenAPI or Swagger artifact: yaml: line 21: mapping values are not allowed in this context",
           "route": "retained batch source attempt",
           "stage": "artifact_parse",
@@ -8868,7 +8724,7 @@
       "connector": "lob",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -8886,7 +8742,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "decode OpenAPI or Swagger artifact: yaml: line 42: found character that cannot start any token",
         "route": "retained batch source attempt",
         "stage": "artifact_parse",
@@ -8907,7 +8763,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -8965,6 +8822,13 @@
           "route": "retained batch source attempt",
           "stage": "artifact_parse",
           "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "decode OpenAPI or Swagger artifact: yaml: line 42: found character that cannot start any token",
+          "route": "retained batch source attempt",
+          "stage": "artifact_parse",
+          "status": "attempted_failed"
         }
       ]
     },
@@ -8972,7 +8836,7 @@
       "connector": "lokalise",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -8990,7 +8854,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "decode OpenAPI or Swagger artifact: yaml: line 53: did not find expected \u003cdocument start\u003e",
         "route": "retained batch source attempt",
         "stage": "artifact_parse",
@@ -9014,7 +8878,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -9089,6 +8954,13 @@
         },
         {
           "evidence": "batches/batch-022-source-materialize.json",
+          "reason": "decode OpenAPI or Swagger artifact: yaml: line 53: did not find expected \u003cdocument start\u003e",
+          "route": "retained batch source attempt",
+          "stage": "artifact_parse",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "decode OpenAPI or Swagger artifact: yaml: line 53: did not find expected \u003cdocument start\u003e",
           "route": "retained batch source attempt",
           "stage": "artifact_parse",
@@ -9429,7 +9301,7 @@
       "connector": "mailtrap",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -9447,7 +9319,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://docs.mailtrap.io/developers/openapi-specs\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -9466,7 +9338,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -9499,6 +9372,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://docs.mailtrap.io/developers/openapi-specs\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://docs.mailtrap.io/developers/openapi-specs\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -9566,7 +9446,7 @@
       "connector": "mendeley",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -9584,8 +9464,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact operation inventory is unknown: primary artifact yielded 16 operation(s), below the ledger's 67; official reference fallback \"https://api.mendeley.com/apidocs/openapi\" failed: artifact operation inventory is unknown: official reference \"https://api.mendeley.com/apidocs/openapi/favicon.png\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact yielded 16 operation(s), below the ledger's 67; official reference fallback \"https://api.mendeley.com/apidocs/openapi\" failed: artifact operation inventory is unknown: official reference \"https://api.mendeley.com/apidocs/openapi/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -9603,7 +9483,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -9644,6 +9525,13 @@
         {
           "evidence": "batches/batch-021-outcomes.json",
           "reason": "artifact operation inventory is unknown: primary artifact yielded 16 operation(s), below the ledger's 67; official reference fallback \"https://api.mendeley.com/apidocs/openapi\" failed: artifact operation inventory is unknown: official reference \"https://api.mendeley.com/apidocs/openapi/favicon.png\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact yielded 16 operation(s), below the ledger's 67; official reference fallback \"https://api.mendeley.com/apidocs/openapi\" failed: artifact operation inventory is unknown: official reference \"https://api.mendeley.com/apidocs/openapi/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -9982,7 +9870,7 @@
       "connector": "mixmax",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -10000,8 +9888,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.mixmax.com/reference/getting-started-with-the-api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.mixmax.com/reference/getting-started-with-the-api\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -10019,7 +9907,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -10060,6 +9949,13 @@
         {
           "evidence": "batches/batch-021-outcomes.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.mixmax.com/reference/getting-started-with-the-api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.mixmax.com/reference/getting-started-with-the-api\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -11408,7 +11304,7 @@
       "connector": "paypal-transaction",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -11426,7 +11322,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.paypal.com/api/rest/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -11445,7 +11341,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -11478,6 +11375,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.paypal.com/api/rest/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.paypal.com/api/rest/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -12123,7 +12027,7 @@
       "connector": "productboard",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -12141,8 +12045,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.productboard.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.productboard.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -12159,7 +12063,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -12193,6 +12098,13 @@
         {
           "evidence": "batches/batch-021-outcomes.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.productboard.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.productboard.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -12473,142 +12385,6 @@
       ]
     },
     {
-      "connector": "recurly",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-028-outcomes.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-028-outcomes.json",
-        "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued",
-        "route": "primary official artifact isolated retrieval",
-        "stage": "artifact_fetch",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "openapi",
-        "retrieved_at": "2026-08-05",
-        "source_reason": "",
-        "source_status": "done",
-        "url": "https://github.com/recurly/recurly-client-go/blob/main/openapi/api.yaml"
-      },
-      "provenance_reports": [
-        "batches/batch-007-materialize.json",
-        "batches/batch-007-outcomes.json",
-        "batches/batch-015-materialize.json",
-        "batches/batch-015-outcomes.json",
-        "batches/batch-017-materialize.json",
-        "batches/batch-017-outcomes.json",
-        "batches/batch-022-cache-preflight.json",
-        "batches/batch-022-gate.json",
-        "batches/batch-022-materialize.json",
-        "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json",
-        "batches/batch-028-outcomes.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-007-materialize.json",
-          "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-007-outcomes.json",
-          "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-015-materialize.json",
-          "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-015-outcomes.json",
-          "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-017-materialize.json",
-          "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-017-outcomes.json",
-          "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-cache-preflight.json",
-          "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-gate.json",
-          "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/recurly: no such file or directory",
-          "route": "retained batch source attempt",
-          "stage": "bundle_path",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-materialize.json",
-          "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/recurly: no such file or directory",
-          "route": "retained batch source attempt",
-          "stage": "bundle_path",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-outcomes.json",
-          "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-source-materialize.json",
-          "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-028-outcomes.json",
-          "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued",
-          "route": "primary official artifact isolated retrieval",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        }
-      ]
-    },
-    {
       "connector": "reddit",
       "official_routes": [
         {
@@ -12781,7 +12557,7 @@
       "connector": "reply-io",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -12799,7 +12575,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact yielded 359 operation(s), below the ledger's 377; official reference fallback \"https://docs.reply.io/api-reference/introduction\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -12816,7 +12592,8 @@
         "batches/batch-003-materialize.json",
         "batches/batch-003-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -12835,6 +12612,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact yielded 359 operation(s), below the ledger's 377; official reference fallback \"https://docs.reply.io/api-reference/introduction\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact yielded 359 operation(s), below the ledger's 377; official reference fallback \"https://docs.reply.io/api-reference/introduction\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -12958,7 +12742,7 @@
       "connector": "rocketlane",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -12976,8 +12760,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developer.rocketlane.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developer.rocketlane.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -12995,7 +12779,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -13039,6 +12824,13 @@
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developer.rocketlane.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
         }
       ]
     },
@@ -13046,7 +12838,7 @@
       "connector": "rollbar",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -13064,8 +12856,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://docs.rollbar.com/reference/getting-started-1\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://docs.rollbar.com/reference/getting-started-1\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -13082,7 +12874,8 @@
         "batches/batch-017-materialize.json",
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -13116,6 +12909,13 @@
         {
           "evidence": "batches/batch-021-outcomes.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://docs.rollbar.com/reference/getting-started-1\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://docs.rollbar.com/reference/getting-started-1\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -13391,7 +13191,7 @@
       "connector": "secoda",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -13409,8 +13209,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: did not find expected comment or line break), and official reference fallback \"https://docs.secoda.co/api/authentication.md\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: did not find expected comment or line break), and official reference fallback \"https://docs.secoda.co/api/authentication.md\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -13431,7 +13231,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -13493,6 +13294,13 @@
         {
           "evidence": "batches/batch-022-source-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: did not find expected comment or line break), and official reference fallback \"https://docs.secoda.co/api/authentication.md\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: did not find expected comment or line break), and official reference fallback \"https://docs.secoda.co/api/authentication.md\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -13559,7 +13367,7 @@
       "connector": "sendgrid",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -13577,7 +13385,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://www.twilio.com/docs/sendgrid/api-reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -13594,7 +13402,8 @@
         "batches/batch-007-materialize.json",
         "batches/batch-007-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -13620,6 +13429,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://www.twilio.com/docs/sendgrid/api-reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://www.twilio.com/docs/sendgrid/api-reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -13719,7 +13535,7 @@
       "connector": "sendpulse",
       "official_routes": [
         {
-          "evidence": "batches/batch-021-outcomes.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -13737,7 +13553,7 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-021-outcomes.json",
+        "evidence": "batches/batch-029-materialize.json",
         "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact has no HTTP or webhook operations), and official reference fallback \"https://sendpulse.com/integrations/api\" failed: fetch artifact: provider returned HTTP 403",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
@@ -13754,7 +13570,8 @@
         "batches/batch-007-materialize.json",
         "batches/batch-007-outcomes.json",
         "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json"
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -13780,6 +13597,13 @@
         },
         {
           "evidence": "batches/batch-021-outcomes.json",
+          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact has no HTTP or webhook operations), and official reference fallback \"https://sendpulse.com/integrations/api\" failed: fetch artifact: provider returned HTTP 403",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact has no HTTP or webhook operations), and official reference fallback \"https://sendpulse.com/integrations/api\" failed: fetch artifact: provider returned HTTP 403",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
@@ -15249,7 +15073,7 @@
       "connector": "teamtailor",
       "official_routes": [
         {
-          "evidence": "batches/batch-022-source-materialize.json",
+          "evidence": "batches/batch-029-materialize.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -15267,8 +15091,8 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-022-source-materialize.json",
-        "reason": "artifact operation inventory is unknown: primary artifact yielded 127 operation(s), below the ledger's 129; official reference fallback \"https://docs.teamtailor.com/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+        "evidence": "batches/batch-029-materialize.json",
+        "reason": "artifact operation inventory is unknown: artifact inventory yielded 128 operation(s), below the ledger's 129",
         "route": "retained batch source attempt",
         "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
@@ -15289,7 +15113,8 @@
         "batches/batch-022-gate.json",
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json"
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json"
       ],
       "retry_attempts": [
         {
@@ -15351,6 +15176,13 @@
         {
           "evidence": "batches/batch-022-source-materialize.json",
           "reason": "artifact operation inventory is unknown: primary artifact yielded 127 operation(s), below the ledger's 129; official reference fallback \"https://docs.teamtailor.com/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+          "route": "retained batch source attempt",
+          "stage": "artifact_inventory_unknown",
+          "status": "attempted_failed"
+        },
+        {
+          "evidence": "batches/batch-029-materialize.json",
+          "reason": "artifact operation inventory is unknown: artifact inventory yielded 128 operation(s), below the ledger's 129",
           "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
@@ -17046,62 +16878,6 @@
           "status": "attempted_failed"
         }
       ]
-    },
-    {
-      "connector": "zoom",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-011-outcomes.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-011-outcomes.json",
-        "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-        "route": "retained batch source attempt",
-        "stage": "artifact_inventory_unknown",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "html_reference",
-        "retrieved_at": "2026-08-05",
-        "source_reason": "Task-directed skip: rebuilt today; totals supplied in the sweep brief.",
-        "source_status": "skipped",
-        "url": "https://developers.zoom.us/docs/api/"
-      },
-      "provenance_reports": [
-        "batches/batch-011-materialize.json",
-        "batches/batch-011-outcomes.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-011-materialize.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-011-outcomes.json",
-          "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        }
-      ]
     }
   ],
   "reconstruction_report": "LEDGER-RECONSTRUCTION-20260809.json",
@@ -17178,6 +16954,27 @@
         "evidence": "preexisting v2 bundle",
         "route": "current validated bundle and retained batch/recovery evidence",
         "state": "already_complete"
+      }
+    },
+    {
+      "connector": "amazon-sqs",
+      "primary_source": {
+        "kind": "html_reference",
+        "retrieved_at": "2026-08-05",
+        "source_reason": "",
+        "source_status": "done",
+        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
+      },
+      "provenance_reports": [
+        "batches/batch-012-materialize.json",
+        "batches/batch-012-outcomes.json",
+        "batches/batch-031-amazon-sqs-materialize.json",
+        "batches/batch-031-outcomes.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-031-outcomes.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
       }
     },
     {
@@ -17421,6 +17218,35 @@
       ],
       "resolved_by": {
         "evidence": "batches/batch-003-outcomes.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
+    {
+      "connector": "brex",
+      "primary_source": {
+        "kind": "openapi",
+        "retrieved_at": "2026-08-05",
+        "source_reason": "",
+        "source_status": "done",
+        "url": "https://developer.brex.com/openapi/"
+      },
+      "provenance_reports": [
+        "batches/batch-007-materialize.json",
+        "batches/batch-007-outcomes.json",
+        "batches/batch-015-materialize.json",
+        "batches/batch-015-outcomes.json",
+        "batches/batch-017-materialize.json",
+        "batches/batch-017-outcomes.json",
+        "batches/batch-021-materialize.json",
+        "batches/batch-021-outcomes.json",
+        "batches/batch-028-outcomes.json",
+        "batches/batch-029-materialize.json",
+        "batches/batch-036-brex-materialize.json",
+        "batches/batch-036-outcomes.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-036-outcomes.json",
         "route": "current validated bundle and retained batch/recovery evidence",
         "state": "newly_materialized"
       }
@@ -18259,6 +18085,27 @@
       }
     },
     {
+      "connector": "fillout",
+      "primary_source": {
+        "kind": "html_reference",
+        "retrieved_at": "2026-08-06",
+        "source_reason": "",
+        "source_status": "done",
+        "url": "https://www.fillout.com/help/fillout-rest-api"
+      },
+      "provenance_reports": [
+        "batches/batch-012-materialize.json",
+        "batches/batch-012-outcomes.json",
+        "batches/batch-032-fillout-materialize.json",
+        "batches/batch-032-outcomes.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-032-outcomes.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
+    {
       "connector": "firehydrant",
       "primary_source": {
         "kind": "html_reference",
@@ -18374,6 +18221,27 @@
       ],
       "resolved_by": {
         "evidence": "batches/batch-022-source-materialize.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
+    {
+      "connector": "freshchat",
+      "primary_source": {
+        "kind": "html_reference",
+        "retrieved_at": "2026-08-05",
+        "source_reason": "Task-directed skip: this connector is owned by a live lane.",
+        "source_status": "skipped",
+        "url": "https://developers.freshchat.com/api/"
+      },
+      "provenance_reports": [
+        "batches/batch-012-materialize.json",
+        "batches/batch-012-outcomes.json",
+        "batches/batch-033-freshchat-materialize.json",
+        "batches/batch-033-outcomes.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-033-outcomes.json",
         "route": "current validated bundle and retained batch/recovery evidence",
         "state": "newly_materialized"
       }
@@ -18764,6 +18632,27 @@
       ],
       "resolved_by": {
         "evidence": "batches/batch-013-retry-v5-materialize.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
+    {
+      "connector": "gorgias",
+      "primary_source": {
+        "kind": "html_reference",
+        "retrieved_at": "2026-08-05",
+        "source_reason": "",
+        "source_status": "done",
+        "url": "https://developers.gorgias.com/reference"
+      },
+      "provenance_reports": [
+        "batches/batch-011-materialize.json",
+        "batches/batch-011-outcomes.json",
+        "batches/batch-034-gorgias-materialize.json",
+        "batches/batch-034-outcomes.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-034-outcomes.json",
         "route": "current validated bundle and retained batch/recovery evidence",
         "state": "newly_materialized"
       }
@@ -19906,6 +19795,38 @@
       }
     },
     {
+      "connector": "recurly",
+      "primary_source": {
+        "kind": "openapi",
+        "retrieved_at": "2026-08-05",
+        "source_reason": "",
+        "source_status": "done",
+        "url": "https://github.com/recurly/recurly-client-go/blob/main/openapi/api.yaml"
+      },
+      "provenance_reports": [
+        "batches/batch-007-materialize.json",
+        "batches/batch-007-outcomes.json",
+        "batches/batch-015-materialize.json",
+        "batches/batch-015-outcomes.json",
+        "batches/batch-017-materialize.json",
+        "batches/batch-017-outcomes.json",
+        "batches/batch-022-cache-preflight.json",
+        "batches/batch-022-gate.json",
+        "batches/batch-022-materialize.json",
+        "batches/batch-022-outcomes.json",
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-028-outcomes.json",
+        "batches/batch-029-materialize.json",
+        "batches/batch-030-outcomes.json",
+        "batches/batch-030-recurly-materialize.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-030-recurly-materialize.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
+    {
       "connector": "repairshopr",
       "primary_source": {
         "kind": "openapi",
@@ -21005,6 +20926,27 @@
       ],
       "resolved_by": {
         "evidence": "batches/batch-007-outcomes.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
+    {
+      "connector": "zoom",
+      "primary_source": {
+        "kind": "html_reference",
+        "retrieved_at": "2026-08-05",
+        "source_reason": "Task-directed skip: rebuilt today; totals supplied in the sweep brief.",
+        "source_status": "skipped",
+        "url": "https://developers.zoom.us/docs/api/"
+      },
+      "provenance_reports": [
+        "batches/batch-011-materialize.json",
+        "batches/batch-011-outcomes.json",
+        "batches/batch-035-outcomes.json",
+        "batches/batch-035-zoom-materialize.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-035-zoom-materialize.json",
         "route": "current validated bundle and retained batch/recovery evidence",
         "state": "newly_materialized"
       }

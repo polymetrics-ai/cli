@@ -688,6 +688,134 @@ func TestBatchMaterializeUsesExactExistingSurfaceEvidence(t *testing.T) {
 	}
 }
 
+func TestBatchMaterializeAllowsExactUnversionedOfficialReference(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"scope": "The preserved provider inventory was exhaustively counted from the official reference.",
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "DELETE", "path": "/widgets/{id}", "operation": { "model": "destructive_action", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "The official provider operation requires explicit approval." } }
+		]
+	}`)}
+	writeBatchBundle(t, sourceDefsRoot, fsys)
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	setBatchManifestOperationCounts(t, manifestPath, 3, 1, 2)
+
+	rawManifest, err := os.ReadFile(manifestPath)
+	if err != nil {
+		t.Fatalf("read manifest fixture: %v", err)
+	}
+	var manifest map[string]any
+	if err := json.Unmarshal(rawManifest, &manifest); err != nil {
+		t.Fatalf("decode manifest fixture: %v", err)
+	}
+	connectors, ok := manifest["connectors"].([]any)
+	if !ok || len(connectors) != 1 {
+		t.Fatalf("manifest connectors = %#v, want one connector", manifest["connectors"])
+	}
+	connector, ok := connectors[0].(map[string]any)
+	if !ok {
+		t.Fatalf("manifest connector = %#v, want object", connectors[0])
+	}
+	artifact, ok := connector["artifact"].(map[string]any)
+	if !ok {
+		t.Fatalf("manifest artifact = %#v, want object", connector["artifact"])
+	}
+	artifact["url"] = "https://example.test/reference"
+	artifact["kind"] = "html_reference"
+	artifact["version"] = ""
+	artifact["unversioned_official_reference"] = true
+	rawManifest, err = json.MarshalIndent(manifest, "", "  ")
+	if err != nil {
+		t.Fatalf("encode unversioned manifest fixture: %v", err)
+	}
+	if err := os.WriteFile(manifestPath, append(rawManifest, '\n'), 0o644); err != nil {
+		t.Fatalf("write unversioned manifest fixture: %v", err)
+	}
+
+	artifactDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.txt"), []byte("official provider reference index"), 0o644); err != nil {
+		t.Fatalf("write official artifact: %v", err)
+	}
+	defsRoot := t.TempDir()
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-09", "--report", reportPath, "--existing-surface-evidence"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("unversioned exact-evidence materialize exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	var report BatchMaterializeReport
+	decodeJSONFile(t, reportPath, &report)
+	if len(report.Included) != 1 || report.Included[0].Artifact.Version != "provider-publishes-no-version-marker" {
+		t.Fatalf("unversioned materialize report = %+v, want explicit no-version provenance", report)
+	}
+	var surface engine.APISurface
+	decodeJSONFile(t, filepath.Join(defsRoot, "cli-surface", "api_surface.json"), &surface)
+	if !strings.Contains(surface.Scope, "provider publishes no version marker") {
+		t.Fatalf("unversioned surface scope = %q, want documented no-version marker", surface.Scope)
+	}
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Provenance == nil || endpoint.Provenance.Version != "provider-publishes-no-version-marker" {
+			t.Fatalf("unversioned endpoint provenance = %+v, want explicit no-version marker", endpoint.Provenance)
+		}
+	}
+
+	withoutEvidenceReport := filepath.Join(t.TempDir(), "without-evidence.json")
+	stdout.Reset()
+	stderr.Reset()
+	code = run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", t.TempDir(), "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-09", "--report", withoutEvidenceReport}, &stdout, &stderr)
+	if code != 1 {
+		t.Fatalf("unversioned ordinary materialize exit = %d, want 1; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	decodeJSONFile(t, withoutEvidenceReport, &report)
+	if len(report.Included) != 0 || len(report.Dropped) != 1 || report.Dropped[0].Stage != "existing_surface_evidence" || !strings.Contains(report.Dropped[0].Reason, "requires --existing-surface-evidence") {
+		t.Fatalf("unversioned ordinary materialize report = %+v, want exact-evidence refusal", report)
+	}
+
+	setBatchManifestOperationCounts(t, manifestPath, 4, 2, 2)
+	mismatchReportPath := filepath.Join(t.TempDir(), "mismatch.json")
+	stdout.Reset()
+	stderr.Reset()
+	code = run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", t.TempDir(), "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-09", "--report", mismatchReportPath, "--existing-surface-evidence"}, &stdout, &stderr)
+	if code != 1 {
+		t.Fatalf("mismatched unversioned materialize exit = %d, want 1; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	decodeJSONFile(t, mismatchReportPath, &report)
+	if len(report.Included) != 0 || len(report.Dropped) != 1 || report.Dropped[0].Stage != "existing_surface_evidence" || !strings.Contains(report.Dropped[0].Reason, "3 operation(s), not the immutable ledger count 4") {
+		t.Fatalf("mismatched unversioned report = %+v, want exact-count refusal", report)
+	}
+}
+
+func TestReadBatchManifestRejectsUndeclaredUnversionedArtifact(t *testing.T) {
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	rawManifest, err := os.ReadFile(manifestPath)
+	if err != nil {
+		t.Fatalf("read manifest fixture: %v", err)
+	}
+	var manifest map[string]any
+	if err := json.Unmarshal(rawManifest, &manifest); err != nil {
+		t.Fatalf("decode manifest fixture: %v", err)
+	}
+	connectors := manifest["connectors"].([]any)
+	artifact := connectors[0].(map[string]any)["artifact"].(map[string]any)
+	artifact["version"] = ""
+	rawManifest, err = json.MarshalIndent(manifest, "", "  ")
+	if err != nil {
+		t.Fatalf("encode ordinary unversioned manifest fixture: %v", err)
+	}
+	if err := os.WriteFile(manifestPath, append(rawManifest, '\n'), 0o644); err != nil {
+		t.Fatalf("write ordinary unversioned manifest fixture: %v", err)
+	}
+
+	if _, err := readBatchManifest(manifestPath); err == nil || !strings.Contains(err.Error(), "artifact.version is required") {
+		t.Fatalf("read ordinary unversioned manifest error = %v, want preserved version guard", err)
+	}
+}
+
 func TestExistingSurfaceEvidenceInventoryMergesSharedEndpointBindings(t *testing.T) {
 	bundle := engine.Bundle{
 		Name: "example",

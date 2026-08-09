@@ -4,15 +4,15 @@
       "id": "preview_invoice",
       "kind": "rest_read",
       "summary": "Preview new invoice for pending line items",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_invoice",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_invoice",
       "rest": {
         "method": "POST",
         "path": "/accounts/{account_id}/invoices/preview",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "properties": {
@@ -134,10 +134,10 @@
       "id": "get_invoice_pdf",
       "kind": "binary_download",
       "summary": "Fetch an invoice as a PDF",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_invoice_pdf",
       "risk": "medium",
       "approval": "none",
       "output_policy": "binary",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_invoice_pdf",
       "binary": {
         "method": "GET",
         "path": "/invoices/{invoice_id}.pdf",
@@ -148,10 +148,10 @@
       "id": "get_preview_renewal",
       "kind": "rest_read",
       "summary": "Fetch a preview of a subscription's renewal invoice(s)",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_preview_renewal",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_preview_renewal",
       "rest": {
         "method": "GET",
         "path": "/subscriptions/{subscription_id}/preview_renewal",
@@ -162,15 +162,15 @@
       "id": "preview_subscription_change",
       "kind": "rest_read",
       "summary": "Preview a new subscription change",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_subscription_change",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_subscription_change",
       "rest": {
         "method": "POST",
         "path": "/subscriptions/{subscription_id}/change/preview",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "properties": {
@@ -535,15 +535,15 @@
       "id": "preview_purchase",
       "kind": "rest_read",
       "summary": "Preview a new purchase",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_purchase",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_purchase",
       "rest": {
         "method": "POST",
         "path": "/purchases/preview",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "properties": {
@@ -1814,10 +1814,10 @@
       "id": "get_export_dates",
       "kind": "binary_download",
       "summary": "List the dates that have an available export to download.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_dates",
       "risk": "medium",
       "approval": "none",
       "output_policy": "binary",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_dates",
       "binary": {
         "method": "GET",
         "path": "/export_dates",
@@ -1828,10 +1828,10 @@
       "id": "get_export_files",
       "kind": "binary_download",
       "summary": "List of the export files that are available to download.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_files",
       "risk": "medium",
       "approval": "none",
       "output_policy": "binary",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_files",
       "binary": {
         "method": "GET",
         "path": "/export_dates/{export_date}/export_files",
@@ -1842,15 +1842,15 @@
       "id": "preview_gift_card",
       "kind": "rest_read",
       "summary": "Preview gift card",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_gift_card",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_gift_card",
       "rest": {
         "method": "POST",
         "path": "/gift_cards/preview",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "properties": {

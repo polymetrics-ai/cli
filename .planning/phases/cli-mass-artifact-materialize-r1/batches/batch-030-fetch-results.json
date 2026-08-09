@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-030-recurly-sdk-manifest.json",
+  "fetched": [
+    {
+      "connector": "recurly",
+      "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-030-recurly-artifacts/recurly.yaml",
+      "status": "retrieved",
+      "reason": null
+    }
+  ]
+}

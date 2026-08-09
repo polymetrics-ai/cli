@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-033-freshchat-unversioned-reference-manifest.json",
+  "fetched": [
+    {
+      "connector": "freshchat",
+      "source_url": "https://developers.freshchat.com/api/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-033-freshchat-artifacts/freshchat.html",
+      "status": "retrieved",
+      "reason": null
+    }
+  ]
+}

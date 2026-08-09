@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "checkpoint": "ba950a91b",
+  "candidate_directories": 71,
+  "candidate_total_kib": 2972984,
+  "phase_root_before_kib": 3248656,
+  "phase_root_after_kib": 275672,
+  "trash_move": "completed",
+  "permanent_deletion": {
+    "status": "not_performed",
+    "unique_matches": 0,
+    "reason": "macOS denied top-level Trash enumeration to both shell and Foundation; no global Trash operation was attempted."
+  },
+  "df_available_before_purge_attempt_kib": 6907360,
+  "df_available_after_purge_attempt_kib": 5604632,
+  "nonrecoverable_cache_bytes": 0,
+  "reproducibility": "The 71 moved directories contain only completed-batch raw fetch caches and duplicate staged/source-def/validated-def trees; compact manifests, outcomes, hashes, ledgers, and connector source changes remain in the worktree and checkpoint."
+}

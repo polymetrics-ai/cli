@@ -110,6 +110,12 @@
 - Red: 40 retry-pending connectors already carry a complete, classified source surface whose normalized endpoint count exactly equals the immutable official-survey count, but their current primary provider document is a reference index or an otherwise non-consumable artifact. Replaying reference traversal would neither add evidence nor finish JSON materialization.
 - Green: an explicit `--existing-surface-evidence` materialization mode requires the cited official artifact bytes, an exact pre-existing endpoint-count match, and a source bundle with an API surface. It upgrades only that existing inventory to v2 endpoint-local provenance, regenerates operation/CLI JSON, and rejects a count mismatch rather than silently accepting partial evidence. The focused regression covers the success and mismatch cases.
 
+## Explicit unversioned official-reference provenance
+
+- Red: an official HTML reference that publishes no version marker was rejected solely because `artifact.version` is normally required, even when its preserved endpoint inventory exactly matched the immutable survey. A broad relaxation would allow ordinary unversioned artifacts to bypass provenance validation.
+- Green: `TestBatchMaterializeAllowsExactUnversionedOfficialReference` proves an explicitly declared unversioned official HTML reference materializes only through `--existing-surface-evidence`, emits the `provider-publishes-no-version-marker` provenance value, rejects a non-evidence invocation, and rejects a 3-versus-4 immutable-count mismatch. `TestReadBatchManifestRejectsUndeclaredUnversionedArtifact` proves ordinary artifacts still require a nonempty version. `go test -count=1 ./cmd/connectorgen -run 'TestBatchMaterializeAllowsExactUnversionedOfficialReference|TestReadBatchManifestRejectsUndeclaredUnversionedArtifact|TestBatchMaterializeUsesExactExistingSurfaceEvidence'` passes.
+- Skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, and `golang-safety`.
+
 ## Shared endpoint bindings in direct evidence materialization
 
 - Red: the first B028 staging preflight found SearXNG's two ETL streams bound to one `GET /search` provider request emitted as duplicate v2 endpoint rows. The generated CLI can only resolve one coverage classifier for a method/path, so `search list` appeared to target the `reddit` binding.
