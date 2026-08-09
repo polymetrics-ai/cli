@@ -1037,6 +1037,24 @@ make lint
 0 issues.
 ```
 
+## Review repair — opaque interpolated path segments (2026-08-10)
+
+Red: the direct-read validator rejected a standalone `.`, but stream and write paths use
+`engine.InterpolatePath`; its shared post-interpolation guard rejected only `..`, and its
+regression explicitly allowed `.`. A Docker Hub `tag_detail` request could therefore interpolate
+`tag=.` into a provider path segment that a normalizing upstream might rebind to the tags
+collection.
+
+Green: `InterpolatePath` now rejects either dot segment in raw and percent-decoded forms. The
+permissive lone-dot regression is replaced with a rejection check and a normal opaque
+`release-1.2.3` path-segment check. This gate-owned review uses `golang-how-to`,
+`golang-security`, `golang-safety`, `golang-error-handling`, `golang-lint`, and `golang-testing`;
+the outer executor retains GSD lifecycle ownership.
+
+```text
+go test -timeout 20m ./internal/connectors/engine -run '^(TestInterpolatePathRejectsDotDotSegment|TestInterpolatePathRejectsDotDotAmongMultipleSegments|TestInterpolatePathRejectsDotSegment|TestInterpolatePathPreservesOpaqueSegment)$' -count=1
+```
+
 ### Correction 5 — Docker Hub admission is connector-specific, not generic required-key enforcement
 
 The historical GREEN narrative under “add-time admission for incomplete
