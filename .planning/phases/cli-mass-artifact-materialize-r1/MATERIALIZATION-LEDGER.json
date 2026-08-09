@@ -1,21 +1,39 @@
 {
   "counts": {
     "already_complete": 5,
-    "foundation_pending": 189,
+    "foundation_pending": 190,
     "genuinely_blocked": 0,
-    "materialized_total": 203,
-    "newly_materialized": 187,
-    "reachable": 22,
+    "materialized_total": 204,
+    "newly_materialized": 188,
+    "reachable": 23,
     "recovered_pilot": 4,
     "recovered_seven": 7,
-    "remaining": 223,
-    "retry_pending": 223
+    "remaining": 222,
+    "retry_pending": 222
   },
   "entries": [
     {
+      "bundle_provenance": {
+        "artifacts": [
+          {
+            "id": "100ms-artifact-2026-08-09",
+            "url": "https://www.100ms.live/docs/sitemap.xml",
+            "kind": "openapi",
+            "version": "3.0.2",
+            "retrieved_at": "2026-08-09",
+            "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326"
+          }
+        ],
+        "bundle_api_surface": "internal/connectors/defs/100ms/api_surface.json",
+        "endpoint_count": 81,
+        "operation_ledger_version": 2,
+        "source_urls": [
+          "https://www.100ms.live/docs/sitemap.xml"
+        ]
+      },
       "connector": "100ms",
-      "evidence": "batches/batch-037-100ms-outcomes.json",
-      "foundation_pending": false,
+      "evidence": "batches/batch-040-outcomes.json",
+      "foundation_pending": true,
       "provenance_reports": [
         "batches/batch-006-materialize.json",
         "batches/batch-023-gate.json",
@@ -23,10 +41,11 @@
         "batches/batch-023-outcomes.json",
         "batches/batch-023-source-materialize.json",
         "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
-        "batches/batch-037-100ms-outcomes.json"
+        "batches/batch-037-100ms-outcomes.json",
+        "batches/batch-040-100ms-materialize.json",
+        "batches/batch-040-outcomes.json"
       ],
-      "reachability": "not_checked",
-      "reason": "Provider-linked Postman fork has no static export and the provider-linked SDK tree has no OpenAPI/Postman contract; preserve the 73-operation target for official documented-reference traversal.",
+      "reachability": "reachable",
       "source": {
         "kind": "html_reference",
         "retrieved_at": "2026-08-05",
@@ -34,8 +53,7 @@
         "source_status": "done",
         "url": "https://www.100ms.live/docs/sitemap.xml"
       },
-      "stage": "artifact_inventory_unknown",
-      "state": "retry_pending"
+      "state": "newly_materialized"
     },
     {
       "bundle_provenance": {

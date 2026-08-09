@@ -1,0 +1,1751 @@
+{
+  "tagline": "Run 100ms's declared streams and reverse-ETL actions.",
+  "usage": "pm 100ms \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v2 active-rooms room-id",
+        "api get v2 active-rooms room-id peers",
+        "api get v2 active-rooms room-id peers peer-id",
+        "api get v2 analytics events",
+        "api get v2 analytics peer-stats",
+        "api get v2 analytics webhooks replay workflow-id",
+        "api get v2 external-streams job-id",
+        "api get v2 external-streams stream-id",
+        "api get v2 live-streams stream-id",
+        "api get v2 polls poll-id",
+        "api get v2 polls poll-id responses",
+        "api get v2 polls poll-id responses response-id",
+        "api get v2 polls poll-id results",
+        "api get v2 polls poll-id sessions",
+        "api get v2 recording-assets asset-id",
+        "api get v2 recording-assets asset-id presigned-url",
+        "api get v2 recordings recording-id",
+        "api get v2 room-codes room room-id",
+        "api get v2 rooms room-id",
+        "api get v2 sessions session-id",
+        "api get v2 stream-keys room room-id",
+        "api get v2 templates template-id",
+        "api get v2 templates template-id destinations",
+        "api get v2 templates template-id recordings",
+        "api get v2 templates template-id roles role",
+        "api get v2 templates template-id roles role-name",
+        "api get v2 templates template-id settings",
+        "external streams list",
+        "live streams list",
+        "recording assets list",
+        "recordings list",
+        "rooms list",
+        "sessions list",
+        "templates list",
+        "webhook events list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v2 polls poll-id questions question-id",
+        "api delete v2 polls poll-id questions question-id options option-id",
+        "api delete v2 templates template-id roles role",
+        "api delete v2 templates template-id roles role-name",
+        "api post v2 active-rooms room-id end-room",
+        "api post v2 active-rooms room-id peers peer-id",
+        "api post v2 active-rooms room-id remove-peers",
+        "api post v2 active-rooms room-id send-message",
+        "api post v2 analytics events webhooks replay",
+        "api post v2 analytics webhooks replay",
+        "api post v2 external-streams job-id stop",
+        "api post v2 external-streams room room-id start",
+        "api post v2 external-streams room room-id stop",
+        "api post v2 external-streams stream-id stop",
+        "api post v2 live-streams room room-id start",
+        "api post v2 live-streams room room-id stop",
+        "api post v2 live-streams stream-id pause",
+        "api post v2 live-streams stream-id pause-recording",
+        "api post v2 live-streams stream-id resume",
+        "api post v2 live-streams stream-id resume-recording",
+        "api post v2 live-streams stream-id stop",
+        "api post v2 live-streams stream-id timed-metadata",
+        "api post v2 polls",
+        "api post v2 polls poll-id",
+        "api post v2 polls poll-id questions question-id",
+        "api post v2 polls poll-id questions question-id options option-id",
+        "api post v2 recordings recording-id stop",
+        "api post v2 recordings room room-id pause",
+        "api post v2 recordings room room-id resume",
+        "api post v2 room-codes room room-id role role",
+        "api post v2 rooms room-id polls",
+        "api post v2 stream-keys room room-id",
+        "api post v2 stream-keys room room-id disable",
+        "api post v2 templates template-id",
+        "api post v2 templates template-id destinations",
+        "api post v2 templates template-id recordings",
+        "api post v2 templates template-id roles role",
+        "api post v2 templates template-id roles role-name",
+        "api post v2 templates template-id settings",
+        "create room apply",
+        "create room code apply",
+        "create template apply",
+        "start recording apply",
+        "stop recording apply",
+        "update room apply",
+        "update room code apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v2 polls poll-id questions question-id",
+      "summary": "Documented DELETE /v2/polls/{poll_id}/questions/{question_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api delete v2 polls poll-id questions question-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/polls/{poll_id}/questions/{question_id}"
+        }
+      ],
+      "operation": "100ms.delete.v2-polls-poll-id-questions-question-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 polls poll-id questions question-id options option-id",
+      "summary": "Documented DELETE /v2/polls/{poll_id}/questions/{question_id}/options/{option_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api delete v2 polls poll-id questions question-id options option-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}"
+        }
+      ],
+      "operation": "100ms.delete.v2-polls-poll-id-questions-question-id-options-option-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 templates template-id roles role",
+      "summary": "Documented DELETE /v2/templates/{template_id}/roles/{role} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api delete v2 templates template-id roles role --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/templates/{template_id}/roles/{role}"
+        }
+      ],
+      "operation": "100ms.delete.v2-templates-template-id-roles-role",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 templates template-id roles role-name",
+      "summary": "Documented DELETE /v2/templates/{template_id}/roles/{role_name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api delete v2 templates template-id roles role-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/templates/{template_id}/roles/{role_name}"
+        }
+      ],
+      "operation": "100ms.delete.v2-templates-template-id-roles-role-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v2 active-rooms room-id",
+      "summary": "Documented GET /v2/active-rooms/{room_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 active-rooms room-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/active-rooms/{room_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-active-rooms-room-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 active-rooms room-id peers",
+      "summary": "Documented GET /v2/active-rooms/{room_id}/peers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 active-rooms room-id peers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/active-rooms/{room_id}/peers"
+        }
+      ],
+      "operation": "100ms.get.v2-active-rooms-room-id-peers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 active-rooms room-id peers peer-id",
+      "summary": "Documented GET /v2/active-rooms/{room_id}/peers/{peer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 active-rooms room-id peers peer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/active-rooms/{room_id}/peers/{peer_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-active-rooms-room-id-peers-peer-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 analytics events",
+      "summary": "Documented GET /v2/analytics/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 analytics events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/analytics/events"
+        }
+      ],
+      "operation": "100ms.get.v2-analytics-events",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 analytics peer-stats",
+      "summary": "Documented GET /v2/analytics/peer-stats (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 analytics peer-stats --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/analytics/peer-stats"
+        }
+      ],
+      "operation": "100ms.get.v2-analytics-peer-stats",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 analytics webhooks replay workflow-id",
+      "summary": "Documented GET /v2/analytics/webhooks/replay/{workflow_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 analytics webhooks replay workflow-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/analytics/webhooks/replay/{workflow_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-analytics-webhooks-replay-workflow-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 external-streams job-id",
+      "summary": "Documented GET /v2/external-streams/{job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 external-streams job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/external-streams/{job_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-external-streams-job-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 external-streams stream-id",
+      "summary": "Documented GET /v2/external-streams/{stream_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 external-streams stream-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/external-streams/{stream_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-external-streams-stream-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 live-streams stream-id",
+      "summary": "Documented GET /v2/live-streams/{stream_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 live-streams stream-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/live-streams/{stream_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-live-streams-stream-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 polls poll-id",
+      "summary": "Documented GET /v2/polls/{poll_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 polls poll-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/polls/{poll_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-polls-poll-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 polls poll-id responses",
+      "summary": "Documented GET /v2/polls/{poll_id}/responses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 polls poll-id responses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/polls/{poll_id}/responses"
+        }
+      ],
+      "operation": "100ms.get.v2-polls-poll-id-responses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 polls poll-id responses response-id",
+      "summary": "Documented GET /v2/polls/{poll_id}/responses/{response_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 polls poll-id responses response-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/polls/{poll_id}/responses/{response_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-polls-poll-id-responses-response-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 polls poll-id results",
+      "summary": "Documented GET /v2/polls/{poll_id}/results (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 polls poll-id results --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/polls/{poll_id}/results"
+        }
+      ],
+      "operation": "100ms.get.v2-polls-poll-id-results",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 polls poll-id sessions",
+      "summary": "Documented GET /v2/polls/{poll_id}/sessions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 polls poll-id sessions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/polls/{poll_id}/sessions"
+        }
+      ],
+      "operation": "100ms.get.v2-polls-poll-id-sessions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 recording-assets asset-id",
+      "summary": "Documented GET /v2/recording-assets/{asset_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 recording-assets asset-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/recording-assets/{asset_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-recording-assets-asset-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 recording-assets asset-id presigned-url",
+      "summary": "Documented GET /v2/recording-assets/{asset_id}/presigned-url (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 recording-assets asset-id presigned-url --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/recording-assets/{asset_id}/presigned-url"
+        }
+      ],
+      "operation": "100ms.get.v2-recording-assets-asset-id-presigned-url",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 recordings recording-id",
+      "summary": "Documented GET /v2/recordings/{recording_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 recordings recording-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/recordings/{recording_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-recordings-recording-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 room-codes room room-id",
+      "summary": "Documented GET /v2/room-codes/room/{room_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 room-codes room room-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/room-codes/room/{room_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-room-codes-room-room-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 rooms room-id",
+      "summary": "Documented GET /v2/rooms/{room_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 rooms room-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/rooms/{room_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-rooms-room-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 sessions session-id",
+      "summary": "Documented GET /v2/sessions/{session_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 sessions session-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/sessions/{session_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-sessions-session-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 stream-keys room room-id",
+      "summary": "Documented GET /v2/stream-keys/room/{room_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 stream-keys room room-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/stream-keys/room/{room_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-stream-keys-room-room-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 templates template-id",
+      "summary": "Documented GET /v2/templates/{template_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 templates template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/templates/{template_id}"
+        }
+      ],
+      "operation": "100ms.get.v2-templates-template-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 templates template-id destinations",
+      "summary": "Documented GET /v2/templates/{template_id}/destinations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 templates template-id destinations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/templates/{template_id}/destinations"
+        }
+      ],
+      "operation": "100ms.get.v2-templates-template-id-destinations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 templates template-id recordings",
+      "summary": "Documented GET /v2/templates/{template_id}/recordings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 templates template-id recordings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/templates/{template_id}/recordings"
+        }
+      ],
+      "operation": "100ms.get.v2-templates-template-id-recordings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 templates template-id roles role",
+      "summary": "Documented GET /v2/templates/{template_id}/roles/{role} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 templates template-id roles role --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/templates/{template_id}/roles/{role}"
+        }
+      ],
+      "operation": "100ms.get.v2-templates-template-id-roles-role",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 templates template-id roles role-name",
+      "summary": "Documented GET /v2/templates/{template_id}/roles/{role_name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 templates template-id roles role-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/templates/{template_id}/roles/{role_name}"
+        }
+      ],
+      "operation": "100ms.get.v2-templates-template-id-roles-role-name",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 templates template-id settings",
+      "summary": "Documented GET /v2/templates/{template_id}/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api get v2 templates template-id settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/templates/{template_id}/settings"
+        }
+      ],
+      "operation": "100ms.get.v2-templates-template-id-settings",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v2 active-rooms room-id end-room",
+      "summary": "Documented POST /v2/active-rooms/{room_id}/end-room (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 active-rooms room-id end-room --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/active-rooms/{room_id}/end-room"
+        }
+      ],
+      "operation": "100ms.post.v2-active-rooms-room-id-end-room",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 active-rooms room-id peers peer-id",
+      "summary": "Documented POST /v2/active-rooms/{room_id}/peers/{peer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 active-rooms room-id peers peer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/active-rooms/{room_id}/peers/{peer_id}"
+        }
+      ],
+      "operation": "100ms.post.v2-active-rooms-room-id-peers-peer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 active-rooms room-id remove-peers",
+      "summary": "Documented POST /v2/active-rooms/{room_id}/remove-peers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 active-rooms room-id remove-peers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/active-rooms/{room_id}/remove-peers"
+        }
+      ],
+      "operation": "100ms.post.v2-active-rooms-room-id-remove-peers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 active-rooms room-id send-message",
+      "summary": "Documented POST /v2/active-rooms/{room_id}/send-message (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 active-rooms room-id send-message --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/active-rooms/{room_id}/send-message"
+        }
+      ],
+      "operation": "100ms.post.v2-active-rooms-room-id-send-message",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 analytics events webhooks replay",
+      "summary": "Documented POST /v2/analytics/events/webhooks/replay (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 analytics events webhooks replay --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/analytics/events/webhooks/replay"
+        }
+      ],
+      "operation": "100ms.post.v2-analytics-events-webhooks-replay",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 analytics webhooks replay",
+      "summary": "Documented POST /v2/analytics/webhooks/replay (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 analytics webhooks replay --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/analytics/webhooks/replay"
+        }
+      ],
+      "operation": "100ms.post.v2-analytics-webhooks-replay",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post v2 external-streams job-id stop",
+      "summary": "Documented POST /v2/external-streams/{job_id}/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 external-streams job-id stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/external-streams/{job_id}/stop"
+        }
+      ],
+      "operation": "100ms.post.v2-external-streams-job-id-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 external-streams room room-id start",
+      "summary": "Documented POST /v2/external-streams/room/{room_id}/start (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 external-streams room room-id start --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/external-streams/room/{room_id}/start"
+        }
+      ],
+      "operation": "100ms.post.v2-external-streams-room-room-id-start",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 external-streams room room-id stop",
+      "summary": "Documented POST /v2/external-streams/room/{room_id}/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 external-streams room room-id stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/external-streams/room/{room_id}/stop"
+        }
+      ],
+      "operation": "100ms.post.v2-external-streams-room-room-id-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 external-streams stream-id stop",
+      "summary": "Documented POST /v2/external-streams/{stream_id}/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 external-streams stream-id stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/external-streams/{stream_id}/stop"
+        }
+      ],
+      "operation": "100ms.post.v2-external-streams-stream-id-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 live-streams room room-id start",
+      "summary": "Documented POST /v2/live-streams/room/{room_id}/start (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 live-streams room room-id start --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/live-streams/room/{room_id}/start"
+        }
+      ],
+      "operation": "100ms.post.v2-live-streams-room-room-id-start",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 live-streams room room-id stop",
+      "summary": "Documented POST /v2/live-streams/room/{room_id}/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 live-streams room room-id stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/live-streams/room/{room_id}/stop"
+        }
+      ],
+      "operation": "100ms.post.v2-live-streams-room-room-id-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 live-streams stream-id pause",
+      "summary": "Documented POST /v2/live-streams/{stream_id}/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 live-streams stream-id pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/live-streams/{stream_id}/pause"
+        }
+      ],
+      "operation": "100ms.post.v2-live-streams-stream-id-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 live-streams stream-id pause-recording",
+      "summary": "Documented POST /v2/live-streams/{stream_id}/pause-recording (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 live-streams stream-id pause-recording --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/live-streams/{stream_id}/pause-recording"
+        }
+      ],
+      "operation": "100ms.post.v2-live-streams-stream-id-pause-recording",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 live-streams stream-id resume",
+      "summary": "Documented POST /v2/live-streams/{stream_id}/resume (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 live-streams stream-id resume --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/live-streams/{stream_id}/resume"
+        }
+      ],
+      "operation": "100ms.post.v2-live-streams-stream-id-resume",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 live-streams stream-id resume-recording",
+      "summary": "Documented POST /v2/live-streams/{stream_id}/resume-recording (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 live-streams stream-id resume-recording --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/live-streams/{stream_id}/resume-recording"
+        }
+      ],
+      "operation": "100ms.post.v2-live-streams-stream-id-resume-recording",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 live-streams stream-id stop",
+      "summary": "Documented POST /v2/live-streams/{stream_id}/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 live-streams stream-id stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/live-streams/{stream_id}/stop"
+        }
+      ],
+      "operation": "100ms.post.v2-live-streams-stream-id-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 live-streams stream-id timed-metadata",
+      "summary": "Documented POST /v2/live-streams/{stream_id}/timed-metadata (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 live-streams stream-id timed-metadata --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/live-streams/{stream_id}/timed-metadata"
+        }
+      ],
+      "operation": "100ms.post.v2-live-streams-stream-id-timed-metadata",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 polls",
+      "summary": "Documented POST /v2/polls (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 polls --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/polls"
+        }
+      ],
+      "operation": "100ms.post.v2-polls",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 polls poll-id",
+      "summary": "Documented POST /v2/polls/{poll_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 polls poll-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/polls/{poll_id}"
+        }
+      ],
+      "operation": "100ms.post.v2-polls-poll-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 polls poll-id questions question-id",
+      "summary": "Documented POST /v2/polls/{poll_id}/questions/{question_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 polls poll-id questions question-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/polls/{poll_id}/questions/{question_id}"
+        }
+      ],
+      "operation": "100ms.post.v2-polls-poll-id-questions-question-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 polls poll-id questions question-id options option-id",
+      "summary": "Documented POST /v2/polls/{poll_id}/questions/{question_id}/options/{option_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 polls poll-id questions question-id options option-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}"
+        }
+      ],
+      "operation": "100ms.post.v2-polls-poll-id-questions-question-id-options-option-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 recordings recording-id stop",
+      "summary": "Documented POST /v2/recordings/{recording_id}/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 recordings recording-id stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/recordings/{recording_id}/stop"
+        }
+      ],
+      "operation": "100ms.post.v2-recordings-recording-id-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 recordings room room-id pause",
+      "summary": "Documented POST /v2/recordings/room/{room_id}/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 recordings room room-id pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/recordings/room/{room_id}/pause"
+        }
+      ],
+      "operation": "100ms.post.v2-recordings-room-room-id-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 recordings room room-id resume",
+      "summary": "Documented POST /v2/recordings/room/{room_id}/resume (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 recordings room room-id resume --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/recordings/room/{room_id}/resume"
+        }
+      ],
+      "operation": "100ms.post.v2-recordings-room-room-id-resume",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 room-codes room room-id role role",
+      "summary": "Documented POST /v2/room-codes/room/{room_id}/role/{role} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 room-codes room room-id role role --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/room-codes/room/{room_id}/role/{role}"
+        }
+      ],
+      "operation": "100ms.post.v2-room-codes-room-room-id-role-role",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 rooms room-id polls",
+      "summary": "Documented POST /v2/rooms/{room_id}/polls (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 rooms room-id polls --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/rooms/{room_id}/polls"
+        }
+      ],
+      "operation": "100ms.post.v2-rooms-room-id-polls",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 stream-keys room room-id",
+      "summary": "Documented POST /v2/stream-keys/room/{room_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 stream-keys room room-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stream-keys/room/{room_id}"
+        }
+      ],
+      "operation": "100ms.post.v2-stream-keys-room-room-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 stream-keys room room-id disable",
+      "summary": "Documented POST /v2/stream-keys/room/{room_id}/disable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 stream-keys room room-id disable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stream-keys/room/{room_id}/disable"
+        }
+      ],
+      "operation": "100ms.post.v2-stream-keys-room-room-id-disable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 templates template-id",
+      "summary": "Documented POST /v2/templates/{template_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 templates template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/templates/{template_id}"
+        }
+      ],
+      "operation": "100ms.post.v2-templates-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 templates template-id destinations",
+      "summary": "Documented POST /v2/templates/{template_id}/destinations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 templates template-id destinations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/templates/{template_id}/destinations"
+        }
+      ],
+      "operation": "100ms.post.v2-templates-template-id-destinations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 templates template-id recordings",
+      "summary": "Documented POST /v2/templates/{template_id}/recordings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 templates template-id recordings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/templates/{template_id}/recordings"
+        }
+      ],
+      "operation": "100ms.post.v2-templates-template-id-recordings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 templates template-id roles role",
+      "summary": "Documented POST /v2/templates/{template_id}/roles/{role} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 templates template-id roles role --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/templates/{template_id}/roles/{role}"
+        }
+      ],
+      "operation": "100ms.post.v2-templates-template-id-roles-role",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 templates template-id roles role-name",
+      "summary": "Documented POST /v2/templates/{template_id}/roles/{role_name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 templates template-id roles role-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/templates/{template_id}/roles/{role_name}"
+        }
+      ],
+      "operation": "100ms.post.v2-templates-template-id-roles-role-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 templates template-id settings",
+      "summary": "Documented POST /v2/templates/{template_id}/settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms api post v2 templates template-id settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/templates/{template_id}/settings"
+        }
+      ],
+      "operation": "100ms.post.v2-templates-template-id-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "create room apply",
+      "summary": "Plan and execute the create room reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_room",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms create room apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/rooms"
+        }
+      ],
+      "risk": "creates a new 100ms room, or upserts an existing room's template if the same name is reused (100ms's own documented create-with-existing-name behavior); external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create room code apply",
+      "summary": "Plan and execute the create room code reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_room_code",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "flags": [
+        {
+          "name": "room_id",
+          "type": "string",
+          "summary": "Required room id record field.",
+          "maps_to": "record.room_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 100ms create room code apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/room-codes/room/{room_id}"
+        }
+      ],
+      "risk": "generates join-authentication room codes for every role in the named room; codes act as join credentials, external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create template apply",
+      "summary": "Plan and execute the create template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_template",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 100ms create template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/templates"
+        }
+      ],
+      "risk": "creates a new room-policy template (roles/settings); external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "external streams list",
+      "summary": "Run the external streams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "external_streams",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms external streams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/external-streams"
+        }
+      ]
+    },
+    {
+      "path": "live streams list",
+      "summary": "Run the live streams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "live_streams",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms live streams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/live-streams"
+        }
+      ]
+    },
+    {
+      "path": "recording assets list",
+      "summary": "Run the recording assets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "recording_assets",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms recording assets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/recording-assets"
+        }
+      ]
+    },
+    {
+      "path": "recordings list",
+      "summary": "Run the recordings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "recordings",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms recordings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/recordings"
+        }
+      ]
+    },
+    {
+      "path": "rooms list",
+      "summary": "Run the rooms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rooms",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms rooms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/rooms"
+        }
+      ]
+    },
+    {
+      "path": "sessions list",
+      "summary": "Run the sessions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sessions",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms sessions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/sessions"
+        }
+      ]
+    },
+    {
+      "path": "start recording apply",
+      "summary": "Plan and execute the start recording reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "start_recording",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "flags": [
+        {
+          "name": "room_id",
+          "type": "string",
+          "summary": "Required room id record field.",
+          "maps_to": "record.room_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 100ms start recording apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/recordings/room/{room_id}/start"
+        }
+      ],
+      "risk": "starts a composite recording job for the named room; consumes recording/storage quota. External mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "stop recording apply",
+      "summary": "Plan and execute the stop recording reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "stop_recording",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "flags": [
+        {
+          "name": "room_id",
+          "type": "string",
+          "summary": "Required room id record field.",
+          "maps_to": "record.room_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 100ms stop recording apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/recordings/room/{room_id}/stop"
+        }
+      ],
+      "risk": "stops all recording jobs currently running in the named room; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/templates"
+        }
+      ]
+    },
+    {
+      "path": "update room apply",
+      "summary": "Plan and execute the update room reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_room",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 100ms update room apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/rooms/{room_id}"
+        }
+      ],
+      "risk": "mutates an existing room's metadata, or disables/re-enables it via the enabled field (100ms's disable/enable API is the same POST /rooms/{id} endpoint); disabling blocks all future joins to that room. External mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update room code apply",
+      "summary": "Plan and execute the update room code reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_room_code",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "flags": [
+        {
+          "name": "code",
+          "type": "string",
+          "summary": "Required code record field.",
+          "maps_to": "record.code",
+          "required": true
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "summary": "Required enabled record field.",
+          "maps_to": "record.enabled",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 100ms update room code apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/room-codes/code"
+        }
+      ],
+      "risk": "enables or disables a specific join-credential room code; disabling revokes that code's ability to join. External mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "webhook events list",
+      "summary": "Run the webhook events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_events",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "examples": [
+        "pm 100ms webhook events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/analytics/webhooks"
+        }
+      ]
+    }
+  ]
+}

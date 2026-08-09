@@ -1,69 +1,1653 @@
 {
-  "api": "100ms server-side REST API (https://api.100ms.live/v2)",
+  "api": "100ms server-side REST API (https://api.100ms.live/v2); provider artifact version: server-side REST API v2",
   "docs": "https://www.100ms.live/docs/server-side/v2/api-reference",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every documented server-side v2 REST endpoint (Rooms, Sessions, active-rooms, Recordings, Recording-assets, Live-streams, External-streams, Room-codes, Templates/Policy, Polls, Analytics) is enumerated below. 8 read streams (4 wave2 legacy-parity + 4 new: live_streams, external_streams, recording_assets, webhook_events) and 7 write actions (create_room, update_room, create_template, create_room_code, update_room_code, start_recording, stop_recording) are now covered. Peer-level real-time control (active-rooms peer list/get/update/remove/message, room end), analytics event-detail endpoints, live/external-stream lifecycle mutations, poll-response reads, and recording-asset presigned-URL/binary retrieval remain out of scope per the categories below.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (73 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "100ms-artifact-2026-08-09",
+      "url": "https://www.100ms.live/docs/sitemap.xml",
+      "kind": "openapi",
+      "version": "3.0.2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v2/rooms", "covered_by": { "stream": "rooms" } },
-    { "method": "GET", "path": "/v2/rooms/{room_id}", "excluded": { "category": "duplicate_of", "reason": "single-room detail subsumed by the rooms list stream; no distinct fields beyond what /v2/rooms already returns per record" } },
-    { "method": "POST", "path": "/v2/rooms", "covered_by": { "write": "create_room" } },
-    { "method": "POST", "path": "/v2/rooms/{room_id}", "covered_by": { "write": "update_room" } },
-    { "method": "GET", "path": "/v2/sessions", "covered_by": { "stream": "sessions" } },
-    { "method": "GET", "path": "/v2/sessions/{session_id}", "excluded": { "category": "duplicate_of", "reason": "single-session detail subsumed by the sessions list stream" } },
-    { "method": "GET", "path": "/v2/recordings", "covered_by": { "stream": "recordings" } },
-    { "method": "GET", "path": "/v2/recordings/{recording_id}", "excluded": { "category": "duplicate_of", "reason": "single-recording detail subsumed by the recordings list stream" } },
-    { "method": "POST", "path": "/v2/recordings/room/{room_id}/start", "covered_by": { "write": "start_recording" } },
-    { "method": "POST", "path": "/v2/recordings/room/{room_id}/stop", "covered_by": { "write": "stop_recording" } },
-    { "method": "POST", "path": "/v2/recordings/{recording_id}/stop", "excluded": { "category": "duplicate_of", "reason": "single-recording-id variant of stop_recording (room-scoped stop is the covered, more commonly used shape); adding a second near-identical write action for the same mutation is not a distinct capability" } },
-    { "method": "POST", "path": "/v2/recordings/room/{room_id}/pause", "excluded": { "category": "out_of_scope", "reason": "recording-pause lifecycle control; deferred pending real usage demand for pause/resume beyond start/stop" } },
-    { "method": "POST", "path": "/v2/recordings/room/{room_id}/resume", "excluded": { "category": "out_of_scope", "reason": "recording-resume lifecycle control; paired with the deferred pause action above" } },
-    { "method": "GET", "path": "/v2/recording-assets", "covered_by": { "stream": "recording_assets" } },
-    { "method": "GET", "path": "/v2/recording-assets/{asset_id}", "excluded": { "category": "duplicate_of", "reason": "single-asset detail subsumed by the recording_assets list stream" } },
-    { "method": "GET", "path": "/v2/recording-assets/{asset_id}/presigned-url", "excluded": { "category": "binary_payload", "reason": "returns a signed URL for downloading the underlying recording media file, not syncable catalog/object data" } },
-    { "method": "GET", "path": "/v2/live-streams", "covered_by": { "stream": "live_streams" } },
-    { "method": "GET", "path": "/v2/live-streams/{stream_id}", "excluded": { "category": "duplicate_of", "reason": "single-live-stream detail subsumed by the live_streams list stream" } },
-    { "method": "POST", "path": "/v2/live-streams/room/{room_id}/start", "excluded": { "category": "out_of_scope", "reason": "HLS live-stream lifecycle start requires a real active room and destination config with no read-side parity gap; deferred until a Pass B write-review pass covers streaming-control actions" } },
-    { "method": "POST", "path": "/v2/live-streams/room/{room_id}/stop", "excluded": { "category": "out_of_scope", "reason": "paired lifecycle-stop for the deferred live-stream start action above" } },
-    { "method": "POST", "path": "/v2/live-streams/{stream_id}/stop", "excluded": { "category": "duplicate_of", "reason": "single-id variant of the room-scoped stop action above" } },
-    { "method": "POST", "path": "/v2/live-streams/{stream_id}/pause", "excluded": { "category": "out_of_scope", "reason": "live-stream recording pause; deferred with the other live-stream lifecycle actions" } },
-    { "method": "POST", "path": "/v2/live-streams/{stream_id}/resume", "excluded": { "category": "out_of_scope", "reason": "live-stream recording resume; deferred with the other live-stream lifecycle actions" } },
-    { "method": "POST", "path": "/v2/live-streams/{stream_id}/timed-metadata", "excluded": { "category": "out_of_scope", "reason": "injects timed metadata into an active HLS manifest; a real-time broadcast control action, not a syncable-record mutation" } },
-    { "method": "GET", "path": "/v2/external-streams", "covered_by": { "stream": "external_streams" } },
-    { "method": "GET", "path": "/v2/external-streams/{job_id}", "excluded": { "category": "duplicate_of", "reason": "single-external-stream detail subsumed by the external_streams list stream" } },
-    { "method": "POST", "path": "/v2/external-streams/room/{room_id}/start", "excluded": { "category": "out_of_scope", "reason": "RTMP push-to-destination lifecycle start; deferred with the other streaming-control actions pending Pass B write review" } },
-    { "method": "POST", "path": "/v2/external-streams/room/{room_id}/stop", "excluded": { "category": "out_of_scope", "reason": "paired lifecycle-stop for the deferred external-stream start action above" } },
-    { "method": "POST", "path": "/v2/external-streams/{job_id}/stop", "excluded": { "category": "duplicate_of", "reason": "single-id variant of the room-scoped stop action above" } },
-    { "method": "GET", "path": "/v2/room-codes/room/{room_id}", "excluded": { "category": "requires_elevated_scope", "reason": "room-codes are per-room join-authentication credentials, not a general syncable object stream; listing them at scale would require fanning out over every room_id and expose active join secrets in warehouse-destined data" } },
-    { "method": "POST", "path": "/v2/room-codes/room/{room_id}", "covered_by": { "write": "create_room_code" } },
-    { "method": "POST", "path": "/v2/room-codes/code", "covered_by": { "write": "update_room_code" } },
-    { "method": "GET", "path": "/v2/templates", "covered_by": { "stream": "templates" } },
-    { "method": "GET", "path": "/v2/templates/{template_id}", "excluded": { "category": "duplicate_of", "reason": "single-template detail subsumed by the templates list stream" } },
-    { "method": "POST", "path": "/v2/templates", "covered_by": { "write": "create_template" } },
-    { "method": "POST", "path": "/v2/templates/{template_id}", "excluded": { "category": "out_of_scope", "reason": "full template update (roles/settings/destinations sub-objects) is a large nested-object POST-as-PATCH surface; only template creation is covered, matching the create-first parity most connectors of this shape ship" } },
-    { "method": "GET", "path": "/v2/templates/{template_id}/roles/{role}", "excluded": { "category": "duplicate_of", "reason": "role detail is already embedded in each template list-stream record's roles map" } },
-    { "method": "POST", "path": "/v2/templates/{template_id}/roles/{role}", "excluded": { "category": "out_of_scope", "reason": "per-role policy sub-object mutation; deferred with the full template-update action above" } },
-    { "method": "DELETE", "path": "/v2/templates/{template_id}/roles/{role}", "excluded": { "category": "destructive_admin", "reason": "deletes a role from a template's policy, potentially breaking any room still assigning peers that role" } },
-    { "method": "GET", "path": "/v2/templates/{template_id}/settings", "excluded": { "category": "duplicate_of", "reason": "settings sub-object is already embedded in each template list-stream record" } },
-    { "method": "POST", "path": "/v2/templates/{template_id}/settings", "excluded": { "category": "out_of_scope", "reason": "settings sub-object mutation; deferred with the full template-update action above" } },
-    { "method": "GET", "path": "/v2/templates/{template_id}/destinations", "excluded": { "category": "duplicate_of", "reason": "destinations sub-object is already embedded in each template list-stream record" } },
-    { "method": "POST", "path": "/v2/templates/{template_id}/destinations", "excluded": { "category": "out_of_scope", "reason": "destinations sub-object mutation; deferred with the full template-update action above" } },
-    { "method": "GET", "path": "/v2/active-rooms/{room_id}", "excluded": { "category": "non_data_endpoint", "reason": "live in-memory active-room/session snapshot, not a syncable catalog object; equivalent information is available via the sessions stream's active filter once a session has been recorded" } },
-    { "method": "GET", "path": "/v2/active-rooms/{room_id}/peers", "excluded": { "category": "non_data_endpoint", "reason": "ephemeral live-peer roster of a currently active room; ceases to exist once the room session ends" } },
-    { "method": "GET", "path": "/v2/active-rooms/{room_id}/peers/{peer_id}", "excluded": { "category": "non_data_endpoint", "reason": "single ephemeral live-peer detail; same reasoning as the peers list above" } },
-    { "method": "POST", "path": "/v2/active-rooms/{room_id}/peers/{peer_id}", "excluded": { "category": "destructive_admin", "reason": "mutates a live participant's role/mute state in an in-progress call" } },
-    { "method": "POST", "path": "/v2/active-rooms/{room_id}/remove-peers", "excluded": { "category": "destructive_admin", "reason": "forcibly disconnects live participants from an in-progress call" } },
-    { "method": "POST", "path": "/v2/active-rooms/{room_id}/send-message", "excluded": { "category": "non_data_endpoint", "reason": "sends a real-time broadcast/direct message into an active room; a live-interaction side-effect, not a data-object mutation with a record shape to validate" } },
-    { "method": "POST", "path": "/v2/active-rooms/{room_id}/end-room", "excluded": { "category": "destructive_admin", "reason": "forcibly terminates a live in-progress room session for all participants" } },
-    { "method": "POST", "path": "/v2/polls", "excluded": { "category": "out_of_scope", "reason": "poll creation requires an active room's live poll-engine state; no corresponding read stream exists yet to establish parity against" } },
-    { "method": "GET", "path": "/v2/polls/{poll_id}", "excluded": { "category": "out_of_scope", "reason": "poll detail/results read; no poll-listing endpoint exists in the documented API to build a catalog stream from (polls are only retrievable by ID or via room linkage)" } },
-    { "method": "GET", "path": "/v2/polls/{poll_id}/responses", "excluded": { "category": "out_of_scope", "reason": "individual poll response records; same reasoning as poll detail above" } },
-    { "method": "POST", "path": "/v2/rooms/{room_id}/polls", "excluded": { "category": "out_of_scope", "reason": "links a poll to a room; a session-setup action tied to the deferred polls feature above" } },
-    { "method": "GET", "path": "/v2/analytics/webhooks", "covered_by": { "stream": "webhook_events" } },
-    { "method": "GET", "path": "/v2/analytics/events", "excluded": { "category": "out_of_scope", "reason": "raw track/recording/error telemetry event stream distinct from webhook-delivery history; a large, high-cardinality diagnostic firehose better suited to a dedicated observability pipeline than a warehouse sync catalog" } },
-    { "method": "GET", "path": "/v2/analytics/peer-stats", "excluded": { "category": "out_of_scope", "reason": "per-peer call-quality telemetry (packet loss/jitter/bitrate time series); same high-cardinality diagnostic-data reasoning as analytics/events" } },
-    { "method": "POST", "path": "/v2/analytics/webhooks/replay", "excluded": { "category": "destructive_admin", "reason": "re-triggers delivery of a historical webhook event to the configured endpoint; an operational replay action, not a data read/create" } },
-    { "method": "POST", "path": "/v2/stream-keys/room/{room_id}", "excluded": { "category": "requires_elevated_scope", "reason": "creates a fresh RTMP ingest stream key/secret for a room; a credential-issuance action out of scope for a reverse-ETL write surface" } },
-    { "method": "GET", "path": "/v2/stream-keys/room/{room_id}", "excluded": { "category": "requires_elevated_scope", "reason": "retrieves the live RTMP ingest stream key/secret for a room; a credential value, not syncable catalog data" } },
-    { "method": "POST", "path": "/v2/stream-keys/room/{room_id}/disable", "excluded": { "category": "destructive_admin", "reason": "revokes an active RTMP ingest stream key, breaking any in-progress ingest using it" } }
+    {
+      "method": "GET",
+      "path": "/v2/active-rooms/{room_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/active-rooms/{room_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "live in-memory active-room/session snapshot, not a syncable catalog object; equivalent information is available via the sessions stream's active filter once a session has been recorded",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/active-rooms/{room_id}/end-room",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/active-rooms/{room_id}/end-room\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "forcibly terminates a live in-progress room session for all participants",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/active-rooms/{room_id}/peers",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/active-rooms/{room_id}/peers\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ephemeral live-peer roster of a currently active room; ceases to exist once the room session ends",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/active-rooms/{room_id}/peers/{peer_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/active-rooms/{room_id}/peers/{peer_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single ephemeral live-peer detail; same reasoning as the peers list above",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/active-rooms/{room_id}/peers/{peer_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/active-rooms/{room_id}/peers/{peer_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "mutates a live participant's role/mute state in an in-progress call",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/active-rooms/{room_id}/remove-peers",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/active-rooms/{room_id}/remove-peers\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "forcibly disconnects live participants from an in-progress call",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/active-rooms/{room_id}/send-message",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/active-rooms/{room_id}/send-message\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "sends a real-time broadcast/direct message into an active room; a live-interaction side-effect, not a data-object mutation with a record shape to validate",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/events",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/analytics/events\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "raw track/recording/error telemetry event stream distinct from webhook-delivery history; a large, high-cardinality diagnostic firehose better suited to a dedicated observability pipeline than a warehouse sync catalog",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/analytics/events/webhooks/replay",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/analytics/events/webhooks/replay\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/peer-stats",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/analytics/peer-stats\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-peer call-quality telemetry (packet loss/jitter/bitrate time series); same high-cardinality diagnostic-data reasoning as analytics/events",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/webhooks",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/analytics/webhooks\"].get"
+      },
+      "covered_by": {
+        "stream": "webhook_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/analytics/webhooks/replay",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/analytics/webhooks/replay\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "re-triggers delivery of a historical webhook event to the configured endpoint; an operational replay action, not a data read/create",
+        "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/webhooks/replay/{workflow_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/analytics/webhooks/replay/{workflow_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/external-streams",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/external-streams\"].get"
+      },
+      "covered_by": {
+        "stream": "external_streams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external-streams/room/{room_id}/start",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/external-streams/room/{room_id}/start\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "RTMP push-to-destination lifecycle start; deferred with the other streaming-control actions pending Pass B write review",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external-streams/room/{room_id}/stop",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/external-streams/room/{room_id}/stop\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "paired lifecycle-stop for the deferred external-stream start action above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/external-streams/{job_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "server-side REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "existing-surface[GET /v2/external-streams/{job_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-external-stream detail subsumed by the external_streams list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external-streams/{job_id}/stop",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "server-side REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "existing-surface[POST /v2/external-streams/{job_id}/stop]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "single-id variant of the room-scoped stop action above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/external-streams/{stream_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/external-streams/{stream_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external-streams/{stream_id}/stop",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/external-streams/{stream_id}/stop\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/live-streams",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/live-streams\"].get"
+      },
+      "covered_by": {
+        "stream": "live_streams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/room/{room_id}/start",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/live-streams/room/{room_id}/start\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "HLS live-stream lifecycle start requires a real active room and destination config with no read-side parity gap; deferred until a Pass B write-review pass covers streaming-control actions",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/room/{room_id}/stop",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/live-streams/room/{room_id}/stop\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "paired lifecycle-stop for the deferred live-stream start action above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/live-streams/{stream_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/live-streams/{stream_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-live-stream detail subsumed by the live_streams list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/pause",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "server-side REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "existing-surface[POST /v2/live-streams/{stream_id}/pause]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "live-stream recording pause; deferred with the other live-stream lifecycle actions",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/pause-recording",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/live-streams/{stream_id}/pause-recording\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/resume",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "server-side REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "existing-surface[POST /v2/live-streams/{stream_id}/resume]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "live-stream recording resume; deferred with the other live-stream lifecycle actions",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/resume-recording",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/live-streams/{stream_id}/resume-recording\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/stop",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/live-streams/{stream_id}/stop\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "single-id variant of the room-scoped stop action above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/timed-metadata",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/live-streams/{stream_id}/timed-metadata\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "injects timed metadata into an active HLS manifest; a real-time broadcast control action, not a syncable-record mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/polls",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "poll creation requires an active room's live poll-engine state; no corresponding read stream exists yet to establish parity against",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "poll detail/results read; no poll-listing endpoint exists in the documented API to build a catalog stream from (polls are only retrievable by ID or via room linkage)",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/polls/{poll_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/polls/{poll_id}/questions/{question_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}/questions/{question_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/polls/{poll_id}/questions/{question_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}/questions/{question_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}/responses",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}/responses\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "individual poll response records; same reasoning as poll detail above",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}/responses/{response_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}/responses/{response_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}/results",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}/results\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}/sessions",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/polls/{poll_id}/sessions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recording-assets",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recording-assets\"].get"
+      },
+      "covered_by": {
+        "stream": "recording_assets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recording-assets/{asset_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recording-assets/{asset_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-asset detail subsumed by the recording_assets list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recording-assets/{asset_id}/presigned-url",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recording-assets/{asset_id}/presigned-url\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a signed URL for downloading the underlying recording media file, not syncable catalog/object data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recordings",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recordings\"].get"
+      },
+      "covered_by": {
+        "stream": "recordings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/room/{room_id}/pause",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recordings/room/{room_id}/pause\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "recording-pause lifecycle control; deferred pending real usage demand for pause/resume beyond start/stop",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/room/{room_id}/resume",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recordings/room/{room_id}/resume\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "recording-resume lifecycle control; paired with the deferred pause action above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/room/{room_id}/start",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recordings/room/{room_id}/start\"].post"
+      },
+      "covered_by": {
+        "write": "start_recording"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/room/{room_id}/stop",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recordings/room/{room_id}/stop\"].post"
+      },
+      "covered_by": {
+        "write": "stop_recording"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recordings/{recording_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recordings/{recording_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-recording detail subsumed by the recordings list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/{recording_id}/stop",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/recordings/{recording_id}/stop\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "single-recording-id variant of stop_recording (room-scoped stop is the covered, more commonly used shape); adding a second near-identical write action for the same mutation is not a distinct capability",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/room-codes/code",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/room-codes/code\"].post"
+      },
+      "covered_by": {
+        "write": "update_room_code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/room-codes/room/{room_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/room-codes/room/{room_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "room-codes are per-room join-authentication credentials, not a general syncable object stream; listing them at scale would require fanning out over every room_id and expose active join secrets in warehouse-destined data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/room-codes/room/{room_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/room-codes/room/{room_id}\"].post"
+      },
+      "covered_by": {
+        "write": "create_room_code"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/room-codes/room/{room_id}/role/{role}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/room-codes/room/{room_id}/role/{role}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/rooms",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/rooms\"].get"
+      },
+      "covered_by": {
+        "stream": "rooms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/rooms",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/rooms\"].post"
+      },
+      "covered_by": {
+        "write": "create_room"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/rooms/{room_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/rooms/{room_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-room detail subsumed by the rooms list stream; no distinct fields beyond what /v2/rooms already returns per record",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/rooms/{room_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/rooms/{room_id}\"].post"
+      },
+      "covered_by": {
+        "write": "update_room"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/rooms/{room_id}/polls",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "server-side REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "existing-surface[POST /v2/rooms/{room_id}/polls]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "links a poll to a room; a session-setup action tied to the deferred polls feature above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sessions",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/sessions\"].get"
+      },
+      "covered_by": {
+        "stream": "sessions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sessions/{session_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/sessions/{session_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-session detail subsumed by the sessions list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/stream-keys/room/{room_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/stream-keys/room/{room_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "retrieves the live RTMP ingest stream key/secret for a room; a credential value, not syncable catalog data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/stream-keys/room/{room_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/stream-keys/room/{room_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "creates a fresh RTMP ingest stream key/secret for a room; a credential-issuance action out of scope for a reverse-ETL write surface",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/stream-keys/room/{room_id}/disable",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/stream-keys/room/{room_id}/disable\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "revokes an active RTMP ingest stream key, breaking any in-progress ingest using it",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates\"].get"
+      },
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates\"].post"
+      },
+      "covered_by": {
+        "write": "create_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-template detail subsumed by the templates list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "full template update (roles/settings/destinations sub-objects) is a large nested-object POST-as-PATCH surface; only template creation is covered, matching the create-first parity most connectors of this shape ship",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}/destinations",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}/destinations\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "destinations sub-object is already embedded in each template list-stream record",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}/destinations",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}/destinations\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destinations sub-object mutation; deferred with the full template-update action above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}/recordings",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}/recordings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}/recordings",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}/recordings\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}/roles/{role_name}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}/roles/{role_name}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}/roles/{role_name}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}/roles/{role_name}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/templates/{template_id}/roles/{role_name}",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}/roles/{role_name}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}/roles/{role}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "server-side REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "existing-surface[GET /v2/templates/{template_id}/roles/{role}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "role detail is already embedded in each template list-stream record's roles map",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}/roles/{role}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "server-side REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "existing-surface[POST /v2/templates/{template_id}/roles/{role}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "per-role policy sub-object mutation; deferred with the full template-update action above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/templates/{template_id}/roles/{role}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "server-side REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "existing-surface[DELETE /v2/templates/{template_id}/roles/{role}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes a role from a template's policy, potentially breaking any room still assigning peers that role",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}/settings",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}/settings\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "settings sub-object is already embedded in each template list-stream record",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}/settings",
+      "provenance": {
+        "artifact": "100ms-artifact-2026-08-09",
+        "source_url": "https://www.100ms.live/docs/sitemap.xml",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+        "coordinate": "paths[\"/v2/templates/{template_id}/settings\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "settings sub-object mutation; deferred with the full template-update action above",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }
