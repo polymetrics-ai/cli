@@ -390,7 +390,7 @@
     {
       "path": "api get repositories workspace repo-slug diff spec",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/diff/{spec} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -402,10 +402,10 @@
           "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-diff-spec",
+      "operation": "get_repositories_workspace_repo_slug_diff_spec",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repositories workspace repo-slug downloads",
@@ -430,7 +430,7 @@
     {
       "path": "api get repositories workspace repo-slug downloads filename",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/downloads/{filename} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -442,15 +442,15 @@
           "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-downloads-filename",
+      "operation": "get_repositories_workspace_repo_slug_downloads_filename",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repositories workspace repo-slug issues export repo-name issues task-id zip",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/issues/export/{repo_name}-issues-{task_id}.zip (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -462,15 +462,15 @@
           "path": "/repositories/{workspace}/{repo_slug}/issues/export/{repo_name}-issues-{task_id}.zip"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-issues-export-repo-name-issues-task-id-zip",
+      "operation": "get_repositories_workspace_repo_slug_issues_export_repo_name_issues_task_id_zip",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repositories workspace repo-slug issues issue-id attachments path",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -482,10 +482,10 @@
           "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-issues-issue-id-attachments-path",
+      "operation": "get_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repositories workspace repo-slug issues issue-id vote",
@@ -530,7 +530,7 @@
     {
       "path": "api get repositories workspace repo-slug patch spec",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/patch/{spec} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -542,15 +542,15 @@
           "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-patch-spec",
+      "operation": "get_repositories_workspace_repo_slug_patch_spec",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repositories workspace repo-slug pipelines pipeline-uuid steps step-uuid log",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -562,15 +562,15 @@
           "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-pipelines-pipeline-uuid-steps-step-uuid-log",
+      "operation": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_log",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repositories workspace repo-slug pipelines pipeline-uuid steps step-uuid logs log-uuid",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -582,10 +582,10 @@
           "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-pipelines-pipeline-uuid-steps-step-uuid-logs-log-uuid",
+      "operation": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_logs_log_uuid",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repositories workspace repo-slug pipelines pipeline-uuid steps step-uuid test-reports",
@@ -730,7 +730,7 @@
     {
       "path": "api get repositories workspace repo-slug pullrequests pull-request-id diff",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -742,10 +742,10 @@
           "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-pullrequests-pull-request-id-diff",
+      "operation": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_diff",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repositories workspace repo-slug pullrequests pull-request-id diffstat",
@@ -790,7 +790,7 @@
     {
       "path": "api get repositories workspace repo-slug pullrequests pull-request-id patch",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -802,15 +802,15 @@
           "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-pullrequests-pull-request-id-patch",
+      "operation": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_patch",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repositories workspace repo-slug src commit path",
       "summary": "Documented GET /repositories/{workspace}/{repo_slug}/src/{commit}/{path} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -822,15 +822,15 @@
           "path": "/repositories/{workspace}/{repo_slug}/src/{commit}/{path}"
         }
       ],
-      "operation": "bitbucket.get.repositories-workspace-repo-slug-src-commit-path",
+      "operation": "get_repositories_workspace_repo_slug_src_commit_path",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get snippets workspace encoded-id files path",
       "summary": "Documented GET /snippets/{workspace}/{encoded_id}/files/{path} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -842,15 +842,15 @@
           "path": "/snippets/{workspace}/{encoded_id}/files/{path}"
         }
       ],
-      "operation": "bitbucket.get.snippets-workspace-encoded-id-files-path",
+      "operation": "get_snippets_workspace_encoded_id_files_path",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get snippets workspace encoded-id node-id files path",
       "summary": "Documented GET /snippets/{workspace}/{encoded_id}/{node_id}/files/{path} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -862,15 +862,15 @@
           "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}"
         }
       ],
-      "operation": "bitbucket.get.snippets-workspace-encoded-id-node-id-files-path",
+      "operation": "get_snippets_workspace_encoded_id_node_id_files_path",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get snippets workspace encoded-id revision diff",
       "summary": "Documented GET /snippets/{workspace}/{encoded_id}/{revision}/diff (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -882,15 +882,15 @@
           "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff"
         }
       ],
-      "operation": "bitbucket.get.snippets-workspace-encoded-id-revision-diff",
+      "operation": "get_snippets_workspace_encoded_id_revision_diff",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get snippets workspace encoded-id revision patch",
       "summary": "Documented GET /snippets/{workspace}/{encoded_id}/{revision}/patch (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -902,10 +902,10 @@
           "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch"
         }
       ],
-      "operation": "bitbucket.get.snippets-workspace-encoded-id-revision-patch",
+      "operation": "get_snippets_workspace_encoded_id_revision_patch",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get snippets workspace encoded-id watch",
@@ -1070,7 +1070,7 @@
     {
       "path": "api get workspaces workspace settings gpg public-key",
       "summary": "Documented GET /workspaces/{workspace}/settings/gpg/public-key (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
@@ -1082,10 +1082,10 @@
           "path": "/workspaces/{workspace}/settings/gpg/public-key"
         }
       ],
-      "operation": "bitbucket.get.workspaces-workspace-settings-gpg-public-key",
+      "operation": "get_workspaces_workspace_settings_gpg_public_key",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api post repositories workspace repo-slug branch-restrictions",

@@ -1029,36 +1029,6 @@
       }
     },
     {
-      "id": "xero.get.accounts-accountid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /Accounts/{AccountID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Accounts/{AccountID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.accounts-accountid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /Accounts/{AccountID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Accounts/{AccountID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "xero.post.accounts-accountid-attachments-filename",
       "kind": "rest_write",
       "summary": "POST /Accounts/{AccountID}/Attachments/{FileName}",
@@ -1087,36 +1057,6 @@
       "rest": {
         "method": "PUT",
         "path": "/Accounts/{AccountID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.banktransactions-banktransactionid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.banktransactions-banktransactionid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /BankTransactions/{BankTransactionID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
         "max_bytes": 16777216
       }
     },
@@ -1153,36 +1093,6 @@
       }
     },
     {
-      "id": "xero.get.banktransfers-banktransferid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /BankTransfers/{BankTransferID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/BankTransfers/{BankTransferID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.banktransfers-banktransferid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /BankTransfers/{BankTransferID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "xero.post.banktransfers-banktransferid-attachments-filename",
       "kind": "rest_write",
       "summary": "POST /BankTransfers/{BankTransferID}/Attachments/{FileName}",
@@ -1211,36 +1121,6 @@
       "rest": {
         "method": "PUT",
         "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.contacts-contactid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /Contacts/{ContactID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Contacts/{ContactID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.contacts-contactid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /Contacts/{ContactID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Contacts/{ContactID}/Attachments/{FileName}",
         "max_bytes": 16777216
       }
     },
@@ -1277,36 +1157,6 @@
       }
     },
     {
-      "id": "xero.get.creditnotes-creditnoteid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.creditnotes-creditnoteid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /CreditNotes/{CreditNoteID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "xero.post.creditnotes-creditnoteid-attachments-filename",
       "kind": "rest_write",
       "summary": "POST /CreditNotes/{CreditNoteID}/Attachments/{FileName}",
@@ -1335,51 +1185,6 @@
       "rest": {
         "method": "PUT",
         "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.creditnotes-creditnoteid-pdf",
-      "kind": "rest_read",
-      "summary": "GET /CreditNotes/{CreditNoteID}/pdf",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/CreditNotes/{CreditNoteID}/pdf",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.invoices-invoiceid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /Invoices/{InvoiceID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Invoices/{InvoiceID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.invoices-invoiceid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /Invoices/{InvoiceID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
         "max_bytes": 16777216
       }
     },
@@ -1416,51 +1221,6 @@
       }
     },
     {
-      "id": "xero.get.invoices-invoiceid-pdf",
-      "kind": "rest_read",
-      "summary": "GET /Invoices/{InvoiceID}/pdf",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Invoices/{InvoiceID}/pdf",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.manualjournals-manualjournalid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.manualjournals-manualjournalid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /ManualJournals/{ManualJournalID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "xero.post.manualjournals-manualjournalid-attachments-filename",
       "kind": "rest_write",
       "summary": "POST /ManualJournals/{ManualJournalID}/Attachments/{FileName}",
@@ -1489,36 +1249,6 @@
       "rest": {
         "method": "PUT",
         "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.purchaseorders-purchaseorderid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.purchaseorders-purchaseorderid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
         "max_bytes": 16777216
       }
     },
@@ -1555,51 +1285,6 @@
       }
     },
     {
-      "id": "xero.get.purchaseorders-purchaseorderid-pdf",
-      "kind": "rest_read",
-      "summary": "GET /PurchaseOrders/{PurchaseOrderID}/pdf",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/PurchaseOrders/{PurchaseOrderID}/pdf",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.quotes-quoteid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /Quotes/{QuoteID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Quotes/{QuoteID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.quotes-quoteid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /Quotes/{QuoteID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "xero.post.quotes-quoteid-attachments-filename",
       "kind": "rest_write",
       "summary": "POST /Quotes/{QuoteID}/Attachments/{FileName}",
@@ -1632,51 +1317,6 @@
       }
     },
     {
-      "id": "xero.get.quotes-quoteid-pdf",
-      "kind": "rest_read",
-      "summary": "GET /Quotes/{QuoteID}/pdf",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Quotes/{QuoteID}/pdf",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.receipts-receiptid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /Receipts/{ReceiptID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Receipts/{ReceiptID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.receipts-receiptid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /Receipts/{ReceiptID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "xero.post.receipts-receiptid-attachments-filename",
       "kind": "rest_write",
       "summary": "POST /Receipts/{ReceiptID}/Attachments/{FileName}",
@@ -1705,36 +1345,6 @@
       "rest": {
         "method": "PUT",
         "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.repeatinginvoices-repeatinginvoiceid-attachments-attachmentid",
-      "kind": "rest_read",
-      "summary": "GET /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "xero.get.repeatinginvoices-repeatinginvoiceid-attachments-filename",
-      "kind": "rest_read",
-      "summary": "GET /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
-      "description": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
         "max_bytes": 16777216
       }
     },

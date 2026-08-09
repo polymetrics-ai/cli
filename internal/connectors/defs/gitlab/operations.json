@@ -1154,22 +1154,6 @@
       }
     },
     {
-      "id": "gitlab.post.ai-llm-git-command",
-      "kind": "rest_write",
-      "summary": "POST /ai/llm/git_command",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/ai/llm/git_command",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.post.ai-third-party-agents-direct-access",
       "kind": "rest_write",
       "summary": "POST /ai/third_party_agents/direct_access",
@@ -1662,86 +1646,6 @@
       }
     },
     {
-      "id": "gitlab.post.chat-completions",
-      "kind": "rest_write",
-      "summary": "POST /chat/completions",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/chat/completions",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.code-suggestions-completions",
-      "kind": "rest_write",
-      "summary": "POST /code_suggestions/completions",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/code_suggestions/completions",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.code-suggestions-connection-details",
-      "kind": "rest_write",
-      "summary": "POST /code_suggestions/connection_details",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/code_suggestions/connection_details",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.code-suggestions-direct-access",
-      "kind": "rest_write",
-      "summary": "POST /code_suggestions/direct_access",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/code_suggestions/direct_access",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.code-suggestions-enabled",
-      "kind": "rest_write",
-      "summary": "POST /code_suggestions/enabled",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/code_suggestions/enabled",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.post.container-registry-event-events",
       "kind": "rest_write",
       "summary": "POST /container_registry_event/events",
@@ -1784,21 +1688,6 @@
       "rest": {
         "method": "GET",
         "path": "/dependency_list_exports/{export_id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.dependency-list-exports-export-id-download",
-      "kind": "rest_read",
-      "summary": "GET /dependency_list_exports/{export_id}/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/dependency_list_exports/{export_id}/download",
         "max_bytes": 16777216
       }
     },
@@ -1860,22 +1749,6 @@
       "rest": {
         "method": "GET",
         "path": "/discover-cert-based-clusters",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.duo-code-review-evaluations",
-      "kind": "rest_write",
-      "summary": "POST /duo_code_review/evaluations",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/duo_code_review/evaluations",
         "max_bytes": 16777216
       }
     },
@@ -2187,38 +2060,6 @@
       "rest": {
         "method": "GET",
         "path": "/geo/proxy",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.geo-proxy-git-ssh-info-refs-receive-pack",
-      "kind": "rest_write",
-      "summary": "POST /geo/proxy_git_ssh/info_refs_receive_pack",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/geo/proxy_git_ssh/info_refs_receive_pack",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.geo-proxy-git-ssh-info-refs-upload-pack",
-      "kind": "rest_write",
-      "summary": "POST /geo/proxy_git_ssh/info_refs_upload_pack",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/geo/proxy_git_ssh/info_refs_upload_pack",
         "max_bytes": 16777216
       }
     },
@@ -3064,21 +2905,6 @@
       }
     },
     {
-      "id": "gitlab.get.groups-id-packages-debian-pool-distribution-project-id-letter-package-name-package-version-file-name",
-      "kind": "rest_read",
-      "summary": "GET /groups/{id}/-/packages/debian/pool/{distribution}/{project_id}/{letter}/{package_name}/{package_version}/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/pool/{distribution}/{project_id}/{letter}/{package_name}/{package_version}/{file_name}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.post.groups-id-packages-npm-npm-v1-security-advisories-bulk",
       "kind": "rest_write",
       "summary": "POST /groups/{id}/-/packages/npm/-/npm/v1/security/advisories/bulk",
@@ -3432,21 +3258,6 @@
       "rest": {
         "method": "GET",
         "path": "/groups/{id}/audit_events/{audit_event_id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.groups-id-avatar",
-      "kind": "rest_read",
-      "summary": "GET /groups/{id}/avatar",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/groups/{id}/avatar",
         "max_bytes": 16777216
       }
     },
@@ -4689,21 +4500,6 @@
       }
     },
     {
-      "id": "gitlab.get.groups-id-export-download",
-      "kind": "rest_read",
-      "summary": "GET /groups/{id}/export/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/groups/{id}/export/download",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.post.groups-id-export-relations",
       "kind": "rest_write",
       "summary": "POST /groups/{id}/export_relations",
@@ -4716,21 +4512,6 @@
       "rest": {
         "method": "POST",
         "path": "/groups/{id}/export_relations",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.groups-id-export-relations-download",
-      "kind": "rest_read",
-      "summary": "GET /groups/{id}/export_relations/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/groups/{id}/export_relations/download",
         "max_bytes": 16777216
       }
     },
@@ -7794,21 +7575,6 @@
       }
     },
     {
-      "id": "gitlab.get.groups-id-uploads-secret-filename",
-      "kind": "rest_read",
-      "summary": "GET /groups/{id}/uploads/{secret}/{filename}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/groups/{id}/uploads/{secret}/{filename}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.delete.groups-id-uploads-secret-filename",
       "kind": "rest_write",
       "summary": "DELETE /groups/{id}/uploads/{secret}/{filename}",
@@ -7821,21 +7587,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/groups/{id}/uploads/{secret}/{filename}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.groups-id-uploads-upload-id",
-      "kind": "rest_read",
-      "summary": "GET /groups/{id}/uploads/{upload_id}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/groups/{id}/uploads/{upload_id}",
         "max_bytes": 16777216
       }
     },
@@ -8639,21 +8390,6 @@
       }
     },
     {
-      "id": "gitlab.get.jobs-id-artifacts",
-      "kind": "rest_read",
-      "summary": "GET /jobs/{id}/artifacts",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/jobs/{id}/artifacts",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.post.jobs-id-artifacts",
       "kind": "rest_write",
       "summary": "POST /jobs/{id}/artifacts",
@@ -8714,21 +8450,6 @@
       "rest": {
         "method": "POST",
         "path": "/jobs/{id}/sbom_scans/authorize",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.jobs-id-sbom-scans-sbom-digest",
-      "kind": "rest_read",
-      "summary": "GET /jobs/{id}/sbom_scans/{sbom_digest}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/jobs/{id}/sbom_scans/{sbom_digest}",
         "max_bytes": 16777216
       }
     },
@@ -8856,21 +8577,6 @@
       }
     },
     {
-      "id": "gitlab.get.license-usage-export",
-      "kind": "rest_read",
-      "summary": "GET /license/usage_export",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/license/usage_export",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.license-id",
       "kind": "rest_read",
       "summary": "GET /license/{id}",
@@ -8929,22 +8635,6 @@
       "rest": {
         "method": "GET",
         "path": "/licenses",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.markdown",
-      "kind": "rest_write",
-      "summary": "POST /markdown",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/markdown",
         "max_bytes": 16777216
       }
     },
@@ -9552,22 +9242,6 @@
       }
     },
     {
-      "id": "gitlab.post.packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-upload-urls",
-      "kind": "rest_write",
-      "summary": "POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search",
       "kind": "rest_read",
       "summary": "GET /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
@@ -9579,37 +9253,6 @@
       "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.packages-conan-v1-conans-package-name-package-version-package-username-package-channel-upload-urls",
-      "kind": "rest_write",
-      "summary": "POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-export-file-name",
-      "kind": "rest_read",
-      "summary": "GET /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}",
         "max_bytes": 16777216
       }
     },
@@ -9642,21 +9285,6 @@
       "rest": {
         "method": "PUT",
         "path": "/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}/authorize",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-package-conan-package-reference-package-revision-file-name",
-      "kind": "rest_read",
-      "summary": "GET /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}",
         "max_bytes": 16777216
       }
     },
@@ -10754,21 +10382,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-attestations-attestation-iid-download",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/attestations/{attestation_iid}/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/attestations/{attestation_iid}/download",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.projects-id-attestations-subject-digest",
       "kind": "rest_read",
       "summary": "GET /projects/{id}/attestations/{subject_digest}",
@@ -10810,21 +10423,6 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{id}/audit_events/{audit_event_id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-avatar",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/avatar",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/avatar",
         "max_bytes": 16777216
       }
     },
@@ -11104,22 +10702,6 @@
       "output_policy": "json",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/ci/lint",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.projects-id-ci-lint",
-      "kind": "rest_write",
-      "summary": "POST /projects/{id}/ci/lint",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
         "path": "/projects/{id}/ci/lint",
         "max_bytes": 16777216
       }
@@ -12153,21 +11735,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-export-download",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/export/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/export/download",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.post.projects-id-export-relations",
       "kind": "rest_write",
       "summary": "POST /projects/{id}/export_relations",
@@ -12180,21 +11747,6 @@
       "rest": {
         "method": "POST",
         "path": "/projects/{id}/export_relations",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-export-relations-download",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/export_relations/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/export_relations/download",
         "max_bytes": 16777216
       }
     },
@@ -14943,21 +14495,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-jobs-artifacts-ref-name-download",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/jobs/artifacts/{ref_name}/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/jobs/artifacts/{ref_name}/download",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.projects-id-jobs-job-id",
       "kind": "rest_read",
       "summary": "GET /projects/{id}/jobs/{job_id}",
@@ -14969,21 +14506,6 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{id}/jobs/{job_id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-jobs-job-id-artifacts",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/jobs/{job_id}/artifacts",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/jobs/{job_id}/artifacts",
         "max_bytes": 16777216
       }
     },
@@ -16355,21 +15877,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-merge-requests-merge-request-iid-raw-diffs",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/merge_requests/{merge_request_iid}/raw_diffs",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/merge_requests/{merge_request_iid}/raw_diffs",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.put.projects-id-merge-requests-merge-request-iid-rebase",
       "kind": "rest_write",
       "summary": "PUT /projects/{id}/merge_requests/{merge_request_iid}/rebase",
@@ -17193,22 +16700,6 @@
       }
     },
     {
-      "id": "gitlab.post.projects-id-ml-mlflow-api-2-0-mlflow-experiments-search",
-      "kind": "rest_write",
-      "summary": "POST /projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/search",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.post.projects-id-ml-mlflow-api-2-0-mlflow-experiments-set-experiment-tag",
       "kind": "rest_write",
       "summary": "POST /projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/set-experiment-tag",
@@ -17660,21 +17151,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-packages-cargo-package-name-package-version-download",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/cargo/{package_name}/{package_version}/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/cargo/{package_name}/{package_version}/download",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.projects-id-packages-cargo-prefix-1-prefix-2-package-name",
       "kind": "rest_read",
       "summary": "GET /projects/{id}/packages/cargo/{prefix_1}/{prefix_2}/{package_name}",
@@ -17827,22 +17303,6 @@
       }
     },
     {
-      "id": "gitlab.post.projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-upload-urls",
-      "kind": "rest_write",
-      "summary": "POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search",
       "kind": "rest_read",
       "summary": "GET /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
@@ -17854,37 +17314,6 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.post.projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-upload-urls",
-      "kind": "rest_write",
-      "summary": "POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-export-file-name",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}",
         "max_bytes": 16777216
       }
     },
@@ -17917,21 +17346,6 @@
       "rest": {
         "method": "PUT",
         "path": "/projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}/authorize",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-package-conan-package-reference-package-revision-file-name",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}",
         "max_bytes": 16777216
       }
     },
@@ -18089,21 +17503,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files-file-name",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files/{file_name}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.put.projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files-file-name",
       "kind": "rest_write",
       "summary": "PUT /projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files/{file_name}",
@@ -18193,21 +17592,6 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision-files-file-name",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files/{file_name}",
         "max_bytes": 16777216
       }
     },
@@ -18304,21 +17688,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-packages-debian-pool-distribution-letter-package-name-package-version-file-name",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/debian/pool/{distribution}/{letter}/{package_name}/{package_version}/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/debian/pool/{distribution}/{letter}/{package_name}/{package_version}/{file_name}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.put.projects-id-packages-debian-file-name",
       "kind": "rest_write",
       "summary": "PUT /projects/{id}/packages/debian/{file_name}",
@@ -18379,36 +17748,6 @@
       "rest": {
         "method": "POST",
         "path": "/projects/{id}/packages/helm/api/{channel}/charts/authorize",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-packages-helm-channel-charts-file-name-tgz",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/helm/{channel}/charts/{file_name}.tgz",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/helm/{channel}/charts/{file_name}.tgz",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-packages-helm-channel-index-yaml",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/helm/{channel}/index.yaml",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/helm/{channel}/index.yaml",
         "max_bytes": 16777216
       }
     },
@@ -18806,66 +18145,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-packages-rubygems-gems-file-name",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/rubygems/gems/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/rubygems/gems/{file_name}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-packages-rubygems-quick-marshal-4-8-file-name",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/rubygems/quick/Marshal.4.8/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/rubygems/quick/Marshal.4.8/{file_name}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-packages-rubygems-file-name",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/rubygems/{file_name}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/rubygems/{file_name}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-packages-terraform-modules-module-name-module-system",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/terraform/modules/{module_name}/{module_system}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.projects-id-packages-package-id",
       "kind": "rest_read",
       "summary": "GET /projects/{id}/packages/{package_id}",
@@ -18924,21 +18203,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/projects/{id}/packages/{package_id}/package_files/{package_file_id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-packages-package-id-package-files-package-file-id-download",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/packages/{package_id}/package_files/{package_file_id}/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/packages/{package_id}/package_files/{package_file_id}/download",
         "max_bytes": 16777216
       }
     },
@@ -20329,21 +19593,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-repository-archive",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/repository/archive",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/repository/archive",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.post.projects-id-repository-blobs-batch",
       "kind": "rest_write",
       "summary": "POST /projects/{id}/repository/blobs/batch",
@@ -20371,21 +19620,6 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{id}/repository/blobs/{sha}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-repository-blobs-sha-raw",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/repository/blobs/{sha}/raw",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/repository/blobs/{sha}/raw",
         "max_bytes": 16777216
       }
     },
@@ -21006,21 +20240,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-repository-files-file-path-raw",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/repository/files/{file_path}/raw",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/repository/files/{file_path}/raw",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.projects-id-repository-health",
       "kind": "rest_read",
       "summary": "GET /projects/{id}/repository/health",
@@ -21450,21 +20669,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/projects/{id}/secure_files/{secure_file_id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-secure-files-secure-file-id-download",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/secure_files/{secure_file_id}/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/secure_files/{secure_file_id}/download",
         "max_bytes": 16777216
       }
     },
@@ -22567,21 +21771,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-snapshot",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/snapshot",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/snapshot",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.projects-id-snippets",
       "kind": "rest_read",
       "summary": "GET /projects/{id}/snippets",
@@ -22924,21 +22113,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-snippets-snippet-id-files-ref-file-path-raw",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/snippets/{snippet_id}/files/{ref}/{file_path}/raw",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/snippets/{snippet_id}/files/{ref}/{file_path}/raw",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.projects-id-snippets-snippet-id-notes-note-id-award-emoji",
       "kind": "rest_read",
       "summary": "GET /projects/{id}/snippets/{snippet_id}/notes/{note_id}/award_emoji",
@@ -22997,21 +22171,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/projects/{id}/snippets/{snippet_id}/notes/{note_id}/award_emoji/{award_id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-snippets-snippet-id-raw",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/snippets/{snippet_id}/raw",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/snippets/{snippet_id}/raw",
         "max_bytes": 16777216
       }
     },
@@ -23531,21 +22690,6 @@
       }
     },
     {
-      "id": "gitlab.get.projects-id-uploads-secret-filename",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/uploads/{secret}/{filename}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/uploads/{secret}/{filename}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.delete.projects-id-uploads-secret-filename",
       "kind": "rest_write",
       "summary": "DELETE /projects/{id}/uploads/{secret}/{filename}",
@@ -23558,21 +22702,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/projects/{id}/uploads/{secret}/{filename}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.projects-id-uploads-upload-id",
-      "kind": "rest_read",
-      "summary": "GET /projects/{id}/uploads/{upload_id}",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/projects/{id}/uploads/{upload_id}",
         "max_bytes": 16777216
       }
     },
@@ -24435,22 +23564,6 @@
       }
     },
     {
-      "id": "gitlab.post.runners-verify",
-      "kind": "rest_write",
-      "summary": "POST /runners/verify",
-      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/runners/verify",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.get.runners-id",
       "kind": "rest_read",
       "summary": "GET /runners/{id}",
@@ -24637,21 +23750,6 @@
       }
     },
     {
-      "id": "gitlab.get.security-vulnerability-archive-exports-id-download",
-      "kind": "rest_read",
-      "summary": "GET /security/vulnerability_archive_exports/{id}/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/security/vulnerability_archive_exports/{id}/download",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gitlab.post.security-vulnerability-exports",
       "kind": "rest_write",
       "summary": "POST /security/vulnerability_exports",
@@ -24679,21 +23777,6 @@
       "rest": {
         "method": "GET",
         "path": "/security/vulnerability_exports/{id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.security-vulnerability-exports-id-download",
-      "kind": "rest_read",
-      "summary": "GET /security/vulnerability_exports/{id}/download",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/security/vulnerability_exports/{id}/download",
         "max_bytes": 16777216
       }
     },
@@ -24971,36 +24054,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/snippets/{id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.snippets-id-files-ref-file-path-raw",
-      "kind": "rest_read",
-      "summary": "GET /snippets/{id}/files/{ref}/{file_path}/raw",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/snippets/{id}/files/{ref}/{file_path}/raw",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.snippets-id-raw",
-      "kind": "rest_read",
-      "summary": "GET /snippets/{id}/raw",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/snippets/{id}/raw",
         "max_bytes": 16777216
       }
     },
@@ -25433,21 +24486,6 @@
       "rest": {
         "method": "POST",
         "path": "/usage_data/increment_unique_users",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gitlab.get.usage-data-metric-definitions",
-      "kind": "rest_read",
-      "summary": "GET /usage_data/metric_definitions",
-      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
-      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/usage_data/metric_definitions",
         "max_bytes": 16777216
       }
     },
@@ -27112,6 +26150,951 @@
       "rest": {
         "method": "GET",
         "path": "/web_commits/public_key",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.post.ai-llm-git-command",
+      "kind": "composite",
+      "summary": "POST /ai/llm/git_command",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /ai/llm/git_command"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.chat-completions",
+      "kind": "composite",
+      "summary": "POST /chat/completions",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /chat/completions"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.code-suggestions-completions",
+      "kind": "composite",
+      "summary": "POST /code_suggestions/completions",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /code_suggestions/completions"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.code-suggestions-connection-details",
+      "kind": "composite",
+      "summary": "POST /code_suggestions/connection_details",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /code_suggestions/connection_details"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.code-suggestions-direct-access",
+      "kind": "composite",
+      "summary": "POST /code_suggestions/direct_access",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /code_suggestions/direct_access"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.code-suggestions-enabled",
+      "kind": "composite",
+      "summary": "POST /code_suggestions/enabled",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /code_suggestions/enabled"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.get.dependency-list-exports-export-id-download",
+      "kind": "binary_download",
+      "summary": "GET /dependency_list_exports/{export_id}/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/dependency_list_exports/{export_id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.post.duo-code-review-evaluations",
+      "kind": "composite",
+      "summary": "POST /duo_code_review/evaluations",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /duo_code_review/evaluations"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.geo-proxy-git-ssh-info-refs-receive-pack",
+      "kind": "composite",
+      "summary": "POST /geo/proxy_git_ssh/info_refs_receive_pack",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /geo/proxy_git_ssh/info_refs_receive_pack"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.geo-proxy-git-ssh-info-refs-upload-pack",
+      "kind": "composite",
+      "summary": "POST /geo/proxy_git_ssh/info_refs_upload_pack",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /geo/proxy_git_ssh/info_refs_upload_pack"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.get.groups-id-packages-debian-pool-distribution-project-id-letter-package-name-package-version-file-name",
+      "kind": "binary_download",
+      "summary": "GET /groups/{id}/-/packages/debian/pool/{distribution}/{project_id}/{letter}/{package_name}/{package_version}/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/groups/{id}/-/packages/debian/pool/{distribution}/{project_id}/{letter}/{package_name}/{package_version}/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.groups-id-avatar",
+      "kind": "binary_download",
+      "summary": "GET /groups/{id}/avatar",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/groups/{id}/avatar",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.groups-id-export-download",
+      "kind": "binary_download",
+      "summary": "GET /groups/{id}/export/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/groups/{id}/export/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.groups-id-export-relations-download",
+      "kind": "binary_download",
+      "summary": "GET /groups/{id}/export_relations/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/groups/{id}/export_relations/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.groups-id-uploads-secret-filename",
+      "kind": "binary_download",
+      "summary": "GET /groups/{id}/uploads/{secret}/{filename}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/groups/{id}/uploads/{secret}/{filename}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.groups-id-uploads-upload-id",
+      "kind": "binary_download",
+      "summary": "GET /groups/{id}/uploads/{upload_id}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/groups/{id}/uploads/{upload_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.jobs-id-artifacts",
+      "kind": "binary_download",
+      "summary": "GET /jobs/{id}/artifacts",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/jobs/{id}/artifacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.jobs-id-sbom-scans-sbom-digest",
+      "kind": "binary_download",
+      "summary": "GET /jobs/{id}/sbom_scans/{sbom_digest}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/jobs/{id}/sbom_scans/{sbom_digest}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.license-usage-export",
+      "kind": "binary_download",
+      "summary": "GET /license/usage_export",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/license/usage_export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.post.markdown",
+      "kind": "composite",
+      "summary": "POST /markdown",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /markdown"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-upload-urls",
+      "kind": "composite",
+      "summary": "POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.packages-conan-v1-conans-package-name-package-version-package-username-package-channel-upload-urls",
+      "kind": "composite",
+      "summary": "POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.get.packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-export-file-name",
+      "kind": "binary_download",
+      "summary": "GET /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-package-conan-package-reference-package-revision-file-name",
+      "kind": "binary_download",
+      "summary": "GET /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-attestations-attestation-iid-download",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/attestations/{attestation_iid}/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/attestations/{attestation_iid}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-avatar",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/avatar",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/avatar",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.post.projects-id-ci-lint",
+      "kind": "composite",
+      "summary": "POST /projects/{id}/ci/lint",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /projects/{id}/ci/lint"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-export-download",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/export/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/export/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-export-relations-download",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/export_relations/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/export_relations/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-jobs-artifacts-ref-name-download",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/jobs/artifacts/{ref_name}/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/jobs/artifacts/{ref_name}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-jobs-job-id-artifacts",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/jobs/{job_id}/artifacts",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/jobs/{job_id}/artifacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-merge-requests-merge-request-iid-raw-diffs",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/merge_requests/{merge_request_iid}/raw_diffs",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/merge_requests/{merge_request_iid}/raw_diffs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.post.projects-id-ml-mlflow-api-2-0-mlflow-experiments-search",
+      "kind": "composite",
+      "summary": "POST /projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/search",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/search"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-cargo-package-name-package-version-download",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/cargo/{package_name}/{package_version}/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/cargo/{package_name}/{package_version}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.post.projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-upload-urls",
+      "kind": "composite",
+      "summary": "POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.post.projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-upload-urls",
+      "kind": "composite",
+      "summary": "POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-export-file-name",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-package-conan-package-reference-package-revision-file-name",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files-file-name",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision-files-file-name",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-debian-pool-distribution-letter-package-name-package-version-file-name",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/debian/pool/{distribution}/{letter}/{package_name}/{package_version}/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/debian/pool/{distribution}/{letter}/{package_name}/{package_version}/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-helm-channel-charts-file-name-tgz",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/helm/{channel}/charts/{file_name}.tgz",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/helm/{channel}/charts/{file_name}.tgz",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-helm-channel-index-yaml",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/helm/{channel}/index.yaml",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/helm/{channel}/index.yaml",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-rubygems-gems-file-name",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/rubygems/gems/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/rubygems/gems/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-rubygems-quick-marshal-4-8-file-name",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/rubygems/quick/Marshal.4.8/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/rubygems/quick/Marshal.4.8/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-rubygems-file-name",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/rubygems/{file_name}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/rubygems/{file_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-terraform-modules-module-name-module-system",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/terraform/modules/{module_name}/{module_system}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-packages-package-id-package-files-package-file-id-download",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/packages/{package_id}/package_files/{package_file_id}/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/packages/{package_id}/package_files/{package_file_id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-repository-archive",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/repository/archive",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/repository/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-repository-blobs-sha-raw",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/repository/blobs/{sha}/raw",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/repository/blobs/{sha}/raw",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-repository-files-file-path-raw",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/repository/files/{file_path}/raw",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/repository/files/{file_path}/raw",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-secure-files-secure-file-id-download",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/secure_files/{secure_file_id}/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/secure_files/{secure_file_id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-snapshot",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/snapshot",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/snapshot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-snippets-snippet-id-files-ref-file-path-raw",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/snippets/{snippet_id}/files/{ref}/{file_path}/raw",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/snippets/{snippet_id}/files/{ref}/{file_path}/raw",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-snippets-snippet-id-raw",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/snippets/{snippet_id}/raw",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/snippets/{snippet_id}/raw",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-uploads-secret-filename",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/uploads/{secret}/{filename}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/uploads/{secret}/{filename}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.projects-id-uploads-upload-id",
+      "kind": "binary_download",
+      "summary": "GET /projects/{id}/uploads/{upload_id}",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/projects/{id}/uploads/{upload_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.post.runners-verify",
+      "kind": "composite",
+      "summary": "POST /runners/verify",
+      "description": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /runners/verify"
+        ]
+      }
+    },
+    {
+      "id": "gitlab.get.security-vulnerability-archive-exports-id-download",
+      "kind": "binary_download",
+      "summary": "GET /security/vulnerability_archive_exports/{id}/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/security/vulnerability_archive_exports/{id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.security-vulnerability-exports-id-download",
+      "kind": "binary_download",
+      "summary": "GET /security/vulnerability_exports/{id}/download",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/security/vulnerability_exports/{id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.snippets-id-files-ref-file-path-raw",
+      "kind": "binary_download",
+      "summary": "GET /snippets/{id}/files/{ref}/{file_path}/raw",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/snippets/{id}/files/{ref}/{file_path}/raw",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.snippets-id-raw",
+      "kind": "binary_download",
+      "summary": "GET /snippets/{id}/raw",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/snippets/{id}/raw",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitlab.get.usage-data-metric-definitions",
+      "kind": "binary_download",
+      "summary": "GET /usage_data/metric_definitions",
+      "description": "GitLab documents a file/raw/archive/artifact retrieval; the bounded binary_download executor exists, but this connector still needs an operation declaration, byte cap, content policy, and command binding.",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/usage_data/metric_definitions",
         "max_bytes": 16777216
       }
     }

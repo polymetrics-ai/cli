@@ -344,11 +344,11 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				}
 				coveredStreams[stream] = true
 			}
-			if ep.CoveredBy.Write != "" {
-				if !writes[ep.CoveredBy.Write] {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, ep.CoveredBy.Write)
+			for _, write := range ep.CoveredBy.WriteTargets() {
+				if !writes[write] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, write)
 				}
-				coveredWrites[ep.CoveredBy.Write] = true
+				coveredWrites[write] = true
 			}
 			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
 				if !directReads[directRead] {
@@ -362,7 +362,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
-			if ep.CoveredBy.Write != "" && mutationMethods[strings.ToUpper(ep.Method)] {
+			if len(ep.CoveredBy.WriteTargets()) > 0 && mutationMethods[strings.ToUpper(ep.Method)] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:

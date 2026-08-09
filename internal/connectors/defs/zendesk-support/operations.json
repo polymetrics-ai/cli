@@ -9203,22 +9203,6 @@
       }
     },
     {
-      "id": "zendesk-support.post.api-v2-audit-logs-export",
-      "kind": "rest_write",
-      "summary": "POST /api/v2/audit_logs/export",
-      "description": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/audit_logs/export",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "zendesk-support.get.api-v2-audit-logs-audit-log-id",
       "kind": "rest_read",
       "summary": "GET /api/v2/audit_logs/{audit_log_id}",
@@ -9244,22 +9228,6 @@
       "output_policy": "json",
       "rest": {
         "method": "GET",
-        "path": "/api/v2/autocomplete/tags",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "zendesk-support.post.api-v2-autocomplete-tags",
-      "kind": "rest_write",
-      "summary": "POST /api/v2/autocomplete/tags",
-      "description": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
         "path": "/api/v2/autocomplete/tags",
         "max_bytes": 16777216
       }
@@ -10050,22 +10018,6 @@
       }
     },
     {
-      "id": "zendesk-support.post.api-v2-custom-objects-custom-object-key-records-search",
-      "kind": "rest_write",
-      "summary": "POST /api/v2/custom_objects/{custom_object_key}/records/search",
-      "description": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/custom_objects/{custom_object_key}/records/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "zendesk-support.get.api-v2-custom-objects-custom-object-key-records-custom-object-record-id",
       "kind": "rest_read",
       "summary": "GET /api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id}",
@@ -10156,21 +10108,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "zendesk-support.get.api-v2-custom-objects-custom-object-key-records-record-id-attachments-id-download",
-      "kind": "rest_read",
-      "summary": "GET /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}/download",
-      "description": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}/download",
         "max_bytes": 16777216
       }
     },
@@ -11529,22 +11466,6 @@
       }
     },
     {
-      "id": "zendesk-support.post.api-v2-it-asset-management-assets-search",
-      "kind": "rest_write",
-      "summary": "POST /api/v2/it_asset_management/assets/search",
-      "description": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/it_asset_management/assets/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "zendesk-support.get.api-v2-it-asset-management-assets-asset-id",
       "kind": "rest_read",
       "summary": "GET /api/v2/it_asset_management/assets/{asset_id}",
@@ -12852,22 +12773,6 @@
       }
     },
     {
-      "id": "zendesk-support.post.api-v2-problems-autocomplete",
-      "kind": "rest_write",
-      "summary": "POST /api/v2/problems/autocomplete",
-      "description": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/problems/autocomplete",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "zendesk-support.post.api-v2-push-notification-devices-destroy-many",
       "kind": "rest_write",
       "summary": "POST /api/v2/push_notification_devices/destroy_many",
@@ -13977,22 +13882,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/api/v2/suspended_tickets/destroy_many",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "zendesk-support.post.api-v2-suspended-tickets-export",
-      "kind": "rest_write",
-      "summary": "POST /api/v2/suspended_tickets/export",
-      "description": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/suspended_tickets/export",
         "max_bytes": 16777216
       }
     },
@@ -15509,22 +15398,6 @@
       }
     },
     {
-      "id": "zendesk-support.post.api-v2-users-autocomplete",
-      "kind": "rest_write",
-      "summary": "POST /api/v2/users/autocomplete",
-      "description": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/users/autocomplete",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "zendesk-support.get.api-v2-users-count",
       "kind": "rest_read",
       "summary": "GET /api/v2/users/count",
@@ -16583,38 +16456,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/api/v2/views/destroy_many",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "zendesk-support.post.api-v2-views-preview",
-      "kind": "rest_write",
-      "summary": "POST /api/v2/views/preview",
-      "description": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/views/preview",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "zendesk-support.post.api-v2-views-preview-count",
-      "kind": "rest_write",
-      "summary": "POST /api/v2/views/preview/count",
-      "description": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/views/preview/count",
         "max_bytes": 16777216
       }
     },

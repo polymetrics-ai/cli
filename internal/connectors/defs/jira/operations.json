@@ -910,9 +910,7 @@
       "binary": {
         "method": "GET",
         "path": "/rest/api/3/universal_avatar/view/type/{type}",
-        "max_bytes": 10485760,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 10485760
       }
     },
     {
@@ -926,9 +924,7 @@
       "binary": {
         "method": "GET",
         "path": "/rest/api/3/universal_avatar/view/type/{type}/avatar/{id}",
-        "max_bytes": 10485760,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 10485760
       }
     },
     {
@@ -942,9 +938,7 @@
       "binary": {
         "method": "GET",
         "path": "/rest/api/3/universal_avatar/view/type/{type}/owner/{entityId}",
-        "max_bytes": 10485760,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 10485760
       }
     },
     {
@@ -1096,6 +1090,409 @@
             }
           }
         }
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-comment-commentid-properties-propertykey",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/comment/{commentId}/properties/{propertyKey}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/comment/{commentId}/properties/{propertyKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.delete.rest-api-3-config-fieldschemes-fields",
+      "kind": "rest_write",
+      "summary": "DELETE /rest/api/3/config/fieldschemes/fields",
+      "description": "the provider declares this request body as an open map keyed by a custom field or scheme id, whose values are objects rather than scalars",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/rest/api/3/config/fieldschemes/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-config-fieldschemes-fields",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/config/fieldschemes/fields",
+      "description": "the provider declares this request body as an open map keyed by a custom field or scheme id, whose values are objects rather than scalars",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/config/fieldschemes/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.delete.rest-api-3-config-fieldschemes-fields-parameters",
+      "kind": "rest_write",
+      "summary": "DELETE /rest/api/3/config/fieldschemes/fields/parameters",
+      "description": "the provider declares this request body as an open map keyed by a custom field or scheme id, whose values are objects rather than scalars",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/rest/api/3/config/fieldschemes/fields/parameters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-config-fieldschemes-fields-parameters",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/config/fieldschemes/fields/parameters",
+      "description": "the provider declares this request body as an open map keyed by a custom field or scheme id, whose values are objects rather than scalars",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/config/fieldschemes/fields/parameters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-config-fieldschemes-projects",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/config/fieldschemes/projects",
+      "description": "the provider declares this request body as an open map keyed by a custom field or scheme id, whose values are objects rather than scalars",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/config/fieldschemes/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-dashboard-dashboardid-items-itemid-properties-propertykey",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.delete.rest-api-3-group",
+      "kind": "rest_write",
+      "summary": "DELETE /rest/api/3/group",
+      "description": "the provider's published spec documents no bindable request field for this operation: no request body, no path variable and no required query parameter",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/rest/api/3/group",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-issue-issueidorkey-properties-propertykey",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.post.rest-api-3-issue-issueidorkey-watchers",
+      "kind": "rest_write",
+      "summary": "POST /rest/api/3/issue/{issueIdOrKey}/watchers",
+      "description": "the provider declares this request body as a bare JSON string rather than an object",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/issue/{issueIdOrKey}/watchers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-issue-issueidorkey-worklog-worklogid-properties-propertykey",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.post.rest-api-3-issuetype-id-avatar2",
+      "kind": "rest_write",
+      "summary": "POST /rest/api/3/issuetype/{id}/avatar2",
+      "description": "the provider declares this request body as */* with no schema at all: it is a raw image byte stream",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/issuetype/{id}/avatar2",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-issuetype-issuetypeid-properties-propertykey",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-mypreferences",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/mypreferences",
+      "description": "the provider declares this request body as a bare JSON string rather than an object",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/mypreferences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-plans-plan-planid",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/plans/plan/{planId}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/plans/plan/{planId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-plans-plan-planid-team-atlassian-atlassianteamid",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/plans/plan/{planId}/team/atlassian/{atlassianTeamId}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/plans/plan/{planId}/team/atlassian/{atlassianTeamId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-plans-plan-planid-team-planonly-planonlyteamid",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/plans/plan/{planId}/team/planonly/{planOnlyTeamId}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/plans/plan/{planId}/team/planonly/{planOnlyTeamId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.post.rest-api-3-project-projectidorkey-avatar2",
+      "kind": "rest_write",
+      "summary": "POST /rest/api/3/project/{projectIdOrKey}/avatar2",
+      "description": "the provider declares this request body as */* with no schema at all: it is a raw image byte stream",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/project/{projectIdOrKey}/avatar2",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-project-projectidorkey-properties-propertykey",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.post.rest-api-3-universal-avatar-type-type-owner-entityid",
+      "kind": "rest_write",
+      "summary": "POST /rest/api/3/universal_avatar/type/{type}/owner/{entityId}",
+      "description": "the provider declares this request body as */* with no schema at all: it is a raw image byte stream",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/universal_avatar/type/{type}/owner/{entityId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.delete.rest-api-3-user-columns",
+      "kind": "rest_write",
+      "summary": "DELETE /rest/api/3/user/columns",
+      "description": "the provider's published spec documents no bindable request field for this operation: no request body, no path variable and no required query parameter",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/rest/api/3/user/columns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-api-3-user-properties-propertykey",
+      "kind": "rest_write",
+      "summary": "PUT /rest/api/3/user/properties/{propertyKey}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/user/properties/{propertyKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.post.rest-api-3-workflows-create-validation",
+      "kind": "composite",
+      "summary": "POST /rest/api/3/workflows/create/validation",
+      "description": "the provider declares a required request-body field for this read that has no scalar leaf (payload)",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /rest/api/3/workflows/create/validation"
+        ]
+      }
+    },
+    {
+      "id": "jira.post.rest-api-3-workflows-update-validation",
+      "kind": "composite",
+      "summary": "POST /rest/api/3/workflows/update/validation",
+      "description": "the provider declares a required request-body field for this read that has no scalar leaf (payload)",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /rest/api/3/workflows/update/validation"
+        ]
+      }
+    },
+    {
+      "id": "jira.put.rest-atlassian-connect-1-addons-addonkey-properties-propertykey",
+      "kind": "rest_write",
+      "summary": "PUT /rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.delete.rest-atlassian-connect-1-app-module-dynamic",
+      "kind": "rest_write",
+      "summary": "DELETE /rest/atlassian-connect/1/app/module/dynamic",
+      "description": "the provider's published spec documents no bindable request field for this operation: no request body, no path variable and no required query parameter",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/rest/atlassian-connect/1/app/module/dynamic",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.put.rest-forge-1-app-properties-propertykey",
+      "kind": "rest_write",
+      "summary": "PUT /rest/forge/1/app/properties/{propertyKey}",
+      "description": "the provider's published spec declares this request body as arbitrary JSON with no properties, so there is no bounded record contract to derive",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/forge/1/app/properties/{propertyKey}",
+        "max_bytes": 16777216
       }
     }
   ]

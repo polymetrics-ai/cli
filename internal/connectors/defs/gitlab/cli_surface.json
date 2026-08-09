@@ -747,6 +747,23 @@
         "api head projects id repository branches branch",
         "api head projects id repository files file-path",
         "api head projects id repository files file-path blame",
+        "api post ai llm git-command",
+        "api post chat completions",
+        "api post code-suggestions completions",
+        "api post code-suggestions connection-details",
+        "api post code-suggestions direct-access",
+        "api post code-suggestions enabled",
+        "api post duo-code-review evaluations",
+        "api post geo proxy-git-ssh info-refs-receive-pack",
+        "api post geo proxy-git-ssh info-refs-upload-pack",
+        "api post markdown",
+        "api post packages conan v1 conans package-name package-version package-username package-channel packages conan-package-reference upload-urls",
+        "api post packages conan v1 conans package-name package-version package-username package-channel upload-urls",
+        "api post projects id ci lint",
+        "api post projects id ml mlflow api 2-0 mlflow experiments search",
+        "api post projects id packages conan v1 conans package-name package-version package-username package-channel packages conan-package-reference upload-urls",
+        "api post projects id packages conan v1 conans package-name package-version package-username package-channel upload-urls",
+        "api post runners verify",
         "groups list",
         "issues list",
         "projects list",
@@ -1010,29 +1027,20 @@
         "api post ai duo-workflows workflows id checkpoints",
         "api post ai duo-workflows workflows id events",
         "api post ai duo-workflows workflows workflow-id resume",
-        "api post ai llm git-command",
         "api post ai third-party-agents direct-access",
         "api post applications",
         "api post applications id renew-secret",
         "api post broadcast-messages",
         "api post bulk-imports",
         "api post bulk-imports import-id cancel",
-        "api post chat completions",
-        "api post code-suggestions completions",
-        "api post code-suggestions connection-details",
-        "api post code-suggestions direct-access",
-        "api post code-suggestions enabled",
         "api post container-registry-event events",
         "api post deploy-keys",
-        "api post duo-code-review evaluations",
         "api post experiments experiment-name assignments",
         "api post feature-flags unleash project-id client metrics",
         "api post feature-flags unleash project-id client register",
         "api post features name",
         "api post geo failures",
         "api post geo node-proxy id graphql",
-        "api post geo proxy-git-ssh info-refs-receive-pack",
-        "api post geo proxy-git-ssh info-refs-upload-pack",
         "api post geo proxy-git-ssh receive-pack",
         "api post geo proxy-git-ssh upload-pack",
         "api post geo status",
@@ -1133,7 +1141,6 @@
         "api post jobs id sbom-scans sbom-digest",
         "api post jobs request",
         "api post license",
-        "api post markdown",
         "api post mcp",
         "api post member-roles",
         "api post namespaces id gitlab-subscription",
@@ -1143,8 +1150,6 @@
         "api post offline-exports",
         "api post offline-imports",
         "api post organizations",
-        "api post packages conan v1 conans package-name package-version package-username package-channel packages conan-package-reference upload-urls",
-        "api post packages conan v1 conans package-name package-version package-username package-channel upload-urls",
         "api post packages npm operation npm v1 security advisories bulk",
         "api post packages npm operation npm v1 security audits quick",
         "api post personal-access-tokens id rotate",
@@ -1168,7 +1173,6 @@
         "api post projects id boards",
         "api post projects id boards board-id lists",
         "api post projects id catalog publish",
-        "api post projects id ci lint",
         "api post projects id cluster-agents",
         "api post projects id cluster-agents agent-id tokens",
         "api post projects id cluster-agents agent-id url-configurations",
@@ -1262,7 +1266,6 @@
         "api post projects id mirror pull",
         "api post projects id ml mlflow api 2-0 mlflow experiments create",
         "api post projects id ml mlflow api 2-0 mlflow experiments delete",
-        "api post projects id ml mlflow api 2-0 mlflow experiments search",
         "api post projects id ml mlflow api 2-0 mlflow experiments set-experiment-tag",
         "api post projects id ml mlflow api 2-0 mlflow model-versions create",
         "api post projects id ml mlflow api 2-0 mlflow registered-models create",
@@ -1276,8 +1279,6 @@
         "api post projects id ml mlflow api 2-0 mlflow runs set-tag",
         "api post projects id ml mlflow api 2-0 mlflow runs update",
         "api post projects id packages composer",
-        "api post projects id packages conan v1 conans package-name package-version package-username package-channel packages conan-package-reference upload-urls",
-        "api post projects id packages conan v1 conans package-name package-version package-username package-channel upload-urls",
         "api post projects id packages helm api channel charts",
         "api post projects id packages helm api channel charts authorize",
         "api post projects id packages npm operation npm v1 security advisories bulk",
@@ -1375,7 +1376,6 @@
         "api post runners id reset-authentication-token",
         "api post runners reset-authentication-token",
         "api post runners reset-registration-token",
-        "api post runners verify",
         "api post security groups id vulnerability-exports",
         "api post security projects id vulnerability-archive-exports",
         "api post security projects id vulnerability-exports",
@@ -7044,7 +7044,7 @@
     {
       "path": "api get dependency-list-exports export-id download",
       "summary": "Documented GET /dependency_list_exports/{export_id}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -7058,8 +7058,8 @@
       ],
       "operation": "gitlab.get.dependency-list-exports-export-id-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get deploy-keys",
@@ -7724,7 +7724,7 @@
     {
       "path": "api get groups id avatar",
       "summary": "Documented GET /groups/{id}/avatar (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -7738,8 +7738,8 @@
       ],
       "operation": "gitlab.get.groups-id-avatar",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get groups id badges",
@@ -8584,7 +8584,7 @@
     {
       "path": "api get groups id export download",
       "summary": "Documented GET /groups/{id}/export/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -8598,13 +8598,13 @@
       ],
       "operation": "gitlab.get.groups-id-export-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get groups id export-relations download",
       "summary": "Documented GET /groups/{id}/export_relations/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -8618,8 +8618,8 @@
       ],
       "operation": "gitlab.get.groups-id-export-relations-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get groups id export-relations status",
@@ -9384,7 +9384,7 @@
     {
       "path": "api get groups id operation packages debian pool distribution project-id letter package-name package-version file-name",
       "summary": "Documented GET /groups/{id}/-/packages/debian/pool/{distribution}/{project_id}/{letter}/{package_name}/{package_version}/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -9398,8 +9398,8 @@
       ],
       "operation": "gitlab.get.groups-id-packages-debian-pool-distribution-project-id-letter-package-name-package-version-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get groups id operation packages nuget index",
@@ -10124,7 +10124,7 @@
     {
       "path": "api get groups id uploads secret filename",
       "summary": "Documented GET /groups/{id}/uploads/{secret}/{filename} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -10138,13 +10138,13 @@
       ],
       "operation": "gitlab.get.groups-id-uploads-secret-filename",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get groups id uploads upload-id",
       "summary": "Documented GET /groups/{id}/uploads/{upload_id} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -10158,8 +10158,8 @@
       ],
       "operation": "gitlab.get.groups-id-uploads-upload-id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get groups id variables",
@@ -10504,7 +10504,7 @@
     {
       "path": "api get jobs id artifacts",
       "summary": "Documented GET /jobs/{id}/artifacts (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -10518,13 +10518,13 @@
       ],
       "operation": "gitlab.get.jobs-id-artifacts",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get jobs id sbom-scans sbom-digest",
       "summary": "Documented GET /jobs/{id}/sbom_scans/{sbom_digest} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -10538,8 +10538,8 @@
       ],
       "operation": "gitlab.get.jobs-id-sbom-scans-sbom-digest",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get keys",
@@ -10664,7 +10664,7 @@
     {
       "path": "api get license usage-export",
       "summary": "Documented GET /license/usage_export (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -10678,8 +10678,8 @@
       ],
       "operation": "gitlab.get.license-usage-export",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get licenses",
@@ -11144,7 +11144,7 @@
     {
       "path": "api get packages conan v1 files package-name package-version package-username package-channel recipe-revision export file-name",
       "summary": "Documented GET /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -11158,13 +11158,13 @@
       ],
       "operation": "gitlab.get.packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-export-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get packages conan v1 files package-name package-version package-username package-channel recipe-revision package conan-package-reference package-revision file-name",
       "summary": "Documented GET /packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -11178,8 +11178,8 @@
       ],
       "operation": "gitlab.get.packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-package-conan-package-reference-package-revision-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get packages conan v1 ping",
@@ -11684,7 +11684,7 @@
     {
       "path": "api get projects id attestations attestation-iid download",
       "summary": "Documented GET /projects/{id}/attestations/{attestation_iid}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -11698,8 +11698,8 @@
       ],
       "operation": "gitlab.get.projects-id-attestations-attestation-iid-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id attestations subject-digest",
@@ -11764,7 +11764,7 @@
     {
       "path": "api get projects id avatar",
       "summary": "Documented GET /projects/{id}/avatar (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -11778,8 +11778,8 @@
       ],
       "operation": "gitlab.get.projects-id-avatar",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id badges",
@@ -12504,7 +12504,7 @@
     {
       "path": "api get projects id export download",
       "summary": "Documented GET /projects/{id}/export/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -12518,13 +12518,13 @@
       ],
       "operation": "gitlab.get.projects-id-export-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id export-relations download",
       "summary": "Documented GET /projects/{id}/export_relations/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -12538,8 +12538,8 @@
       ],
       "operation": "gitlab.get.projects-id-export-relations-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id export-relations status",
@@ -13664,7 +13664,7 @@
     {
       "path": "api get projects id jobs artifacts ref-name download",
       "summary": "Documented GET /projects/{id}/jobs/artifacts/{ref_name}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -13678,8 +13678,8 @@
       ],
       "operation": "gitlab.get.projects-id-jobs-artifacts-ref-name-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id jobs job-id",
@@ -13704,7 +13704,7 @@
     {
       "path": "api get projects id jobs job-id artifacts",
       "summary": "Documented GET /projects/{id}/jobs/{job_id}/artifacts (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -13718,8 +13718,8 @@
       ],
       "operation": "gitlab.get.projects-id-jobs-job-id-artifacts",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id jobs job-id artifacts tree",
@@ -14544,7 +14544,7 @@
     {
       "path": "api get projects id merge-requests merge-request-iid raw-diffs",
       "summary": "Documented GET /projects/{id}/merge_requests/{merge_request_iid}/raw_diffs (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -14558,8 +14558,8 @@
       ],
       "operation": "gitlab.get.projects-id-merge-requests-merge-request-iid-raw-diffs",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id merge-requests merge-request-iid related-issues",
@@ -15364,7 +15364,7 @@
     {
       "path": "api get projects id packages cargo package-name package-version download",
       "summary": "Documented GET /projects/{id}/packages/cargo/{package_name}/{package_version}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -15378,8 +15378,8 @@
       ],
       "operation": "gitlab.get.projects-id-packages-cargo-package-name-package-version-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages cargo prefix-1 prefix-2 package-name",
@@ -15564,7 +15564,7 @@
     {
       "path": "api get projects id packages conan v1 files package-name package-version package-username package-channel recipe-revision export file-name",
       "summary": "Documented GET /projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -15578,13 +15578,13 @@
       ],
       "operation": "gitlab.get.projects-id-packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-export-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages conan v1 files package-name package-version package-username package-channel recipe-revision package conan-package-reference package-revision file-name",
       "summary": "Documented GET /projects/{id}/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -15598,8 +15598,8 @@
       ],
       "operation": "gitlab.get.projects-id-packages-conan-v1-files-package-name-package-version-package-username-package-channel-recipe-revision-package-conan-package-reference-package-revision-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages conan v1 ping",
@@ -15724,7 +15724,7 @@
     {
       "path": "api get projects id packages conan v2 conans package-name package-version package-username package-channel revisions recipe-revision files file-name",
       "summary": "Documented GET /projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -15738,8 +15738,8 @@
       ],
       "operation": "gitlab.get.projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages conan v2 conans package-name package-version package-username package-channel revisions recipe-revision packages conan-package-reference latest",
@@ -15804,7 +15804,7 @@
     {
       "path": "api get projects id packages conan v2 conans package-name package-version package-username package-channel revisions recipe-revision packages conan-package-reference revisions package-revision files file-name",
       "summary": "Documented GET /projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -15818,8 +15818,8 @@
       ],
       "operation": "gitlab.get.projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision-files-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages conan v2 conans package-name package-version package-username package-channel revisions recipe-revision search",
@@ -15924,7 +15924,7 @@
     {
       "path": "api get projects id packages debian pool distribution letter package-name package-version file-name",
       "summary": "Documented GET /projects/{id}/packages/debian/pool/{distribution}/{letter}/{package_name}/{package_version}/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -15938,13 +15938,13 @@
       ],
       "operation": "gitlab.get.projects-id-packages-debian-pool-distribution-letter-package-name-package-version-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages helm channel charts file-name tgz",
       "summary": "Documented GET /projects/{id}/packages/helm/{channel}/charts/{file_name}.tgz (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -15958,13 +15958,13 @@
       ],
       "operation": "gitlab.get.projects-id-packages-helm-channel-charts-file-name-tgz",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages helm channel index-yaml",
       "summary": "Documented GET /projects/{id}/packages/helm/{channel}/index.yaml (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -15978,8 +15978,8 @@
       ],
       "operation": "gitlab.get.projects-id-packages-helm-channel-index-yaml",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages nuget index",
@@ -16104,7 +16104,7 @@
     {
       "path": "api get projects id packages package-id package-files package-file-id download",
       "summary": "Documented GET /projects/{id}/packages/{package_id}/package_files/{package_file_id}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -16118,8 +16118,8 @@
       ],
       "operation": "gitlab.get.projects-id-packages-package-id-package-files-package-file-id-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages package-id pipelines",
@@ -16204,7 +16204,7 @@
     {
       "path": "api get projects id packages rubygems file-name",
       "summary": "Documented GET /projects/{id}/packages/rubygems/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -16218,13 +16218,13 @@
       ],
       "operation": "gitlab.get.projects-id-packages-rubygems-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages rubygems gems file-name",
       "summary": "Documented GET /projects/{id}/packages/rubygems/gems/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -16238,13 +16238,13 @@
       ],
       "operation": "gitlab.get.projects-id-packages-rubygems-gems-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages rubygems quick marshal-4-8 file-name",
       "summary": "Documented GET /projects/{id}/packages/rubygems/quick/Marshal.4.8/{file_name} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -16258,13 +16258,13 @@
       ],
       "operation": "gitlab.get.projects-id-packages-rubygems-quick-marshal-4-8-file-name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id packages terraform modules module-name module-system",
       "summary": "Documented GET /projects/{id}/packages/terraform/modules/{module_name}/{module_system} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -16278,8 +16278,8 @@
       ],
       "operation": "gitlab.get.projects-id-packages-terraform-modules-module-name-module-system",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id pages",
@@ -17024,7 +17024,7 @@
     {
       "path": "api get projects id repository archive",
       "summary": "Documented GET /projects/{id}/repository/archive (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -17038,8 +17038,8 @@
       ],
       "operation": "gitlab.get.projects-id-repository-archive",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id repository blobs sha",
@@ -17064,7 +17064,7 @@
     {
       "path": "api get projects id repository blobs sha raw",
       "summary": "Documented GET /projects/{id}/repository/blobs/{sha}/raw (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -17078,8 +17078,8 @@
       ],
       "operation": "gitlab.get.projects-id-repository-blobs-sha-raw",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id repository branches",
@@ -17504,7 +17504,7 @@
     {
       "path": "api get projects id repository files file-path raw",
       "summary": "Documented GET /projects/{id}/repository/files/{file_path}/raw (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -17518,8 +17518,8 @@
       ],
       "operation": "gitlab.get.projects-id-repository-files-file-path-raw",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id repository health",
@@ -17824,7 +17824,7 @@
     {
       "path": "api get projects id secure-files secure-file-id download",
       "summary": "Documented GET /projects/{id}/secure_files/{secure_file_id}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -17838,8 +17838,8 @@
       ],
       "operation": "gitlab.get.projects-id-secure-files-secure-file-id-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id security-settings",
@@ -17964,7 +17964,7 @@
     {
       "path": "api get projects id snapshot",
       "summary": "Documented GET /projects/{id}/snapshot (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -17978,8 +17978,8 @@
       ],
       "operation": "gitlab.get.projects-id-snapshot",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id snippets",
@@ -18184,7 +18184,7 @@
     {
       "path": "api get projects id snippets snippet-id files ref file-path raw",
       "summary": "Documented GET /projects/{id}/snippets/{snippet_id}/files/{ref}/{file_path}/raw (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -18198,8 +18198,8 @@
       ],
       "operation": "gitlab.get.projects-id-snippets-snippet-id-files-ref-file-path-raw",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id snippets snippet-id notes note-id award-emoji",
@@ -18244,7 +18244,7 @@
     {
       "path": "api get projects id snippets snippet-id raw",
       "summary": "Documented GET /projects/{id}/snippets/{snippet_id}/raw (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -18258,8 +18258,8 @@
       ],
       "operation": "gitlab.get.projects-id-snippets-snippet-id-raw",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id snippets snippet-id user-agent-detail",
@@ -18524,7 +18524,7 @@
     {
       "path": "api get projects id uploads secret filename",
       "summary": "Documented GET /projects/{id}/uploads/{secret}/{filename} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -18538,13 +18538,13 @@
       ],
       "operation": "gitlab.get.projects-id-uploads-secret-filename",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id uploads upload-id",
       "summary": "Documented GET /projects/{id}/uploads/{upload_id} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -18558,8 +18558,8 @@
       ],
       "operation": "gitlab.get.projects-id-uploads-upload-id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get projects id users",
@@ -19124,7 +19124,7 @@
     {
       "path": "api get security vulnerability-archive-exports id download",
       "summary": "Documented GET /security/vulnerability_archive_exports/{id}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -19138,8 +19138,8 @@
       ],
       "operation": "gitlab.get.security-vulnerability-archive-exports-id-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get security vulnerability-exports id",
@@ -19164,7 +19164,7 @@
     {
       "path": "api get security vulnerability-exports id download",
       "summary": "Documented GET /security/vulnerability_exports/{id}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -19178,8 +19178,8 @@
       ],
       "operation": "gitlab.get.security-vulnerability-exports-id-download",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get service-accounts",
@@ -19384,7 +19384,7 @@
     {
       "path": "api get snippets id files ref file-path raw",
       "summary": "Documented GET /snippets/{id}/files/{ref}/{file_path}/raw (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -19398,13 +19398,13 @@
       ],
       "operation": "gitlab.get.snippets-id-files-ref-file-path-raw",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get snippets id raw",
       "summary": "Documented GET /snippets/{id}/raw (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -19418,8 +19418,8 @@
       ],
       "operation": "gitlab.get.snippets-id-raw",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get snippets id repository-storage-moves",
@@ -19764,7 +19764,7 @@
     {
       "path": "api get usage-data metric-definitions",
       "summary": "Documented GET /usage_data/metric_definitions (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -19778,8 +19778,8 @@
       ],
       "operation": "gitlab.get.usage-data-metric-definitions",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get usage-data non-sql-metrics",
@@ -20744,7 +20744,7 @@
     {
       "path": "api head projects id repository branches branch",
       "summary": "Documented HEAD /projects/{id}/repository/branches/{branch} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -20764,7 +20764,7 @@
     {
       "path": "api head projects id repository files file-path",
       "summary": "Documented HEAD /projects/{id}/repository/files/{file_path} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -20784,7 +20784,7 @@
     {
       "path": "api head projects id repository files file-path blame",
       "summary": "Documented HEAD /projects/{id}/repository/files/{file_path}/blame (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -21644,7 +21644,7 @@
     {
       "path": "api post ai llm git-command",
       "summary": "Documented POST /ai/llm/git_command (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -21658,8 +21658,8 @@
       ],
       "operation": "gitlab.post.ai-llm-git-command",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post ai third-party-agents direct-access",
@@ -21784,7 +21784,7 @@
     {
       "path": "api post chat completions",
       "summary": "Documented POST /chat/completions (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -21798,13 +21798,13 @@
       ],
       "operation": "gitlab.post.chat-completions",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post code-suggestions completions",
       "summary": "Documented POST /code_suggestions/completions (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -21818,13 +21818,13 @@
       ],
       "operation": "gitlab.post.code-suggestions-completions",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post code-suggestions connection-details",
       "summary": "Documented POST /code_suggestions/connection_details (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -21838,13 +21838,13 @@
       ],
       "operation": "gitlab.post.code-suggestions-connection-details",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post code-suggestions direct-access",
       "summary": "Documented POST /code_suggestions/direct_access (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -21858,13 +21858,13 @@
       ],
       "operation": "gitlab.post.code-suggestions-direct-access",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post code-suggestions enabled",
       "summary": "Documented POST /code_suggestions/enabled (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -21878,8 +21878,8 @@
       ],
       "operation": "gitlab.post.code-suggestions-enabled",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post container-registry-event events",
@@ -21924,7 +21924,7 @@
     {
       "path": "api post duo-code-review evaluations",
       "summary": "Documented POST /duo_code_review/evaluations (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -21938,8 +21938,8 @@
       ],
       "operation": "gitlab.post.duo-code-review-evaluations",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post experiments experiment-name assignments",
@@ -22064,7 +22064,7 @@
     {
       "path": "api post geo proxy-git-ssh info-refs-receive-pack",
       "summary": "Documented POST /geo/proxy_git_ssh/info_refs_receive_pack (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -22078,13 +22078,13 @@
       ],
       "operation": "gitlab.post.geo-proxy-git-ssh-info-refs-receive-pack",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post geo proxy-git-ssh info-refs-upload-pack",
       "summary": "Documented POST /geo/proxy_git_ssh/info_refs_upload_pack (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -22098,8 +22098,8 @@
       ],
       "operation": "gitlab.post.geo-proxy-git-ssh-info-refs-upload-pack",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post geo proxy-git-ssh receive-pack",
@@ -24104,7 +24104,7 @@
     {
       "path": "api post markdown",
       "summary": "Documented POST /markdown (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -24118,8 +24118,8 @@
       ],
       "operation": "gitlab.post.markdown",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post mcp",
@@ -24304,7 +24304,7 @@
     {
       "path": "api post packages conan v1 conans package-name package-version package-username package-channel packages conan-package-reference upload-urls",
       "summary": "Documented POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -24318,13 +24318,13 @@
       ],
       "operation": "gitlab.post.packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-upload-urls",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post packages conan v1 conans package-name package-version package-username package-channel upload-urls",
       "summary": "Documented POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -24338,8 +24338,8 @@
       ],
       "operation": "gitlab.post.packages-conan-v1-conans-package-name-package-version-package-username-package-channel-upload-urls",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post packages npm operation npm v1 security advisories bulk",
@@ -24804,7 +24804,7 @@
     {
       "path": "api post projects id ci lint",
       "summary": "Documented POST /projects/{id}/ci/lint (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -24818,8 +24818,8 @@
       ],
       "operation": "gitlab.post.projects-id-ci-lint",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post projects id cluster-agents",
@@ -26684,7 +26684,7 @@
     {
       "path": "api post projects id ml mlflow api 2-0 mlflow experiments search",
       "summary": "Documented POST /projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/search (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -26698,8 +26698,8 @@
       ],
       "operation": "gitlab.post.projects-id-ml-mlflow-api-2-0-mlflow-experiments-search",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post projects id ml mlflow api 2-0 mlflow experiments set-experiment-tag",
@@ -26964,7 +26964,7 @@
     {
       "path": "api post projects id packages conan v1 conans package-name package-version package-username package-channel packages conan-package-reference upload-urls",
       "summary": "Documented POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -26978,13 +26978,13 @@
       ],
       "operation": "gitlab.post.projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-upload-urls",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post projects id packages conan v1 conans package-name package-version package-username package-channel upload-urls",
       "summary": "Documented POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -26998,8 +26998,8 @@
       ],
       "operation": "gitlab.post.projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-upload-urls",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post projects id packages helm api channel charts",
@@ -28944,7 +28944,7 @@
     {
       "path": "api post runners verify",
       "summary": "Documented POST /runners/verify (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
       "examples": [
@@ -28958,8 +28958,8 @@
       ],
       "operation": "gitlab.post.runners-verify",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post security groups id vulnerability-exports",

@@ -714,38 +714,6 @@
       }
     },
     {
-      "id": "gorgias.post.api-reporting-stats",
-      "kind": "rest_write",
-      "summary": "POST /api/reporting/stats",
-      "description": "'Retrieve a statistic' requires a top-level 'query' field whose schema is a 50-arm discriminated union implementing the Statistics API's recursive filter-expression grammar (and/or/comparison nodes), with no typed scalar leaf and no neutral empty default. This repository's authoring rule for an implemented direct-read POST command requires every required operations.json rest.body_schema path to be satisfied by a static rest.body or a required command flag mapped to body.*; no single flag or static literal can honestly stand in for an arbitrary filter tree. Source: https://developers.gorgias.com/reference/get-statistic",
-      "source_url": "https://developers.gorgias.com/reference",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/reporting/stats",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "gorgias.post.api-stats-name-download",
-      "kind": "rest_write",
-      "summary": "POST /api/stats/{name}/download",
-      "description": "'Download a statistic' returns text/csv from a POST request that carries a required JSON filter body. This repository's binary download executor (engine.OperationBinaryDownload / commandrunner.validateBinaryDownloadCommand) requires GET, so a POST-triggered CSV export cannot be wired through it. Source: https://developers.gorgias.com/reference/download-legacy-statistic",
-      "source_url": "https://developers.gorgias.com/reference",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/stats/{name}/download",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "gorgias.put.api-tickets-ticket-id-custom-fields-id",
       "kind": "rest_write",
       "summary": "PUT /api/tickets/{ticket_id}/custom-fields/{id}",
@@ -777,19 +745,48 @@
       }
     },
     {
+      "id": "gorgias.post.api-reporting-stats",
+      "kind": "composite",
+      "summary": "POST /api/reporting/stats",
+      "description": "'Retrieve a statistic' requires a top-level 'query' field whose schema is a 50-arm discriminated union implementing the Statistics API's recursive filter-expression grammar (and/or/comparison nodes), with no typed scalar leaf and no neutral empty default. This repository's authoring rule for an implemented direct-read POST command requires every required operations.json rest.body_schema path to be satisfied by a static rest.body or a required command flag mapped to body.*; no single flag or static literal can honestly stand in for an arbitrary filter tree. Source: https://developers.gorgias.com/reference/get-statistic",
+      "source_url": "https://developers.gorgias.com/reference",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /api/reporting/stats"
+        ]
+      }
+    },
+    {
+      "id": "gorgias.post.api-stats-name-download",
+      "kind": "composite",
+      "summary": "POST /api/stats/{name}/download",
+      "description": "'Download a statistic' returns text/csv from a POST request that carries a required JSON filter body. This repository's binary download executor (engine.OperationBinaryDownload / commandrunner.validateBinaryDownloadCommand) requires GET, so a POST-triggered CSV export cannot be wired through it. Source: https://developers.gorgias.com/reference/download-legacy-statistic",
+      "source_url": "https://developers.gorgias.com/reference",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /api/stats/{name}/download"
+        ]
+      }
+    },
+    {
       "id": "gorgias.put.api-views-view-id-items",
-      "kind": "rest_write",
+      "kind": "composite",
       "summary": "PUT /api/views/{view_id}/items",
       "description": "'Search for view's items' takes its filter/order criteria in a request body but the provider requires PUT, not GET or POST. This repository's operation direct-read executor (commandrunner.validateOperationDirectReadCommand) accepts only GET or POST endpoints, so a PUT-bodied read cannot be wired through it. The common case (an unfiltered, cursor-paginated listing of a view's items) is already served by the GET sibling, implemented here as the 'views items list' direct read. Source: https://developers.gorgias.com/reference/update-view-items",
       "source_url": "https://developers.gorgias.com/reference",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
       "output_policy": "json",
-      "mutation_class": "update",
-      "rest": {
-        "method": "PUT",
-        "path": "/api/views/{view_id}/items",
-        "max_bytes": 16777216
+      "composite": {
+        "steps": [
+          "PUT /api/views/{view_id}/items"
+        ]
       }
     }
   ]

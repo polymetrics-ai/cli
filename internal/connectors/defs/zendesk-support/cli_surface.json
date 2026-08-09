@@ -305,6 +305,15 @@
         "api get api v2 views view-id tickets",
         "api get api v2 workspaces",
         "api get api v2 workspaces workspace-id",
+        "api post api v2 audit-logs export",
+        "api post api v2 autocomplete tags",
+        "api post api v2 custom-objects custom-object-key records search",
+        "api post api v2 it-asset-management assets search",
+        "api post api v2 problems autocomplete",
+        "api post api v2 suspended-tickets export",
+        "api post api v2 users autocomplete",
+        "api post api v2 views preview",
+        "api post api v2 views preview count",
         "articles list",
         "attribute definitions list",
         "automations list",
@@ -433,20 +442,16 @@
         "api post api v2 any-channel channelback report-error",
         "api post api v2 any-channel push",
         "api post api v2 any-channel validate-token",
-        "api post api v2 audit-logs export",
-        "api post api v2 autocomplete tags",
         "api post api v2 channels twitter tickets",
         "api post api v2 channels voice agents agent-id tickets ticket-id display",
         "api post api v2 channels voice agents agent-id users user-id display",
         "api post api v2 custom-objects custom-object-key records record-id attachments",
-        "api post api v2 custom-objects custom-object-key records search",
         "api post api v2 custom-roles",
         "api post api v2 dynamic-content items",
         "api post api v2 dynamic-content items dynamic-content-item-id variants",
         "api post api v2 dynamic-content items dynamic-content-item-id variants create-many",
         "api post api v2 end-users user-id identities",
         "api post api v2 group-slas policies",
-        "api post api v2 it-asset-management assets search",
         "api post api v2 macros attachments",
         "api post api v2 macros macro-id attachments",
         "api post api v2 oauth clients",
@@ -458,7 +463,6 @@
         "api post api v2 organizations create-or-update",
         "api post api v2 organizations organization-id merge",
         "api post api v2 organizations organization-id tags",
-        "api post api v2 problems autocomplete",
         "api post api v2 push-notification-devices destroy-many",
         "api post api v2 queues",
         "api post api v2 recipient-addresses",
@@ -472,7 +476,6 @@
         "api post api v2 skips",
         "api post api v2 slas policies",
         "api post api v2 suspended-tickets attachments",
-        "api post api v2 suspended-tickets export",
         "api post api v2 targets",
         "api post api v2 ticket-fields ticket-field-id options",
         "api post api v2 ticket-forms",
@@ -483,15 +486,12 @@
         "api post api v2 uploads",
         "api post api v2 user-fields",
         "api post api v2 user-fields user-field-id options",
-        "api post api v2 users autocomplete",
         "api post api v2 users create-or-update",
         "api post api v2 users logout-many",
         "api post api v2 users user-id identities",
         "api post api v2 users user-id organization-memberships",
         "api post api v2 users user-id password",
         "api post api v2 users user-id tags",
-        "api post api v2 views preview",
-        "api post api v2 views preview count",
         "api post oauth tokens",
         "api put api v2 account settings",
         "api put api v2 automations update-many",
@@ -3007,7 +3007,7 @@
     {
       "path": "api get api v2 custom-objects custom-object-key records record-id attachments id download",
       "summary": "Documented GET /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -3019,10 +3019,10 @@
           "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}/download"
         }
       ],
-      "operation": "zendesk-support.get.api-v2-custom-objects-custom-object-key-records-record-id-attachments-id-download",
+      "operation": "zendesk-support.download_custom_object_record_attachment",
       "risk": "high",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get api v2 custom-objects custom-object-key records search",
@@ -8427,7 +8427,7 @@
     {
       "path": "api post api v2 audit-logs export",
       "summary": "Documented POST /api/v2/audit_logs/export (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -8441,13 +8441,13 @@
       ],
       "operation": "zendesk-support.export_audit_logs",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post api v2 autocomplete tags",
       "summary": "Documented POST /api/v2/autocomplete/tags (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -8461,8 +8461,8 @@
       ],
       "operation": "zendesk-support.autocomplete_tags_post",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post api v2 channels twitter tickets",
@@ -8547,7 +8547,7 @@
     {
       "path": "api post api v2 custom-objects custom-object-key records search",
       "summary": "Documented POST /api/v2/custom_objects/{custom_object_key}/records/search (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -8561,8 +8561,8 @@
       ],
       "operation": "zendesk-support.filtered_search_custom_object_records",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post api v2 custom-roles",
@@ -8687,7 +8687,7 @@
     {
       "path": "api post api v2 it-asset-management assets search",
       "summary": "Documented POST /api/v2/it_asset_management/assets/search (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -8701,8 +8701,8 @@
       ],
       "operation": "zendesk-support.filtered_search_itam_assets",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post api v2 macros attachments",
@@ -8927,7 +8927,7 @@
     {
       "path": "api post api v2 problems autocomplete",
       "summary": "Documented POST /api/v2/problems/autocomplete (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -8941,8 +8941,8 @@
       ],
       "operation": "zendesk-support.autocomplete_problems",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post api v2 push-notification-devices destroy-many",
@@ -9207,7 +9207,7 @@
     {
       "path": "api post api v2 suspended-tickets export",
       "summary": "Documented POST /api/v2/suspended_tickets/export (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -9221,8 +9221,8 @@
       ],
       "operation": "zendesk-support.export_suspended_tickets",
       "risk": "high",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post api v2 targets",
@@ -9427,7 +9427,7 @@
     {
       "path": "api post api v2 users autocomplete",
       "summary": "Documented POST /api/v2/users/autocomplete (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -9441,8 +9441,8 @@
       ],
       "operation": "zendesk-support.autocomplete_users_post",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post api v2 users create-or-update",
@@ -9567,7 +9567,7 @@
     {
       "path": "api post api v2 views preview",
       "summary": "Documented POST /api/v2/views/preview (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -9581,13 +9581,13 @@
       ],
       "operation": "zendesk-support.preview_views",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post api v2 views preview count",
       "summary": "Documented POST /api/v2/views/preview/count (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "examples": [
@@ -9601,8 +9601,8 @@
       ],
       "operation": "zendesk-support.preview_count",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post oauth tokens",

@@ -1,214 +1,1015 @@
 {
-  "tagline": "Read Lever Hiring records and safely plan typed Lever mutations.",
-  "usage": "pm lever-hiring <command> [flags]",
-  "source_cli": {
-    "name": "Lever API",
-    "docs": "https://hire.lever.co/developer/documentation",
-    "reference": "Lever Developer documentation fetched 2026-08-01",
-    "source": "provider_api"
-  },
+  "tagline": "Run Lever Hiring's declared streams and reverse-ETL actions.",
+  "usage": "pm lever-hiring \u003ccommand\u003e [flags]",
   "groups": [
     {
-      "id": "etl",
-      "title": "ETL streams",
+      "id": "read",
+      "title": "Read streams",
       "commands": [
-        "applications",
-        "archive-reasons",
-        "audit-events",
-        "deleted-applications",
-        "deleted-opportunities",
-        "deleted-postings",
-        "disposition-stages",
-        "feedback-templates",
-        "form-templates",
-        "opportunities",
-        "opportunity-feedback",
-        "opportunity-file-actions",
-        "opportunity-forms",
-        "opportunity-interviews",
-        "opportunity-notes",
-        "opportunity-offers",
-        "opportunity-panels",
-        "opportunity-referrals",
-        "posting-users",
-        "postings",
-        "requisition-fields",
-        "requisitions",
-        "sources",
-        "stages",
-        "users"
+        "api delete opportunities opportunity files file",
+        "api get opportunities opportunity files",
+        "api get opportunities opportunity files file",
+        "api get opportunities opportunity files file download",
+        "api get opportunities opportunity offers offer download",
+        "api get opportunities opportunity resumes",
+        "api get opportunities opportunity resumes resume",
+        "api get opportunities opportunity resumes resume download",
+        "api get v1 eeo responses",
+        "api get webhooks",
+        "api post opportunities opportunity files",
+        "api post uploads",
+        "applications list",
+        "archive-reasons list",
+        "audit-events list",
+        "deleted-applications list",
+        "deleted-opportunities list",
+        "deleted-postings list",
+        "direct list-all-tags",
+        "direct retrieve-a-diversity-survey",
+        "direct retrieve-a-feedback-form",
+        "direct retrieve-a-feedback-template",
+        "direct retrieve-a-profile-form",
+        "direct retrieve-a-profile-form-template",
+        "direct retrieve-a-single-application",
+        "direct retrieve-a-single-archive-reason",
+        "direct retrieve-a-single-contact",
+        "direct retrieve-a-single-interview",
+        "direct retrieve-a-single-note",
+        "direct retrieve-a-single-opportunity",
+        "direct retrieve-a-single-panel",
+        "direct retrieve-a-single-posting",
+        "direct retrieve-a-single-referral",
+        "direct retrieve-a-single-requisition",
+        "direct retrieve-a-single-requisition-field",
+        "direct retrieve-a-single-stage",
+        "direct retrieve-a-single-user",
+        "direct retrieve-eeo-responses-with-pii",
+        "direct retrieve-posting-application-questions",
+        "disposition-stages list",
+        "feedback-templates list",
+        "form-templates list",
+        "opportunities list",
+        "opportunity-feedback list",
+        "opportunity-file-actions list",
+        "opportunity-forms list",
+        "opportunity-interviews list",
+        "opportunity-notes list",
+        "opportunity-offers list",
+        "opportunity-panels list",
+        "opportunity-referrals list",
+        "posting-users list",
+        "postings list",
+        "requisition-fields list",
+        "requisitions list",
+        "sources list",
+        "stages list",
+        "users list"
       ]
     },
     {
-      "id": "direct",
-      "title": "Bounded direct reads",
+      "id": "write",
+      "title": "Reverse ETL writes",
       "commands": [
-        "direct"
+        "api delete opportunities opportunity interviews interview",
+        "api delete opportunities opportunity panels panel",
+        "api delete webhooks webhookid",
+        "api post opportunities",
+        "api post opportunities opportunity addlinks",
+        "api post opportunities opportunity addsources",
+        "api post opportunities opportunity addtags",
+        "api post opportunities opportunity feedback",
+        "api post opportunities opportunity forms",
+        "api post opportunities opportunity interviews",
+        "api post opportunities opportunity notes",
+        "api post opportunities opportunity panels",
+        "api post opportunities opportunity removelinks",
+        "api post opportunities opportunity removesources",
+        "api post opportunities opportunity removetags",
+        "api post postings",
+        "api post postings posting",
+        "api post postings posting apply",
+        "api post requisition-fields",
+        "api post requisition-fields requisition-field options",
+        "api post requisitions",
+        "api post users",
+        "api post webhooks",
+        "api put contacts contact",
+        "api put opportunities opportunity archived",
+        "api put opportunities opportunity interviews interview",
+        "api put opportunities opportunity notes note",
+        "api put opportunities opportunity panels panel",
+        "api put opportunities opportunity stage",
+        "api put requisition-fields requisition-field",
+        "api put requisition-fields requisition-field options",
+        "api put requisitions requisition",
+        "api put users user",
+        "api put webhooks",
+        "create-feedback-template plan",
+        "create-form-template plan",
+        "deactivate-user plan",
+        "delete-feedback plan",
+        "delete-feedback-template plan",
+        "delete-form-template plan",
+        "delete-note plan",
+        "delete-requisition plan",
+        "delete-requisition-field plan",
+        "delete-requisition-field-options plan",
+        "reactivate-user plan",
+        "update-feedback plan",
+        "update-feedback-template plan",
+        "update-form-template plan"
       ]
-    },
-    {
-      "id": "writes",
-      "title": "Reverse ETL write plans",
-      "commands": [
-        "create-feedback-template",
-        "create-form-template",
-        "deactivate-user",
-        "delete-feedback",
-        "delete-feedback-template",
-        "delete-form-template",
-        "delete-note",
-        "delete-requisition",
-        "delete-requisition-field",
-        "delete-requisition-field-options",
-        "reactivate-user",
-        "update-feedback",
-        "update-feedback-template",
-        "update-form-template"
-      ]
-    }
-  ],
-  "global_flags": [
-    {
-      "name": "credential",
-      "type": "string",
-      "summary": "Credential name to use for the Lever request."
-    },
-    {
-      "name": "connection",
-      "type": "string",
-      "summary": "Alias for --credential."
-    },
-    {
-      "name": "config",
-      "type": "string_array",
-      "summary": "Connector config override as key=value; never pass secret values here."
-    },
-    {
-      "name": "json",
-      "type": "boolean",
-      "summary": "Emit machine-readable JSON output."
-    },
-    {
-      "name": "limit",
-      "type": "integer",
-      "summary": "Maximum ETL records to emit."
-    },
-    {
-      "name": "max-bytes",
-      "type": "integer",
-      "summary": "Maximum bounded direct-read response bytes."
-    },
-    {
-      "name": "preview",
-      "type": "boolean",
-      "summary": "Preview a reverse-ETL write command without making a network mutation."
-    },
-    {
-      "name": "approve",
-      "type": "string",
-      "summary": "Approval token required to execute a reverse-ETL plan."
-    },
-    {
-      "name": "confirm",
-      "type": "string",
-      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
     }
   ],
   "commands": [
     {
-      "path": "opportunities list",
-      "summary": "Read Lever Hiring opportunities as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "opportunities",
+      "path": "api delete opportunities opportunity files file",
+      "summary": "Documented DELETE /opportunities/{opportunity}/files/{file} (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api delete opportunities opportunity files file --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/files/{file}"
+        }
+      ],
+      "operation": "lever-hiring.delete.opportunities-opportunity-files-file",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api delete opportunities opportunity interviews interview",
+      "summary": "Documented DELETE /opportunities/{opportunity}/interviews/{interview} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api delete opportunities opportunity interviews interview --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/interviews/{interview}"
+        }
+      ],
+      "operation": "lever-hiring.delete.opportunities-opportunity-interviews-interview",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete opportunities opportunity panels panel",
+      "summary": "Documented DELETE /opportunities/{opportunity}/panels/{panel} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api delete opportunities opportunity panels panel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/panels/{panel}"
+        }
+      ],
+      "operation": "lever-hiring.delete.opportunities-opportunity-panels-panel",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhooks webhookid",
+      "summary": "Documented DELETE /webhooks/{webhookId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api delete webhooks webhookid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{webhookId}"
+        }
+      ],
+      "operation": "lever-hiring.delete.webhooks-webhookid",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api get opportunities opportunity files",
+      "summary": "Documented GET /opportunities/{opportunity}/files (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api get opportunities opportunity files --help"
+      ],
       "api_surface": [
         {
           "method": "GET",
+          "path": "/opportunities/{opportunity}/files"
+        }
+      ],
+      "operation": "lever-hiring.get.opportunities-opportunity-files",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api get opportunities opportunity files file",
+      "summary": "Documented GET /opportunities/{opportunity}/files/{file} (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api get opportunities opportunity files file --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/files/{file}"
+        }
+      ],
+      "operation": "lever-hiring.get.opportunities-opportunity-files-file",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api get opportunities opportunity files file download",
+      "summary": "Documented GET /opportunities/{opportunity}/files/{file}/download (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api get opportunities opportunity files file download --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/files/{file}/download"
+        }
+      ],
+      "operation": "lever-hiring.get.opportunities-opportunity-files-file-download",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api get opportunities opportunity offers offer download",
+      "summary": "Documented GET /opportunities/{opportunity}/offers/{offer}/download (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api get opportunities opportunity offers offer download --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/offers/{offer}/download"
+        }
+      ],
+      "operation": "lever-hiring.get.opportunities-opportunity-offers-offer-download",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api get opportunities opportunity resumes",
+      "summary": "Documented GET /opportunities/{opportunity}/resumes (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api get opportunities opportunity resumes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/resumes"
+        }
+      ],
+      "operation": "lever-hiring.get.opportunities-opportunity-resumes",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api get opportunities opportunity resumes resume",
+      "summary": "Documented GET /opportunities/{opportunity}/resumes/{resume} (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api get opportunities opportunity resumes resume --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/resumes/{resume}"
+        }
+      ],
+      "operation": "lever-hiring.get.opportunities-opportunity-resumes-resume",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api get opportunities opportunity resumes resume download",
+      "summary": "Documented GET /opportunities/{opportunity}/resumes/{resume}/download (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api get opportunities opportunity resumes resume download --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/resumes/{resume}/download"
+        }
+      ],
+      "operation": "lever-hiring.get.opportunities-opportunity-resumes-resume-download",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api get v1 eeo responses",
+      "summary": "Documented GET /v1/eeo/responses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api get v1 eeo responses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/eeo/responses"
+        }
+      ],
+      "operation": "lever-hiring.get.v1-eeo-responses",
+      "risk": "high",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks",
+      "summary": "Documented GET /webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api get webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "lever-hiring.get.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post opportunities",
+      "summary": "Documented POST /opportunities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
           "path": "/opportunities"
         }
       ],
-      "examples": [
-        "pm lever-hiring opportunities list --json --limit 25"
-      ]
+      "operation": "lever-hiring.post.opportunities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "postings list",
-      "summary": "Read Lever Hiring postings as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "postings",
+      "path": "api post opportunities opportunity addlinks",
+      "summary": "Documented POST /opportunities/{opportunity}/addLinks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity addlinks --help"
+      ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/addLinks"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-addlinks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity addsources",
+      "summary": "Documented POST /opportunities/{opportunity}/addSources (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity addsources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/addSources"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-addsources",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity addtags",
+      "summary": "Documented POST /opportunities/{opportunity}/addTags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity addtags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/addTags"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-addtags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity feedback",
+      "summary": "Documented POST /opportunities/{opportunity}/feedback (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity feedback --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/feedback"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-feedback",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity files",
+      "summary": "Documented POST /opportunities/{opportunity}/files (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/files"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-files",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api post opportunities opportunity forms",
+      "summary": "Documented POST /opportunities/{opportunity}/forms (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity forms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/forms"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-forms",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity interviews",
+      "summary": "Documented POST /opportunities/{opportunity}/interviews (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity interviews --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/interviews"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-interviews",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity notes",
+      "summary": "Documented POST /opportunities/{opportunity}/notes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/notes"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity panels",
+      "summary": "Documented POST /opportunities/{opportunity}/panels (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity panels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/panels"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-panels",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity removelinks",
+      "summary": "Documented POST /opportunities/{opportunity}/removeLinks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity removelinks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/removeLinks"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-removelinks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity removesources",
+      "summary": "Documented POST /opportunities/{opportunity}/removeSources (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity removesources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/removeSources"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-removesources",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities opportunity removetags",
+      "summary": "Documented POST /opportunities/{opportunity}/removeTags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post opportunities opportunity removetags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/removeTags"
+        }
+      ],
+      "operation": "lever-hiring.post.opportunities-opportunity-removetags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post postings",
+      "summary": "Documented POST /postings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post postings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
           "path": "/postings"
         }
       ],
-      "examples": [
-        "pm lever-hiring postings list --json --limit 25"
-      ]
+      "operation": "lever-hiring.post.postings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "users list",
-      "summary": "Read Lever Hiring users as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "users",
+      "path": "api post postings posting",
+      "summary": "Documented POST /postings/{posting} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post postings posting --help"
+      ],
       "api_surface": [
         {
-          "method": "GET",
-          "path": "/users"
+          "method": "POST",
+          "path": "/postings/{posting}"
         }
       ],
-      "examples": [
-        "pm lever-hiring users list --json --limit 25"
-      ]
+      "operation": "lever-hiring.post.postings-posting",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "requisitions list",
-      "summary": "Read Lever Hiring requisitions as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "requisitions",
+      "path": "api post postings posting apply",
+      "summary": "Documented POST /postings/{posting}/apply (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post postings posting apply --help"
+      ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "POST",
+          "path": "/postings/{posting}/apply"
+        }
+      ],
+      "operation": "lever-hiring.post.postings-posting-apply",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post requisition-fields",
+      "summary": "Documented POST /requisition_fields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post requisition-fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/requisition_fields"
+        }
+      ],
+      "operation": "lever-hiring.post.requisition-fields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post requisition-fields requisition-field options",
+      "summary": "Documented POST /requisition_fields/{requisition_field}/options (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post requisition-fields requisition-field options --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/requisition_fields/{requisition_field}/options"
+        }
+      ],
+      "operation": "lever-hiring.post.requisition-fields-requisition-field-options",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post requisitions",
+      "summary": "Documented POST /requisitions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post requisitions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
           "path": "/requisitions"
         }
       ],
-      "examples": [
-        "pm lever-hiring requisitions list --json --limit 25"
-      ]
+      "operation": "lever-hiring.post.requisitions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "stages list",
-      "summary": "Read Lever Hiring stages as ETL records.",
+      "path": "api post uploads",
+      "summary": "Documented POST /uploads (not implemented)",
+      "intent": "binary_download",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post uploads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/uploads"
+        }
+      ],
+      "operation": "lever-hiring.post.uploads",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "lever-hiring.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks",
+      "summary": "Documented POST /webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api post webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "lever-hiring.post.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api put contacts contact",
+      "summary": "Documented PUT /contacts/{contact} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put contacts contact --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact}"
+        }
+      ],
+      "operation": "lever-hiring.put.contacts-contact",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put opportunities opportunity archived",
+      "summary": "Documented PUT /opportunities/{opportunity}/archived (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put opportunities opportunity archived --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/archived"
+        }
+      ],
+      "operation": "lever-hiring.put.opportunities-opportunity-archived",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put opportunities opportunity interviews interview",
+      "summary": "Documented PUT /opportunities/{opportunity}/interviews/{interview} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put opportunities opportunity interviews interview --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/interviews/{interview}"
+        }
+      ],
+      "operation": "lever-hiring.put.opportunities-opportunity-interviews-interview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put opportunities opportunity notes note",
+      "summary": "Documented PUT /opportunities/{opportunity}/notes/{note} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put opportunities opportunity notes note --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/notes/{note}"
+        }
+      ],
+      "operation": "lever-hiring.put.opportunities-opportunity-notes-note",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put opportunities opportunity panels panel",
+      "summary": "Documented PUT /opportunities/{opportunity}/panels/{panel} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put opportunities opportunity panels panel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/panels/{panel}"
+        }
+      ],
+      "operation": "lever-hiring.put.opportunities-opportunity-panels-panel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put opportunities opportunity stage",
+      "summary": "Documented PUT /opportunities/{opportunity}/stage (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put opportunities opportunity stage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/stage"
+        }
+      ],
+      "operation": "lever-hiring.put.opportunities-opportunity-stage",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put requisition-fields requisition-field",
+      "summary": "Documented PUT /requisition_fields/{requisition_field} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put requisition-fields requisition-field --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/requisition_fields/{requisition_field}"
+        }
+      ],
+      "operation": "lever-hiring.put.requisition-fields-requisition-field",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put requisition-fields requisition-field options",
+      "summary": "Documented PUT /requisition_fields/{requisition_field}/options (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put requisition-fields requisition-field options --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/requisition_fields/{requisition_field}/options"
+        }
+      ],
+      "operation": "lever-hiring.put.requisition-fields-requisition-field-options",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put requisitions requisition",
+      "summary": "Documented PUT /requisitions/{requisition} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put requisitions requisition --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/requisitions/{requisition}"
+        }
+      ],
+      "operation": "lever-hiring.put.requisitions-requisition",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users user",
+      "summary": "Documented PUT /users/{user} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put users user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{user}"
+        }
+      ],
+      "operation": "lever-hiring.put.users-user",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put webhooks",
+      "summary": "Documented PUT /webhooks/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm lever-hiring api put webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webhooks/"
+        }
+      ],
+      "operation": "lever-hiring.put.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "applications list",
+      "summary": "Read Lever Hiring applications as ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "stages",
+      "stream": "applications",
+      "examples": [
+        "pm lever-hiring applications list --json --limit 25"
+      ],
       "api_surface": [
         {
           "method": "GET",
-          "path": "/stages"
+          "path": "/opportunities/{opportunity}/applications"
         }
-      ],
-      "examples": [
-        "pm lever-hiring stages list --json --limit 25"
-      ]
-    },
-    {
-      "path": "deleted-applications list",
-      "summary": "Read Lever Hiring deleted applications as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "deleted_applications",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/applications/deleted"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring deleted-applications list --json --limit 25"
       ]
     },
     {
@@ -217,14 +1018,14 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "archive_reasons",
+      "examples": [
+        "pm lever-hiring archive-reasons list --json --limit 25"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/archive_reasons"
         }
-      ],
-      "examples": [
-        "pm lever-hiring archive-reasons list --json --limit 25"
       ]
     },
     {
@@ -233,46 +1034,298 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "audit_events",
+      "examples": [
+        "pm lever-hiring audit-events list --json --limit 25"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/audit_events"
         }
-      ],
-      "examples": [
-        "pm lever-hiring audit-events list --json --limit 25"
       ]
     },
     {
-      "path": "disposition-stages list",
-      "summary": "Read Lever Hiring disposition stages as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "disposition_stages",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/disposition_stages"
-        }
-      ],
+      "path": "create-feedback-template plan",
+      "summary": "Creates a feedback template.",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_feedback_template",
       "examples": [
-        "pm lever-hiring disposition-stages list --json --limit 25"
-      ]
-    },
-    {
-      "path": "feedback-templates list",
-      "summary": "Read Lever Hiring feedback templates as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "feedback_templates",
+        "pm lever-hiring create feedback template apply --plan \u003cplan-name\u003e"
+      ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "POST",
           "path": "/feedback_templates"
         }
       ],
+      "risk": "Creates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create-form-template plan",
+      "summary": "Creates a profile form template.",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_form_template",
       "examples": [
-        "pm lever-hiring feedback-templates list --json --limit 25"
+        "pm lever-hiring create form template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/form_templates"
+        }
+      ],
+      "risk": "Creates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "deactivate-user plan",
+      "summary": "Deactivates a Lever user.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "deactivate_user",
+      "flags": [
+        {
+          "name": "user",
+          "type": "string",
+          "summary": "Required user record field.",
+          "maps_to": "record.user",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring deactivate user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{user}/deactivate"
+        }
+      ],
+      "risk": "Deactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete-feedback plan",
+      "summary": "Deletes a feedback form from an opportunity.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_feedback",
+      "flags": [
+        {
+          "name": "feedback",
+          "type": "string",
+          "summary": "Required feedback record field.",
+          "maps_to": "record.feedback",
+          "required": true
+        },
+        {
+          "name": "opportunity",
+          "type": "string",
+          "summary": "Required opportunity record field.",
+          "maps_to": "record.opportunity",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring delete feedback apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/feedback/{feedback}"
+        }
+      ],
+      "risk": "Deletes a feedback form from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete-feedback-template plan",
+      "summary": "Deletes a feedback template.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_feedback_template",
+      "flags": [
+        {
+          "name": "feedback_template",
+          "type": "string",
+          "summary": "Required feedback template record field.",
+          "maps_to": "record.feedback_template",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring delete feedback template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/feedback_templates/{feedback_template}"
+        }
+      ],
+      "risk": "Deletes a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete-form-template plan",
+      "summary": "Deletes a profile form template.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_form_template",
+      "flags": [
+        {
+          "name": "form_template",
+          "type": "string",
+          "summary": "Required form template record field.",
+          "maps_to": "record.form_template",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring delete form template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/form_templates/{form_template}"
+        }
+      ],
+      "risk": "Deletes a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete-note plan",
+      "summary": "Deletes a note from an opportunity.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_note",
+      "flags": [
+        {
+          "name": "noteId",
+          "type": "string",
+          "summary": "Required noteId record field.",
+          "maps_to": "record.noteId",
+          "required": true
+        },
+        {
+          "name": "opportunity",
+          "type": "string",
+          "summary": "Required opportunity record field.",
+          "maps_to": "record.opportunity",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring delete note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/notes/{noteId}"
+        }
+      ],
+      "risk": "Deletes a note from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete-requisition plan",
+      "summary": "Deletes a requisition.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_requisition",
+      "flags": [
+        {
+          "name": "requisition",
+          "type": "string",
+          "summary": "Required requisition record field.",
+          "maps_to": "record.requisition",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring delete requisition apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/requisitions/{requisition}"
+        }
+      ],
+      "risk": "Deletes a requisition. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete-requisition-field plan",
+      "summary": "Deletes a requisition field.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_requisition_field",
+      "flags": [
+        {
+          "name": "requisition_field",
+          "type": "string",
+          "summary": "Required requisition field record field.",
+          "maps_to": "record.requisition_field",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring delete requisition field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/requisition_fields/{requisition_field}"
+        }
+      ],
+      "risk": "Deletes a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete-requisition-field-options plan",
+      "summary": "Deletes dropdown options for a requisition field.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_requisition_field_options",
+      "flags": [
+        {
+          "name": "requisition_field",
+          "type": "string",
+          "summary": "Required requisition field record field.",
+          "maps_to": "record.requisition_field",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring delete requisition field options apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/requisition_fields/{requisition_field}/options"
+        }
+      ],
+      "risk": "Deletes dropdown options for a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "deleted-applications list",
+      "summary": "Read Lever Hiring deleted applications as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deleted_applications",
+      "examples": [
+        "pm lever-hiring deleted-applications list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/applications/deleted"
+        }
       ]
     },
     {
@@ -281,14 +1334,14 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "deleted_opportunities",
+      "examples": [
+        "pm lever-hiring deleted-opportunities list --json --limit 25"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/opportunities/deleted"
         }
-      ],
-      "examples": [
-        "pm lever-hiring deleted-opportunities list --json --limit 25"
       ]
     },
     {
@@ -297,334 +1350,64 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "deleted_postings",
+      "examples": [
+        "pm lever-hiring deleted-postings list --json --limit 25"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/postings/deleted"
         }
-      ],
-      "examples": [
-        "pm lever-hiring deleted-postings list --json --limit 25"
       ]
     },
     {
-      "path": "form-templates list",
-      "summary": "Read Lever Hiring form templates as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "form_templates",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/form_templates"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring form-templates list --json --limit 25"
-      ]
-    },
-    {
-      "path": "requisition-fields list",
-      "summary": "Read Lever Hiring requisition fields as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "requisition_fields",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/requisition_fields"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring requisition-fields list --json --limit 25"
-      ]
-    },
-    {
-      "path": "sources list",
-      "summary": "Read Lever Hiring sources as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "sources",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/sources"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring sources list --json --limit 25"
-      ]
-    },
-    {
-      "path": "applications list",
-      "summary": "Read Lever Hiring applications as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "applications",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/applications"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring applications list --json --limit 25"
-      ]
-    },
-    {
-      "path": "opportunity-feedback list",
-      "summary": "Read Lever Hiring opportunity feedback as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "opportunity_feedback",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/feedback"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring opportunity-feedback list --json --limit 25"
-      ]
-    },
-    {
-      "path": "opportunity-interviews list",
-      "summary": "Read Lever Hiring opportunity interviews as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "opportunity_interviews",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/interviews"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring opportunity-interviews list --json --limit 25"
-      ]
-    },
-    {
-      "path": "opportunity-notes list",
-      "summary": "Read Lever Hiring opportunity notes as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "opportunity_notes",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/notes"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring opportunity-notes list --json --limit 25"
-      ]
-    },
-    {
-      "path": "opportunity-offers list",
-      "summary": "Read Lever Hiring opportunity offers as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "opportunity_offers",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/offers"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring opportunity-offers list --json --limit 25"
-      ]
-    },
-    {
-      "path": "opportunity-file-actions list",
-      "summary": "Read Lever Hiring opportunity file actions as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "opportunity_file_actions",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/file_actions"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring opportunity-file-actions list --json --limit 25"
-      ]
-    },
-    {
-      "path": "opportunity-panels list",
-      "summary": "Read Lever Hiring opportunity panels as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "opportunity_panels",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/panels"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring opportunity-panels list --json --limit 25"
-      ]
-    },
-    {
-      "path": "opportunity-forms list",
-      "summary": "Read Lever Hiring opportunity forms as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "opportunity_forms",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/forms"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring opportunity-forms list --json --limit 25"
-      ]
-    },
-    {
-      "path": "opportunity-referrals list",
-      "summary": "Read Lever Hiring opportunity referrals as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "opportunity_referrals",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/referrals"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring opportunity-referrals list --json --limit 25"
-      ]
-    },
-    {
-      "path": "posting-users list",
-      "summary": "Read Lever Hiring posting users as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "posting_users",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/postings/{posting}/users"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring posting-users list --json --limit 25"
-      ]
-    },
-    {
-      "path": "direct retrieve-a-single-application",
-      "summary": "Retrieve a single application",
+      "path": "direct list-all-tags",
+      "summary": "List all tags",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_application",
+      "examples": [
+        "pm lever-hiring direct list-all-tags --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ],
       "output_policy": "json_redacted",
+      "operation": "lever-hiring.list_all_tags"
+    },
+    {
+      "path": "direct retrieve-a-diversity-survey",
+      "summary": "Retrieve a diversity survey",
+      "intent": "direct_read",
+      "availability": "implemented",
       "flags": [
         {
-          "name": "opportunity",
+          "name": "posting",
           "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "application",
-          "type": "string",
-          "summary": "Lever application identifier.",
-          "maps_to": "path.application",
+          "summary": "Lever posting identifier.",
+          "maps_to": "path.posting",
           "allow_empty": false
         }
+      ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-diversity-survey --posting fixture-posting --json"
       ],
       "api_surface": [
         {
           "method": "GET",
-          "path": "/opportunities/{opportunity}/applications/{application}"
+          "path": "/surveys/diversity/{posting}"
         }
       ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-application --opportunity fixture-opportunity --application fixture-application --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-a-single-archive-reason",
-      "summary": "Retrieve a single archive reason",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_archive_reason",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "archive-reason",
-          "type": "string",
-          "summary": "Lever archive_reason identifier.",
-          "maps_to": "path.archive_reason",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/archive_reasons/{archive_reason}"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-archive-reason --archive-reason fixture-archive-reason --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-a-single-contact",
-      "summary": "Retrieve a single contact",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_contact",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "contact",
-          "type": "string",
-          "summary": "Lever contact identifier.",
-          "maps_to": "path.contact",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/contacts/{contact}"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-contact --contact fixture-contact --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-eeo-responses-with-pii",
-      "summary": "Retrieve EEO responses with PII",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_eeo_responses_with_pii",
       "output_policy": "clinical_json_redacted",
-      "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v1/eeo/responses/pii"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-eeo-responses-with-pii --json"
-      ]
+      "operation": "lever-hiring.retrieve_a_diversity_survey"
     },
     {
       "path": "direct retrieve-a-feedback-form",
       "summary": "Retrieve a feedback form",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_feedback_form",
-      "output_policy": "json_redacted",
       "flags": [
         {
           "name": "opportunity",
@@ -641,23 +1424,23 @@
           "allow_empty": false
         }
       ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-feedback-form --opportunity fixture-opportunity --feedback fixture-feedback --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/opportunities/{opportunity}/feedback/{feedback}"
         }
       ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-feedback-form --opportunity fixture-opportunity --feedback fixture-feedback --json"
-      ]
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_feedback_form"
     },
     {
       "path": "direct retrieve-a-feedback-template",
       "summary": "Retrieve a feedback template",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_feedback_template",
-      "output_policy": "json_redacted",
       "flags": [
         {
           "name": "feedback-template",
@@ -667,200 +1450,23 @@
           "allow_empty": false
         }
       ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-feedback-template --feedback-template fixture-feedback-template --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/feedback_templates/{feedback_template}"
         }
       ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-feedback-template --feedback-template fixture-feedback-template --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-a-single-interview",
-      "summary": "Retrieve a single interview",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_interview",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "interview",
-          "type": "string",
-          "summary": "Lever interview identifier.",
-          "maps_to": "path.interview",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/interviews/{interview}"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-interview --opportunity fixture-opportunity --interview fixture-interview --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-a-single-note",
-      "summary": "Retrieve a single note",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_note",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Lever note identifier.",
-          "maps_to": "path.note",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/notes/{note}"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-note --opportunity fixture-opportunity --note fixture-note --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-a-single-opportunity",
-      "summary": "Retrieve a single opportunity",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_opportunity",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-opportunity --opportunity fixture-opportunity --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-a-single-panel",
-      "summary": "Retrieve a single panel",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_panel",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "panel",
-          "type": "string",
-          "summary": "Lever panel identifier.",
-          "maps_to": "path.panel",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/opportunities/{opportunity}/panels/{panel}"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-panel --opportunity fixture-opportunity --panel fixture-panel --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-a-single-posting",
-      "summary": "Retrieve a single posting",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_posting",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "posting",
-          "type": "string",
-          "summary": "Lever posting identifier.",
-          "maps_to": "path.posting",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/postings/{posting}"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-posting --posting fixture-posting --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-posting-application-questions",
-      "summary": "Retrieve posting application questions",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_posting_application_questions",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "posting",
-          "type": "string",
-          "summary": "Lever posting identifier.",
-          "maps_to": "path.posting",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/postings/{posting}/apply"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-posting-application-questions --posting fixture-posting --json"
-      ]
+      "operation": "lever-hiring.retrieve_a_feedback_template"
     },
     {
       "path": "direct retrieve-a-profile-form",
       "summary": "Retrieve a profile form",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_profile_form",
-      "output_policy": "json_redacted",
       "flags": [
         {
           "name": "opportunity",
@@ -877,23 +1483,23 @@
           "allow_empty": false
         }
       ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-profile-form --opportunity fixture-opportunity --form fixture-form --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/opportunities/{opportunity}/forms/{form}"
         }
       ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-profile-form --opportunity fixture-opportunity --form fixture-form --json"
-      ]
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_profile_form"
     },
     {
       "path": "direct retrieve-a-profile-form-template",
       "summary": "Retrieve a profile form template",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_profile_form_template",
-      "output_policy": "json_redacted",
       "flags": [
         {
           "name": "form-template",
@@ -903,23 +1509,259 @@
           "allow_empty": false
         }
       ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-profile-form-template --form-template fixture-form-template --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/form_templates/{form_template}"
         }
       ],
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_profile_form_template"
+    },
+    {
+      "path": "direct retrieve-a-single-application",
+      "summary": "Retrieve a single application",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "opportunity",
+          "type": "string",
+          "summary": "Lever opportunity identifier.",
+          "maps_to": "path.opportunity",
+          "allow_empty": false
+        },
+        {
+          "name": "application",
+          "type": "string",
+          "summary": "Lever application identifier.",
+          "maps_to": "path.application",
+          "allow_empty": false
+        }
+      ],
       "examples": [
-        "pm lever-hiring direct retrieve-a-profile-form-template --form-template fixture-form-template --json"
-      ]
+        "pm lever-hiring direct retrieve-a-single-application --opportunity fixture-opportunity --application fixture-application --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/applications/{application}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_application"
+    },
+    {
+      "path": "direct retrieve-a-single-archive-reason",
+      "summary": "Retrieve a single archive reason",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "archive-reason",
+          "type": "string",
+          "summary": "Lever archive_reason identifier.",
+          "maps_to": "path.archive_reason",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-archive-reason --archive-reason fixture-archive-reason --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/archive_reasons/{archive_reason}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_archive_reason"
+    },
+    {
+      "path": "direct retrieve-a-single-contact",
+      "summary": "Retrieve a single contact",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "contact",
+          "type": "string",
+          "summary": "Lever contact identifier.",
+          "maps_to": "path.contact",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-contact --contact fixture-contact --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_contact"
+    },
+    {
+      "path": "direct retrieve-a-single-interview",
+      "summary": "Retrieve a single interview",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "opportunity",
+          "type": "string",
+          "summary": "Lever opportunity identifier.",
+          "maps_to": "path.opportunity",
+          "allow_empty": false
+        },
+        {
+          "name": "interview",
+          "type": "string",
+          "summary": "Lever interview identifier.",
+          "maps_to": "path.interview",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-interview --opportunity fixture-opportunity --interview fixture-interview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/interviews/{interview}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_interview"
+    },
+    {
+      "path": "direct retrieve-a-single-note",
+      "summary": "Retrieve a single note",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "opportunity",
+          "type": "string",
+          "summary": "Lever opportunity identifier.",
+          "maps_to": "path.opportunity",
+          "allow_empty": false
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "summary": "Lever note identifier.",
+          "maps_to": "path.note",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-note --opportunity fixture-opportunity --note fixture-note --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/notes/{note}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_note"
+    },
+    {
+      "path": "direct retrieve-a-single-opportunity",
+      "summary": "Retrieve a single opportunity",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "opportunity",
+          "type": "string",
+          "summary": "Lever opportunity identifier.",
+          "maps_to": "path.opportunity",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-opportunity --opportunity fixture-opportunity --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_opportunity"
+    },
+    {
+      "path": "direct retrieve-a-single-panel",
+      "summary": "Retrieve a single panel",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "opportunity",
+          "type": "string",
+          "summary": "Lever opportunity identifier.",
+          "maps_to": "path.opportunity",
+          "allow_empty": false
+        },
+        {
+          "name": "panel",
+          "type": "string",
+          "summary": "Lever panel identifier.",
+          "maps_to": "path.panel",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-panel --opportunity fixture-opportunity --panel fixture-panel --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/panels/{panel}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_panel"
+    },
+    {
+      "path": "direct retrieve-a-single-posting",
+      "summary": "Retrieve a single posting",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "posting",
+          "type": "string",
+          "summary": "Lever posting identifier.",
+          "maps_to": "path.posting",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-posting --posting fixture-posting --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/postings/{posting}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_posting"
     },
     {
       "path": "direct retrieve-a-single-referral",
       "summary": "Retrieve a single referral",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_referral",
-      "output_policy": "json_redacted",
       "flags": [
         {
           "name": "opportunity",
@@ -936,23 +1778,23 @@
           "allow_empty": false
         }
       ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-referral --opportunity fixture-opportunity --referral fixture-referral --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/opportunities/{opportunity}/referrals/{referral}"
         }
       ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-referral --opportunity fixture-opportunity --referral fixture-referral --json"
-      ]
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_referral"
     },
     {
       "path": "direct retrieve-a-single-requisition",
       "summary": "Retrieve a single requisition",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_requisition",
-      "output_policy": "json_redacted",
       "flags": [
         {
           "name": "requisition",
@@ -962,23 +1804,23 @@
           "allow_empty": false
         }
       ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-requisition --requisition fixture-requisition --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/requisitions/{requisition}"
         }
       ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-requisition --requisition fixture-requisition --json"
-      ]
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_requisition"
     },
     {
       "path": "direct retrieve-a-single-requisition-field",
       "summary": "Retrieve a single requisition field",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_requisition_field",
-      "output_policy": "json_redacted",
       "flags": [
         {
           "name": "requisition-field",
@@ -988,23 +1830,23 @@
           "allow_empty": false
         }
       ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-requisition-field --requisition-field fixture-requisition-field --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/requisition_fields/{requisition_field}"
         }
       ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-requisition-field --requisition-field fixture-requisition-field --json"
-      ]
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_requisition_field"
     },
     {
       "path": "direct retrieve-a-single-stage",
       "summary": "Retrieve a single stage",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_stage",
-      "output_policy": "json_redacted",
       "flags": [
         {
           "name": "stage",
@@ -1014,67 +1856,23 @@
           "allow_empty": false
         }
       ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-stage --stage fixture-stage --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/stages/{stage}"
         }
       ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-stage --stage fixture-stage --json"
-      ]
-    },
-    {
-      "path": "direct retrieve-a-diversity-survey",
-      "summary": "Retrieve a diversity survey",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_diversity_survey",
-      "output_policy": "clinical_json_redacted",
-      "flags": [
-        {
-          "name": "posting",
-          "type": "string",
-          "summary": "Lever posting identifier.",
-          "maps_to": "path.posting",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/surveys/diversity/{posting}"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-diversity-survey --posting fixture-posting --json"
-      ]
-    },
-    {
-      "path": "direct list-all-tags",
-      "summary": "List all tags",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "lever-hiring.list_all_tags",
       "output_policy": "json_redacted",
-      "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/tags"
-        }
-      ],
-      "examples": [
-        "pm lever-hiring direct list-all-tags --json"
-      ]
+      "operation": "lever-hiring.retrieve_a_single_stage"
     },
     {
       "path": "direct retrieve-a-single-user",
       "summary": "Retrieve a single user",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "lever-hiring.retrieve_a_single_user",
-      "output_policy": "json_redacted",
       "flags": [
         {
           "name": "user",
@@ -1084,652 +1882,283 @@
           "allow_empty": false
         }
       ],
+      "examples": [
+        "pm lever-hiring direct retrieve-a-single-user --user fixture-user --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/users/{user}"
         }
       ],
-      "examples": [
-        "pm lever-hiring direct retrieve-a-single-user --user fixture-user --json"
-      ]
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_a_single_user"
     },
     {
-      "path": "update-feedback plan",
-      "summary": "Updates a feedback form for an opportunity.",
-      "intent": "reverse_etl",
+      "path": "direct retrieve-eeo-responses-with-pii",
+      "summary": "Retrieve EEO responses with PII",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "update_feedback",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity value.",
-          "maps_to": "record.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "feedback",
-          "type": "string",
-          "summary": "Lever feedback value.",
-          "maps_to": "record.feedback",
-          "allow_empty": false
-        },
-        {
-          "name": "completedat",
-          "type": "integer",
-          "summary": "Lever completedAt value.",
-          "maps_to": "record.completedAt"
-        },
-        {
-          "name": "fieldvalue-id",
-          "type": "string",
-          "summary": "Feedback field identifier for the first field value.",
-          "maps_to": "record.fieldValues.0.id",
-          "allow_empty": false
-        },
-        {
-          "name": "fieldvalue-value",
-          "type": "string",
-          "summary": "Feedback value for the first field value.",
-          "maps_to": "record.fieldValues.0.value",
-          "allow_empty": false
-        }
+      "examples": [
+        "pm lever-hiring direct retrieve-eeo-responses-with-pii --json"
       ],
       "api_surface": [
         {
-          "method": "PUT",
-          "path": "/opportunities/{opportunity}/feedback/{feedback}"
+          "method": "GET",
+          "path": "/v1/eeo/responses/pii"
         }
       ],
-      "risk": "Updates a feedback form for an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring update-feedback plan --preview --json"
-      ]
+      "output_policy": "clinical_json_redacted",
+      "operation": "lever-hiring.retrieve_eeo_responses_with_pii"
     },
     {
-      "path": "delete-feedback plan",
-      "summary": "Deletes a feedback form from an opportunity.",
-      "intent": "reverse_etl",
+      "path": "direct retrieve-posting-application-questions",
+      "summary": "Retrieve posting application questions",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "delete_feedback",
       "flags": [
         {
-          "name": "opportunity",
+          "name": "posting",
           "type": "string",
-          "summary": "Lever opportunity value.",
-          "maps_to": "record.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "feedback",
-          "type": "string",
-          "summary": "Lever feedback value.",
-          "maps_to": "record.feedback",
+          "summary": "Lever posting identifier.",
+          "maps_to": "path.posting",
           "allow_empty": false
         }
+      ],
+      "examples": [
+        "pm lever-hiring direct retrieve-posting-application-questions --posting fixture-posting --json"
       ],
       "api_surface": [
         {
-          "method": "DELETE",
-          "path": "/opportunities/{opportunity}/feedback/{feedback}"
+          "method": "GET",
+          "path": "/postings/{posting}/apply"
         }
       ],
-      "risk": "Deletes a feedback form from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring delete-feedback plan --preview --json"
-      ]
+      "output_policy": "json_redacted",
+      "operation": "lever-hiring.retrieve_posting_application_questions"
     },
     {
-      "path": "create-feedback-template plan",
-      "summary": "Creates a feedback template.",
-      "intent": "reverse_etl",
+      "path": "disposition-stages list",
+      "summary": "Read Lever Hiring disposition stages as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "write": "create_feedback_template",
-      "flags": [
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Lever text value.",
-          "maps_to": "record.text",
-          "allow_empty": false
-        },
-        {
-          "name": "instructions",
-          "type": "string",
-          "summary": "Lever instructions value.",
-          "maps_to": "record.instructions",
-          "allow_empty": false
-        },
-        {
-          "name": "group",
-          "type": "string",
-          "summary": "Lever group value.",
-          "maps_to": "record.group",
-          "allow_empty": false
-        },
-        {
-          "name": "field-id",
-          "type": "string",
-          "summary": "Identifier for the first template field.",
-          "maps_to": "record.fields.0.id",
-          "allow_empty": false
-        },
-        {
-          "name": "field-type",
-          "type": "string",
-          "summary": "Type for the first template field.",
-          "maps_to": "record.fields.0.type",
-          "allow_empty": false
-        },
-        {
-          "name": "field-text",
-          "type": "string",
-          "summary": "Text label for the first template field.",
-          "maps_to": "record.fields.0.text",
-          "allow_empty": false
-        },
-        {
-          "name": "field-required",
-          "type": "boolean",
-          "summary": "Whether the first template field is required.",
-          "maps_to": "record.fields.0.required"
-        },
-        {
-          "name": "field-description",
-          "type": "string",
-          "summary": "Description for the first template field.",
-          "maps_to": "record.fields.0.description",
-          "allow_empty": false
-        },
-        {
-          "name": "field-prompt",
-          "type": "string",
-          "summary": "Prompt for the first template field.",
-          "maps_to": "record.fields.0.prompt",
-          "allow_empty": false
-        }
+      "stream": "disposition_stages",
+      "examples": [
+        "pm lever-hiring disposition-stages list --json --limit 25"
       ],
       "api_surface": [
         {
-          "method": "POST",
+          "method": "GET",
+          "path": "/disposition_stages"
+        }
+      ]
+    },
+    {
+      "path": "feedback-templates list",
+      "summary": "Read Lever Hiring feedback templates as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feedback_templates",
+      "examples": [
+        "pm lever-hiring feedback-templates list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
           "path": "/feedback_templates"
         }
-      ],
-      "risk": "Creates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring create-feedback-template plan --preview --json"
       ]
     },
     {
-      "path": "update-feedback-template plan",
-      "summary": "Updates a feedback template.",
-      "intent": "reverse_etl",
+      "path": "form-templates list",
+      "summary": "Read Lever Hiring form templates as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "write": "update_feedback_template",
-      "flags": [
-        {
-          "name": "feedback-template",
-          "type": "string",
-          "summary": "Lever feedback_template value.",
-          "maps_to": "record.feedback_template",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Lever text value.",
-          "maps_to": "record.text",
-          "allow_empty": false
-        },
-        {
-          "name": "instructions",
-          "type": "string",
-          "summary": "Lever instructions value.",
-          "maps_to": "record.instructions",
-          "allow_empty": false
-        },
-        {
-          "name": "group",
-          "type": "string",
-          "summary": "Lever group value.",
-          "maps_to": "record.group",
-          "allow_empty": false
-        },
-        {
-          "name": "field-id",
-          "type": "string",
-          "summary": "Identifier for the first template field.",
-          "maps_to": "record.fields.0.id",
-          "allow_empty": false
-        },
-        {
-          "name": "field-type",
-          "type": "string",
-          "summary": "Type for the first template field.",
-          "maps_to": "record.fields.0.type",
-          "allow_empty": false
-        },
-        {
-          "name": "field-text",
-          "type": "string",
-          "summary": "Text label for the first template field.",
-          "maps_to": "record.fields.0.text",
-          "allow_empty": false
-        },
-        {
-          "name": "field-required",
-          "type": "boolean",
-          "summary": "Whether the first template field is required.",
-          "maps_to": "record.fields.0.required"
-        },
-        {
-          "name": "field-description",
-          "type": "string",
-          "summary": "Description for the first template field.",
-          "maps_to": "record.fields.0.description",
-          "allow_empty": false
-        },
-        {
-          "name": "field-prompt",
-          "type": "string",
-          "summary": "Prompt for the first template field.",
-          "maps_to": "record.fields.0.prompt",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/feedback_templates/{feedback_template}"
-        }
-      ],
-      "risk": "Updates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      "stream": "form_templates",
       "examples": [
-        "pm lever-hiring update-feedback-template plan --preview --json"
-      ]
-    },
-    {
-      "path": "delete-feedback-template plan",
-      "summary": "Deletes a feedback template.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_feedback_template",
-      "flags": [
-        {
-          "name": "feedback-template",
-          "type": "string",
-          "summary": "Lever feedback_template value.",
-          "maps_to": "record.feedback_template",
-          "allow_empty": false
-        }
+        "pm lever-hiring form-templates list --json --limit 25"
       ],
       "api_surface": [
         {
-          "method": "DELETE",
-          "path": "/feedback_templates/{feedback_template}"
-        }
-      ],
-      "risk": "Deletes a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring delete-feedback-template plan --preview --json"
-      ]
-    },
-    {
-      "path": "create-form-template plan",
-      "summary": "Creates a profile form template.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_form_template",
-      "flags": [
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Lever text value.",
-          "maps_to": "record.text",
-          "allow_empty": false
-        },
-        {
-          "name": "instructions",
-          "type": "string",
-          "summary": "Lever instructions value.",
-          "maps_to": "record.instructions",
-          "allow_empty": false
-        },
-        {
-          "name": "group",
-          "type": "string",
-          "summary": "Lever group value.",
-          "maps_to": "record.group",
-          "allow_empty": false
-        },
-        {
-          "name": "secretbydefault",
-          "type": "boolean",
-          "summary": "Lever secretByDefault value.",
-          "maps_to": "record.secretByDefault"
-        },
-        {
-          "name": "field-id",
-          "type": "string",
-          "summary": "Identifier for the first template field.",
-          "maps_to": "record.fields.0.id",
-          "allow_empty": false
-        },
-        {
-          "name": "field-type",
-          "type": "string",
-          "summary": "Type for the first template field.",
-          "maps_to": "record.fields.0.type",
-          "allow_empty": false
-        },
-        {
-          "name": "field-text",
-          "type": "string",
-          "summary": "Text label for the first template field.",
-          "maps_to": "record.fields.0.text",
-          "allow_empty": false
-        },
-        {
-          "name": "field-required",
-          "type": "boolean",
-          "summary": "Whether the first template field is required.",
-          "maps_to": "record.fields.0.required"
-        },
-        {
-          "name": "field-description",
-          "type": "string",
-          "summary": "Description for the first template field.",
-          "maps_to": "record.fields.0.description",
-          "allow_empty": false
-        },
-        {
-          "name": "field-prompt",
-          "type": "string",
-          "summary": "Prompt for the first template field.",
-          "maps_to": "record.fields.0.prompt",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "POST",
+          "method": "GET",
           "path": "/form_templates"
         }
-      ],
-      "risk": "Creates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring create-form-template plan --preview --json"
       ]
     },
     {
-      "path": "update-form-template plan",
-      "summary": "Updates a profile form template.",
-      "intent": "reverse_etl",
+      "path": "opportunities list",
+      "summary": "Read Lever Hiring opportunities as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "write": "update_form_template",
-      "flags": [
-        {
-          "name": "form-template",
-          "type": "string",
-          "summary": "Lever form_template value.",
-          "maps_to": "record.form_template",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Lever text value.",
-          "maps_to": "record.text",
-          "allow_empty": false
-        },
-        {
-          "name": "instructions",
-          "type": "string",
-          "summary": "Lever instructions value.",
-          "maps_to": "record.instructions",
-          "allow_empty": false
-        },
-        {
-          "name": "group",
-          "type": "string",
-          "summary": "Lever group value.",
-          "maps_to": "record.group",
-          "allow_empty": false
-        },
-        {
-          "name": "secretbydefault",
-          "type": "boolean",
-          "summary": "Lever secretByDefault value.",
-          "maps_to": "record.secretByDefault"
-        },
-        {
-          "name": "field-id",
-          "type": "string",
-          "summary": "Identifier for the first template field.",
-          "maps_to": "record.fields.0.id",
-          "allow_empty": false
-        },
-        {
-          "name": "field-type",
-          "type": "string",
-          "summary": "Type for the first template field.",
-          "maps_to": "record.fields.0.type",
-          "allow_empty": false
-        },
-        {
-          "name": "field-text",
-          "type": "string",
-          "summary": "Text label for the first template field.",
-          "maps_to": "record.fields.0.text",
-          "allow_empty": false
-        },
-        {
-          "name": "field-required",
-          "type": "boolean",
-          "summary": "Whether the first template field is required.",
-          "maps_to": "record.fields.0.required"
-        },
-        {
-          "name": "field-description",
-          "type": "string",
-          "summary": "Description for the first template field.",
-          "maps_to": "record.fields.0.description",
-          "allow_empty": false
-        },
-        {
-          "name": "field-prompt",
-          "type": "string",
-          "summary": "Prompt for the first template field.",
-          "maps_to": "record.fields.0.prompt",
-          "allow_empty": false
-        }
+      "stream": "opportunities",
+      "examples": [
+        "pm lever-hiring opportunities list --json --limit 25"
       ],
       "api_surface": [
         {
-          "method": "PUT",
-          "path": "/form_templates/{form_template}"
+          "method": "GET",
+          "path": "/opportunities"
         }
-      ],
-      "risk": "Updates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring update-form-template plan --preview --json"
       ]
     },
     {
-      "path": "delete-form-template plan",
-      "summary": "Deletes a profile form template.",
-      "intent": "reverse_etl",
+      "path": "opportunity-feedback list",
+      "summary": "Read Lever Hiring opportunity feedback as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "write": "delete_form_template",
-      "flags": [
-        {
-          "name": "form-template",
-          "type": "string",
-          "summary": "Lever form_template value.",
-          "maps_to": "record.form_template",
-          "allow_empty": false
-        }
+      "stream": "opportunity_feedback",
+      "examples": [
+        "pm lever-hiring opportunity-feedback list --json --limit 25"
       ],
       "api_surface": [
         {
-          "method": "DELETE",
-          "path": "/form_templates/{form_template}"
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/feedback"
         }
-      ],
-      "risk": "Deletes a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring delete-form-template plan --preview --json"
       ]
     },
     {
-      "path": "delete-note plan",
-      "summary": "Deletes a note from an opportunity.",
-      "intent": "reverse_etl",
+      "path": "opportunity-file-actions list",
+      "summary": "Read Lever Hiring opportunity file actions as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "write": "delete_note",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity value.",
-          "maps_to": "record.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "noteid",
-          "type": "string",
-          "summary": "Lever noteId value.",
-          "maps_to": "record.noteId",
-          "allow_empty": false
-        }
+      "stream": "opportunity_file_actions",
+      "examples": [
+        "pm lever-hiring opportunity-file-actions list --json --limit 25"
       ],
       "api_surface": [
         {
-          "method": "DELETE",
-          "path": "/opportunities/{opportunity}/notes/{noteId}"
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/file_actions"
         }
-      ],
-      "risk": "Deletes a note from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring delete-note plan --preview --json"
       ]
     },
     {
-      "path": "delete-requisition plan",
-      "summary": "Deletes a requisition.",
-      "intent": "reverse_etl",
+      "path": "opportunity-forms list",
+      "summary": "Read Lever Hiring opportunity forms as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "write": "delete_requisition",
-      "flags": [
-        {
-          "name": "requisition",
-          "type": "string",
-          "summary": "Lever requisition value.",
-          "maps_to": "record.requisition",
-          "allow_empty": false
-        }
+      "stream": "opportunity_forms",
+      "examples": [
+        "pm lever-hiring opportunity-forms list --json --limit 25"
       ],
       "api_surface": [
         {
-          "method": "DELETE",
-          "path": "/requisitions/{requisition}"
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/forms"
         }
-      ],
-      "risk": "Deletes a requisition. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring delete-requisition plan --preview --json"
       ]
     },
     {
-      "path": "delete-requisition-field-options plan",
-      "summary": "Deletes dropdown options for a requisition field.",
-      "intent": "reverse_etl",
+      "path": "opportunity-interviews list",
+      "summary": "Read Lever Hiring opportunity interviews as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "write": "delete_requisition_field_options",
-      "flags": [
-        {
-          "name": "requisition-field",
-          "type": "string",
-          "summary": "Lever requisition_field value.",
-          "maps_to": "record.requisition_field",
-          "allow_empty": false
-        }
+      "stream": "opportunity_interviews",
+      "examples": [
+        "pm lever-hiring opportunity-interviews list --json --limit 25"
       ],
       "api_surface": [
         {
-          "method": "DELETE",
-          "path": "/requisition_fields/{requisition_field}/options"
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/interviews"
         }
-      ],
-      "risk": "Deletes dropdown options for a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring delete-requisition-field-options plan --preview --json"
       ]
     },
     {
-      "path": "delete-requisition-field plan",
-      "summary": "Deletes a requisition field.",
-      "intent": "reverse_etl",
+      "path": "opportunity-notes list",
+      "summary": "Read Lever Hiring opportunity notes as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "write": "delete_requisition_field",
-      "flags": [
-        {
-          "name": "requisition-field",
-          "type": "string",
-          "summary": "Lever requisition_field value.",
-          "maps_to": "record.requisition_field",
-          "allow_empty": false
-        }
+      "stream": "opportunity_notes",
+      "examples": [
+        "pm lever-hiring opportunity-notes list --json --limit 25"
       ],
       "api_surface": [
         {
-          "method": "DELETE",
-          "path": "/requisition_fields/{requisition_field}"
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/notes"
         }
-      ],
-      "risk": "Deletes a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring delete-requisition-field plan --preview --json"
       ]
     },
     {
-      "path": "deactivate-user plan",
-      "summary": "Deactivates a Lever user.",
-      "intent": "reverse_etl",
+      "path": "opportunity-offers list",
+      "summary": "Read Lever Hiring opportunity offers as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "write": "deactivate_user",
-      "flags": [
-        {
-          "name": "user",
-          "type": "string",
-          "summary": "Lever user value.",
-          "maps_to": "record.user",
-          "allow_empty": false
-        }
+      "stream": "opportunity_offers",
+      "examples": [
+        "pm lever-hiring opportunity-offers list --json --limit 25"
       ],
       "api_surface": [
         {
-          "method": "POST",
-          "path": "/users/{user}/deactivate"
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/offers"
         }
-      ],
-      "risk": "Deactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+      ]
+    },
+    {
+      "path": "opportunity-panels list",
+      "summary": "Read Lever Hiring opportunity panels as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunity_panels",
       "examples": [
-        "pm lever-hiring deactivate-user plan --preview --json"
+        "pm lever-hiring opportunity-panels list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/panels"
+        }
+      ]
+    },
+    {
+      "path": "opportunity-referrals list",
+      "summary": "Read Lever Hiring opportunity referrals as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunity_referrals",
+      "examples": [
+        "pm lever-hiring opportunity-referrals list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/referrals"
+        }
+      ]
+    },
+    {
+      "path": "posting-users list",
+      "summary": "Read Lever Hiring posting users as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "posting_users",
+      "examples": [
+        "pm lever-hiring posting-users list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/postings/{posting}/users"
+        }
+      ]
+    },
+    {
+      "path": "postings list",
+      "summary": "Read Lever Hiring postings as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "postings",
+      "examples": [
+        "pm lever-hiring postings list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/postings"
+        }
       ]
     },
     {
@@ -1742,10 +2171,13 @@
         {
           "name": "user",
           "type": "string",
-          "summary": "Lever user value.",
+          "summary": "Required user record field.",
           "maps_to": "record.user",
-          "allow_empty": false
+          "required": true
         }
+      ],
+      "examples": [
+        "pm lever-hiring reactivate user apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1754,20 +2186,175 @@
         }
       ],
       "risk": "Reactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
-      "examples": [
-        "pm lever-hiring reactivate-user plan --preview --json"
-      ]
-    }
-  ],
-  "help_topics": [
-    {
-      "name": "operation-ledger",
-      "summary": "Lever operation ledger covers 107 HTTP operations and 10 webhook events from the official documentation."
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
-      "name": "write-safety",
-      "summary": "Lever write commands use reverse ETL plan -> preview -> approval -> execute; destructive actions require typed confirmation."
+      "path": "requisition-fields list",
+      "summary": "Read Lever Hiring requisition fields as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "requisition_fields",
+      "examples": [
+        "pm lever-hiring requisition-fields list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requisition_fields"
+        }
+      ]
+    },
+    {
+      "path": "requisitions list",
+      "summary": "Read Lever Hiring requisitions as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "requisitions",
+      "examples": [
+        "pm lever-hiring requisitions list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requisitions"
+        }
+      ]
+    },
+    {
+      "path": "sources list",
+      "summary": "Read Lever Hiring sources as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "examples": [
+        "pm lever-hiring sources list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sources"
+        }
+      ]
+    },
+    {
+      "path": "stages list",
+      "summary": "Read Lever Hiring stages as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stages",
+      "examples": [
+        "pm lever-hiring stages list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stages"
+        }
+      ]
+    },
+    {
+      "path": "update-feedback plan",
+      "summary": "Updates a feedback form for an opportunity.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_feedback",
+      "flags": [
+        {
+          "name": "feedback",
+          "type": "string",
+          "summary": "Required feedback record field.",
+          "maps_to": "record.feedback",
+          "required": true
+        },
+        {
+          "name": "opportunity",
+          "type": "string",
+          "summary": "Required opportunity record field.",
+          "maps_to": "record.opportunity",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring update feedback apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/feedback/{feedback}"
+        }
+      ],
+      "risk": "Updates a feedback form for an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update-feedback-template plan",
+      "summary": "Updates a feedback template.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_feedback_template",
+      "flags": [
+        {
+          "name": "feedback_template",
+          "type": "string",
+          "summary": "Required feedback template record field.",
+          "maps_to": "record.feedback_template",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring update feedback template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/feedback_templates/{feedback_template}"
+        }
+      ],
+      "risk": "Updates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update-form-template plan",
+      "summary": "Updates a profile form template.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_form_template",
+      "flags": [
+        {
+          "name": "form_template",
+          "type": "string",
+          "summary": "Required form template record field.",
+          "maps_to": "record.form_template",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm lever-hiring update form template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/form_templates/{form_template}"
+        }
+      ],
+      "risk": "Updates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Read Lever Hiring users as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "examples": [
+        "pm lever-hiring users list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
     }
   ]
 }
