@@ -300,6 +300,28 @@ func TestCheckSurfaceComplete_POSTDirectReadDoesNotRequireWriteCapability(t *tes
 	}
 }
 
+func TestCheckSurfaceComplete_PluralWritesSatisfyCoverage(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Write: true},
+		},
+		Writes: []engine.WriteAction{{Name: "set_banner"}, {Name: "clear_banner"}},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "PUT",
+				Path:      "/announcement-banner",
+				CoveredBy: &engine.SurfaceCoverage{Writes: []string{"set_banner", "clear_banner"}},
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete rejected plural write coverage: %v", err)
+	}
+}
+
 // sanity: confirm the invalid corpus directories actually exist on disk
 // under this package (own corpus, not shared with cmd/connectorgen).
 func TestInvalidCorpus_DirsExist(t *testing.T) {

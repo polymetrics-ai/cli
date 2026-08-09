@@ -123,11 +123,11 @@ func surfaceInventoryFromRaw(raw []byte) (SurfaceResult, error) {
 }
 
 func hasSurfaceCoverage(coverage *engine.SurfaceCoverage) bool {
-	return coverage != nil && (coverage.Stream != "" || len(coverage.WriteTargets()) > 0 || coverage.DirectRead != "" || len(coverage.DirectReads) > 0)
+	return coverage != nil && (len(coverage.StreamTargets()) > 0 || len(coverage.WriteTargets()) > 0 || coverage.DirectRead != "" || len(coverage.DirectReads) > 0)
 }
 
 func addSurfaceCoverageCounts(counts map[string]int, coverage *engine.SurfaceCoverage) {
-	if coverage.Stream != "" {
+	for range coverage.StreamTargets() {
 		counts["stream"]++
 	}
 	if writes := coverage.WriteTargets(); len(writes) > 0 {

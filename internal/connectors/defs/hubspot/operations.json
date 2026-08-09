@@ -74078,22 +74078,6 @@
       }
     },
     {
-      "id": "hubspot.post.automation-2026-09-beta-flows-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /automation/2026-09-beta/flows/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/automation/2026-09-beta/flows/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.automation-2026-09-beta-flows-email-campaigns",
       "kind": "rest_read",
       "summary": "GET /automation/2026-09-beta/flows/email-campaigns",
@@ -74167,22 +74151,6 @@
       "rest": {
         "method": "GET",
         "path": "/automation/2026-09-beta/flows/{flowId}/revisions/{revisionId}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.automation-2026-09-beta-workflow-id-mappings-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /automation/2026-09-beta/workflow-id-mappings/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/automation/2026-09-beta/workflow-id-mappings/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -75521,22 +75489,6 @@
       }
     },
     {
-      "id": "hubspot.post.automation-v4-flows-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /automation/v4/flows/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/automation/v4/flows/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.automation-v4-flows-email-campaigns",
       "kind": "rest_read",
       "summary": "GET /automation/v4/flows/email-campaigns",
@@ -75671,22 +75623,6 @@
       "rest": {
         "method": "GET",
         "path": "/automation/v4/sequences/{sequenceId}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.automation-v4-workflow-id-mappings-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /automation/v4/workflow-id-mappings/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/automation/v4/workflow-id-mappings/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -76342,22 +76278,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-blogs-2025-09-authors-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/blogs/2025-09/authors/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/blogs/2025-09/authors/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-blogs-2025-09-authors-batch-update",
       "kind": "rest_write",
       "summary": "POST /cms/blogs/2025-09/authors/batch/update",
@@ -76560,22 +76480,6 @@
       "rest": {
         "method": "POST",
         "path": "/cms/blogs/2025-09/posts/batch/create",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.cms-blogs-2025-09-posts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/blogs/2025-09/posts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/blogs/2025-09/posts/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -76943,22 +76847,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-blogs-2025-09-tags-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/blogs/2025-09/tags/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/blogs/2025-09/tags/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-blogs-2025-09-tags-batch-update",
       "kind": "rest_write",
       "summary": "POST /cms/blogs/2025-09/tags/batch/update",
@@ -77161,22 +77049,6 @@
       "rest": {
         "method": "POST",
         "path": "/cms/blogs/2026-03/authors/batch/create",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.cms-blogs-2026-03-authors-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/blogs/2026-03/authors/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/blogs/2026-03/authors/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -77413,22 +77285,6 @@
       "rest": {
         "method": "POST",
         "path": "/cms/blogs/2026-03/posts/batch/create",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.cms-blogs-2026-03-posts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/blogs/2026-03/posts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/blogs/2026-03/posts/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -77826,22 +77682,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-blogs-2026-03-tags-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/blogs/2026-03/tags/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/blogs/2026-03/tags/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-blogs-2026-03-tags-batch-update",
       "kind": "rest_write",
       "summary": "POST /cms/blogs/2026-03/tags/batch/update",
@@ -78078,22 +77918,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-blogs-2026-09-authors-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/blogs/2026-09/authors/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/blogs/2026-09/authors/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-blogs-2026-09-authors-batch-update",
       "kind": "rest_write",
       "summary": "POST /cms/blogs/2026-09/authors/batch/update",
@@ -78296,22 +78120,6 @@
       "rest": {
         "method": "POST",
         "path": "/cms/blogs/2026-09/posts/batch/create",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.cms-blogs-2026-09-posts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/blogs/2026-09/posts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/blogs/2026-09/posts/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -78675,22 +78483,6 @@
       "rest": {
         "method": "POST",
         "path": "/cms/blogs/2026-09/tags/batch/create",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.cms-blogs-2026-09-tags-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/blogs/2026-09/tags/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/blogs/2026-09/tags/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -79240,22 +79032,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-hubdb-2026-03-tables-tableidorname-rows-draft-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/hubdb/2026-03/tables/{tableIdOrName}/rows/draft/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/hubdb/2026-03/tables/{tableIdOrName}/rows/draft/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-hubdb-2026-03-tables-tableidorname-rows-draft-batch-replace",
       "kind": "rest_write",
       "summary": "POST /cms/hubdb/2026-03/tables/{tableIdOrName}/rows/draft/batch/replace",
@@ -79525,22 +79301,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-pages-2026-03-landing-pages-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/pages/2026-03/landing-pages/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/pages/2026-03/landing-pages/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-pages-2026-03-landing-pages-batch-update",
       "kind": "rest_write",
       "summary": "POST /cms/pages/2026-03/landing-pages/batch/update",
@@ -79569,21 +79329,6 @@
       "rest": {
         "method": "POST",
         "path": "/cms/pages/2026-03/landing-pages/clone",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.cms-pages-2026-03-landing-pages-folders",
-      "kind": "rest_read",
-      "summary": "GET /cms/pages/2026-03/landing-pages/folders",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/pages/2026-03/landing-pages/folders",
         "max_bytes": 16777216
       }
     },
@@ -79668,21 +79413,6 @@
       }
     },
     {
-      "id": "hubspot.get.cms-pages-2026-03-landing-pages-folders-objectid",
-      "kind": "rest_read",
-      "summary": "GET /cms/pages/2026-03/landing-pages/folders/{objectId}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/pages/2026-03/landing-pages/folders/{objectId}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.patch.cms-pages-2026-03-landing-pages-folders-objectid",
       "kind": "rest_write",
       "summary": "PATCH /cms/pages/2026-03/landing-pages/folders/{objectId}",
@@ -79711,36 +79441,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/cms/pages/2026-03/landing-pages/folders/{objectId}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.cms-pages-2026-03-landing-pages-folders-objectid-revisions",
-      "kind": "rest_read",
-      "summary": "GET /cms/pages/2026-03/landing-pages/folders/{objectId}/revisions",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/pages/2026-03/landing-pages/folders/{objectId}/revisions",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.cms-pages-2026-03-landing-pages-folders-objectid-revisions-revisionid",
-      "kind": "rest_read",
-      "summary": "GET /cms/pages/2026-03/landing-pages/folders/{objectId}/revisions/{revisionId}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/pages/2026-03/landing-pages/folders/{objectId}/revisions/{revisionId}",
         "max_bytes": 16777216
       }
     },
@@ -80140,22 +79840,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-pages-2026-03-site-pages-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/pages/2026-03/site-pages/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/pages/2026-03/site-pages/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-pages-2026-03-site-pages-batch-update",
       "kind": "rest_write",
       "summary": "POST /cms/pages/2026-03/site-pages/batch/update",
@@ -80486,36 +80170,6 @@
       }
     },
     {
-      "id": "hubspot.get.cms-pages-v3-landing-pages-folders-cursor",
-      "kind": "rest_read",
-      "summary": "GET /cms/pages/v3/landing-pages/folders/cursor",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/pages/v3/landing-pages/folders/cursor",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.cms-pages-v3-landing-pages-folders-cursor-query",
-      "kind": "rest_read",
-      "summary": "GET /cms/pages/v3/landing-pages/folders/cursor/query",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/pages/v3/landing-pages/folders/cursor/query",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.cms-pages-v3-site-pages-cursor",
       "kind": "rest_read",
       "summary": "GET /cms/pages/v3/site-pages/cursor",
@@ -80667,21 +80321,6 @@
       }
     },
     {
-      "id": "hubspot.get.cms-source-code-2025-09-environment-content-path",
-      "kind": "rest_read",
-      "summary": "GET /cms/source-code/2025-09/{environment}/content/{path}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/source-code/2025-09/{environment}/content/{path}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-source-code-2025-09-environment-content-path",
       "kind": "rest_write",
       "summary": "POST /cms/source-code/2025-09/{environment}/content/{path}",
@@ -80792,21 +80431,6 @@
       }
     },
     {
-      "id": "hubspot.get.cms-source-code-2026-03-environment-content-path",
-      "kind": "rest_read",
-      "summary": "GET /cms/source-code/2026-03/{environment}/content/{path}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/source-code/2026-03/{environment}/content/{path}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-source-code-2026-03-environment-content-path",
       "kind": "rest_write",
       "summary": "POST /cms/source-code/2026-03/{environment}/content/{path}",
@@ -80855,21 +80479,6 @@
       }
     },
     {
-      "id": "hubspot.get.cms-source-code-2026-03-environment-metadata-path",
-      "kind": "rest_read",
-      "summary": "GET /cms/source-code/2026-03/{environment}/metadata/{path}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/source-code/2026-03/{environment}/metadata/{path}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-source-code-2026-03-environment-validate-path",
       "kind": "rest_write",
       "summary": "POST /cms/source-code/2026-03/{environment}/validate/{path}",
@@ -80913,21 +80522,6 @@
       "rest": {
         "method": "GET",
         "path": "/cms/source-code/2026-09/extract/async/tasks/{taskId}/status",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.cms-source-code-2026-09-environment-content-path",
-      "kind": "rest_read",
-      "summary": "GET /cms/source-code/2026-09/{environment}/content/{path}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/source-code/2026-09/{environment}/content/{path}",
         "max_bytes": 16777216
       }
     },
@@ -81603,22 +81197,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-v3-blogs-authors-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/v3/blogs/authors/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/v3/blogs/authors/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-v3-blogs-authors-batch-update",
       "kind": "rest_write",
       "summary": "POST /cms/v3/blogs/authors/batch/update",
@@ -81821,22 +81399,6 @@
       "rest": {
         "method": "POST",
         "path": "/cms/v3/blogs/posts/batch/create",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.cms-v3-blogs-posts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/v3/blogs/posts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/v3/blogs/posts/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -82200,22 +81762,6 @@
       "rest": {
         "method": "POST",
         "path": "/cms/v3/blogs/tags/batch/create",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.cms-v3-blogs-tags-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/v3/blogs/tags/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/v3/blogs/tags/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -82705,22 +82251,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-v3-hubdb-tables-tableidorname-rows-draft-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/v3/hubdb/tables/{tableIdOrName}/rows/draft/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/v3/hubdb/tables/{tableIdOrName}/rows/draft/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-v3-hubdb-tables-tableidorname-rows-draft-batch-replace",
       "kind": "rest_write",
       "summary": "POST /cms/v3/hubdb/tables/{tableIdOrName}/rows/draft/batch/replace",
@@ -82990,22 +82520,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-v3-pages-landing-pages-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/v3/pages/landing-pages/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/v3/pages/landing-pages/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-v3-pages-landing-pages-batch-update",
       "kind": "rest_write",
       "summary": "POST /cms/v3/pages/landing-pages/batch/update",
@@ -83034,21 +82548,6 @@
       "rest": {
         "method": "POST",
         "path": "/cms/v3/pages/landing-pages/clone",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.cms-v3-pages-landing-pages-folders",
-      "kind": "rest_read",
-      "summary": "GET /cms/v3/pages/landing-pages/folders",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/v3/pages/landing-pages/folders",
         "max_bytes": 16777216
       }
     },
@@ -83133,21 +82632,6 @@
       }
     },
     {
-      "id": "hubspot.get.cms-v3-pages-landing-pages-folders-objectid",
-      "kind": "rest_read",
-      "summary": "GET /cms/v3/pages/landing-pages/folders/{objectId}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/v3/pages/landing-pages/folders/{objectId}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.patch.cms-v3-pages-landing-pages-folders-objectid",
       "kind": "rest_write",
       "summary": "PATCH /cms/v3/pages/landing-pages/folders/{objectId}",
@@ -83176,36 +82660,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/cms/v3/pages/landing-pages/folders/{objectId}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.cms-v3-pages-landing-pages-folders-objectid-revisions",
-      "kind": "rest_read",
-      "summary": "GET /cms/v3/pages/landing-pages/folders/{objectId}/revisions",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/v3/pages/landing-pages/folders/{objectId}/revisions",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.cms-v3-pages-landing-pages-folders-objectid-revisions-revisionid",
-      "kind": "rest_read",
-      "summary": "GET /cms/v3/pages/landing-pages/folders/{objectId}/revisions/{revisionId}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/v3/pages/landing-pages/folders/{objectId}/revisions/{revisionId}",
         "max_bytes": 16777216
       }
     },
@@ -83605,22 +83059,6 @@
       }
     },
     {
-      "id": "hubspot.post.cms-v3-pages-site-pages-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /cms/v3/pages/site-pages/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/cms/v3/pages/site-pages/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-v3-pages-site-pages-batch-update",
       "kind": "rest_write",
       "summary": "POST /cms/v3/pages/site-pages/batch/update",
@@ -83967,21 +83405,6 @@
       }
     },
     {
-      "id": "hubspot.get.cms-v3-source-code-environment-content-path",
-      "kind": "rest_read",
-      "summary": "GET /cms/v3/source-code/{environment}/content/{path}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/v3/source-code/{environment}/content/{path}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.cms-v3-source-code-environment-content-path",
       "kind": "rest_write",
       "summary": "POST /cms/v3/source-code/{environment}/content/{path}",
@@ -84026,21 +83449,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/cms/v3/source-code/{environment}/content/{path}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.cms-v3-source-code-environment-metadata-path",
-      "kind": "rest_read",
-      "summary": "GET /cms/v3/source-code/{environment}/metadata/{path}",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/cms/v3/source-code/{environment}/metadata/{path}",
         "max_bytes": 16777216
       }
     },
@@ -84500,22 +83908,6 @@
       }
     },
     {
-      "id": "hubspot.post.communication-preferences-2025-09-statuses-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /communication-preferences/2025-09/statuses/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/communication-preferences/2025-09/statuses/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.communication-preferences-2025-09-statuses-batch-unsubscribe-all",
       "kind": "rest_write",
       "summary": "POST /communication-preferences/2025-09/statuses/batch/unsubscribe-all",
@@ -84528,22 +83920,6 @@
       "rest": {
         "method": "POST",
         "path": "/communication-preferences/2025-09/statuses/batch/unsubscribe-all",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.communication-preferences-2025-09-statuses-batch-unsubscribe-all-read",
-      "kind": "rest_write",
-      "summary": "POST /communication-preferences/2025-09/statuses/batch/unsubscribe-all/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/communication-preferences/2025-09/statuses/batch/unsubscribe-all/read",
         "max_bytes": 16777216
       }
     },
@@ -84689,22 +84065,6 @@
       }
     },
     {
-      "id": "hubspot.post.communication-preferences-2026-03-statuses-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /communication-preferences/2026-03/statuses/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/communication-preferences/2026-03/statuses/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.communication-preferences-2026-03-statuses-batch-unsubscribe-all",
       "kind": "rest_write",
       "summary": "POST /communication-preferences/2026-03/statuses/batch/unsubscribe-all",
@@ -84717,22 +84077,6 @@
       "rest": {
         "method": "POST",
         "path": "/communication-preferences/2026-03/statuses/batch/unsubscribe-all",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.communication-preferences-2026-03-statuses-batch-unsubscribe-all-read",
-      "kind": "rest_write",
-      "summary": "POST /communication-preferences/2026-03/statuses/batch/unsubscribe-all/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/communication-preferences/2026-03/statuses/batch/unsubscribe-all/read",
         "max_bytes": 16777216
       }
     },
@@ -84877,22 +84221,6 @@
       }
     },
     {
-      "id": "hubspot.post.communication-preferences-2026-09-statuses-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /communication-preferences/2026-09/statuses/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/communication-preferences/2026-09/statuses/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.communication-preferences-2026-09-statuses-batch-unsubscribe-all",
       "kind": "rest_write",
       "summary": "POST /communication-preferences/2026-09/statuses/batch/unsubscribe-all",
@@ -84905,22 +84233,6 @@
       "rest": {
         "method": "POST",
         "path": "/communication-preferences/2026-09/statuses/batch/unsubscribe-all",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.communication-preferences-2026-09-statuses-batch-unsubscribe-all-read",
-      "kind": "rest_write",
-      "summary": "POST /communication-preferences/2026-09/statuses/batch/unsubscribe-all/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/communication-preferences/2026-09/statuses/batch/unsubscribe-all/read",
         "max_bytes": 16777216
       }
     },
@@ -85128,22 +84440,6 @@
       }
     },
     {
-      "id": "hubspot.post.communication-preferences-v4-statuses-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /communication-preferences/v4/statuses/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/communication-preferences/v4/statuses/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.communication-preferences-v4-statuses-batch-unsubscribe-all",
       "kind": "rest_write",
       "summary": "POST /communication-preferences/v4/statuses/batch/unsubscribe-all",
@@ -85156,22 +84452,6 @@
       "rest": {
         "method": "POST",
         "path": "/communication-preferences/v4/statuses/batch/unsubscribe-all",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.communication-preferences-v4-statuses-batch-unsubscribe-all-read",
-      "kind": "rest_write",
-      "summary": "POST /communication-preferences/v4/statuses/batch/unsubscribe-all/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/communication-preferences/v4/statuses/batch/unsubscribe-all/read",
         "max_bytes": 16777216
       }
     },
@@ -85250,22 +84530,6 @@
       "rest": {
         "method": "POST",
         "path": "/communication-preferences/v4/statuses/{subscriberIdString}/unsubscribe-all",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.conversations-conversations-2026-09-beta-actors-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /conversations/conversations/2026-09-beta/actors/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/conversations/conversations/2026-09-beta/actors/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -85526,22 +84790,6 @@
       "rest": {
         "method": "GET",
         "path": "/conversations/conversations/2026-09-beta/threads/{threadId}/messages/{messageId}/original-content",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.conversations-conversations-2026-09-actors-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /conversations/conversations/2026-09/actors/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/conversations/conversations/2026-09/actors/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -86478,22 +85726,6 @@
       }
     },
     {
-      "id": "hubspot.post.conversations-v3-conversations-actors-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /conversations/v3/conversations/actors/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/conversations/v3/conversations/actors/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.conversations-v3-conversations-actors-actorid",
       "kind": "rest_read",
       "summary": "GET /conversations/v3/conversations/actors/{actorId}",
@@ -86925,22 +86157,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-object-schemas-2025-09-schemas-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm-object-schemas/2025-09/schemas/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm-object-schemas/2025-09/schemas/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-object-schemas-2025-09-schemas-objecttype",
       "kind": "rest_read",
       "summary": "GET /crm-object-schemas/2025-09/schemas/{objectType}",
@@ -87047,22 +86263,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm-object-schemas/2026-03/schemas",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-object-schemas-2026-03-schemas-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm-object-schemas/2026-03/schemas/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm-object-schemas/2026-03/schemas/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -87177,22 +86377,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-object-schemas-2026-09-schemas-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm-object-schemas/2026-09/schemas/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm-object-schemas/2026-09/schemas/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-object-schemas-2026-09-schemas-objecttype",
       "kind": "rest_read",
       "summary": "GET /crm-object-schemas/2026-09/schemas/{objectType}",
@@ -87299,22 +86483,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm-object-schemas/v3/schemas",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-object-schemas-v3-schemas-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm-object-schemas/v3/schemas/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm-object-schemas/v3/schemas/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -87556,22 +86724,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-associations-2025-09-fromobjecttype-toobjecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/associations/2025-09/{fromObjectType}/{toObjectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/associations/2025-09/{fromObjectType}/{toObjectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-associations-2025-09-fromobjecttype-toobjecttype-labels",
       "kind": "rest_read",
       "summary": "GET /crm/associations/2025-09/{fromObjectType}/{toObjectType}/labels",
@@ -87793,22 +86945,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-associations-2026-03-fromobjecttype-toobjecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/associations/2026-03/{fromObjectType}/{toObjectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/associations/2026-03/{fromObjectType}/{toObjectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-associations-2026-03-fromobjecttype-toobjecttype-labels",
       "kind": "rest_read",
       "summary": "GET /crm/associations/2026-03/{fromObjectType}/{toObjectType}/labels",
@@ -88026,22 +87162,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/associations/2026-09/{fromObjectType}/{toObjectType}/batch/labels/archive",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-associations-2026-09-fromobjecttype-toobjecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/associations/2026-09/{fromObjectType}/{toObjectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/associations/2026-09/{fromObjectType}/{toObjectType}/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -88308,21 +87428,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/exports/2026-03/export/async",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.crm-exports-2026-03-export-async-tasks-taskid-status",
-      "kind": "rest_read",
-      "summary": "GET /crm/exports/2026-03/export/async/tasks/{taskId}/status",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/crm/exports/2026-03/export/async/tasks/{taskId}/status",
         "max_bytes": 16777216
       }
     },
@@ -90279,21 +89384,6 @@
       }
     },
     {
-      "id": "hubspot.get.crm-lists-2025-09-folders",
-      "kind": "rest_read",
-      "summary": "GET /crm/lists/2025-09/folders",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/crm/lists/2025-09/folders",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-lists-2025-09-folders",
       "kind": "rest_write",
       "summary": "POST /crm/lists/2025-09/folders",
@@ -90420,22 +89510,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-lists-2025-09-records-memberships-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/lists/2025-09/records/memberships/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/lists/2025-09/records/memberships/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-lists-2025-09-records-objecttypeid-recordid-memberships",
       "kind": "rest_read",
       "summary": "GET /crm/lists/2025-09/records/{objectTypeId}/{recordId}/memberships",
@@ -90447,22 +89521,6 @@
       "rest": {
         "method": "GET",
         "path": "/crm/lists/2025-09/records/{objectTypeId}/{recordId}/memberships",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-lists-2025-09-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/lists/2025-09/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/lists/2025-09/search",
         "max_bytes": 16777216
       }
     },
@@ -90734,21 +89792,6 @@
       }
     },
     {
-      "id": "hubspot.get.crm-lists-2026-03-folders",
-      "kind": "rest_read",
-      "summary": "GET /crm/lists/2026-03/folders",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/crm/lists/2026-03/folders",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-lists-2026-03-folders",
       "kind": "rest_write",
       "summary": "POST /crm/lists/2026-03/folders",
@@ -90875,22 +89918,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-lists-2026-03-records-memberships-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/lists/2026-03/records/memberships/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/lists/2026-03/records/memberships/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-lists-2026-03-records-objecttypeid-recordid-memberships",
       "kind": "rest_read",
       "summary": "GET /crm/lists/2026-03/records/{objectTypeId}/{recordId}/memberships",
@@ -90902,22 +89929,6 @@
       "rest": {
         "method": "GET",
         "path": "/crm/lists/2026-03/records/{objectTypeId}/{recordId}/memberships",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-lists-2026-03-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/lists/2026-03/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/lists/2026-03/search",
         "max_bytes": 16777216
       }
     },
@@ -91345,22 +90356,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-lists-2026-09-records-memberships-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/lists/2026-09/records/memberships/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/lists/2026-09/records/memberships/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-lists-2026-09-records-objecttypeid-recordid-memberships",
       "kind": "rest_read",
       "summary": "GET /crm/lists/2026-09/records/{objectTypeId}/{recordId}/memberships",
@@ -91372,22 +90367,6 @@
       "rest": {
         "method": "GET",
         "path": "/crm/lists/2026-09/records/{objectTypeId}/{recordId}/memberships",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-lists-2026-09-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/lists/2026-09/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/lists/2026-09/search",
         "max_bytes": 16777216
       }
     },
@@ -91891,22 +90870,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2025-09-objecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2025-09/{objectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2025-09/{objectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2025-09-objecttype-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2025-09/{objectType}/batch/update",
@@ -91967,22 +90930,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2025-09/{objectType}/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2025-09-objecttype-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2025-09/{objectType}/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2025-09/{objectType}/search",
         "max_bytes": 16777216
       }
     },
@@ -92144,22 +91091,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-0-162-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/0-162/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/0-162/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-0-162-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/0-162/batch/update",
@@ -92188,22 +91119,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/0-162/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-0-162-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/0-162/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/0-162/search",
         "max_bytes": 16777216
       }
     },
@@ -92318,22 +91233,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-0-3-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/0-3/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/0-3/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-0-3-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/0-3/batch/update",
@@ -92378,22 +91277,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/0-3/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-0-3-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/0-3/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/0-3/search",
         "max_bytes": 16777216
       }
     },
@@ -92508,22 +91391,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-0-410-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/0-410/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/0-410/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-0-410-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/0-410/batch/update",
@@ -92552,22 +91419,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/0-410/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-0-410-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/0-410/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/0-410/search",
         "max_bytes": 16777216
       }
     },
@@ -92682,22 +91533,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-0-420-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/0-420/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/0-420/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-0-420-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/0-420/batch/update",
@@ -92726,22 +91561,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/0-420/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-0-420-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/0-420/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/0-420/search",
         "max_bytes": 16777216
       }
     },
@@ -92856,22 +91675,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-calls-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/calls/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/calls/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-calls-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/calls/batch/update",
@@ -92900,22 +91703,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/calls/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-calls-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/calls/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/calls/search",
         "max_bytes": 16777216
       }
     },
@@ -93030,22 +91817,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-carts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/carts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/carts/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-carts-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/carts/batch/update",
@@ -93074,22 +91845,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/carts/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-carts-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/carts/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/carts/search",
         "max_bytes": 16777216
       }
     },
@@ -93204,22 +91959,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-commerce-payments-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/commerce_payments/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/commerce_payments/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-commerce-payments-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/commerce_payments/batch/update",
@@ -93248,22 +91987,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/commerce_payments/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-commerce-payments-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/commerce_payments/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/commerce_payments/search",
         "max_bytes": 16777216
       }
     },
@@ -93378,22 +92101,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-communications-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/communications/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/communications/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-communications-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/communications/batch/update",
@@ -93422,22 +92129,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/communications/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-communications-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/communications/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/communications/search",
         "max_bytes": 16777216
       }
     },
@@ -93552,22 +92243,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-companies-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/companies/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/companies/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-companies-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/companies/batch/update",
@@ -93612,22 +92287,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/companies/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-companies-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/companies/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/companies/search",
         "max_bytes": 16777216
       }
     },
@@ -93742,22 +92401,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-contacts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/contacts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/contacts/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-contacts-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/contacts/batch/update",
@@ -93822,22 +92465,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-contacts-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/contacts/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/contacts/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-objects-2026-03-contacts-contactid",
       "kind": "rest_read",
       "summary": "GET /crm/objects/2026-03/contacts/{contactId}",
@@ -93896,22 +92523,6 @@
       "rest": {
         "method": "GET",
         "path": "/crm/objects/2026-03/contracts",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-contracts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/contracts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/contracts/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -93994,22 +92605,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-discounts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/discounts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/discounts/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-discounts-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/discounts/batch/update",
@@ -94038,22 +92633,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/discounts/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-discounts-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/discounts/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/discounts/search",
         "max_bytes": 16777216
       }
     },
@@ -94168,22 +92747,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-emails-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/emails/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/emails/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-emails-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/emails/batch/update",
@@ -94212,22 +92775,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/emails/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-emails-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/emails/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/emails/search",
         "max_bytes": 16777216
       }
     },
@@ -94290,38 +92837,6 @@
       "rest": {
         "method": "GET",
         "path": "/crm/objects/2026-03/feedback_submissions",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-feedback-submissions-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/feedback_submissions/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/feedback_submissions/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-feedback-submissions-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/feedback_submissions/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/feedback_submissions/search",
         "max_bytes": 16777216
       }
     },
@@ -94404,22 +92919,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-fees-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/fees/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/fees/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-fees-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/fees/batch/update",
@@ -94448,22 +92947,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/fees/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-fees-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/fees/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/fees/search",
         "max_bytes": 16777216
       }
     },
@@ -94578,22 +93061,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-goal-targets-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/goal_targets/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/goal_targets/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-goal-targets-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/goal_targets/batch/update",
@@ -94622,22 +93089,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/goal_targets/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-goal-targets-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/goal_targets/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/goal_targets/search",
         "max_bytes": 16777216
       }
     },
@@ -94752,22 +93203,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-invoices-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/invoices/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/invoices/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-invoices-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/invoices/batch/update",
@@ -94796,22 +93231,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/invoices/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-invoices-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/invoices/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/invoices/search",
         "max_bytes": 16777216
       }
     },
@@ -94926,22 +93345,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-leads-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/leads/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/leads/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-leads-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/leads/batch/update",
@@ -94970,22 +93373,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/leads/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-leads-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/leads/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/leads/search",
         "max_bytes": 16777216
       }
     },
@@ -95100,22 +93487,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-line-items-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/line_items/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/line_items/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-line-items-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/line_items/batch/update",
@@ -95144,22 +93515,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/line_items/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-line-items-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/line_items/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/line_items/search",
         "max_bytes": 16777216
       }
     },
@@ -95274,22 +93629,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-meetings-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/meetings/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/meetings/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-meetings-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/meetings/batch/update",
@@ -95318,22 +93657,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/meetings/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-meetings-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/meetings/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/meetings/search",
         "max_bytes": 16777216
       }
     },
@@ -95448,22 +93771,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-notes-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/notes/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/notes/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-notes-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/notes/batch/update",
@@ -95492,22 +93799,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/notes/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-notes-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/notes/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/notes/search",
         "max_bytes": 16777216
       }
     },
@@ -95622,22 +93913,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-orders-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/orders/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/orders/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-orders-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/orders/batch/update",
@@ -95666,22 +93941,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/orders/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-orders-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/orders/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/orders/search",
         "max_bytes": 16777216
       }
     },
@@ -95748,22 +94007,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-partner-clients-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/partner_clients/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/partner_clients/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-partner-clients-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/partner_clients/batch/update",
@@ -95776,22 +94019,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/partner_clients/batch/update",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-partner-clients-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/partner_clients/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/partner_clients/search",
         "max_bytes": 16777216
       }
     },
@@ -95857,22 +94084,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-partner-services-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/partner_services/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/partner_services/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-partner-services-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/partner_services/batch/update",
@@ -95885,22 +94096,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/partner_services/batch/update",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-partner-services-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/partner_services/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/partner_services/search",
         "max_bytes": 16777216
       }
     },
@@ -96014,22 +94209,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-postal-mail-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/postal_mail/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/postal_mail/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-postal-mail-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/postal_mail/batch/update",
@@ -96058,22 +94237,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/postal_mail/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-postal-mail-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/postal_mail/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/postal_mail/search",
         "max_bytes": 16777216
       }
     },
@@ -96188,22 +94351,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-products-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/products/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/products/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-products-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/products/batch/update",
@@ -96232,22 +94379,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/products/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-products-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/products/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/products/search",
         "max_bytes": 16777216
       }
     },
@@ -96362,22 +94493,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-projects-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/projects/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/projects/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-projects-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/projects/batch/update",
@@ -96422,22 +94537,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/projects/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-projects-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/projects/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/projects/search",
         "max_bytes": 16777216
       }
     },
@@ -96552,22 +94651,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-quotes-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/quotes/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/quotes/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-quotes-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/quotes/batch/update",
@@ -96596,22 +94679,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/quotes/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-quotes-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/quotes/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/quotes/search",
         "max_bytes": 16777216
       }
     },
@@ -96726,22 +94793,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-subscriptions-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/subscriptions/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/subscriptions/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-subscriptions-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/subscriptions/batch/update",
@@ -96770,22 +94821,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/subscriptions/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-subscriptions-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/subscriptions/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/subscriptions/search",
         "max_bytes": 16777216
       }
     },
@@ -96900,22 +94935,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-tasks-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/tasks/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/tasks/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-tasks-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/tasks/batch/update",
@@ -96944,22 +94963,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/tasks/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-tasks-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/tasks/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/tasks/search",
         "max_bytes": 16777216
       }
     },
@@ -97074,22 +95077,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-taxes-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/taxes/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/taxes/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-taxes-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/taxes/batch/update",
@@ -97118,22 +95105,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/taxes/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-taxes-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/taxes/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/taxes/search",
         "max_bytes": 16777216
       }
     },
@@ -97248,22 +95219,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-tickets-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/tickets/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/tickets/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-tickets-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/tickets/batch/update",
@@ -97308,22 +95263,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/tickets/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-tickets-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/tickets/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/tickets/search",
         "max_bytes": 16777216
       }
     },
@@ -97438,22 +95377,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-users-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/users/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/users/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-users-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/users/batch/update",
@@ -97482,22 +95405,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/users/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-users-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/users/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/users/search",
         "max_bytes": 16777216
       }
     },
@@ -97628,22 +95535,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-03-objecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/{objectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/{objectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-03-objecttype-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-03/{objectType}/batch/update",
@@ -97704,22 +95595,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-03/{objectType}/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-03-objecttype-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-03/{objectType}/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-03/{objectType}/search",
         "max_bytes": 16777216
       }
     },
@@ -97865,22 +95740,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-09-beta-objecttype-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-09-beta/{objectType}/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-09-beta/{objectType}/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-objects-2026-09-beta-objecttype-objectid",
       "kind": "rest_read",
       "summary": "GET /crm/objects/2026-09-beta/{objectType}/{objectId}",
@@ -98006,22 +95865,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-2026-09-objecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-09/{objectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-09/{objectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-2026-09-objecttype-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/2026-09/{objectType}/batch/update",
@@ -98082,22 +95925,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/2026-09/{objectType}/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-2026-09-objecttype-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/2026-09/{objectType}/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/2026-09/{objectType}/search",
         "max_bytes": 16777216
       }
     },
@@ -98196,22 +96023,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-v3-deals-splits-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/v3/deals/splits/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/v3/deals/splits/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-v3-deals-splits-batch-upsert",
       "kind": "rest_write",
       "summary": "POST /crm/objects/v3/deals/splits/batch/upsert",
@@ -98291,22 +96102,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-v3-projects-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/v3/projects/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/v3/projects/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-v3-projects-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/v3/projects/batch/update",
@@ -98351,22 +96146,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/v3/projects/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-v3-projects-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/v3/projects/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/v3/projects/search",
         "max_bytes": 16777216
       }
     },
@@ -98481,22 +96260,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-objects-v3-objecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/v3/{objectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/v3/{objectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-objects-v3-objecttype-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/objects/v3/{objectType}/batch/update",
@@ -98557,22 +96320,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/objects/v3/{objectType}/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-objects-v3-objecttype-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/objects/v3/{objectType}/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/objects/v3/{objectType}/search",
         "max_bytes": 16777216
       }
     },
@@ -99821,22 +97568,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-properties-2025-09-objecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/properties/2025-09/{objectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/properties/2025-09/{objectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-properties-2025-09-objecttype-groups",
       "kind": "rest_read",
       "summary": "GET /crm/properties/2025-09/{objectType}/groups",
@@ -100025,22 +97756,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-properties-2026-03-objecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/properties/2026-03/{objectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/properties/2026-03/{objectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-properties-2026-03-objecttype-groups",
       "kind": "rest_read",
       "summary": "GET /crm/properties/2026-03/{objectType}/groups",
@@ -100225,22 +97940,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/properties/2026-09/{objectType}/batch/create",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-properties-2026-09-objecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/properties/2026-09/{objectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/properties/2026-09/{objectType}/batch/read",
         "max_bytes": 16777216
       }
     },
@@ -100648,22 +98347,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-associations-fromobjecttype-toobjecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/associations/{fromObjectType}/{toObjectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/associations/{fromObjectType}/{toObjectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-v3-associations-fromobjecttype-toobjecttype-types",
       "kind": "rest_read",
       "summary": "GET /crm/v3/associations/{fromObjectType}/{toObjectType}/types",
@@ -100691,21 +98374,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/exports/export/async",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.crm-v3-exports-export-async-tasks-taskid-status",
-      "kind": "rest_read",
-      "summary": "GET /crm/v3/exports/export/async/tasks/{taskId}/status",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/crm/v3/exports/export/async/tasks/{taskId}/status",
         "max_bytes": 16777216
       }
     },
@@ -101517,22 +99185,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-lists-records-memberships-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/lists/records/memberships/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/lists/records/memberships/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-v3-lists-records-objecttypeid-recordid-memberships",
       "kind": "rest_read",
       "summary": "GET /crm/v3/lists/records/{objectTypeId}/{recordId}/memberships",
@@ -101544,22 +99196,6 @@
       "rest": {
         "method": "GET",
         "path": "/crm/v3/lists/records/{objectTypeId}/{recordId}/memberships",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-lists-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/lists/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/lists/search",
         "max_bytes": 16777216
       }
     },
@@ -101908,22 +99544,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-0-162-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/0-162/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/0-162/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-0-162-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/0-162/batch/update",
@@ -101952,22 +99572,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/0-162/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-0-162-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/0-162/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/0-162/search",
         "max_bytes": 16777216
       }
     },
@@ -102082,22 +99686,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-0-3-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/0-3/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/0-3/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-0-3-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/0-3/batch/update",
@@ -102142,22 +99730,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/0-3/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-0-3-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/0-3/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/0-3/search",
         "max_bytes": 16777216
       }
     },
@@ -102272,22 +99844,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-0-410-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/0-410/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/0-410/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-0-410-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/0-410/batch/update",
@@ -102316,22 +99872,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/0-410/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-0-410-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/0-410/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/0-410/search",
         "max_bytes": 16777216
       }
     },
@@ -102446,22 +99986,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-0-420-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/0-420/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/0-420/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-0-420-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/0-420/batch/update",
@@ -102490,22 +100014,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/0-420/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-0-420-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/0-420/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/0-420/search",
         "max_bytes": 16777216
       }
     },
@@ -102620,22 +100128,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-bucket-test111s-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/bucket_test111s/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/bucket_test111s/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-bucket-test111s-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/bucket_test111s/batch/update",
@@ -102648,22 +100140,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/bucket_test111s/batch/update",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-bucket-test111s-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/bucket_test111s/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/bucket_test111s/search",
         "max_bytes": 16777216
       }
     },
@@ -102778,22 +100254,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-calls-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/calls/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/calls/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-calls-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/calls/batch/update",
@@ -102822,22 +100282,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/calls/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-calls-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/calls/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/calls/search",
         "max_bytes": 16777216
       }
     },
@@ -102952,22 +100396,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-carts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/carts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/carts/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-carts-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/carts/batch/update",
@@ -102996,22 +100424,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/carts/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-carts-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/carts/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/carts/search",
         "max_bytes": 16777216
       }
     },
@@ -103126,22 +100538,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-commerce-payments-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/commerce_payments/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/commerce_payments/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-commerce-payments-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/commerce_payments/batch/update",
@@ -103170,22 +100566,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/commerce_payments/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-commerce-payments-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/commerce_payments/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/commerce_payments/search",
         "max_bytes": 16777216
       }
     },
@@ -103300,22 +100680,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-communications-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/communications/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/communications/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-communications-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/communications/batch/update",
@@ -103344,22 +100708,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/communications/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-communications-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/communications/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/communications/search",
         "max_bytes": 16777216
       }
     },
@@ -103474,22 +100822,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-companies-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/companies/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/companies/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-companies-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/companies/batch/update",
@@ -103534,22 +100866,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/companies/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-companies-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/companies/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/companies/search",
         "max_bytes": 16777216
       }
     },
@@ -103664,22 +100980,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-contacts-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/contacts/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/contacts/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-contacts-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/contacts/batch/update",
@@ -103740,22 +101040,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/contacts/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-contacts-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/contacts/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/contacts/search",
         "max_bytes": 16777216
       }
     },
@@ -103914,22 +101198,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/contracts/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-contracts-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/contracts/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/contracts/search",
         "max_bytes": 16777216
       }
     },
@@ -104262,22 +101530,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/emails/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-emails-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/emails/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/emails/search",
         "max_bytes": 16777216
       }
     },
@@ -105546,22 +102798,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-notes-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/notes/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/notes/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-v3-objects-notes-noteid",
       "kind": "rest_read",
       "summary": "GET /crm/v3/objects/notes/{noteId}",
@@ -105967,22 +103203,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/partner_services/batch/update",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-partner-services-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/partner_services/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/partner_services/search",
         "max_bytes": 16777216
       }
     },
@@ -106412,22 +103632,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-products-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/products/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/products/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-v3-objects-products-productid",
       "kind": "rest_read",
       "summary": "GET /crm/v3/objects/products/{productId}",
@@ -106582,22 +103786,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/quotes/batch/upsert",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-quotes-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/quotes/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/quotes/search",
         "max_bytes": 16777216
       }
     },
@@ -107472,22 +104660,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-users-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/users/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/users/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.crm-v3-objects-users-userid",
       "kind": "rest_read",
       "summary": "GET /crm/v3/objects/users/{userId}",
@@ -107598,22 +104770,6 @@
       }
     },
     {
-      "id": "hubspot.post.crm-v3-objects-objecttype-batch-read",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/{objectType}/batch/read",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/{objectType}/batch/read",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.post.crm-v3-objects-objecttype-batch-update",
       "kind": "rest_write",
       "summary": "POST /crm/v3/objects/{objectType}/batch/update",
@@ -107658,22 +104814,6 @@
       "rest": {
         "method": "POST",
         "path": "/crm/v3/objects/{objectType}/merge",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.post.crm-v3-objects-objecttype-search",
-      "kind": "rest_write",
-      "summary": "POST /crm/v3/objects/{objectType}/search",
-      "description": "HubSpot bounded provider search/query/direct read operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/crm/v3/objects/{objectType}/search",
         "max_bytes": 16777216
       }
     },
@@ -109952,21 +107092,6 @@
       }
     },
     {
-      "id": "hubspot.get.files-2025-09-files-import-from-url-async-tasks-taskid-status",
-      "kind": "rest_read",
-      "summary": "GET /files/2025-09/files/import-from-url/async/tasks/{taskId}/status",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/2025-09/files/import-from-url/async/tasks/{taskId}/status",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.files-2025-09-files-search",
       "kind": "rest_read",
       "summary": "GET /files/2025-09/files/search",
@@ -110072,36 +107197,6 @@
       "rest": {
         "method": "POST",
         "path": "/files/2026-03/files/import-from-url/async",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.files-2026-03-files-import-from-url-async-tasks-taskid-status",
-      "kind": "rest_read",
-      "summary": "GET /files/2026-03/files/import-from-url/async/tasks/{taskId}/status",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/2026-03/files/import-from-url/async/tasks/{taskId}/status",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.files-2026-03-files-search",
-      "kind": "rest_read",
-      "summary": "GET /files/2026-03/files/search",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/2026-03/files/search",
         "max_bytes": 16777216
       }
     },
@@ -110227,21 +107322,6 @@
       "rest": {
         "method": "POST",
         "path": "/files/2026-03/folders",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.files-2026-03-folders-search",
-      "kind": "rest_read",
-      "summary": "GET /files/2026-03/folders/search",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/2026-03/folders/search",
         "max_bytes": 16777216
       }
     },
@@ -110387,21 +107467,6 @@
       }
     },
     {
-      "id": "hubspot.get.files-2026-09-beta-files-import-from-url-async-tasks-taskid-status",
-      "kind": "rest_read",
-      "summary": "GET /files/2026-09-beta/files/import-from-url/async/tasks/{taskId}/status",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/2026-09-beta/files/import-from-url/async/tasks/{taskId}/status",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.files-2026-09-beta-files-search",
       "kind": "rest_read",
       "summary": "GET /files/2026-09-beta/files/search",
@@ -110495,21 +107560,6 @@
       }
     },
     {
-      "id": "hubspot.get.files-2026-09-beta-files-fileid-download",
-      "kind": "rest_read",
-      "summary": "GET /files/2026-09-beta/files/{fileId}/download",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/2026-09-beta/files/{fileId}/download",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.delete.files-2026-09-beta-files-fileid-gdpr-delete",
       "kind": "rest_write",
       "summary": "DELETE /files/2026-09-beta/files/{fileId}/gdpr-delete",
@@ -110522,21 +107572,6 @@
       "rest": {
         "method": "DELETE",
         "path": "/files/2026-09-beta/files/{fileId}/gdpr-delete",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.files-2026-09-beta-files-fileid-signed-url",
-      "kind": "rest_read",
-      "summary": "GET /files/2026-09-beta/files/{fileId}/signed-url",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/2026-09-beta/files/{fileId}/signed-url",
         "max_bytes": 16777216
       }
     },
@@ -110666,21 +107701,6 @@
       }
     },
     {
-      "id": "hubspot.get.files-2026-09-files-import-from-url-async-tasks-taskid-status",
-      "kind": "rest_read",
-      "summary": "GET /files/2026-09/files/import-from-url/async/tasks/{taskId}/status",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/2026-09/files/import-from-url/async/tasks/{taskId}/status",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.files-2026-09-files-search",
       "kind": "rest_read",
       "summary": "GET /files/2026-09/files/search",
@@ -110790,36 +107810,6 @@
       }
     },
     {
-      "id": "hubspot.get.files-v3-files-import-from-url-async-tasks-taskid-status",
-      "kind": "rest_read",
-      "summary": "GET /files/v3/files/import-from-url/async/tasks/{taskId}/status",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/v3/files/import-from-url/async/tasks/{taskId}/status",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.files-v3-files-search",
-      "kind": "rest_read",
-      "summary": "GET /files/v3/files/search",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/v3/files/search",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.get.files-v3-files-stat-path",
       "kind": "rest_read",
       "summary": "GET /files/v3/files/stat/{path}",
@@ -110898,21 +107888,6 @@
       }
     },
     {
-      "id": "hubspot.get.files-v3-files-fileid-download",
-      "kind": "rest_read",
-      "summary": "GET /files/v3/files/{fileId}/download",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/v3/files/{fileId}/download",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "hubspot.delete.files-v3-files-fileid-gdpr-delete",
       "kind": "rest_write",
       "summary": "DELETE /files/v3/files/{fileId}/gdpr-delete",
@@ -110956,21 +107931,6 @@
       "rest": {
         "method": "POST",
         "path": "/files/v3/folders",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "hubspot.get.files-v3-folders-search",
-      "kind": "rest_read",
-      "summary": "GET /files/v3/folders/search",
-      "description": "HubSpot bounded binary/file read is in scope but blocked until typed file output policy, size cap, redaction, and fixture evidence are added.",
-      "source_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/files/v3/folders/search",
         "max_bytes": 16777216
       }
     },

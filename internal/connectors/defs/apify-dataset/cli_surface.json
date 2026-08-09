@@ -2893,7 +2893,7 @@
     {
       "path": "api head v2 datasets datasetid items",
       "summary": "Documented HEAD /v2/datasets/{datasetId}/items (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://docs.apify.com/api/openapi.json",
       "examples": [
@@ -2913,7 +2913,7 @@
     {
       "path": "api head v2 key-value-stores storeid records recordkey",
       "summary": "Documented HEAD /v2/key-value-stores/{storeId}/records/{recordKey} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://docs.apify.com/api/openapi.json",
       "examples": [

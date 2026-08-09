@@ -1677,6 +1677,195 @@ func TestMaterializeOperationCatalogKeepsEmptyOperationsArray(t *testing.T) {
 	}
 }
 
+func TestMaterializeOperationCatalogUsesArtifactURLWithoutEndpointProvenance(t *testing.T) {
+	operations, err := materializeOperationCatalog(
+		engine.Bundle{Name: "example"},
+		engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method:    http.MethodGet,
+			Path:      "/widgets",
+			Operation: &engine.SurfaceOperation{Model: "direct_read", Risk: "low", Reason: "documented read"},
+		}}},
+		BatchManifestConnector{Connector: "example", Artifact: BatchArtifact{URL: "https://provider.example/openapi.json"}},
+	)
+	if err != nil {
+		t.Fatalf("materialize operation catalog: %v", err)
+	}
+	if len(operations) != 1 || operations[0].SourceURL != "https://provider.example/openapi.json" {
+		t.Fatalf("operations = %+v, want artifact source URL fallback", operations)
+	}
+}
+
+func TestMaterializeOperationsFollowEndpointModels(t *testing.T) {
+	provenance := &engine.SurfaceProvenance{SourceURL: "https://provider.example/openapi.json"}
+	surface := engine.APISurface{Endpoints: []engine.SurfaceEndpoint{
+		{
+			Method:     http.MethodPost,
+			Path:       "/flows/batch/read",
+			Provenance: provenance,
+			Operation:  &engine.SurfaceOperation{Model: "direct_read", Risk: "medium", Reason: "bounded query"},
+		},
+		{
+			Method:     http.MethodGet,
+			Path:       "/files/diff",
+			Provenance: provenance,
+			Operation:  &engine.SurfaceOperation{Model: "binary_read", Risk: "medium", Reason: "binary diff"},
+		},
+		{
+			Method:     http.MethodPost,
+			Path:       "/reports/search",
+			Provenance: provenance,
+			Operation:  &engine.SurfaceOperation{Model: "direct_read", Risk: "medium", Reason: "untyped query"},
+		},
+		{
+			Method:     http.MethodGet,
+			Path:       "/canonical/read",
+			Provenance: provenance,
+			Operation:  &engine.SurfaceOperation{Model: "direct_read", Risk: "low", Reason: "canonical typed read"},
+		},
+	}}
+	bundle := engine.Bundle{
+		Name: "acme",
+		Operations: []engine.OperationSpec{
+			{
+				ID:           "acme.flow.read",
+				Kind:         "rest_read",
+				Summary:      "Read flows",
+				Risk:         "medium",
+				Approval:     "none",
+				OutputPolicy: "json_redacted",
+				REST: &engine.RESTOperationSpec{
+					Method:     http.MethodPost,
+					Path:       "/flows/batch/read",
+					MaxBytes:   1024,
+					BodySchema: json.RawMessage(`{"type":"object"}`),
+				},
+			},
+			{
+				ID:           "acme.diff.download",
+				Kind:         "binary_download",
+				Summary:      "Download diff",
+				Risk:         "medium",
+				Approval:     "none",
+				OutputPolicy: "binary_file_bounded",
+				Binary:       &engine.BinaryOperationSpec{Method: http.MethodGet, Path: "/files/diff", MaxBytes: 1024},
+			},
+			{
+				ID:            "acme.post.flows-batch-read",
+				Kind:          "rest_write",
+				Summary:       "Stale generated write",
+				Risk:          "medium",
+				Approval:      "not implemented",
+				OutputPolicy:  "json",
+				MutationClass: "create",
+				REST:          &engine.RESTOperationSpec{Method: http.MethodPost, Path: "/flows/batch/read", MaxBytes: 1024},
+			},
+			{
+				ID:           "acme.get.files-diff",
+				Kind:         "rest_read",
+				Summary:      "Stale generated read",
+				Risk:         "medium",
+				Approval:     "not implemented",
+				OutputPolicy: "json",
+				REST:         &engine.RESTOperationSpec{Method: http.MethodGet, Path: "/files/diff", MaxBytes: 1024},
+			},
+			{
+				ID:           "acme.get.canonical-read",
+				Kind:         "rest_read",
+				Summary:      "Canonical read",
+				Risk:         "low",
+				Approval:     "none",
+				OutputPolicy: "json_redacted",
+				REST:         &engine.RESTOperationSpec{Method: http.MethodGet, Path: "/canonical/read", MaxBytes: 2048},
+			},
+		},
+	}
+	candidate := BatchManifestConnector{Connector: "acme", Artifact: BatchArtifact{URL: "https://provider.example/openapi.json"}}
+
+	operations, err := materializeOperationCatalog(bundle, surface, candidate)
+	if err != nil {
+		t.Fatalf("materializeOperationCatalog: %v", err)
+	}
+	operationsByID := make(map[string]engine.OperationSpec, len(operations))
+	for _, operation := range operations {
+		operationsByID[operation.ID] = operation
+	}
+	if _, ok := operationsByID["acme.post.flows-batch-read"]; ok {
+		t.Fatal("stale generated rest_write operation was retained for direct_read endpoint")
+	}
+	if _, ok := operationsByID["acme.get.files-diff"]; ok {
+		t.Fatal("stale generated rest_read operation was retained for binary_read endpoint")
+	}
+	if operation, ok := operationsByID["acme.post.reports-search"]; !ok || operation.Kind != "composite" {
+		t.Fatalf("untyped POST direct-read operation = %+v, want composite metadata", operation)
+	}
+	if operation, ok := operationsByID["acme.get.canonical-read"]; !ok || operation.REST == nil || operation.REST.MaxBytes != 2048 {
+		t.Fatalf("canonical typed read = %+v, want retained source contract", operation)
+	}
+
+	cli, err := materializeCLISurface(bundle, surface, candidate, operations)
+	if err != nil {
+		t.Fatalf("materializeCLISurface: %v", err)
+	}
+	commands := make(map[string]engine.CLICommand, len(cli.Commands))
+	for _, command := range cli.Commands {
+		commands[command.Path] = command
+	}
+	for path, want := range map[string]struct {
+		intent     string
+		operation  string
+		dependency string
+	}{
+		"api post flows batch read": {intent: "direct_read", operation: "acme.flow.read", dependency: "engine.direct_read_operation_contract"},
+		"api get files diff":        {intent: "binary_download", operation: "acme.diff.download", dependency: "engine.binary_download_operation_contract"},
+		"api post reports search":   {intent: "direct_read", operation: "acme.post.reports-search", dependency: "engine.direct_read_operation_contract"},
+		"api get canonical read":    {intent: "direct_read", operation: "acme.get.canonical-read", dependency: "engine.direct_read_executor"},
+	} {
+		command, ok := commands[path]
+		if !ok {
+			t.Fatalf("command %q was not materialized", path)
+		}
+		if command.Intent != want.intent || command.Operation != want.operation || !strings.Contains(command.Notes, want.dependency) {
+			t.Fatalf("command %q = %+v, want intent=%q operation=%q dependency=%q", path, command, want.intent, want.operation, want.dependency)
+		}
+	}
+}
+
+func TestMaterializeCLISurfaceUsesPluralWriteCoverage(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "acme",
+		Writes: []engine.WriteAction{
+			{Name: "set_banner", RecordSchema: json.RawMessage(`{"type":"object","properties":{}}`)},
+			{Name: "clear_banner", RecordSchema: json.RawMessage(`{"type":"object","properties":{}}`)},
+		},
+	}
+	surface := engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+		Method:    http.MethodPut,
+		Path:      "/announcement-banner",
+		CoveredBy: &engine.SurfaceCoverage{Writes: []string{"set_banner", "clear_banner"}},
+	}}}
+	if err := ensureMaterializedCoverage(bundle, surface); err != nil {
+		t.Fatalf("ensureMaterializedCoverage: %v", err)
+	}
+
+	cli, err := materializeCLISurface(bundle, surface, BatchManifestConnector{Connector: "acme", Artifact: BatchArtifact{URL: "https://provider.example/openapi.json"}}, nil)
+	if err != nil {
+		t.Fatalf("materializeCLISurface: %v", err)
+	}
+	for _, write := range []string{"set_banner", "clear_banner"} {
+		path := materializedCommandPath(write, "apply")
+		found := false
+		for _, command := range cli.Commands {
+			if command.Path == path && command.Write == write && len(command.APISurface) == 1 && command.APISurface[0] == (engine.CLISurfaceEndpointRef{Method: http.MethodPut, Path: "/announcement-banner"}) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Fatalf("write command %q did not retain plural coverage reference: %+v", write, cli.Commands)
+		}
+	}
+}
+
 func TestParseBatchOpenAPIArtifactResolvesLocalPathItemReferencesAndTrace(t *testing.T) {
 	artifact := []byte(`{
 		"openapi": "3.1.0",

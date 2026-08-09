@@ -305,7 +305,7 @@
     {
       "path": "api get accounts accountid attachments attachmentid",
       "summary": "Documented GET /Accounts/{AccountID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -317,15 +317,15 @@
           "path": "/Accounts/{AccountID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.accounts-accountid-attachments-attachmentid",
+      "operation": "xero.get_account_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get accounts accountid attachments filename",
       "summary": "Documented GET /Accounts/{AccountID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -337,15 +337,15 @@
           "path": "/Accounts/{AccountID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.accounts-accountid-attachments-filename",
+      "operation": "xero.get_account_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get banktransactions banktransactionid attachments attachmentid",
       "summary": "Documented GET /BankTransactions/{BankTransactionID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -357,15 +357,15 @@
           "path": "/BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.banktransactions-banktransactionid-attachments-attachmentid",
+      "operation": "xero.get_bank_transaction_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get banktransactions banktransactionid attachments filename",
       "summary": "Documented GET /BankTransactions/{BankTransactionID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -377,15 +377,15 @@
           "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.banktransactions-banktransactionid-attachments-filename",
+      "operation": "xero.get_bank_transaction_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get banktransfers banktransferid attachments attachmentid",
       "summary": "Documented GET /BankTransfers/{BankTransferID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -397,15 +397,15 @@
           "path": "/BankTransfers/{BankTransferID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.banktransfers-banktransferid-attachments-attachmentid",
+      "operation": "xero.get_bank_transfer_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get banktransfers banktransferid attachments filename",
       "summary": "Documented GET /BankTransfers/{BankTransferID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -417,15 +417,15 @@
           "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.banktransfers-banktransferid-attachments-filename",
+      "operation": "xero.get_bank_transfer_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get contacts contactid attachments attachmentid",
       "summary": "Documented GET /Contacts/{ContactID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -437,15 +437,15 @@
           "path": "/Contacts/{ContactID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.contacts-contactid-attachments-attachmentid",
+      "operation": "xero.get_contact_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get contacts contactid attachments filename",
       "summary": "Documented GET /Contacts/{ContactID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -457,15 +457,15 @@
           "path": "/Contacts/{ContactID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.contacts-contactid-attachments-filename",
+      "operation": "xero.get_contact_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get creditnotes creditnoteid attachments attachmentid",
       "summary": "Documented GET /CreditNotes/{CreditNoteID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -477,15 +477,15 @@
           "path": "/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.creditnotes-creditnoteid-attachments-attachmentid",
+      "operation": "xero.get_credit_note_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get creditnotes creditnoteid attachments filename",
       "summary": "Documented GET /CreditNotes/{CreditNoteID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -497,15 +497,15 @@
           "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.creditnotes-creditnoteid-attachments-filename",
+      "operation": "xero.get_credit_note_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get creditnotes creditnoteid pdf",
       "summary": "Documented GET /CreditNotes/{CreditNoteID}/pdf (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -517,15 +517,15 @@
           "path": "/CreditNotes/{CreditNoteID}/pdf"
         }
       ],
-      "operation": "xero.get.creditnotes-creditnoteid-pdf",
+      "operation": "xero.get_credit_note_as_pdf",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get invoices invoiceid attachments attachmentid",
       "summary": "Documented GET /Invoices/{InvoiceID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -537,15 +537,15 @@
           "path": "/Invoices/{InvoiceID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.invoices-invoiceid-attachments-attachmentid",
+      "operation": "xero.get_invoice_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get invoices invoiceid attachments filename",
       "summary": "Documented GET /Invoices/{InvoiceID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -557,15 +557,15 @@
           "path": "/Invoices/{InvoiceID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.invoices-invoiceid-attachments-filename",
+      "operation": "xero.get_invoice_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get invoices invoiceid pdf",
       "summary": "Documented GET /Invoices/{InvoiceID}/pdf (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -577,15 +577,15 @@
           "path": "/Invoices/{InvoiceID}/pdf"
         }
       ],
-      "operation": "xero.get.invoices-invoiceid-pdf",
+      "operation": "xero.get_invoice_as_pdf",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get manualjournals manualjournalid attachments attachmentid",
       "summary": "Documented GET /ManualJournals/{ManualJournalID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -597,15 +597,15 @@
           "path": "/ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.manualjournals-manualjournalid-attachments-attachmentid",
+      "operation": "xero.get_manual_journal_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get manualjournals manualjournalid attachments filename",
       "summary": "Documented GET /ManualJournals/{ManualJournalID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -617,15 +617,15 @@
           "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.manualjournals-manualjournalid-attachments-filename",
+      "operation": "xero.get_manual_journal_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get purchaseorders purchaseorderid attachments attachmentid",
       "summary": "Documented GET /PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -637,15 +637,15 @@
           "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.purchaseorders-purchaseorderid-attachments-attachmentid",
+      "operation": "xero.get_purchase_order_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get purchaseorders purchaseorderid attachments filename",
       "summary": "Documented GET /PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -657,15 +657,15 @@
           "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.purchaseorders-purchaseorderid-attachments-filename",
+      "operation": "xero.get_purchase_order_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get purchaseorders purchaseorderid pdf",
       "summary": "Documented GET /PurchaseOrders/{PurchaseOrderID}/pdf (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -677,15 +677,15 @@
           "path": "/PurchaseOrders/{PurchaseOrderID}/pdf"
         }
       ],
-      "operation": "xero.get.purchaseorders-purchaseorderid-pdf",
+      "operation": "xero.get_purchase_order_as_pdf",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get quotes quoteid attachments attachmentid",
       "summary": "Documented GET /Quotes/{QuoteID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -697,15 +697,15 @@
           "path": "/Quotes/{QuoteID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.quotes-quoteid-attachments-attachmentid",
+      "operation": "xero.get_quote_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get quotes quoteid attachments filename",
       "summary": "Documented GET /Quotes/{QuoteID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -717,15 +717,15 @@
           "path": "/Quotes/{QuoteID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.quotes-quoteid-attachments-filename",
+      "operation": "xero.get_quote_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get quotes quoteid pdf",
       "summary": "Documented GET /Quotes/{QuoteID}/pdf (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -737,15 +737,15 @@
           "path": "/Quotes/{QuoteID}/pdf"
         }
       ],
-      "operation": "xero.get.quotes-quoteid-pdf",
+      "operation": "xero.get_quote_as_pdf",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get receipts receiptid attachments attachmentid",
       "summary": "Documented GET /Receipts/{ReceiptID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -757,15 +757,15 @@
           "path": "/Receipts/{ReceiptID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.receipts-receiptid-attachments-attachmentid",
+      "operation": "xero.get_receipt_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get receipts receiptid attachments filename",
       "summary": "Documented GET /Receipts/{ReceiptID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -777,15 +777,15 @@
           "path": "/Receipts/{ReceiptID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.receipts-receiptid-attachments-filename",
+      "operation": "xero.get_receipt_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repeatinginvoices repeatinginvoiceid attachments attachmentid",
       "summary": "Documented GET /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -797,15 +797,15 @@
           "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}"
         }
       ],
-      "operation": "xero.get.repeatinginvoices-repeatinginvoiceid-attachments-attachmentid",
+      "operation": "xero.get_repeating_invoice_attachment_by_id",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get repeatinginvoices repeatinginvoiceid attachments filename",
       "summary": "Documented GET /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "examples": [
@@ -817,10 +817,10 @@
           "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}"
         }
       ],
-      "operation": "xero.get.repeatinginvoices-repeatinginvoiceid-attachments-filename",
+      "operation": "xero.get_repeating_invoice_attachment_by_file_name",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api post accounts accountid attachments filename",

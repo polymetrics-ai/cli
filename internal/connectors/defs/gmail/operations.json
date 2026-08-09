@@ -12,9 +12,198 @@
       "binary": {
         "method": "GET",
         "path": "/users/{userId}/messages/{messageId}/attachments/{id}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
+      }
+    },
+    {
+      "id": "gmail.post.users-userid-messages-batchmodify",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/messages/batchModify",
+      "description": "Takes a top-level ids[] array as the entire request body. The engine's write dialect is one-request-per-record and has no schema-gated top-level JSON array body type. Named dependency: issue #514 (schema-gated top-level JSON array request bodies).",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/messages/batchModify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.post.users-userid-messages-batchdelete",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/messages/batchDelete",
+      "description": "Takes a top-level ids[] array as the entire request body. The engine's write dialect is one-request-per-record and has no schema-gated top-level JSON array body type. Named dependency: issue #514 (schema-gated top-level JSON array request bodies).",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/messages/batchDelete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.get.users-userid-settings-cse-identities",
+      "kind": "rest_read",
+      "summary": "GET /users/{userId}/settings/cse/identities",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/cse/identities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.get.users-userid-settings-cse-identities-cseemailaddress",
+      "kind": "rest_read",
+      "summary": "GET /users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.post.users-userid-settings-cse-identities",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/settings/cse/identities",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/identities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.patch.users-userid-settings-cse-identities-emailaddress",
+      "kind": "rest_write",
+      "summary": "PATCH /users/{userId}/settings/cse/identities/{emailAddress}",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/users/{userId}/settings/cse/identities/{emailAddress}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.delete.users-userid-settings-cse-identities-cseemailaddress",
+      "kind": "rest_write",
+      "summary": "DELETE /users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.get.users-userid-settings-cse-keypairs",
+      "kind": "rest_read",
+      "summary": "GET /users/{userId}/settings/cse/keypairs",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/cse/keypairs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.get.users-userid-settings-cse-keypairs-keypairid",
+      "kind": "rest_read",
+      "summary": "GET /users/{userId}/settings/cse/keypairs/{keyPairId}",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.post.users-userid-settings-cse-keypairs",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/settings/cse/keypairs",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/keypairs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.post.users-userid-settings-cse-keypairs-keypairid-enable",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/settings/cse/keypairs/{keyPairId}:enable",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:enable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.post.users-userid-settings-cse-keypairs-keypairid-disable",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/settings/cse/keypairs/{keyPairId}:disable",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:disable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gmail.post.users-userid-settings-cse-keypairs-keypairid-obliterate",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate",
+      "description": "Google Workspace Client-Side Encryption is an Enterprise Plus / Education Plus ADD-ON gated on organization-level admin enablement. No OAuth scope this connector can declare unlocks it, so this is an entitlement dependency, not a scope dependency.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate",
+        "max_bytes": 16777216
       }
     }
   ]

@@ -2528,150 +2528,6 @@
       }
     },
     {
-      "id": "google-ads.post.v22-customers-customer-id-generateaudiencecompositioninsights",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:generateAudienceCompositionInsights",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateAudienceCompositionInsights",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-generateaudienceoverlapinsights",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:generateAudienceOverlapInsights",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateAudienceOverlapInsights",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-generatecreatorinsights",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:generateCreatorInsights",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateCreatorInsights",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-generateinsightsfinderreport",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:generateInsightsFinderReport",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateInsightsFinderReport",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-generatekeywordforecastmetrics",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:generateKeywordForecastMetrics",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateKeywordForecastMetrics",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-generatereachforecast",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:generateReachForecast",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateReachForecast",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-generateshareablepreviews",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:generateShareablePreviews",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateShareablePreviews",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-generatetargetingsuggestionmetrics",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-generatetrendinginsights",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:generateTrendingInsights",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateTrendingInsights",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "google-ads.post.v22-customers-customer-id-mutate",
       "kind": "rest_write",
       "summary": "POST /v22/customers/{customer_id}:mutate",
@@ -2700,54 +2556,6 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}:removeCampaignAutomaticallyCreatedAsset",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-suggestkeywordthemes",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:suggestKeywordThemes",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:suggestKeywordThemes",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-suggestsmartcampaignad",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:suggestSmartCampaignAd",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:suggestSmartCampaignAd",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "google-ads.post.v22-customers-customer-id-suggestsmartcampaignbudgetoptions",
-      "kind": "rest_write",
-      "summary": "POST /v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
-      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
         "max_bytes": 16777216
       }
     },
@@ -3113,22 +2921,6 @@
       }
     },
     {
-      "id": "google-ads.post.v22-resource-name-regenerateshareablelinkid",
-      "kind": "rest_write",
-      "summary": "POST /v22/{resource_name}:regenerateShareableLinkId",
-      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-      "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/{resource_name}:regenerateShareableLinkId",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "google-ads.post.v22-resource-name-run",
       "kind": "rest_write",
       "summary": "POST /v22/{resource_name}:run",
@@ -3174,6 +2966,201 @@
         "method": "POST",
         "path": "/v22/{resource_name}:scheduleExperiment",
         "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generateaudiencecompositioninsights",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:generateAudienceCompositionInsights",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:generateAudienceCompositionInsights"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generateaudienceoverlapinsights",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:generateAudienceOverlapInsights",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:generateAudienceOverlapInsights"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatecreatorinsights",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:generateCreatorInsights",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:generateCreatorInsights"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generateinsightsfinderreport",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:generateInsightsFinderReport",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:generateInsightsFinderReport"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatekeywordforecastmetrics",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:generateKeywordForecastMetrics",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:generateKeywordForecastMetrics"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatereachforecast",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:generateReachForecast",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:generateReachForecast"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generateshareablepreviews",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:generateShareablePreviews",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:generateShareablePreviews"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatetargetingsuggestionmetrics",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:generateTargetingSuggestionMetrics"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatetrendinginsights",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:generateTrendingInsights",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:generateTrendingInsights"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-suggestkeywordthemes",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:suggestKeywordThemes",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:suggestKeywordThemes"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-suggestsmartcampaignad",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:suggestSmartCampaignAd",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:suggestSmartCampaignAd"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-suggestsmartcampaignbudgetoptions",
+      "kind": "composite",
+      "summary": "POST /v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions"
+        ]
+      }
+    },
+    {
+      "id": "google-ads.post.v22-resource-name-regenerateshareablelinkid",
+      "kind": "composite",
+      "summary": "POST /v22/{resource_name}:regenerateShareableLinkId",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /v22/{resource_name}:regenerateShareableLinkId"
+        ]
       }
     }
   ]

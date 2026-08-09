@@ -4903,7 +4903,7 @@
     {
       "path": "api head clusters operation",
       "summary": "Documented HEAD /clusters/* (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://g.codefresh.io/api/openapi.json",
       "examples": [
@@ -4923,7 +4923,7 @@
     {
       "path": "api head kubernetes",
       "summary": "Documented HEAD /kubernetes* (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://g.codefresh.io/api/openapi.json",
       "examples": [

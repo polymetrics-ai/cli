@@ -3088,7 +3088,7 @@
     {
       "path": "api get v1 file-links",
       "summary": "Documented GET /v1/file_links (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
       "examples": [
@@ -3102,13 +3102,13 @@
       ],
       "operation": "stripe.get.v1-file-links",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get v1 file-links link",
       "summary": "Documented GET /v1/file_links/{link} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
       "examples": [
@@ -3122,13 +3122,13 @@
       ],
       "operation": "stripe.get.v1-file-links-link",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get v1 files",
       "summary": "Documented GET /v1/files (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
       "examples": [
@@ -3142,13 +3142,13 @@
       ],
       "operation": "stripe.get.v1-files",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get v1 files file",
       "summary": "Documented GET /v1/files/{file} (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
       "examples": [
@@ -3162,8 +3162,8 @@
       ],
       "operation": "stripe.get.v1-files-file",
       "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get v1 financial-connections accounts",
